@@ -158,6 +158,12 @@ $_xml_fv = '';
 $_xml_parser = null;
 
 /**
+  * Whether we're in an item
+  * @access private
+*/
+$_xml_in_item = true;
+
+/**
   * Convert XML element names to values that are understood internally.
   * @param String Textualized XML element
   * @return String Proper string value for processing
@@ -212,12 +218,15 @@ function normalizeXmlNames($fieldName)
 */
 function _xml_start($parser, $name, $attr)
 {
-  global $_xml_fn, $itemIndex;
+  global $_xml_fn, $_xml_in_item, $itemIndex;
 
   $_xml_fn = $name;
 
   if ($_xml_fn == 'item')
+  {
+    $_xml_in_item = true;
     $itemIndex++;
+  }
 }
 
 /**
@@ -228,9 +237,14 @@ function _xml_start($parser, $name, $attr)
 */
 function _xml_end($parser, $name)
 {
-  global $_xml_fn, $_xml_fv;
+  global $_xml_fn, $_xml_fv, $_xml_in_item;
   $_xml_fn = '';
   $_xml_fv = '';
+
+  if ($name == 'item')
+    $_xml_in_item = false;
+  else if ($name == 'channel')
+    $_xml_in_item = true;  
 }
 
 /**
@@ -241,11 +255,11 @@ function _xml_end($parser, $name)
 */
 function _xml_cdata($parser, $data)
 {
-  global $_xml_fn, $_xml_fv;
+  global $_xml_fn, $_xml_fv, $_xml_in_item;
 
   $_xml_fv .= ltrim($data);
 
-  if ($_xml_fv)
+  if ($_xml_fv && $_xml_in_item)
     internalizeItem($_xml_fn, $_xml_fv);
 }
 
