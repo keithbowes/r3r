@@ -1,0 +1,59 @@
+# -*-shell-script-*-
+
+#
+# Rudamentary spec file for autopackage.  It doesn't work yet, but hopefully
+# it will some day.
+#
+# Mildly altered version from makeinstaller --mkspec
+#
+
+[Meta]
+RootName: @r3r.sourceforge.net/default:@VERSION@
+DisplayName: R3R Feed Reader
+ShortName: r3r
+Maintainer: R3R Developers - http://sourceforge.net/projects/r3r
+Packager: Anonymous <anonymous@nowhere.com>
+Summary: R3R is a small, fast, and portable reader/aggregator for RSS, ESF and Atom feeds.
+SoftwareVersion: @VERSION@
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules
+# InterfaceVersion: 0.0
+
+PackageVersion: 1
+
+[Description]
+R3R is a reader for RSS, ESF and Atom feeds. It will retrieve feeds and display the items in a convenient list view. You can subscribe to feeds that you wish to view everytime that the program starts. R3R is conditionally compliant with HTTP/1.1, though some advanced features aren't supported.
+
+[Description:eo]
+R3R estas kanallegilo por RSS, ESF kaj Atomo.
+
+[BuildPrepare]
+prepareBuild
+rm -fv congig.status
+
+[BuildUnprepare]
+unprepareBuild
+
+[Imports]
+echo '*' | import
+
+[Prepare]
+# Dependency checking
+require @php.net/php4 4.3.4
+
+[Install]
+mkdir -p @prefix@/r3r/includes
+mkdir -p @prefix@/r3r/l10n
+mkdir -p @prefix@/share/icons/hicolor/32x32/apps
+
+@INSTALL@ -m 755 r3r r3r.php version.php @prefix@/r3r
+@INSTALL@ -m 755 includes/*.php @prefix@/r3r/includes
+@INSTALL@ -m 644 l10n/*.lng @prefix@/r3r/l10n
+@INSTALL@ -m 755 icons/r3r.xpm @prefix@/share/icons/hicolor/32x32/apps
+@INSTALL@ -m 755 R3R.Desktop /home/@configured_user@/Desktop
+cd @prefix@/bin && @LN_S@ -f @prefix@/r3r/r3r
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog
