@@ -251,7 +251,7 @@ function getRemoteFeed($url)
         $statusBar->set_text(STATUS_OPEN_CONNECTION);
 
         if (!getSetting('use-proxy'))
-          fwrite($pfeed, 'GET ' . $aurl['path'] . " HTTP/1.1\r\n");
+          fwrite($pfeed, 'GET ' . $aurl['path'] . '?' . $aurl['query'] . '#' . $aurl['fragment'] . " HTTP/1.1\r\n");
         else
           fwrite($pfeed, 'GET ' . $req . " HTTP/1.1\r\n");
 

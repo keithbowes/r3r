@@ -2,10 +2,10 @@
 
 cd `dirname $0`
 
-rm -fv ./Output/* ../../r3r-*.exe
-
 CVERSION=`cat ../version.php`
 VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
+
+./prepdist
 
 export VERSION
 

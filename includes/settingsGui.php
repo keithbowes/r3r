@@ -64,6 +64,11 @@ function createFeedPage($notebook)
   $hideCachedCheck->connect('toggled', 'checkToggled', array(array(), 'hide-cached-feeds'));
   $feedPage->pack_start($hideCachedCheck, false);
 
+  $mimeGuessCheck = &new GtkCheckButton(SET_MIME_GUESS);
+  $mimeGuessCheck->set_active(getSetting('enable-mime-guess'));
+  $mimeGuessCheck->connect('toggled', 'checkToggled', array(array(), 'enable-mime-guess'));
+  $feedPage->pack_start($mimeGuessCheck, false);
+
   $notebook->append_page($feedPage, $feedLabel);
 }
 
@@ -209,18 +214,38 @@ function createHttpHeaderPage($notebook)
 */
 function createMailPage($notebook)
 {
-  $mailPage = &new GtkVBox(false, 5);
+  $mailPage = &new GtkHBox();
   $mailLbl = &new GtkLabel(SET_MAIL);
 
-  $mailClientBox = &new GtkHBox();
-  $mailPage->pack_start($mailClientBox, false, false);
+  $mailTableBox = &new GtkVBox();
+  $mailPage->pack_start($mailTableBox, false);
+
+  $mailFrame = &new GtkFrame(SET_MAIL);
+  $mailTableBox->pack_start($mailFrame, false);
+
+  $mailTable = &new GtkTable(2, 3);
+  $mailFrame->add($mailTable);
+
+  $browserLbl = &new GtkLabel(SET_HTTP_CLIENT);
+  $mailTable->attach($browserLbl, 0, 1, 0, 1);
+
+  $browserField = createEdit(getSetting('http-client'));
+  $browserField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
+  $mailTable->attach($browserField, 1, 2, 0, 1);
 
   $mailClientLbl = &new GtkLabel(SET_MAIL_CLIENT);
-  $mailClientBox->pack_start($mailClientLbl, false);
+  $mailTable->attach($mailClientLbl, 0, 1, 1, 2);
 
   $mailClientField = createEdit(getSetting('mail-client-cl'));
   $mailClientField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
-  $mailClientBox->pack_start($mailClientField);
+  $mailTable->attach($mailClientField, 1, 2, 1, 2);
+
+  $editorLbl = &new GtkLabel(SET_EDITOR);
+  $mailTable->attach($editorLbl, 0, 1, 2, 3);
+
+  $editorField = createEdit(getSetting('editor'));
+  $editorField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
+  $mailTable->attach($editorField, 1, 2, 2, 3);
 
   $notebook->append_page($mailPage, $mailLbl);
 }
@@ -247,12 +272,9 @@ function createNotebook($parent)
 */
 function showSettingsDialog()
 {
-  $settings = null;
-
   $dialog = &new GtkWindow(GTK_WINDOW_DIALOG);
   $dialog->set_title(SET_TITLE);
   $dialog->set_policy(false, false, true);
-  //$dialog->connect('delete-event', 'settingsDlgDel', array(true, $settings));
 
   $dlgBox = &new GtkVBox();
   $dialog->add($dlgBox);
@@ -266,7 +288,7 @@ function showSettingsDialog()
 
   $okBtn = &new GtkButton(SET_OK_BTN);
   $okBtn->set_flags(GTK_CAN_DEFAULT);
-  $okBtn->connect('clicked', 'saveSettingsChange', $settings);
+  $okBtn->connect('clicked', 'commitSettings');
   $okBtn->connect('clicked', 'killWidget', $dialog);
 
   $cancelBtn = &new GtkButton(SET_CANCEL_BTN);

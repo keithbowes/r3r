@@ -80,16 +80,6 @@ class ExtendedGtkStatusBar extends GtkStatusBar
   { 
     return $this->_prev_text;
   }
-
-  /**
-    * Remove the topmost entry of the status-bar.
-    * @deprecated
-  */
-  function remove_top()
-  { 
-    trigger_error('remove_top() has been integrated into set_text().  Use only when you need to clear the status bar.  May be removed altogether in future versions.', E_WARNING);
-    $this->pop($this->$_cid);
-  }
 }
 
 /**
@@ -149,13 +139,6 @@ $urlEntry = null;
   * GtkWindow The main window.
 */
 $window = &new GtkWindow();
-
-/* Settings */
-
-/**
-  * @global Array Internal representation of your settings.
-*/
-$settings = array();
 
 /* Feeds */
 

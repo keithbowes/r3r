@@ -14,6 +14,7 @@ function killApp()
 {
   gtk::main_quit();
   saveSettings();
+  saveSubscriptions();
 }
 
 /**
@@ -68,14 +69,27 @@ function gotoLink($link)
 */
 function sendMail($addr, $subj)
 {
+  $addr = rawurlencode($addr);
+  $subj = rawurlencode($subj);
+
   $mcc = getSetting('mail-client-cl');
-  $mcc = str_replace('%a', rawurlencode($addr), $mcc);
-  $mcc = str_replace('%s', rawurlencode($subj), $mcc);
+  $mcc = str_replace('%a', $addr, $mcc);
+  $mcc = str_replace('%s', $subj, $mcc);
 
   if ($mcc == 'system')
-    gotoLink('mailto:' . rawurlencode($addr) . '?subject=' . rawurlencode($subj));
+    gotoLink('mailto:' . $addr . '?subject=' . $subj);
   else
     system($mcc);
+}
+
+/**
+  * Viewing source code was triggered
+  * @param GtkMenu The widget that generated the message
+  * @param String URL of the feed.
+*/
+function viewSource($widget, $url)
+{
+  system("\"" . getSetting('editor') . "\" " . $url . ' > /dev/null &');
 }
 
 /**
@@ -182,9 +196,9 @@ function feedListMenuActivated($widget, $data)
       {
         $subscribed_feeds = getSetting('subscribed-feeds');
         if ($will_subscribe)
-          setSetting('subscribed-feeds', $subscribed_feeds .= $url . ' ');
+          addSubscription($url);
         else
-          setSetting('subscribed-feeds', ltrim(str_replace($url, '', $subscribed_feeds)));
+          removeSubscription($url);
       }
       break;
     case 'creat':
@@ -235,7 +249,8 @@ function createFeedListMenu($widget, $event)
 
   if ($top_feed)
   {
-    if (!strstr(getSetting('subscribed-feeds'), $url))
+    $subs = getSubscriptions();
+    if (!$subs[$url])
     {
       $subsItem = createAccelMenu(ITEM_SUBSCRIBE);
       $is_subscribed = true;
@@ -247,6 +262,10 @@ function createFeedListMenu($widget, $event)
     }
     $subsItem->connect('activate', 'feedListMenuActivated', array('subs', array($url, $is_subscribed)));
     $menu->append($subsItem);
+
+    $srcItem = createAccelMenu(ITEM_VIEW_SOURCE);
+    $srcItem->connect('activate', viewSource, $url);
+    $menu->append($srcItem);
   }
 
   if (isset($feed['creator']))
@@ -315,42 +334,17 @@ function findLocalFeed()
 */
 function feedListRowSelected($widget, $row)
 {
-  global $feedItemView, $statusBar;
+  global $feedItemView, $mime_type, $statusBar;
   list($feed) = $widget->get_data($row);
 
   $text = &new GtkText();
   $text->insert_text($feed['description'], 0);
-  $text->set_word_wrap(!!getSetting('wrap-desc'));
+
+  if (getSetting('wrap-desc') && $mime_type != 'text/x-rss')
+    $text->set_word_wrap(true);
 
   $scrolledBox = &new GtkVBox();
   $scrolled = &new GtkScrolledWindow();
-
-  // TODO: Try to accompish RSS 3.0 linking with GtkText
-  /*$str = $feed['description'];
-
-  while (preg_match('/([^\<]+)(\<URL:([^\>]+)\>)?/', $str, $matches))
-  {
-    list($match, $label, $link, $link_url) = $matches;
-    $str = str_replace("$label$link", '', $str);
-    $lw = getSetting('wrap-desc');
-
-    $txt = &new GtkText();
-    $txt->insert_text($feed['description'], 100);
-    $txt->set_line_wrap($lw);
-    $scrolled->add($txt);
-
-    if ($link_url)
-    {
-      $linkEvBox = &new GtkEventBox();
-      $linkEvBox->connect('button-press-event', 'descLinkClicked', $link_url);
-
-      $linkLabel = &new GtkLabel($link_url);
-      $linkLabel->set_pattern(str_repeat('_', strlen($link_url)));
-      $linkEvBox->add($linkLabel);
-
-      $scrolled->add($linkEvBox);
-    }
-  }*/
 
   $scrolled->set_usize(150, 45);
   $scrolled->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
@@ -448,40 +442,6 @@ function urlFieldGo($widget, $event, $data)
 /* Settings dialog callbacks */
 
 /**
-  * The "Cancel" button in the Settings dialog has been activated.
-  * @param GtkButton The widget from which the callback originated.
-  * @param Array Data sent to the function, providing information about settings to be canceled.
-*/
-function settingsDlgDel($widget, $data)
-{
-  list($save_settings, $settings) = (array) $data;
-
-  if ($save_settings)
-    cancelSettingsChange($widget, $settings);
-}
-
-/**
-  * Revert settings to their previous state.
-  * @param GtkWidget GTK widget
-  * @param Array Old settings.
-  * @deprecated
-*/
-function cancelSettingsChange($widget, $data)
-{
-  global $settings;
-
-  $settings = $data;
-}
-
-/**
-  * @deprecated
-*/
-function saveSettingsChange($widget, $data)
-{
-  commitSettings();
-}
-
-/**
   * Convenience function for checkboxed settings.
   * @param GtkCheckButton Widget from which the callback originated.
   * @param Array An array of widgets to disable/enable between toggled states, and which setting to change.
@@ -490,10 +450,15 @@ function checkToggled($source, $data)
 {
   list($targets, $setting) = $data;
 
-  $sensitive = !getSetting($setting);
+  static $sensitive = null;
+
+  if ($sensitive === null)
+    $sensitive = !getSetting($setting);
+
   foreach ($targets as $target)
     $target->set_sensitive($sensitive);
-  setSetting($setting, $sensitive);
+
+  $sensitive = !setSetting($setting, $sensitive);
 }
 
 /**

@@ -22,6 +22,7 @@ ITEM_MAIL=_Retpoþtigu la verkanto
 ITEM_ERRORS=_Sendu eraran ripoton
 ITEM_LIC=Ano _Permesilo
 ITEM_METADATA=_Metadatumo
+ITEM_VIEW_SOURCE=Rigardu _Fonton
 
 # Item Metadata
 IMD_LAST_MODIFIED=Lasta þanøita: 
@@ -90,7 +91,7 @@ INFO_SETTINGS_DIR=Opciarujo
 # File-selection captions
 FS_OPEN=Trovu kanalon...
 FS_RC=Foliumu por risurc-doseieroj...
-FS_CLIENT=Foliumu por via prefera HTTP-kliento...
+FS_CLIENT=Foliumu por via prefera krozilo...
 
 # Settings dialog
 # Main dialog
@@ -112,12 +113,12 @@ SET_KNOWN_FEEDS=Montru konatajn kanalojn interne tekslisto
 SET_DESC_WRAP=Volvigu anajn priskribojn
 SET_TITLES_ONLY=Montru nur kanalajn titolojn
 SET_HIDE_CACHED=Nur montru øisdatigitajn kanalojn
+SET_MIME_GUESS=Ebligu enhavtipan supozadon
 
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Baza
 SET_TO_PREF=Templimiøo: 
 SET_TO_SUF= (sekundoj)
-SET_HTTP_CLIENT=HTTP-kliento: 
 SET_PROXY_LBL=Prokuro
 SET_USE_PROXY=Uzu prokuron
 SET_PROXY_IP=Adreso: 
@@ -132,8 +133,10 @@ SET_HDR_LANG=Lingvoj:
 SET_USE_CUSTOM=Uzas Agordan
 
 # Mail Tab
-SET_MAIL=Retpþto
-SET_MAIL_CLIENT=Retpoþta Kliento: 
+SET_MAIL=Programaro
+SET_HTTP_CLIENT=Krozilo: 
+SET_MAIL_CLIENT=Retpoþtilo: 
+SET_EDITOR=Redaktilo:  
 
 # XML Parser
 XML_PARSER_ERROR=La XML sintaksa analizilo renkontis la sekvan eraron: 

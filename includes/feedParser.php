@@ -28,7 +28,7 @@ function internalizeItem($fn, $fv)
 {
   global $feeds, $itemIndex;
 
-  $fv = html_entity_decode($fv);
+  $fv = html_entity_decode(strip_tags($fv));
   $fn = normalizeXmlNames($fn);
 
   if ($fn)
@@ -144,8 +144,9 @@ function parseEsf($str)
     if (getSetting('show-warnings'))
       alert(ALERT_NOT_ESF, ALERT_WARNING);
     
-    if (parseXml($str))
-      $mime_type = 'application/xml';
+    if (getSetting('enable-mime-guess'))
+      if (parseXml($str))
+        $mime_type = 'application/xml';
 
     return;
   }
@@ -306,8 +307,9 @@ function parseXml($str)
     if ($itemIndex > 0)
       $itemIndex++;
 
-    if (parseTxt($str))
-      $mime_type = 'text/x-rss';
+    if (getSetting('enable-mime-guess'))
+      if (parseTxt($str))
+        $mime_type = 'text/x-rss';
 
     freeXmlParser();
     return false;

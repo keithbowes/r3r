@@ -10,11 +10,12 @@ all:
 	@echo "Make completed successfully.  The errors, if any, weren't fatal."
 
 clean:
-	$(RM) R3R.Desktop r3r
 	cd l10n && $(RM) *.lng
 
-distclean: clean
-	$(RM) Makefile config.cache config.log config.status configure autopackage/default.apspec
+genclean:
+	$(RM) Makefile R3R.Desktop config.cache config.log config.status configure r3r autopackage/default.apspec scripts/setup.iss
+
+distclean: clean genclean
 
 install: all
 	mkdir -p @prefix@/r3r/includes

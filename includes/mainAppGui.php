@@ -5,6 +5,7 @@
 */
 
 require_once('guiConvFuncs.php');
+require_once('subscriptions.php');
 require_once('callbacks.php');
 require_once('networking.php');
 require_once('settingsGui.php');
@@ -84,7 +85,6 @@ function createAppArea()
   $feedList->set_column_width(1, 200); 
   $feedList->set_column_width(2, 67);
   $feedList->column_titles_passive();
-  $flAdj = &new GtkAdjustment(0, 0, 100, 1, 10, 150);
   $feedList->connect('select-row', 'feedListRowSelected');
   $feedList->connect('unselect-row', 'feedListRowUnselected');
   $feedList->connect('button-press-event', 'feedListRowClicked');
@@ -148,13 +148,18 @@ function startMainGui()
     $statusBar->set_text(STATUS_READ_CL);
   }
 
-  $subscribed_feeds = getSetting('subscribed-feeds');
-  if ($subscribed_feeds)
+  $subs = getSubscriptions();
+  if (count($subs) > 1)
   {
-    foreach(explode(' ', $subscribed_feeds) as $subscribed_feed)
-      getRemoteFeed($subscribed_feed);
+    while(list($url) = each($subs))
+    {
+      if ($url)
+      {
+        getRemoteFeed($url);
+        $urlEntry->set_text($url);
+      }
+    }
 
-    $urlEntry->set_text($subscribed_feed);
     $statusBar->set_text(STATUS_READ_SUBSCRIBED);
   }
 

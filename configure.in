@@ -67,4 +67,4 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 
 dnl Checks for library functions.
 
-AC_OUTPUT(Makefile R3R.Desktop r3r autopackage/default.apspec)
+AC_OUTPUT(Makefile R3R.Desktop r3r autopackage/default.apspec scripts/setup.iss)

@@ -7,7 +7,7 @@ AppName=R3R
 AppPublisher=Zooplah
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
-AppVerName=R3R {%VERSION}
+AppVerName=R3R 
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
@@ -35,13 +35,13 @@ Source: "C:\Program Files\R3R\gtk\*.dll"; DestDir: "{app}\gtk"; Components: gtk
 Name: desktopicon; Description: "&Create a desktop icon"
 
 [Components]
-Name: "r3r"; Description: "R3R"; Flags: fixed; Types: full compact
-Name: "php"; Description: "The PHP interpreter"; Types: full
-Name: "pg"; Description: "The PHP-GTK extension"; Types: full
-Name: "gtk"; Description: "The GTK+ dynamic libraries"; Types: full
+Name: "r3r"; Description: "R3R"; Flags: fixed; Types: full compact custom
+Name: "php"; Description: "The PHP interpreter"; Types: full custom
+Name: "pg"; Description: "The PHP-GTK extension"; Types: full custom
+Name: "gtk"; Description: "The GTK+ dynamic libraries"; Types: full custom
 
 [Icons]
-Name: "{group}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.ico"
+Name: "{group}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.png"
 Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 Name: "{userdesktop}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.png"; Tasks: desktopicon
 

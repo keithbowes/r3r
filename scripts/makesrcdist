@@ -2,11 +2,11 @@
 
 cd `dirname $0`
 
+./prepdist
+
 rm -frv Output
 
 cd ..
-
-rm -fv ../r3r-src*.bz2
 
 CVERSION=`cat version.php`
 VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
