@@ -4,28 +4,28 @@ PROG_NAME=R3R
 # Menus
 FILE=_Dosiero
 FILE_OPEN=_Malfermu
-FILE_QUIT=_∆esu
+FILE_QUIT=_ƒàesu
 TOOLS=_Laboriloj
 TOOLS_SETTINGS=_Opciaro
 HELP=_Helpo
-HELP_INFO=_Informaºo
+HELP_INFO=_Informaƒµo
 
 # Context Menus
 # Entry Boxes
-CMENU_CUT=TranÊu
+CMENU_CUT=Tranƒâu
 CMENU_COPY=Kopiu
 CMENU_PASTE=Gluu
 # Feed Items
 ITEM_SUBSCRIBE=_Abonu...
 ITEM_UNSUBSCRIBE=M_alabonu...
-ITEM_MAIL=_Retpo˛tigu la verkanto
+ITEM_MAIL=_Retpo≈ùtigu la verkanto
 ITEM_ERRORS=_Sendu eraran ripoton
 ITEM_LIC=Ano _Permesilo
 ITEM_METADATA=_Metadatumo
 ITEM_VIEW_SOURCE=Rigardu _Fonton
 
 # Item Metadata
-IMD_LAST_MODIFIED=Lasta ˛an¯ita: 
+IMD_LAST_MODIFIED=Lasta ≈ùanƒùita: 
 IMD_LANG=Lingvo: 
 IMD_COPY=Kopirajto: 
 IMD_GUID=GUID: 
@@ -49,35 +49,35 @@ GO_BTN=Iru
 
 # Status-bar messages
 STATUS_GETTING_DATA=Ekhavas Datumo...
-STATUS_TWICE=Finita: Êi tiu kanalo estis jam en via rigardo
+STATUS_TWICE=Finita: ƒâi tiu kanalo estis jam en via rigardo
 STATUS_CONNECT_FAIL=Konekto fiaskis
-STATUS_OPEN_CONNECTION=Konekto malfermi¯as; sendas peton...
-STATUS_CACHED_MSG=Finleginta el ka˛ejo...
+STATUS_OPEN_CONNECTION=Konekto malfermiƒùas; sendas peton...
+STATUS_CACHED_MSG=Finleginta el ka≈ùejo...
 STATUS_OPENING_CONNECTION=Malfermas konekton...
 STATUS_LV_FILL=Plenigas la listrigardon...
 STATUS_DONE_MSG=Finita
 STATUS_UNIMP_STATUS=La servilo sendis statkodon ke mi ne komprendas
 STATUS_READ_LOCAL=Finita legas lokan kanalon
 STATUS_READ_CL=Finita legas el la komandlinio
-STATUS_READ_SUBSCRIBED=∆iuj via abonita kanaloj nun montras
+STATUS_READ_SUBSCRIBED=ƒàiuj via abonita kanaloj nun montras
 
 # Alert boxes
 ALERT_OK_BTN=Bone
 # Errors
 ALERT_ERROR=Eraro
-ALERT_NO_PHP_GTK=Mi ne povis ˛ultas la PHP-GTK-an kromaºon.
+ALERT_NO_PHP_GTK=Mi ne povis ≈ùultas la PHP-GTK-an kromaƒµon.
 ALERT_WRONG_MIME=R3R ne traktas kanalojn kun la MIME-tipo
 ALERT_ITEM_DETAILS=Anaj Detaloj
 ALERT_MDATA=Ano Metadatumo
-ALERT_CANT_CONN=Ne povas komenci konekton.  Mi prenos ka˛an version, se havebla.
+ALERT_CANT_CONN=Ne povas komenci konekton.  Mi prenos ka≈ùan version, se havebla.
 ALERT_CANT_OPEN=ne povas malfermi.
 # Warnings
 ALERT_WARNING=Averto
-ALERT_INVALID_LINE_NAME=Neprava linenomo.  ∆iu lineo devas ekhavi dupunkton (:) a˝ kunkomencas blankan spacon.
-ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas ¯in trans lineoj por plej legebleco.
-ALERT_CR=∆øaratreveno detektis.  ∆iuj lineoj devus fini kun liniavanco.
+ALERT_INVALID_LINE_NAME=Neprava linenomo.  ƒàiu lineo devas ekhavi dupunkton (:) a≈≠ kunkomencas blankan spacon.
+ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas ƒùin trans lineoj por plej legebleco.
+ALERT_CR=ƒà≈ºaratreveno detektis.  ƒàiuj lineoj devus fini kun liniavanco.
 ALERT_NOT_ESF=Tio ne estas ESF-a kanalo.
-ALERT_NOT_XML=Tio ne estas XML-a kanalo (a˝ havas eraron).
+ALERT_NOT_XML=Tio ne estas XML-a kanalo (a≈≠ havas eraron).
 
 # Info... Dialog
 INFO_TITLE=Pri R3R
@@ -103,7 +103,7 @@ SET_BROWS_BTN=Foliumu...
 
 # Appearance tab
 SET_APP_TAB=Apero
-SET_YOUR_RC=Uzu nea˝tomatajn risurc-doseierojn
+SET_YOUR_RC=Uzu nea≈≠tomatajn risurc-doseierojn
 
 # Feeds tab
 SET_FEEDS_TAB=Kanaloj
@@ -111,12 +111,12 @@ SET_WARNINGS=Montru Avertojn
 SET_KNOWN_FEEDS=Montru konatajn kanalojn interne tekslisto
 SET_DESC_WRAP=Volvigu anajn priskribojn
 SET_TITLES_ONLY=Montru nur kanalajn titolojn
-SET_HIDE_CACHED=Nur montru ¯isdatigitajn kanalojn
+SET_HIDE_CACHED=Nur montru ƒùisdatigitajn kanalojn
 SET_MIME_GUESS=Ebligu enhavtipan supozadon
 
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Baza
-SET_TO_PREF=Templimi¯o: 
+SET_TO_PREF=Templimiƒùo: 
 SET_TO_SUF= (sekundoj)
 SET_PROXY_LBL=Prokuro
 SET_USE_PROXY=Uzu prokuron
@@ -124,8 +124,8 @@ SET_PROXY_IP=Adreso:
 SET_PROXY_PORT=Pordo: 
 
 # HTTP: Headers tab
-SET_HEADERS=HTTP: ∆apo
-SET_HDR_LBL=PetÊapo
+SET_HEADERS=HTTP: ƒàapo
+SET_HDR_LBL=Petƒâapo
 SET_HDR_UA=Uzula Peranto: 
 SET_HDR_AT=Akceptaj Tipoj: 
 SET_HDR_LANG=Lingvoj:
@@ -134,7 +134,7 @@ SET_USE_CUSTOM=Uzas Agordan
 # Mail Tab
 SET_MAIL=Programaro
 SET_HTTP_CLIENT=Krozilo: 
-SET_MAIL_CLIENT=Retpo˛tilo: 
+SET_MAIL_CLIENT=Retpo≈ùtilo: 
 SET_EDITOR=Redaktilo:  
 
 # XML Parser

@@ -233,7 +233,7 @@ function feedListMenuActivated($widget, $data)
 }
 
 /**
-  * Create context menu for feed list items.
+  * Create a context menu for feed list items.
   * @param GtkCList Widget from which signal originated.
   * @param GdkEvent The event.
 */

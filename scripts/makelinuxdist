@@ -20,8 +20,9 @@ cp -fv icons/r3r.png ../r3r-linux-$VERSION/icons
 cp -fv includes/* ../r3r-linux-$VERSION/includes
 cp -fv l10n/*.lng ../r3r-linux-$VERSION/l10n
 
+rm -fv config.status
 makeinstaller
-mv -fv r3r-$VERSION.package ../r3r-linux-$VERSION.package
+mv -fv r3r-$VERSION.x86.package ../r3r-linux-$VERSION.package
 
 cd ..
 
