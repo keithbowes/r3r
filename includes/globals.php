@@ -11,21 +11,18 @@ require_once('l10n.php');
 /**
   * The version of the program.
 */
-define('VERSION', '1.1.4');
+define('VERSION', '1.1.5');
 
-if ($home = getenv('HOME'))
-{
-  /**
-    * The directory where the settings are stored.
-  */
-  define('SETTINGS_DIR', "$home/.r3r");
-  /**
-    * The settings file.
-  */
-  define('SETTINGS_FILE', 'r3rrc');
-}
+/**
+  * The directory where the settings are stored.
+*/
+define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
+/**
+  * The settings file.
+*/
+define('SETTINGS_FILE', 'r3rrc');
 
-/* GUI vriables and classes */
+/* GUI variables and classes */
 
 /**
   * An extended status-bar class with less wordy methods.
