@@ -1,0 +1,43 @@
+README for Really Radical Reader for RSS (R3R)
+
+This document provides a quick overview.  See
+http://sourceforge.net/projects/r3r and sites linked therein for full details.
+
+1. LICENSE
+
+R3R is license under the Artistic License.  See the file Artistic for the full
+text.
+
+2. INSTALLING ON UNIX
+
+Grab the r3r-linux or r3r-src packages, or a copy from CVS.  Then, run
+./r3r-installer.
+
+3. INSTALLING ON WINDOWS
+
+3.1
+
+Get a release from the r3r-win package and run the simple installer.
+
+3.2
+
+If there's none available:
+
+3.2.1
+
+The UNIX installer can be used if you have the necessary utils (GNU ash,
+fileutils, etc).  Having a UNIX directory structure (namely, /home/$USER and
+/usr/local directories) will make it easier to use.
+
+3.2.2
+
+Create your own installer.  Get Inno Setup, change setup.iss so that
+Inno Setup knows where to find the required files on your computer, and run
+setup.iss with Inno Setup.  More information about creating the setup and
+making it downloadable by anybody is available on the project home page.
+
+4. REPORTING BUGS, SUBMITTING PATCHES, etc.
+
+SourceForge provides excellent facilities for this.  Read Site Docs for info.
+The specifics can be found on the project home page.
+
