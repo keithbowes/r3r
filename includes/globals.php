@@ -111,7 +111,7 @@ $window = &new GtkWindow();
 /* Settings */
 
 /**
-  * @global Array Internel representation of your setting.
+  * @global Array Internel representation of your settings.
 */
 $settings = array();
 

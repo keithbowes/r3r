@@ -25,7 +25,7 @@ function killWidget($source, $target)
 {
   $target->destroy();
 }
-  
+
 /**
   * Open up a web browser and go to a URL.
   * @param String The URL to which to go.

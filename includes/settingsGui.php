@@ -25,14 +25,10 @@ function createAppearancePage($notebook)
   $rcField->connect('changed', 'settingsEntryChanged', 'rc-file');
   $rcBox->pack_start($rcField, false);
 
-  $rcBrowseBox = &new GtkHButtonBox();
-  $rcBrowseBox->set_spacing(0);
-  $rcBox->pack_start($rcBrowseBox, false, false, 5);
-
   $rcBrowse = &new GtkButton(SET_BROWS_BTN);
   $rcBrowse->set_sensitive(getSetting('use-rc-file'));
   $rcBrowse->connect('clicked', 'createFileSelection', array($rcField, FS_RC, 'rc-file', $rcField));
-  $rcBrowseBox->pack_start($rcBrowse, false);
+  $rcBox->pack_start($rcBrowse, false, false, 3);
 
   $rcCheckBtn->connect('toggled', 'checkToggled', array(array($rcField, $rcBrowse), 'use-rc-file'));
 
@@ -165,45 +161,36 @@ function createHttpHeaderPage($notebook)
   $httpHeaderPageLabel = &new GtkLabel(SET_HEADERS);
 
   $httpHeaderRespFrame = &new GtkFrame(SET_HDR_LBL);
-  $httpHeaderPage->pack_start($httpHeaderRespFrame);
+  $httpHeaderPage->pack_start($httpHeaderRespFrame, false);
 
-  $httpHeaderRespBox = &new GtkHBox();
-  $httpHeaderRespFrame->add($httpHeaderRespBox);
-
-  $labels = &new GtkVBox(false, 10);
-  $httpHeaderRespBox->pack_start($labels, false);
+  $httpHeaderRespTable = &new GtkTable(2, 3);
+  $httpHeaderRespFrame->add($httpHeaderRespTable);
 
   $uaLabel = &new GtkLabel(SET_HDR_UA);
-  $labels->pack_start($uaLabel, false);
+  $httpHeaderRespTable->attach($uaLabel, 0, 1, 0, 1);
 
   $acceptLabel = &new GtkLabel(SET_HDR_AT);
-  $labels->pack_start($acceptLabel, false);
-
-  $fields = &new GtkVBox(false, 10);
-  $httpHeaderRespBox->pack_start($fields, false);
+  $httpHeaderRespTable->attach($acceptLabel, 0, 1, 1, 2);
 
   $uaField = createEdit(getSetting('user-agent'));
   $uaField->set_sensitive(getSetting('use-custom-user-agent'));
   $uaField->connect('changed', 'settingsEntryChanged', 'user-agent');
-  $fields->pack_start($uaField, false);
+  $httpHeaderRespTable->attach($uaField, 1, 2, 0, 1);
 
   $acceptField = createEdit(getSetting('accept-types'));
   $acceptField->set_sensitive(getSetting('use-custom-accept-types'));
   $acceptField->connect('changed', 'settingsEntryChanged', 'accept-types');
-  $fields->pack_start($acceptField, false);
-
-  $customHeadersBox = &new GtkVBox();
-  $httpHeaderRespBox->pack_start($customHeadersBox, false);
+  $httpHeaderRespTable->attach($acceptField, 1, 2, 1, 2);
 
   $uaCustomCheck = &new GtkCheckButton(SET_USE_CUSTOM);
   $uaCustomCheck->set_active(getSetting('use-custom-user-agent'));
   $uaCustomCheck->connect('toggled', 'checkToggled', array(array($uaField), 'use-custom-user-agent'));
-  $customHeadersBox->pack_start($uaCustomCheck, false);
+  $httpHeaderRespTable->attach($uaCustomCheck, 2, 3, 0, 1);
 
   $acceptCustomCheck = &new GtkCheckButton(SET_USE_CUSTOM);
   $acceptCustomCheck->set_active(getSetting('use-custom-accept-types'));
   $acceptCustomCheck->connect('toggled', 'checkToggled', array(array($acceptField), 'use-custom-accept-types'));
-  $customHeadersBox->pack_start($acceptCustomCheck, false);
+  $httpHeaderRespTable->attach($acceptCustomCheck, 2, 3, 1, 2);
 
   $notebook->append_page($httpHeaderPage, $httpHeaderPageLabel);
 }
@@ -286,14 +273,6 @@ function showSettingsDialog()
   $buttonBox->pack_start($okBtn);
   $buttonBox->pack_start($cancelBtn);
   $buttonBox->pack_start($saveBtn);
-/*
-  $auxButtonBox = &new GtkHButtonBox();
-  $buttonBox->pack_start($auxButtonBox);
-  $auxButtonBox->pack_start($cancelBtn, false);
-
-  $saveButtonBox = &new GtkHButtonBox();
-  $buttonBox->pack_start($saveButtonBox);
-  $saveButtonBox->pack_start($saveBtn);*/
 
   $okBtn->grab_default();
 
