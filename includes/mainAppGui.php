@@ -148,7 +148,7 @@ function startMainGui()
 
   for ($idx = 1; $idx < $argc; $idx++)
   {
-    if (strstr($argv[$idx], 'httpz://'))
+    if (strstr($argv[$idx], 'http://'))
       getRemoteFeed(rawurldecode($argv[$idx]));
     else
       getLocalFeed(rawurldecode($argv[$idx]));

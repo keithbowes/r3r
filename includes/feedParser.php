@@ -192,8 +192,10 @@ function normalizeXmlNames($fieldName)
       $fieldName = 'creator';
       break;
     case 'entry':
-    case 'feed':
       $fieldName = 'item';
+      break;
+    case 'feed':
+      $fieldName = 'channel';
       break;
     case 'id':
       $fieldName = 'guid';
@@ -222,12 +224,12 @@ function _xml_start($parser, $name, $attr)
 
   $_xml_fn = $name;
 
-  if ($_xml_fn == 'item')
+  if (normalizeXmlNames($_xml_fn) == 'item')
   {
     $_xml_in_item = true;
     $itemIndex++;
   }
-  else if ($_xml_fn == 'channel')
+  else if (normalizeXmlNames($_xml_fn) == 'channel')
     $_xml_in_item = true; 
 }
 
@@ -243,7 +245,7 @@ function _xml_end($parser, $name)
   $_xml_fn = '';
   $_xml_fv = '';
 
-  if ($name == 'item')
+  if (normalizeXmlNames($name) == 'item')
     $_xml_in_item = false; 
 }
 
