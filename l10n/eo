@@ -1,0 +1,125 @@
+# Main Program
+PROG_NAME=R3R
+
+# Menus
+FILE=_Dosiero
+FILE_OPEN=_Malfermu
+FILE_QUIT=_Æesu
+TOOLS=_Laboriloj
+TOOLS_SETTINGS=_Opciaro
+HELP=_Helpo
+HELP_INFO=_Informa¼o
+
+# Context Menus
+# Entry Boxes
+CMENU_CUT=Tranæu
+CMENU_COPY=Kopiu
+CMENU_PASTE=Gluu
+# Feed Items
+ITEM_SUBSCRIBE=Abonu
+ITEM_UNSUBSCRIBE=Malabonu
+ITEM_METADATA=Metadatumo
+ITEM_CONTACT=Kontaktu
+
+# General feed stuff
+FEED_LINE_EMPTY=[Neniu]
+
+# Main List View
+LV_FEED_NAME=Kanala Nomo
+LV_ITEM_TITLE=Ana Titolo
+LV_SUBJECT=Temo
+LV_CREATED=Kreita
+
+# Description Display
+DESC_NO_ITEM=[Neniu ano elektita]
+
+# URL area
+GO_BTN=Iru
+
+# Status-bar messages
+STATUS_GETTING_DATA=Ekhavas Datumo...
+STATUS_TWICE=Finita: Æi tiu kanalo estis jam en via rigardo
+STATUS_CONNECT_FAIL=Konekto fiaskis
+STATUS_OPEN_CONNECTION=Konekto malfermiøas; sendas peton...
+STATUS_CACHED_MSG=Finleginta el kaþejo...
+STATUS_OPENING_CONNECTION=Malfermas konekton...
+STATUS_LV_FILL=Plenigas la listrigardon...
+STATUS_DONE_MSG=Finita
+STATUS_UNIMP_STATUS=La servilo sendis statkodon ke mi ne komprendas
+STATUS_READ_LOCAL=Finita legas lokan kanalon
+
+# Alert boxes
+ALERT_OK_BTN=Bone
+# Errors
+ALERT_ERROR=Eraro
+ALERT_NO_PHP_GTK=Mi ne povis þultas la PHP-GTK-an kroma¼on.
+ALERT_WRONG_MIME=R3R ne traktas kanalojn kun la MIME-tipo
+ALERT_ITEM_DETAILS=Anaj Detaloj
+ALERT_MDATA=Ano Metadatumo
+ALERT_CANT_CONN=Ne povas komenci konekton.  Mi prenos kaþan version, se havebla.
+ALERT_CANT_OPEN=ne povas malfermi.
+# Warnings
+ALERT_WARNING=Averto
+ALERT_INVALID_LINE_NAME=Neprava linenomo.  Æiu lineo devas ekhavi dupunkton (:) aý kunkomencas blankan spacon.
+ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas Øin trans lineoj por plej legebleco.
+ALERT_CR=Æaratreveno detektis.  Øuj lineoj devus fini kun liniavanco.
+ALERT_NOT_ESF=Tio ne estas ESF-a kanalo.
+ALERT_NOT_XML=Tio ne estas ESF-a kanalo (aý havas eraron).
+
+# Info... Dialog
+INFO_TITLE=Pri R3R
+INFO_NAME=Vere Bonega Legilo por RSS
+INFO_VERSION=Versio de R3R
+INFO_OS=Operaciumo
+INFO_PHP_VERSION=Versio de PHP
+INFO_PHP_API=API de PHP
+
+# File-selection captions
+FS_OPEN=Trovu kanalon...
+FS_RC=Foliumu por risurc-doseieroj...
+FS_CLIENT=Foliumu por via prefera HTTP-kliento...
+
+# Settings dialog
+# Main dialog
+SET_TITLE=Opcioj...
+# Buttons
+SET_OK_BTN=Bone
+SET_CANCEL_BTN=Rezignu
+SET_SAVE_BTN=Konservu
+SET_BROWS_BTN=Foliumu...
+
+# Appearance tab
+SET_APP_TAB=Apero
+SET_YOUR_RC=Uzu neaýtomatajn risurc-doseierojn
+
+# Feeds tab
+SET_FEEDS_TAB=Kanaloj
+SET_WARNINGS=Montru Avertojn
+SET_KNOWN_FEEDS=Montru konatajn kanalojn interne tekslisto
+SET_DESC_WRAP=Volvigu anajn priskribojn
+SET_TITLES_ONLY=Montru nur kanalajn titolojn
+SET_HIDE_CACHED=Kaþu kaþejitajn kanalojn
+
+# HTTP: Basic tab
+SET_HTTP_BASIC=HTTP: Baza
+SET_TO_PREF=Templimiøo: 
+SET_TO_SUF= (sekundoj)
+SET_HTTP_CLIENT=HTTP-kliento: 
+SET_PROXY_LBL=Prokuro
+SET_USE_PROXY=Uzu prokuron
+SET_PROXY_IP=Adreso: 
+SET_PROXY_PORT=Pordo: 
+
+# HTTP: Headers tab
+SET_HEADERS=HTTP: Æapo
+SET_HDR_LBL=Petæapo
+SET_HDR_UA=Uzula Peranto: 
+SET_HDR_AT=Akceptaj Tipoj: 
+SET_USE_CUSTOM=Uzas Agordan
+
+# Mail Tab
+SET_MAIL=Retpoþto
+SET_MAIL_CLIENT=Retpoþta Kliento: 
+
+# XML Parser
+XML_PARSER_ERROR=La XML sintaksa analizilo renkontis la sekvan eraron: 
