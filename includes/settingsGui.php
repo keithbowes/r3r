@@ -240,24 +240,24 @@ function createMailPage($notebook)
   $mailClientLbl = &new GtkLabel(SET_MAIL_CLIENT);
   $mailTable->attach($mailClientLbl, 0, 1, 1, 2);
 
-  $browserBrowse = &new GtkButton(SET_BROWS_BTN);
-  $browserBrowse->connect('clicked', 'createFileSelection', array($browserField, FS_CLIENT, 'http-client', $browserField));
-  $mailTable->attach($browserBrowse, 2, 3, 0, 1);;
-
   $mailClientField = createEdit(getSetting('mail-client-cl'));
   $mailClientField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
   $mailTable->attach($mailClientField, 1, 2, 1, 2);
 
-  $browserBrowse = &new GtkButton(SET_BROWS_BTN);
-  $browserBrowse->connect('clicked', 'createFileSelection', array($browserField, FS_CLIENT, 'http-client', $browserField));
-  $mailTable->attach($browserBrowse, 2, 3, 0, 1);;
+  $mailerBrowse = &new GtkButton(SET_BROWS_BTN);
+  $mailerBrowse->connect('clicked', 'createFileSelection', array($mailClientField, FS_CLIENT, 'mail-client-cl', $browserField));
+  $mailTable->attach($mailerBrowse, 2, 3, 1, 2);
 
   $editorLbl = &new GtkLabel(SET_EDITOR);
   $mailTable->attach($editorLbl, 0, 1, 2, 3);
 
   $editorField = createEdit(getSetting('editor'));
-  $editorField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
+  $editorField->connect('changed', 'settingsEntryChanged', 'editor');
   $mailTable->attach($editorField, 1, 2, 2, 3);
+
+  $editorBrowse = &new GtkButton(SET_BROWS_BTN);
+  $editorBrowse->connect('clicked', 'createFileSelection', array($editorField, FS_CLIENT, 'editor', $editorField));
+  $mailTable->attach($editorBrowse, 2, 3, 2, 3);
 
   $notebook->append_page($mailPage, $mailLbl);
 }
