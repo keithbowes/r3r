@@ -145,7 +145,7 @@ function displayFeedData($res)
     $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
     $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
   }
-  
+
   $feedList->freeze();
   if (!getSetting('display-feed-title-only'))
   {
