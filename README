@@ -10,7 +10,7 @@ full text.
 
 2. MIMIMUM REQUIREMENTS
 
-* PHP 4.3 or higher, but lower than 5.0.
+* PHP 4.3 or higher.
 * GTK+ 1.2.6 or higher, but lower than 2.0.
 * PHP-GTK 0.52 or higher, but lower than 2.0.
 

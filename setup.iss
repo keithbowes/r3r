@@ -19,6 +19,7 @@ Source: "r3r-settedup.bat"; DestDir: "{app}"; Components: r3r
 Source: "r3r.*"; DestDir: "{app}"; Components: r3r
 Source: "feeds.txt"; DestDir: "{app}"; Components: r3r
 Source: "icons\r3r.ico"; DestDir: "{app}"; Components: r3r
+Source: "version.txt"; DestDir: "{app}"; Components: r3r
 Source: "includes\*.php"; DestDir: "{app}\includes"; Components: r3r
 Source: "l10n\*"; DestDir: "{app}\l10n"; Components: r3r
 Source: "php.ini.gtk"; DestDir:"{app}\php"; Components: php

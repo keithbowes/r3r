@@ -228,12 +228,12 @@ function sendCacheHeader($res)
     $_cache_data = readCacheData();
 
   if ($_cache_data['mod-type'] == 'etag')
-    _fwrite($res, 'If-None-Match: ' . $_cache_data['mod-val'] . "\r\n");
+    fwrite($res, 'If-None-Match: ' . $_cache_data['mod-val'] . "\r\n");
 
   if ($_cache_data['mod-type'] == 'modified')
   {
     if (($_cache_data['mod-val'] + 60) < $_cache_data['date'])
-      _fwrite($res, 'If-Modified-Since: ' . gmdate('D, d M Y H:i:s GMT', $_cache_data['mod-val']) . "\r\n");
+      fwrite($res, 'If-Modified-Since: ' . gmdate('D, d M Y H:i:s GMT', $_cache_data['mod-val']) . "\r\n");
   }
 }
 
