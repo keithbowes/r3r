@@ -106,3 +106,6 @@ SET_USE_CUSTOM=Use Custom
 # Mail Tab
 SET_MAIL=Mail
 SET_MAIL_CLIENT=Mail Client: 
+
+# XML Parser
+XML_PARSER_ERROR=The XML parser encountered the following error:  

@@ -258,7 +258,8 @@ function parseXml($str)
     xml_set_character_data_handler($_xml_parser, '_xml_cdata');
   }
 
-  xml_parse($_xml_parser, $str);
+  if (!xml_parse($_xml_parser, $str))
+    alert(XML_PARSER_ERROR . "\n" . xml_error_string(xml_get_error_code($_xml_parser)));
 }
 
 /**

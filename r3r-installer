@@ -174,12 +174,17 @@ echo
 
 echo "Creating the program directory..."
 mkdir -p $BIN_DIR/includes
+mkdir -p $BIN_DIR/l10n
+mkdir -p $ICON_DIR
 
 echo
+
+chmod -R 777 .
 
 echo "Installing the program..."
 install feeds.txt r3r.php $BIN_DIR
 install includes/* $BIN_DIR/includes
+install l10n/* $BIN_DIR/l10n
 
 echo "Installing the startup script..."
 install -m 777 startr3r $BIN_DIR
