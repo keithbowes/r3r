@@ -207,37 +207,47 @@ function getRemoteFeed($url)
   if (empty($displayedFeeds[$url]))
   {
     openCache($url);
+    $is_cached = isCached();
 
-    @$pfeed = fsockopen($server, $port, $errno, $errstr, getSetting('timeout-sec'));
+    if ($is_cached != 2)
+      @$pfeed = fsockopen($server, $port, $errno, $errstr, getSetting('timeout-sec'));
 
-    if (!$pfeed)
+    if (!$pfeed && $is_cached != 2)
     {
       $statusBar->set_text(STATUS_CONNECT_FAIL);
       alert(ALERT_CANT_CONN . " ($errstr)");
-      return null;
+
+      if (isCached())
+        displayFeedData(getCacheFeedHandle());
+      else
+        return null;
     }
     else
     {
-      $statusBar->set_text(STATUS_OPEN_CONNECTION);
-      fputs($pfeed, 'GET ' . $req . " HTTP/1.1\r\n");
-      fputs($pfeed, 'Host: ' . $aurl['host'] . ':' .  $aurl['port'] . "\r\n");
-      fputs($pfeed, 'User-Agent: ' . getSetting('user-agent') . "\r\n");
-      fputs($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
-      fputs($pfeed, "Accept-Encoding: \r\n");
-      if (isCached())
+      if ($is_cached != 2)
       {
-        fputs($pfeed, 'If-None-Match: ' . readCacheData());
+        $statusBar->set_text(STATUS_OPEN_CONNECTION);
+        fputs($pfeed, 'GET ' . $req . " HTTP/1.1\r\n");
+        fputs($pfeed, 'Host: ' . $aurl['host'] . ':' .  $aurl['port'] . "\r\n");
+        fputs($pfeed, 'User-Agent: ' . getSetting('user-agent') . "\r\n");
+        fputs($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
+        fputs($pfeed, "Accept-Encoding: \r\n");
+        if ($is_cached == 1)
+          sendCacheHeader($pfeed);
+        fputs($pfeed, "Connection: close\r\n");
+        fputs($pfeed, "\r\n");
       }
-      fputs($pfeed, "Connection: close\r\n");
-      fputs($pfeed, "\r\n");
-      if (isCached())
+
+      if ($is_cached)
       {
-        if (strpos(fgets($pfeed), '304'))
+        if ($is_cached == 2 || ($is_cached == 1 && strpos(fgets($pfeed), '304')))
         {
           if (!getSetting('hide-cached-feeds'))
             displayFeedData(getCacheFeedHandle());
 
-          fclose($pfeed);
+          if ($pfeed)
+            fclose($pfeed);
+
           closeCache();
           $statusBar->set_text(STATUS_CACHED_MSG);
           return;
@@ -258,7 +268,8 @@ function getRemoteFeed($url)
   else
     $statusBar->set_text(STATUS_TWICE);
 
-  fclose($pfeed);
+  if ($pfeed)
+    fclose($pfeed);
 
   list($key, $val) = each($feeds[-1]);
   preg_match('/\w+\/(\d\.\d)\s+(\d{3})\s+(.+)\r\n/', $key, $matches);
@@ -271,6 +282,8 @@ function getRemoteFeed($url)
       break;
     case 2:
       $statusBar->set_text(STATUS_DONE_MSG . " ($reason)");
+      if ($code == 206)
+        invalidateCache();
       break;
     case 3:
       if (($header = $feeds[-1]['location']) || ($header = $feeds[-1]['content-location']))

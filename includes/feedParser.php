@@ -6,8 +6,6 @@
 
 /* Functions for parsing various types of feeds */
 
-/* RSS 3.0 parsing functions */
-
 /* Common Functions */
 
 /**
@@ -40,6 +38,8 @@ function internalizeItem($fn, $fv)
     return $fn;
   }
 }
+
+/* RSS 3.0 parsing functions */
 
 /**
   * Parse a line of an RSS 3.0 feed and fill an array with the information.
@@ -204,6 +204,7 @@ function normalizeXmlNames($fieldName)
   * @param Resource The XML parser
   * @param String The tag name
   * @param Array Element attributes
+  * @access private
 */
 function _xml_start($parser, $name, $attr)
 {
@@ -219,6 +220,7 @@ function _xml_start($parser, $name, $attr)
   * End XML tag found
   * @param Resource The XML parser
   * @param String The tag name
+  * @access private
 */
 function _xml_end($parser, $name)
 {
@@ -231,6 +233,7 @@ function _xml_end($parser, $name)
   * XML character data found
   * @param Resource The XML parser
   * @param String The character data
+  * @access private
 */
 function _xml_cdata($parser, $data)
 {
@@ -259,7 +262,10 @@ function parseXml($str)
   }
 
   if (!xml_parse($_xml_parser, $str))
+  {
     alert(XML_PARSER_ERROR . "\n" . xml_error_string(xml_get_error_code($_xml_parser)));
+    freeXmlParser();
+  }
 }
 
 /**

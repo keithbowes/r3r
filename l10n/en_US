@@ -44,7 +44,7 @@ ALERT_ERROR=Error
 ALERT_WRONG_MIME=R3R can't handle feeds with the MIME type
 ALERT_ITEM_DETAILS=Item Details
 ALERT_MDATA=Item Metadata
-ALERT_CANT_CONN=Could not initialize connection
+ALERT_CANT_CONN=Could not initialize connection.  I'll retrieve a cached version if one's available.
 ALERT_CANT_OPEN=can't be opened.
 # Warnings
 ALERT_WARNING=Warning
@@ -54,7 +54,7 @@ ALERT_CR=Carriage return detected.  All lines should end with a line feed.
 
 # Info... Dialog
 INFO_TITLE=About R3R
-INFO_NAME=RSS 3.0 Reader
+INFO_NAME=Really Radical Reader for RSS
 INFO_VERSION=Version
 INFO_OS=Operating System
 INFO_PHP_VERSION=PHP Version
@@ -108,4 +108,4 @@ SET_MAIL=Mail
 SET_MAIL_CLIENT=Mail Client: 
 
 # XML Parser
-XML_PARSER_ERROR=The XML parser encountered the following error:  
+XML_PARSER_ERROR=The XML parser encountered the following error: 
