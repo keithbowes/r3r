@@ -1,0 +1,24 @@
+#!/bin/sh
+
+cd `dirname $0`
+cd ..
+
+rm -fv ../r3r-linux*.bz2
+
+CVERSION=`cat version.php`
+VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
+
+mkdir -p ../r3r-linux-$VERSION/icons
+mkdir    ../r3r-linux-$VERSION/includes
+mkdir    ../r3r-linux-$VERSION/l10n
+
+cp -fv *.in *.php Artistic README feeds.txt install-sh ../r3r-linux-$VERSION
+cp -fv icons/r3r.xpm ../r3r-linux-$VERSION/icons
+cp -fv includes/* ../r3r-linux-$VERSION/includes
+cp -fv l10n/*.lng ../r3r-linux-$VERSION/l10n
+
+cd ..
+
+tar cjvf r3r-linux-$VERSION.tar.bz2 r3r-linux-$VERSION
+
+rm -frv r3r-linux-$VERSION

@@ -1,0 +1,21 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+rm -frv Output
+
+cd ..
+
+rm -fv ../r3r-src*.bz2
+
+CVERSION=`cat version.php`
+VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
+
+mkdir ../r3r-src-$VERSION
+cp -frv * ../r3r-src-$VERSION
+
+cd ..
+
+tar cjvf r3r-src-$VERSION.tar.bz2 r3r-src-$VERSION
+
+rm -frv r3r-src-$VERSION
