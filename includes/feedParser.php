@@ -10,7 +10,7 @@
 
 /**
   * Tests whether the input line is blank
-  * @param String a string to test
+  * @param String A string to test
   * @return Boolean Whether the line was blank
 */
 function isBlankLine($str)

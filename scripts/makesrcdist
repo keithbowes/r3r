@@ -2,14 +2,14 @@
 
 cd `dirname $0`
 
-./prepdist
-
 rm -frv Output
 
 cd ..
 
 CVERSION=`cat version.php`
 VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
+
+make distclean
 
 mkdir ../r3r-src-$VERSION
 cp -frv * ../r3r-src-$VERSION

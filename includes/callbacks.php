@@ -450,15 +450,16 @@ function checkToggled($source, $data)
 {
   list($targets, $setting) = $data;
 
-  static $sensitive = null;
-
-  if ($sensitive === null)
-    $sensitive = !getSetting($setting);
-
   foreach ($targets as $target)
-    $target->set_sensitive($sensitive);
+  {
+    if ($target->sensitive === null)
+      $target->sensitive = getSetting($setting);
 
-  $sensitive = !setSetting($setting, $sensitive);
+    $target->sensitive = !$target->sensitive;
+    $target->set_sensitive($target->sensitive);
+  }
+
+  setSetting($setting, !getSetting($setting));
 }
 
 /**
@@ -469,21 +470,6 @@ function checkToggled($source, $data)
 function settingsEntryChanged($widget, $data)
 {
   setSetting($data, $widget->get_text());
-}
-
-/* Item Description Callbacks*/
-
-/**
-  * A link in the description area has been clicked
-  * @param GtkEventBox The clicked widget
-  * @param GdkEvent The event passed
-  * @param String The link to visit
-*/
-function descLinkClicked($widget, $event, $data)
-{
-  global $feeds;
-
-  gotoLink(relToAbs($feeds[0]['link'], $data));
 }
 
 ?>

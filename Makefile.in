@@ -33,5 +33,6 @@ uninstall:
 	$(RMDIR) @prefix@/r3r
 	$(RM) @prefix@/bin/r3r @prefix@/share/icons/hicolor/32x32/apps/r3r.xpm /home/@configured_user@/Desktop/R3R.Desktop
 
-uninstall-permament: uninstall
-	$(RMDIR) /root/.r3r /home/*/.r3r
+uninstall-permanent: uninstall
+	$(RMDIR) /root/.r3r
+	$(foreach home, $(wildcard /home/*), $(RMDIR) $(home)/.r3r)

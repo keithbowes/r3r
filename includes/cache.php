@@ -192,7 +192,7 @@ function writeCacheData()
   if ($data = $feeds[-1]['etag'])
     fwrite($_cache_cache, "etag=$data");
   else if ($data = $feeds[-1]['last-modified'])
-    fwrite($_cache_cache, "modified=$data");
+    fwrite($_cache_cache, 'modified=' . strtotime($data));
 
   fwrite($_cache_cache, "\t" . strtotime($feeds[-1]['date']));
   fwrite($_cache_cache, "\t$mime_type");
@@ -249,7 +249,7 @@ function sendCacheHeader($res)
   if ($_cache_data['mod-type'] == 'modified')
   {
     if (($_cache_data['mod-val'] + 60) < $_cache_data['date'])
-      fwrite($res, 'If-Modified-Since: ' . gmdate('D, d M Y H:i:s GMT', $_cache_data['mod-val']) . "\r\n");
+      fwrite($res, 'If-Modified-Since: ' . gmdate('r', $_cache_data['mod-val']) . "\r\n");
   }
 }
 
