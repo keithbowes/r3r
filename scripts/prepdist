@@ -1,0 +1,11 @@
+#!/bin/sh
+
+CWD=`pwd`
+
+cd ..
+
+autoconf
+./configure
+make
+
+cd $CWD
