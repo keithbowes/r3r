@@ -227,6 +227,8 @@ function _xml_start($parser, $name, $attr)
     $_xml_in_item = true;
     $itemIndex++;
   }
+  else if ($_xml_fn == 'channel')
+    $_xml_in_item = true; 
 }
 
 /**
@@ -242,9 +244,7 @@ function _xml_end($parser, $name)
   $_xml_fv = '';
 
   if ($name == 'item')
-    $_xml_in_item = false;
-  else if ($name == 'channel')
-    $_xml_in_item = true;  
+    $_xml_in_item = false; 
 }
 
 /**
