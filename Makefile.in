@@ -1,0 +1,35 @@
+root_files=r3r r3r.php version.php
+includes_files=$(wildcard includes/*.php)
+l10n_files=$(wildcard l10n/*.lng)
+
+RMDIR?=$(RM) -r
+
+all:
+	chmod +x r3r
+	-cd l10n && @PHP@ cnf2lng.php
+
+clean:
+	$(RM) R3R.Desktop r3r
+	cd l10n && $(RM) *.lng
+
+distclean: clean
+	$(RM) Makefile config.cache config.log config.status configure
+
+install: all
+	mkdir -p @prefix@/r3r/includes
+	mkdir -p @prefix@/r3r/l10n
+	mkdir -p @prefix@/share/icons/hicolor/32x32/apps
+
+	@INSTALL@ -m 755 $(root_files) @prefix@/r3r
+	@INSTALL@ -m 755 $(includes_files) @prefix@/r3r/includes
+	@INSTALL@ -m 644 $(l10n_files) @prefix@/r3r/l10n
+	@INSTALL@ -m 755 icons/r3r.xpm @prefix@/share/icons/hicolor/32x32/apps
+	@INSTALL@ -m 755 R3R.Desktop /home/@configured_user@/Desktop
+	cd @prefix@/bin && @LN_S@ -f @prefix@/r3r/r3r
+
+uninstall:
+	$(RMDIR) @prefix@/r3r
+	$(RM) @prefix@/bin/r3r @prefix@/share/icons/hicolor/32x32/apps/r3r.xpm /home/@configured_user@/Desktop/R3R.Desktop
+
+uninstall-permament: uninstall
+	$(RMDIR) /root/.r3r /home/*/.r3r

@@ -1,0 +1,6 @@
+# !/bin/sh
+# @configure_input@
+
+cd @prefix@/r3r
+
+@PHP@ r3r.php $@
