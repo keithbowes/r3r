@@ -10,6 +10,17 @@ TOOLS_SETTINGS=_Settings
 HELP=_Help
 HELP_INFO=_Info
 
+# Context Menus
+# Entry Boxes
+CMENU_CUT=Cut
+CMENU_COPY=Copy
+CMENU_PASTE=Paste
+# Feed Items
+ITEM_SUBSCRIBE=_Subscribe
+ITEM_UNSUBSCRIBE=_Unsubscribe
+ITEM_METADATA=Metadata
+ITEM_CONTACT=Contact
+
 # General feed stuff
 FEED_LINE_EMPTY=[None]
 
@@ -51,6 +62,7 @@ ALERT_WARNING=Warning
 ALERT_INVALID_LINE_NAME=Invalid line name.  Each line must either contain a colon (:) or begin with whitespace.
 ALERT_LONG_LINE=The field value is more than eighty characters.  Please split it across lines for optimum readability.
 ALERT_CR=Carriage return detected.  All lines should end with a line feed.
+ALERT_NOT_ESF=This is not an ESF feed.
 
 # Info... Dialog
 INFO_TITLE=About R3R

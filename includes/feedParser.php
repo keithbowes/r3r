@@ -96,6 +96,8 @@ function parseTxt($str)
 function parseEsf($str)
 {
   global $feeds, $itemIndex;
+  static $wmAgain = false;
+  static $prvr3 = false;
 
   $items = array('created', 'title', 'link');
   $arr = explode("\t", trim($str));
@@ -131,7 +133,37 @@ function parseEsf($str)
   else if ($narr == 2)
   {
     list($fieldName, $fieldVal) = $arr;
+    if ($fieldName == 'contact')
+      $fieldName = 'creator';
+
     internalizeItem($fieldName, $fieldVal);
+    return;
+  }
+  // This is not an ESF feed, though the MIME type says it is.  Throw it to the correct parser.
+  else
+  {
+    if (getSetting('show-warnings') && !$wmAgain)
+      alert(ALERT_NOT_ESF, ALERT_WARNING);
+    
+    if (preg_match('/^\w[^:]+:/', $str))
+    {
+      parseTxt($str);
+      $prvr3 = true;
+    }
+    else if (preg_match('/^\s+\S/', $str))
+    {
+      if ($prvr3)
+        parseTxt($str);
+      else
+        parseXml($str);
+    }
+    else
+    {
+      parseXml($str);
+      $prvr3 = false;
+    }
+
+    $wmAgain = true;
     return;
   }
 
@@ -222,15 +254,17 @@ function _xml_start($parser, $name, $attr)
 {
   global $_xml_fn, $_xml_in_item, $itemIndex;
 
-  $_xml_fn = $name;
+  $_xml_fn = normalizeXmlNames($name);
 
-  if (normalizeXmlNames($_xml_fn) == 'item')
+  if ($_xml_fn == 'item')
   {
     $_xml_in_item = true;
     $itemIndex++;
   }
-  else if (normalizeXmlNames($_xml_fn) == 'channel')
+  else if ($_xml_fn == 'channel')
     $_xml_in_item = true; 
+  else if ($_xml_fn == 'link')
+    internalizeItem($_xml_fn,  $attr['href']);
 }
 
 /**
