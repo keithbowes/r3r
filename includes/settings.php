@@ -42,9 +42,11 @@ function commitSettings()
 {
   global $_settings, $_temp_settings;
   reset($_temp_settings);
-  
+
   while (list($setting_name, $setting_val) = each($_temp_settings))
     $_settings[$setting_name] = $setting_val;
+
+  unset($_temp_settings);
 }
 
 /**
@@ -64,7 +66,7 @@ function setInitialSetting($setting)
         $val= $lang['name'] . '-' . $lang['country'] .',' . $lang['name'] . '; q=0.5';
       break;
     case 'accept-types':
-      $val = 'text/x-rss, text/plain; q=0.8, application/rss+xml; q=0.6, application/rdf+xml; q=0.5, application/atom+xml; q=0.3, */*; q=0.1';
+      $val = 'text/x-rss, text/plain; q=0.8, application/rss+xml; q=0.6, application/rdf+xml; q=0.5, application/atom+xml; q=0.3, application/xml; q=0.2, text/xml; q=0.1, */*; q=0.0';
       break;
     case 'display-feed-title-only':
       $val = false;

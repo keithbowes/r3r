@@ -3,4 +3,7 @@
 
 cd @prefix@/r3r
 
+R3R_BROWSER=@with_browser@
+export R3R_BROWSER
+
 @PHP@ r3r.php $@

@@ -81,7 +81,6 @@ ALERT_NOT_XML=Tio ne estas XML-a kanalo (aý havas eraron).
 
 # Info... Dialog
 INFO_TITLE=Pri R3R
-INFO_NAME=Vere Bonega Legilo por RSS
 INFO_VERSION=Versio de R3R
 INFO_OS=Operaciumo
 INFO_PHP_VERSION=Versio de PHP

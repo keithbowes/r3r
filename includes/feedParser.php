@@ -43,6 +43,7 @@ function internalizeItem($fn, $fv)
 /**
   * Parse a line of an RSS 3.0 feed and fill an array with the information.
   * @param String A line of an RSS 3.0 feed
+  * @return Boolean Whether the line was successfully parsed
 */
 function parseTxt($str)
 {
@@ -94,6 +95,7 @@ function parseTxt($str)
 /**
   * Parse a line of an ESF feed and fill an array with the information.
   * @param String A line of an ESF feed
+  * @return Boolean Whether the line was successfully parsed
 */
 function parseEsf($str)
 {
@@ -286,6 +288,7 @@ function _xml_cdata($parser, $data)
 /**
   * Parse a line of an XML feed and fill an array with the information.
   * @param String A line of an XML feed
+  * @return Boolean Whether the line was successfully parsed
 */
 function parseXml($str)
 {

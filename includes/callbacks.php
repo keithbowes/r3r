@@ -52,13 +52,11 @@ function gotoLink($link)
       }
       else
       {
-        $brows = `links -dump $link`;
-        if ($brows)
-          alert($brows, ALERT_ITEM_DETAILS, false);
+        system("\"" . getenv('R3R_BROWSER') . "\" \"" . $link . '" > /dev/null &');
       }
     }
     else
-      system("\"" . getSetting('http-client') . "\" " . $link . ' > /dev/null &');
+      system("\"" . getSetting('http-client') . "\" \"" . $link . '" > /dev/null &');
   }
 }
 
@@ -412,7 +410,7 @@ function feedListRowPressed($widget, $event)
 */
 function showInfo()
 {
-  alert(INFO_NAME . ' (' . PROG_NAME . ")\n\n" . INFO_VERSION . ': ' . VERSION . "\n" . INFO_OS . ': ' . getOs() . "\n" . INFO_PHP_VERSION . ': ' . PHP_VERSION . "\n" . INFO_PHP_API . ': ' . php_sapi_name() . "\n" . INFO_SETTINGS_DIR . ': ' . SETTINGS_DIR, INFO_TITLE);
+  alert(INFO_VERSION . ': ' . VERSION . "\n" . INFO_OS . ': ' . getOs() . "\n" . INFO_PHP_VERSION . ': ' . PHP_VERSION . "\n" . INFO_PHP_API . ': ' . php_sapi_name() . "\n" . INFO_SETTINGS_DIR . ': ' . SETTINGS_DIR, INFO_TITLE);
 }
 
 /**
