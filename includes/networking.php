@@ -30,7 +30,7 @@ function rejoinurl($aurl)
 }
 
 /**
-  * If an RSS field is abscent, create one.
+  * If an RSS field is absent, create one.
   * @param Array The original item.
   * @return Array The new item.
 */

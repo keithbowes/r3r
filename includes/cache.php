@@ -118,7 +118,7 @@ function isCached()
   if (!$_cache_data['expires'])
     $_is_cached = 0;
   else if ($_cache_data['expires'] > time())
-    echo $_cache_data['expires'] - time();
+    $_is_cached = 2;
 
   return $_is_cached;
 }
