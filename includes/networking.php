@@ -150,8 +150,9 @@ function displayFeedData($res)
   $statusBar->set_text(STATUS_LV_FILL);
   $row_index++;
 
-  // Note: A blank first line is acceptable in ESF feeds
-  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created'] || $mime_type == 'text/plain')
+  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created']
+  // Note: Feeds without metadata are acceptable in ESF feeds, so...
+    || $mime_type == 'text/plain' || $mime_type == 'text/x-esf')
   {
     $feeds[0] = generateFields($feeds[0]);
     $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
@@ -160,7 +161,6 @@ function displayFeedData($res)
   else
     $row_index--;
 
-  $feedList->freeze();
   if (!getSetting('display-feed-title-only'))
   {
     $nFeeds = count($feeds) + $baseItem;
@@ -181,7 +181,6 @@ function displayFeedData($res)
       }
     }
   }
-  $feedList->thaw();
 
   $displayedFeeds[$feeds[0]['title']] = true;
   $mime_type = null;

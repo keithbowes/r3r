@@ -32,8 +32,6 @@ function killWidget($source, $target)
 */
 function gotoLink($link)
 {
-  global $feed;
-
   if ($link != FEED_LINE_EMPTY && $link)
   {
     if (getSetting('http-client') == 'system')
@@ -456,7 +454,7 @@ function urlFieldGo($widget, $event, $data)
 */
 function settingsDlgDel($widget, $data)
 {
-  list($save_settings, $settings) = $data;
+  list($save_settings, $settings) = (array) $data;
 
   if ($save_settings)
     cancelSettingsChange($widget, $settings);

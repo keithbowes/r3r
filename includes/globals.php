@@ -66,9 +66,7 @@ function doEvent()
 */
 function getOs()
 {
-  preg_match('/(.+)\s\S+\s(\d\.\S+)/', php_uname(), $matches);
-  list($match, $os_name, $os_version) = $matches;
-  return $os_name . ' ' . $os_version;
+  return php_uname('s') . ' ' . php_uname('r');
 }
 
 /**
