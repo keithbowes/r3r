@@ -22,6 +22,8 @@ if ($argc < 2)
 
 for ($i = 1; $i < $argc; $i++)
 {
+  echo "Converting " . $argv[$i] . ' to ' . $argv[$i] . ".lng...\n";
+
   $cnf = fopen($argv[$i], 'r');
   $lng = fopen($argv[$i] . '.lng', 'w');
   fwrite($lng, "<?php\n\n");
@@ -33,6 +35,11 @@ for ($i = 1; $i < $argc; $i++)
 
   fclose($lng);
   fclose($cnf);
+
+  echo 'Finished.';
+
+  if ($i != $argc - 1)
+    echo "\n\n";
 }
 
 ?> 

@@ -48,7 +48,7 @@ GO_BTN=Iru
 
 # Status-bar messages
 STATUS_GETTING_DATA=Ekhavas Datumo...
-STATUS_TWICE=Finita: Æi tiu kanalo estis jam en via rigardo
+STATUS_TWICE=Finita: æi tiu kanalo estis jam en via rigardo
 STATUS_CONNECT_FAIL=Konekto fiaskis
 STATUS_OPEN_CONNECTION=Konekto malfermiøas; sendas peton...
 STATUS_CACHED_MSG=Finleginta el kaþejo...
@@ -73,8 +73,8 @@ ALERT_CANT_OPEN=ne povas malfermi.
 # Warnings
 ALERT_WARNING=Averto
 ALERT_INVALID_LINE_NAME=Neprava linenomo.  Æiu lineo devas ekhavi dupunkton (:) aý kunkomencas blankan spacon.
-ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas Øin trans lineoj por plej legebleco.
-ALERT_CR=Æaratreveno detektis.  Øuj lineoj devus fini kun liniavanco.
+ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas øin trans lineoj por plej legebleco.
+ALERT_CR=Æ¿aratreveno detektis.  Æiuj lineoj devus fini kun liniavanco.
 ALERT_NOT_ESF=Tio ne estas ESF-a kanalo.
 ALERT_NOT_XML=Tio ne estas XML-a kanalo (aý havas eraron).
 
@@ -111,7 +111,7 @@ SET_WARNINGS=Montru Avertojn
 SET_KNOWN_FEEDS=Montru konatajn kanalojn interne tekslisto
 SET_DESC_WRAP=Volvigu anajn priskribojn
 SET_TITLES_ONLY=Montru nur kanalajn titolojn
-SET_HIDE_CACHED=Kaþu kaþejitajn kanalojn
+SET_HIDE_CACHED=Nur montru øisdatigitajn kanalojn
 
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Baza
@@ -132,7 +132,7 @@ SET_HDR_LANG=Lingvoj:
 SET_USE_CUSTOM=Uzas Agordan
 
 # Mail Tab
-SET_MAIL=Retpoþto
+SET_MAIL=Retpþto
 SET_MAIL_CLIENT=Retpoþta Kliento: 
 
 # XML Parser

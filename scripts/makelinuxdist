@@ -13,7 +13,7 @@ mkdir    ../r3r-linux-$VERSION/includes
 mkdir    ../r3r-linux-$VERSION/l10n
 
 cp -fv *.in *.php Artistic README feeds.txt install-sh ../r3r-linux-$VERSION
-cp -fv icons/r3r.xpm ../r3r-linux-$VERSION/icons
+cp -fv icons/r3r.png ../r3r-linux-$VERSION/icons
 cp -fv includes/* ../r3r-linux-$VERSION/includes
 cp -fv l10n/*.lng ../r3r-linux-$VERSION/l10n
 

@@ -163,7 +163,8 @@ function displayFeedData($res)
 
   if (!getSetting('display-feed-title-only'))
   {
-    $nFeeds = count($feeds) + $baseItem;
+    $nFeeds = count($feeds) + $baseItem + 1;
+
     for ($idx = 1; $idx < $nFeeds; $idx++)
     { 
       if (is_array($feeds[$idx]))
@@ -182,10 +183,10 @@ function displayFeedData($res)
     }
   }
 
+  writeCacheData();
+
   $displayedFeeds[$feeds[0]['title']] = true;
   $mime_type = null;
-
-  writeCacheData();
 }
 
 /**
@@ -198,6 +199,7 @@ function getRemoteFeed($url)
   static $displayedFeeds;
 
   $itemIndex = -1;
+
   $feedSrc = $url;
 
   $aurl = parse_url($url);
@@ -231,8 +233,11 @@ function getRemoteFeed($url)
 
     if (!$pfeed && $cached_status < 2)
     {
-      $statusBar->set_text(STATUS_CONNECT_FAIL);
-      alert(ALERT_CANT_CONN . " ($errstr)");
+      if ($errno != 0)
+      {
+        $statusBar->set_text(STATUS_CONNECT_FAIL);
+        alert(ALERT_CANT_CONN . " ($errstr)");
+      }
 
       if ($cached_status)
         displayFeedData(getCacheFeedHandle());
@@ -290,7 +295,10 @@ function getRemoteFeed($url)
         $statusBar->set_text(STATUS_OPENING_CONNECTION);
 
         if (!$feeds)
+        {
+          $statusBar->set_text('');
           return;
+        }
       }
     }
   }
@@ -337,6 +345,7 @@ function getRemoteFeed($url)
       $statusBar->set_text(STATUS_UNIMP_STATUS);
   }
 
+  $statusBar->set_default($statusBar->get_text());
   closeCache();
 }
 
@@ -382,6 +391,7 @@ function getLocalFeed($file, $start_index = 0)
 
   displayFeedData($fh);
   $statusBar->set_text(STATUS_READ_LOCAL);
+  $statusBar->set_default($statusBar->get_text());
   fclose($fh);
   chdir($cwd);
 }

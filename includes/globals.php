@@ -13,7 +13,7 @@ define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
 /**
   * The settings file.
 */
-define('SETTINGS_FILE', 'r3rrc.php');
+define('SETTINGS_FILE', 'r3rrc');
 
 /* GUI variables and classes */
 
@@ -27,6 +27,34 @@ class ExtendedGtkStatusBar extends GtkStatusBar
     * @access private
   */
   var $_cid;
+  /**
+    * @var int The default status string.
+    * @access private
+  */
+  var $_default_status;
+  /**
+    * @var int The text previously passed to the widget.
+    * @access private
+  */
+  var $_prev_text;
+
+  /**
+    * Set the default status-bar string.
+    * @param String The default string.
+  */
+  function set_default($str)
+  {
+    $this->_default_status = $str;
+  }
+
+  /**
+    * Get the default status-bar string.
+    * @return The default string.
+  */
+  function get_default()
+  {
+    return $this->_default_status;
+  }
   
   /**
     * Set the status-bar text.
@@ -34,20 +62,33 @@ class ExtendedGtkStatusBar extends GtkStatusBar
   */
   function set_text($text)
   { 
-    global $_cid;
     doEvent();
 
-    $_cid = GtkStatusBar::get_context_id($text);
-    $this->push($_cid, $text);
+    $this->_cid = GtkStatusBar::get_context_id($text);
+
+    $this->pop($this->_cid);
+    $this->push($this->_cid, $text);
+
+    $this->_prev_text = $text;
+  }
+  
+  /**
+    * Get the status-bar text.
+    * @param String The text in the status bar.
+  */
+  function get_text()
+  { 
+    return $this->_prev_text;
   }
 
   /**
     * Remove the topmost entry of the status-bar.
+    * @deprecated
   */
   function remove_top()
   { 
-    global $_cid;
-    $this->pop($_cid);
+    trigger_error('remove_top() has been integrated into set_text().  Use only when you need to clear the status bar.  May be removed altogether in future versions.', E_WARNING);
+    $this->pop($this->$_cid);
   }
 }
 
@@ -112,7 +153,7 @@ $window = &new GtkWindow();
 /* Settings */
 
 /**
-  * @global Array Internel representation of your settings.
+  * @global Array Internal representation of your settings.
 */
 $settings = array();
 

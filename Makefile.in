@@ -14,7 +14,7 @@ clean:
 	cd l10n && $(RM) *.lng
 
 distclean: clean
-	$(RM) Makefile config.cache config.log config.status configure
+	$(RM) Makefile config.cache config.log config.status configure autopackage/default.apspec
 
 install: all
 	mkdir -p @prefix@/r3r/includes

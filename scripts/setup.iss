@@ -7,7 +7,7 @@ AppName=R3R
 AppPublisher=Zooplah
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
-AppVerName=the R3R version you downloaded
+AppVerName=R3R {%VERSION}
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
@@ -17,7 +17,7 @@ LicenseFile=../Artistic
 ; The following are the locations on my computer.  You will probably need to change these.
 Source: "..\launchers\r3r*.bat"; DestDir: "{app}"; Components: r3r
 Source: "..\*.php"; DestDir: "{app}"; Components: r3r
-Source: "..\icons\r3r.ico"; DestDir: "{app}"; Components: r3r
+Source: "..\icons\r3r.png"; DestDir: "{app}"; Components: r3r
 Source: "..\includes\*.php"; DestDir: "{app}\includes"; Components: r3r
 Source: "..\l10n\*.lng"; DestDir: "{app}\l10n"; Components: r3r
 Source: "php.ini-gtk"; DestDir:"{app}\php"; DestName: "php.ini"; Components: php
@@ -43,5 +43,5 @@ Name: "gtk"; Description: "The GTK+ dynamic libraries"; Types: full
 [Icons]
 Name: "{group}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.ico"
 Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
-Name: "{userdesktop}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.ico"; Tasks: desktopicon
+Name: "{userdesktop}\R3R"; FileName: "{app}\r3r-settedup.bat"; WorkingDir: "{app}"; IconFilename: "{app}\r3r.png"; Tasks: desktopicon
 

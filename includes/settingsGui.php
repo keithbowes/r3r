@@ -247,13 +247,12 @@ function createNotebook($parent)
 */
 function showSettingsDialog()
 {
-  global $settings;
-  $old_settings = $settings;
+  $settings = null;
 
   $dialog = &new GtkWindow(GTK_WINDOW_DIALOG);
   $dialog->set_title(SET_TITLE);
   $dialog->set_policy(false, false, true);
-  $dialog->connect('delete-event', 'settingsDlgDel', array(true, $old_settings));
+  //$dialog->connect('delete-event', 'settingsDlgDel', array(true, $settings));
 
   $dlgBox = &new GtkVBox();
   $dialog->add($dlgBox);
@@ -267,11 +266,11 @@ function showSettingsDialog()
 
   $okBtn = &new GtkButton(SET_OK_BTN);
   $okBtn->set_flags(GTK_CAN_DEFAULT);
+  $okBtn->connect('clicked', 'saveSettingsChange', $settings);
   $okBtn->connect('clicked', 'killWidget', $dialog);
 
   $cancelBtn = &new GtkButton(SET_CANCEL_BTN);
   $cancelBtn->set_flags(GTK_CAN_DEFAULT);
-  $cancelBtn->connect('clicked', 'cancelSettingsChange', $old_settings);
   $cancelBtn->connect('clicked', 'killWidget', $dialog);
 
   $saveBtn = &new GtkButton(SET_SAVE_BTN);

@@ -22,6 +22,11 @@ $_cache_dir = '';
 */
 $_cache_handle = null;
 /**
+  * Handle of the cached response headers
+  * @access private
+*/
+$_cache_response = null;
+/**
   * Identification of the current cache
   * @access private
 */
@@ -43,7 +48,7 @@ $_cached_status = 0;
 */
 function openCache($url)
 {
-  global $_cache_cache, $_cache_dir, $_cache_handle, $_cache_id, $_cached_status;
+  global $_cache_cache, $_cache_dir, $_cache_handle, $_cache_id, $_cache_response, $_cached_status;
 
   if ($_cache_handle)
     closeCache();
@@ -53,6 +58,7 @@ function openCache($url)
 
   $_cache_data = 'data';
   $_cache_feed = 'feed';
+  $_cache_resp = 'response';
 
   $cwd = getcwd();
 
@@ -81,10 +87,17 @@ function openCache($url)
     fclose($fh);
   }
 
+  if (!file_exists($_cache_resp))
+  {
+    $fh = fopen($_cache_resp, 'w');
+    fclose($fh);
+  }
+
   unset($fh);
 
   $_cache_cache = fopen($_cache_data, 'ar+');
   $_cache_handle = fopen($_cache_feed, 'ar+');
+  $_cache_response = fopen($_cache_resp, 'ar+');
 
   chdir($cwd);
 }
@@ -98,6 +111,7 @@ function closeCache()
 
   @fclose($_cache_cache);
   @fclose($_cache_handle);
+  @fclose($_cache_response);
 
   $_cache_data = null;
   $_cache_id = '';
@@ -114,6 +128,8 @@ function getCachedStatus()
 
   if (!$_cache_data)
     $_cache_data = readCacheData();
+  if (!$_cache_data)
+    return $_cached_status;
 
   if (!$_cache_data['expires'])
     $_cached_status = 0;
@@ -129,10 +145,15 @@ function getCachedStatus()
 */
 function cacheWrite($str)
 {
-  global $_cache_handle;
+  global $_cache_handle, $_cache_response, $itemIndex;
 
-  if ($_cache_handle)
-    fwrite($_cache_handle, str_replace("\r", '', $str));
+  if ($str)
+  {
+    if ($_cache_handle && $itemIndex > -1)
+      fwrite($_cache_handle, str_replace("\r", '', $str));
+    else if ($_cache_response && $itemIndex == -1)
+      fwrite($_cache_response, str_replace("\r", '', $str));
+  }
 }
 
 /**
@@ -140,7 +161,7 @@ function cacheWrite($str)
 */
 function writeCacheData()
 {
-  global $_cache_cache, $_cache_data, $_cached_status, $feeds;
+  global $_cache_cache, $_cache_data, $_cached_status, $feeds, $mime_type;
 
   if (!$_cache_data)
     $_cache_data = readCacheData();
@@ -174,6 +195,7 @@ function writeCacheData()
     fwrite($_cache_cache, "modified=$data");
 
   fwrite($_cache_cache, "\t" . strtotime($feeds[-1]['date']));
+  fwrite($_cache_cache, "\t$mime_type");
 }
 
 /**
@@ -182,7 +204,7 @@ function writeCacheData()
 */
 function readCacheData()
 {
-  global $_cache_cache;
+  global $_cache_cache, $mime_type;
 
   if (!$_cache_cache)
     return;
@@ -191,16 +213,10 @@ function readCacheData()
 
   $str = fgets($_cache_cache);
   $data = explode("\t", $str);
-  list($expires, $mod, $date) = $data;
-
-  $arr['expires'] = $expires;
-  $arr['date'] = $date;
+  list($arr['expires'], $mod, $arr['date'], $mime_type) = $data;
 
   preg_match('/^(\w+)=(.+)$/', $mod, $matches);
-  list($match, $mod_type, $mod_val) = $matches;
-
-  $arr['mod-type'] = $mod_type;
-  $arr['mod-val'] = $mod_val;
+  list($match, $arr['mod-type'], $arr['mod-val']) = $matches;
 
   return $arr;
 }
@@ -246,6 +262,7 @@ function invalidateCache()
 
   unlink("$_cache_dir/$_cache_id/data");
   unlink("$_cache_dir/$_cache_id/feed");
+  unlink("$_cache_dir/$_cache_id/response");
 
   $_cached_status = 0;
 }

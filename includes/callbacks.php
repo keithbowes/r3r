@@ -320,7 +320,7 @@ function feedListRowSelected($widget, $row)
 
   $text = &new GtkText();
   $text->insert_text($feed['description'], 0);
-  $text->set_word_wrap(getSetting('wrap-desc'));
+  $text->set_word_wrap(!!getSetting('wrap-desc'));
 
   $scrolledBox = &new GtkVBox();
   $scrolled = &new GtkScrolledWindow();
@@ -372,11 +372,11 @@ function feedListRowSelected($widget, $row)
 function feedListRowUnselected()
 {
   global $feedItemView, $statusBar;
+
   $feedItemView->set_label(DESC_NO_ITEM);
+  $statusBar->set_text($statusBar->get_default());
 
   $feedItemView->remove($feedItemView->child);
-
-  $statusBar->remove_top();
 }
 
 /**
@@ -464,12 +464,21 @@ function settingsDlgDel($widget, $data)
   * Revert settings to their previous state.
   * @param GtkWidget GTK widget
   * @param Array Old settings.
+  * @deprecated
 */
 function cancelSettingsChange($widget, $data)
 {
   global $settings;
 
   $settings = $data;
+}
+
+/**
+  * @deprecated
+*/
+function saveSettingsChange($widget, $data)
+{
+  commitSettings();
 }
 
 /**
@@ -494,7 +503,7 @@ function checkToggled($source, $data)
 */
 function settingsEntryChanged($widget, $data)
 {
-  setSetting($data, $widget->get_text());  
+  setSetting($data, $widget->get_text());
 }
 
 /* Item Description Callbacks*/

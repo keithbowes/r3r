@@ -9,7 +9,7 @@ VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
 
 export VERSION
 
-compil32 setup.iss /ss
+compil32 setup.iss /cc
 
 mv Output/setup.exe ../../r3r-win-$VERSION.exe 
 
