@@ -122,7 +122,7 @@ function internalizeFeedData($res)
 */
 function displayFeedData($res)
 {
-  global $feedList, $feeds, $itemIndex, $mime_type, $statusBar;
+  global $feedList, $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar;
   static $displayedFeeds;
   static $row_index = -1;
 
@@ -138,12 +138,13 @@ function displayFeedData($res)
   }
 
   $statusBar->set_text(STATUS_LV_FILL);
+  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created']){
   $feeds[0] = generateFields($feeds[0]);
   $feedList->freeze();
-  $row_index++;
   $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
-  $feedList->set_data($row_index, array($feeds[0], $src, true));
-
+  $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
+}
+  $row_index++;
   if (!getSetting('display-feed-title-only'))
   {
     $nFeeds = count($feeds) + $baseItem;
@@ -160,7 +161,7 @@ function displayFeedData($res)
 
         $feeds[$idx]['link'] = relToAbs($feeds[0]['link'], $feeds[$idx]['link']);
         $feedList->append(array('', $feeds[$idx]['title'], $feeds[$idx]['subject'], $feeds[$idx]['created']));
-        $feedList->set_data($row_index, array($feeds[$idx], $src, false));
+        $feedList->set_data($row_index, array($feeds[$idx], $feedSrc, false));
       }
     }
   }
@@ -178,10 +179,11 @@ function displayFeedData($res)
 */
 function getRemoteFeed($url)
 {
-  global $feeds, $itemIndex, $mime_type, $statusBar;
+  global $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar, $urlCombo_entry;
   static $displayedFeeds;
 
   $itemIndex = -1;
+  $feedSrc = $url;
 
   $aurl = parse_url($url);
   if (empty($aurl['scheme']))
@@ -240,7 +242,8 @@ function getRemoteFeed($url)
 
       if ($is_cached)
       {
-        if ($is_cached == 2 || ($is_cached == 1 && strpos(fgets($pfeed), '304')))
+        $code = '304';
+        if ($is_cached == 2 || ($is_cached == 1 && strpos(fgets($pfeed), $code)))
         {
           if (!getSetting('hide-cached-feeds'))
             displayFeedData(getCacheFeedHandle());
@@ -248,21 +251,22 @@ function getRemoteFeed($url)
           if ($pfeed)
             fclose($pfeed);
 
-          closeCache();
           $statusBar->set_text(STATUS_CACHED_MSG);
-          return;
         }
         else
           invalidateCache();
       }
-      fputs($pfeed, "Connection: close\r\n");
-      fputs($pfeed, "\r\n");
+      if ($is_cached < 2)
+      {
+        fputs($pfeed, "Connection: close\r\n");
+        fputs($pfeed, "\r\n");
 
-      $statusBar->set_text(STATUS_OPENING_CONNECTION);
-      displayFeedData($pfeed);
+        $statusBar->set_text(STATUS_OPENING_CONNECTION);
+        displayFeedData($pfeed);
 
-      if (!$feeds)
-        return;
+        if (!$feeds)
+          return;
+      }
     }
   }
   else
@@ -271,9 +275,12 @@ function getRemoteFeed($url)
   if ($pfeed)
     fclose($pfeed);
 
-  list($key, $val) = each($feeds[-1]);
-  preg_match('/\w+\/(\d\.\d)\s+(\d{3})\s+(.+)\r\n/', $key, $matches);
-  list($match, $version, $code, $reason) = $matches;
+  if (empty($code))
+  {
+    list($key, $val) = each($feeds[-1]);
+    preg_match('/\w+\/(\d\.\d)\s+(\d{3})\s+(.+)\r\n/', $key, $matches);
+    list($match, $version, $code, $reason) = $matches;
+  }
 
   switch (substr($code, 0, 1))
   {
@@ -287,7 +294,15 @@ function getRemoteFeed($url)
       break;
     case 3:
       if (($header = $feeds[-1]['location']) || ($header = $feeds[-1]['content-location']))
+      {
+        if ($code == 301)
+        {
+          $feedSrc = $header;
+          $urlCombo_entry->set_text($header);
+        }
+
         getRemoteFeed($header);
+      }
       break;
     case 4:
     case 5:
@@ -307,9 +322,10 @@ function getRemoteFeed($url)
 */
 function getLocalFeed($file, $start_index = 0)
 {
-  global $itemIndex, $mime_type, $statusBar;
+  global $feedSrc, $itemIndex, $mime_type, $statusBar;
 
   $itemIndex = $start_index;
+  $feedSrc = $file;
 
   $cwd = getcwd();
   chdir(dirname($file));

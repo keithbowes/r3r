@@ -180,14 +180,18 @@ function feedListMenuActivated($widget, $data)
         else
           setSetting('subscribed-feeds', ltrim(str_replace($url, '', $subscribed_feeds)));
       }
+      break;
     case 'creat':
       list($addr) = $user_data;
       sendMail($addr, 'Comments about your feed');
+      break;
     case 'err':
       list($addr) = $user_data;
       sendMail($addr, 'Feed errors');
+      break;
     case 'lic':
       gotoLink($user_data);
+      break;
     case 'md':
       list($feed) = $user_data;
       $mds = '';
@@ -205,7 +209,8 @@ function feedListMenuActivated($widget, $data)
       if ($feed['generator'])
         $mds .= 'Generator: ' . $feed['generator'] . "\n";
 
-      alert($mds, ALERT_MDATA);
+      alert($mds, ALERT_MDATA, false);
+      break;
   }
 }
 

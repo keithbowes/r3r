@@ -11,7 +11,7 @@ require_once('l10n.php');
 /**
   * The version of the program.
 */
-define('VERSION', '1.1.5');
+define('VERSION', '1.1.6');
 
 /**
   * The directory where the settings are stored.
@@ -100,6 +100,10 @@ $menuBar = &new GtkMenuBar();
 */
 $statusBar = &new ExtendedGtkStatusBar();
 /**
+  * URL Field
+*/
+$urlCombo_entry = null;
+/**
   * GtkWindow The main window.
 */
 $window = &new GtkWindow();
@@ -122,6 +126,11 @@ $feeds = null;
   * The index of the current feed item.
 */
 $itemIndex = 0;
+
+/**
+  * Source URL of the current feed
+*/
+$feedSrc = null;
 
 /**
   * The MIME/content type of the current feed.

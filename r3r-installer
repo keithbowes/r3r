@@ -12,7 +12,7 @@ echo
 
 echo "Testing whether PHP is installed..."
 
-PHP_VERSION=`php -v|grep -Po "PHP [\d\.?]+"`
+PHP_VERSION=`php -v|grep -Po "PHP \d\S+"`
 
 if ! [ "$PHP_VERSION" = "" ];
 then
@@ -133,9 +133,9 @@ echo
 
 echo "Genreating startup script..."
 
-START_SCRIPT_CONTENTS="#!`which sh`\n\ncd \`dirname \"\$0\"\`\n\nphp"
+START_SCRIPT_CONTENTS="#!`which sh`\n\ncd $BIN_DIR\n\nphp"
 
-if [ "$PHP_IS_CLI" = "" ];
+if [ "$PHP_IS_CLI" = 0 ];
 then
   START_SCRIPT_CONTENTS="$START_SCRIPT_CONTENTS -q"
 fi
@@ -150,7 +150,7 @@ then
 fi
 
 echo "Generating uninstall script..."
-UNINSTALL_SCRIPT_CONTENTS="#!`which sh`\n\necho \"Uninstalling the program...\"\necho\n\nrm -frv $BIN_DIR/*\n\nrmdir -v $BIN_DIR\n\necho\necho \"Removing the program icon...\"\n\nrm -fv $ICON_DIR/r3r.xpm"
+UNINSTALL_SCRIPT_CONTENTS="#!`which sh`\n\necho \"Uninstalling the program...\"\necho\n\nrm -frv $BIN_DIR/*\n\nrmdir -v $BIN_DIR\n\necho\necho \"Removing the program icon...\"\n\nrm -fv $ICON_DIR/r3r.xpm $SYMLINK/startr3r"
 if ! [ "$USERS" = "" ];
 then
   for user in $USERS;
@@ -189,6 +189,14 @@ install -m 755 startr3r $BIN_DIR
 
 echo "Installing the icon..."
 install icons/r3r.xpm $ICON_DIR
+
+if [ "$SYMLINK" ]
+then
+  echo
+  echo "Installing the symlink"
+
+  ln -s $BIN_DIR/startr3r $SYMLINK
+fi
 
 if ! [ "$USERS" = "" ];
 then

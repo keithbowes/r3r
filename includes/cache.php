@@ -45,6 +45,9 @@ function openCache($url)
 {
   global $_cache_cache, $_cache_dir, $_cache_handle, $_cache_id, $_is_cached;
 
+  if ($_cache_handle)
+    closeCache();
+
   $_cache_id = rawurlencode($url);
   $_cache_dir = SETTINGS_DIR . '/cache';
 
@@ -93,8 +96,8 @@ function closeCache()
 {
   global $_cache_cache, $_cache_handle, $_cache_id, $_is_cached;
 
-  fclose($_cache_cache);
-  fclose($_cache_handle);
+  @fclose($_cache_cache);
+  @fclose($_cache_handle);
 
   $_cache_id = '';
   $_is_cached = 0;
@@ -139,7 +142,7 @@ function writeCacheData()
   if (!$_cache_data)
     $_cache_data = readCacheData();
 
-  if ($_cache_data['mod-val'])
+  if (!$_cache_data || $_cache_data['mod-val'])
     return;
 
   $now = time();
@@ -177,7 +180,9 @@ function writeCacheData()
 function readCacheData()
 {
   global $_cache_cache;
-  rewind($_cache_cache);
+
+  if (!$_cache_cache)
+    return;
 
   $arr = array();
 

@@ -75,7 +75,7 @@ function createMenu()
 */
 function createAppArea()
 {
-  global $box, $feedItemView, $feedList, $statusBar;
+  global $box, $feedItemView, $feedList, $statusBar, $urlCombo_entry;
 
   $feedListBox = &new GtkHBox();
   $box->pack_start($feedListBox);
