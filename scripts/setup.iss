@@ -7,7 +7,7 @@ AppName=R3R
 AppPublisher=Zooplah
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
-AppVerName=R3R {%VERSION}
+AppVerName=the R3R version you downloaded
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
@@ -20,7 +20,7 @@ Source: "..\*.php"; DestDir: "{app}"; Components: r3r
 Source: "..\icons\r3r.ico"; DestDir: "{app}"; Components: r3r
 Source: "..\includes\*.php"; DestDir: "{app}\includes"; Components: r3r
 Source: "..\l10n\*.lng"; DestDir: "{app}\l10n"; Components: r3r
-Source: "php.ini-gtk"; DestDir:"{app}\php"; Components: php
+Source: "php.ini-gtk"; DestDir:"{app}\php"; DestName: "php.ini"; Components: php
 
 ; Replace by your PHP locations
 Source: "C:\Program Files\R3R\php\php.exe"; DestDir: "{app}\php"; Components: php

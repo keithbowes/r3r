@@ -22,7 +22,6 @@ function isBlankLine($str)
   * Internalizes the current item.
   * @param String The name of the current item
   * @param String The value of the current item
-  * @param Boolean Whether the feed type is XML
   * @return The processed field name
 */
 function internalizeItem($fn, $fv)
@@ -100,7 +99,7 @@ function parseEsf($str)
 {
   global $feeds, $itemIndex, $mime_type;
 
-  $items = array('created', 'title', 'link');
+  $items = array('created', 'title', 'link', 'description');
   $arr = explode("\t", trim($str));
   $narr = count($arr);
 
@@ -110,12 +109,12 @@ function parseEsf($str)
       $itemIndex = 0;
     return;
   }
-  else if ($narr == 3)
+  else if ($narr > 2)
   {
     if ($itemIndex == 0)
       $itemIndex++;
-
-    for ($idx = 0; $idx < 3; $idx++)
+    
+    for ($idx = 0; $idx < 4; $idx++)
     {
       $fieldName = $items[$idx];
       $fieldVal = $arr[$idx];

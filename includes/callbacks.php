@@ -34,7 +34,7 @@ function gotoLink($link)
 {
   global $feed;
 
-  if ($link != '[None]' && $link != null)
+  if ($link != FEED_LINE_EMPTY && $link)
   {
     if (getSetting('http-client') == 'system')
     {
@@ -54,7 +54,7 @@ function gotoLink($link)
       else
       {
         $brows = `links -dump $link`;
-        if ($brows != null)
+        if ($brows)
           alert($brows, ALERT_ITEM_DETAILS, false);
       }
     }
@@ -114,13 +114,13 @@ function createEditMenu($widget, $event)
 {
   $editMenu = &new GtkMenu();
 
-  $cutItem = &new GtkMenuItem('Cut');
+  $cutItem = &new GtkMenuItem(CMENU_CUT);
   $cutItem->connect('activate', 'entryMenuClicked', array($widget, 'cut'));
 
-  $copyItem = &new GtkMenuItem('Copy');
+  $copyItem = &new GtkMenuItem(CMENU_COPY);
   $copyItem->connect('activate', 'entryMenuClicked', array($widget, 'copy'));
 
-  $pasteItem = &new GtkMenuItem('Paste');
+  $pasteItem = &new GtkMenuItem(CMENU_PASTE);
   $pasteItem->connect('activate', 'entryMenuClicked', array($widget, 'paste'));
 
   $editMenu->append($cutItem);
@@ -205,17 +205,17 @@ function feedListMenuActivated($widget, $data)
       $mds = '';
 
       if ($feed['last-modified'])
-        $mds .= 'Last Modified: ' . $feed['last-modified'] . "\n";
+        $mds .= IMD_LAST_MODIFIED . $feed['last-modified'] . "\n";
       if ($feed['language'])
-        $mds .= 'Language: ' . $feed['language'] . "\n";
+        $mds .= IMD_LANG . $feed['language'] . "\n";
       if ($feed['rights'])
-        $mds .= 'Copyright: ' . $feed['rights'] . "\n";
+        $mds .= IMD_COPY . $feed['rights'] . "\n";
       if ($feed['guid'])
-        $mds .= 'Unique Item Identifier: ' . $feed['guid'] . "\n";
+        $mds .= IMD_GUID . $feed['guid'] . "\n";
       if ($feed['uri'])
-        $mds .= 'Unique Item Address: ' . $feed['uri'] . "\n";
+        $mds .= IMD_ADDR . $feed['uri'] . "\n";
       if ($feed['generator'])
-        $mds .= 'Generator: ' . $feed['generator'] . "\n";
+        $mds .= IMD_GUID . $feed['generator'] . "\n";
 
       alert($mds, ALERT_MDATA, false);
       break;
@@ -239,12 +239,12 @@ function createFeedListMenu($widget, $event)
   {
     if (!strstr(getSetting('subscribed-feeds'), $url))
     {
-      $subsItem = createAccelMenu('S_ubscribe...');
+      $subsItem = createAccelMenu(ITEM_SUBSCRIBE);
       $is_subscribed = true;
     }
     else
     {
-      $subsItem = createAccelMenu('_Unubscribe...');
+      $subsItem = createAccelMenu(ITEM_UNSUBSCRIBE);
       $is_subscribed = false;
     }
     $subsItem->connect('activate', 'feedListMenuActivated', array('subs', array($url, $is_subscribed)));
@@ -256,7 +256,7 @@ function createFeedListMenu($widget, $event)
     preg_match('/^(\S+)/', $feed['creator'], $matches);
     list($match, $addr) = $matches;
 
-    $creatItem = createAccelMenu('Mail the _Creator');
+    $creatItem = createAccelMenu(ITEM_MAIL);
     $creatItem->connect('activate', 'feedListMenuActivated', array('creat', array($addr)));
     $menu->append($creatItem);
   }
@@ -266,19 +266,19 @@ function createFeedListMenu($widget, $event)
     preg_match('/^(\S+)/', $feed['errorsto'], $matches);
     list($match, $addr) = $matches;
 
-    $etItem = createAccelMenu('Submit _Errors');
+    $etItem = createAccelMenu(ITEM_ERRORS);
     $etItem->connect('activate', 'feedListMenuActivated', array('err', array($addr)));
     $menu->append($etItem);
   }
 
   if (isset($feed['license']))
   {
-    $licItem = createAccelMenu('Item _License');
+    $licItem = createAccelMenu(ITEM_LIC);
     $licItem->connect('activate', 'feedListMenuActivated', array('lic', array($feed['license'])));
     $menu->append($etItem);
   }
 
-  $mdItem = createAccelMenu('_Metadata');
+  $mdItem = createAccelMenu(ITEM_METADATA);
   $mdItem->connect('activate', 'feedListMenuActivated', array('md', array($feed)));
   $menu->append($mdItem);
 
@@ -320,11 +320,15 @@ function feedListRowSelected($widget, $row)
   global $feedItemView, $statusBar;
   list($feed) = $widget->get_data($row);
 
-  $label = &new GtkLabel($feed['description']);
-  $label->set_line_wrap(getSetting('wrap-desc'));
+  $text = &new GtkText();
+  $text->insert_text($feed['description'], 0);
+  $text->set_word_wrap(getSetting('wrap-desc'));
 
-  $str = $feed['description'];
   $scrolledBox = &new GtkVBox();
+  $scrolled = &new GtkScrolledWindow();
+
+  // TODO: Try to accompish RSS 3.0 linking with GtkText
+  /*$str = $feed['description'];
 
   while (preg_match('/([^\<]+)(\<URL:([^\>]+)\>)?/', $str, $matches))
   {
@@ -332,9 +336,10 @@ function feedListRowSelected($widget, $row)
     $str = str_replace("$label$link", '', $str);
     $lw = getSetting('wrap-desc');
 
-    $lbl = &new GtkLabel($label);
-    $lbl->set_line_wrap($lw);
-    $scrolledBox->pack_start($lbl, false);
+    $txt = &new GtkText();
+    $txt->insert_text($feed['description'], 100);
+    $txt->set_line_wrap($lw);
+    $scrolled->add($txt);
 
     if ($link_url)
     {
@@ -345,19 +350,19 @@ function feedListRowSelected($widget, $row)
       $linkLabel->set_pattern(str_repeat('_', strlen($link_url)));
       $linkEvBox->add($linkLabel);
 
-      $scrolledBox->pack_start($linkEvBox, false);
+      $scrolled->add($linkEvBox);
     }
-  }
+  }*/
 
-  $scrolled = &new GtkScrolledWindow();
   $scrolled->set_usize(150, 45);
   $scrolled->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  $scrolled->add_with_viewport($scrolledBox);
+  $scrolled->add($text);
+  $scrolledBox->pack_start($scrolled);
 
   $feedItemView->set_label($feed['title']);
   if ($feedItemView->child)
     $feedItemView->remove($feedItemView->child);
-  $feedItemView->add($scrolled);
+  $feedItemView->add($scrolledBox);
   $feedItemView->show_all();
 
   $statusBar->set_text($feed['link']);
@@ -369,7 +374,7 @@ function feedListRowSelected($widget, $row)
 function feedListRowUnselected()
 {
   global $feedItemView, $statusBar;
-  $feedItemView->set_label('[No Item Selected]');
+  $feedItemView->set_label(DESC_NO_ITEM);
 
   $feedItemView->remove($feedItemView->child);
 

@@ -16,10 +16,20 @@ CMENU_CUT=Tranæu
 CMENU_COPY=Kopiu
 CMENU_PASTE=Gluu
 # Feed Items
-ITEM_SUBSCRIBE=Abonu
-ITEM_UNSUBSCRIBE=Malabonu
-ITEM_METADATA=Metadatumo
-ITEM_CONTACT=Kontaktu
+ITEM_SUBSCRIBE=_Abonu...
+ITEM_UNSUBSCRIBE=M_alabonu...
+ITEM_MAIL=_Retpoþtigu la verkanto
+ITEM_ERRORS=_Sendu eraran ripoton
+ITEM_LIC=Ano _Permesilo
+ITEM_METADATA=_Metadatumo
+
+# Item Metadata
+IMD_LAST_MODIFIED=Lasta þanøita: 
+IMD_LANG=Lingvo: 
+IMD_COPY=Kopirajto: 
+IMD_GUID=GUID: 
+IMD_ADDR=Ano Adreso: 
+IMD_GEN=Generilo: 
 
 # General feed stuff
 FEED_LINE_EMPTY=[Neniu]
@@ -66,7 +76,7 @@ ALERT_INVALID_LINE_NAME=Neprava linenomo.  Æiu lineo devas ekhavi dupunkton (:) 
 ALERT_LONG_LINE=La kampo valoro estas pli ol okdekaj signoj.  Bonvolu apartigas Øin trans lineoj por plej legebleco.
 ALERT_CR=Æaratreveno detektis.  Øuj lineoj devus fini kun liniavanco.
 ALERT_NOT_ESF=Tio ne estas ESF-a kanalo.
-ALERT_NOT_XML=Tio ne estas ESF-a kanalo (aý havas eraron).
+ALERT_NOT_XML=Tio ne estas XML-a kanalo (aý havas eraron).
 
 # Info... Dialog
 INFO_TITLE=Pri R3R

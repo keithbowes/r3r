@@ -4,16 +4,16 @@ AC_INIT(r3r.php)
 AC_SUBST(configured_user)
 configured_user=`id -un`
 
-dnl Custom options
-AC_ARG_WITH(wget, [  --without-wget    Don't use wget to download missing items], use_wget=false, use_wget=true)
-
 dnl Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_LN_S
 
 AC_PATH_PROGS(PHP, php)
-AC_PATH_PROGS(PKG_CONFIG, pkg-config)
-AC_PATH_PROGS(WGET, wget)
+
+if test -z $PHP;
+then
+  AC_ERROR([PHP, version 4.3.0 or higher, is required.  Please get it from http://www.php.net/.])
+fi
 
 dnl Checks for required PHP features.
 AC_MSG_CHECKING(for PHP_SHLIB_SUFFIX)
@@ -26,13 +26,13 @@ else
 fi
 
 AC_MSG_CHECKING(for PHP-GTK presence)
-php_gtk_out=`php -r "dl('php_gtk.' . PHP_SHLIB_SUFFIX);"`
+php_gtk_out=`php -r "dl('php_gtk.' . PHP_SHLIB_SUFFIX2);"`
 if test -z "$php_gtk_out";
 then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_ERROR(Please get PHP-GTK 1.0.0 from http://www.gtk.php.net/)
+  AC_ERROR(Please get PHP-GTK 1.0.0 from http://gtk.php.net/)
 fi
 
 AC_MSG_CHECKING(for PCRE presence)
@@ -42,7 +42,7 @@ then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_WARN(The PCRE extension, which is required for feed parsing, is not present.)
+  AC_WARN([The PCRE extension, which is required for feed parsing, is not present.])
 fi
 
 AC_MSG_CHECKING(for XML presence)
@@ -52,7 +52,7 @@ then
   AC_MSG_RESULT(yes)
 else
   AC_MSG_RESULT(no)
-  AC_WARN(The XML extension, which is required for parsing RSS and Atom feeds, is not present)
+  AC_WARN([The XML extension, which is required for parsing RSS and Atom feeds, is not present])
 fi
 
 dnl Checks for libraries.

@@ -35,7 +35,7 @@ $_cache_data = null;
   * Number indicating the feed's cached status
   * @access private
 */
-$_is_cached = 0;
+$_cached_status = 0;
 
 /**
   * Opens the cache
@@ -43,7 +43,7 @@ $_is_cached = 0;
 */
 function openCache($url)
 {
-  global $_cache_cache, $_cache_dir, $_cache_handle, $_cache_id, $_is_cached;
+  global $_cache_cache, $_cache_dir, $_cache_handle, $_cache_id, $_cached_status;
 
   if ($_cache_handle)
     closeCache();
@@ -67,10 +67,10 @@ function openCache($url)
   chdir($_cache_id);
 
   if (file_exists($_cache_data))
-    $_is_cached = 1;
+    $_cached_status = 1;
   else
   {
-    $_is_cached = 0;
+    $_cached_status = 0;
     $fh = fopen($_cache_data, 'w');
     fclose($fh);
   }
@@ -94,33 +94,33 @@ function openCache($url)
 */
 function closeCache()
 {
-  global $_cache_cache, $_cache_data, $_cache_handle, $_cache_id, $_is_cached;
+  global $_cache_cache, $_cache_data, $_cache_handle, $_cache_id, $_cached_status;
 
   @fclose($_cache_cache);
   @fclose($_cache_handle);
 
   $_cache_data = null;
   $_cache_id = '';
-  $_is_cached = 0;
+  $_cached_status = 0;
 }
 
 /**
   * Test whether the feed is cached.
   * @return Boolean Whether the feed is cached
 */
-function isCached()
+function getCachedStatus()
 {
-  global $_cache_data, $_is_cached;
+  global $_cache_data, $_cached_status;
 
   if (!$_cache_data)
     $_cache_data = readCacheData();
 
   if (!$_cache_data['expires'])
-    $_is_cached = 0;
+    $_cached_status = 0;
   else if ($_cache_data['expires'] > time())
-    $_is_cached = 2;
+    $_cached_status = 2;
 
-  return $_is_cached;
+  return $_cached_status;
 }
 
 /**
@@ -140,7 +140,7 @@ function cacheWrite($str)
 */
 function writeCacheData()
 {
-  global $_cache_cache, $_cache_data, $_is_cached, $feeds;
+  global $_cache_cache, $_cache_data, $_cached_status, $feeds;
 
   if (!$_cache_data)
     $_cache_data = readCacheData();
@@ -242,12 +242,12 @@ function sendCacheHeader($res)
 */
 function invalidateCache()
 {
-  global $_cache_dir, $_cache_id, $_is_cached;
+  global $_cache_dir, $_cache_id, $_cached_status;
 
   unlink("$_cache_dir/$_cache_id/data");
   unlink("$_cache_dir/$_cache_id/feed");
 
-  $_is_cached = 0;
+  $_cached_status = 0;
 }
 
 ?>

@@ -16,10 +16,20 @@ CMENU_CUT=Cut
 CMENU_COPY=Copy
 CMENU_PASTE=Paste
 # Feed Items
-ITEM_SUBSCRIBE=_Subscribe
+ITEM_SUBSCRIBE=_Subscribe...
 ITEM_UNSUBSCRIBE=_Unsubscribe
-ITEM_METADATA=Metadata
-ITEM_CONTACT=Contact
+ITEM_MAIL=Mail the _Creator
+ITEM_ERRORS=Submit _Errors
+ITEM_LIC=Item _License
+ITEM_METADATA=_Metadata
+
+# Item Metadata
+IMD_LAST_MODIFIED=Last Modified: 
+IMD_LANG=Language: 
+IMD_COPY=Copyright: 
+IMD_GUID=Globally Unique Identifier: 
+IMD_ADDR=Item Address: 
+IMD_GEN=Generator: 
 
 # General feed stuff
 FEED_LINE_EMPTY=[None]

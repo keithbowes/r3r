@@ -98,6 +98,7 @@ function internalizeFeedData($res)
           parseTxt($str);
           break;
         case 'text/plain':
+        case 'text/x-esf':
           parseEsf($str);
           break;
         case 'text/xml':
@@ -115,7 +116,7 @@ function internalizeFeedData($res)
     else
       parseTxt($str);
 
-    if (!isCached())
+    if (!getCachedStatus())
       cacheWrite($str);
 
     doEvent();
@@ -149,7 +150,8 @@ function displayFeedData($res)
   $statusBar->set_text(STATUS_LV_FILL);
   $row_index++;
 
-  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created'])
+  // Note: A blank first line is acceptable in ESF feeds
+  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created'] || $mime_type == 'text/plain')
   {
     $feeds[0] = generateFields($feeds[0]);
     $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
@@ -223,24 +225,24 @@ function getRemoteFeed($url)
   if (empty($displayedFeeds[$url]))
   {
     openCache($url);
-    $is_cached = isCached();
+    $cached_status = getCachedStatus();
 
-    if ($is_cached != 2)
+    if ($cached_status != 2)
       @$pfeed = fsockopen("$server", $port, $errno, $errstr, getSetting('timeout-sec'));
 
-    if (!$pfeed && $is_cached < 2)
+    if (!$pfeed && $cached_status < 2)
     {
       $statusBar->set_text(STATUS_CONNECT_FAIL);
       alert(ALERT_CANT_CONN . " ($errstr)");
 
-      if (isCached())
+      if ($cached_status)
         displayFeedData(getCacheFeedHandle());
       else
         return null;
     }
     else
     {
-      if ($is_cached != 2)
+      if ($cached_status != 2)
       {
         $statusBar->set_text(STATUS_OPEN_CONNECTION);
 
@@ -254,16 +256,16 @@ function getRemoteFeed($url)
         fwrite($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
         fwrite($pfeed, 'Accept-Language: ' . getSetting('accept-langs') . "\r\n");
         fwrite($pfeed, "Accept-Encoding: \r\n");
-        if ($is_cached == 1)
+        if ($cached_status == 1)
           sendCacheHeader($pfeed);
         fwrite($pfeed, "Connection: close\r\n");
         fwrite($pfeed, "\r\n");
       }
 
-      if ($is_cached)
+      if ($cached_status)
       {
         $code = '304';
-        if ($is_cached == 2 || (($is_cached == 1) && strpos(fgets($pfeed), $code)))
+        if ($cached_status == 2 || (($cached_status == 1) && strpos(fgets($pfeed), $code)))
         {
           if (!getSetting('hide-cached-feeds'))
             displayFeedData(getCacheFeedHandle());

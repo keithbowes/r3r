@@ -119,7 +119,7 @@ function createAppArea()
 */
 function startMainGui()
 {
-  global $accelGroup, $argc, $argv, $statusBar, $window;
+  global $accelGroup, $argc, $argv, $statusBar, $urlEntry, $window;
 
   getSettings();
 
@@ -133,12 +133,17 @@ function startMainGui()
   $window->add_accel_group($accelGroup);
   $window->show_all();
 
-  for ($idx = 1; $idx < $argc; $idx++)
+  if ($argc > 1)
   {
-    if (strstr($argv[$idx], 'http://'))
-      getRemoteFeed(rawurldecode($argv[$idx]));
-    else
-      getLocalFeed(rawurldecode($argv[$idx]));
+    for ($idx = 1; $idx < $argc; $idx++)
+    {
+      if (strstr($argv[$idx], 'http://'))
+        getRemoteFeed(rawurldecode($argv[$idx]));
+      else
+        getLocalFeed(rawurldecode($argv[$idx]));
+
+      $urlEntry->set_text($argv[$idx]);
+    }
 
     $statusBar->set_text(STATUS_READ_CL);
   }
@@ -149,6 +154,7 @@ function startMainGui()
     foreach(explode(' ', $subscribed_feeds) as $subscribed_feed)
       getRemoteFeed($subscribed_feed);
 
+    $urlEntry->set_text($subscribed_feed);
     $statusBar->set_text(STATUS_READ_SUBSCRIBED);
   }
 

@@ -7,6 +7,7 @@ RMDIR?=$(RM) -r
 all:
 	chmod +x r3r
 	-cd l10n && @PHP@ cnf2lng.php
+	@echo "Make completed successfully.  The errors, if any, weren't fatal."
 
 clean:
 	$(RM) R3R.Desktop r3r
