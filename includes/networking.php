@@ -4,6 +4,12 @@
   * @package Networking
 */
 
+function _fwrite($res, $str)
+{
+  fwrite($res, $str);
+  echo "$str";
+}
+
 require_once('feedParser.php');
 require_once('cache.php');
 
@@ -231,15 +237,20 @@ function getRemoteFeed($url)
       if ($is_cached != 2)
       {
         $statusBar->set_text(STATUS_OPEN_CONNECTION);
-        fputs($pfeed, 'GET ' . $req . " HTTP/1.1\r\n");
-        fputs($pfeed, 'Host: ' . $aurl['host'] . ':' .  $aurl['port'] . "\r\n");
-        fputs($pfeed, 'User-Agent: ' . getSetting('user-agent') . "\r\n");
-        fputs($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
-        fputs($pfeed, "Accept-Encoding: \r\n");
+
+        if (!getSetting('use-proxy'))
+          _fwrite($pfeed, 'GET ' . $aurl['path'] . " HTTP/1.1\r\n");
+        else
+          _fwrite($pfeed, 'GET ' . $req . " HTTP/1.1\r\n");
+
+        _fwrite($pfeed, 'Host: ' . $aurl['host'] . ':' . $aurl['port'] . "\r\n");
+        _fwrite($pfeed, 'User-Agent: ' . getSetting('user-agent') . "\r\n");
+        _fwrite($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
+        _fwrite($pfeed, "Accept-Encoding: \r\n");
         if ($is_cached == 1)
           sendCacheHeader($pfeed);
-        fputs($pfeed, "Connection: close\r\n");
-        fputs($pfeed, "\r\n");
+        _fwrite($pfeed, "Connection: close\r\n");
+        _fwrite($pfeed, "\r\n");
       }
 
       if ($is_cached)
@@ -260,8 +271,8 @@ function getRemoteFeed($url)
       }
       else if ($pfeed)
       {
-        fputs($pfeed, "Connection: close\r\n");
-        fputs($pfeed, "\r\n");
+        _fwrite($pfeed, "Connection: close\r\n");
+        _fwrite($pfeed, "\r\n");
         displayFeedData($pfeed);
 
         $statusBar->set_text(STATUS_OPENING_CONNECTION);

@@ -131,7 +131,7 @@ echo "Now, we'll generate some files"
 
 echo
 
-echo "Genreating startup script..."
+echo "Generating startup script..."
 
 START_SCRIPT_CONTENTS="#!`which sh`\n\ncd $BIN_DIR\n\nphp"
 

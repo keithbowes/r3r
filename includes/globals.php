@@ -34,24 +34,27 @@ class ExtendedGtkStatusBar extends GtkStatusBar
     * @access private
   */
   var $_cid;
-
+  
   /**
     * Set the status-bar text.
     * @param String The text to place in the status bar.
   */
   function set_text($text)
   { 
+    global $_cid;
     doEvent();
-    $this->_cid = $this->get_context_id($text);
-    $this->push($this->_cid, $text);
+
+    $_cid = GtkStatusBar::get_context_id($text);
+    $this->push($_cid, $text);
   }
 
   /**
     * Remove the topmost entry of the status-bar.
   */
   function remove_top()
-  {
-    $this->pop($this->_cid);
+  { 
+    global $_cid;
+    $this->pop($_cid);
   }
 }
 

@@ -124,7 +124,7 @@ function createEditMenu($widget, $event)
   $editMenu->append($pasteItem);
   $editMenu->show_all();
 
-  $editMenu->popup(null, null, null, 0, $event->time);
+  $editMenu->popup(null, null, null, 0, $event['time']);
 }
 
 /**
@@ -134,7 +134,9 @@ function createEditMenu($widget, $event)
 */
 function entryClicked($widget, $event)
 { 
-  if ($event->button == 3)
+  $event = (array) $event;
+
+  if ($event['button'] == 3)
     createEditMenu($widget, $event);
 }
 
@@ -145,7 +147,9 @@ function entryClicked($widget, $event)
 */
 function entryPressed($widget, $event)
 {
-  if ($event->keyval == GDK_KEY_F10 && $event->state == GDK_SHIFT_MASK)
+  $event = (array) $event;
+
+  if ($event['keyval'] == GDK_KEY_F10 && $event['state'] == GDK_SHIFT_MASK)
     createEditMenu($widget, $event);
 }
 
@@ -277,7 +281,7 @@ function createFeedListMenu($widget, $event)
   if ($menu->children())
   {
     $menu->show_all();
-    $menu->popup(null, null, null, 0, $event->time);
+    $menu->popup(null, null, null, 0, $event['time']);
   }
 }
 
@@ -376,10 +380,11 @@ function feedListRowUnselected()
 function feedListRowClicked($widget, $event)
 {
   list($feed) = $widget->get_data($widget->selection[0]);
+  $event = (array) $event;
 
-  if ($event->button == 1 && $event->type == GDK_2BUTTON_PRESS)
+  if ($event['button'] == 1 && $event['type'] == GDK_2BUTTON_PRESS)
     gotoLink($feed['link']);
-  else if ($event->button == 3)
+  else if ($event['button'] == 3)
     createFeedListMenu($widget, $event);
 }
 
@@ -390,12 +395,14 @@ function feedListRowClicked($widget, $event)
 */
 function feedListRowPressed($widget, $event)
 {
-  if ($event->keyval == GDK_KEY_Return)
+  $event = (array) $event;
+
+  if ($event['keyval'] == GDK_KEY_Return)
   {
     list($feed) = $widget->get_data($widget->selection[0]);
     gotoLink($feed['link']);
   }
-  if ($event->keyval == GDK_KEY_F10 && $event->state == GDK_SHIFT_MASK)
+  if ($event['keyval'] == GDK_KEY_F10 && $event['state'] == GDK_SHIFT_MASK)
     createFeedListMenu($widget, $event);
 }
 
@@ -425,7 +432,9 @@ function goBtnClicked($widget, $data)
 */
 function urlFieldGo($widget, $event, $data)
 {
-  if ($event->keyval == GDK_KEY_Return)
+  $event = (array) $event;
+
+  if ($event['keyval'] == GDK_KEY_Return)
     goBtnClicked($data, $widget);
 }
 

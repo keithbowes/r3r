@@ -96,8 +96,8 @@ function closeCache()
 {
   global $_cache_cache, $_cache_data, $_cache_handle, $_cache_id, $_is_cached;
 
-  fclose($_cache_cache);
-  fclose($_cache_handle);
+  @fclose($_cache_cache);
+  @fclose($_cache_handle);
 
   $_cache_data = null;
   $_cache_id = '';
@@ -228,12 +228,12 @@ function sendCacheHeader($res)
     $_cache_data = readCacheData();
 
   if ($_cache_data['mod-type'] == 'etag')
-    fwrite($res, 'If-None-Match: ' . $_cache_data['mod-val']);
+    _fwrite($res, 'If-None-Match: ' . $_cache_data['mod-val'] . "\r\n");
 
   if ($_cache_data['mod-type'] == 'modified')
   {
     if (($_cache_data['mod-val'] + 60) < $_cache_data['date'])
-      fwrite($res, 'If-Modified-Since: ' . gmdate('D, d M Y H:i:s GMT', $_cache_data['mod-val']));
+      _fwrite($res, 'If-Modified-Since: ' . gmdate('D, d M Y H:i:s GMT', $_cache_data['mod-val']) . "\r\n");
   }
 }
 
