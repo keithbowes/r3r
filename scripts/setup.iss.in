@@ -11,7 +11,7 @@ AppVerName=R3R @VERSION@
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
-LicenseFile=../Artistic
+LicenseFile=../LICENSE
 
 [Files]
 ; The following are the locations on my computer.  You will probably need to change these.
