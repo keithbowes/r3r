@@ -5,7 +5,7 @@
   * @package Localization
 */
 
-$lang = getenv('LANG') or 'en_US';
+$lang = getenv('LANG');
 $lfl = "l10n/$lang.lng";
 
 if (!is_file($lfl))

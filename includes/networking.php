@@ -193,7 +193,7 @@ function displayFeedData($res)
 */
 function getRemoteFeed($url)
 {
-  global $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar, $urlCombo_entry;
+  global $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar, $urlEntry;
   static $displayedFeeds;
 
   $itemIndex = -1;
@@ -252,6 +252,7 @@ function getRemoteFeed($url)
         fwrite($pfeed, 'Host: ' . $aurl['host'] . ':' . $aurl['port'] . "\r\n");
         fwrite($pfeed, 'User-Agent: ' . getSetting('user-agent') . "\r\n");
         fwrite($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
+        fwrite($pfeed, 'Accept-Language: ' . getSetting('accept-langs') . "\r\n");
         fwrite($pfeed, "Accept-Encoding: \r\n");
         if ($is_cached == 1)
           sendCacheHeader($pfeed);
@@ -320,7 +321,7 @@ function getRemoteFeed($url)
         if ($code == 301)
         {
           $feedSrc = $header;
-          $urlCombo_entry->set_text($header);
+          $urlEntry->set_text($header);
         }
 
         $itemIndex--;

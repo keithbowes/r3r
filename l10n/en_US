@@ -47,6 +47,8 @@ STATUS_LV_FILL=Filling the listview...
 STATUS_DONE_MSG=Done
 STATUS_UNIMP_STATUS=The server sent a status code that I don't understand
 STATUS_READ_LOCAL=Done reading local feed
+STATUS_READ_CL=Finished reading from the command line
+STATUS_READ_SUBSCRIBED=All your subscribed feeds are now displayed
 
 # Alert boxes
 ALERT_OK_BTN=OK
@@ -73,6 +75,7 @@ INFO_VERSION=Version
 INFO_OS=Operating System
 INFO_PHP_VERSION=PHP Version
 INFO_PHP_API=PHP API
+INFO_SETTINGS_DIR=Settings Path
 
 # File-selection captions
 FS_OPEN=Find Feed...
@@ -115,6 +118,7 @@ SET_HEADERS=HTTP: Headers
 SET_HDR_LBL=Request Headers
 SET_HDR_UA=User Agent: 
 SET_HDR_AT=Accept Types: 
+SET_HDR_LANG=Languages: 
 SET_USE_CUSTOM=Use Custom
 
 # Mail Tab

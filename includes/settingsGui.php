@@ -158,7 +158,7 @@ function createHttpHeaderPage($notebook)
   $httpHeaderRespFrame = &new GtkFrame(SET_HDR_LBL);
   $httpHeaderPage->pack_start($httpHeaderRespFrame, false);
 
-  $httpHeaderRespTable = &new GtkTable(2, 3);
+  $httpHeaderRespTable = &new GtkTable(2, 4);
   $httpHeaderRespFrame->add($httpHeaderRespTable);
 
   $uaLabel = &new GtkLabel(SET_HDR_UA);
@@ -166,6 +166,9 @@ function createHttpHeaderPage($notebook)
 
   $acceptLabel = &new GtkLabel(SET_HDR_AT);
   $httpHeaderRespTable->attach($acceptLabel, 0, 1, 1, 2);
+
+  $langLabel = &new GtkLabel(SET_HDR_LANG);
+  $httpHeaderRespTable->attach($langLabel, 0, 1, 2, 3);
 
   $uaField = createEdit(getSetting('user-agent'));
   $uaField->set_sensitive(getSetting('use-custom-user-agent'));
@@ -177,6 +180,11 @@ function createHttpHeaderPage($notebook)
   $acceptField->connect('changed', 'settingsEntryChanged', 'accept-types');
   $httpHeaderRespTable->attach($acceptField, 1, 2, 1, 2);
 
+  $langField = createEdit(getSetting('accept-langs'));
+  $langField->set_sensitive(getSetting('use-custom-accept-langs'));
+  $langField->connect('changed', 'settingsEntryChanged', 'accept-langs');
+  $httpHeaderRespTable->attach($langField, 1, 2, 2, 3);
+
   $uaCustomCheck = &new GtkCheckButton(SET_USE_CUSTOM);
   $uaCustomCheck->set_active(getSetting('use-custom-user-agent'));
   $uaCustomCheck->connect('toggled', 'checkToggled', array(array($uaField), 'use-custom-user-agent'));
@@ -186,6 +194,11 @@ function createHttpHeaderPage($notebook)
   $acceptCustomCheck->set_active(getSetting('use-custom-accept-types'));
   $acceptCustomCheck->connect('toggled', 'checkToggled', array(array($acceptField), 'use-custom-accept-types'));
   $httpHeaderRespTable->attach($acceptCustomCheck, 2, 3, 1, 2);
+
+  $langCustomCheck = &new GtkCheckButton(SET_USE_CUSTOM);
+  $langCustomCheck->set_active(getSetting('use-custom-accept-langs'));
+  $langCustomCheck->connect('toggled', 'checkToggled', array(array($langField), 'use-custom-accept-langs'));
+  $httpHeaderRespTable->attach($langCustomCheck, 2, 3, 2, 3);
 
   $notebook->append_page($httpHeaderPage, $httpHeaderPageLabel);
 }

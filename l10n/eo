@@ -47,6 +47,8 @@ STATUS_LV_FILL=Plenigas la listrigardon...
 STATUS_DONE_MSG=Finita
 STATUS_UNIMP_STATUS=La servilo sendis statkodon ke mi ne komprendas
 STATUS_READ_LOCAL=Finita legas lokan kanalon
+STATUS_READ_CL=Finita legas el la komandlinio
+STATUS_READ_SUBSCRIBED=Æiuj via abonita kanaloj nun montras
 
 # Alert boxes
 ALERT_OK_BTN=Bone
@@ -73,6 +75,7 @@ INFO_VERSION=Versio de R3R
 INFO_OS=Operaciumo
 INFO_PHP_VERSION=Versio de PHP
 INFO_PHP_API=API de PHP
+INFO_SETTINGS_DIR=Opciarujo
 
 # File-selection captions
 FS_OPEN=Trovu kanalon...
@@ -81,7 +84,7 @@ FS_CLIENT=Foliumu por via prefera HTTP-kliento...
 
 # Settings dialog
 # Main dialog
-SET_TITLE=Opcioj...
+SET_TITLE=Opciaro...
 # Buttons
 SET_OK_BTN=Bone
 SET_CANCEL_BTN=Rezignu
@@ -115,6 +118,7 @@ SET_HEADERS=HTTP: Æapo
 SET_HDR_LBL=Petæapo
 SET_HDR_UA=Uzula Peranto: 
 SET_HDR_AT=Akceptaj Tipoj: 
+SET_HDR_LANG=Lingvoj:
 SET_USE_CUSTOM=Uzas Agordan
 
 # Mail Tab

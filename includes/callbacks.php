@@ -59,7 +59,7 @@ function gotoLink($link)
       }
     }
     else
-      system("\"" . getSetting('http-client') . "\" " . $link . ' &');
+      system("\"" . getSetting('http-client') . "\" " . $link . ' > /dev/null &');
   }
 }
 
@@ -415,7 +415,7 @@ function feedListRowPressed($widget, $event)
 */
 function showInfo()
 {
-  alert(INFO_NAME . ' (' . PROG_NAME . ")\n\n" . INFO_VERSION . ': ' . VERSION . "\n" . INFO_OS . ': ' . getOs() . "\n" . INFO_PHP_VERSION . ': ' . PHP_VERSION . "\n" . INFO_PHP_API . ': ' . php_sapi_name(), INFO_TITLE);
+  alert(INFO_NAME . ' (' . PROG_NAME . ")\n\n" . INFO_VERSION . ': ' . VERSION . "\n" . INFO_OS . ': ' . getOs() . "\n" . INFO_PHP_VERSION . ': ' . PHP_VERSION . "\n" . INFO_PHP_API . ': ' . php_sapi_name() . "\n" . INFO_SETTINGS_DIR . ': ' . SETTINGS_DIR, INFO_TITLE);
 }
 
 /**

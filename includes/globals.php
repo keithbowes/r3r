@@ -75,30 +75,37 @@ function getOs()
   * GtkAccelGroup The accel group used by the program.
 */
 $accelGroup = &new GtkAccelGroup();
+
 /**
   * GtkVBox The main program box.
 */
 $box = &new GtkVBox();
+
 /**
   * GtkFrame A container for item descriptions.
 */
 $feedItemView = &new GtkFrame(DESC_NO_ITEM);
+
 /**
   * GtkCList A list in which feed items are displayed.
 */
 $feedList = &new GtkCList(4, array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED));
+
 /**
   * GtkMenuBar The main window's menu bar.
 */
 $menuBar = &new GtkMenuBar();
+
 /**
   * ExtendedGtkStatusBar The main window's status bar.
 */
 $statusBar = &new ExtendedGtkStatusBar();
+
 /**
   * URL Field
 */
-$urlCombo_entry = null;
+$urlEntry = null;
+
 /**
   * GtkWindow The main window.
 */

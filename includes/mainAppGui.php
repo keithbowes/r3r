@@ -75,7 +75,7 @@ function createMenu()
 */
 function createAppArea()
 {
-  global $box, $feedItemView, $feedList, $statusBar, $urlCombo_entry;
+  global $box, $feedItemView, $feedList, $statusBar, $urlEntry;
 
   $feedListBox = &new GtkHBox();
   $box->pack_start($feedListBox);
@@ -105,26 +105,13 @@ function createAppArea()
   $addrBox = &new GtkHBox(false);
   $box->pack_end($addrBox, false, false, 5);
 
-  if (getSetting('display-known-feeds'))
-  {
-    $urlCombo = &new GtkCombo();
-    $urlCombo->set_popdown_strings(getKnownFeeds());
-    $addrBox->pack_start($urlCombo, true, true, 5);
-
-    $urlCombo_entry = $urlCombo->entry;
-    $urlCombo_entry->connect('button-release-event', 'entryClicked');
-    $urlCombo_entry->connect('key-press-event', 'entryPressed');
-  }
-  else
-  {
-    $urlCombo_entry = createEdit('http://');
-    $addrBox->pack_start($urlCombo_entry);
-  }
+  $urlEntry = createEdit('http://');
+  $addrBox->pack_start($urlEntry);
 
   $goBtn = &new GtkButton(GO_BTN);
-  $goBtn->connect('clicked', 'goBtnClicked', $urlCombo_entry);
+  $goBtn->connect('clicked', 'goBtnClicked', $urlEntry);
   $addrBox->pack_start($goBtn, false, false, 5);
-  $urlCombo_entry->connect('key-press-event', 'urlFieldGo', $goBtn);
+  $urlEntry->connect('key-press-event', 'urlFieldGo', $goBtn);
 }
 
 /**
@@ -132,7 +119,7 @@ function createAppArea()
 */
 function startMainGui()
 {
-  global $accelGroup, $argc, $argv, $window;
+  global $accelGroup, $argc, $argv, $statusBar, $window;
 
   getSettings();
 
@@ -152,12 +139,18 @@ function startMainGui()
       getRemoteFeed(rawurldecode($argv[$idx]));
     else
       getLocalFeed(rawurldecode($argv[$idx]));
+
+    $statusBar->set_text(STATUS_READ_CL);
   }
 
   $subscribed_feeds = getSetting('subscribed-feeds');
   if ($subscribed_feeds)
+  {
     foreach(explode(' ', $subscribed_feeds) as $subscribed_feed)
       getRemoteFeed($subscribed_feed);
+
+    $statusBar->set_text(STATUS_READ_SUBSCRIBED);
+  }
 
   gtk::main();
 }

@@ -4,7 +4,7 @@
   * @package Library
 */
 
-include_once(SETTINGS_DIR . '/' . SETTINGS_FILE);
+@include_once(SETTINGS_DIR . '/' . SETTINGS_FILE);
 
 /**
   * Set a setting
@@ -39,8 +39,13 @@ function getSetting($setting_name)
 */
 function setInitialSetting($setting)
 {
+  global $lang;
+  
   switch ($setting)
   {
+    case 'accept-langs':
+      $val = str_replace('_', '-', strtolower($lang));
+      break;
     case 'accept-types':
       $val = 'text/x-rss, text/plain; q=0.8, application/rss+xml; q=0.6, application/rdf+xml; q=0.5, application/atom+xml; q=0.3, */*; q=0.1';
       break;
@@ -74,6 +79,7 @@ function setInitialSetting($setting)
     case 'timeout-sec':
       $val = 30;
       break;
+    case 'use-custom-accept-langs':
     case 'use-custom-accept-types':
     case 'use-custom-user-agent':
     case 'use-proxy':
@@ -100,6 +106,7 @@ function setInitialSetting($setting)
 */
 function setInitialSettings()
 {
+  setInitialSetting('accept-langs');
   setInitialSetting('accept-types');
   setInitialSetting('display-feed-title-only');
   setInitialSetting('hide-cached-feeds');
@@ -112,6 +119,7 @@ function setInitialSettings()
   setInitialSetting('subscribed-feeds');
   setInitialSetting('timeout-sec');
   setInitialSetting('use-custom-accept-types');
+  setInitialSetting('use-custom-accept-langs');
   setInitialSetting('use-custom-user-agent');
   setInitialSetting('use-proxy');
   setInitialSetting('use-rc-file');
@@ -139,6 +147,8 @@ function getSettings()
     saveSettings();
   }
 
+  if (!getSetting('use-custom-accept-langs'))
+    setInitialSetting('accept-langs');
   if (!getSetting('use-custom-accept-types'))
     setInitialSetting('accept-types');
   if (!getSetting('use-custom-user-agent'))
