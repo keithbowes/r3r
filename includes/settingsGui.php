@@ -47,12 +47,7 @@ function createFeedPage($notebook)
   $warningsCheck = &new GtkCheckButton(SET_WARNINGS);
   $warningsCheck->set_active(getSetting('show-warnings'));
   $warningsCheck->connect('toggled', 'checkToggled', array(array(), 'show-warnings'));
-  $feedPage->pack_start($warningsCheck, false);
-
-  $displayFeedsCheck = &new GtkCheckButton(SET_KNOWN_FEEDS);
-  $displayFeedsCheck->set_active(getSetting('display-known-feeds'));
-  $displayFeedsCheck->connect('toggled', 'checkToggled', array(array(), 'display-known-feeds'));
-  $feedPage->pack_start($displayFeedsCheck, false);  
+  $feedPage->pack_start($warningsCheck, false); 
 
   $wrapDescCheck = &new GtkCheckButton(SET_DESC_WRAP);
   $wrapDescCheck->set_active(getSetting('wrap-desc'));
@@ -211,6 +206,7 @@ function createMailPage($notebook)
   $mailClientBox->pack_start($mailClientLbl, false);
 
   $mailClientField = createEdit(getSetting('mail-client-cl'));
+  $mailClientField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
   $mailClientBox->pack_start($mailClientField);
 
   $notebook->append_page($mailPage, $mailLbl);

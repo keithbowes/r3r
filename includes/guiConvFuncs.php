@@ -113,25 +113,4 @@ function createAccelMenu($label = '', $mask = 4)
   return $menuItem;
 }
 
-/**
-  * Retrieve the RSS-3 that are known.
-  * @return Array An array of known feeds.
-*/
-function getKnownFeeds()
-{  
-  $knownFeeds = array('http://');
-  $file_array = file('feeds.txt');
-  $file_lines = count($file_array);
-
-  for ($idx = 0; $idx < $file_lines; $idx++)
-  {
-    $file_array[$idx] = trim($file_array[$idx]);
-    list($name, $addr, $subscribed) = explode(',', $file_array[$idx]);
-    $url = trim(urldecode($addr));
-    $knownFeeds[$idx + 1] = $url;
-  }
-
-  return $knownFeeds;
-}
-
 ?>

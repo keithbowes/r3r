@@ -83,8 +83,11 @@ function parseTxt($str)
   }
   else if (preg_match('/^\s+\S/', $str))
     $fieldVal .= "\n" . preg_replace('/\s+/', ' ', $str);
+  else
+    return false;
 
   internalizeItem($fieldName, $fieldVal);
+  return true;
 }
 
 /* ESF functions */
@@ -95,9 +98,7 @@ function parseTxt($str)
 */
 function parseEsf($str)
 {
-  global $feeds, $itemIndex;
-  static $wmAgain = false;
-  static $prvr3 = false;
+  global $feeds, $itemIndex, $mime_type;
 
   $items = array('created', 'title', 'link');
   $arr = explode("\t", trim($str));
@@ -139,31 +140,14 @@ function parseEsf($str)
     internalizeItem($fieldName, $fieldVal);
     return;
   }
-  // This is not an ESF feed, though the MIME type says it is.  Throw it to the correct parser.
   else
   {
-    if (getSetting('show-warnings') && !$wmAgain)
+    if (getSetting('show-warnings'))
       alert(ALERT_NOT_ESF, ALERT_WARNING);
     
-    if (preg_match('/^\w[^:]+:/', $str))
-    {
-      parseTxt($str);
-      $prvr3 = true;
-    }
-    else if (preg_match('/^\s+\S/', $str))
-    {
-      if ($prvr3)
-        parseTxt($str);
-      else
-        parseXml($str);
-    }
-    else
-    {
-      parseXml($str);
-      $prvr3 = false;
-    }
+    if (parseXml($str))
+      $mime_type = 'application/xml';
 
-    $wmAgain = true;
     return;
   }
 
@@ -305,7 +289,7 @@ function _xml_cdata($parser, $data)
 */
 function parseXml($str)
 {
-  global $_xml_parser;
+  global $_xml_parser, $itemIndex, $mime_type;
 
   if (!$_xml_parser)
   {
@@ -317,9 +301,19 @@ function parseXml($str)
 
   if (!xml_parse($_xml_parser, $str))
   {
-    alert(XML_PARSER_ERROR . "\n" . xml_error_string(xml_get_error_code($_xml_parser)));
+    if (getSetting('show-warnings') && $mime_type != 'text/plain')
+      alert(ALERT_NOT_XML, ALERT_WARNING);
+
+    if ($itemIndex > 0)
+      $itemIndex++;
+
+    if (parseTxt($str))
+      $mime_type = 'text/x-rss';
+
     freeXmlParser();
+    return false;
   }
+  return true;
 }
 
 /**

@@ -4,6 +4,8 @@
   * @package Library
 */
 
+include_once(SETTINGS_DIR . '/' . SETTINGS_FILE);
+
 /**
   * Set a setting
   * @param String Name of the setting.
@@ -40,10 +42,7 @@ function setInitialSetting($setting)
   switch ($setting)
   {
     case 'accept-types':
-      $val = 'text/x-rss, text/plain; q=0.5, text/*; q=0.4, */*; q=0.1';
-      break;
-    case 'display-known-feeds':
-      $val = false;
+      $val = 'text/x-rss, text/plain; q=0.8, application/rss+xml; q=0.6, application/rdf+xml; q=0.5, application/atom+xml; q=0.3, */*; q=0.1';
       break;
     case 'display-feed-title-only':
       $val = false;
@@ -55,7 +54,7 @@ function setInitialSetting($setting)
       $val = 'system';
       break;
     case 'mail-client-cl':
-      $val = 'mozilla mailto:%a?subject=%s &';
+      $val = 'system';
       break;
     case 'proxy-addr':
       $val = '0.0.0.0';
@@ -103,7 +102,6 @@ function setInitialSettings()
 {
   setInitialSetting('accept-types');
   setInitialSetting('display-feed-title-only');
-  setInitialSetting('display-known-feeds');
   setInitialSetting('hide-cached-feeds');
   setInitialSetting('http-client');
   setInitialSetting('mail-client-cl');
@@ -140,25 +138,13 @@ function getSettings()
     setInitialSettings();
     saveSettings();
   }
-  else
-  {
-    $fh = fopen(SETTINGS_FILE, 'r');
-    while (!feof($fh))
-    {
-      $str = fgets($fh);
-      $eqidx = strpos($str, '=');
-      $setting_name = substr($str, 0, $eqidx);
-      $setting_val = rtrim(substr($str, $eqidx + 1));
-      setSetting($setting_name, $setting_val);
-    }
-    fclose($fh);
 
-    if (!getSetting('use-custom-accept-types'))
-      setInitialSetting('accept-types');
-    if (!getSetting('use-custom-user-agent'))
-      setInitialSetting('user-agent');
-    setInitialSetting('version');
-  } 
+  if (!getSetting('use-custom-accept-types'))
+    setInitialSetting('accept-types');
+  if (!getSetting('use-custom-user-agent'))
+    setInitialSetting('user-agent');
+  setInitialSetting('version');
+
   chdir($wd);
 }
 
@@ -180,12 +166,16 @@ function saveSettings()
     chmod(SETTINGS_FILE, 0600);
   $fh = fopen(SETTINGS_FILE, 'w');
 
+  fwrite($fh, "<?php\n\n");
   while (list($setting_name, $setting_val) = each($settings))
     if ($setting_name)
-      fwrite($fh, $setting_name . '=' . $setting_val . "\n");
+      fwrite($fh, "\$settings['$setting_name'] = '$setting_val';\n");
+
+  fwrite($fh, "\n?>");
 
   fclose($fh);
   chmod(SETTINGS_FILE, 0400);
+
   chdir($wd);
 }
 

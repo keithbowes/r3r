@@ -17,21 +17,13 @@ full text.
 3. INSTALLING ON UNIX
 
 Grab the r3r-linux or r3r-src packages, or a copy from CVS.  Then, run
-./r3r-installer.
+autoconf to turn configure.in into a traditional configure script.
+Now, you just do your traditional ./configure && make, and then
+make install as root (unless you ./configure --prefix=$HOME).
 
 4. INSTALLING ON WINDOWS
 
 Get a release from the r3r-win package and run the simple installer.
-
-If there's none available:
-a) The UNIX installer can be used if you have the necessary utils (GNU ash,
-fileutils, etc).  Having a UNIX directory structure (namely, /home/$USER and
-/usr/local directories) will make it easier to use.
-
-b) Create your own installer.  Get Inno Setup, change setup.iss so that
-Inno Setup knows where to find the required files on your computer, and run
-setup.iss with Inno Setup.  More information about creating the setup and
-making it downloadable by anybody is available on the project home page.
 
 5. REPORTING BUGS, SUBMITTING PATCHES, etc.
 

@@ -4,15 +4,8 @@
   * @package Library
 */
 
-require_once('l10n.php');
-
 /* Global program information */
   
-/**
-  * The version of the program.
-*/
-define('VERSION', trim(file_get_contents('version.txt')));
-
 /**
   * The directory where the settings are stored.
 */
@@ -20,7 +13,7 @@ define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
 /**
   * The settings file.
 */
-define('SETTINGS_FILE', 'r3rrc');
+define('SETTINGS_FILE', 'r3rrc.php');
 
 /* GUI variables and classes */
 

@@ -92,16 +92,24 @@ function internalizeFeedData($res)
 
     if ($itemIndex > -1)
     {
-      if ($mime_type == 'text/x-rss')
-        parseTxt($str);
-      else if ($mime_type == 'text/plain')
-        parseEsf($str);
-      else if (strpos($mime_type, 'xml'))
-        parseXml($str);
-      else
+      switch ($mime_type)
       {
-        alert(ALERT_WRONG_MIME . " $mime_type.");
-        return;
+        case 'text/x-rss':
+          parseTxt($str);
+          break;
+        case 'text/plain':
+          parseEsf($str);
+          break;
+        case 'text/xml':
+        case 'application/xml':
+        case 'application/rss+xml':
+        case 'application/rdf+xml':
+        case 'application/atom+xml':
+          parseXml($str);
+          break;
+        default:
+          alert(ALERT_WRONG_MIME . " $mime_type.");
+          return;
       }
     }
     else
@@ -147,6 +155,8 @@ function displayFeedData($res)
     $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
     $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
   }
+  else
+    $row_index--;
 
   $feedList->freeze();
   if (!getSetting('display-feed-title-only'))
@@ -354,6 +364,7 @@ function getLocalFeed($file, $start_index = 0)
     case 'txt':
       $mime_type = 'text/x-rss';
       break;
+    case 'atom':
     case 'rdf':
     case 'rss':
     case 'xml':

@@ -5,30 +5,12 @@
   * @package Localization
 */
 
-$cwd = getcwd();
-chdir('l10n');
+$lang = getenv('LANG') or 'en_US';
+$lfl = "l10n/$lang.lng";
 
-$lang = getenv('LANG');
+if (!is_file($lfl))
+  $lfl = "l10n/en_US.lng";
 
-if (!file_exists($lang))
-  $lang = 'en_US';
-
-$fh = fopen($lang, 'r');
-
-while (!feof($fh))
-{
-  $str = fgets($fh);
-  $eqidx = strpos($str, '=');
-
-  if ($eqidx)
-  {
-    $const = substr($str, 0, $eqidx);
-    $val = trim(substr($str, $eqidx + 1));
-    define($const, $val);
-  }
-}
-fclose($fh);
-
-chdir($cwd);
+require_once($lfl);
 
 ?>

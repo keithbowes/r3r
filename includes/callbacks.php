@@ -59,7 +59,7 @@ function gotoLink($link)
       }
     }
     else
-      system("\"" . getSetting('http-client') . "\" " . $link . ' > /dev/null &');
+      system("\"" . getSetting('http-client') . "\" " . $link . ' &');
   }
 }
 
@@ -73,7 +73,11 @@ function sendMail($addr, $subj)
   $mcc = getSetting('mail-client-cl');
   $mcc = str_replace('%a', rawurlencode($addr), $mcc);
   $mcc = str_replace('%s', rawurlencode($subj), $mcc);
-  system($mcc);
+
+  if ($mcc == 'system')
+    gotoLink('mailto:' . rawurlencode($addr) . '?subject=' . rawurlencode($subj));
+  else
+    system($mcc);
 }
 
 /**
