@@ -11,7 +11,7 @@ require_once('l10n.php');
 /**
   * The version of the program.
 */
-define('VERSION', '1.1.6');
+define('VERSION', '1.2-dev');
 
 /**
   * The directory where the settings are stored.

@@ -16,7 +16,6 @@ function alert($msg, $title = ALERT_ERROR, $wrap = true)
 
   $alertWindow = &new GtkWindow(GTK_WINDOW_DIALOG);
   $alertWindow->set_title($title);
-  $alertWindow->show();
 
   $alertBox = &new GtkVBox();
   $alertWindow->add($alertBox);

@@ -102,7 +102,11 @@ function parseEsf($str)
   $narr = count($arr);
 
   if (isBlankLine($str) || substr($str, 0, 1) == '#')
+  {
+    if ($itemIndex == -1)
+      $itemIndex = 0;
     return;
+  }
   else if ($narr == 3)
   {
     if ($itemIndex == 0)

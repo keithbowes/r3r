@@ -67,7 +67,7 @@ function openCache($url)
   chdir($_cache_id);
 
   if (file_exists($_cache_data))
-    $_is_cached = 2;
+    $_is_cached = 1;
   else
   {
     $_is_cached = 0;
@@ -94,11 +94,12 @@ function openCache($url)
 */
 function closeCache()
 {
-  global $_cache_cache, $_cache_handle, $_cache_id, $_is_cached;
+  global $_cache_cache, $_cache_data, $_cache_handle, $_cache_id, $_is_cached;
 
-  @fclose($_cache_cache);
-  @fclose($_cache_handle);
+  fclose($_cache_cache);
+  fclose($_cache_handle);
 
+  $_cache_data = null;
   $_cache_id = '';
   $_is_cached = 0;
 }
@@ -114,8 +115,10 @@ function isCached()
   if (!$_cache_data)
     $_cache_data = readCacheData();
 
-  if ($_cache_data['expires'] > time())
-    $_is_cached = 2;
+  if (!$_cache_data['expires'])
+    $_is_cached = 0;
+  else if ($_cache_data['expires'] > time())
+    echo $_cache_data['expires'] - time();
 
   return $_is_cached;
 }
@@ -126,7 +129,7 @@ function isCached()
 */
 function cacheWrite($str)
 {
-  global $_cache_handle, $itemIndex;
+  global $_cache_handle;
 
   if ($_cache_handle)
     fwrite($_cache_handle, str_replace("\r", '', $str));

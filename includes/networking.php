@@ -86,7 +86,6 @@ function internalizeFeedData($res)
     {
       preg_match('/^([^\;]+)/', $feeds[-1]['content-type'], $matches);
       list($match, $mime_type) = $matches;
-      
     }
 
     if ($itemIndex > -1)
@@ -138,18 +137,21 @@ function displayFeedData($res)
   }
 
   $statusBar->set_text(STATUS_LV_FILL);
-  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created']){
-  $feeds[0] = generateFields($feeds[0]);
-  $feedList->freeze();
-  $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
-  $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
-}
   $row_index++;
+
+  if ($feeds[0]['title'] || $feeds[0]['subject'] || $feeds[0]['created'])
+  {
+    $feeds[0] = generateFields($feeds[0]);
+    $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
+    $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
+  }
+  
+  $feedList->freeze();
   if (!getSetting('display-feed-title-only'))
   {
     $nFeeds = count($feeds) + $baseItem;
     for ($idx = 1; $idx < $nFeeds; $idx++)
-    {
+    { 
       if (is_array($feeds[$idx]))
       {
         // Check for stray blank lines.  It's messy, I know.
@@ -214,7 +216,7 @@ function getRemoteFeed($url)
     if ($is_cached != 2)
       @$pfeed = fsockopen($server, $port, $errno, $errstr, getSetting('timeout-sec'));
 
-    if (!$pfeed && $is_cached != 2)
+    if (!$pfeed && $is_cached < 2)
     {
       $statusBar->set_text(STATUS_CONNECT_FAIL);
       alert(ALERT_CANT_CONN . " ($errstr)");
@@ -256,13 +258,13 @@ function getRemoteFeed($url)
         else
           invalidateCache();
       }
-      if ($is_cached < 2)
+      else if ($pfeed)
       {
         fputs($pfeed, "Connection: close\r\n");
         fputs($pfeed, "\r\n");
+        displayFeedData($pfeed);
 
         $statusBar->set_text(STATUS_OPENING_CONNECTION);
-        displayFeedData($pfeed);
 
         if (!$feeds)
           return;
@@ -272,8 +274,7 @@ function getRemoteFeed($url)
   else
     $statusBar->set_text(STATUS_TWICE);
 
-  if ($pfeed)
-    fclose($pfeed);
+  @fclose($pfeed);
 
   if (empty($code))
   {
