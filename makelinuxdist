@@ -6,6 +6,17 @@ rm -fv ./Output/* ../r3r-linux*.bz2
 
 read VERSION < version.txt
 
-tar cjvf r3r-linux-$VERSION.tar.bz2 *.php Artistic README feeds.txt r3r-installer icons/r3r.xpm includes/* l10n/*
+mkdir -p ../r3r-linux-$VERSION/icons
+mkdir    ../r3r-linux-$VERSION/includes
+mkdir    ../r3r-linux-$VERSION/l10n
 
-mv *.bz2 ../
+cp -fv *.php Artistic README feeds.txt r3r-installer ../r3r-linux-$VERSION
+cp -fv icons/r3r.xpm ../r3r-linux-$VERSION/icons
+cp -fv includes/* ../r3r-linux-$VERSION/includes
+cp -fv l10n/* ../r3r-linux-$VERSION/l10n
+
+cd ..
+
+tar cjvf r3r-linux-$VERSION.tar.bz2 r3r-linux-$VERSION
+
+rm -frv r3r-linux-$VERSION

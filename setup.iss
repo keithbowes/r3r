@@ -7,7 +7,7 @@ AppName=R3R
 AppPublisher=Zooplah
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
-AppVerName=R3R 1.2-dev
+AppVerName=R3R {%VERSION} 
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes

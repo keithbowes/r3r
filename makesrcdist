@@ -6,6 +6,11 @@ rm -fv ./Output/* ../r3r-src*.bz2
 
 read VERSION < version.txt
 
-tar cjvf r3r-src-$VERSION.tar.bz2 *
+mkdir ../r3r-src-$VERSION
+cp -frv * ../r3r-src-$VERSION
 
-mv *.bz2 ../
+cd ..
+
+tar cjvf r3r-src-$VERSION.tar.bz2 r3r-src-$VERSION
+
+rm -frv r3r-src-$VERSION
