@@ -11,7 +11,7 @@ chdir('l10n');
 $lang = getenv('LANG');
 
 if (!file_exists($lang))
-  $lang = 'en';
+  $lang = 'en_US';
 
 $fh = fopen($lang, 'r');
 

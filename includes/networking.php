@@ -77,9 +77,11 @@ function internalizeFeedData($res)
 {
   global $feeds, $itemIndex, $mime_type, $statusBar;
 
-  while (!feof($res))
+  while (!@feof($res))
   {
-    $str = fgets($res);
+    if (!$str = @fgets($res))
+      break;
+
     $statusBar->set_text(STATUS_GETTING_DATA);
 
     if ($mime_type == null)
@@ -214,7 +216,7 @@ function getRemoteFeed($url)
     $is_cached = isCached();
 
     if ($is_cached != 2)
-      @$pfeed = fsockopen($server, $port, $errno, $errstr, getSetting('timeout-sec'));
+      @$pfeed = fsockopen("$server", $port, $errno, $errstr, getSetting('timeout-sec'));
 
     if (!$pfeed && $is_cached < 2)
     {
@@ -250,7 +252,7 @@ function getRemoteFeed($url)
       if ($is_cached)
       {
         $code = '304';
-        if ($is_cached == 2 || ($is_cached == 1 && strpos(fgets($pfeed), $code)))
+        if ($is_cached == 2 || (($is_cached == 1) && strpos(fgets($pfeed), $code)))
         {
           if (!getSetting('hide-cached-feeds'))
             displayFeedData(getCacheFeedHandle());
@@ -261,12 +263,16 @@ function getRemoteFeed($url)
           $statusBar->set_text(STATUS_CACHED_MSG);
         }
         else
+        {
           invalidateCache();
+          getRemoteFeed($url);
+        }
       }
       else if ($pfeed)
       {
-        fwrite($pfeed, "Connection: close\r\n");
-        fwrite($pfeed, "\r\n");
+        @fwrite($pfeed, "Connection: close\r\n");
+        @fwrite($pfeed, "\r\n");
+
         displayFeedData($pfeed);
 
         $statusBar->set_text(STATUS_OPENING_CONNECTION);
@@ -307,6 +313,7 @@ function getRemoteFeed($url)
           $urlCombo_entry->set_text($header);
         }
 
+        $itemIndex--;
         getRemoteFeed($header);
       }
       break;
