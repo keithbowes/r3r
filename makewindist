@@ -1,0 +1,13 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+rm -fv ./Output/* ../r3r-*.exe
+
+read VERSION < version.txt
+
+compil32 setup.iss /ss
+
+mv Output/setup.exe ../r3r-win-$VERSION.exe 
+
+rmdir Output

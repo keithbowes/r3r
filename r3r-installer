@@ -1,0 +1,218 @@
+#!/bin/sh
+
+echo "Welcome to the R3R Installation script.  This will guide you throught the process of getting R3R installed on a POSIX system (Linux, BSD, Cygwin, etc)."
+
+echo
+echo "================================================================================"
+echo
+
+echo "First, we'll be sure that you have the requirements."
+
+echo
+
+echo "Testing whether PHP is installed..."
+
+PHP_VERSION=`php -v|grep -Po "PHP [\d\.?]+"`
+
+if ! [ "$PHP_VERSION" = "" ];
+then
+  echo "$PHP_VERSION is installed"
+else
+  echo "Error: PHP is either not installed or not in your path.  Please ensure that PHP is installed and located in your path."
+  exit
+fi
+
+echo
+
+echo "Testing whether vital feature of suffix detection is supported (requires PHP 4.3+)..."
+
+if [ "`php php-suffix.php`" = "" ];
+then
+  echo "Yes, suffix detection is supported"
+else
+  echo "Error: Suffix detection is not supported"
+  exit
+fi
+
+echo
+
+echo "Testing whether PHP command-line is installed..."
+
+if [ "`php -v|grep -o \(cli\)`" = "(cli)" ];
+then
+  echo "Yes, the command-line is installed";
+  PHP_IS_CLI=1
+else
+  echo "No, the command-line is not installed.  CGI will be used.";
+  PHP_IS_CLI=0
+fi
+
+echo
+
+echo "Testing whether PHP-GTK is installed..."
+
+if [ "`php php-gtk-test.php`" = "" ];
+then
+  echo "PHP-GTK is installed"
+else
+  echo "Error: PHP-GTK is not installed.  Please get it from http://gtk.php.net/"
+  exit
+fi
+
+echo
+echo "================================================================================"
+echo
+
+echo "Now, it's time for you to choose where to install everything..."
+
+echo
+
+echo "Where do you want R3R installed?  (Leave blank to install in /usr/local/r3r)"
+read BIN_DIR
+
+echo
+
+echo "Where do want the program icon installed? (Leave blank to install /usr/share/icons/hicolor/32x32/apps)"
+read ICON_DIR
+
+echo
+
+echo "Where in your path do you want a symbolic link to be placed?  (Leave blank to skip)"
+read SYMLINK
+
+echo
+
+echo "Enter a space-separated list of users on whose desktop you want a Desktop Entry to be placed. (Leave blank to skip)"
+read USERS
+
+echo
+echo "================================================================================"
+echo
+
+echo "Now we'll be checking the values you entered and initialize the default values where needed..."
+
+echo
+
+if [ "$BIN_DIR" = "" ];
+then
+  echo "Setting the program directory to /usr/local/r3r"
+  echo
+  BIN_DIR=/usr/local/r3r
+fi
+
+if [ "$ICON_DIR" = "" ];
+then
+  echo "Setting the icon directory to /usr/share/icons/hicolor/32x32/apps"
+  echo
+  ICON_DIR=/usr/share/icons/hicolor/32x32/apps
+fi
+
+echo "Finished with our check."
+echo "Now, let's review..."
+
+echo
+
+echo "Program directory: $BIN_DIR"
+echo "Icon directory: $ICON_DIR"
+echo "Symbolic link directory: $SYMLINK"
+
+if [ "$USERS" = "" ];
+then
+  echo "Desktop entry: No"
+else
+  echo "Desktop entry: Yes"
+fi
+
+echo
+echo "================================================================================"
+echo
+
+echo "Now, we'll generate some files"
+
+echo
+
+echo "Genreating startup script..."
+
+START_SCRIPT_CONTENTS="#!`which sh`\n\ncd \`dirname \"\$0\"\`\n\nphp"
+
+if [ "$PHP_IS_CLI" = "" ];
+then
+  START_SCRIPT_CONTENTS="$START_SCRIPT_CONTENTS -q"
+fi
+
+START_SCRIPT_CONTENTS="$START_SCRIPT_CONTENTS r3r.php \$@"
+echo -e $START_SCRIPT_CONTENTS > startr3r
+
+if ! [ "$USERS" = "" ];
+then
+  echo "Generating a desktop entry..."
+  echo -e "[Desktop Entry]\nName=R3R\nExec=$BIN_DIR/startr3r\nIcon=$ICON_DIR/r3r.xpm\nType=Application" > R3R.Desktop
+fi
+
+echo "Generating uninstall script..."
+UNINSTALL_SCRIPT_CONTENTS="#!`which sh`\n\necho \"Uninstalling the program...\"\necho\n\nrm -frv $BIN_DIR/*\n\nrmdir -v $BIN_DIR\n\necho\necho \"Removing the program icon...\"\n\nrm -fv $ICON_DIR/r3r.xpm"
+if ! [ "$USERS" = "" ];
+then
+  for user in $USERS;
+  do
+    if ! [ "$user" = "root" ];
+    then
+      UNINSTALL_SCRIPT_CONTENTS="$UNINSTALL_SCRIPT_CONTENTS\n\necho\necho \"Removing $user's desktop entry...\"\necho\n\nrm -fv /home/$user/Desktop/R3R.Desktop\n\necho\necho \"Removing $user's settings...\"\necho\necho\n rm -fvr /home/$user/.r3r/*";
+    else
+      UNINSTALL_SCRIPT_CONTENTS="$UNINSTALL_SCRIPT_CONTENTS\n\necho\necho \"Removing root's desktop entry...\"\necho\n\nrm -fv /root/Desktop/R3R.Desktop\n\necho\necho \"Removing root's settings...\"\necho\necho\n rm -fvr /root/.r3r/*";
+    fi
+  done;
+  echo -e "$UNINSTALL_SCRIPT_CONTENTS" > uninstall
+fi
+echo
+echo "================================================================================"
+echo
+
+echo "Now, let's install it..."
+
+echo
+
+echo "Creating the program directory..."
+mkdir -p $BIN_DIR/includes
+
+echo
+
+echo "Installing the program..."
+install feeds.txt r3r.php $BIN_DIR
+install includes/* $BIN_DIR/includes
+
+echo "Installing the startup script..."
+install -m 777 startr3r $BIN_DIR
+
+echo "Installing the icon..."
+install icons/r3r.xpm $ICON_DIR
+
+if ! [ "$USERS" = "" ];
+then
+  for user in $USERS;
+  do
+    echo "Installing the Desktop entry for $user..."
+    if ! [ "$user" = "root" ];
+    then
+      install R3R.Desktop /home/$user/Desktop
+    else
+      install R3R.Desktop /root/Desktop
+    fi
+  done;
+fi;
+
+echo "Installing the uninstallation script..."
+install uninstall $BIN_DIR
+
+echo
+
+echo "================================================================================"
+
+echo
+
+echo "Installation has completed, so I'll now do some clean-up..."
+rm -fv R3R.Desktop startr3r uninstall
+
+echo
+
+echo "Finished!"

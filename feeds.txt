@@ -1,0 +1,10 @@
+Aaron%20Swartz%3A%20The%20Weblog,http%3A%2F%2Fwww.aaronsw.com%2Fweblog%2Findex.rss,0
+Around%20My%20Room,http%3A%2F%2Fwww.aroundmyroom.com%2Fblog%2Frss3.txt,0
+Disillusion,http%3A%2F%2Fdisillusion.net%2Frss3.txt,0
+Dive%20into%20Mark,http%3A%2F%2Fdiveintomark.org%2Fxml%2Frss3.txt,0
+Internet%20Alchemy,http%3A%2F%2Finternetalchemy.org%2Findex.txt,0
+Raelity%20Bytes,http%3A%2F%2Fwww.raelity.org%2F%3Fflav%3Drss3,0
+Sam%20Ruby,http%3A%2F%2Fwww.intertwingly.net%2Fblog%2Findex.txt,0
+Stoyan%20Zhekov,http%3A%2F%2Fwww.openbg.net%2Fweblog%2Fphosxom.php%2Ftxt,0
+Vertical%20Hold%20%28Patrick%20Berry%29,http%3A%2F%2Fwww.patandkat.com%2Fpat%2Fweblog%2Frss3.txt,0
+Zooplah.dyndns.org%20News,http%3A%2F%2Fzooplah.dyndns.org%2F,0

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+rm -fv ./Output/* ../r3r-src*.bz2
+
+read VERSION < version.txt
+
+tar cjvf r3r-src-$VERSION.tar.bz2 *
+
+mv *.bz2 ../

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+rm -fv ./Output/* ../r3r-linux*.bz2
+
+read VERSION < version.txt
+
+tar cjvf r3r-linux-$VERSION.tar.bz2 *.php Artistic feeds.txt r3r-installer icons/r3r.xpm includes/* l10n/*
+
+mv *.bz2 ../
