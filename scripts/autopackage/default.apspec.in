@@ -1,0 +1,58 @@
+include(m4/version.m4)dnl
+dnl
+# -*-shell-script-*-
+
+[Meta]
+RootName: @r3r.sourceforge.net/default:$SOFTWAREVERSION:$PACKAGEVERSION
+ShortName: r3r
+DisplayName: R3R Feed Reader
+Summary: R3R is a feed reader
+Maintainer: The R3R Developers - http://sourceforge.net/project/memberlist.php?group_id=90897
+Packager: Anonymous <anonymous@nowhere.com>
+SoftwareVersion: Get_Version
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
+# or ask on autopackage-dev if you don't understand interface versioning in autopackage.
+#
+# InterfaceVersion: 0.0
+
+PackageVersion: 1
+
+Language: eo
+DisplayName[eo]: R3R Kanala legilo
+Summary[eo]: R3R estas kanala legilo
+
+AutopackageTarget: 0.7
+CPUArchitectures: x86
+License: BSD
+URL: http://sourceforge.net/projects/r3r/
+
+[Description]
+R3R is a reader for RSS, ESF and Atom feeds.  It has a simple GUI that gathers your subscribed feeds on startup and displays them into a single list.
+
+[Description:eo]
+R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, kiu amasigas viajn abonitajn kanalojn je lanĉo kaj montras ilin en unuopan liston.
+
+[BuildPrepare]
+#prepareBuild
+
+[BuildUnprepare]
+#unprepareBuild
+
+[Imports]
+echo $source_dir'/../r3r' | import
+echo $source_dir'/../intl/*.mo' | import
+
+[Prepare]
+# Dependency checking
+# require @whatever.you/need 1.0
+
+[Install]
+# Put your installation script here
+installExe r3r
+copyFiles *.mo "$PREFIX/bin"
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog

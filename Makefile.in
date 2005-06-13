@@ -1,38 +1,182 @@
-root_files=r3r r3r.php version.php
-includes_files=$(wildcard includes/*.php)
-l10n_files=$(wildcard l10n/*.lng)
+include(m4/version.m4)dnl
+dnl
+.POSIX: 
 
-RMDIR?=$(RM) -r
+SHELL = /bin/sh
 
-all:
-	chmod +x r3r
-	-cd l10n && @PHP@ cnf2lng.php
-	@echo "Make completed successfully.  The errors, if any, weren't fatal."
+EXEEXT = # Extension for executables
+OBJEXT = .o
+PASEXT = .pas
+UNITEXT = .ppu
 
-clean:
-	cd l10n && $(RM) *.lng
+MOEXT = .mo
+RSTEXT = .rst
 
-genclean:
-	$(RM) Makefile R3R.Desktop config.cache config.log config.status configure r3r autopackage/default.apspec scripts/setup.iss
+PC = fpc
+PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -FE. -FU$(R3R_UI) \
+				 -Xs- -gl -CX- # Oh-so-important debugging stuff for the buggy alpha \
+				 								stage
+DEFS = # Defines, for enabling different features/dialect syntax
 
-distclean: clean genclean
+TAR = tar
+TARFLAGS = czf
 
+CD = cd
+CP = cp -fr
+ECHO = echo
+INSTALL = install -m 755
+M4 = m4
+MKDIR = mkdir
+MSGFMT = msgfmt
+MSGMERGE = msgmerge
+MV = mv
+RM = rm -fr
+RSTCONV = rstconv
+
+ISCC=iscc
+ISCCFLAGS=
+
+AUTOPACKAGE=makeinstaller
+
+R3R_UI = tui
+OS = win32
+
+VERSION = Get_Version
+
+DESTDIR = /usr/local
+prefix = $(DESTDIR)
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+docdir = $(prefix)/doc/r3r
+
+# Technically not standard-compliant.  But it helps not to delete the directory
+# every time I rebuild the documentation.  Besides, what's it gonna hurt?
+.PHONY: docs r3r
+
+#.po.mo:
+intl/%.mo: intl/%.po
+	$(MSGMERGE) -U $< intl/r3r.pot
+	$(MSGFMT) -o $@ $<
+
+# Default building rule
+all: libr3r/ver.pas r3r intl/r3r.pot intl/r3r.eo.mo
+
+libr3r/ver.pas: libr3r/ver.in.pas
+	$(M4) $< > $@
+
+intl/r3r.pot: $(R3R_UI)/r3rrs$(RSTEXT)
+	$(RSTCONV) -i $< -o $@
+
+r3r:
+	$(PC) $(PFLAGS) $(DEFS) $(R3R_UI)/r3r$(PASEXT)
+
+cross:
+	$(MAKE) PFLAGS="$(PFLAGS) -T$(OS)"
+
+# Installation rules
 install: all
-	mkdir -p @prefix@/r3r/includes
-	mkdir -p @prefix@/r3r/l10n
-	mkdir -p @prefix@/share/icons/hicolor/32x32/apps
+	-$(MKDIR) $(bindir)
+	-$(MKDIR) $(bindir)/intl
+	$(INSTALL) r3r$(EXEEXT) $(bindir)
+	$(INSTALL) intl/*.mo $(bindir)/intl
 
-	@INSTALL@ -m 755 $(root_files) @prefix@/r3r
-	@INSTALL@ -m 755 $(includes_files) @prefix@/r3r/includes
-	@INSTALL@ -m 644 $(l10n_files) @prefix@/r3r/l10n
-	@INSTALL@ -m 755 icons/r3r.xpm @prefix@/share/icons/hicolor/32x32/apps
-	@INSTALL@ -m 755 R3R.Desktop /home/@configured_user@/Desktop
-	cd @prefix@/bin && @LN_S@ -f @prefix@/r3r/r3r
+install-win32:
+	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe INSTALL=copy install
 
+# Uninstallation rules
 uninstall:
-	$(RMDIR) @prefix@/r3r
-	$(RM) @prefix@/bin/r3r @prefix@/share/icons/hicolor/32x32/apps/r3r.xpm /home/@configured_user@/Desktop/R3R.Desktop
+	$(RM) $(bindir)/r3r$(EXEEXT)
+	$(RM) $(bindir)/intl
+	$(RM) $(docdir)
 
-uninstall-permanent: uninstall
-	$(RMDIR) /root/.r3r
-	$(foreach home, $(wildcard /home/*), $(RMDIR) $(home)/.r3r)
+uninstall-win32:
+	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" \
+	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe RM=del uninstall
+
+# Documentation rules
+docs:
+	$(CD) docs && $(FPDOC) --input=../lib/r3r/libr3r.pas \
+				--input=../lib/r3r/feeditem.pas --descr=../lib/r3r/libr3r.pas.xml
+
+install-docs:
+	-$(MKDIR) $(docdir)
+	$(CD) docs && $(INSTALL) * $(docdir)
+
+install-docs-win32:
+	$(MAKE) docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" INSTALL=copy \
+	install-docs
+
+# Distribution rules
+dist: distclean
+	-$(MKDIR) ../r3r-src
+	$(CP) * ../r3r-src
+	$(MV) ../r3r-src r3r-src-$(VERSION)
+	$(TAR) $(TARFLAGS) r3r-$(VERSION).tar.gz r3r-src-$(VERSION) --exclude=.*
+	$(RM) r3r-src-$(VERSION)
+	$(MV) r3r-$(VERSION).tar.gz ..
+
+dist-win32:
+	$(MAKE) cross OS=win32
+	$(ISCC) $(ISCCFLAGS) scripts\\iss\\setup.iss
+	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
+
+scripts/iss/setup.iss: scripts/iss/setup.iss.in
+	$(M4) $< > $@
+
+dist-win32-cross:
+	$(MAKE) ISCC="wine iscc" dist-win32
+
+scripts/autopackage/default.apspec: scripts/autopackage/default.apspec.in
+	$(M4) $< > $@
+
+dist-linux: all r3r$(EXEEXT) scripts/autopackage/default.apspec
+	$(CD) scripts &&  $(AUTOPACKAGE)
+	$(MV) scripts/r3r-$(VERSION).x86.package ..
+
+# Cleaning rules
+mostlyclean:
+	$(RM) r3r$(EXEEXT)
+
+clean cleanall: mostlyclean
+	$(RM) */*$(OBJEXT)
+
+distclean: clean
+	$(RM) */*$(UNITEXT) */*$(RSTEXT) */*$(MOEXT)
+	$(RM) docs
+	$(RM) libr3r/ver.pas
+	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
+	-delp -e .
+
+maintainer-clean: distclean
+	$(RM) Makefile
+
+clean-win32:
+	$(MAKE) EXEEXT=.exe RM=del distclean
+
+# Other compilers
+gpc:
+	-$(MAKE) PC=gpc PFLAGS="--automake -B intl -B libr3r -o r3r" UNITEXT=.gpi
+	@$(ECHO) "Unless you really know what you're doing, the build has failed." \
+	"Hopefully, it will work in the future."
+
+for-borland-compilers:
+	-$(MAKE) \
+	PFLAGS="-B -CC -E. -M -O$(R3R_UI) -Uintl -Ulibr3r -V" DEFS=-DNO_GETTEXT \
+				 OBJEXT=.obj UNITEXT=.dcu
+	@$(ECHO) "Compiling with Delphi/Kylix is currently unsupported.  If that" \
+	"concerns you, send patches."
+
+delphi:
+	$(MAKE) PC=dcc32 for-borland-compilers
+
+kylix:
+	$(MAKE) PC=dcc for-borland-compilers
+
+virtual-pascal vp:
+	@$(ECHO) "Compiling with Virtual Pascal is unsupported.  If that concerns" \
+	"you, send patches."
+
+clean-alt: # Cleans files left by alternative compilers
+	-$(MAKE) distclean clean-win32
+	-$(MAKE) UNITEXT=.gpi distclean clean-win32
+	-$(MAKE) OBJEXT=.obj UNITEXT=.dcu distclean clean-win32 maintainer-clean
