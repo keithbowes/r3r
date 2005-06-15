@@ -95,12 +95,10 @@ function internalizeFeedData($res)
       switch ($mime_type)
       {
         case 'text/x-rss':
-        case 'text/rss3':
           parseTxt($str);
           break;
         case 'text/plain':
         case 'text/x-esf':
-        case 'esf/text':
           parseEsf($str);
           break;
         case 'text/xml':

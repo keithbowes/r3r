@@ -98,7 +98,7 @@ function createFileSelection($source, $data)
 }
 
 /**
-  * Creates a menu item with an access key.
+  * Creates an menu item with an access key.
   * @param String The item's label.
   * @param String Parameters for the type of access.
   * @return GtkMenuItem A menu item with an accelerator.

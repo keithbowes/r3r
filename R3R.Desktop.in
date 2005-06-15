@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=R3R
+Exec=@prefix@/r3r/r3r
+Icon=@prefix@/share/icons/hicolor/32x32/apps/r3r.png
+Type=Application
