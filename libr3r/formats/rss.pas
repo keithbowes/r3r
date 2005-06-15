@@ -15,10 +15,14 @@ type
 
 implementation
 
+uses
+  RSock;
+
 function TRssFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
 begin
   inherited ParseLine(Line, Item);
-  Writeln(FElem);
+  Result := (FXmlElement^.Name <> 'item') and (Line <> SockEof);
+  if not Result then Writeln('New item!');
 end;
 
 function TRssFeed.GetFormat: TFeedType;

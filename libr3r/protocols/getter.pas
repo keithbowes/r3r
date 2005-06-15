@@ -5,10 +5,6 @@ interface
 uses
   BlckSock, Classes, Feed, FeedItem, Headers;
 
-
-
-
-
 implementation
 
 uses

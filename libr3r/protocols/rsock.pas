@@ -31,7 +31,7 @@ type
 implementation
 
 uses
-  Esf, Rss, Rss3;
+  Esf, Rss, Rss3, SysUtils;
 
 var
   AbstractFeed: TFeed;
@@ -40,12 +40,14 @@ constructor TRSock.Create(Host, Port: String);
 begin
   FHost := Host;
   FPort := Port;
+  AbstractFeed := nil;
   inherited Create(false);
 end;
 
 destructor TRSock.Destroy;
 begin
   FSock.Free;
+  FreeAndNil(AbstractFeed);
   inherited Destroy;
 end;
 
@@ -70,22 +72,25 @@ function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   Line: String;
 begin
-  if FeedType = ftEsf then
+  if not Assigned(AbstractFeed) then
   begin
-    AbstractFeed := TEsfFeed.Create;
-  end
-  else if FeedType = ftRss3 then
-  begin
-    AbstractFeed := TRss3Feed.Create;
-  end
-  else if FeedType = ftRss then
-  begin
-    AbstractFeed := TRssFeed.Create;
-  end
-  else
-  begin
-    Result := true;
-    Exit;
+    if FeedType = ftEsf then
+    begin
+      AbstractFeed := TEsfFeed.Create;
+    end
+    else if FeedType = ftRss3 then
+    begin
+      AbstractFeed := TRss3Feed.Create;
+    end
+    else if FeedType = ftRss then
+    begin
+      AbstractFeed := TRssFeed.Create;
+    end
+    else
+    begin
+      Result := true;
+      Exit;
+    end;
   end;
   
   with AbstractFeed do
@@ -93,7 +98,6 @@ begin
     repeat
       Line := GetLine;
     until not ParseLine(Line, Item);
-    Free;
   end;
 
   Result := Line = SockEof;

@@ -103,7 +103,7 @@ end;
 
 function TEsfFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
 begin
-  Result := true;
+  Result := false;
 
   if Pos('#', Line) <> 1 then
   begin
@@ -115,7 +115,7 @@ begin
     begin
       ParseDataLine(Item);
       FLineType := ltData;
-      Result := false;
+      Result := true;
     end
     else if FLCount = 2 then
     begin

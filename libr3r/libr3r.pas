@@ -21,7 +21,7 @@ type
     FOnItemParsed: TParsedEvent;
     FSock: TRSock;
   protected
-    procedure ItemParse;
+    procedure DoParseItem;
   public
     constructor Create(const Resource: String);
     destructor Destroy; override;
@@ -89,7 +89,7 @@ begin
     Finished := FSock.ParseItem(Item);
     if Item.Title <> '' then
     begin
-      ItemParse;
+      DoParseItem;
       Item.Links.Clear;
       Item.Title := '';
     end;
@@ -102,7 +102,7 @@ begin
   end;
 end;
 
-procedure TLibR3R.ItemParse;
+procedure TLibR3R.DoParseItem;
 begin
   if Assigned(FOnItemParsed) then
   begin

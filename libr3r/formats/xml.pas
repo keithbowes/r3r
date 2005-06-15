@@ -6,13 +6,23 @@ uses
   Classes, Feed, FeedItem, Sax, Sax_Html;
 
 type
+  PXmlElement = ^TXmlElement;
+  TXmlElement = record
+    Base: String;
+    Name: String;
+    Lang: String;
+    Prev: PXmlElement;
+  end;
+
   TXmlFeed = class(TFeed)
-  protected
-    FElem: SaxString;
+  private
     FInput: TSaxInputSource;
     FReader: THtmlReader;
     FStream: TStringStream;
+  protected
+    FXmlElement: PXmlElement;
     procedure ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
+    procedure ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
   public
     constructor Create;
     destructor Destroy; override;
@@ -29,6 +39,8 @@ begin
   FInput := TSaxInputSource.Create(FStream);
   FReader := THtmlReader.Create;
   FReader.OnStartElement := @ElementStarted;
+  FReader.onEndElement := @ElementEnded;
+  New(FXmlElement);
 end;
 
 function TXmlFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
@@ -38,7 +50,7 @@ begin
   FStream := TStringStream.Create(Line);
   FReader.Parse(FInput);
 
-  Result := true;
+  Result := false;
 end;
 
 destructor TXmlFeed.Destroy;
@@ -52,8 +64,15 @@ end;
 
 procedure TXmlFeed.ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
 begin
-  WriteLn('a', LocalName);
-  FElem := LocalName;
+  New(FXmlElement^.Prev);
+  FXmlElement^.Prev := FXmlElement;
+  FXmlElement^.Name := LocalName;
+end;
+
+procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
+begin
+  Writeln(FXmlElement^.Name);
+  FXmlElement := FXmlElement^.Prev;
 end;
 
 end.

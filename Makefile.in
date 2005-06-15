@@ -59,7 +59,7 @@ intl/%.mo: intl/%.po
 	$(MSGFMT) -o $@ $<
 
 # Default building rule
-all: libr3r/ver.pas r3r intl/r3r.pot intl/r3r.eo.mo
+all: clean libr3r/ver.pas r3r intl/r3r.pot intl/r3r.eo.mo
 
 libr3r/ver.pas: libr3r/ver.in.pas
 	$(M4) $< > $@
@@ -138,10 +138,10 @@ mostlyclean:
 	$(RM) r3r$(EXEEXT)
 
 clean cleanall: mostlyclean
-	$(RM) */*$(OBJEXT)
+	$(RM) */*$(OBJEXT) */*$(UNITEXT)
 
 distclean: clean
-	$(RM) */*$(UNITEXT) */*$(RSTEXT) */*$(MOEXT)
+	$(RM)  */*$(RSTEXT) */*$(MOEXT)
 	$(RM) docs
 	$(RM) libr3r/ver.pas
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
