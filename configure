@@ -1,0 +1,19 @@
+#! /bin/sh
+
+echo " Make sure you have the following installed:
+  Free Pascal 1.9.6+ <http://www.freepascal.org/>
+  GNU Make 3.80+ <http://www.gnu.org/software/make/>
+  Synapse 35+ <http://www.ararat.cz/synapse/>
+  TRegExpr v.0.952+ <http://www.regexpstudio.com/>
+
+  "
+
+  
+echo " Generating Makefile..."
+m4 Makefile.in > Makefile
+
+echo " Done."
+
+echo "
+ Now run GNU make in the current directory
+ (using the -e make flag is recommended) to build the software."
