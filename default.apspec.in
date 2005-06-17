@@ -1,0 +1,84 @@
+# -*-shell-script-*-
+
+#
+# Rudimentary spec file for autopackage.  It doesn't work yet, but hopefully
+# it will some day.
+#
+# Mildly altered version from makeinstaller --mkspec
+#
+
+[Meta]
+RootName: @r3r.sourceforge.net/default:@VERSION@
+DisplayName: R3R Feed Reader
+ShortName: r3r
+Maintainer: R3R Developers - http://sourceforge.net/projects/r3r
+Packager: Anonymous <anonymous@nowhere.com>
+Summary: R3R is a small, fast, and portable reader/aggregator for RSS, ESF and Atom feeds.
+SoftwareVersion: @VERSION@
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules
+# InterfaceVersion: 0.0
+
+PackageVersion: 1
+
+[Description]
+R3R is a reader for RSS, ESF and Atom feeds. It will retrieve feeds and display the items in a convenient list view. You can subscribe to feeds that you wish to view everytime that the program starts. R3R is conditionally compliant with HTTP/1.1, though some advanced features aren't supported.
+
+[Description:eo]
+R3R estas kanalilo por RSS, ESF kaj Atomo.
+
+[BuildPrepare]
+#prepareBuild
+
+[BuildUnprepare]
+unprepareBuild
+
+[Imports]
+#echo '*' | import
+echo '*.in' | import
+echo 'Artistic' | import
+echo 'README' | import
+echo 'configure' | import
+echo 'install-sh' | import
+echo 'r3r.php' | import
+echo 'version.php' | import
+
+echo 'autopackage' | import
+echo 'icons' | import
+echo 'includes' | import
+echo 'l10n' | import
+echo 'scripts' | import
+
+echo 'autopackage/default.apspec.in' | import
+echo 'icons/r3r.png' | import
+echo 'includes/*.php' | import
+echo 'l10n/*.lng' | import
+echo 'scripts/*.in' | import
+
+[Prepare]
+# Dependency checking
+#require @php.net/php4 4.3.4
+
+[Install]
+./configure --prefix=$prefix
+
+mkdirs $prefix/r3r/includes
+mkdirs $prefix/r3r/l10n
+mkdirs $prefix/share/icons/hicolor/32x32/apps
+
+copyFiles r3r r3r.php version.php $prefix/r3r
+copyFiles includes/*.php $prefix/r3r/includes
+copyFiles l10n/*.lng $prefix/r3r/l10n
+
+installDesktop "Network/Feed Reading" R3R.Desktop
+installIcon icons/r3r.png
+
+linkFile $prefix/r3r/r3r $prefix/bin/r3r
+
+# InstallExe doesn't work with the start-up script, so...
+chmod +x $prefix/r3r/r3r
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog

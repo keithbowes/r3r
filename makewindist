@@ -1,0 +1,16 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+CVERSION=`cat ../version.php`
+VERSION=`echo $CVERSION|grep -o "[0-9][^']*"`
+
+./prepdist
+
+export VERSION
+
+compil32 setup.iss /cc
+
+mv Output/setup.exe ../../r3r-win-$VERSION.exe 
+
+rmdir Output
