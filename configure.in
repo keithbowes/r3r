@@ -1,0 +1,106 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(r3r.php)
+
+AC_SUBST(configured_user)
+configured_user=`whoami`
+
+AC_SUBST(VERSION)
+
+dnl Checks for programs.
+AC_PROG_INSTALL
+AC_PROG_LN_S
+
+AC_PATH_PROGS(PHP, php)
+
+if test -z $PHP;
+then
+  AC_ERROR([PHP, version 4.3.0 or higher, is required.  Please get it from http://www.php.net/.])
+fi
+
+AC_ARG_WITH(BROWSER, [  --with-browser=prog     the path to your preferred browser], with_browser=$withval)
+
+if test -z $with_browser;
+then
+  AC_PATH_PROGS(WINEBROWSER, winebrowser)
+  if test -z $WINEBROWSER;
+  then
+    AC_PATH_PROGS(XTERM, xterm)
+    if test $XTERM;
+    then
+      AC_PATH_PROGS(LYNX, lynx)
+      if test -z $LYNX;
+      then
+        AC_PATH_PROGS(LINKS, links)
+        if $LINKS;
+        then
+          with_browser="$XTERM -e $LINKS"
+        fi
+      else
+        with_browser="$XTERM -e $LYNX"
+      fi
+    fi
+  else
+    with_browser=$WINEBROWSER
+  fi
+fi
+
+if test -z $with_browser;
+then
+  AC_ERROR(Couldn't find a browser on your system.  Please use the --with-browser argument.)
+fi
+
+AC_MSG_CHECKING(for which browser to use)
+AC_MSG_RESULT($with_browser)
+AC_SUBST(with_browser)
+
+dnl Checks for required PHP features.
+AC_MSG_CHECKING(for PHP_SHLIB_SUFFIX)
+php_suffix_out=`php -r "echo PHP_SHLIB_SUFFIX;"`
+if test "$php_suffix_out" = "PHP_SHLIB_SUFFIX";
+then
+  AC_ERROR(Couldn't get PHP_SHLIB_SUFFIX.  PHP 4.3.0 or higher is required.  Please get an adequate version from http://www.php.net/)
+else
+  AC_MSG_RESULT($php_suffix_out)
+fi
+
+AC_MSG_CHECKING(for PHP-GTK presence)
+php_gtk_out=`php -r "if(!dl('php_gtk.' . PHP_SHLIB_SUFFIX)) echo 'Couldn\'t load the extension';"`
+echo $php_gtk_out
+if test -z "$php_gtk_out";
+then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_ERROR(Please get PHP-GTK 1.0.0 from http://gtk.php.net/)
+fi
+
+php_modules=`php -m`
+AC_MSG_CHECKING(for the PCRE extension)
+php_pcre_out=`echo $php_modules|grep pcre`
+if test -n "$php_pcre_out";
+then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_WARN([The PCRE extension, which is required for feed parsing, is not present.])
+fi
+
+AC_MSG_CHECKING(for the XML extension)
+php_xml_out=`echo $php_modules|grep xml`
+if test -n "$php_xml_out";
+then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_WARN([The XML extension, which is required for parsing RSS and Atom feeds, is not present])
+fi
+
+dnl Checks for libraries.
+
+dnl Checks for header files.
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+
+dnl Checks for library functions.
+
+AC_OUTPUT(Makefile R3R.Desktop r3r autopackage/default.apspec scripts/setup.iss)
