@@ -34,7 +34,7 @@
           See the existing front ends for examples.
         </descr>
       </element>
-      <element name="TLibR3R.ItemParse">
+      <element name="TLibR3R.DoParseItem">
         <descr>
           The procedure which calls the method to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points, when conditions permit it.
         </descr>
@@ -51,7 +51,7 @@
       </element>
       <element name="TLibR3R.Parse">
         <descr>
-          Parses the feed at the connected address, and calls (indirectly via <link id="TLibR3R.ItemParse">ItemParse</link>) the callback to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points each time an entire feed item has been parsed.
+          Parses the feed at the connected address, and calls (indirectly via <link id="TLibR3R.DoParseItem">DoParseItem</link>) the callback to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points each time an entire feed item has been parsed.
         </descr>
       </element>
       <element name="TLibR3R.OnItemParsed">
