@@ -1,0 +1,8 @@
+#!/bin/sh
+
+cd `dirname $0`
+
+R3R_BROWSER=winebrowser
+export R3R_BROWSER
+
+php r3r.php $@
