@@ -10,10 +10,14 @@ PASEXT = .pas
 UNITEXT = .ppu
 
 MOEXT = .mo
+POEXT = .po
+POTEXT = .pot
 RSTEXT = .rst
 
+.SUFFIXES: $(MOEXT) $(POEXT)
+
 PC = fpc
-PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -FE. -FU$(R3R_UI) \
+PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
 				 -Xs- -gl -CX- # Oh-so-important debugging stuff for the buggy alpha \
 				 								stage
 DEFS = # Defines, for enabling different features/dialect syntax
@@ -24,6 +28,7 @@ TARFLAGS = czf
 CD = cd
 CP = cp -fr
 ECHO = echo
+FPDOC = fpdoc
 INSTALL = install -m 755
 M4 = m4
 MKDIR = mkdir
@@ -49,22 +54,29 @@ exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 docdir = $(prefix)/doc/r3r
 
-# Technically not standard-compliant.  But it helps not to delete the directory
-# every time I rebuild the documentation.  Besides, what's it gonna hurt?
+# Technically, this isn't standard-compliant.  It's purpose is so that
+# "make docs" will rebuild the documentation without checking the timestamp
+# of the docs directory.
+# Also, the r3r program needs to relink every time the product is made
+# (it doesn't matter that the updated source files are re-compiled if the
+# program isn't relinked with the new object files).
+# This is a proprietary extension, but make programs that don't support it
+# should theoretically see it as an unused rule, so it shouldn't hurt anything.
 .PHONY: docs r3r
 
-#.po.mo:
-intl/%.mo: intl/%.po
-	$(MSGMERGE) -U $< intl/r3r.pot
+$(POEXT)$(MOEXT):
+	$(MSGMERGE) -U $< intl/r3r$(POTEXT)
 	$(MSGFMT) -o $@ $<
 
 # Default building rule
-all: clean libr3r/ver.pas r3r intl/r3r.pot intl/r3r.eo.mo
+all: libr3r/ver.pas r3r intl/r3r$(POTEXT) languages
+
+languages: intl/r3r.eo$(MOEXT)
 
 libr3r/ver.pas: libr3r/ver.in.pas
 	$(M4) $< > $@
 
-intl/r3r.pot: $(R3R_UI)/r3rrs$(RSTEXT)
+intl/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
 
 r3r:
@@ -94,9 +106,11 @@ uninstall-win32:
 	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe RM=del uninstall
 
 # Documentation rules
-docs:
-	$(CD) docs && $(FPDOC) --input=../lib/r3r/libr3r.pas \
-				--input=../lib/r3r/feeditem.pas --descr=../lib/r3r/libr3r.pas.xml
+docs: libr3r/formats/feeditem.pas libr3r/libr3r.pas libr3r/libr3r.pas.xml
+	-$(MKDIR) docs
+	$(CD) docs && $(FPDOC) --input=../libr3r/libr3r.pas \
+		--input=../libr3r/formats/feeditem.pas --descr=../libr3r/libr3r.pas.xml \
+		--package=LibR3R
 
 install-docs:
 	-$(MKDIR) $(docdir)
@@ -104,14 +118,15 @@ install-docs:
 
 install-docs-win32:
 	$(MAKE) docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" INSTALL=copy \
-	install-docs
+		install-docs
 
 # Distribution rules
 dist: distclean
 	-$(MKDIR) ../r3r-src
 	$(CP) * ../r3r-src
 	$(MV) ../r3r-src r3r-src-$(VERSION)
-	$(TAR) $(TARFLAGS) r3r-$(VERSION).tar.gz r3r-src-$(VERSION) --exclude=.*
+	$(TAR) $(TARFLAGS) r3r-$(VERSION).tar.gz r3r-src-$(VERSION) \
+		--exclude=.* --exclude=CVS
 	$(RM) r3r-src-$(VERSION)
 	$(MV) r3r-$(VERSION).tar.gz ..
 
@@ -130,7 +145,7 @@ scripts/autopackage/default.apspec: scripts/autopackage/default.apspec.in
 	$(M4) $< > $@
 
 dist-linux: all r3r$(EXEEXT) scripts/autopackage/default.apspec
-	$(CD) scripts &&  $(AUTOPACKAGE)
+	$(CD) scripts && $(AUTOPACKAGE)
 	$(MV) scripts/r3r-$(VERSION).x86.package ..
 
 # Cleaning rules

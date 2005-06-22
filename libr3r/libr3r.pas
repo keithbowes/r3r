@@ -2,9 +2,6 @@ unit LibR3R;
 
 interface
 
-{$UNITPATH formats}
-{$UNITPATH protocols}
-
 uses
 {$IFDEF UNIX}
   CThreads,

@@ -2,8 +2,6 @@ unit RSock;
 
 interface
 
-{$UNITPATH ../formats}
-
 uses
   BlckSock, Classes, Feed, FeedItem;
 
