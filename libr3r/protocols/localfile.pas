@@ -26,6 +26,7 @@ uses
 
 constructor TLocalFile.Create(FileName: String);
 begin
+  Read;
   FFileName := FileName;
 end;
 

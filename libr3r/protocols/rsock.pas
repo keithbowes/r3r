@@ -38,8 +38,7 @@ constructor TRSock.Create(Host, Port: String);
 begin
   FHost := Host;
   FPort := Port;
-  AbstractFeed := nil;
-  inherited Create(false);
+  inherited Create(true);
 end;
 
 destructor TRSock.Destroy;
@@ -68,6 +67,7 @@ end;
 
 function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
+  ItemFinished: Boolean;
   Line: String;
 begin
   if not Assigned(AbstractFeed) then
@@ -95,7 +95,8 @@ begin
   begin
     repeat
       Line := GetLine;
-    until not ParseLine(Line, Item);
+      ParseLine(Line, Item, ItemFinished);
+    until ItemFinished;
   end;
 
   Result := Line = SockEof;

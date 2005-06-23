@@ -10,7 +10,7 @@ type
   protected
     function GetFormat: TFeedType; override;
   public
-    function ParseLine(Line: String; var Item: TFeedItem): Boolean; override;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
 implementation
@@ -18,11 +18,11 @@ implementation
 uses
   RSock;
 
-function TRssFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
+procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
-  inherited ParseLine(Line, Item);
-  Result := (FXmlElement^.Name <> 'item') and (Line <> SockEof);
-  if not Result then Writeln('New item!');
+  inherited ParseLine(Line, Item, ItemFinished);
+  //ItemFinished := (FXmlElement^.Name = 'item') or (Line = SockEof);
+  if ItemFinished then Writeln('New item!');
 end;
 
 function TRssFeed.GetFormat: TFeedType;

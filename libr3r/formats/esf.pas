@@ -21,7 +21,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function ParseLine(Line: String; var Item: TFeedItem): Boolean; override;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
 implementation
@@ -101,9 +101,9 @@ begin
   end;
 end;
 
-function TEsfFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
+procedure TEsfFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
-  Result := false;
+  ItemFinished := true;
 
   if Pos('#', Line) <> 1 then
   begin
@@ -115,7 +115,7 @@ begin
     begin
       ParseDataLine(Item);
       FLineType := ltData;
-      Result := true;
+      ItemFinished := false;
     end
     else if FLCount = 2 then
     begin
@@ -124,13 +124,13 @@ begin
     end
     else if Line = SockEof then
     begin
-      Result := false;
+      ItemFinished := true;
     end;
   end;
 
   if FLineType = ltMeta then
   begin
-    Result := Trim(Line) <> '';
+    ItemFinished := Trim(Line) <> '';
   end;
 end;
 

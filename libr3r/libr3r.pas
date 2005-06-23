@@ -39,6 +39,7 @@ var
   Prot, User, Pass, Host, Port, Path, Para: String;
 begin
   inherited Create;
+  FSock := nil;
 
   if FileExists(Resource) then
   begin
@@ -55,10 +56,11 @@ begin
     begin
       Exit;
     end;
-
-    FSock.Execute;
-    FHadError := FSock.Sock.LastError <> 0;
   end;
+
+  FSock.Execute;
+  if Assigned(FSock.Sock) then
+    FHadError := FSock.Sock.LastError <> 0;
 
   Item.Links := TStringList.Create;
 end;

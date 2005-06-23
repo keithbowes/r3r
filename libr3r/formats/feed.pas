@@ -15,7 +15,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function ParseLine(Line: String; var Item: TFeedItem): Boolean; virtual; abstract;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); virtual; abstract;
     property Format: TFeedType read GetFormat;
   end; 
 

@@ -14,7 +14,7 @@ type
     procedure FillItem(var Item: TFeedItem);
     procedure AppendFilledItem(var Item: TFeedItem);
   public
-    function ParseLine(Line: String; var Item: TFeedItem): Boolean; override;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
 implementation
@@ -96,11 +96,11 @@ begin
   end;
 end;
 
-function TRss3Feed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
+procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
-  Result := (Line <> '') and (Line <> SockEof);
+  ItemFinished := (Line = '') or (Line = SockEof);
 
-  if Result then
+  if not ItemFinished then
   begin
     with FRegExpr do
     begin

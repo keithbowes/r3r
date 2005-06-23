@@ -18,8 +18,8 @@ RSTEXT = .rst
 
 PC = fpc
 PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
-				 -Xs- -gl -CX- # Oh-so-important debugging stuff for the buggy alpha \
-				 								stage
+				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
+				 													buggy alpha stage
 DEFS = # Defines, for enabling different features/dialect syntax
 
 TAR = tar
@@ -54,7 +54,7 @@ exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 docdir = $(prefix)/doc/r3r
 
-# Technically, this isn't standard-compliant.  It's purpose is so that
+# Technically, this isn't standard-compliant.  Its purpose is so that
 # "make docs" will rebuild the documentation without checking the timestamp
 # of the docs directory.
 # Also, the r3r program needs to relink every time the product is made

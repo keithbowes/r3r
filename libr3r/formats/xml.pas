@@ -6,27 +6,26 @@ uses
   Classes, Feed, FeedItem, Sax, Sax_Html;
 
 type
-  PXmlElement = ^TXmlElement;
   TXmlElement = record
     Base: String;
     Name: String;
     Lang: String;
-    Prev: PXmlElement;
   end;
 
   TXmlFeed = class(TFeed)
   private
+    FElemList: TList;
     FInput: TSaxInputSource;
     FReader: THtmlReader;
     FStream: TStringStream;
+    FXmlElement: TXmlElement;
   protected
-    FXmlElement: PXmlElement;
     procedure ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
     procedure ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
   public
     constructor Create;
     destructor Destroy; override;
-    function ParseLine(Line: String; var Item: TFeedItem): Boolean; override;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
 implementation
@@ -35,26 +34,29 @@ constructor TXmlFeed.Create;
 begin
   inherited Create;
 
+  FElemList := TList.Create;
+
   FStream := TStringStream.Create('');
   FInput := TSaxInputSource.Create(FStream);
   FReader := THtmlReader.Create;
   FReader.OnStartElement := @ElementStarted;
-  FReader.onEndElement := @ElementEnded;
-  New(FXmlElement);
+  FReader.OnEndElement := @ElementEnded;
 end;
 
-function TXmlFeed.ParseLine(Line: String; var Item: TFeedItem): Boolean;
+procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
   FStream.Free;
 
   FStream := TStringStream.Create(Line);
   FReader.Parse(FInput);
 
-  Result := false;
+  ItemFinished := true;
 end;
 
 destructor TXmlFeed.Destroy;
 begin
+  FElemList.Free;
+
   FStream.Free;
   FInput.Free;
   FReader.Free;
@@ -64,15 +66,22 @@ end;
 
 procedure TXmlFeed.ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
 begin
-  New(FXmlElement^.Prev);
-  FXmlElement^.Prev := FXmlElement;
-  FXmlElement^.Name := LocalName;
+  FXmlElement.Name := LocalName;
+  {if FElemList.Count > 1 then
+  begin
+    if TXmlElement(FElemList[FElemList.Count-1]^).Lang = '' then
+    begin
+      TXmlElement(FElemList[FElemList.Count-1]^).Lang := TXmlElement(FElemList[FElemList.Count-2]^).Lang;
+    end;
+  end;}
+
+  FElemList.Add(@FXmlElement);
 end;
 
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
-  Writeln(FXmlElement^.Name);
-  FXmlElement := FXmlElement^.Prev;
+  FElemList.Delete(FElemList.Count-1);
+  WriteLn(TXmlElement(FElemList[FElemList.Count-1]^).Name);
 end;
 
 end.
