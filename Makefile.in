@@ -37,6 +37,7 @@ MSGMERGE = msgmerge
 MV = mv
 RM = rm -fr
 RSTCONV = rstconv
+TOUCH = touch
 
 ISCC=iscc
 ISCCFLAGS=
