@@ -7,8 +7,8 @@ uses
 
 type
   TXmlElement = record
-    Base: String;
     Name: String;
+    Base: String;
     Lang: String;
   end;
 
@@ -18,14 +18,18 @@ type
     FInput: TSaxInputSource;
     FReader: THtmlReader;
     FStream: TStringStream;
-    FXmlElement: TXmlElement;
   protected
+    FXmlElement: TXmlElement;
     procedure ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
     procedure ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
+    function GetCurrentElement: TXmlElement;
+    function GetPreviousElement: TXmlElement;
   public
     constructor Create;
     destructor Destroy; override;
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    property CurrentElement: TXmlElement read GetCurrentElement;
+    property PreviousElement: TXmlElement read GetPreviousElement;
   end;
 
 implementation
@@ -65,15 +69,25 @@ begin
 end;
 
 procedure TXmlFeed.ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
+var
+  Item: integer;
 begin
   FXmlElement.Name := LocalName;
-  {if FElemList.Count > 1 then
+
+  if Assigned(Atts) then
   begin
-    if TXmlElement(FElemList[FElemList.Count-1]^).Lang = '' then
+    for Item := 0 to Atts.Length - 1 do
     begin
-      TXmlElement(FElemList[FElemList.Count-1]^).Lang := TXmlElement(FElemList[FElemList.Count-2]^).Lang;
+      if Atts.GetLocalName(Item) = 'xml:base' then
+      begin
+        FXmlElement.Base := Atts.GetValue(Item);
+      end;
+      if Atts.GetLocalName(Item) = 'xml:lang' then
+      begin
+        FXmlElement.Lang := Atts.GetValue(Item);
+      end;
     end;
-  end;}
+  end;
 
   FElemList.Add(@FXmlElement);
 end;
@@ -81,7 +95,19 @@ end;
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
   FElemList.Delete(FElemList.Count-1);
-  WriteLn(TXmlElement(FElemList[FElemList.Count-1]^).Name);
+
+  if FElemList.Count > 0 then
+    WriteLn(CurrentElement.Lang);
+end;
+
+function TXmlFeed.GetCurrentElement: TXmlElement;
+begin
+  Result := TXmlElement(FElemList[FElemList.Count - 1]^);
+end;
+
+function TXmlFeed.GetPreviousElement: TXmlElement;
+begin
+  Result := TXmlElement(FElemList[FElemList.Count - 2]^);
 end;
 
 end.

@@ -21,7 +21,7 @@ uses
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
   inherited ParseLine(Line, Item, ItemFinished);
-  //ItemFinished := (FXmlElement^.Name = 'item') or (Line = SockEof);
+  ItemFinished := (FXmlElement.Name = 'item') or (Line = SockEof);
   if ItemFinished then Writeln('New item!');
 end;
 

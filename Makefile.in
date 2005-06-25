@@ -54,22 +54,12 @@ exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 docdir = $(prefix)/doc/r3r
 
-# Technically, this isn't standard-compliant.  Its purpose is so that
-# "make docs" will rebuild the documentation without checking the timestamp
-# of the docs directory.
-# Also, the r3r program needs to relink every time the product is made
-# (it doesn't matter that the updated source files are re-compiled if the
-# program isn't relinked with the new object files).
-# This is a proprietary extension, but make programs that don't support it
-# should theoretically see it as an unused rule, so it shouldn't hurt anything.
-.PHONY: docs r3r
-
 $(POEXT)$(MOEXT):
 	$(MSGMERGE) -U $< intl/r3r$(POTEXT)
 	$(MSGFMT) -o $@ $<
 
 # Default building rule
-all: libr3r/ver.pas r3r intl/r3r$(POTEXT) languages
+all: libr3r/ver.pas touch-r3r r3r$(EXEEXT) intl/r3r$(POTEXT) languages
 
 languages: intl/r3r.eo$(MOEXT)
 
@@ -79,8 +69,12 @@ libr3r/ver.pas: libr3r/ver.in.pas
 intl/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
 
-r3r:
-	$(PC) $(PFLAGS) $(DEFS) $(R3R_UI)/r3r$(PASEXT)
+# So the program will relink, regardless
+touch-r3r:
+	$(TOUCH) $(R3R_UI)/r3r$(PASEXT)
+
+r3r$(EXEEXT): $(R3R_UI)/r3r$(PASEXT)
+	$(PC) $(PFLAGS) $(DEFS) $<
 
 cross:
 	$(MAKE) PFLAGS="$(PFLAGS) -T$(OS)"
