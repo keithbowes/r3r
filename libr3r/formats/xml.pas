@@ -8,6 +8,7 @@ uses
 type
   TXmlElement = record
     Name: String;
+    Content: String;
     Base: String;
     Lang: String;
   end;
@@ -22,6 +23,7 @@ type
     FXmlElement: TXmlElement;
     procedure ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
     procedure ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
+    procedure CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
     function GetCurrentElement: TXmlElement;
     function GetPreviousElement: TXmlElement;
   public
@@ -45,6 +47,8 @@ begin
   FReader := THtmlReader.Create;
   FReader.OnStartElement := @ElementStarted;
   FReader.OnEndElement := @ElementEnded;
+  FReader.OnCharacters := @CharactersReceived;
+  FReader.OnIgnorableWhitespace := @CharactersReceived;
 end;
 
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
@@ -73,6 +77,7 @@ var
   Item: integer;
 begin
   FXmlElement.Name := LocalName;
+  FXmlElement.Content := '';
 
   if Assigned(Atts) then
   begin
@@ -95,9 +100,11 @@ end;
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
   FElemList.Delete(FElemList.Count-1);
+end;
 
-  if FElemList.Count > 0 then
-    WriteLn(CurrentElement.Lang);
+procedure TXmlFeed.CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
+begin
+  FXmlElement.Content := FXmlElement.Content + ch;
 end;
 
 function TXmlFeed.GetCurrentElement: TXmlElement;
