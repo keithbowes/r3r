@@ -6,7 +6,7 @@ uses
 {$IFDEF UNIX}
   CThreads,
 {$ENDIF}
-  FeedItem, RSock;
+  FeedItem, RMessage, RSock;
 
 type
   TParsedFeedItem = TFeedItem;
@@ -14,8 +14,8 @@ type
 
   TLibR3R = class
   private
-    FHadError: Boolean;
     FOnItemParsed: TParsedEvent;
+    FOnMessage: TRMessage;
     FSock: TRSock;
   protected
     procedure DoParseItem;
@@ -24,6 +24,7 @@ type
     destructor Destroy; override;
     procedure Parse;
     property OnItemParsed: TParsedEvent write FOnItemParsed;
+    property OnMessage: TRMessage write FOnMessage;
   end;
 
 implementation
@@ -59,8 +60,6 @@ begin
   end;
 
   FSock.Execute;
-  if Assigned(FSock.Sock) then
-    FHadError := FSock.Sock.LastError <> 0;
 
   Item.Links := TStringList.Create;
 end;
@@ -82,9 +81,16 @@ var
   Finished: Boolean;
 begin
   Finished := false;
+  SetMessageEvent(FOnMessage);
 
-  while (not Finished) and (not FHadError) do
+  while not Finished do
   begin
+    if Assigned(FSock.Sock) and (FSock.Sock.LastError <> 0) then
+    begin
+      CallMessageEvent(Self, true, ErrorGetting);
+      Break;
+    end;
+
     Finished := FSock.ParseItem(Item);
     if Item.Title <> '' then
     begin
@@ -92,12 +98,6 @@ begin
       Item.Links.Clear;
       Item.Title := '';
     end;
-  end;
-
-  // TODO: Process in a UI-independent way
-  if FHadError then
-  begin
-    Writeln(GetError);
   end;
 end;
 

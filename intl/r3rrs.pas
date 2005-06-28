@@ -12,7 +12,7 @@ resourcestring
   HelpKey = 'h';
   QuitKey = 'q';
 
-  GetError = 'An error occurred while trying to retrieve the feed.';
+  ErrorGetting = 'ERROR:  Couldn''t retrieve the feed.';
 
 implementation
 

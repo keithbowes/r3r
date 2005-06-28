@@ -11,6 +11,7 @@ type
     FTLib: TLibR3R;
   protected
     procedure ItemParsed(Item: TParsedFeedItem);
+    procedure MessageReceived(Sender: TObject; Error: Boolean; MessageName: String);
     procedure ShowHelp;
     procedure GoURI;
   public
@@ -35,6 +36,7 @@ begin
   begin
     FTLib := TLibR3R.Create(ParamStr(FeedIndex));
     FTLib.OnItemParsed := @ItemParsed;
+    FTLib.OnMessage := @MessageReceived;
     FTLib.Parse;
     FreeAndNil(FTLib);
   end;
@@ -80,6 +82,11 @@ begin
   end;
 
   WriteLn;
+end;
+
+procedure TTui.MessageReceived(Sender: TObject; Error: Boolean; MessageName: String);
+begin
+  WriteLn(MessageName);
 end;
 
 procedure TTui.ShowHelp;
