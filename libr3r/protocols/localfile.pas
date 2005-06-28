@@ -33,6 +33,7 @@ end;
 destructor TLocalFile.Destroy;
 begin
   Close(FFileHandle);
+  inherited Destroy;
 end;
 
 procedure TLocalFile.Execute;
@@ -66,6 +67,10 @@ begin
   else if FileExt = '.r3' then
   begin
     FeedType := ftRss3;
+  end
+  else if (FileExt = '.rss') or (FileExt = '.xml') then
+  begin
+    FeedType := ftRss;
   end
   else
   begin

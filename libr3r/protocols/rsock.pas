@@ -13,6 +13,7 @@ type
   private
     FSock: TTCPBlockSocket;
   protected
+    FAbstractFeed: TFeed;
     FFeedType: TFeedType;
     FHost: String;
     FPort: String;
@@ -31,9 +32,6 @@ implementation
 uses
   Esf, Rss, Rss3, SysUtils;
 
-var
-  AbstractFeed: TFeed;
-
 constructor TRSock.Create(Host, Port: String);
 begin
   FHost := Host;
@@ -44,8 +42,12 @@ end;
 destructor TRSock.Destroy;
 begin
   FSock.Free;
-  FreeAndNil(AbstractFeed);
-  inherited Destroy;
+  FreeAndNil(FAbstractFeed);
+
+  if Self.ClassName <> 'TLocalFile' then
+  begin
+    inherited Destroy;
+  end;
 end;
 
 function TRSock.GetLine: String;
@@ -70,19 +72,19 @@ var
   ItemFinished: Boolean;
   Line: String;
 begin
-  if not Assigned(AbstractFeed) then
+  if not Assigned(FAbstractFeed) then
   begin
     if FeedType = ftEsf then
     begin
-      AbstractFeed := TEsfFeed.Create;
+      FAbstractFeed := TEsfFeed.Create;
     end
     else if FeedType = ftRss3 then
     begin
-      AbstractFeed := TRss3Feed.Create;
+      FAbstractFeed := TRss3Feed.Create;
     end
     else if FeedType = ftRss then
     begin
-      AbstractFeed := TRssFeed.Create;
+      FAbstractFeed := TRssFeed.Create;
     end
     else
     begin
@@ -91,7 +93,7 @@ begin
     end;
   end;
   
-  with AbstractFeed do
+  with FAbstractFeed do
   begin
     repeat
       Line := GetLine;
