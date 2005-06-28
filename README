@@ -49,6 +49,20 @@ r3r-<version>.<extension>, where extension is:
 .exe: Windows setup
 .x86.package: x86 Autopackage installer
 
+The Windows and Linux installers are installed simply by executing the file
+(Linux users may need to make the file executable).
+The source code will extract to a new directory.  In that directory,
+do the traditional:
+./configure
+make
+make install
+
+The configure file is not an autoconf configure.  It's just a shell script
+that will output a message and then generate the Makefile.
+Other files that need generated will be generated during the make process.
+Enabling features must be done with the environment variable DEFS.  The prefix
+to which to install is determined via the DESTDIR environment variable.
+
 4. REPORTING BUGS, SUBMITTING PATCHES, etc.
 
 SourceForge provides excellent facilities for this.  Read Site Docs for info.
