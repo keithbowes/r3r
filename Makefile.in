@@ -101,11 +101,12 @@ uninstall-win32:
 	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe RM=del uninstall
 
 # Documentation rules
-docs: libr3r/formats/feeditem.pas libr3r/libr3r.pas libr3r/libr3r.pas.xml
+docs: libr3r/formats/feeditem.pas libr3r/libr3r.pas libr3r/rmessage.pas \
+	libr3r/libr3r.pas.xml
 	-$(MKDIR) docs
 	$(CD) docs && $(FPDOC) --input=../libr3r/libr3r.pas \
-		--input=../libr3r/formats/feeditem.pas --descr=../libr3r/libr3r.pas.xml \
-		--package=LibR3R
+		--input=../libr3r/formats/feeditem.pas --input=../libr3r/rmessage.pas \
+		--descr=../libr3r/libr3r.pas.xml --package=LibR3R
 
 install-docs:
 	-$(MKDIR) $(docdir)

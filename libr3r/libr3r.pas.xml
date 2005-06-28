@@ -59,6 +59,11 @@
           An event, which points to a class' method that is to be called whenever a feed item has been <link id="TLibR3R.Parse">parse</link>d.  Its one parameter is of type <link id="TParsedFeedItem">TParsedFeedItem</link>.
         </descr>
       </element>
+      <element name="TLibR3R.OnMessage">
+        <descr>
+          An event, which points to a class' method that is to be called whenever the backend needs to send a message to the UI.  If an error occurred, the second parameter will be true and the UI can act accordingly.
+        </descr>
+      </element>
     </module>
   </package>
 </fpdoc-description>
