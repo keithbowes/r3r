@@ -51,19 +51,19 @@ begin
     begin
       Item.Subject := Item.Subject + Content;
     end
-    else if Name = 'pubDate' then
+    else if Name = 'pubdate' then
     begin
       Item.Created := Item.Created + Content;
     end
-    else if Name = 'managingEditor' then
+    else if Name = 'managingeditor' then
     begin
-      Item.Contact := Item.Contact + Content;
+      Item.Contact := CreateEmailRecord(Content);
     end
     else if Name = 'generator' then
     begin
       Item.Generator := Item.Generator + Content;
     end
-    else if Name = 'lastPubDate' then
+    else if Name = 'lastpubdate' then
     begin
       Item.LastModified := Item.LastModified + Content;
     end

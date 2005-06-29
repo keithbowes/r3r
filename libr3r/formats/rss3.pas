@@ -37,7 +37,7 @@ procedure TRss3Feed.AppendFilledItem(var Item: TFeedItem);
 var
   Data: String;
 begin
-  Data := Trim(FRegExpr.Match[2]);
+  Data := Trim(FRegExpr.Match[2]) + ' ';
 
   if FCurrentField = 'title' then
   begin
@@ -66,9 +66,10 @@ begin
   begin
     Item.Created := Item.Created + Data;
   end
-  else if FCurrentField = 'contact' then
+  else if FCurrentField = 'creator' then
   begin
-    Item.Contact := Item.Contact + Data
+    Data := Item.Contact.Address + ' ' + Item.Contact.Toee + Data;
+    Item.Contact := CreateEmailRecord(Data, false);
   end
   else if FCurrentField = 'generator' then
   begin
@@ -112,7 +113,7 @@ begin
       end
       else
       begin
-        Expression := '^\s+(\S*)';
+        Expression := '^(\s+)(\S*)';
         Exec(Line);
         if Match[1] <> '' then
         begin

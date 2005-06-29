@@ -187,7 +187,8 @@ virtual-pascal vp:
 	@$(ECHO) "Compiling with Virtual Pascal is unsupported.  If that concerns" \
 	"you, send patches."
 
-clean-alt: # Cleans files left by alternative compilers
+# Cleans files left by alternative compilers
+clean-alt:
 	-$(MAKE) distclean clean-win32
 	-$(MAKE) UNITEXT=.gpi distclean clean-win32
 	-$(MAKE) OBJEXT=.obj UNITEXT=.dcu distclean clean-win32 maintainer-clean

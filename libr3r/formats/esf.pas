@@ -96,7 +96,7 @@ begin
     end
     else if FList[0] = 'contact' then
     begin
-      Contact := FList[1];
+      Contact := CreateEmailRecord(FList[1]);
     end;
   end;
 end;
