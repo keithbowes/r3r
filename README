@@ -45,9 +45,9 @@ Get a release from the r3r-win package and run the simple installer.
 
 The naming of the download files has changed in R3R 2.x.  It's now
 r3r-<version>.<extension>, where extension is:
-.tar.gz: Source code
-.exe: Windows setup
-.x86.package: x86 Autopackage installer
+tar.gz: Source code
+exe: Windows setup
+x86.package: x86 Autopackage installer
 
 The Windows and Linux installers are installed simply by executing the file
 (Linux users may need to make the file executable).
