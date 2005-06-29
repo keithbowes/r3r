@@ -4,7 +4,6 @@ var
 constructor TRSettings.Create;
 begin
   IniFile := TIniFile.Create(SettingsDir + 'r3rrc');
-  Proxy := '80.80.80';
 end;
 
 destructor TRSettings.Destroy;
