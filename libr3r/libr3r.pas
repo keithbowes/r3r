@@ -6,7 +6,7 @@ uses
 {$IFDEF UNIX}
   CThreads,
 {$ENDIF}
-  FeedItem, RMessage, RSock;
+  FeedItem, RMessage, RSettings, RSock;
 
 type
   TParsedFeedItem = TFeedItem;
@@ -16,6 +16,7 @@ type
   private
     FOnItemParsed: TParsedEvent;
     FOnMessage: TRMessage;
+    FSettings: TRSettings;
     FSock: TRSock;
   protected
     procedure DoParseItem;
@@ -25,6 +26,7 @@ type
     procedure Parse;
     property OnItemParsed: TParsedEvent write FOnItemParsed;
     property OnMessage: TRMessage write FOnMessage;
+    property Settings: TRSettings read FSettings write FSettings;
   end;
 
 implementation
@@ -40,6 +42,7 @@ var
   Prot, User, Pass, Host, Port, Path, Para: String;
 begin
   inherited Create;
+  FSettings := TRSettings.Create;
   FSock := nil;
 
   if FileExists(Resource) then
@@ -73,6 +76,7 @@ begin
   end;
 
   FSock.Free;
+  FSettings.Free;
   inherited Destroy;
 end;
 

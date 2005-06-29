@@ -20,7 +20,8 @@ PC = fpc
 PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
 				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
 				 													buggy alpha stage
-DEFS = # Defines, for enabling different features/dialect syntax
+# Defines, for enabling different features/dialect syntax
+DEFS = "-dSETTINGS_INI"
 
 TAR = tar
 TARFLAGS = czf
@@ -80,6 +81,9 @@ r3r$(EXEEXT): $(R3R_UI)/r3r$(PASEXT)
 cross:
 	$(MAKE) PFLAGS="$(PFLAGS) -T$(OS)"
 
+win32:
+	$(MAKE) cross OS=win32 DEFS="-dSETTINGS_REGISTRY"
+
 # Installation rules
 install: all
 	-$(MKDIR) $(bindir)
@@ -88,7 +92,7 @@ install: all
 	$(INSTALL) intl/*.mo $(bindir)/intl
 
 install-win32:
-	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe INSTALL=copy install
+	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
 
 # Uninstallation rules
 uninstall:
@@ -98,7 +102,7 @@ uninstall:
 
 uninstall-win32:
 	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" \
-	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe RM=del uninstall
+	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe uninstall
 
 # Documentation rules
 docs: libr3r/formats/feeditem.pas libr3r/libr3r.pas libr3r/rmessage.pas \
@@ -113,8 +117,7 @@ install-docs:
 	$(CD) docs && $(INSTALL) * $(docdir)
 
 install-docs-win32:
-	$(MAKE) docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" INSTALL=copy \
-		install-docs
+	$(MAKE) docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" install-docs
 
 # Distribution rules
 dist: distclean
@@ -162,7 +165,7 @@ maintainer-clean: distclean
 	$(RM) Makefile
 
 clean-win32:
-	$(MAKE) EXEEXT=.exe RM=del distclean
+	$(MAKE) EXEEXT=.exe distclean
 
 # Other compilers
 gpc:

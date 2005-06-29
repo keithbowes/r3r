@@ -53,7 +53,6 @@ begin
   end;
 
   BegName := Pos(Delim, EmailStr);
-  WriteLn(BegName);
   with Result do
   begin
     if BegName <> 0 then
@@ -66,8 +65,6 @@ begin
       Address := EmailStr;
     end;
   end;
-  WriteLn('Address: ', Result.Address);
-  WriteLn('Toee: ', Result.Toee);
 end;
 
 end.
