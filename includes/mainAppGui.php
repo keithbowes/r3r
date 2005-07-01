@@ -50,7 +50,7 @@ function createMenu()
   $settingsItem->connect('activate', 'showSettingsDialog');
 
   $helpMenuItem = createAccelMenu(HELP, 8);
-  $helpMenuItem->right_justify();
+  $helpMenuItem->set_right_justified(true);
 
   $infoItem = createAccelMenu(HELP_INFO);
   $infoItem->connect('activate', 'showInfo');
@@ -76,28 +76,43 @@ function createMenu()
 */
 function createAppArea()
 {
-  global $box, $feedItemView, $feedList, $statusBar, $urlEntry;
+  global $box, $feedItemView, $feedList, $feedTree, $statusBar, $urlEntry;
 
   $feedListBox = &new GtkHBox();
   $box->pack_start($feedListBox);
 
-  $feedList->set_column_width(0, 100); 
-  $feedList->set_column_width(1, 200); 
-  $feedList->set_column_width(2, 67);
-  $feedList->column_titles_passive();
-  $feedList->connect('select-row', 'feedListRowSelected');
-  $feedList->connect('unselect-row', 'feedListRowUnselected');
-  $feedList->connect('button-press-event', 'feedListRowClicked');
-  $feedList->connect('key-press-event', 'feedListRowPressed');
+  if (PHP_GTK_MAJOR > 1)
+  {
+    $feedTree->get_column(0)->set_min_width(100);
+    $feedTree->get_column(1)->set_min_width(200);
+    $feedTree->get_column(2)->set_min_width(67);
+    $feedTree->connect('button-press-event', 'feedListRowClicked');
+    $feedTree->connect('key-press-event', 'feedListRowPressed');
+  }
+  else
+  {
+    $feedList->set_column_width(0, 100); 
+    $feedList->set_column_width(1, 200); 
+    $feedList->set_column_width(2, 67);
+    $feedList->column_titles_passive();
+    $feedList->connect('select-row', 'feedListRowSelected');
+    $feedList->connect('unselect-row', 'feedListRowUnselected');
+    $feedList->connect('button-press-event', 'feedListRowClicked');
+    $feedList->connect('key-press-event', 'feedListRowPressed');
+  }
 
   $scroll = &new GtkScrolledWindow();
-  $scroll->set_usize(500, 150);
+  $scroll->set_size_request(500, 150);
   $scroll->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  $scroll->add($feedList);
+  if (PHP_GTK_MAJOR > 1)
+    $scroll->add($feedTree);
+  else
+    $scroll->add($feedList);
+
   $feedListBox->pack_start($scroll);
   $scroll->show();
 
-  $feedItemView->set_usize(150, 60);
+  $feedItemView->set_size_request(150, 60);
   $box->pack_start($feedItemView);
 
   $box->pack_end($statusBar, false);

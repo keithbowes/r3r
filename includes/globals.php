@@ -15,6 +15,11 @@ define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
 */
 define('SETTINGS_FILE', 'r3rrc');
 
+/**
+  * Major version of PHP-GTK
+*/
+define('PHP_GTK_MAJOR', getenv('PHP_GTK_MAJOR'));
+
 /* GUI variables and classes */
 
 /**
@@ -118,7 +123,23 @@ $feedItemView = &new GtkFrame(DESC_NO_ITEM);
 /**
   * GtkCList A list in which feed items are displayed.
 */
-$feedList = &new GtkCList(4, array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED));
+$listArray = array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED);
+if (PHP_GTK_MAJOR > 1)
+{
+  $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+  $feedTree = new GtkTreeView();
+  $feedTree->set_model($feedList);
+  $feedTree->set_headers_visible(true);
+  $listitems = count($listArray);
+  for ($i = 0; $i < $listitems; $i++)
+  {
+    $col = new GtkTreeViewColumn();
+    $col->set_title($listArray[$i]);
+    $feedTree->append_column($col);
+  }
+}
+else
+  $feedList = &new GtkCList(4, $listArray);
 
 /**
   * GtkMenuBar The main window's menu bar.
