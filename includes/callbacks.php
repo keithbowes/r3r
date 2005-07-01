@@ -470,4 +470,25 @@ function settingsEntryChanged($widget, $data)
   setSetting($data, $widget->get_text());
 }
 
+/* Callbacks specific to PHP-GTK 2 */
+
+/**
+  * Powers the Settings dialog button.
+  * @param GtkDialog The dialog from which the signal originated.
+  * @param gint The ID of the button that was activated.
+*/
+function settingsdlgResponded($widget, $id)
+{
+  switch ($id)
+  {
+    case 1:
+      commitSettings();
+    case 2:
+      killWidget(null, $widget);
+      break;
+    case 3:
+      saveSettings();
+  }
+}
+
 ?>

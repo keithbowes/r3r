@@ -14,34 +14,45 @@ function alert($msg, $title = ALERT_ERROR, $wrap = true)
 {
   doEvent();
 
-  $alertWindow = &new GtkWindow(GTK_WINDOW_DIALOG);
-  $alertWindow->set_title($title);
+  if (PHP_GTK_MAJOR > 1)
+  {
+    global $window;
+    $alertWindow = new GtkMessageDialog($window, GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, $msg);
+    $alertWindow->set_title($title);
+    $alertWindow->run();
+    $alertWindow->destroy();
+  }
+  else
+  {
+    $alertWindow = &new GtkWindow(GTK_WINDOW_DIALOG);
+    $alertWindow->set_title($title);
 
-  $alertBox = &new GtkVBox();
-  $alertWindow->add($alertBox);
+    $alertBox = &new GtkVBox();
+    $alertWindow->add($alertBox);
 
-  $label = &new GtkLabel();
-  $label->set_line_wrap($wrap);
-  $label->set_text($msg);
+    $label = &new GtkLabel();
+    $label->set_line_wrap($wrap);
+    $label->set_text($msg);
 
-  $alertScrolledWindow = &new GtkScrolledWindow();
-  $alertScrolledWindow->set_usize(300, 150);
-  $alertScrolledWindow->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  $alertScrolledWindow->add_with_viewport($label);
-  $alertBox->pack_start($alertScrolledWindow);
+    $alertScrolledWindow = &new GtkScrolledWindow();
+    $alertScrolledWindow->set_usize(300, 150);
+    $alertScrolledWindow->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+    $alertScrolledWindow->add_with_viewport($label);
+    $alertBox->pack_start($alertScrolledWindow);
 
-  $okBtnBox = &new GtkHButtonBox();
-  $alertBox->pack_end($okBtnBox, false);
+    $okBtnBox = &new GtkHButtonBox();
+    $alertBox->pack_end($okBtnBox, false);
 
-  $OKButton = &new GtkButton(ALERT_OK_BTN);
-  $OKButton->set_usize(30, 30);
-  $OKButton->connect('clicked', 'killWidget', $alertWindow);
-  $okBtnBox->pack_end($OKButton);
+    $OKButton = &new GtkButton(ALERT_OK_BTN);
+    $OKButton->set_usize(30, 30);
+    $OKButton->connect('clicked', 'killWidget', $alertWindow);
+    $okBtnBox->pack_end($OKButton);
 
-  $OKButton->set_flags(GTK_CAN_DEFAULT);
-  $OKButton->grab_default();
+    $OKButton->set_flags(GTK_CAN_DEFAULT);
+    $OKButton->grab_default();
 
-  $alertWindow->show_all();
+    $alertWindow->show_all();
+  }
 }
 
 /**

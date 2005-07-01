@@ -76,38 +76,34 @@ function createMenu()
 */
 function createAppArea()
 {
-  global $box, $feedItemView, $feedList, $feedTree, $statusBar, $urlEntry;
+  global $box, $feedItemView, $itemsWidget, $statusBar, $urlEntry;
 
   $feedListBox = &new GtkHBox();
   $box->pack_start($feedListBox);
 
   if (PHP_GTK_MAJOR > 1)
   {
-    $feedTree->get_column(0)->set_min_width(100);
-    $feedTree->get_column(1)->set_min_width(200);
-    $feedTree->get_column(2)->set_min_width(67);
-    $feedTree->connect('button-press-event', 'feedListRowClicked');
-    $feedTree->connect('key-press-event', 'feedListRowPressed');
+    $itemsWidget->get_column(0)->set_min_width(100);
+    $itemsWidget->get_column(1)->set_min_width(200);
+    $itemsWidget->get_column(2)->set_min_width(67);
   }
   else
   {
-    $feedList->set_column_width(0, 100); 
-    $feedList->set_column_width(1, 200); 
-    $feedList->set_column_width(2, 67);
-    $feedList->column_titles_passive();
-    $feedList->connect('select-row', 'feedListRowSelected');
-    $feedList->connect('unselect-row', 'feedListRowUnselected');
-    $feedList->connect('button-press-event', 'feedListRowClicked');
-    $feedList->connect('key-press-event', 'feedListRowPressed');
+    $itemsWidget->set_column_width(0, 100); 
+    $itemsWidget->set_column_width(1, 200); 
+    $itemsWidget->set_column_width(2, 67);
+    $itemsWidget->column_titles_passive();
+    $itemsWidget->connect('select-row', 'feedListRowSelected');
+    $itemsWidget->connect('unselect-row', 'feedListRowUnselected');
   }
+
+  $itemsWidget->connect('button-press-event', 'feedListRowClicked');
+  $itemsWidget->connect('key-press-event', 'feedListRowPressed');
 
   $scroll = &new GtkScrolledWindow();
   $scroll->set_size_request(500, 150);
   $scroll->set_policy(GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  if (PHP_GTK_MAJOR > 1)
-    $scroll->add($feedTree);
-  else
-    $scroll->add($feedList);
+  $scroll->add($itemsWidget);
 
   $feedListBox->pack_start($scroll);
   $scroll->show();

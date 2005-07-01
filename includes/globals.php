@@ -121,8 +121,9 @@ $box = &new GtkVBox();
 $feedItemView = &new GtkFrame(DESC_NO_ITEM);
 
 /**
-  * GtkCList A list in which feed items are displayed.
+  * GtkWidget A list in which feed items are displayed.
 */
+$itemsWidget = null;
 $listArray = array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED);
 if (PHP_GTK_MAJOR > 1)
 {
@@ -135,11 +136,23 @@ if (PHP_GTK_MAJOR > 1)
   {
     $col = new GtkTreeViewColumn();
     $col->set_title($listArray[$i]);
+
+    $feedListRenderer = new GtkCellRendererText();
+    $feedListRenderer->set_property('text', $i);
+    $feedListRenderer->text = $i;
+
+    $col->pack_start($feedListRenderer, true);
+    $col->set_data('renderer', $feedListRenderer);
+    $col->set_visible(true);
     $feedTree->append_column($col);
   }
+  $itemsWidget = $feedTree;
 }
 else
+{
   $feedList = &new GtkCList(4, $listArray);
+  $itemsWidget = $feedList;
+}
 
 /**
   * GtkMenuBar The main window's menu bar.

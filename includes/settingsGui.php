@@ -284,40 +284,61 @@ function createNotebook($parent)
 */
 function showSettingsDialog()
 {
-  $dialog = &new GtkWindow(GTK_WINDOW_DIALOG);
+  if (PHP_GTK_MAJOR > 1)
+  {
+    $dialog = new GtkDialog();
+    $dialog->set_resizable(false);
+  }
+  else
+  {
+    $dialog = &new GtkWindow(GTK_WINDOW_DIALOG);
+    $dialog->set_policy(false, false, true);
+  }
   $dialog->set_title(SET_TITLE);
-  $dialog->set_policy(false, false, true);
-
   $dlgBox = &new GtkVBox();
-  $dialog->add($dlgBox);
+
+  if (PHP_GTK_MAJOR > 1)
+    $dialog->vbox->add($dlgBox);
+  else
+    $dialog->add($dlgBox);
 
   $notebook = createNotebook($dlgBox);
 
-  $buttonBox = &new GtkHButtonBox();
-  $buttonBox->set_layout(GTK_BUTTONBOX_END);
-  $buttonBox->set_spacing(0);
-  $dlgBox->pack_end($buttonBox, false, false, 3);
+  if (PHP_GTK_MAJOR > 1)
+  {
+    $okBtn = $dialog->add_button(SET_OK_BTN, 1);
+    $cancelBtn = $dialog->add_button(SET_CANCEL_BTN, 2);
+    $saveBtn = $dialog->add_button(SET_SAVE_BTN, 3);
 
-  $okBtn = &new GtkButton(SET_OK_BTN);
-  $okBtn->set_flags(GTK_CAN_DEFAULT);
-  $okBtn->connect('clicked', 'commitSettings');
-  $okBtn->connect('clicked', 'killWidget', $dialog);
+    $dialog->connect('response', 'settingsdlgResponded');
+  }
+  else
+  {
+    $buttonBox = &new GtkHButtonBox();
+    $buttonBox->set_layout(GTK_BUTTONBOX_END);
+    $buttonBox->set_spacing(0);
+    $dlgBox->pack_end($buttonBox, false, false, 3);
 
-  $cancelBtn = &new GtkButton(SET_CANCEL_BTN);
-  $cancelBtn->set_flags(GTK_CAN_DEFAULT);
-  $cancelBtn->connect('clicked', 'killWidget', $dialog);
+    $okBtn = &new GtkButton(SET_OK_BTN);
+    $okBtn->set_flags(GTK_CAN_DEFAULT);
+    $okBtn->connect('clicked', 'commitSettings');
+    $okBtn->connect('clicked', 'killWidget', $dialog);
 
-  $saveBtn = &new GtkButton(SET_SAVE_BTN);
-  $saveBtn->set_flags(GTK_CAN_DEFAULT);
-  $saveBtn->connect('clicked', 'saveSettings');
-  $saveBtn->connect('clicked', 'killWidget', $dialog);
+    $cancelBtn = &new GtkButton(SET_CANCEL_BTN);
+    $cancelBtn->set_flags(GTK_CAN_DEFAULT);
+    $cancelBtn->connect('clicked', 'killWidget', $dialog);
 
-  $buttonBox->pack_start($okBtn);
-  $buttonBox->pack_start($cancelBtn);
-  $buttonBox->pack_start($saveBtn);
+    $saveBtn = &new GtkButton(SET_SAVE_BTN);
+    $saveBtn->set_flags(GTK_CAN_DEFAULT);
+    $saveBtn->connect('clicked', 'saveSettings');
+    $saveBtn->connect('clicked', 'killWidget', $dialog);
+
+    $buttonBox->pack_start($okBtn);
+    $buttonBox->pack_start($cancelBtn);
+    $buttonBox->pack_start($saveBtn);
+  }
 
   $okBtn->grab_default();
-
   $dialog->show_all();
 }
 

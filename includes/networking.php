@@ -132,7 +132,7 @@ function internalizeFeedData($res)
 */
 function displayFeedData($res)
 {
-  global $feedList, $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar;
+  global $itemsWidget, $feeds, $feedSrc, $itemIndex, $mime_type, $statusBar;
   static $displayedFeeds;
   static $row_index = -1;
 
@@ -155,8 +155,19 @@ function displayFeedData($res)
     || $mime_type == 'text/plain' || $mime_type == 'text/x-esf')
   {
     $feeds[0] = generateFields($feeds[0]);
-    $feedList->append(array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']));
-    $feedList->set_data($row_index, array($feeds[0], $feedSrc, true));
+    $rowArray = array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']);
+    if (PHP_GTK_MAJOR > 1)
+    {
+      $n = count($rowArray);
+      for ($i = 0; $i < $n; $i++)
+      {
+        $itemsWidget->get_column($i)->get_data('renderer')->set_property('text', $rowArray[i]);
+      }
+    }
+    else
+      $itemsWidget->append($rowArray);
+
+    $itemsWidget->set_data($row_index, array($feeds[0], $feedSrc, true));
   }
   else
     $row_index--;
@@ -177,8 +188,19 @@ function displayFeedData($res)
         $feeds[$idx] = generateFields($feeds[$idx]);
 
         $feeds[$idx]['link'] = relToAbs($feeds[0]['link'], $feeds[$idx]['link']);
-        $feedList->append(array('', $feeds[$idx]['title'], $feeds[$idx]['subject'], $feeds[$idx]['created']));
-        $feedList->set_data($row_index, array($feeds[$idx], $feedSrc, false));
+        $rowArray = array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']);
+        if (PHP_GTK_MAJOR > 1)
+        {
+          $n = count($rowArray);
+          for ($i = 0; $i < $n; $i++)
+          {
+            $itemsWidget->get_column($i)->get_data('renderer')->set_property('text', $rowArray[i]);
+          }
+        }
+        else
+          $itemsWidget->append($rowArray);
+
+    $itemsWidget->set_data($row_index, array($feeds[0], $feedSrc, true));
       }
     }
   }
