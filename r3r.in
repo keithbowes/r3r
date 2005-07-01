@@ -3,7 +3,8 @@
 
 cd @prefix@/r3r
 
+PHP_GTK_MAJOR=2
 R3R_BROWSER=@with_browser@
-export R3R_BROWSER
+export PHP_GTK_MAJOR R3R_BROWSER
 
 @PHP@ r3r.php $@

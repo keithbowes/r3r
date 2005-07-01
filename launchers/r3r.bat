@@ -1,5 +1,7 @@
 @echo off
 
+SET PHP_GTK_MAJOR=1
+
 if "%PHP%" == "" goto SETPHP
 
 goto TESTOPTS
