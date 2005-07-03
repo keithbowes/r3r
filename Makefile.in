@@ -2,8 +2,6 @@ include(m4/version.m4)dnl
 dnl
 .POSIX: 
 
-SHELL = /bin/sh
-
 EXEEXT = # Extension for executables
 OBJEXT = .o
 PASEXT = .pas
@@ -13,11 +11,12 @@ MOEXT = .mo
 POEXT = .po
 POTEXT = .pot
 RSTEXT = .rst
+XMLEXT = .xml
 
 .SUFFIXES: $(MOEXT) $(POEXT)
 
 PC = fpc
-PFLAGS = -S2 -Sh -Fu./intl -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
+PFLAGS = -S2 -Sh -Fu./po -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
 				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
 				 													buggy alpha stage
 # Defines, for enabling different features/dialect syntax
@@ -32,7 +31,7 @@ ECHO = echo
 FPDOC = fpdoc
 INSTALL = install -m 755
 M4 = m4
-MKDIR = mkdir
+MKDIR = mkdir -p
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
 MV = mv
@@ -55,21 +54,30 @@ prefix = $(DESTDIR)
 exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
 docdir = $(prefix)/doc/r3r
+localedir = $(prefix)/share/locale
 
 $(POEXT)$(MOEXT):
-	$(MSGMERGE) -U $< intl/r3r$(POTEXT)
+	$(MSGMERGE) -U $< po/r3r$(POTEXT)
 	$(MSGFMT) -o $@ $<
 
-# Default building rule
-all: libr3r/ver.pas touch-r3r r3r$(EXEEXT) intl/r3r$(POTEXT) languages
+.IGNORE: install uninstall
 
-languages: intl/r3r.eo$(MOEXT)
+# Default building rule
+all: Makefile libr3r/ver.pas touch-r3r r3r$(EXEEXT) languages
+
+languages: po/r3r$(POTEXT) po/en$(MOEXT) po/eo$(MOEXT)
 
 libr3r/ver.pas: libr3r/ver.in.pas
 	$(M4) $< > $@
 
-intl/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
+po/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
+	$(TOUCH) po/*$(POEXT)
+
+# Regenerate the Makefile if Makefile.in has been updated
+Makefile: Makefile.in
+	$(M4) $< > $@
+	$(MAKE)
 
 # So the program will relink, regardless
 touch-r3r:
@@ -87,37 +95,39 @@ win32:
 # Installation rules
 install: all
 	-$(MKDIR) $(bindir)
-	-$(MKDIR) $(bindir)/intl
+	-$(MKDIR) $(localedir)/en/LC_MESSAGES
+	-$(MKDIR) $(localedir)/eo/LC_MESSAGES
 	$(INSTALL) r3r$(EXEEXT) $(bindir)
-	$(INSTALL) intl/*.mo $(bindir)/intl
+	$(INSTALL) po/en$(MOEXT) $(localedir)/en/LC_MESSAGES/r3r$(MOEXT)
+	$(INSTALL) po/eo$(MOEXT) $(localedir)/eo/LC_MESSAGES/r3r$(MOEXT)
 
 install-win32:
-	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
+	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
 
 # Uninstallation rules
 uninstall:
 	$(RM) $(bindir)/r3r$(EXEEXT)
-	$(RM) $(bindir)/intl
-	$(RM) $(docdir)
+	$(RM) $(localedir)/en/LC_MESSAGES/r3r$(MOEXT)
+	$(RM) $(localedir)/eo/LC_MESSAGES/r3r$(MOEXT)
 
 uninstall-win32:
-	$(MAKE) bindir="C:\\\\Program\\ Files\\\\R3R" \
-	docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" EXEEXT=.exe uninstall
+	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R"" EXEEXT=.exe uninstall
 
 # Documentation rules
-docs: libr3r/formats/feeditem.pas libr3r/libr3r.pas libr3r/rmessage.pas \
-	libr3r/libr3r.pas.xml
+docs: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
+	libr3r/rmessage$(PASEXT) libr3r/libr3r.pas$(XMLEXT)
 	-$(MKDIR) docs
-	$(CD) docs && $(FPDOC) --input=../libr3r/libr3r.pas \
-		--input=../libr3r/formats/feeditem.pas --input=../libr3r/rmessage.pas \
-		--descr=../libr3r/libr3r.pas.xml --package=LibR3R
+	$(CD) docs && $(FPDOC) --input=../libr3r/libr3r$(PASEXT) \
+		--input=../libr3r/formats/feeditem$(PASEXT) \
+		--input=../libr3r/rmessage$(PASEXT) --descr=../libr3r/libr3r.pas$(XMLEXT) \
+		--package=LibR3R
 
 install-docs:
 	-$(MKDIR) $(docdir)
 	$(CD) docs && $(INSTALL) * $(docdir)
 
 install-docs-win32:
-	$(MAKE) docdir="C:\\\\Program\\ Files\\\\R3R\\\\Docs" install-docs
+	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" install-docs
 
 # Distribution rules
 dist: distclean
@@ -155,7 +165,7 @@ clean cleanall: mostlyclean
 	$(RM) */*$(OBJEXT) */*$(UNITEXT)
 
 distclean: clean
-	$(RM)  */*$(RSTEXT) */*$(MOEXT)
+	$(RM)  */*$(RSTEXT) */*$(MOEXT) */*$(POTEXT)
 	$(RM) docs
 	$(RM) libr3r/ver.pas
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
@@ -169,13 +179,13 @@ clean-win32:
 
 # Other compilers
 gpc:
-	-$(MAKE) PC=gpc PFLAGS="--automake -B intl -B libr3r -o r3r" UNITEXT=.gpi
+	-$(MAKE) PC=gpc PFLAGS="--automake -B po -B libr3r -o r3r" UNITEXT=.gpi
 	@$(ECHO) "Unless you really know what you're doing, the build has failed." \
 	"Hopefully, it will work in the future."
 
 for-borland-compilers:
 	-$(MAKE) \
-	PFLAGS="-B -CC -E. -M -O$(R3R_UI) -Uintl -Ulibr3r -V" DEFS=-DNO_GETTEXT \
+	PFLAGS="-B -CC -E. -M -O$(R3R_UI) -Upo -Ulibr3r -V" DEFS=-DNO_GETTEXT \
 				 OBJEXT=.obj UNITEXT=.dcu
 	@$(ECHO) "Compiling with Delphi/Kylix is currently unsupported.  If that" \
 	"concerns you, send patches."

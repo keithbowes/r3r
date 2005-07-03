@@ -14,17 +14,25 @@ begin
     Result := GetEnv('APPDATA');
     if Result = '' then
     begin
-      Result := GetEnv('WINDIR') + '/profiles/' + GetEnv('USERNAME');
+      Result := GetEnv('WINDIR') + PathDelim + 'profiles' + PathDelim + GetEnv('USERNAME');
     end;
   end;
 
   CheckDir(Result);
 end;
 
-function GetSettingsDir: String;
+function GetSettingsDir(const Version: String = ''): String;
 begin
-  Result := GetHome + '/.r3r-2.0/';
+  Result := GetHome + PathDelim + '.r3r';
+  if Version <> '' then
+  begin
+    Result := Result + '-';
+  end;
+
+  Result := Result + Version;
   CheckDir(Result);
+
+  Result := Result + PathDelim;
 end;
 
 procedure TRSettings.Import;

@@ -14,5 +14,6 @@ LicenseFile=LICENSE
 
 [Files]
 Source: "..\..\r3r.exe"; DestDir: "{app}";
-Source: "..\..\intl\*.mo"; DestDir: "{app}\intl";
+Source: "..\..\po\r3r.en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES\r3r.mo";
+Source: "..\..\po\r3r.eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES\r3r.mo";
 

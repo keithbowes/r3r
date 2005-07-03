@@ -42,7 +42,7 @@ R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, 
 
 [Imports]
 echo $source_dir'/../r3r' | import
-echo $source_dir'/../intl/*.mo' | import
+echo $source_dir'/../po/*.mo' | import
 
 [Prepare]
 # Dependency checking
@@ -51,7 +51,8 @@ echo $source_dir'/../intl/*.mo' | import
 [Install]
 # Put your installation script here
 installExe r3r
-copyFiles *.mo "$PREFIX/bin"
+copyFiles r3r.en.mo "$PREFIX/share/locale/en/LC_MESSAGES/r3r.mo"
+copyFiles r3r.eo.mo "$PREFIX/share/locale/eo/LC_MESSAGES/r3r.mo"
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything

@@ -63,6 +63,6 @@ end;
 
 initialization
 
-SettingsDir := GetSettingsDir;
+SettingsDir := GetSettingsDir('2.0');
 
 end.
