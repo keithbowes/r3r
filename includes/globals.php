@@ -125,27 +125,35 @@ $feedItemView = &new GtkFrame(DESC_NO_ITEM);
 */
 $itemsWidget = null;
 $listArray = array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED);
+
 if (PHP_GTK_MAJOR > 1)
 {
+  function createRow($col, $data)
+  {
+    $index = $col->get_data('index');
+    $store = $col->get_data('store');
+
+    $renderer = new GtkCellRendererText();
+    $col->pack_end($renderer, true);
+    $iter = $store->append();
+    $store->set($iter, $index, $data);
+    $renderer->set_property('text', $data);
+  }
+
   $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   $feedTree = new GtkTreeView();
   $feedTree->set_model($feedList);
-  $feedTree->set_headers_visible(true);
   $listitems = count($listArray);
+
   for ($i = 0; $i < $listitems; $i++)
   {
     $col = new GtkTreeViewColumn();
     $col->set_title($listArray[$i]);
-
-    $feedListRenderer = new GtkCellRendererText();
-    $feedListRenderer->set_property('text', $i);
-    $feedListRenderer->text = $i;
-
-    $col->pack_start($feedListRenderer, true);
-    $col->set_data('renderer', $feedListRenderer);
-    $col->set_visible(true);
+    $col->set_data('index', $i);
+    $col->set_data('store', $feedList);
     $feedTree->append_column($col);
   }
+
   $itemsWidget = $feedTree;
 }
 else

@@ -161,7 +161,7 @@ function displayFeedData($res)
       $n = count($rowArray);
       for ($i = 0; $i < $n; $i++)
       {
-        $itemsWidget->get_column($i)->get_data('renderer')->set_property('text', $rowArray[i]);
+        createRow($itemsWidget->get_column($i), $rowArray[$i]);
       }
     }
     else
@@ -188,19 +188,20 @@ function displayFeedData($res)
         $feeds[$idx] = generateFields($feeds[$idx]);
 
         $feeds[$idx]['link'] = relToAbs($feeds[0]['link'], $feeds[$idx]['link']);
-        $rowArray = array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']);
+        $rowArray = array($feeds[$idx]['title'], '', $feeds[$idx]['subject'], $feeds[$idx]['created']);
         if (PHP_GTK_MAJOR > 1)
         {
           $n = count($rowArray);
           for ($i = 0; $i < $n; $i++)
           {
-            $itemsWidget->get_column($i)->get_data('renderer')->set_property('text', $rowArray[i]);
+            //alert($rowArray[$i]);
+            createRow($itemsWidget->get_column($i), $rowArray[$i]);
           }
         }
         else
           $itemsWidget->append($rowArray);
 
-    $itemsWidget->set_data($row_index, array($feeds[0], $feedSrc, true));
+        $itemsWidget->set_data($row_index, array($feeds[$idx], $feedSrc, true));
       }
     }
   }
