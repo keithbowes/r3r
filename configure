@@ -1,16 +1,15 @@
 #! /bin/sh
 
-echo " Make sure you have the following installed:
-  Free Pascal 1.9.6+ <http://www.freepascal.org/>
-  GNU Make 3.80+ <http://www.gnu.org/software/make/>
-  Synapse 35+ <http://www.ararat.cz/synapse/>
-  TRegExpr v.0.952+ <http://www.regexpstudio.com/>
-
-  "
-
+echo "Before building this software, you'll need to be sure that you understand
+how to build the software and your rights when using, modifying or distributing
+it.  Please read the README and LICENSE files before continuing."
+echo
   
 echo " Generating Makefile..."
 m4 Makefile.in > Makefile
+# Make sure the Makefile regenerates itself with the proper options
+sleep 1
+touch Makefile.in
 
 echo " Done."
 

@@ -8,7 +8,7 @@ uses
 type
   TTui = class
   private
-    FTLib: TLibR3R;
+    procedure GetFeed(const Feed: String);
   protected
     procedure ItemParsed(Item: TParsedFeedItem);
     procedure MessageReceived(Sender: TObject; Error: Boolean; MessageName: String);
@@ -16,7 +16,6 @@ type
     procedure GoURI;
   public
     constructor Create;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -34,11 +33,7 @@ begin
 
   for FeedIndex := 1 to ParamCount do
   begin
-    FTLib := TLibR3R.Create(ParamStr(FeedIndex));
-    FTLib.OnItemParsed := @ItemParsed;
-    FTLib.OnMessage := @MessageReceived;
-    FTLib.Parse;
-    FreeAndNil(FTLib);
+    GetFeed(ParamStr(ParamCount));
   end;
 
   ShowHelp;
@@ -61,16 +56,6 @@ begin
       end;
     end;
   until KeyChar = QuitKey;
-end;
-
-destructor TTui.Destroy;
-begin
-  if Assigned(FTLib) then
-  begin
-    FTLib.Free;
-  end;
-
-  inherited Destroy;
 end;
 
 procedure TTui.ItemParsed(Item: TParsedFeedItem);
@@ -101,23 +86,22 @@ procedure TTui.GoURI;
 var
   URI: String;
 begin
-  if Assigned(FTLib) then
-  begin
-    FTLib.Free;
-  end;
-
   Write(Feed);
   ReadLn(URI);
 
-  FTLib := TLibR3R.Create(URI);
-
-  with FTLib do
-  begin
-    OnItemParsed := @ItemParsed;
-    Parse;
-  end;
-
+  GetFeed(URI);
   ShowHelp;
+end;
+
+procedure TTui.GetFeed(const Feed: String);
+var
+  Lib: TLibR3R;
+begin
+  Lib := TLibR3R.Create(Feed);
+  Lib.OnItemParsed := @ItemParsed;
+  Lib.OnMessage := @MessageReceived;
+  Lib.Parse;
+  FreeAndNil(Lib);
 end;
 
 end.

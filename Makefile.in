@@ -1,6 +1,9 @@
 include(m4/version.m4)dnl
+include(m4/nls.m4)dnl
 dnl
 .POSIX: 
+
+SHELL = sh
 
 EXEEXT = # Extension for executables
 OBJEXT = .o
@@ -20,7 +23,7 @@ PFLAGS = -S2 -Sh -Fu./po -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
 				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
 				 													buggy alpha stage
 # Defines, for enabling different features/dialect syntax
-DEFS = "-dSETTINGS_INI"
+DEFS = -dSETTINGS_INI
 
 TAR = tar
 TARFLAGS = czf
@@ -31,6 +34,7 @@ ECHO = echo
 FPDOC = fpdoc
 INSTALL = install -m 755
 M4 = m4
+M4FLAGS=-DUSE_NLS
 MKDIR = mkdir -p
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
@@ -65,10 +69,10 @@ $(POEXT)$(MOEXT):
 # Default building rule
 all: Makefile libr3r/ver.pas touch-r3r r3r$(EXEEXT) languages
 
-languages: po/r3r$(POTEXT) po/en$(MOEXT) po/eo$(MOEXT)
+languages: Get_Language_Deps
 
 libr3r/ver.pas: libr3r/ver.in.pas
-	$(M4) $< > $@
+	$(M4) $(M4FLAGS) $< > $@
 
 po/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
@@ -76,7 +80,7 @@ po/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
 
 # Regenerate the Makefile if Makefile.in has been updated
 Makefile: Makefile.in
-	$(M4) $< > $@
+	$(M4) $(M4FLAGS) $< > $@
 	$(MAKE)
 
 # So the program will relink, regardless
@@ -95,11 +99,8 @@ win32:
 # Installation rules
 install: all
 	-$(MKDIR) $(bindir)
-	-$(MKDIR) $(localedir)/en/LC_MESSAGES
-	-$(MKDIR) $(localedir)/eo/LC_MESSAGES
 	$(INSTALL) r3r$(EXEEXT) $(bindir)
-	$(INSTALL) po/en$(MOEXT) $(localedir)/en/LC_MESSAGES/r3r$(MOEXT)
-	$(INSTALL) po/eo$(MOEXT) $(localedir)/eo/LC_MESSAGES/r3r$(MOEXT)
+	Install_Langs
 
 install-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
@@ -107,8 +108,7 @@ install-win32:
 # Uninstallation rules
 uninstall:
 	$(RM) $(bindir)/r3r$(EXEEXT)
-	$(RM) $(localedir)/en/LC_MESSAGES/r3r$(MOEXT)
-	$(RM) $(localedir)/eo/LC_MESSAGES/r3r$(MOEXT)
+	Uninstall_Langs
 
 uninstall-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R"" EXEEXT=.exe uninstall
@@ -145,13 +145,13 @@ dist-win32:
 	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
 
 scripts/iss/setup.iss: scripts/iss/setup.iss.in
-	$(M4) $< > $@
+	$(M4) $(M4FLAGS) $< > $@
 
 dist-win32-cross:
 	$(MAKE) ISCC="wine iscc" dist-win32
 
 scripts/autopackage/default.apspec: scripts/autopackage/default.apspec.in
-	$(M4) $< > $@
+	$(M4) $(M4FLAGS) $< > $@
 
 dist-linux: all r3r$(EXEEXT) scripts/autopackage/default.apspec
 	$(CD) scripts && $(AUTOPACKAGE)
