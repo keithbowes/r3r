@@ -17,10 +17,22 @@ R3R is licensed under the BSD License.  See the file LICENSE for the full text.
 2.2 FOR 2.x
 2.2.1 FOR COMPILING
 
-* Pascal Compiler (currently, only Free Pascal works; I hope others also will
-  in the future).
-* Pascal units: Synapse and RegExp Studio.
-* Unix tools (preferably, the GNU versions): sh, make, m4, as, ld, rm, cp, ...
+* Pascal Compiler (currently, only Free Pascal <http://www.freepascal.org/>
+  works; I hope others also will in the future).
+* Pascal units: Synapse <http://sourceforge.net/projects/synalist> and
+  TRegExpr <http://regexpstudio.com/TRegExpr/TRegExpr.html>.
+* Unix tools (preferably, the GNU versions):
+  * sh (for running configure)
+  * Normal make utils (included with Free Pascal): make, as, ld, cp, mv, rm
+  * (DOS/Windows/OS2) UNIX versions of limited DOS-based utils: install, echo,
+    mkdir (also included with Free Pascal, prefixed with g)
+  * Other file utils: touch
+  * m4: For macros
+  * Gettext (only if USE_NLS is in the M4FLAGS macro): For translating the
+    program into different languages.
+  (The source code for the GNU versions of these programs can be found at
+    <http://www.gnu.org/software/>, but I'd recommend using a search engine
+    to find the appropriate versions for your operating system)
 
 2.2.2 FOR RUNNING
   Hopefully, nothing.  Everything (other than built-in OS components) should
@@ -51,6 +63,7 @@ x86.package: x86 Autopackage installer
 
 The Windows and Linux installers are installed simply by executing the file
 (Linux users may need to make the file executable).
+
 The source code will extract to a new directory.  In that directory,
 do the traditional:
 ./configure
@@ -62,6 +75,10 @@ that will output a message and then generate the Makefile.
 Other files that need generated will be generated during the make process.
 Enabling features must be done with the environment variable DEFS.  The prefix
 to which to install is determined via the DESTDIR environment variable.
+
+On Non-Unix-like operating systems, some environment variables might need
+changed.  Special win32 targets (win32, install-win32, uninstall-win32, etc)
+exist for convenience.
 
 4. REPORTING BUGS, SUBMITTING PATCHES, etc.
 

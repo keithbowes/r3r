@@ -134,7 +134,7 @@ if (PHP_GTK_MAJOR > 1)
     $store = $col->get_data('store');
 
     $renderer = new GtkCellRendererText();
-    $col->pack_end($renderer, true);
+    $col->pack_start($renderer, true);
     $iter = $store->append();
     $store->set($iter, $index, $data);
     $renderer->set_property('text', $data);
@@ -143,8 +143,8 @@ if (PHP_GTK_MAJOR > 1)
   $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
   $feedTree = new GtkTreeView();
   $feedTree->set_model($feedList);
-  $listitems = count($listArray);
 
+  $listitems = count($listArray);
   for ($i = 0; $i < $listitems; $i++)
   {
     $col = new GtkTreeViewColumn();
