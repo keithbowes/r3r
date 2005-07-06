@@ -5,15 +5,19 @@ dnl
 
 SHELL = sh
 
+# Extensions for compiling
 EXEEXT = # Extension for executables
 OBJEXT = .o
 PASEXT = .pas
 UNITEXT = .ppu
 
+# Extensions for gettext
 MOEXT = .mo
 POEXT = .po
 POTEXT = .pot
 RSTEXT = .rst
+
+# Extensions for documentation
 XMLEXT = .xml
 
 .SUFFIXES: $(MOEXT) $(POEXT)
@@ -34,7 +38,7 @@ ECHO = echo
 FPDOC = fpdoc
 INSTALL = install -m 755
 M4 = m4
-M4FLAGS=-DUSE_NLS
+M4FLAGS= -DUSE_NLS
 MKDIR = mkdir -p
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
@@ -64,14 +68,12 @@ $(POEXT)$(MOEXT):
 	$(MSGMERGE) -U $< po/r3r$(POTEXT)
 	$(MSGFMT) -o $@ $<
 
-.IGNORE: install uninstall
-
 # Default building rule
-all: Makefile libr3r/ver.pas touch-r3r r3r$(EXEEXT) languages
+all: Makefile libr3r/ver$(PASEXT) touch-r3r r3r$(EXEEXT) languages
 
 languages: Get_Language_Deps
 
-libr3r/ver.pas: libr3r/ver.in.pas
+libr3r/ver$(PASEXT): libr3r/ver.in$(PASEXT)
 	$(M4) $(M4FLAGS) $< > $@
 
 po/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
@@ -111,7 +113,7 @@ uninstall:
 	Uninstall_Langs
 
 uninstall-win32:
-	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R"" EXEEXT=.exe uninstall
+	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
 
 # Documentation rules
 docs: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
