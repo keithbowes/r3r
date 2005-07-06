@@ -5,14 +5,12 @@ how to build the software and your rights when using, modifying or distributing
 it.  Please read the README and LICENSE files before continuing."
 echo
   
-echo " Generating Makefile..."
+echo "Generating Makefile..."
 m4 Makefile.in > Makefile
 # Make sure the Makefile regenerates itself with the proper options
 sleep 1
 touch Makefile.in
 
-echo " Done."
+echo "Done."
 
-echo "
- Now run GNU make in the current directory
- (using the -e make flag is recommended) to build the software."
+echo "Now run GNU make in the current directory to build the software."

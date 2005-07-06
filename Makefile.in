@@ -11,16 +11,16 @@ OBJEXT = .o
 PASEXT = .pas
 UNITEXT = .ppu
 
-# Extensions for gettext
-MOEXT = .mo
-POEXT = .po
-POTEXT = .pot
+# Extensions for gettext message catalogs
+MESSAGES_COMPILED = .mo
+MESSAGES = .po
+MESSAGES_TEMPLATE = .pot
 RSTEXT = .rst
 
 # Extensions for documentation
 XMLEXT = .xml
 
-.SUFFIXES: $(MOEXT) $(POEXT)
+.SUFFIXES: $(MESSAGES_COMPILED) $(MESSAGES)
 
 PC = fpc
 PFLAGS = -S2 -Sh -Fu./po -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
@@ -45,6 +45,7 @@ MSGMERGE = msgmerge
 MV = mv
 RM = rm -fr
 RSTCONV = rstconv
+TEST = test
 TOUCH = touch
 
 ISCC=iscc
@@ -64,21 +65,26 @@ bindir = $(exec_prefix)/bin
 docdir = $(prefix)/doc/r3r
 localedir = $(prefix)/share/locale
 
-$(POEXT)$(MOEXT):
-	$(MSGMERGE) -U $< po/r3r$(POTEXT)
+$(MESSAGES)$(MESSAGES_COMPILED):
+	$(MSGMERGE) -U $< po/r3r$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
 
+default: all
+
 # Default building rule
-all: Makefile libr3r/ver$(PASEXT) touch-r3r r3r$(EXEEXT) languages
+all: Makefile libr3r/info$(PASEXT) touch-r3r r3r$(EXEEXT) languages
 
 languages: Get_Language_Deps
 
-libr3r/ver$(PASEXT): libr3r/ver.in$(PASEXT)
-	$(M4) $(M4FLAGS) $< > $@
+$(VERSION):
+	if $(TEST) ! -f $(VERSION); then $(TOUCH) $(VERSION); fi
 
-po/r3r$(POTEXT): $(R3R_UI)/r3rrs$(RSTEXT)
+libr3r/info$(PASEXT): $(VERSION)
+	$(PYTHON) scripts/info$(PYTHONEXT) $(VERSION) > libr3r/info$(PASEXT)
+
+po/r3r$(MESSAGES_TEMPLATE): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
-	$(TOUCH) po/*$(POEXT)
+	$(TOUCH) po/*$(MESSAGES)
 
 # Regenerate the Makefile if Makefile.in has been updated
 Makefile: Makefile.in
@@ -99,10 +105,11 @@ win32:
 	$(MAKE) cross OS=win32 DEFS="-dSETTINGS_REGISTRY"
 
 # Installation rules
-install: all
+install:
 	-$(MKDIR) $(bindir)
 	$(INSTALL) r3r$(EXEEXT) $(bindir)
-	Install_Langs
+	$(PYTHON) scripts/installangs$(PYTHONEXT) "$(INSTALL)" $(localedir) \
+		r3r_$(R3R_UI)
 
 install-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
@@ -110,7 +117,7 @@ install-win32:
 # Uninstallation rules
 uninstall:
 	$(RM) $(bindir)/r3r$(EXEEXT)
-	Uninstall_Langs
+	$(PYTHON) scripts/installangs$(PYTHONEXT) "$(RM)" $(localedir) r3r_$(R3R_UI)
 
 uninstall-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
@@ -167,7 +174,7 @@ clean cleanall: mostlyclean
 	$(RM) */*$(OBJEXT) */*$(UNITEXT)
 
 distclean: clean
-	$(RM)  */*$(RSTEXT) */*$(MOEXT) */*$(POTEXT)
+	$(RM)  */*$(RSTEXT) */*$(MESSAGES_COMPILED) */*$(MESSAGES_TEMPLATE)
 	$(RM) docs
 	$(RM) libr3r/ver.pas
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
