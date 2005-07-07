@@ -15,11 +15,6 @@ define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
 */
 define('SETTINGS_FILE', 'r3rrc');
 
-/**
-  * Major version of PHP-GTK
-*/
-define('PHP_GTK_MAJOR', getenv('PHP_GTK_MAJOR'));
-
 /* GUI variables and classes */
 
 /**
@@ -128,33 +123,43 @@ $listArray = array(LV_FEED_NAME, LV_ITEM_TITLE, LV_SUBJECT, LV_CREATED);
 
 if (PHP_GTK_MAJOR > 1)
 {
-  function createRow($col, $data)
+  if (ENABLE_DEPRECATED)
   {
-    $index = $col->get_data('index');
-    $store = $col->get_data('store');
-
-    $renderer = new GtkCellRendererText();
-    $col->pack_start($renderer, true);
-    $iter = $store->append();
-    $store->set($iter, $index, $data);
-    $renderer->set_property('text', $data);
+    $itemsWidget = new GtkCList(4);
+    $listitems = count($listArray);
+    for ($i = 0; $i < $listitems; $i++)
+      $itemsWidget->set_column_title($i, $listArray[$i]);
   }
-
-  $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-  $feedTree = new GtkTreeView();
-  $feedTree->set_model($feedList);
-
-  $listitems = count($listArray);
-  for ($i = 0; $i < $listitems; $i++)
+  else
   {
-    $col = new GtkTreeViewColumn();
-    $col->set_title($listArray[$i]);
-    $col->set_data('index', $i);
-    $col->set_data('store', $feedList);
-    $feedTree->append_column($col);
-  }
+    function createRow($col, $data)
+    {
+      $index = $col->get_data('index');
+      $store = $col->get_data('store');
 
-  $itemsWidget = $feedTree;
+      $renderer = new GtkCellRendererText();
+      $col->pack_start($renderer, true);
+      $iter = $store->append();
+      $store->set($iter, $index, $data);
+      $renderer->set_property('text', $data);
+    }
+
+    $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    $feedTree = new GtkTreeView();
+    $feedTree->set_model($feedList);
+
+    $listitems = count($listArray);
+    for ($i = 0; $i < $listitems; $i++)
+    {
+      $col = new GtkTreeViewColumn();
+      $col->set_title($listArray[$i]);
+      $col->set_data('index', $i);
+      $col->set_data('store', $feedList);
+      $feedTree->append_column($col);
+    }
+
+    $itemsWidget = $feedTree;
+  }
 }
 else
 {

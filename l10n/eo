@@ -3,12 +3,12 @@ PROG_NAME=R3R
 
 # Menus
 FILE=_Dosiero
-FILE_OPEN=_Malfermu
-FILE_QUIT=_Ĉesu
-TOOLS=_Laboriloj
-TOOLS_SETTINGS=_Opciaro
+FILE_OPEN=_Malfermi
+FILE_QUIT=_Eliri
+TOOLS=_Iloj
+TOOLS_SETTINGS=_Agordo
 HELP=_Helpo
-HELP_INFO=_Informaĵo
+HELP_INFO=_Informoj
 
 # Context Menus
 # Entry Boxes
@@ -85,7 +85,7 @@ INFO_VERSION=Versio de R3R
 INFO_OS=Operaciumo
 INFO_PHP_VERSION=Versio de PHP
 INFO_PHP_API=API de PHP
-INFO_SETTINGS_DIR=Opciarujo
+INFO_SETTINGS_DIR=Agordujo
 
 # File-selection captions
 FS_OPEN=Trovu kanalon...
@@ -94,32 +94,32 @@ FS_CLIENT=Foliumu por via prefera krozilo...
 
 # Settings dialog
 # Main dialog
-SET_TITLE=Opciaro...
+SET_TITLE=Agordo...
 # Buttons
 SET_OK_BTN=Bone
-SET_CANCEL_BTN=Rezignu
-SET_SAVE_BTN=Konservu
-SET_BROWS_BTN=Foliumu...
+SET_CANCEL_BTN=Rezigni
+SET_SAVE_BTN=Konservi
+SET_BROWS_BTN=Foliumi...
 
 # Appearance tab
 SET_APP_TAB=Apero
-SET_YOUR_RC=Uzu neaŭtomatajn risurc-doseierojn
+SET_YOUR_RC=Uzi neaŭtomatajn risurc-doseierojn
 
 # Feeds tab
 SET_FEEDS_TAB=Kanaloj
-SET_WARNINGS=Montru Avertojn
-SET_KNOWN_FEEDS=Montru konatajn kanalojn interne tekslisto
-SET_DESC_WRAP=Volvigu anajn priskribojn
-SET_TITLES_ONLY=Montru nur kanalajn titolojn
-SET_HIDE_CACHED=Nur montru ĝisdatigitajn kanalojn
-SET_MIME_GUESS=Ebligu enhavtipan supozadon
+SET_WARNINGS=Montri Avertojn
+SET_KNOWN_FEEDS=Montri konatajn kanalojn interne tekslisto
+SET_DESC_WRAP=Volvigi anajn priskribojn
+SET_TITLES_ONLY=Montri nur kanalajn titolojn
+SET_HIDE_CACHED=Nur montri ĝisdatigitajn kanalojn
+SET_MIME_GUESS=Ebligi enhavtipan supozadon
 
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Baza
 SET_TO_PREF=Templimiĝo: 
 SET_TO_SUF= (sekundoj)
 SET_PROXY_LBL=Prokuro
-SET_USE_PROXY=Uzu prokuron
+SET_USE_PROXY=Uzi prokuron
 SET_PROXY_IP=Adreso: 
 SET_PROXY_PORT=Pordo: 
 
@@ -129,7 +129,7 @@ SET_HDR_LBL=Petĉapo
 SET_HDR_UA=Uzula Peranto: 
 SET_HDR_AT=Akceptaj Tipoj: 
 SET_HDR_LANG=Lingvoj:
-SET_USE_CUSTOM=Uzas Agordan
+SET_USE_CUSTOM=Uzi propran
 
 # Mail Tab
 SET_MAIL=Programaro

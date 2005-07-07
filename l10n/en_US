@@ -112,6 +112,7 @@ SET_KNOWN_FEEDS=Display known feeds in a combo box
 SET_DESC_WRAP=Wrap item descriptions
 SET_TITLES_ONLY=Display feed titles only
 SET_HIDE_CACHED=Hide cached feeds
+SET_MIME_GUESS=Guess the MIME type of feeds
 
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Basic
@@ -131,9 +132,10 @@ SET_HDR_AT=Accept Types:
 SET_HDR_LANG=Languages: 
 SET_USE_CUSTOM=Use Custom
 
-# Mail Tab
+# Programs Tab
 SET_MAIL=Mail
 SET_MAIL_CLIENT=Mail Client: 
+SET_EDITOR=Editor: 
 
 # XML Parser
 XML_PARSER_ERROR=The XML parser encountered the following error: 

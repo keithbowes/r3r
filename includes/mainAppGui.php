@@ -81,7 +81,7 @@ function createAppArea()
   $feedListBox = &new GtkHBox();
   $box->pack_start($feedListBox);
 
-  if (PHP_GTK_MAJOR > 1)
+  if (PHP_GTK_MAJOR > 1 && !ENABLE_DEPRECATED)
   {
     $itemsWidget->get_column(0)->set_min_width(100);
     $itemsWidget->get_column(1)->set_min_width(200);
@@ -95,6 +95,8 @@ function createAppArea()
     $itemsWidget->column_titles_passive();
     $itemsWidget->connect('select-row', 'feedListRowSelected');
     $itemsWidget->connect('unselect-row', 'feedListRowUnselected');
+    if (PHP_GTK_MAJOR > 1)
+      $itemsWidget->column_titles_show();
   }
 
   $itemsWidget->connect('button-press-event', 'feedListRowClicked');

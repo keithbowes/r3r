@@ -94,23 +94,8 @@ function createHttpPage($notebook)
 
   $toPostLabel = &new GtkLabel(SET_TO_SUF);
   $toBox->pack_start($toPostLabel, false);
-
-  $httpPageHSep1 = &new GtkHSeparator();
-  $httpPage->pack_start($httpPageHSep1, false, false, 5);
-
   $httpClientBox = &new GtkHBox();
   $httpPage->pack_start($httpClientBox);
-
-  $httpClientPreLabel = &new GtkLabel(SET_HTTP_CLIENT);
-  $httpClientBox->pack_start($httpClientPreLabel, false);
-
-  $httpClientField = createEdit(getSetting('http-client'));
-  $httpClientField->connect('changed', 'settingsEntryChanged', 'http-client');
-  $httpClientBox->pack_start($httpClientField, false, false, 3);
-
-  $httpClientBrowse = &new GtkButton(SET_BROWS_BTN);
-  $httpClientBrowse->connect('clicked', 'createFileSelection', array($httpClientField, FS_CLIENT, 'http-client', $httpClientField));
-  $httpClientBox->pack_start($httpClientBrowse, false, false, 2);
 
   $proxyFrame = &new GtkFrame(SET_PROXY_LBL);
   $httpPage->pack_start($proxyFrame);

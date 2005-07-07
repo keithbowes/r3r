@@ -156,7 +156,7 @@ function displayFeedData($res)
   {
     $feeds[0] = generateFields($feeds[0]);
     $rowArray = array($feeds[0]['title'], '', $feeds[0]['subject'], $feeds[0]['created']);
-    if (PHP_GTK_MAJOR > 1)
+    if (PHP_GTK_MAJOR > 1 && !ENABLE_DEPRECATED)
     {
       $n = count($rowArray);
       for ($i = 0; $i < $n; $i++)
@@ -189,12 +189,11 @@ function displayFeedData($res)
 
         $feeds[$idx]['link'] = relToAbs($feeds[0]['link'], $feeds[$idx]['link']);
         $rowArray = array($feeds[$idx]['title'], '', $feeds[$idx]['subject'], $feeds[$idx]['created']);
-        if (PHP_GTK_MAJOR > 1)
+        if (PHP_GTK_MAJOR > 1 && !ENABLE_DEPRECATED)
         {
           $n = count($rowArray);
           for ($i = 0; $i < $n; $i++)
           {
-            //alert($rowArray[$i]);
             createRow($itemsWidget->get_column($i), $rowArray[$i]);
           }
         }
