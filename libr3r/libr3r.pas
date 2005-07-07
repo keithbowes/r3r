@@ -32,7 +32,7 @@ type
 implementation
 
 uses
-  Classes, Http, LocalFile, R3RRs, SynaUtil, SysUtils;
+  Classes, Http, LocalFile, LibR3R_Rs, SynaUtil, SysUtils;
 
 var
   Item: TFeedItem;

@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  R3RRs, SysUtils;
+  Tui_Rs, SysUtils;
 
 constructor TTui.Create;
 var

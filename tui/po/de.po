@@ -1,0 +1,38 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0-alpha4\n"
+"PO-Revision-Date: 2005-07-07 00:29-0400\n"
+"Last-Translator: \n"
+"Language-Team: German <de@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# tui_rs:feed
+msgid "Feed Address: "
+msgstr "Die Adresse von das Feed"
+
+# tui_rs:gourl
+msgid "g)o to a URL"
+msgstr "g)ehen nach einem URL"
+
+# tui_rs:help
+msgid "h)elp, this screen"
+msgstr "h)elfen, dieser Bildschirm"
+
+# tui_rs:quit
+msgid "q)uit the program"
+msgstr "a)usgehen von dem Programm"
+
+# tui_rs:gokey
+msgid "g"
+msgstr ""
+
+# tui_rs:helpkey
+msgid "h"
+msgstr ""
+
+# tui_rs:quitkey
+msgid "q"
+msgstr "a"

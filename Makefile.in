@@ -20,7 +20,7 @@ XMLEXT = .xml
 .SUFFIXES: $(MESSAGES_COMPILED) $(MESSAGES)
 
 PC = fpc
-PFLAGS = -S2 -Sh -Fu./po -Fu./libr3r -Fu./libr3r/* -FE. -FU$(R3R_UI) \
+PFLAGS = -S2 -Sh -Fu./libr3r -Fu./libr3r/* -Fu$(R3R_UI)/po -FE. -FU$(R3R_UI) \
 				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
 				 													buggy alpha stage
 # Defines, for enabling different features/dialect syntax
@@ -31,6 +31,7 @@ TARFLAGS = czf
 
 CD = cd
 CP = cp -fr
+DIRNAME = dirname
 ECHO = echo
 FPDOC = fpdoc
 INSTALL = install -m 755
@@ -48,12 +49,12 @@ ISCCFLAGS=
 
 AUTOPACKAGE=makeinstaller
 
-R3R_UI = tui
+R3R_UI = ${perl:ui}
 OS = win32
 
 VERSION = ${perl:version}
 
-DESTDIR = /usr/local
+DESTDIR = ${perl:prefix}
 prefix = $(DESTDIR)
 exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
@@ -61,7 +62,7 @@ docdir = $(prefix)/doc/r3r
 localedir = $(prefix)/share/locale
 
 $(MESSAGES)$(MESSAGES_COMPILED):
-	$(MSGMERGE) -U $< po/r3r$(MESSAGES_TEMPLATE)
+	$(MSGMERGE) -U $< `$(DIRNAME) $<`/messages$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
 
 # Default building rule
@@ -77,9 +78,13 @@ libr3r/info$(PASEXT): libr3r/info$(PASEXT).in
 
 libr3r/info$(PASEXT).in: $(VERSION)
 
-po/r3r$(MESSAGES_TEMPLATE): $(R3R_UI)/r3rrs$(RSTEXT)
+libr3r/po/messages$(MESSAGES_TEMPLATE): $(R3R_UI)/libr3r_rs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
-	$(TOUCH) po/*$(MESSAGES)
+	$(TOUCH) libr3r/po/*$(MESSAGES)
+
+$(R3R_UI)/po/messages$(MESSAGES_TEMPLATE): $(R3R_UI)/$(R3R_UI)_rs$(RSTEXT)
+	$(RSTCONV) -i $< -o $@
+	$(TOUCH) $(R3R_UI)/po/*$(MESSAGES)
 
 # Regenerate the Makefile if Makefile.in has been updated
 Makefile: Makefile.in
@@ -148,13 +153,13 @@ dist-win32:
 	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
 
 scripts/iss/setup.iss: scripts/iss/setup.iss.in
-	./configure --quiet --input=$< --output=$@
+	./configure --quiet --with-ui=$(R3R_UI) --input=$< --output=$@
 
 dist-win32-cross:
 	$(MAKE) ISCC="wine iscc" dist-win32
 
 scripts/autopackage/default.apspec: scripts/autopackage/default.apspec.in
-	./configure --quiet --input=$< --output=$@
+	./configure --quiet --with-ui=$(R3R_UI) --input=$< --output=$@
 
 dist-linux: all r3r$(EXEEXT) scripts/autopackage/default.apspec
 	$(CD) scripts && $(AUTOPACKAGE)
@@ -168,7 +173,7 @@ clean cleanall: mostlyclean
 	$(RM) */*$(OBJEXT) */*$(UNITEXT)
 
 distclean: clean
-	$(RM)  */*$(RSTEXT) */*$(MESSAGES_COMPILED) */*$(MESSAGES_TEMPLATE)
+	$(RM)  */*$(RSTEXT) */*/*$(MESSAGES_COMPILED) */*/*$(MESSAGES_TEMPLATE)
 	$(RM) docs
 	$(RM) libr3r/info$(PASEXT)
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss

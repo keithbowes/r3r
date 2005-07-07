@@ -1,4 +1,4 @@
-unit R3RRs;
+unit Tui_Rs;
 
 interface
 
@@ -12,8 +12,6 @@ resourcestring
   HelpKey = 'h';
   QuitKey = 'q';
 
-  ErrorGetting = 'ERROR:  Couldn''t retrieve the feed.';
-
 implementation
 
 {$IFNDEF NO_GETTEXT}
@@ -23,7 +21,7 @@ uses
 
 initialization
 
-TranslateResourcestrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r.mo');
+TranslateResourcestrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_tui.mo');
 
 {$ENDIF}
 

@@ -1,6 +1,6 @@
 #! /bin/env perl
 
-@languages = ('en', 'eo');
+@languages = ('de', 'en', 'eo');
 $version = '2.0-alpha4-dev';
 
 # Hash (transitive verb) the command-line arguments
@@ -20,29 +20,31 @@ sub hash_args
 
 sub show_usage
 {
-  die "Usage: configure [--usage | [[--quiet] [--input=FILE --output=FILE] [--disable-nls]]]\n";
-}
-
-sub nls_suffix
-{
-  return @_[0];
+  die "Usage: configure [--usage | [[--quiet[=yes]] [--input=FILE --output=FILE] [--with-ui=tui] [--disable-nls] [--prefix=PATH]]]\n";
 }
 
 sub get_language_deps
 {
   my $rv;
-  $rv = 'po/r3r.pot';
+  $rv = 'libr3r/po/messages$(MESSAGES_TEMPLATE) $(R3R_UI)/po/messages$(MESSAGES_TEMPLATE)';
   if (!exists($clargs{'disable-nls'}))
   {
     foreach $lang (@languages)
     {
-      $rv .= ' po/' . $lang . '$(MESSAGES_COMPILED)';
+      $rv .= ' libr3r/po/' . $lang . '$(MESSAGES_COMPILED)';
+      $rv .= ' $(R3R_UI)/po/' . $lang . '$(MESSAGES_COMPILED)';
     }
   }
 
   return $rv;
 }
 $language_deps = get_language_deps;
+
+$ui = $clargs{'with-ui'};
+if (!$ui)
+{
+  $ui = 'tui';
+}
 
 sub get_install_langs
 {
@@ -58,15 +60,25 @@ sub get_install_langs
   {
     foreach $lang (@languages)
     {
-     $rv .= "\n$action" . ' po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r.mo";
+     $rv .= "\n$action" . ' libr3r/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/libr3r.mo";
+     $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo";
     }
   }
 
   return $rv;
 }
-$install_langs = get_install_langs("\t$(INSTALL)");
-$uninstall_langs = get_install_langs("\t$(RM)");
-$ap_copy_langs = get_install_langs("copyFiles", '$PREFIX/share/locale');
+$install_langs = get_install_langs("\t" . '$(INSTALL)');
+$ap_copy_langs = get_install_langs('copyFiles', '$PREFIX/share/locale');
+
+sub get_uninstall_langs
+{
+  my $rv;
+  $rv = get_install_langs(@_);
+  # Strip out the source files
+  $rv =~ s/(\t\S+)\s*\S+/$1/g;
+  return $rv;
+}
+$uninstall_langs = get_uninstall_langs("\t" . '$(RM)');
 
 sub get_is_install_langs
 {
@@ -124,6 +136,12 @@ how to build the software and your rights when using, modifying or distributing
 it.  Please read the README and LICENSE files before continuing.\n
 EOM
     print "Generating Makefile...\n";
+  }
+
+  $prefix = $clargs{'prefix'};
+  if (!$prefix)
+  {
+    $prefix = '/usr/local';
   }
 
   write_file('Makefile.in', 'Makefile');
