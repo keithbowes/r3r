@@ -1,6 +1,3 @@
-include(m4/version.m4)dnl
-include(m4/nls.m4)dnl
-dnl
 .POSIX: 
 
 SHELL = sh
@@ -37,8 +34,6 @@ CP = cp -fr
 ECHO = echo
 FPDOC = fpdoc
 INSTALL = install -m 755
-M4 = m4
-M4FLAGS= -DUSE_NLS
 MKDIR = mkdir -p
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
@@ -56,7 +51,7 @@ AUTOPACKAGE=makeinstaller
 R3R_UI = tui
 OS = win32
 
-VERSION = Get_Version
+VERSION = ${perl:version}
 
 DESTDIR = /usr/local
 prefix = $(DESTDIR)
@@ -69,18 +64,18 @@ $(MESSAGES)$(MESSAGES_COMPILED):
 	$(MSGMERGE) -U $< po/r3r$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
 
-default: all
-
 # Default building rule
 all: Makefile libr3r/info$(PASEXT) touch-r3r r3r$(EXEEXT) languages
 
-languages: Get_Language_Deps
+languages: ${perl:language_deps}
 
 $(VERSION):
 	if $(TEST) ! -f $(VERSION); then $(TOUCH) $(VERSION); fi
 
-libr3r/info$(PASEXT): $(VERSION)
-	$(PYTHON) scripts/info$(PYTHONEXT) $(VERSION) > libr3r/info$(PASEXT)
+libr3r/info$(PASEXT): libr3r/info$(PASEXT).in
+	./configure --quiet --input=$< --output=$@
+
+libr3r/info$(PASEXT).in: $(VERSION)
 
 po/r3r$(MESSAGES_TEMPLATE): $(R3R_UI)/r3rrs$(RSTEXT)
 	$(RSTCONV) -i $< -o $@
@@ -88,7 +83,7 @@ po/r3r$(MESSAGES_TEMPLATE): $(R3R_UI)/r3rrs$(RSTEXT)
 
 # Regenerate the Makefile if Makefile.in has been updated
 Makefile: Makefile.in
-	$(M4) $(M4FLAGS) $< > $@
+	./configure --quiet
 	$(MAKE)
 
 # So the program will relink, regardless
@@ -108,8 +103,7 @@ win32:
 install:
 	-$(MKDIR) $(bindir)
 	$(INSTALL) r3r$(EXEEXT) $(bindir)
-	$(PYTHON) scripts/installangs$(PYTHONEXT) "$(INSTALL)" $(localedir) \
-		r3r_$(R3R_UI)
+	${perl:install_langs}
 
 install-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
@@ -117,7 +111,7 @@ install-win32:
 # Uninstallation rules
 uninstall:
 	$(RM) $(bindir)/r3r$(EXEEXT)
-	$(PYTHON) scripts/installangs$(PYTHONEXT) "$(RM)" $(localedir) r3r_$(R3R_UI)
+	${perl:uninstall_langs}
 
 uninstall-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
@@ -154,13 +148,13 @@ dist-win32:
 	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
 
 scripts/iss/setup.iss: scripts/iss/setup.iss.in
-	$(M4) $(M4FLAGS) $< > $@
+	./configure --quiet --input=$< --output=$@
 
 dist-win32-cross:
 	$(MAKE) ISCC="wine iscc" dist-win32
 
 scripts/autopackage/default.apspec: scripts/autopackage/default.apspec.in
-	$(M4) $(M4FLAGS) $< > $@
+	./configure --quiet --input=$< --output=$@
 
 dist-linux: all r3r$(EXEEXT) scripts/autopackage/default.apspec
 	$(CD) scripts && $(AUTOPACKAGE)
@@ -176,8 +170,9 @@ clean cleanall: mostlyclean
 distclean: clean
 	$(RM)  */*$(RSTEXT) */*$(MESSAGES_COMPILED) */*$(MESSAGES_TEMPLATE)
 	$(RM) docs
-	$(RM) libr3r/ver.pas
+	$(RM) libr3r/info$(PASEXT)
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
+	$(RM) $(VERSION)
 	-delp -e .
 
 maintainer-clean: distclean

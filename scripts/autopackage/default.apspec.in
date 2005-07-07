@@ -1,6 +1,3 @@
-include(m4/version.m4)dnl
-include(m4/nls.m4)dnl
-dnl
 # -*-shell-script-*-
 
 [Meta]
@@ -10,7 +7,7 @@ DisplayName: R3R Feed Reader
 Summary: R3R is a feed reader
 Maintainer: The R3R Developers - http://sourceforge.net/project/memberlist.php?group_id=90897
 Packager: Anonymous <anonymous@nowhere.com>
-SoftwareVersion: Get_Version
+SoftwareVersion: ${perl:version}
 
 # Only uncomment InterfaceVersion if your package exposes interfaces to other software,
 # for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
@@ -52,7 +49,7 @@ echo $source_dir'/../po/*.mo' | import
 [Install]
 # Put your installation script here
 installExe r3r
-Ap_Copy_Langs
+${perl:ap_copy_langs}
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything

@@ -1,18 +1,15 @@
-include(m4/version.m4)dnl
-include(m4/nls.m4)dnl
-dnl
 [Setup]
 AllowNoIcons=yes
 AppName=R3R
 AppPublisher=The R3R Developers
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
-AppVerName=R3R Get_Version
+AppVerName=R3R ${perl:version} 
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
 LicenseFile=LICENSE
 
 [Files]
-Source: "..\..\r3r.exe"; DestDir: "{app}";
-Is_Install_Langs
+Source: "..\..\r3r.exe"; DestDir: "{app}/bin";
+${perl:is_install_langs}

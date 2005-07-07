@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  Feed, SysUtils, Ver;
+  Feed, Info, SysUtils;
 
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
