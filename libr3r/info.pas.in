@@ -26,14 +26,14 @@ var
   Data: Pointer;
 begin
 {$IFDEF UNIX}
+  Data := GetMem(SizeOf(UtsName));
   FpUname(UtsName(Data^));
-  with UtsName(Data^) do
-  begin
-    Name := SysName;
-    Version := Release;
-  end;
+  Name := UtsName(Data^).SysName;
+  Version := UtsName(Data^).Release;
+  FreeMem(Data);
 {$ELSE}
   {$IFDEF WIN32}
+    New(LPOSVERSIONINFO(Data));
     with OSVERSIONINFO(Data^) do
     begin
       dwOSVersionInfoSize := SizeOf(OSVERSIONINFO);
@@ -54,6 +54,7 @@ begin
       end;
       Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMajorVersion);
     end;
+    Dispose(LPOSVERSIONINFO(Data));
   {$ELSE}
     Name := 'DOS';
     Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));

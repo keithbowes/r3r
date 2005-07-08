@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  Tui_Rs, SysUtils;
+  Crt, Info, Tui_Rs, SysUtils;
 
 constructor TTui.Create;
 var
@@ -33,7 +33,7 @@ begin
 
   for FeedIndex := 1 to ParamCount do
   begin
-    GetFeed(ParamStr(ParamCount));
+    GetFeed(ParamStr(FeedIndex));
   end;
 
   ShowHelp;
@@ -75,7 +75,12 @@ begin
 end;
 
 procedure TTui.ShowHelp;
+var
+  InfoLine: String;
 begin
+  InfoLine := 'R3R ' + Version + ' (' + Os + ')';
+  WriteLn(InfoLine:ScreenWidth - 5);
+
   Write(GoURL + #9);
   Write(Help + #9);
   Write(Quit);

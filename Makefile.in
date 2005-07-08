@@ -121,7 +121,7 @@ install-strip:
 	-$(UPX) $(bindir)/r3r$(EXEEXT)
 
 install-win32:
-	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install-strip
+	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install-strip
 
 # Uninstallation rules
 uninstall:
@@ -130,7 +130,7 @@ uninstall:
 	${perl:uninstall_langs}
 
 uninstall-win32:
-	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
+	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
 
 # Documentation rules
 docs html: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
@@ -147,7 +147,7 @@ install-docs: docs
 		$(docdir)/$$doc`; $(INSTALL_DATA) $$doc $(docdir)/$$doc; done
 
 install-docs-win32:
-	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" install-docs
+	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" install-docs
 
 # Distribution rules
 dist: distclean
