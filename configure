@@ -1,6 +1,5 @@
 #! /bin/env perl
 
-@languages = ('de', 'en', 'eo');
 $version = '2.0-alpha4-dev';
 
 # Hash (transitive verb) the command-line arguments
@@ -18,6 +17,28 @@ sub hash_args
 }
 %clargs = hash_args;
 
+$ui = $clargs{'with-ui'};
+if (!$ui)
+{
+  $ui = 'tui';
+}
+
+sub get_languages
+{
+  my $po, $ui_po;
+  
+  opendir(DIR, 'libr3r/po/') or die("Could not open the lib 'po' directory");
+  @{$po} = map { /^(..)\.po$/ } grep { /(..)\.po$/ } readdir(DIR);
+  closedir(DIR);
+  
+  opendir(DIR, "$ui/po/") or die("Could not open the ui 'po' directory");
+  @{$ui_po} = map { /^(..)\.po$/ } grep { /(..)\.po$/ } readdir(DIR);
+  closedir(DIR);
+  
+  return wantarray ? ($po, $ui_po) : $po;
+}
+my ($languages, $ui_languages) = get_languages;
+
 sub show_usage
 {
   die "Usage: configure [--usage | [[--quiet[=yes]] [--input=FILE --output=FILE] [--with-ui=tui] [--disable-nls] [--prefix=PATH]]]\n";
@@ -29,9 +50,12 @@ sub get_language_deps
   $rv = 'libr3r/po/messages$(MESSAGES_TEMPLATE) $(R3R_UI)/po/messages$(MESSAGES_TEMPLATE)';
   if (!exists($clargs{'disable-nls'}))
   {
-    foreach $lang (@languages)
+	  foreach $lang (@{$languages})
     {
       $rv .= ' libr3r/po/' . $lang . '$(MESSAGES_COMPILED)';
+    }
+    foreach $lang (@{$ui_languages})
+    {
       $rv .= ' $(R3R_UI)/po/' . $lang . '$(MESSAGES_COMPILED)';
     }
   }
@@ -40,11 +64,6 @@ sub get_language_deps
 }
 $language_deps = get_language_deps;
 
-$ui = $clargs{'with-ui'};
-if (!$ui)
-{
-  $ui = 'tui';
-}
 
 sub get_install_langs
 {
@@ -58,10 +77,13 @@ sub get_install_langs
 
   if (!exists($clargs{'disable-nls'}))
   {
-    foreach $lang (@languages)
+    foreach $lang (@{$languages})
     {
       $rv .= "\n$action" . ' libr3r/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/libr3r.mo";
-      $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo";
+    }
+    foreach $lang (@{$ui_languages})
+    {
+      $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo"
     }
   }
 
