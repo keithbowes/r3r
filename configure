@@ -1,6 +1,6 @@
 #! /bin/env perl
 
-$version = '2.0-alpha4-dev';
+do 'scripts/version.pl';
 
 # Hash (transitive verb) the command-line arguments
 sub hash_args
@@ -135,7 +135,7 @@ sub write_file
     $contents .= $in;
   }
 
-  while (true)
+  while (1)
   {
     $count = $contents =~ s/\$\{perl:([^\}]+)\}/$$1/;
     if (!$count)
