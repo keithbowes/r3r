@@ -60,14 +60,14 @@ sub get_install_langs
   {
     foreach $lang (@languages)
     {
-     $rv .= "\n$action" . ' libr3r/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/libr3r.mo";
-     $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo";
+      $rv .= "\n$action" . ' libr3r/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/libr3r.mo";
+      $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo";
     }
   }
 
   return $rv;
 }
-$install_langs = get_install_langs("\t" . '$(INSTALL)');
+$install_langs = get_install_langs("\t" . '$(INSTALL_DATA)');
 $ap_copy_langs = get_install_langs('copyFiles', '$PREFIX/share/locale');
 
 sub get_uninstall_langs
@@ -101,6 +101,7 @@ $is_install_langs= get_is_install_langs;
 sub write_file
 {
   ($infile, $outfile) = @_;
+  my $contents;
 
   # Go through $infile, replace the variables with values and write to $outfile
   open INFILE, "<$infile";
@@ -109,18 +110,19 @@ sub write_file
   while (!eof(INFILE))
   {
     read INFILE, $in, 255;
-
-    while (true)
-    {
-      $count = $in =~ s/\$\{perl:([^\}]+)\}/$$1/;
-      if (!$count)
-      {
-        last;
-      }
-    }
-
-    print OUTFILE $in;
+    $contents .= $in;
   }
+
+  while (true)
+  {
+    $count = $contents =~ s/\$\{perl:([^\}]+)\}/$$1/;
+    if (!$count)
+    {
+      last;
+    }
+  }
+
+  print OUTFILE $contents;
   close OUTFILE;
   close INFILE;
 }

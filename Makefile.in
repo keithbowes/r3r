@@ -17,10 +17,11 @@ RSTEXT = .rst
 # Extensions for documentation
 XMLEXT = .xml
 
+.SUFFIXES:
 .SUFFIXES: $(MESSAGES_COMPILED) $(MESSAGES)
 
 PC = fpc
-PFLAGS = -S2 -Sh -Fu./libr3r -Fu./libr3r/* -Fu$(R3R_UI)/po -FE. -FU$(R3R_UI) \
+PCFLAGS = -S2 -Sh -Fu./libr3r -Fu./libr3r/* -Fu$(R3R_UI)/po -FE. -FU$(R3R_UI) \
 				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
 				 													buggy alpha stage
 # Defines, for enabling different features/dialect syntax
@@ -34,15 +35,19 @@ CP = cp -fr
 DIRNAME = dirname
 ECHO = echo
 FPDOC = fpdoc
-INSTALL = install -m 755
-MKDIR = mkdir -p
+INSTALL = install
+INSTALL_DATA = $(INSTALL) -m 644
+INSTALL_PROGRAM = $(INSTALL) -m 755
+MKDIR = mkdir
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
 MV = mv
 RM = rm -fr
 RSTCONV = rstconv
+STRIP = strip
 TEST = test
 TOUCH = touch
+UPX = upx
 
 ISCC=iscc
 ISCCFLAGS=
@@ -54,15 +59,15 @@ OS = win32
 
 VERSION = ${perl:version}
 
-DESTDIR = ${perl:prefix}
-prefix = $(DESTDIR)
+prefix = ${perl:prefix}
 exec_prefix = $(prefix)
 bindir = $(exec_prefix)/bin
-docdir = $(prefix)/doc/r3r
-localedir = $(prefix)/share/locale
+datarootdir = $(prefix)/share
+docdir = $(datarootdir)/doc/r3r
+localedir = $(datarootdir)/locale
 
 $(MESSAGES)$(MESSAGES_COMPILED):
-	$(MSGMERGE) -U $< `$(DIRNAME) $<`/messages$(MESSAGES_TEMPLATE)
+	-$(MSGMERGE) -U $< `$(DIRNAME) $<`/messages$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
 
 # Default building rule
@@ -96,10 +101,10 @@ touch-r3r:
 	$(TOUCH) $(R3R_UI)/r3r$(PASEXT)
 
 r3r$(EXEEXT): $(R3R_UI)/r3r$(PASEXT)
-	$(PC) $(PFLAGS) $(DEFS) $<
+	$(PC) $(PCFLAGS) $(DEFS) $<
 
 cross:
-	$(MAKE) PFLAGS="$(PFLAGS) -T$(OS)"
+	$(MAKE) PCFLAGS="$(PCFLAGS) -T$(OS)"
 
 win32:
 	$(MAKE) cross OS=win32 DEFS="-dSETTINGS_REGISTRY"
@@ -107,22 +112,28 @@ win32:
 # Installation rules
 install:
 	-$(MKDIR) $(bindir)
-	$(INSTALL) r3r$(EXEEXT) $(bindir)
+	$(INSTALL_PROGRAM) r3r$(EXEEXT) $(bindir)/r3r$(EXEEXT)
 	${perl:install_langs}
+	@$(ECHO) Type $(MAKE) install-docs if you want to install the documentation.
+
+install-strip:
+	-$(STRIP) $(bindir)/r3r$(EXEEXT)
+	-$(UPX) $(bindir)/r3r$(EXEEXT)
 
 install-win32:
-	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install
+	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install-strip
 
 # Uninstallation rules
 uninstall:
 	$(RM) $(bindir)/r3r$(EXEEXT)
+	$(RM) $(docdir)
 	${perl:uninstall_langs}
 
 uninstall-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
 
 # Documentation rules
-docs: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
+docs html: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
 	libr3r/rmessage$(PASEXT) libr3r/libr3r.pas$(XMLEXT)
 	-$(MKDIR) docs
 	$(CD) docs && $(FPDOC) --input=../libr3r/libr3r$(PASEXT) \
@@ -130,9 +141,10 @@ docs: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
 		--input=../libr3r/rmessage$(PASEXT) --descr=../libr3r/libr3r.pas$(XMLEXT) \
 		--package=LibR3R
 
-install-docs:
+install-docs: docs
 	-$(MKDIR) $(docdir)
-	$(CD) docs && $(INSTALL) * $(docdir)
+	$(CD) docs && for doc in *.html */*; do $(MKDIR) `$(DIRNAME) \
+		$(docdir)/$$doc`; $(INSTALL_DATA) $$doc $(docdir)/$$doc; done
 
 install-docs-win32:
 	$(MAKE) DESTDIR="C:\\\\Program\\ Files\\\\R3R" install-docs
@@ -188,13 +200,13 @@ clean-win32:
 
 # Other compilers
 gpc:
-	-$(MAKE) PC=gpc PFLAGS="--automake -B po -B libr3r -o r3r" UNITEXT=.gpi
+	-$(MAKE) PC=gpc PCFLAGS="--automake -B po -B libr3r -o r3r" UNITEXT=.gpi
 	@$(ECHO) "Unless you really know what you're doing, the build has failed." \
 	"Hopefully, it will work in the future."
 
 for-borland-compilers:
 	-$(MAKE) \
-	PFLAGS="-B -CC -E. -M -O$(R3R_UI) -Upo -Ulibr3r -V" DEFS=-DNO_GETTEXT \
+	PCFLAGS="-B -CC -E. -M -O$(R3R_UI) -Upo -Ulibr3r -V" DEFS=-DNO_GETTEXT \
 				 OBJEXT=.obj UNITEXT=.dcu
 	@$(ECHO) "Compiling with Delphi/Kylix is currently unsupported.  If that" \
 	"concerns you, send patches."
