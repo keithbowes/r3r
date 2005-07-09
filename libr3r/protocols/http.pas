@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  Feed, Info, SysUtils;
+  BlckSock, Feed, Info, RegExpr, SysUtils;
 
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
@@ -98,7 +98,9 @@ begin
 
   SendHeader('GET ' + FPath + ' HTTP/1.0');
   SendHeader('Host: ' + FHost);
-  SendHeader('User-Agent: R3R/' + Version);
+  SendHeader('User-Agent: R3R/' + Version + ' (' + Os + ') Synapse/' +
+    SynapseRelease + ' TRegExpr/' + IntToStr(TRegExpr.VersionMajor) + '.' +
+    IntToStr(TRegExpr.VersionMinor));
   SendHeader('Accept-Encoding: ');
   SendHeader('Accept: text/plain, esf/text, */*');
   SendHeader('Connection: close');
@@ -107,8 +109,8 @@ end;
 
 procedure THttpSock.SendHeader(const Name: String);
 begin
-   Sock.SendString(Name);
-   Sock.SendString(#13#10);
+  Sock.SendString(Name);
+  Sock.SendString(#13#10);
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;

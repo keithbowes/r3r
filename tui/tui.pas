@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  Crt, Info, Tui_Rs, SysUtils;
+  Info, Tui_Rs, SysUtils;
 
 constructor TTui.Create;
 var
@@ -79,7 +79,7 @@ var
   InfoLine: String;
 begin
   InfoLine := 'R3R ' + Version + ' (' + Os + ')';
-  WriteLn(InfoLine:ScreenWidth - 5);
+  WriteLn(InfoLine:75);
 
   Write(GoURL + #9);
   Write(Help + #9);

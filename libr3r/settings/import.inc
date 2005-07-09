@@ -14,7 +14,7 @@ begin
     Result := GetEnv('APPDATA');
     if Result = '' then
     begin
-      Result := GetEnv('WINDIR') + PathDelim + 'profiles' + PathDelim + GetEnv('USERNAME');
+      Result := GetEnv('WINDIR') + PathDelim + 'profiles' + PathDelim + GetEnv('USERNAME') + PathDelim + 'Application Data';
     end;
   end;
 

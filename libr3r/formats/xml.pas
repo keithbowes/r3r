@@ -99,7 +99,7 @@ end;
 
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
-  FElemList.Delete(FElemList.Count-1);
+  FElemList.Delete(FElemList.Count - 1);
 end;
 
 procedure TXmlFeed.CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);

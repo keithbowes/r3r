@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha4\n"
-"PO-Revision-Date: 2005-07-07 14:29-0400\n"
+"PO-Revision-Date: 2005-07-08 14:57\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr "g)ehen nach einem URL"
 
 # tui_rs:help
 msgid "h)elp, this screen"
-msgstr "h)ilfe, dieser Bildschirm"
+msgstr "h)ilfe"
 
 # tui_rs:quit
 msgid "q)uit the program"
