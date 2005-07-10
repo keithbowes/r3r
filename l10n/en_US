@@ -117,8 +117,7 @@ SET_MIME_GUESS=Guess the MIME type of feeds
 # HTTP: Basic tab
 SET_HTTP_BASIC=HTTP: Basic
 SET_TO_PREF=Timeout: 
-SET_TO_SUF= (seconds)
-SET_HTTP_CLIENT=HTTP Client: 
+SET_TO_SUF= (seconds) 
 SET_PROXY_LBL=Proxy
 SET_USE_PROXY=Use a proxy
 SET_PROXY_IP=Address: 
@@ -133,6 +132,7 @@ SET_HDR_LANG=Languages:
 SET_USE_CUSTOM=Use Custom
 
 # Programs Tab
+SET_BROWSER=Browser:
 SET_MAIL=External Programs
 SET_MAIL_CLIENT=Mail Client: 
 SET_EDITOR=Editor: 

@@ -5,6 +5,7 @@
 */
 
 $_settings = null;
+$_cat_settings = null;
 $_temp_settings = null;
 
 @include_once(SETTINGS_DIR . '/' . OLD_SETTINGS_FILE);
@@ -150,6 +151,9 @@ function setInitialSettings()
 */
 function getSettings()
 {
+  global $_settings;
+  reset($_settings);
+
   $wd = getcwd();
 
   if (!is_dir(SETTINGS_DIR))
@@ -164,6 +168,18 @@ function getSettings()
     saveSettings();
   }
 
+  $fh = fopen(SETTINGS_FILE, 'r');
+  while (!feof($fh))
+  {
+    $str = fgets($fh);
+    if (strpos('=', $str) > 0)
+    {
+      $setparts = explode('=', $str);
+      $_settings[$setparts[0]] = $setparts[1];
+    }
+  }
+  fclose($fh);
+
   if (!getSetting('use-custom-accept-langs'))
     setInitialSetting('accept-langs');
   if (!getSetting('use-custom-accept-types'))
@@ -177,6 +193,54 @@ function getSettings()
 }
 
 /**
+  * Categorize the settings
+*/
+function catSettings()
+{
+  global $_cat_settings, $_settings;
+  //reset($_cat_settings);
+  reset($_settings);
+  while (list($setting_name, $setting_val) = each($_settings))
+  {
+    switch ($setting_name)
+    {
+      case 'accept-langs':
+      case 'accept-types':
+      case 'enable-mime-guess':
+      case 'proxy-addr':
+      case 'proxy port':
+      case 'timeout-sec':
+        $cat = 'HTTP';
+        break;
+      case 'show-warnings':
+        $cat = 'General';
+      case 'display-feed-titles-only':
+      case 'hide-cached-feeds':
+      case 'wrap-desc':
+        $cat = 'GUI';
+        break;
+      case 'user-agent':
+        $cat = 'Info';
+        break;
+      case 'browser':
+      case 'editor':
+      case 'mail-client-cl':
+        $cat = 'Programs';
+        break;
+      case 'use-custom-accept-langs':
+      case 'use-custom-accept-types':
+      case 'use-custom-user-agent':
+      case 'use-proxy':
+        $cat = 'Volatile';
+        break;
+      default:
+        $cat = 'Deprecated';
+    }
+    $_cat_settings[$cat][$setting_name] = $setting_val;
+  }
+}
+
+/**
   * Dump the settings from memory to the settings file.
 */
 function saveSettings()
@@ -187,24 +251,28 @@ function saveSettings()
   commitSettings();
   $wd = getcwd();
 
-  global $_settings;
-  reset($_settings);
+  global $_cat_settings;
+  catSettings();
 
   // $_settings is sporadically and unpredictably not an array, causing the
   // settings file to be overwritten with nothing.  This is a hack to only
   // write settings when $_settings is an array.  If anybody finds the cause
   // of $_settings ceasing to be an array, I'd be glad to fix the real source
   // of error, rather than keeping this work-around.
-  if (is_array($_settings))
+  if (is_array($_cat_settings))
   {
     chdir(SETTINGS_DIR);
     if (file_exists(SETTINGS_FILE))
       chmod(SETTINGS_FILE, 0600);
     $fh = fopen(SETTINGS_FILE, 'w');
 
-    while (list($setting_name, $setting_val) = each($_settings))
-      if ($setting_name !== null)
-        fwrite($fh, "$setting_name=$setting_val\n");
+    while (list($cat, $setting) = each($_cat_settings))
+    {
+      fwrite($fh, "[$cat]\n");
+      while (list($setting_name, $setting_val) = each($setting))
+        if ($setting_name !== null)
+          fwrite($fh, "$setting_name=$setting_val\n");
+    }
 
     fclose($fh);
     chmod(SETTINGS_FILE, 0400);

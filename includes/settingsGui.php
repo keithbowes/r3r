@@ -180,7 +180,7 @@ function createMailPage($notebook)
   $mailTable = &new GtkTable(2, 3);
   $mailFrame->add($mailTable);
 
-  $browserLbl = &new GtkLabel(SET_HTTP_CLIENT);
+  $browserLbl = &new GtkLabel(SET_BROWSER);
   $mailTable->attach($browserLbl, 0, 1, 0, 1);
 
   $browserField = createEdit(getSetting('browser'));

@@ -21,26 +21,32 @@ AC_ARG_WITH(BROWSER, [  --with-browser=prog     the path to your preferred brows
 
 if test -z $with_browser;
 then
-  AC_PATH_PROGS(WINEBROWSER, winebrowser)
-  if test -z $WINEBROWSER;
+  AC_PATH_PROGS(WWWBROWSER, www-browser)
+  if test -z $WWWBROWSER;
   then
-    AC_PATH_PROGS(XTERM, xterm)
-    if test $XTERM;
+    AC_PATH_PROGS(WINEBROWSER, winebrowser)
+    if test -z $WINEBROWSER;
     then
-      AC_PATH_PROGS(LYNX, lynx)
-      if test -z $LYNX;
+      AC_PATH_PROGS(XTERM, xterm)
+      if test $XTERM;
       then
-        AC_PATH_PROGS(LINKS, links)
-        if $LINKS;
+        AC_PATH_PROGS(LYNX, lynx)
+        if test -z $LYNX;
         then
-          with_browser="$XTERM -e $LINKS"
+          AC_PATH_PROGS(LINKS, links)
+          if $LINKS;
+          then
+            with_browser="$XTERM -e $LINKS"
+          fi
+        else
+          with_browser="$XTERM -e $LYNX"
         fi
-      else
-        with_browser="$XTERM -e $LYNX"
       fi
+    else
+      with_browser=$WINEBROWSER
     fi
   else
-    with_browser=$WINEBROWSER
+    with_browser=$WWWBROWSER
   fi
 fi
 
