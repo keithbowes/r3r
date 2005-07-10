@@ -35,7 +35,7 @@ function gotoLink($link)
 {
   if ($link != FEED_LINE_EMPTY && $link)
   {
-    if (getSetting('http-client') == 'system')
+    if (getSetting('browser') == 'system')
     {
       if (class_exists('COM'))
       {
@@ -56,7 +56,7 @@ function gotoLink($link)
       }
     }
     else
-      system("\"" . getSetting('http-client') . "\" \"" . $link . '" > /dev/null &');
+      system("\"" . getSetting('browser') . "\" \"" . $link . '" > /dev/null &');
   }
 }
 
@@ -233,7 +233,7 @@ function feedListMenuActivated($widget, $data)
 }
 
 /**
-  * Create context menu for feed list items.
+  * Create a context menu for feed list items.
   * @param GtkCList Widget from which signal originated.
   * @param GdkEvent The event.
 */

@@ -133,7 +133,7 @@ SET_HDR_LANG=Languages:
 SET_USE_CUSTOM=Use Custom
 
 # Programs Tab
-SET_MAIL=Mail
+SET_MAIL=External Programs
 SET_MAIL_CLIENT=Mail Client: 
 SET_EDITOR=Editor: 
 

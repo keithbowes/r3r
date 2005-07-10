@@ -250,10 +250,10 @@ function getRemoteFeed($url)
     openCache($url);
     $cached_status = getCachedStatus();
 
-    if ($cached_status != 2)
+    if ($cached_status != CACHED_STATUS_NOT_EXPIRED)
       @$pfeed = fsockopen("$server", $port, $errno, $errstr, getSetting('timeout-sec'));
 
-    if (!$pfeed && $cached_status < 2)
+    if (!$pfeed && $cached_status < CACHED_STATUS_NOT_EXPIRED)
     {
       if ($errno != 0)
       {
@@ -268,7 +268,7 @@ function getRemoteFeed($url)
     }
     else
     {
-      if ($cached_status != 2)
+      if ($cached_status != CACHED_STATUS_NOT_EXPIRED)
       {
         $statusBar->set_text(STATUS_OPEN_CONNECTION);
 
@@ -282,7 +282,7 @@ function getRemoteFeed($url)
         fwrite($pfeed, 'Accept: ' . getSetting('accept-types') . "\r\n");
         fwrite($pfeed, 'Accept-Language: ' . getSetting('accept-langs') . "\r\n");
         fwrite($pfeed, "Accept-Encoding: \r\n");
-        if ($cached_status == 1)
+        if ($cached_status == CACHED_STATUS_EXPIRED)
           sendCacheHeader($pfeed);
         fwrite($pfeed, "Connection: close\r\n");
         fwrite($pfeed, "\r\n");
@@ -291,7 +291,7 @@ function getRemoteFeed($url)
       if ($cached_status)
       {
         $code = '304';
-        if ($cached_status == 2 || (($cached_status == 1) && strpos(fgets($pfeed), $code)))
+        if ($cached_status == CACHED_STATUS_NOT_EXPIRED || (($cached_status == CACHED_STATUS_EXPIRED) && strpos(fgets($pfeed), $code)))
         {
           if (!getSetting('hide-cached-feeds'))
             displayFeedData(getCacheFeedHandle());

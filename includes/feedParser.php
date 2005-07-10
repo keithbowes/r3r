@@ -242,7 +242,7 @@ function _xml_start($parser, $name, $attr)
 
   $_xml_fn = normalizeXmlNames($name);
 
-  if ($_xml_fn == 'item')
+  if ($_xml_fn === 'item')
   {
     $_xml_in_item = true;
     $itemIndex++;
@@ -265,7 +265,7 @@ function _xml_end($parser, $name)
   $_xml_fn = '';
   $_xml_fv = '';
 
-  if (normalizeXmlNames($name) == 'item')
+  if (normalizeXmlNames($name) === 'item')
     $_xml_in_item = false; 
 }
 

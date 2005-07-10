@@ -7,7 +7,7 @@
 $_settings = null;
 $_temp_settings = null;
 
-@include_once(SETTINGS_DIR . '/' . SETTINGS_FILE);
+@include_once(SETTINGS_DIR . '/' . OLD_SETTINGS_FILE);
 
 /**
   * Set a setting
@@ -68,6 +68,9 @@ function setInitialSetting($setting)
     case 'accept-types':
       $val = 'text/x-rss, text/plain; q=0.8, application/rss+xml; q=0.6, application/rdf+xml; q=0.5, application/atom+xml; q=0.3, application/xml; q=0.2, text/xml; q=0.1, */*; q=0.0';
       break;
+    case 'browser':
+      $val = 'system';
+      break;
     case 'display-feed-title-only':
       $val = false;
       break;
@@ -75,13 +78,8 @@ function setInitialSetting($setting)
       $val = 'gvim';
       break;
     case 'enable-mime-guess':
-      $val = false;
-      break;
     case 'hide-cached-feeds':
       $val = false;
-      break;
-    case 'http-client':
-      $val = 'system';
       break;
     case 'mail-client-cl':
       $val = 'system';
@@ -125,13 +123,13 @@ function setInitialSetting($setting)
 */
 function setInitialSettings()
 {
+  setInitialSetting('browser');
   setInitialSetting('accept-langs');
   setInitialSetting('accept-types');
   setInitialSetting('display-feed-title-only');
   setInitialSetting('editor');
   setInitialSetting('enable-mime-guess');
   setInitialSetting('hide-cached-feeds');
-  setInitialSetting('http-client');
   setInitialSetting('mail-client-cl');
   setInitialSetting('proxy-addr');
   setInitialSetting('proxy-port');
@@ -204,12 +202,9 @@ function saveSettings()
       chmod(SETTINGS_FILE, 0600);
     $fh = fopen(SETTINGS_FILE, 'w');
 
-    fwrite($fh, "<?php\n\n");
     while (list($setting_name, $setting_val) = each($_settings))
-      if ($setting_name)
-        fwrite($fh, "\$_settings['$setting_name'] = '$setting_val';\n");
-
-    fwrite($fh, "\n?>");
+      if ($setting_name !== null)
+        fwrite($fh, "$setting_name=$setting_val\n");
 
     fclose($fh);
     chmod(SETTINGS_FILE, 0400);

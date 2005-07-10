@@ -5,37 +5,6 @@
 */
 
 /**
-  * Create the "Appearance" tab
-  * @param GtkNotebook The parent notebook.
-*/
-function createAppearancePage($notebook)
-{
-  $appearancePage = &new GtkVBox(false, 5);
-  $appearanceLabel = &new GtkLabel(SET_APP_TAB);
-
-  $rcCheckBtn = &new GtkCheckButton(SET_YOUR_RC);
-  $rcCheckBtn->set_active(getSetting('use-rc-file'));
-  $appearancePage->pack_start($rcCheckBtn, false);
-
-  $rcBox = &new GtkHBox();
-  $appearancePage->pack_start($rcBox, false);
-
-  $rcField = createEdit(getSetting('rc-file'));
-  $rcField->set_sensitive(getSetting('use-rc-file'));
-  $rcField->connect('changed', 'settingsEntryChanged', 'rc-file');
-  $rcBox->pack_start($rcField, false);
-
-  $rcBrowse = &new GtkButton(SET_BROWS_BTN);
-  $rcBrowse->set_sensitive(getSetting('use-rc-file'));
-  $rcBrowse->connect('clicked', 'createFileSelection', array($rcField, FS_RC, 'rc-file', $rcField));
-  $rcBox->pack_start($rcBrowse, false, false, 3);
-
-  $rcCheckBtn->connect('toggled', 'checkToggled', array(array($rcField, $rcBrowse), 'use-rc-file'));
-
-  $notebook->append_page($appearancePage, $appearanceLabel);
-}
-
-/**
   * Create the "Feeds" tab
   * @param GtkNotebook The parent notebook.
 */
@@ -214,12 +183,12 @@ function createMailPage($notebook)
   $browserLbl = &new GtkLabel(SET_HTTP_CLIENT);
   $mailTable->attach($browserLbl, 0, 1, 0, 1);
 
-  $browserField = createEdit(getSetting('http-client'));
-  $browserField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
+  $browserField = createEdit(getSetting('browser'));
+  $browserField->connect('changed', 'settingsEntryChanged', 'browser');
   $mailTable->attach($browserField, 1, 2, 0, 1);
 
   $browserBrowse = &new GtkButton(SET_BROWS_BTN);
-  $browserBrowse->connect('clicked', 'createFileSelection', array($browserField, FS_CLIENT, 'http-client', $browserField));
+  $browserBrowse->connect('clicked', 'createFileSelection', array($browserField, FS_CLIENT, 'browser', $browserField));
   $mailTable->attach($browserBrowse, 2, 3, 0, 1);
 
   $mailClientLbl = &new GtkLabel(SET_MAIL_CLIENT);
@@ -256,7 +225,6 @@ function createNotebook($parent)
 {
   $notebook = &new GtkNotebook();
   $parent->pack_start($notebook);
-  createAppearancePage($notebook);
   createFeedPage($notebook);
   createHttpPage($notebook);
   createHttpHeaderPage($notebook);

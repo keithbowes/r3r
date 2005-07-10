@@ -53,7 +53,6 @@ function getSubscriptionsOld()
   for ($idx = 0; $idx < $narr; $idx++)
     $_subscriptions[$sarr[$idx]] = 1;
 
-  setSetting('subscribed-feeds', null);
   return $_subscriptions;
 }
 

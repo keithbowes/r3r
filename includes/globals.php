@@ -13,7 +13,11 @@ define('SETTINGS_DIR', getenv('HOME') . '/.r3r');
 /**
   * The settings file.
 */
-define('SETTINGS_FILE', 'r3rrc');
+define('SETTINGS_FILE', 'r3r.ini');
+/**
+  * The old settings file.
+*/
+define('OLD_SETTINGS_FILE', 'r3rrc');
 
 /* GUI variables and classes */
 

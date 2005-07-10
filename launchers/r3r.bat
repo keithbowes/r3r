@@ -28,7 +28,15 @@ if "%APPDATA%" == "" goto SETAD
 goto SETHOME
 
 :SETAD
-SET APPDATA=%WINDIR%\profiles\%USERNAME%
+if "%USERNAME%" == "" goto SETUSER
+
+goto SETDATA
+
+:SETUSER
+SET USERNAME="All Users"
+
+:SETDATA
+SET APPDATA="%WINDIR%\profiles\%USERNAME%\Application Data"
 
 :SETHOME
 SET HOME=%APPDATA%

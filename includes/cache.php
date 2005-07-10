@@ -6,6 +6,23 @@
 
 /* Caching, duh */
 
+/* Constants */
+
+/**
+  * The feed hasn't been cached
+*/
+define('CACHED_STATUS_NOT_CACHED', 0);
+/**
+  * The feed has been cached, but has expired
+*/
+define('CACHED_STATUS_EXPIRED', 1);
+/**
+  * The feed has been cached and hasn't expired
+*/
+define('CACHED_STATUS_NOT_EXPIRED', 2);
+
+/* Variables */
+
 /**
   * Handle of the cached data
   * @access private
@@ -40,7 +57,7 @@ $_cache_data = null;
   * Number indicating the feed's cached status
   * @access private
 */
-$_cached_status = 0;
+$_cached_status = CACHED_STATUS_NOT_CACHED;
 
 /**
   * Opens the cache
@@ -73,10 +90,10 @@ function openCache($url)
   chdir($_cache_id);
 
   if (file_exists($_cache_data))
-    $_cached_status = 1;
+    $_cached_status = CACHED_STATUS_EXPIRED;
   else
   {
-    $_cached_status = 0;
+    $_cached_status = CACHED_STATUS_NOT_CACHED;
     $fh = fopen($_cache_data, 'w');
     fclose($fh);
   }
@@ -115,7 +132,7 @@ function closeCache()
 
   $_cache_data = null;
   $_cache_id = '';
-  $_cached_status = 0;
+  $_cached_status = CACHED_STATUS_NOT_CACHED;
 }
 
 /**
@@ -132,9 +149,9 @@ function getCachedStatus()
     return $_cached_status;
 
   if (!$_cache_data['expires'])
-    $_cached_status = 0;
+    $_cached_status = CACHED_STATUS_NOT_CACHED;
   else if ($_cache_data['expires'] > time())
-    $_cached_status = 2;
+    $_cached_status = CACHED_STATUS_NOT_EXPIRED;
 
   return $_cached_status;
 }
@@ -264,7 +281,7 @@ function invalidateCache()
   unlink("$_cache_dir/$_cache_id/feed");
   unlink("$_cache_dir/$_cache_id/response");
 
-  $_cached_status = 0;
+  $_cached_status = CACHED_STATUS_NOT_CACHED;
 }
 
 ?>

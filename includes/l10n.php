@@ -18,7 +18,11 @@ if (extension_loaded('iconv') && isset($lang['charset']))
 $lfl = 'l10n/' . $lang['name'] . '.lng';
 
 if (!is_file($lfl))
-  $lfl = "l10n/en_US.lng";
+{
+  $lfl = preg_replace("/\$lang\['name'\]/", "\$lang\['name'\]_\$lang['country']", $lfl);
+  if (!is_file($lfl))
+    $lfl = "l10n/en_US.lng";
+}
 
 require_once($lfl);
 
