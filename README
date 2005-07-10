@@ -24,16 +24,15 @@ R3R is licensed under the BSD License.  See the file LICENSE for the full text.
 * Unix tools (preferably, the GNU versions):
   * Make and sh
   * binutils: as, ld
-  * file utils: cp, dirname, mv, rm, touch
-  * (DOS/Windows/OS2) UNIX versions of limited DOS-based utils: install, echo,
-    mkdir (also included with Free Pascal, prefixed with g)
+  * file utils: basename, cp, dirname, mv, rm, touch
+  * grep and sed
   * gettext: For translating the program into different languages.
     (You can configure with --disable-nls if you don't have gettext)
-  * perl <http://cpan.org/ports/index.html>: For text manipulation of the
-    source files during compilation.
   (The source code for the GNU versions of these programs can be found at
     <http://www.gnu.org/software/>, but I'd recommend using a search engine
     to find the appropriate versions for your operating system)
+* Perl <http://cpan.org/ports/index.html>: For text manipulation of the
+    source files during compilation.
 
 2.2.2 FOR RUNNING
   Hopefully, nothing.  Everything (other than built-in OS components) should

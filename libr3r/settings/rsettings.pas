@@ -21,7 +21,6 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    procedure Import;
     property Proxy: String read GetProxy write SetProxy;
   end;
 
@@ -37,7 +36,6 @@ type
   TSettingEnum = (seProxyAddress, seProxyPort);
 
 var
-  SettingsDir: String;
   SettingEnum: TSettingEnum;
 
 function TRSettings.GetProxy: String;
@@ -51,7 +49,7 @@ begin
   SetString('Proxy', Proxy);
 end;
 
-{$I import.inc}
+{$I routines.inc}
 
 {$IFDEF SETTINGS_REGISTRY}
 {$I regsettings.inc}
@@ -62,7 +60,5 @@ end;
 {$ENDIF}
 
 initialization
-
-SettingsDir := GetSettingsDir('2.0');
 
 end.

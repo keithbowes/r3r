@@ -21,20 +21,10 @@ begin
   CheckDir(Result);
 end;
 
-function GetSettingsDir(const Version: String = ''): String;
+function SettingsDir: String;
 begin
   Result := GetHome + PathDelim + '.r3r';
-  if Version <> '' then
-  begin
-    Result := Result + '-';
-  end;
-
-  Result := Result + Version;
   CheckDir(Result);
 
   Result := Result + PathDelim;
-end;
-
-procedure TRSettings.Import;
-begin
 end;

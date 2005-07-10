@@ -52,7 +52,7 @@ begin
           Name := 'Win32s';
         end;
       end;
-      Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMajorVersion);
+      Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMinorVersion);
     end;
     Dispose(LPOSVERSIONINFO(Data));
   {$ELSE}
