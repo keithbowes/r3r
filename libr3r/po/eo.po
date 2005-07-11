@@ -9,6 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# r3rrs:errorgetting
+# libr3r_rs:errorgetting
 msgid "ERROR:  Couldn't retrieve the feed."
 msgstr "Eraro: Ne povis akiri la kanalon."

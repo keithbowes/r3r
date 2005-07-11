@@ -14,6 +14,8 @@ type
 
   TLibR3R = class
   private
+    FFreeLinks: Boolean;
+    FItem: TFeedItem;
     FOnItemParsed: TParsedEvent;
     FOnMessage: TRMessage;
     FSettings: TRSettings;
@@ -24,6 +26,7 @@ type
     constructor Create(const Resource: String);
     destructor Destroy; override;
     procedure Parse;
+    property FreeLinks: Boolean read FFreeLinks write FFreeLinks;
     property OnItemParsed: TParsedEvent write FOnItemParsed;
     property OnMessage: TRMessage write FOnMessage;
     property Settings: TRSettings read FSettings write FSettings;
@@ -34,14 +37,12 @@ implementation
 uses
   Classes, Http, LocalFile, LibR3R_Rs, SynaUtil, SysUtils;
 
-var
-  Item: TFeedItem;
-
 constructor TLibR3R.Create(const Resource: String);
 var
   Prot, User, Pass, Host, Port, Path, Para: String;
 begin
   inherited Create;
+  FFreeLinks := true;
   FSettings := TRSettings.Create;
   FSock := nil;
 
@@ -64,15 +65,14 @@ begin
 
   FSock.Execute;
 
-  Item.Links := TStringList.Create;
+  FItem.Links := TStringList.Create;
 end;
 
 destructor TLibR3R.Destroy;
 begin
-  if Assigned(Item.Links) then
+  if FFreeLinks and Assigned(FItem.Links) then
   begin
-    Item.Links.Free;
-    Item.Links := nil;
+    FreeAndNil(FItem.Links);
   end;
 
   FSock.Free;
@@ -95,12 +95,11 @@ begin
       Break;
     end;
 
-    Finished := FSock.ParseItem(Item);
-    if Item.Title <> '' then
+    Finished := FSock.ParseItem(FItem);
+    if FItem.Title <> '' then
     begin
       DoParseItem;
-      Item.Links.Clear;
-      Item.Title := '';
+      ClearItem(FItem);
     end;
   end;
 end;
@@ -109,7 +108,7 @@ procedure TLibR3R.DoParseItem;
 begin
   if Assigned(FOnItemParsed) then
   begin
-    FOnItemParsed(Item);
+    FOnItemParsed(FItem);
   end;
 end;
 

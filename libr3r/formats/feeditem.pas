@@ -26,12 +26,34 @@ type
     Uri: String;
   end;
 
+procedure ClearItem(var Item: TFeedItem);
+
 function CreateEmailRecord(EmailStr: String; NameIsDelim: Boolean = true): TEmail;
 
 implementation
 
 uses
   SysUtils;
+
+procedure ClearItem(var Item: TFeedItem);
+begin
+  with Item do
+  begin
+    Title := '';
+    Links.Clear;
+    Description := '';
+    Subject := '';
+    Created := '';
+    Contact.Toee := '';
+    Contact.Address := '';
+    Generator := '';
+    LastModified := '';
+    Language := '';
+    Copyright := '';
+    Id := '';
+    Uri := '';
+  end;
+end;
 
 function CreateEmailRecord(EmailStr: String; NameIsDelim: Boolean = true): TEmail;
 var

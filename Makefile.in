@@ -21,9 +21,10 @@ XMLEXT = .xml
 .SUFFIXES: $(MESSAGES_COMPILED) $(MESSAGES)
 
 PC = fpc
+PCFLAGS_DEBUG = -Xs- -gh -gl -CX- -XX-
+PCFLAGS_EXTRA =
 PCFLAGS = -S2 -Sh -Fu./libr3r -Fu./libr3r/* -Fu$(R3R_UI)/po -FE. -FU$(R3R_UI) \
-				 -Xs- -gh -gl -CX- -XX- # Oh-so-important debugging stuff for the \
-				 													buggy alpha stage
+				  $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA)
 # Defines, for enabling different features/dialect syntax
 DEFS = -dSETTINGS_INI
 
@@ -82,7 +83,7 @@ all: Makefile libr3r/info$(PASEXT) touch-r3r r3r$(EXEEXT) languages
 languages: $(language_deps)
 
 $(VERSION):
-	if $(TEST) ! -f $(VERSION); then $(TOUCH) $(VERSION); fi
+	if $(TEST) ! -e $(VERSION); then $(TOUCH) $(VERSION); fi
 
 libr3r/info$(PASEXT): libr3r/info$(PASEXT).in
 	./configure --quiet --input=$< --output=$@

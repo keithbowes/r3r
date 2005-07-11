@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha4\n"
-"PO-Revision-Date: 2005-07-01 20:11-0400\n"
+"PO-Revision-Date: 2005-07-11 20:11-0400\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -12,30 +12,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-# r3rrs:feed
+# tui_rs:feed
 msgid "Feed Address: "
 msgstr ""
 
-# r3rrs:gourl
+# tui_rs:gourl
 msgid "g)o to a URL"
 msgstr ""
 
-# r3rrs:help
+# tui_rs:aboutitem
+msgid "a)bout item number"
+msgstr ""
+
+# tui_rs:help
 msgid "h)elp, this screen"
 msgstr ""
 
-# r3rrs:quit
+# tui_rs:quit
 msgid "q)uit the program"
 msgstr ""
 
-# r3rrs:gokey
+# tui_rs:aboutkey
+msgid "a"
+msgstr ""
+
+# tui_rs:gokey
 msgid "g"
 msgstr ""
 
-# r3rrs:helpkey
+# tui_rs:helpkey
 msgid "h"
 msgstr ""
 
-# r3rrs:quitkey
+# tui_rs:quitkey
 msgid "q"
+msgstr ""
+
+# tui_rs:itemno
+msgid "Item number: "
+msgstr ""
+
+# tui_rs:itemsubject
+msgid "Subject: "
+msgstr ""
+
+# tui_rs:itemcreated
+msgid "Created: "
+msgstr ""
+
+# tui_rs:itemdesc
+msgid "Description: "
+msgstr ""
+
+# tui_rs:itemlink
+msgid "Link %d: %s"
+msgstr ""
+
+# tui_rs:invalidnumber
+msgid "Invalid Number!"
 msgstr ""

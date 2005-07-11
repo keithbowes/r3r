@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha4\n"
-"PO-Revision-Date: 2005-07-08 14:57\n"
+"PO-Revision-Date: 2005-07-11 14:57\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,10 @@ msgstr "Die Feedadresse: "
 msgid "g)o to a URL"
 msgstr "g)ehen nach einem URL"
 
+# tui_rs:aboutitem
+msgid "a)bout item number"
+msgstr "ü)ber Teilzahl"
+
 # tui_rs:help
 msgid "h)elp, this screen"
 msgstr "h)ilfe, dieser Bildschirm"
@@ -24,6 +28,10 @@ msgstr "h)ilfe, dieser Bildschirm"
 # tui_rs:quit
 msgid "q)uit the program"
 msgstr "b)eenden dem Programm"
+
+# tui_rs:aboutkey
+msgid "a"
+msgstr "ü"
 
 # tui_rs:gokey
 msgid "g"
@@ -36,3 +44,27 @@ msgstr ""
 # tui_rs:quitkey
 msgid "q"
 msgstr "b"
+
+# tui_rs:itemno
+msgid "Item number: "
+msgstr "Teilzahl: "
+
+# tui_rs:itemsubject
+msgid "Subject: "
+msgstr "Subjekt: "
+
+# tui_rs:itemcreated
+msgid "Created: "
+msgstr "Erstellt: "
+
+# tui_rs:itemdesc
+msgid "Description: "
+msgstr "Beschreibung: "
+
+# tui_rs:itemlink
+msgid "Link %d: %s"
+msgstr ""
+
+# tui_rs:invalidnumber
+msgid "Invalid Number!"
+msgstr "Ungültige Zahl!"
