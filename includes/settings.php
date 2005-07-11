@@ -8,8 +8,6 @@ $_settings = null;
 $_cat_settings = null;
 $_temp_settings = null;
 
-@include_once(SETTINGS_DIR . '/' . OLD_SETTINGS_FILE);
-
 /**
   * Set a setting
   * @param String Name of the setting.
@@ -42,12 +40,16 @@ function getSetting($setting_name)
 function commitSettings()
 {
   global $_settings, $_temp_settings;
-  reset($_temp_settings);
 
-  while (list($setting_name, $setting_val) = each($_temp_settings))
-    $_settings[$setting_name] = $setting_val;
+  if (is_array($_temp_settings))
+  {
+    reset($_temp_settings);
 
-  unset($_temp_settings);
+    while (list($setting_name, $setting_val) = each($_temp_settings))
+      $_settings[$setting_name] = $setting_val;
+
+    unset($_temp_settings);
+  }
 }
 
 /**
@@ -152,7 +154,6 @@ function setInitialSettings()
 function getSettings()
 {
   global $_settings;
-  reset($_settings);
 
   $wd = getcwd();
 
@@ -164,7 +165,9 @@ function getSettings()
   {
     $fh = fopen(SETTINGS_FILE, 'w');
     fclose($fh);
-    setInitialSettings();
+    @include_once(SETTINGS_DIR . '/' . OLD_SETTINGS_FILE);
+    if (!$_settings)
+      setInitialSettings();
     saveSettings();
   }
 
@@ -172,10 +175,10 @@ function getSettings()
   while (!feof($fh))
   {
     $str = fgets($fh);
-    if (strpos('=', $str) > 0)
+    $colonpos = strpos($str, '=');
+    if (strpos($str, '=') > 0)
     {
-      $setparts = explode('=', $str);
-      $_settings[$setparts[0]] = $setparts[1];
+      $_settings[substr($str, 0, $colonpos)] = trim(substr($str, $colonpos + 1, strlen($str)));
     }
   }
   fclose($fh);
@@ -198,7 +201,6 @@ function getSettings()
 function catSettings()
 {
   global $_cat_settings, $_settings;
-  //reset($_cat_settings);
   reset($_settings);
   while (list($setting_name, $setting_val) = each($_settings))
   {
@@ -208,13 +210,14 @@ function catSettings()
       case 'accept-types':
       case 'enable-mime-guess':
       case 'proxy-addr':
-      case 'proxy port':
+      case 'proxy-port':
       case 'timeout-sec':
         $cat = 'HTTP';
         break;
       case 'show-warnings':
         $cat = 'General';
-      case 'display-feed-titles-only':
+        break;
+      case 'display-feed-title-only':
       case 'hide-cached-feeds':
       case 'wrap-desc':
         $cat = 'GUI';
@@ -261,6 +264,7 @@ function saveSettings()
   // of error, rather than keeping this work-around.
   if (is_array($_cat_settings))
   {
+    reset($_cat_settings);
     chdir(SETTINGS_DIR);
     if (file_exists(SETTINGS_FILE))
       chmod(SETTINGS_FILE, 0600);
