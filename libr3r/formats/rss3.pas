@@ -49,13 +49,14 @@ begin
   end
   else if FCurrentField = 'link' then
   begin
-    if Item.Links.Count > 0 then
+    Item.LinksCount := Length(Item.Links);
+    if Item.LinksCount > 0 then
     begin
-      Item.Links.Insert(0, Item.Links[0] + Data);
+      Item.Links[0] := Item.Links[0] + Data;
     end
     else
     begin
-      Item.Links.Add(Data);
+      Item.Links[Item.LinksCount] := Data;
     end;
   end
   else if FCurrentField = 'subject' then
@@ -69,7 +70,7 @@ begin
   else if FCurrentField = 'creator' then
   begin
     Data := Item.Contact.Address + ' ' + Item.Contact.Toee + Data;
-    Item.Contact := CreateEmailRecord(Data, false);
+    Item.Contact := CreateEmailRecord(Data, ' ', 0);
   end
   else if FCurrentField = 'generator' then
   begin

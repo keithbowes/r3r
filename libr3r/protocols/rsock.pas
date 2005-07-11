@@ -95,6 +95,7 @@ begin
   
   with FAbstractFeed do
   begin
+    ClearItem(Item);
     repeat
       Line := GetLine;
       ParseLine(Line, Item, ItemFinished);

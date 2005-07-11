@@ -13,7 +13,7 @@ type
 
   TFeedItem = record
     Title: String;
-    Links: TStringList;
+    Links: array of String;
     Description: String;
     Subject: String;
     Created: String;
@@ -24,11 +24,13 @@ type
     Copyright: String;
     Id: String;
     Uri: String;
+
+    LinksCount: cardinal;
   end;
 
 procedure ClearItem(var Item: TFeedItem);
 
-function CreateEmailRecord(EmailStr: String; NameIsDelim: Boolean = true): TEmail;
+function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;
 
 implementation
 
@@ -40,7 +42,7 @@ begin
   with Item do
   begin
     Title := '';
-    Links.Clear;
+    Links := nil;
     Description := '';
     Subject := '';
     Created := '';
@@ -55,24 +57,11 @@ begin
   end;
 end;
 
-function CreateEmailRecord(EmailStr: String; NameIsDelim: Boolean = true): TEmail;
+function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;
 var
   BegName: cardinal;
-  Delim: String;
-  OffsetEnd: 0..1;
 begin
   EmailStr := Trim(EmailStr);
-
-  if NameIsDelim then
-  begin
-    Delim := '(';
-    OffsetEnd := 1;
-  end
-  else
-  begin
-    Delim := ' ';
-    OffsetEnd := 0;
-  end;
 
   BegName := Pos(Delim, EmailStr);
   with Result do

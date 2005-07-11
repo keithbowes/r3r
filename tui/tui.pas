@@ -68,7 +68,6 @@ end;
 
 destructor TTui.Destroy;
 begin
-  FItems[High(FItems)].Links.Free;
   inherited Destroy;
 end;
 
@@ -134,9 +133,11 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Copy(Description, 0, 75) + '...');
-      if Links.Count > 0 then
+
+      LinksCount := Length(Links);
+      if LinksCount > 0 then
       begin
-        for LinkIndex := 0 to Links.Count - 1 do
+        for LinkIndex := 0 to LinksCount - 1 do
         begin
           WriteLn(Format(ItemLink, [LinkIndex + 1, Links[LinkIndex]]));
         end;

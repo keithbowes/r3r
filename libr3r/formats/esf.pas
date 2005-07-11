@@ -75,7 +75,9 @@ begin
   begin
     Created := UnixToDate(FList[0]);
     Title := Trim(FList[1]);
-    Links.Add(Trim(FList[2]));
+    LinksCount := Length(Links);
+    SetLength(Links, LinksCount + 1);
+    Links[LinksCount] := Trim(FList[2]);
   end;
 end;
 
@@ -92,11 +94,13 @@ begin
     end
     else if FList[0] = 'link' then
     begin
-      Links.Add(FList[1]);
+      LinksCount := Length(Links);
+      SetLength(Links, LinksCount + 1);
+      Links[LinksCount] := FList[1];
     end
     else if FList[0] = 'contact' then
     begin
-      Contact := CreateEmailRecord(FList[1]);
+      Contact := CreateEmailRecord(FList[1], '(', 1);
     end;
   end;
 end;
@@ -115,7 +119,7 @@ begin
     begin
       ParseDataLine(Item);
       FLineType := ltData;
-      ItemFinished := false;
+      ItemFinished := true;
     end
     else if FLCount = 2 then
     begin

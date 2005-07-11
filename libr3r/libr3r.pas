@@ -64,16 +64,11 @@ begin
   end;
 
   FSock.Execute;
-
-  FItem.Links := TStringList.Create;
 end;
 
 destructor TLibR3R.Destroy;
 begin
-  if FFreeLinks and Assigned(FItem.Links) then
-  begin
-    FreeAndNil(FItem.Links);
-  end;
+  FItem.Links := nil;
 
   FSock.Free;
   FSettings.Free;
@@ -99,7 +94,6 @@ begin
     if FItem.Title <> '' then
     begin
       DoParseItem;
-      ClearItem(FItem);
     end;
   end;
 end;

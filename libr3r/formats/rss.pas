@@ -45,7 +45,9 @@ begin
     end
     else if Name = 'link' then
     begin
-      Item.Links.Add(Content);
+      Item.LinksCount := Length(Item.Links);
+      SetLength(Item.Links, Item.LinksCount + 1);
+      Item.Links[Item.LinksCount] := Content;
     end
     else if Name = 'category' then
     begin
@@ -57,7 +59,7 @@ begin
     end
     else if Name = 'managingeditor' then
     begin
-      Item.Contact := CreateEmailRecord(Content);
+      Item.Contact := CreateEmailRecord(Content, '(', 1);
     end
     else if Name = 'generator' then
     begin
