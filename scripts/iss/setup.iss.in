@@ -8,7 +8,7 @@ AppVerName=R3R ${perl:version}
 DefaultDirName={pf}\R3R
 DefaultGroupName=R3R
 DisableStartupPrompt=yes
-LicenseFile=LICENSE
+LicenseFile=..\..\LICENSE
 
 [Files]
 Source: "..\..\r3r.exe"; DestDir: "{app}/bin";

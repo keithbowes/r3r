@@ -176,7 +176,7 @@ dist: distclean
 	$(MV) r3r-$(VERSION).tar.gz ..
 
 dist-win32:
-	$(MAKE) cross OS=win32
+	$(MAKE) win32 scripts/iss/setup.iss OS=win32
 	$(ISCC) $(ISCCFLAGS) scripts\\iss\\setup.iss
 	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
 
