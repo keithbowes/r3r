@@ -50,7 +50,7 @@ echo $source_dir'/../${perl:ui}/po/r3r_*.mo' | import
 [Install]
 # Put your installation script here
 installExe r3r
-${perl:ap_copy_langs} # This is a buggy installation routine, I know.  Will fix in beta 1.
+${perl:ap_copy_langs}
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
