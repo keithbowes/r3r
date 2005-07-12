@@ -45,6 +45,7 @@ MKDIR = mkdir
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
 MV = mv
+PERL = perl
 RM = rm -fr
 RSTCONV = rstconv
 SED = sed
@@ -76,6 +77,9 @@ language_deps = ${perl:language_deps}
 $(MESSAGES)$(MESSAGES_COMPILED):
 	-$(MSGMERGE) -U $< `$(DIRNAME) $<`/messages$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
+	$(CP) $@ `$(PERL) -e '$$path = "$@"; \
+		$$path =~ s/(\w+)(\/po\/)(\w+)(\.mo)/$$1\/$$2\/r3r_$$1\.$$3$$4/g; \
+		print $$path'`
 
 # Default building rule
 all: Makefile libr3r/info$(PASEXT) touch-r3r r3r$(EXEEXT) languages

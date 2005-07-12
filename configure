@@ -79,11 +79,11 @@ sub get_install_langs
   {
     foreach $lang (@{$languages})
     {
-      $rv .= "\n$action" . ' libr3r/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/libr3r.mo";
+      $rv .= "\n$action" . ' libr3r/po/r3r_libr3r.' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_libr3r.$lang.mo";
     }
     foreach $lang (@{$ui_languages})
     {
-      $rv .= "\n$action $ui" . '/po/' . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.mo"
+      $rv .= "\n$action $ui" . "/po/r3r_$ui." . $lang . '.mo ' . "$localedir/$lang/LC_MESSAGES/r3r_$ui.$lang.mo"
     }
   }
 

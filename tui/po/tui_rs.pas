@@ -30,9 +30,21 @@ implementation
 uses
   GetText, SysUtils;
 
+var
+  FallbackLang, Lang: String;
+  Mo: TMoFile;
+
 initialization
 
-TranslateResourcestrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_tui.mo');
+try
+  Mo := TMOFile.Create(Format(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_tui.%s.mo', [FallbackLang, FallbackLang]));
+  try
+    TranslateResourceStrings(Mo);
+  finally
+    Mo.Free;
+  end;
+except
+end;
 
 {$ENDIF}
 

@@ -12,9 +12,21 @@ implementation
 uses
   GetText, SysUtils;
 
+var
+  FallbackLang, Lang: String;
+  Mo: TMoFile;
+
 initialization
 
-TranslateResourcestrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/libr3r.mo');
+try
+  Mo := TMOFile.Create(Format(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_libr3r.%s.mo', [FallbackLang, FallbackLang]));
+  try
+    TranslateResourceStrings(Mo);
+  finally
+    Mo.Free;
+  end;
+except
+end;
 
 {$ENDIF}
 
