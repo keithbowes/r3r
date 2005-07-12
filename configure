@@ -90,7 +90,8 @@ sub get_install_langs
   return $rv;
 }
 $install_langs = get_install_langs("\t" . '$(INSTALL_DATA)');
-$ap_copy_langs = get_install_langs('copyFiles', '$PREFIX/share/locale');
+$ap_copy_langs = get_install_langs('copyFile', '$PREFIX/share/locale');
+$ap_copy_langs =~ s/(\s)\w+\/po\//$1/g;
 
 sub get_uninstall_langs
 {

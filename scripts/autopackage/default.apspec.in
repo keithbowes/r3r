@@ -41,7 +41,7 @@ R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, 
 [Imports]
 echo $source_dir'/../r3r' | import
 echo $source_dir'/../libr3r/po/*.mo' | import
-echo $source_dir'/../tui/po/*.mo' | import
+echo $source_dir'/../${perl:ui}/po/*.mo' | import
 
 [Prepare]
 # Dependency checking
@@ -50,7 +50,7 @@ echo $source_dir'/../tui/po/*.mo' | import
 [Install]
 # Put your installation script here
 installExe r3r
-${perl:ap_copy_langs}
+${perl:ap_copy_langs} # This is a buggy installation routine, I know.  Will fix in beta 1.
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
