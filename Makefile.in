@@ -78,7 +78,7 @@ $(MESSAGES)$(MESSAGES_COMPILED):
 	-$(MSGMERGE) -U $< `$(DIRNAME) $<`/messages$(MESSAGES_TEMPLATE)
 	$(MSGFMT) -o $@ $<
 	$(CP) $@ `$(PERL) -e '$$path = "$@"; \
-		$$path =~ s/(\w+)(\/po\/)(\w+)(\.mo)/$$1\/$$2\/r3r_$$1\.$$3$$4/g; \
+		$$path =~ s/(\w+)(\/po\/)(\w+)(\$(MESSAGES_COMPILED))/$$1\/$$2\/r3r_$$1\.$$3$$4/g; \
 		print $$path'`
 
 # Default building rule
@@ -130,7 +130,7 @@ install: all
 	# Create the directories for the gettext translations
 	-for lang in $(language_deps); \
 		do dir=`$(ECHO) \`$(BASENAME) $$lang\` | $(GREP) "\.mo" | \
-		$(SED) 's/\.mo//g'`; $(MKDIR) $(localedir)/$$dir; $(MKDIR) \
+		$(SED) 's/\$(MESSAGES_COMPILED)//g'`; $(MKDIR) $(localedir)/$$dir; $(MKDIR) \
 		$(localedir)/$$dir/LC_MESSAGES; done 
 	${perl:install_langs}
 	@$(ECHO) Type $(MAKE) install-docs if you want to install the documentation.
