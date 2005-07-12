@@ -36,6 +36,7 @@ var
 
 initialization
 
+GetLanguageIDs(Lang, FallbackLang);
 try
   Mo := TMOFile.Create(Format(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_tui.%s.mo', [FallbackLang, FallbackLang]));
   try
