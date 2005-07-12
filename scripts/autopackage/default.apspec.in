@@ -40,7 +40,8 @@ R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, 
 
 [Imports]
 echo $source_dir'/../r3r' | import
-echo $source_dir'/../po/*.mo' | import
+echo $source_dir'/../libr3r/po/*.mo' | import
+echo $source_dir'/../tui/po/*.mo' | import
 
 [Prepare]
 # Dependency checking

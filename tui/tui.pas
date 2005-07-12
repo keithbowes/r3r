@@ -18,13 +18,15 @@ type
     procedure GoItem;
   public
     constructor Create;
-    destructor Destroy; override;
   end;
 
 implementation
 
 uses
   Info, Keyboard, Tui_Rs, SysUtils;
+
+const
+  Tab = #9;
 
 constructor TTui.Create;
 var
@@ -66,11 +68,6 @@ begin
   until KeyChar = QuitKey;
 end;
 
-destructor TTui.Destroy;
-begin
-  inherited Destroy;
-end;
-
 procedure TTui.ItemParsed(Item: TParsedFeedItem);
 var
   Items: cardinal;
@@ -89,8 +86,6 @@ begin
 end;
 
 procedure TTui.ShowHelp;
-const
-  Tab = #9;
 var
   InfoLine: String;
 begin
