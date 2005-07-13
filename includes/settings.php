@@ -237,7 +237,8 @@ function catSettings()
         $cat = 'Volatile';
         break;
       default:
-        $cat = 'Deprecated';
+        if (strpos($setting_name, 'Subscription') !== 0)
+          $cat = 'Deprecated';
     }
     $_cat_settings[$cat][$setting_name] = $setting_val;
   }

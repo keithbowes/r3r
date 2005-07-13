@@ -83,18 +83,28 @@ function saveSubscriptions()
 {
   global $_subscriptions;
   reset($_subscriptions);
+  $i = 0;
   
   $nsubs = count($_subscriptions);
   
   $wd = getcwd();
   chdir(SETTINGS_DIR);
 
-  $fh = fopen('subscriptions', 'w');
+  chmod(SETTINGS_FILE, 0600);
+  $fh = fopen(SETTINGS_FILE, 'a');
+  fwrite($fh, "[Subscriptions]\n");
+  fwrite($fh, 'SubscriptionCount=' . --$nsubs . "\n");
+
   while (list($url, $state) = each($_subscriptions))
     if ($url && $state)
-      fwrite($fh, $url . "\n");
+    {
+      fwrite($fh, "Subscription$i=$url\n");
+      $i++;
+    }
 
+  chmod(SETTINGS_FILE, 0600);
   fclose($fh);
+
   chdir($wd);
 }
 
