@@ -3,3 +3,4 @@ Name=R3R
 Exec=r3r
 Icon=r3r.png
 Type=Application
+MimeType=text/plain;esf/plain;text/x-rss;application/xml;application/rss+xml
