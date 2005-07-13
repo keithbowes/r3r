@@ -10,6 +10,15 @@ DefaultGroupName=R3R
 DisableStartupPrompt=yes
 LicenseFile=..\..\LICENSE
 
+[Tasks]
+Name: desktopicon; Description: "&Create a desktop icon"
+
 [Files]
 Source: "..\..\r3r.exe"; DestDir: "{app}/bin";
+Source: "..\..\icons\r3r.ico"; DestDir: "{app}/share/icons";
 ${perl:is_install_langs}
+
+[Icons]
+Name: "{userdesktop}\R3R"; FileName: "{app}\bin\r3r.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
+Name: "{group}\R3R"; FileName: "{app}\bin\r3r.exe"; IconFilename: "{app}\share\icons\r3r.ico"
+Name: "{group}\Uninstall"; FileName: "{uninstallexe}"

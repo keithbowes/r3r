@@ -40,8 +40,10 @@ R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, 
 
 [Imports]
 echo $source_dir'/../r3r' | import
+echo $source_dir'/../r3r.desktop' | import
 echo $source_dir'/../libr3r/po/r3r_*.mo' | import
 echo $source_dir'/../${perl:ui}/po/r3r_*.mo' | import
+echo $source_dir'/../icons/r3r.png' | import
 
 [Prepare]
 # Dependency checking
@@ -50,6 +52,8 @@ echo $source_dir'/../${perl:ui}/po/r3r_*.mo' | import
 [Install]
 # Put your installation script here
 installExe r3r
+installIcon r3r.png
+installDesktop "Network/Aggregators" r3r.desktop
 ${perl:ap_copy_langs}
 
 [Uninstall]

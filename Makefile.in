@@ -39,8 +39,9 @@ ECHO = echo
 FPDOC = fpdoc
 GREP = grep
 INSTALL = install
-INSTALL_DATA = $(INSTALL) -m 644
-INSTALL_PROGRAM = $(INSTALL) -m 755
+INSTALLFLAGS = -c
+INSTALL_DATA = $(INSTALL) $(INSTALLFLAGS) -m 644
+INSTALL_PROGRAM = $(INSTALL) $(INSTALLFLAGS) -m 755
 MKDIR = mkdir
 MSGFMT = msgfmt
 MSGMERGE = msgmerge
@@ -71,6 +72,7 @@ datarootdir = $(prefix)/share
 docsdir = $(datarootdir)/doc
 docdir = $(docsdir)/r3r
 localedir = $(datarootdir)/locale
+icondir = $(datarootdir)/icons
 
 language_deps = ${perl:language_deps}
 
@@ -117,7 +119,10 @@ r3r$(EXEEXT): $(R3R_UI)/r3r$(PASEXT)
 cross:
 	$(MAKE) PCFLAGS="$(PCFLAGS) -T$(OS)"
 
-win32:
+icons/r3r.ico: icons/r3r.png
+	png2ico $@ $<
+
+win32: icons/r3r.ico
 	$(MAKE) cross OS=win32 DEFS="-dSETTINGS_REGISTRY"
 
 # Installation rules
@@ -129,10 +134,13 @@ install: all
 	-$(MKDIR) $(localedir)
 	# Create the directories for the gettext translations
 	-for lang in $(language_deps); \
-		do dir=`$(ECHO) \`$(BASENAME) $$lang\` | $(GREP) "\.mo" | \
-		$(SED) 's/\$(MESSAGES_COMPILED)//g'`; $(MKDIR) $(localedir)/$$dir; $(MKDIR) \
-		$(localedir)/$$dir/LC_MESSAGES; done 
+		do dir=`$(ECHO) \`$(BASENAME) $$lang\` | $(GREP) "\$(MESSAGES_COMPILED)" \
+		| $(SED) 's/\$(MESSAGES_COMPILED)//g'`; $(MKDIR) $(localedir)/$$dir; \
+		$(MKDIR) $(localedir)/$$dir/LC_MESSAGES; done 
 	${perl:install_langs}
+	-$(MKDIR) $(icondir)
+	$(INSTALL_DATA) icons/r3r.png $(icondir)
+	-$(INSTALL_DATA) icons/r3r.ico $(icondir)
 	@$(ECHO) Type $(MAKE) install-docs if you want to install the documentation.
 
 install-strip: install
@@ -140,7 +148,7 @@ install-strip: install
 	-$(UPX) $(bindir)/r3r$(EXEEXT)
 
 install-win32:
-	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe install-strip
+	$(MAKE) prefix="\"C:/Program Files/R3R\"" EXEEXT=.exe install-strip
 
 # Uninstallation rules
 uninstall:
@@ -149,7 +157,7 @@ uninstall:
 	${perl:uninstall_langs}
 
 uninstall-win32:
-	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" EXEEXT=.exe uninstall
+	$(MAKE) prefix="\"C:/Program Files/R3R\"" EXEEXT=.exe uninstall
 
 # Documentation rules
 docs html: libr3r/formats/feeditem.pas libr3r/libr3r$(PASEXT) \
@@ -167,7 +175,7 @@ install-docs: docs
 		$(docdir)/$$doc`; $(INSTALL_DATA) $$doc $(docdir)/$$doc; done
 
 install-docs-win32:
-	$(MAKE) prefix="C:\\\\Program\\ Files\\\\R3R" install-docs
+	$(MAKE) prefix="\"C:/Program Files/R3R\"" install-docs
 
 # Distribution rules
 dist: distclean
@@ -180,7 +188,7 @@ dist: distclean
 	$(MV) r3r-$(VERSION).tar.gz ..
 
 dist-win32:
-	$(MAKE) win32 scripts/iss/setup.iss OS=win32
+	$(MAKE) win32 scripts/iss/setup.iss
 	$(ISCC) $(ISCCFLAGS) scripts\\iss\\setup.iss
 	$(MV) scripts/iss/Output/setup.exe ../r3r-$(VERSION).exe
 
