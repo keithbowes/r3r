@@ -217,6 +217,7 @@ distclean: clean
 	$(RM) docs
 	$(RM) libr3r/info$(PASEXT)
 	$(RM) scripts/autopackage/default.apspec scripts/iss/setup.iss
+	$(RM) icons/r3r.ico
 	$(RM) $(VERSION)
 	-delp -e .
 
