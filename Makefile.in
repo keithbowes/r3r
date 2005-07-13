@@ -29,7 +29,7 @@ PCFLAGS = -S2 -Sh -Fu./libr3r -Fu./libr3r/* -Fu$(R3R_UI)/po -FE. -FU$(R3R_UI) \
 DEFS = -dSETTINGS_INI
 
 TAR = tar
-TARFLAGS = czf
+TARFLAGS = -czf
 
 BASENAME = basename
 CD = cd
@@ -178,13 +178,13 @@ install-docs-win32:
 	$(MAKE) prefix="\"C:/Program Files/R3R\"" install-docs
 
 # Distribution rules
-dist: distclean
+dist: maintainer-clean
 	-$(MKDIR) ../r3r-src
 	$(CP) * ../r3r-src
-	$(MV) ../r3r-src r3r-src-$(VERSION)
-	$(TAR) $(TARFLAGS) r3r-$(VERSION).tar.gz r3r-src-$(VERSION) \
-		--exclude=.* --exclude=CVS
-	$(RM) r3r-src-$(VERSION)
+	$(MV) ../r3r-src r3r-$(VERSION)-dist
+	$(TAR) --exclude=.* --exclude=CVS $(TARFLAGS) r3r-$(VERSION).tar.gz \
+		r3r-$(VERSION)-dist
+	$(RM) r3r-$(VERSION)-dist
 	$(MV) r3r-$(VERSION).tar.gz ..
 
 dist-win32:
