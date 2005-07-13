@@ -1,1 +1,1 @@
-$version = '2.0-alpha4-dev';
+$version = '2.0-alpha4';
