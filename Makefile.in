@@ -139,8 +139,8 @@ install: all
 		$(MKDIR) $(localedir)/$$dir/LC_MESSAGES; done 
 	${perl:install_langs}
 	-$(MKDIR) $(icondir)
-	$(INSTALL_DATA) icons/r3r.png $(icondir)
-	-$(INSTALL_DATA) icons/r3r.ico $(icondir)
+	$(INSTALL_DATA) icons/r3r.png $(icondir)/r3r.png
+	-$(INSTALL_DATA) icons/r3r.ico $(icondir)/r3r.ico
 	@$(ECHO) Type $(MAKE) install-docs if you want to install the documentation.
 
 install-strip: install
@@ -181,10 +181,10 @@ install-docs-win32:
 dist: maintainer-clean
 	-$(MKDIR) ../r3r-src
 	$(CP) * ../r3r-src
-	$(MV) ../r3r-src r3r-$(VERSION)-dist
+	$(MV) ../r3r-src r3r-$(VERSION)
 	$(TAR) --exclude=.* --exclude=CVS $(TARFLAGS) r3r-$(VERSION).tar.gz \
-		r3r-$(VERSION)-dist
-	$(RM) r3r-$(VERSION)-dist
+		r3r-$(VERSION)
+	$(RM) r3r-$(VERSION)
 	$(MV) r3r-$(VERSION).tar.gz ..
 
 dist-win32:

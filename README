@@ -33,7 +33,7 @@ R3R is licensed under the BSD License.  See the file LICENSE for the full text.
     to find the appropriate versions for your operating system)
 * Perl <http://cpan.org/ports/index.html>: For text manipulation of the
     source files during compilation.
-* (Windows only) png2ico
+* (Windows only) png2ico <http://www.winterdrache.de/freeware/png2ico/>
 
 2.2.2 FOR RUNNING
 Hopefully, nothing.  Everything (other than built-in OS components) should
