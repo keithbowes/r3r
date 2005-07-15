@@ -49,6 +49,14 @@ echo $source_dir'/../icons/r3r.png' | import
 # Dependency checking
 # require @whatever.you/need 1.0
 
+if test "${perl:ui}" = "tui";
+then
+  require @gnu.org/ncurses 5.3
+elif test "${perl:ui}" = "gui";
+then
+  require @gtk.org/gtk 1.2
+fi
+
 [Install]
 # Put your installation script here
 installExe r3r
