@@ -160,7 +160,7 @@ sub write_makefile
     print <<EOM;
 Before building this software, you'll need to be sure that you understand
 how to build the software and your rights when using, modifying or distributing
-it.  Please read the README and LICENSE files before continuing.\n
+it.  Please read the files in ./dok before continuing.\n
 EOM
     print "Generating Makefile...\n";
   }

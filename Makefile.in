@@ -89,7 +89,8 @@ all: Makefile libr3r/info$(PASEXT) touch-r3r r3r$(EXEEXT) languages
 languages: $(language_deps)
 
 $(VERSION):
-	if $(TEST) ! -e $(VERSION); then $(TOUCH) $(VERSION); fi
+	if $(TEST) ! -e $(VERSION); then $(TOUCH) $(VERSION); \
+		$(TOUCH) libr3r/info$(PASEXT).in; ./configure --quiet; $(MAKE); fi
 
 libr3r/info$(PASEXT): libr3r/info$(PASEXT).in
 	./configure --quiet --input=$< --output=$@
