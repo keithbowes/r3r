@@ -138,20 +138,21 @@ if (PHP_GTK_MAJOR > 1)
   {
     function createRow($col, $data)
     {
+      global $renderer;
       $index = $col->get_data('index');
       $store = $col->get_data('store');
 
       $renderer = new GtkCellRendererText();
-      $col->pack_start($renderer, true);
+      $col->pack_start($renderer);
+
       $iter = $store->append();
       $store->set($iter, $index, $data);
       $renderer->set_property('text', $data);
     }
 
-    $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+    $feedList = new GtkListStore(Gtk::TYPE_STRING, Gtk::TYPE_STRING, Gtk::TYPE_STRING, Gtk::TYPE_STRING);
     $feedTree = new GtkTreeView();
     $feedTree->set_model($feedList);
-
     $listitems = count($listArray);
     for ($i = 0; $i < $listitems; $i++)
     {
@@ -159,6 +160,7 @@ if (PHP_GTK_MAJOR > 1)
       $col->set_title($listArray[$i]);
       $col->set_data('index', $i);
       $col->set_data('store', $feedList);
+      $col->set_data('renderer', $renderer);
       $feedTree->append_column($col);
     }
 
