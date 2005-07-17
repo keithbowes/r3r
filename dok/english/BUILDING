@@ -18,10 +18,10 @@ Minimum requirements:
     source files during compilation.
 * (Windows only) png2ico <http://www.winterdrache.de/freeware/png2ico/>
 
-After you have the software, in a shell in the root source directory, do:
+After you have the dependencies, in a shell in the root source directory, do:
 ./configure [options]
 make [rules] [macros]
-make install
+make install [macros]
 
 For configure options, type "./configure --usage".
 Helpful make rules:
@@ -46,3 +46,18 @@ vp
   Build with Virtual Pascal
 win32
   Make with Free Pascal for Windows
+
+Helpful macros:
+INSTALL
+  BSD-compatible install program.  If you don't have one, you can use X.org's
+  install.sh
+  <http://cvs.freedesktop.org/*checkout*/xorg/xc/config/util/install.sh>.
+  GNU install may be called ginstall on some systems.
+PC
+  The Pascal compiler to use.  Defaults to fpc, though rules for other
+  compilers override it.
+PCFLAGS_DEBUG
+  The compiler's debugging options.  Set to blank if you don't want a debug
+  build.
+PERL
+  The Perl executable to use.
