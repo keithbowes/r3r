@@ -10,5 +10,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # libr3r_rs:errorgetting
+#: libr3rstrings:errorgetting
 msgid "ERROR:  Couldn't retrieve the feed."
 msgstr "Eraro: Ne povis akiri la kanalon."

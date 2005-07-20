@@ -17,7 +17,7 @@ type
 implementation
 
 uses
-  RSock;
+  SockConsts;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin

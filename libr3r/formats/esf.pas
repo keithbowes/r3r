@@ -27,7 +27,7 @@ type
 implementation
 
 uses
-  DateUtils, RSock, SysUtils;
+  DateUtils, SockConsts, SysUtils;
 
 constructor TEsfFeed.Create;
 begin

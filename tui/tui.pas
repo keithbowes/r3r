@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  Info, Keyboard, Tui_Rs, SysUtils;
+  Info, Keyboard, TuiStrings, SysUtils;
 
 const
   Tab = #9;

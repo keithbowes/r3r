@@ -14,7 +14,7 @@ uses
 {$ENDIF};
 
 const
-  Version = '${perl:version}';
+  Version = '@VERSION@';
 
 function Os: String;
 

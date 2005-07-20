@@ -20,7 +20,7 @@ type
 implementation
 
 uses
-  RSock, SysUtils;
+  SockConsts, SysUtils;
 
 function TRss3Feed.GetFormat: TFeedType;
 begin

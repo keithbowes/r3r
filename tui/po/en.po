@@ -13,61 +13,76 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 # tui_rs:feed
+#: tuistrings:feed
 msgid "Feed Address: "
 msgstr ""
 
 # tui_rs:gourl
+#: tuistrings:gourl
 msgid "g)o to a URL"
 msgstr ""
 
 # tui_rs:aboutitem
+#: tuistrings:aboutitem
 msgid "a)bout item number"
 msgstr ""
 
 # tui_rs:help
+#: tuistrings:help
 msgid "h)elp, this screen"
 msgstr ""
 
 # tui_rs:quit
+#: tuistrings:quit
 msgid "q)uit the program"
 msgstr ""
 
 # tui_rs:aboutkey
+#: tuistrings:aboutkey
 msgid "a"
 msgstr ""
 
 # tui_rs:gokey
+#: tuistrings:gokey
 msgid "g"
 msgstr ""
 
 # tui_rs:helpkey
+#: tuistrings:helpkey
 msgid "h"
 msgstr ""
 
 # tui_rs:quitkey
+#: tuistrings:quitkey
 msgid "q"
 msgstr ""
 
 # tui_rs:itemno
+#: tuistrings:itemno
 msgid "Item number: "
 msgstr ""
 
 # tui_rs:itemsubject
+#: tuistrings:itemsubject
 msgid "Subject: "
 msgstr ""
 
 # tui_rs:itemcreated
+#: tuistrings:itemcreated
 msgid "Created: "
 msgstr ""
 
 # tui_rs:itemdesc
+#: tuistrings:itemdesc
 msgid "Description: "
 msgstr ""
 
 # tui_rs:itemlink
+#: tuistrings:itemlink
 msgid "Link %d: %s"
 msgstr ""
 
 # tui_rs:invalidnumber
+#: tuistrings:invalidnumber
 msgid "Invalid Number!"
 msgstr ""

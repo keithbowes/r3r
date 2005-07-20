@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  Classes, Http, LocalFile, LibR3R_Rs, SynaUtil, SysUtils;
+  Classes, Http, LocalFile, LibR3RStrings, SynaUtil, SysUtils;
 
 constructor TLibR3R.Create(const Resource: String);
 var

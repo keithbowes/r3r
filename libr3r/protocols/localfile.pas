@@ -3,7 +3,7 @@ unit LocalFile;
 interface
 
 uses
-  RSock, FeedItem;
+  FeedItem, RSock;
 
 type
   TLocalFile = class(TRSock)
@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  Feed, SysUtils;
+  Feed, SockConsts, SysUtils;
 
 constructor TLocalFile.Create(FileName: String);
 begin

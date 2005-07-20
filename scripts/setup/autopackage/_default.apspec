@@ -1,0 +1,95 @@
+# -*-shell-script-*-
+
+[Meta]
+RootName: @r3r.sourceforge.net/default:$SOFTWAREVERSION:$PACKAGEVERSION
+ShortName: r3r
+DisplayName: R3R Feed Reader
+Summary: R3R is a feed reader
+Maintainer: The R3R Developers - http://sourceforge.net/project/memberlist.php?group_id=90897
+Packager: Anonymous <anonymous@nowhere.com>
+SoftwareVersion: @VERSION@
+
+# Only uncomment InterfaceVersion if your package exposes interfaces to other software,
+# for instance if it includes DSOs or python/perl modules. See the developer guide for more info,
+# or ask on autopackage-dev if you don't understand interface versioning in autopackage.
+#
+# InterfaceVersion: 0.0
+
+PackageVersion: 1
+
+Language: eo
+DisplayName[eo]: R3R Kanala legilo
+Summary[eo]: R3R estas kanala legilo
+
+AutopackageTarget: 0.7
+CPUArchitectures: x86
+License: BSD
+URL: http://sourceforge.net/projects/r3r/
+
+[Description]
+R3R is a reader for RSS, ESF and Atom feeds.  It has a simple GUI that gathers your subscribed feeds on startup and displays them into a single list.
+
+[Description:eo]
+R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, kiu amasigas viajn abonitajn kanalojn je lanĉo kaj montras ilin en unuopan liston.
+
+[BuildPrepare]
+#prepareBuild
+
+[BuildUnprepare]
+#unprepareBuild
+
+[Imports]
+echo $source_dir/autopackage/r3r.desktop | import
+
+echo $source_dir'/../../r3r' | import
+
+echo $source_dir'/../../libr3r' | import
+echo $source_dir'/../../libr3r/po' | import
+
+echo $source_dir'/../../@UI@' | import
+echo $source_dir'/../../@UI@/po' | import
+
+echo $source_dir'/../../libr3r/po/*.mo' | import
+echo $source_dir'/../../@UI@/po/*.mo' | import
+
+echo $source_dir'/../../icons/r3r.png' | import
+
+[Prepare]
+# Dependency checking
+# require @whatever.you/need 1.0
+
+if test "@UI@" = "tui";
+then
+  require @gnu.org/ncurses 5.3
+elif test "@UI@" = "gui";
+then
+  require @gtk.org/gtk 1.2
+fi
+
+[Install]
+# Put your installation script here
+installExe r3r
+installIcon r3r.png
+installDesktop "Network/Aggregators" r3r.desktop
+
+cd libr3r/po
+for lang in *.mo;
+do
+  l=`echo $lang | sed 's/\.mo$//g'`
+  copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/libr3r.mo"
+done
+
+cd ../..
+
+cd @UI@/po
+for lang in *.mo;
+do
+  l=`echo $lang | sed 's/\.mo$//g'`
+  copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/r3r_@UI@.mo"
+done
+
+cd ../..
+
+[Uninstall]
+# Usually just the following line is enough to uninstall everything
+uninstallFromLog

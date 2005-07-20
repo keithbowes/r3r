@@ -5,9 +5,6 @@ interface
 uses
   BlckSock, Classes, Feed, FeedItem;
 
-const
-  SockEof = #0;
-
 type
   TRSock = class(TThread)
   private
@@ -30,7 +27,7 @@ type
 implementation
 
 uses
-  Esf, Rss, Rss3, SysUtils;
+  Esf, Rss, Rss3, SockConsts, SysUtils;
 
 constructor TRSock.Create(Host, Port: String);
 begin

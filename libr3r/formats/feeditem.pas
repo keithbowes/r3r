@@ -2,9 +2,6 @@ unit FeedItem;
 
 interface
 
-uses
-  Classes;
-
 type
   TEmail = record
     Toee: String;
