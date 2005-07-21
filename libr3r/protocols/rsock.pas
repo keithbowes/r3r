@@ -27,7 +27,7 @@ type
 implementation
 
 uses
-  Esf, Rss, Rss3, SockConsts, SysUtils;
+  Atom, Esf, Rss, Rss3, SockConsts, SysUtils;
 
 constructor TRSock.Create(Host, Port: String);
 begin
@@ -82,6 +82,10 @@ begin
     else if FeedType = ftRss then
     begin
       FAbstractFeed := TRssFeed.Create;
+    end
+    else if FeedType = ftAtom then
+    begin
+      FAbstractFeed := TAtomFeed.Create;
     end
     else
     begin

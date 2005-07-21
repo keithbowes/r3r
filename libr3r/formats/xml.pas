@@ -6,8 +6,15 @@ uses
   Classes, Feed, FeedItem, Sax, Sax_Html;
 
 type
+  TXmlAttr = record
+    Name: String;
+    Value: String;
+  end;
+
   TXmlElement = record
     Name: String;
+    { Yeah, like anybody will exceed 11 attributes per element }
+    Attributes: array [0..10] of TXmlAttr;
     Content: String;
     Base: String;
     Lang: String;
@@ -15,7 +22,9 @@ type
 
   TXmlFeed = class(TFeed)
   private
-    FElemList: TList;
+    FElemList: array of TXmlElement;
+    FElems: cardinal;
+    FIgnoreWhiteSpace: Boolean;
     FInput: TSaxInputSource;
     FReader: THtmlReader;
     FStream: TStringStream;
@@ -24,6 +33,7 @@ type
     procedure ElementStarted(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString; Atts: TSAXAttributes);
     procedure ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
     procedure CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
+    procedure WhiteSpaceReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
     function GetCurrentElement: TXmlElement;
     function GetPreviousElement: TXmlElement;
   public
@@ -36,19 +46,23 @@ type
 
 implementation
 
+uses
+  SysUtils;
+
 constructor TXmlFeed.Create;
 begin
   inherited Create;
 
-  FElemList := TList.Create;
+  SetLength(FElemList, 1);
 
   FStream := TStringStream.Create('');
+  FIgnoreWhiteSpace := false;
   FInput := TSaxInputSource.Create(FStream);
   FReader := THtmlReader.Create;
   FReader.OnStartElement := @ElementStarted;
   FReader.OnEndElement := @ElementEnded;
   FReader.OnCharacters := @CharactersReceived;
-  FReader.OnIgnorableWhitespace := @CharactersReceived;
+  FReader.OnIgnorableWhitespace := @WhiteSpaceReceived;
 end;
 
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
@@ -63,7 +77,7 @@ end;
 
 destructor TXmlFeed.Destroy;
 begin
-  FElemList.Free;
+  FElemList := nil;
 
   FStream.Free;
   FInput.Free;
@@ -91,30 +105,51 @@ begin
       begin
         FXmlElement.Lang := Atts.GetValue(Item);
       end;
+      if Item < 11 then
+      begin
+        FXmlElement.Attributes[Item].Name := Atts.GetLocalName(Item);
+        FXmlElement.Attributes[Item].Value := Atts.GetValue(Item);
+      end
     end;
   end;
 
-  FElemList.Add(@FXmlElement);
+  FElems := Length(FElemList);
+  SetLength(FElemList, FElems + 1);
+  FElemList[FElems] := FXmlElement;
 end;
 
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
-  FElemList.Delete(FElemList.Count - 1);
+  FElems := Length(FElemList);
+  SetLength(FElemList, FElems - 1);
 end;
 
 procedure TXmlFeed.CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
 begin
   FXmlElement.Content := FXmlElement.Content + ch;
+
+  FIgnoreWhiteSpace := false;
+end;
+
+procedure TXmlFeed.WhiteSpaceReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
+begin
+  if not FIgnoreWhiteSpace then
+  begin
+    FXmlElement.Content := FXmlElement.Content + ch;
+    FIgnoreWhiteSpace := true;
+  end;
 end;
 
 function TXmlFeed.GetCurrentElement: TXmlElement;
 begin
-  Result := TXmlElement(FElemList[FElemList.Count - 1]^);
+  FElems := Length(FElemList);
+  Result := FElemList[FElems];
 end;
 
 function TXmlFeed.GetPreviousElement: TXmlElement;
 begin
-  Result := TXmlElement(FElemList[FElemList.Count - 2]^);
+  FElems := Length(FElemList);
+  Result := FElemList[FElems - 1];
 end;
 
 end.

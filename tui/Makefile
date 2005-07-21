@@ -1,6 +1,6 @@
 .POSIX: 
 
-bindir=$(prefix)/bin
+bindir=$(exec_prefix)/bin
 
 .SUFFIXES:
 .SUFFIXES: $(OBJEXT) .pas

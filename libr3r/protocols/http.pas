@@ -72,6 +72,10 @@ begin
         begin
           FHeaders.ContentType := ftRss3
         end
+        else if Pos('atom', HeaderValue) <> 0 then
+        begin
+          FHeaders.ContentType := ftAtom;
+        end
         else if (Pos('rss', HeaderValue) <> 0) or (Pos('xml', HeaderValue) <> 0) then
         begin
           FHeaders.ContentType := ftRss;

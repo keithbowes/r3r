@@ -10,7 +10,7 @@ distclean:
 
 r3r-$(VERSION).x86.package: autopackage/default.apspec
 	makeinstaller
-	mv r3r-$(VERSION).x86.package ../../..
+	cp -f r3r-$(VERSION).x86.package ../../..
 
 autopackage/default.apspec: autopackage/_default.apspec
 	sed 's/@VERSION@/$(VERSION)/g'  autopackage/_default.apspec > \

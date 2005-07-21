@@ -8,6 +8,9 @@ all: libr3r.pas.xml ../libr3r/formats/feeditem.pas ../libr3r/libr3r.pas \
 	-fpdoc --input=../libr3r/libr3r.pas --input=../libr3r/formats/feeditem.pas \
 		--input=../libr3r/rmessage.pas --descr=libr3r.pas.xml --package=LibR3R
 
+distclean:
+	rm -f `find . | grep "\.html$$"`
+
 install: all
 	-mkdir $(docsdir)
 	-mkdir $(docdir)

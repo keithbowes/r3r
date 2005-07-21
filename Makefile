@@ -19,7 +19,6 @@ VERSION = `cat .version`
 
 prefix = /usr/local
 exec_prefix = $(prefix)
-bindir = $(exec_prefix)/bin
 datarootdir = $(prefix)/share
 
 default:
@@ -37,12 +36,13 @@ all:
 install:
 	-mkdir $(prefix)
 	-mkdir $(datarootdir)
+	cd $(R3R_UI) && $(MAKE) datarootdir="$(datarootdir)" \
+		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
+		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" install
 	cd icons && $(MAKE) datarootdir="$(datarootdir)" \
 		INSTALL_DATA="$(INSTALL_DATA)" install
 	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" \
 		INSTALL_DATA="$(INSTALL_DATA)" install
-	cd tui && $(MAKE) datarootdir="$(datarootdir)" prefix="$(prefix)" \
-		INSTALL_DATA="$(INSTALL_DATA)" INSTALL_PROGRAM="$(INSTALL_PROGRAM)" install
 	@echo Type $(MAKE) install-docs if you want to install the documentation.
 
 install-strip: install
@@ -57,10 +57,11 @@ install-win32-strip:
 
 # Uninstallation rules
 uninstall:
+	cd $(R3R_UI) && $(MAKE) datarootdir="$(datarootdir)" prefix="$(prefix)" \
+		uninstall
 	cd docs && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd icons && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" uninstall
-	cd tui && $(MAKE) datarootdir="$(datarootdir)" prefix="$(prefix)" uninstall
 
 uninstall-win32:
 	$(MAKE) prefix="\"C:/Program Files/R3R\"" EXEEXT=.exe uninstall
@@ -108,6 +109,7 @@ cleanall: mostlyclean
 
 distclean: clean
 	cd $(R3R_UI) && $(MAKE) distclean
+	cd docs && $(MAKE) distclean
 	cd icons && $(MAKE) distclean
 	cd libr3r && $(MAKE) distclean
 	cd scripts/setup && $(MAKE) distclean
