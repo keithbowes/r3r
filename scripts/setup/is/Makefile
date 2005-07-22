@@ -16,8 +16,8 @@ r3r.iss: _r3r.iss
 		's/\.mo$$//g'`; \
 		sed "s/;insert_next_lang/Source: \"libr3r\\\\po\\\\$$lang\"; DestDir: \"{app}\\\\share\\\\locale\\\\$$l\\\\LC_MESSAGES\"; DestName: \"libr3r.mo\"\n;insert_next_lang/g" \
 		$$d/r3r.iss.$$oldindex > $$d/r3r.iss.$$index; oldindex=$$index; done && \
-		cd ../../$(R3R_UI)/po && for lang in *.mo; do index=`expr $$index + 1`; \
+		cd ../../ui/$(R3R_UI)/po && for lang in *.mo; do index=`expr $$index + 1`; \
 		l=`echo $$lang | sed 's/\.mo$$//g'`; \
-		sed "s/;insert_next_lang/Source: \"$(R3R_UI)\\\\po\\\\$$lang\"; DestDir: \"{app}\\\\share\\\\locale\\\\$$l\\\\LC_MESSAGES\"; DestName: \"r3r_$(R3R_UI).mo\"\n;insert_next_lang/g" \
+		sed "s/;insert_next_lang/Source: \"ui\\\\$(R3R_UI)\\\\po\\\\$$lang\"; DestDir: \"{app}\\\\share\\\\locale\\\\$$l\\\\LC_MESSAGES\"; DestName: \"r3r_$(R3R_UI).mo\"\n;insert_next_lang/g" \
 		$$d/r3r.iss.$$oldindex > $$d/r3r.iss.$$index; oldindex=$$index; done && \
 		cd $$d && mv r3r.iss.$$index r3r.iss && rm -f r3r.iss.*

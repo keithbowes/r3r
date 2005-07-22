@@ -44,7 +44,7 @@ cd $source_dir/../..
 echo r3r | import
 
 echo libr3r | import
-echo @UI@ | import
+echo ui/@UI@ | import
 
 echo icons/r3r.png | import
 
@@ -77,7 +77,7 @@ done
 
 cd ../..
 
-cd @UI@/po
+cd ui/@UI@/po
 for lang in *.mo;
 do
   l=`echo $lang | sed 's/\.mo$//g'`

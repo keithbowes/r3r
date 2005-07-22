@@ -30,19 +30,19 @@ all:
 	cd icons && $(MAKE) all
 	cd libr3r && $(MAKE) PCFLAGS="$(PCFLAGS)" DEFS="$(DEFS)" OBJEXT="$(OBJEXT)" \
 		 VERSION="`cat ../.version`" all
-	cd $(R3R_UI) && $(MAKE) PCFLAGS="$(PCFLAGS)" all
+	cd ui && $(MAKE) PCFLAGS="$(PCFLAGS)" R3R_UI="$(R3R_UI)" all
 
 # Installation rules
 install:
 	-mkdir $(prefix)
 	-mkdir $(datarootdir)
-	cd $(R3R_UI) && $(MAKE) datarootdir="$(datarootdir)" \
-		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
-		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" install
 	cd icons && $(MAKE) datarootdir="$(datarootdir)" \
 		INSTALL_DATA="$(INSTALL_DATA)" install
 	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" \
 		INSTALL_DATA="$(INSTALL_DATA)" install
+	cd ui && $(MAKE) datarootdir="$(datarootdir)" \
+		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
+		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" R3R_UI="$(R3R_UI)" install
 	@echo Type $(MAKE) install-docs if you want to install the documentation.
 
 install-strip: install
@@ -57,11 +57,14 @@ install-win32-strip:
 
 # Uninstallation rules
 uninstall:
-	cd $(R3R_UI) && $(MAKE) datarootdir="$(datarootdir)" prefix="$(prefix)" \
-		uninstall
+	cd $(R3R_UI) && $(MAKE)
 	cd docs && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd icons && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" uninstall
+	cd ui && $(MAKE) datarootdir="$(datarootdir)" \
+		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
+		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" R3R_UI="$(R3R_UI)" \
+		datarootdir="$(datarootdir)" prefix="$(prefix)"	uninstall
 
 uninstall-win32:
 	$(MAKE) prefix="\"C:/Program Files/R3R\"" EXEEXT=.exe uninstall
@@ -79,8 +82,8 @@ install-docs-win32:
 
 # Distribution rules
 dist:
-	tar cf - r3r$(EXEEXT) icons/r3r.png libr3r/po/*.mo $(R3R_UI)/po/*.mo | gzip \
-		-f > r3r-$(VERSION).tar.gz
+	tar cf - r3r$(EXEEXT) icons/r3r.png libr3r/po/*.mo ui/$(R3R_UI)/po/*.mo | \
+		gzip -f > r3r-$(VERSION).tar.gz
 
 dist-src: maintainer-clean
 	-mkdir ../r3r-src
@@ -104,15 +107,15 @@ mostlyclean:
 	rm -f r3r$(EXEEXT)
 
 cleanall: mostlyclean
-	cd $(R3R_UI) && $(MAKE) clean
 	cd libr3r && $(MAKE) clean
+	cd ui && $(MAKE) clean R3R_UI="$(R3R_UI)"
 
 distclean: clean
-	cd $(R3R_UI) && $(MAKE) distclean
 	cd docs && $(MAKE) distclean
 	cd icons && $(MAKE) distclean
 	cd libr3r && $(MAKE) distclean
 	cd scripts/setup && $(MAKE) distclean
+	cd ui && $(MAKE) distclean R3R_UI="$(R3R_UI)"
 	-delp -eq .
 	rm -f .*.built
 

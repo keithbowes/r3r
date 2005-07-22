@@ -27,5 +27,5 @@ uninstall:
 	rm -f $(bindir)/r3r$(EXEEXT)
 
 .pas$(OBJEXT):
-	$(PC) $(PC_OUTDIR).. $(UNITDIR)po $(UNITDIR)../libr3r $(UNITDIR)../libr3r/* \
+	$(PC) $(PC_OUTDIR)../.. $(UNITDIR)po $(UNITDIR)../../libr3r $(UNITDIR)../../libr3r/* \
 		$(PCFLAGS) $<

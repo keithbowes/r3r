@@ -1,5 +1,7 @@
 unit TuiStrings;
 
+{$codepage utf8}
+
 interface
 
 resourcestring

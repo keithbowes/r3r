@@ -1,5 +1,7 @@
 unit LibR3RStrings;
 
+{$codepage utf8}
+
 interface
 
 resourcestring
