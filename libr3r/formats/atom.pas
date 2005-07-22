@@ -40,7 +40,7 @@ begin
     begin
       Title := Title + Content;
     end
-    else if Name = 'summary' then
+    else if (Name = 'summary') or (Name = 'subtitle') then
     begin
       Description := Description + Content;
     end
@@ -91,6 +91,10 @@ begin
           end;
         end;
       end;
+    end
+    else if Name = 'published' then
+    begin
+      Created := Created + Content;
     end
     else if Name = 'name' then
     begin
