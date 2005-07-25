@@ -20,12 +20,12 @@ distclean:
 install:
 	cd po && $(MAKE) install
 	-mkdir $(bindir)
-	$(INSTALL_PROGRAM) ../r3r$(EXEEXT) $(bindir)/r3r$(EXEEXT)
+	$(INSTALL_PROGRAM) ../../r3r$(EXEEXT) $(bindir)/r3r$(EXEEXT)
 
 uninstall:
 	cd po && $(MAKE) uninstall
 	rm -f $(bindir)/r3r$(EXEEXT)
 
 .pas$(OBJEXT):
-	$(PC) $(PC_OUTDIR)../.. $(UNITDIR)po $(UNITDIR)../../libr3r $(UNITDIR)../../libr3r/* \
-		$(PCFLAGS) $<
+	$(PC) $(PC_OUTDIR)../.. $(UNITDIR)po $(UNITDIR)../../libr3r \
+		$(UNITDIR)../../libr3r/* $(PCFLAGS) $<

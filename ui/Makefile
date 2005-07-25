@@ -1,14 +1,14 @@
 all:
-	cd $(R3R_UI) && make all
+	cd $(R3R_UI) && $(MAKE) all
 
 install:
-	cd $(R3R_UI) && make install
+	cd $(R3R_UI) && $(MAKE) install
 
 uninstall:
-	cd $(R3R_UI) && make uninstall
+	cd $(R3R_UI) && $(MAKE) uninstall
 
 clean:
-	cd $(R3R_UI) && make clean
+	cd $(R3R_UI) && $(MAKE) clean
 
 distclean:
-	cd $(R3R_UI) && make distclean
+	cd $(R3R_UI) && $(MAKE) distclean

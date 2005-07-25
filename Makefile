@@ -3,7 +3,7 @@
 SHELL = sh
 
 # Extensions for compiling
-EXEEXT=
+EXEEXT =
 
 PCFLAGS = $(DEFS) $(DEFS_EXTRA) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA)
 # Defines, for enabling different features/dialect syntax
@@ -138,8 +138,8 @@ fpc-cross:
 	$(MAKE) PC=fpc PCFLAGS_EXTRA="$(PCFLAGS_EXTRA) -T$(OS)" all
 
 fpc-win32:
-	$(MAKE) fpc PCFLAGS_EXTRA="$(PCFLAGS_EXTRA) -Twin32" \
-		DEFS="-dSETTINGS_REGISTRY"
+	$(MAKE) PCFLAGS_EXTRA="$(PCFLAGS_EXTRA) -Twin32" \
+		DEFS="-dSETTINGS_REGISTRY" fpc
 
 gpc:
 	-$(MAKE) PC=gpc PCFLAGS_BASE="--automake -B po -B libr3r -o r3r" UNITEXT=.gpi
