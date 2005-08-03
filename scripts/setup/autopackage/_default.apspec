@@ -17,8 +17,12 @@ SoftwareVersion: @VERSION@
 
 PackageVersion: 1
 
-Language: eo
+Language: de eo
+
+DisplayName[de]: R3R Feedreader
 DisplayName[eo]: R3R Kanala legilo
+
+Summary[de]: R3R ist ein Feedreader
 Summary[eo]: R3R estas kanala legilo
 
 AutopackageTarget: 0.7
@@ -27,10 +31,13 @@ License: BSD
 URL: http://sourceforge.net/projects/r3r/
 
 [Description]
-R3R is a reader for RSS, ESF and Atom feeds.  It has a simple GUI that gathers your subscribed feeds on startup and displays them into a single list.
+R3R is a reader for RSS, ESF and Atom feeds.
+
+[Description:de]
+R3R ist ein Reader für RSS, ESF und Atom Feeds.
 
 [Description:eo]
-R3R estas legilo por RSSaj, ESFaj kaj Atomaj kanaloj.  Ĝi havas simplan GUIon, kiu amasigas viajn abonitajn kanalojn je lanĉo kaj montras ilin en unuopan liston.
+R3R estas legilo por kanaloj RSS-aj, ESF-aj kaj Atom-aj.
 
 [BuildPrepare]
 #prepareBuild
@@ -57,7 +64,7 @@ echo $source_dir/autopackage/r3r.desktop | import
 if test "@UI@" = "tui";
 then
   require @gnu.org/ncurses 5.3
-elif test "@UI@" = "gui";
+elif test "@UI@" = "classic";
 then
   require @gtk.org/gtk 1.2
 fi

@@ -1,0 +1,93 @@
+object R3RForm: TR3RForm
+  Caption = 'R3R'
+  ClientHeight = 275
+  ClientWidth = 501
+  Menu = R3RMenu
+  OnCreate = Created
+  PixelsPerInch = 63
+  HorzScrollBar.Page = 500
+  VertScrollBar.Page = 274
+  Left = 278
+  Height = 300
+  Top = 47
+  Width = 501
+  object FeedList: TListView
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    Columns = <    
+      item
+      end    
+      item
+      end    
+      item
+      end    
+      item
+        Width = 351
+      end>
+    ScrollBars = ssAutoVertical
+    ViewStyle = vsReport
+    AnchorSideBottom.Control = DescBox
+    Height = 136
+    Width = 501
+  end
+  object StatusBar: TStatusBar
+    Panels = <>
+    Height = 22
+    Top = 253
+    Width = 501
+  end
+  object GoBtn: TButton
+    Align = alCustom
+    TabOrder = 1
+    AnchorSideLeft.Control = UriEdit
+    AnchorSideTop.Control = DescBox
+    Left = 458
+    Height = 24
+    Top = 224
+    Width = 35
+  end
+  object UriEdit: TEdit
+    Anchors = [akTop, akRight]
+    TabOrder = 2
+    Text = 'http://'
+    AnchorSideTop.Control = DescBox
+    AnchorSideRight.Control = GoBtn
+    AnchorSideBottom.Control = StatusBar
+    Left = 10
+    Height = 24
+    Top = 224
+    Width = 448
+  end
+  object DescBox: TGroupBox
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ClientHeight = 71
+    ClientWidth = 484
+    ParentColor = True
+    TabOrder = 3
+    AnchorSideTop.Control = FeedList
+    AnchorSideBottom.Control = UriEdit
+    Left = 8
+    Height = 88
+    Top = 136
+    Width = 488
+  end
+  object R3RMenu: TMainMenu
+    object FileMenu: TMenuItem
+      object OpenItem: TMenuItem
+        OnClick = OpenItemClick
+      end
+      object CloseItem: TMenuItem
+        OnClick = CloseItemClick
+      end
+    end
+    object ToolsMenu: TMenuItem
+      object SettingsItem: TMenuItem
+      end
+    end
+    object HelpMenu: TMenuItem
+      RightJustify = True
+      object InfoItem: TMenuItem
+        OnClick = InfoMenuClick
+      end
+    end
+  end
+end
