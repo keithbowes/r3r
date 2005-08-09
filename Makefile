@@ -57,7 +57,6 @@ install-win32-strip:
 
 # Uninstallation rules
 uninstall:
-	cd $(R3R_UI) && $(MAKE)
 	cd docs && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd icons && $(MAKE) datarootdir="$(datarootdir)" uninstall
 	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" uninstall

@@ -7,12 +7,13 @@ object R3RForm: TR3RForm
   PixelsPerInch = 63
   HorzScrollBar.Page = 500
   VertScrollBar.Page = 274
-  Left = 278
+  Left = 188
   Height = 300
-  Top = 47
+  Top = 72
   Width = 501
   object FeedList: TListView
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.OnChange = nil
     Columns = <    
       item
       end    
@@ -37,28 +38,33 @@ object R3RForm: TR3RForm
   end
   object GoBtn: TButton
     Align = alCustom
+    BorderSpacing.OnChange = nil
+    OnClick = GoBtnClick
     TabOrder = 1
     AnchorSideLeft.Control = UriEdit
     AnchorSideTop.Control = DescBox
-    Left = 458
+    Left = 456
     Height = 24
     Top = 224
     Width = 35
   end
   object UriEdit: TEdit
     Anchors = [akTop, akRight]
+    BorderSpacing.OnChange = nil
+    OnKeyDown = UriEditKeyDown
     TabOrder = 2
     Text = 'http://'
     AnchorSideTop.Control = DescBox
     AnchorSideRight.Control = GoBtn
     AnchorSideBottom.Control = StatusBar
-    Left = 10
+    Left = 8
     Height = 24
     Top = 224
     Width = 448
   end
   object DescBox: TGroupBox
     Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.OnChange = nil
     ClientHeight = 71
     ClientWidth = 484
     ParentColor = True

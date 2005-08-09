@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs, Menus,
-  ComCtrls, Buttons, StdCtrls, ClassicStrings, LibR3R, Info;
+  ComCtrls, Buttons, StdCtrls, LclType, ClassicStrings, LibR3R, Info;
 
 type
 
@@ -27,13 +27,18 @@ type
     R3RMenu: TMainMenu;
     StatusBar: TStatusBar;
     procedure Created(Sender: TObject);
+    procedure GoBtnClick(Sender: TObject);
     procedure InfoMenuClick(Sender: TObject);
     procedure OpenItemClick(Sender: TObject);
     procedure CloseItemClick(Sender: TObject);
+    procedure UriEditKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+      );
   private
     { private declarations }
+    FTopItem: Boolean;
     procedure ParseFeed(const Uri: String);
     procedure ItemParsed(Item: TParsedFeedItem);
+    procedure GotMessage(Sender: TObject; Error: Boolean; MessageName: String);
   public
     { public declarations }
   end; 
@@ -69,15 +74,23 @@ begin
   GoBtn.Caption := Go;
 end;
 
+procedure TR3RForm.GoBtnClick(Sender: TObject);
+begin
+  ParseFeed(UriEdit.Text);
+end;
+
 procedure TR3RForm.InfoMenuClick(Sender: TObject);
 begin
   ShowMessage('R3R ' + Version + ' (' + Os + ')');
 end;
 
 procedure TR3RForm.OpenItemClick(Sender: TObject);
+var
+  OpenDlg: TOpenDialog;
 begin
-  { TODO:  File dialog }
-  ParseFeed('');
+  OpenDlg := TOpenDialog.Create(Self);
+  OpenDlg.Execute;
+  ParseFeed(OpenDlg.FileName);
 end;
 
 procedure TR3RForm.CloseItemClick(Sender: TObject);
@@ -85,19 +98,66 @@ begin
   Close;
 end;
 
+procedure TR3RForm.UriEditKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+  begin
+    ParseFeed((Sender as TEdit).Text);
+  end;
+end;
+
 procedure TR3RForm.ParseFeed(const Uri: String);
 var
   Lib: TLibR3R;
 begin
+  FTopItem := true;
   Lib := TLibR3R.Create(Uri);
   Lib.OnItemParsed := @ItemParsed;
+  Lib.OnMessage := @GotMessage;
   Lib.Parse;
   Lib.Free;
 end;
 
 procedure TR3RForm.ItemParsed(Item: TParsedFeedItem);
 begin
-  { TODO }
+  with FeedList.Items.Add do
+  begin
+    if not FTopItem then
+    begin
+      SubItems.Add(Item.Title);
+    end
+    else
+    begin
+      Caption := Item.Title;
+      FTopItem := false;
+      
+      SubItems.Add('');
+    end;
+
+    if Item.Subject <> '' then
+    begin
+      SubItems.Add(Item.Subject)
+    end
+    else
+    begin
+      SubItems.Add(EmptyField)
+    end;
+
+    if Item.Created <> '' then
+    begin
+      SubItems.Add(Item.Created)
+    end
+    else
+    begin
+      SubItems.Add(EmptyField)
+    end;
+  end;
+end;
+
+procedure TR3RForm.GotMessage(Sender: TObject; Error: Boolean; MessageName: String);
+begin
+  StatusBar.SimpleText := MessageName;
 end;
 
 initialization
