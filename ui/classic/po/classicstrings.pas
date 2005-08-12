@@ -34,7 +34,7 @@ uses
 
 initialization
 
-TranslateResourceStrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_tui.mo');
+TranslateResourceStrings(ExtractFilePath(ParamStr(0)) + '../share/locale/%s/LC_MESSAGES/r3r_classic.mo');
 
 
 {$ENDIF}
