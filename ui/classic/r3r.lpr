@@ -2,6 +2,10 @@ program r3r;
 
 {$mode objfpc}{$H+}
 
+{$ifdef win32}
+  {$r ../../icons/r3r.res}
+{$endif}
+
 uses
   {$ifdef UNIX}
     CThreads,

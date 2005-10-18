@@ -17,3 +17,4 @@ uninstall:
 
 r3r.ico: r3r.png
 	-png2ico r3r.ico r3r.png
+	-windres -i r3r.rc -o r3r.res
