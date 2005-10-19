@@ -32,7 +32,8 @@ uninstall:
 	cd po && $(MAKE) uninstall
 
 .pas$(OBJEXT):
-	$(PC) $(PCFLAGS) $(UNITDIR)formats $(UNITDIR)po $(UNITDIR)protocols $(UNITDIR)settings $<
+	$(PC) $(PCFLAGS) $(UNITDIR)formats $(UNITDIR)po $(UNITDIR)protocols \
+		$(UNITDIR)regexpr $(UNITDIR)settings $<
 
 info.pas: _info.pas ../.$(VERSION).built
 	sed 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas

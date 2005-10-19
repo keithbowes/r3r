@@ -11,4 +11,4 @@ clean:
 	rm -f *$(OBJEXT) *$(UNITEXT)
 
 .pas$(OBJEXT):
-	$(PC) $(PCFLAGS) $(UNITDIR).. $(UNITDIR)../formats $<
+	$(PC) $(PCFLAGS) $(UNITDIR).. $(UNITDIR)../formats $(UNITDIR)../regexpr $<
