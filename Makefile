@@ -93,6 +93,18 @@ dist-src: maintainer-clean
 	rm r3r-$(VERSION)
 	mv r3r-$(VERSION).tar.gz ..
 
+# Experimental support for POSIX PAX.
+# This should replace dist-src, eventually.
+dist-src-pax: maintainer-clean
+	-mkdir ../r3r-src
+	-cp -rf * ../r3r-src
+# Paranoia: Remove all the files in the CVS dirs
+	rm -rf `find ../r3r-src | grep CVS`
+	mv ../r3r-src r3r-$(VERSION)
+	pax -w r3r-$(VERSION) | gzip -cf > r3r-$(VERSION).tar.gz 
+	rm r3r-$(VERSION)
+	mv r3r-$(VERSION).tar.gz ..
+
 dist-linux:
 	cd scripts/setup && $(MAKE) VERSION="`cat ../../.version`" \
 	R3R_UI="$(R3R_UI)" dist-linux
