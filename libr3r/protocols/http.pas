@@ -100,7 +100,7 @@ procedure THttpSock.Execute;
 begin
   inherited Execute;
 
-  SendHeader('GET ' + FPath + ' HTTP/1.0');
+  SendHeader('GET ' + FPath + ' HTTP/1.1');
   SendHeader('Host: ' + FHost);
   SendHeader('User-Agent: R3R/' + Version + ' (' + Os + ') Synapse/' +
     SynapseRelease + ' TRegExpr/' + IntToStr(TRegExpr.VersionMajor) + '.' +

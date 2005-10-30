@@ -72,6 +72,10 @@ begin
   begin
     FeedType := ftRss;
   end
+  else if FileExt = '.atom' then
+  begin
+    FeedType := ftAtom
+  end
   else
   begin
     FeedType := ftUnknown;
