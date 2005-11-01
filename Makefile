@@ -5,7 +5,8 @@ SHELL = sh
 # Extensions for compiling
 EXEEXT =
 
-PCFLAGS = $(DEFS) $(DEFS_EXTRA) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA)
+PCFLAGS = $(DEFS) $(DEFS_EXTRA) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) \
+	$(PCFLAGS_EXTRA)
 # Defines, for enabling different features/dialect syntax
 DEFS = -dSETTINGS_INI
 
@@ -26,7 +27,6 @@ default:
 
 # Default building rule
 all:
-	if test ! -e .$(VERSION).built; then touch .$(VERSION).built; fi
 	cd icons && $(MAKE) all
 	cd libr3r && $(MAKE) PCFLAGS="$(PCFLAGS)" DEFS="$(DEFS)" OBJEXT="$(OBJEXT)" \
 		 VERSION="`cat ../.version`" all
@@ -81,21 +81,10 @@ install-docs-win32:
 
 # Distribution rules
 dist:
-	tar cf - r3r$(EXEEXT) icons/r3r.png libr3r/po/*.mo ui/$(R3R_UI)/po/*.mo | \
-		gzip -f > r3r-$(VERSION).tar.gz
+	pax -w r3r$(EXEEXT) icons/r3r.png libr3r/po/*.mo \
+	ui/$(R3R_UI)/po/*.mo | gzip -f > r3r-$(VERSION).tar.gz
 
 dist-src: maintainer-clean
-	-mkdir ../r3r-src
-	cp * ../r3r-src
-	mv ../r3r-src r3r-$(VERSION)
-	tar --exclude=.* --exclude=CVS -czf r3r-$(VERSION).tar.gz \
-		r3r-$(VERSION)
-	rm r3r-$(VERSION)
-	mv r3r-$(VERSION).tar.gz ..
-
-# Experimental support for POSIX PAX.
-# This should replace dist-src, eventually.
-dist-src-pax: maintainer-clean
 	-mkdir ../r3r-src
 	-cp -rf * ../r3r-src
 # Paranoia: Remove all the files in the CVS dirs
@@ -170,6 +159,26 @@ delphi:
 kylix:
 	$(MAKE) PC=dcc for-borland-compilers
 
+# Deprecated rules
+
+# tar is obsolete
+dist-src-dep: maintainer-clean
+	-mkdir ../r3r-src
+	cp * ../r3r-src
+	mv ../r3r-src r3r-$(VERSION)
+	tar --exclude=.* --exclude=CVS -czf r3r-$(VERSION).tar.gz \
+		r3r-$(VERSION)
+	rm r3r-$(VERSION)
+	mv r3r-$(VERSION).tar.gz ..
+
+# ditto
+dist-old:
+	tar -cf - r3r$(EXEEXT) icons/r3r.png libr3r/po/*.mo \
+	ui/$(R3R_UI)/po/*.mo | gzip -f > r3r-$(VERSION).tar.gz
+
+# Virtual Pascal has been discontinued.
+# But if anyone wants to make compatiblity units, then I'd be happy to accept
+# the possibility to add the proper command-line commands here.
 virtual-pascal vpc:
 	@echo "Compiling with Virtual Pascal is unsupported.  If that concerns" \
 	"you, send patches."

@@ -35,5 +35,5 @@ uninstall:
 	$(PC) $(PCFLAGS) $(UNITDIR)formats $(UNITDIR)po $(UNITDIR)protocols \
 		$(UNITDIR)regexpr $(UNITDIR)settings $<
 
-info.pas: _info.pas ../.$(VERSION).built
+info.pas: _info.pas ../.version
 	sed 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas
