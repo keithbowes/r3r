@@ -67,4 +67,4 @@ msgstr "Ligilo %d: %s"
 
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
-msgstr "Nevalida cifero"
+msgstr "Nevalida numero"
