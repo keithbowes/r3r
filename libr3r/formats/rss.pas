@@ -35,7 +35,7 @@ procedure TRssFeed.FillItem(var Item: TFeedItem);
 begin
   with FXmlElement do
   begin
-    if Name = 'title' then
+    if (Name = 'title') and (PreviousElement.Name <> 'image') then
     begin
       Item.Title := Item.Title + Content;
     end

@@ -50,6 +50,7 @@ begin
   else if FCurrentField = 'link' then
   begin
     Item.LinksCount := Length(Item.Links);
+    SetLength(Item.Links, Item.LinksCount + 1);
     if Item.LinksCount > 0 then
     begin
       Item.Links[0] := Item.Links[0] + Data;

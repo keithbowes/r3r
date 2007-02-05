@@ -124,6 +124,7 @@ begin
     else if FLCount = 2 then
     begin
       ParseMetaLine(Item);
+      ItemFinished := Trim(Line) <> '';
       FLineType := ltMeta;
     end
     else if Line = SockEof then
@@ -132,10 +133,6 @@ begin
     end;
   end;
 
-  if FLineType = ltMeta then
-  begin
-    ItemFinished := Trim(Line) <> '';
-  end;
 end;
 
 end.
