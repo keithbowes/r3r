@@ -121,7 +121,10 @@ end;
 procedure TXmlFeed.ElementEnded(Sender: TObject; const NamespaceURI, LocalName, QName: SAXString);
 begin
   FElems := Length(FElemList);
-  SetLength(FElemList, FElems - 1);
+	if FElems > 0 then
+	begin
+  	SetLength(FElemList, FElems - 1);
+	end;
 end;
 
 procedure TXmlFeed.CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
