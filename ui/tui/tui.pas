@@ -8,10 +8,10 @@ uses
 type
   TTui = class
   private
-    FItems: array of TParsedFeedItem;
+    FItems: array of TFeedItem;
     procedure GetFeed(const Feed: String);
   protected
-    procedure ItemParsed(Item: TParsedFeedItem);
+    procedure ItemParsed(Item: TFeedItem);
     procedure MessageReceived(Sender: TObject; Error: Boolean; MessageName: String);
     procedure ShowHelp;
     procedure GoURI;
@@ -68,7 +68,7 @@ begin
   until KeyChar = QuitKey;
 end;
 
-procedure TTui.ItemParsed(Item: TParsedFeedItem);
+procedure TTui.ItemParsed(Item: TFeedItem);
 var
   Items: cardinal;
 begin

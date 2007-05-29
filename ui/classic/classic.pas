@@ -37,7 +37,7 @@ type
     { private declarations }
     FTopItem: Boolean;
     procedure ParseFeed(const Uri: String);
-    procedure ItemParsed(Item: TParsedFeedItem);
+    procedure ItemParsed(Item: TFeedItem);
     procedure GotMessage(Sender: TObject; Error: Boolean; MessageName: String);
   public
     { public declarations }
@@ -119,7 +119,7 @@ begin
   Lib.Free;
 end;
 
-procedure TR3RForm.ItemParsed(Item: TParsedFeedItem);
+procedure TR3RForm.ItemParsed(Item: TFeedItem);
 begin
   with FeedList.Items.Add do
   begin

@@ -9,8 +9,8 @@ uses
   FeedItem, RMessage, RSettings, RSock;
 
 type
-  TParsedFeedItem = TFeedItem;
-  TParsedEvent = procedure(Item: TParsedFeedItem) of object;
+  TFeedItem = FeedItem.TFeedItem;
+  TParsedEvent = procedure(Item: TFeedItem) of object;
 
   TLibR3R = class
   private

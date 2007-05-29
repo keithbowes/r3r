@@ -14,8 +14,8 @@
           The type of the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  Don't use directly.
         </descr>
       </element>
-      <element name="TParsedFeedItem">
-        <short>Parsed feed data.</short>
+      <element name="TFeedItem">
+        <short>Information about the concerned feed item.</short>
         <descr>
           This is the same as TFeedItem.  The only reason for it is so that this unit is all you need to include in your uses clause (the less back-end stuff in the front end, the better).
           Only use with the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  In this context, you won't get access violations.
