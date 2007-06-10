@@ -12,7 +12,6 @@ type
     procedure FillItem(var Item: TFeedItem);
   public
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
-    published
   end;
 
 implementation
