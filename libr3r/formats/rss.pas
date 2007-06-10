@@ -1,5 +1,7 @@
 unit Rss;
 
+{$M+}
+
 interface
 
 uses
@@ -12,6 +14,7 @@ type
     procedure FillItem(var Item: TFeedItem);
   public
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    published
   end;
 
 implementation
@@ -51,6 +54,11 @@ begin
     end
     else if Name = 'category' then
     begin
+      if Item.Subject <> '' then
+      begin
+        Item.Subject := Item.Subject + ', ';
+      end;
+ 
       Item.Subject := Item.Subject + Content;
     end
     else if Name = 'pubdate' then

@@ -125,6 +125,8 @@ begin
   begin
     SetLength(FElemList, FElems - 1);
   end;
+
+  FXmlElement.Name := LocalName;
 end;
 
 procedure TXmlFeed.CharactersReceived(Sender: TObject; const ch: PSAXChar; AStart, ALength: Integer);
