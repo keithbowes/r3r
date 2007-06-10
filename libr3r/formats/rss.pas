@@ -1,7 +1,5 @@
 unit Rss;
 
-{$M+}
-
 interface
 
 uses
