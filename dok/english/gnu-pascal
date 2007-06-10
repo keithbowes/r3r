@@ -1,5 +1,5 @@
 It would be nice if this project could be built with GNU Pascal (GPC), due to
-its portability (it exists everywhere where GCC can be).  But below are some
+its portability (it exists everywhere where GCC can).  But below are some
 of its limitations/incompatibilities with the way I'm currently coding.  These
 might be worked around later, but for now, Free Pascal is required.
 

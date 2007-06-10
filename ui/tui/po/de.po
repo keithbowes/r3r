@@ -51,7 +51,7 @@ msgstr "Teilzahl: "
 
 #: tuistrings:itemsubject
 msgid "Subject: "
-msgstr "Subjekt: "
+msgstr "Temen: "
 
 #: tuistrings:itemcreated
 msgid "Created: "
