@@ -12,6 +12,7 @@ Minimal dependencies:
   (The source code for the GNU versions of these programs can be found at
     <http://www.gnu.org/software/>, but I'd recommend using a search engine
     to find the appropriate versions for your operating system)
+* (for a GUI) Lazarus <http://www.lazarus.freepascal.org/>
 * (Windows only) png2ico <http://www.winterdrache.de/freeware/png2ico/>
 
 After you have the dependencies, open a shell in the root source directory and
@@ -64,7 +65,7 @@ PCFLAGS_DEBUG
 PCFLAGS_EXTRA
   Extra options to send to the compiler.
 R3R_UI
-  The user interface to use.  Defaults to "tui".
+  The user interface to use.  Look in the ./ui directory for available user interfaces.  Defaults to "tui."
 prefix
   Where to install the software.  Defaults to /usr/local (or for the *win32
   rules, C:\Program Files\R3R).
