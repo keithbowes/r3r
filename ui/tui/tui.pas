@@ -77,6 +77,12 @@ begin
   FItems[Items] := Item;
   FItems[Items].Links := Item.Links;
   Write(Items, ': ', Item.Title);
+
+  if Length(Item.Links) > 0 then
+  begin
+    Write(' <', Item.Links[0], '>');
+  end; 
+
   WriteLn;
 end;
 
