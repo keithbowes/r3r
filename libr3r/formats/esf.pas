@@ -3,12 +3,12 @@ unit Esf;
 interface
 
 uses
-  Classes, Feed, FeedItem;
+  Classes, Feed, FeedItem, NonXml;
 
 type
   TLineType = (ltNone, ltData, ltMeta);
 
-  TEsfFeed = class(TFeed)
+  TEsfFeed = class(TNonXmlFeed)
   private
     FLCount: cardinal;
     FLineType: TLineType;

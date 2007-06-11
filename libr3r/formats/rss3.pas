@@ -3,10 +3,10 @@ unit Rss3;
 interface
 
 uses
-  Feed, FeedItem;
+  Feed, FeedItem, NonXml;
 
 type
-  TRss3Feed = class(TFeed)
+  TRss3Feed = class(TNonXmlFeed)
   private
     FCurrentField: String;
   protected

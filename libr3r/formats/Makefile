@@ -3,8 +3,9 @@
 .SUFFIXES:
 .SUFFIXES: $(OBJEXT) .pas
 
-all: deps feeditem$(OBJEXT) feed$(OBJEXT) esf$(OBJEXT) xml$(OBJEXT) \
-	rss$(OBJEXT) rss3$(OBJEXT) atom$(OBJEXT)
+all: deps feeditem$(OBJEXT) feed$(OBJEXT) \
+	nonxml$(OBJEXT) esf$(OBJEXT) rss3$(OBJEXT) \
+       	xml$(OBJEXT) rss$(OBJEXT) atom$(OBJEXT)
 
 clean:
 	rm -f *$(OBJEXT) *$(UNITEXT)
