@@ -55,7 +55,7 @@ begin
     except
       { UnixToDateTime is unimplemented in FPC.  Use this crude surrogate until
         it is. }
-      Result := DateTimeToStr((double(NTS) / (24 * 60 * 60)) + EncodeDate(1970, 1, 1));
+      Result := DateTimeToStr(double(NTS) / (24 * 60 * 60) + EncodeDate(1970, 1, 1));
     end;
   end
   else

@@ -25,7 +25,7 @@ DisplayName[eo]: R3R Kanala legilo
 Summary[de]: R3R ist ein Feedreader
 Summary[eo]: R3R estas kanala legilo
 
-AutopackageTarget: 0.7
+AutopackageTarget: 1.0
 CPUArchitectures: x86
 License: BSD
 URL: http://sourceforge.net/projects/r3r/
@@ -48,14 +48,14 @@ R3R estas legilo por kanaloj RSS-aj, ESF-aj kaj Atom-aj.
 [Imports]
 cd $source_dir/../..
 
-echo r3r | import
+echo 'r3r' | import
 
-echo libr3r | import
-echo ui/@UI@ | import
+echo 'libr3r' | import
+echo 'ui/@UI@' | import
 
-echo icons/r3r.png | import
+echo 'icons/r3r.png' | import
 
-echo $source_dir/autopackage/r3r.desktop | import
+echo $source_dir'/autopackage/r3r.desktop' | import
 
 [Prepare]
 # Dependency checking
@@ -84,7 +84,7 @@ done
 
 cd ../..
 
-cd ui/@UI@/po
+cd @UI@/po
 for lang in *.mo;
 do
   l=`echo $lang | sed 's/\.mo$//g'`

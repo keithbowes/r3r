@@ -9,7 +9,7 @@ distclean:
 	rm -f *.package autopackage/default.apspec is/r3r.iss is/setup.exe
 
 r3r-$(VERSION).x86.package: autopackage/default.apspec
-	makeinstaller
+	makepackage
 	cp -f r3r-$(VERSION).x86.package ../../..
 
 autopackage/default.apspec: autopackage/_default.apspec
