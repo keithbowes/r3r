@@ -1,4 +1,4 @@
-.POSIX: 
+SHELL = sh
 
 bindir=$(exec_prefix)/bin
 

@@ -1,4 +1,4 @@
-.POSIX: 
+SHELL = sh
 
 docsdir = $(datarootdir)/doc
 docdir = $(docsdir)/r3r

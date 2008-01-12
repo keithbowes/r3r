@@ -1,4 +1,4 @@
-.POSIX: 
+SHELL = sh
 
 dist-linux: r3r-$(VERSION).x86.package
 
@@ -13,8 +13,8 @@ r3r-$(VERSION).x86.package: autopackage/default.apspec
 	cp -f r3r-$(VERSION).x86.package ../../..
 
 autopackage/default.apspec: autopackage/_default.apspec
-	sed 's/@VERSION@/$(VERSION)/g'  autopackage/_default.apspec > \
-		autopackage/default.apspec.1
-	sed 's/@UI@/$(R3R_UI)/g' autopackage/default.apspec.1 > \
+	sed \
+	       	-e 's/@VERSION@/$(VERSION)/g' \
+		-e 's/@UI@/$(R3R_UI)/g' \
+      		autopackage/_default.apspec > \
 		autopackage/default.apspec
-	rm -f autopackage/default.apspec.1

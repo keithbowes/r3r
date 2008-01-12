@@ -1,5 +1,3 @@
-.POSIX: 
-
 SHELL = sh
 
 # Extensions for compiling
@@ -16,11 +14,15 @@ INSTALL_DATA = $(INSTALL) $(INSTALLFLAGS) -m 644
 INSTALL_PROGRAM = $(INSTALL) $(INSTALLFLAGS) -m 755
 
 R3R_UI = tui
-VERSION = `cat .version`
+VERSION = $(shell cat .version)
 
 prefix = /usr/local
 exec_prefix = $(prefix)
 datarootdir = $(prefix)/share
+
+export DEFS INSTALL_DATA INSTALL_PROGRAM OBJEXT PCFLAGS \
+	PCFLAGS_EXTRA R3R_UI VERSION \
+	datarootdir exec_prefix prefix
 
 default:
 	@echo "Tisk, tisk!  You haven't read ./dok/english/BUILDING, have you?"
@@ -28,21 +30,16 @@ default:
 # Default building rule
 all:
 	cd icons && $(MAKE) all
-	cd libr3r && $(MAKE) PCFLAGS="$(PCFLAGS)" DEFS="$(DEFS)" OBJEXT="$(OBJEXT)" \
-		 VERSION="`cat ../.version`" all
-	cd ui && $(MAKE) PCFLAGS="$(PCFLAGS)" R3R_UI="$(R3R_UI)" all
+	cd libr3r && $(MAKE) all
+	cd ui && $(MAKE) all
 
 # Installation rules
 install:
 	-mkdir $(prefix)
 	-mkdir $(datarootdir)
-	cd icons && $(MAKE) datarootdir="$(datarootdir)" \
-		INSTALL_DATA="$(INSTALL_DATA)" install
-	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" \
-		INSTALL_DATA="$(INSTALL_DATA)" install
-	cd ui && $(MAKE) datarootdir="$(datarootdir)" \
-		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
-		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" R3R_UI="$(R3R_UI)" install
+	cd icons && $(MAKE)  install
+	cd libr3r && $(MAKE) install
+	cd ui && $(MAKE) install
 	@echo Type $(MAKE) install-docs if you want to install the documentation.
 
 install-strip: install
@@ -57,24 +54,20 @@ install-win32-strip:
 
 # Uninstallation rules
 uninstall:
-	cd docs && $(MAKE) datarootdir="$(datarootdir)" uninstall
-	cd icons && $(MAKE) datarootdir="$(datarootdir)" uninstall
-	cd libr3r && $(MAKE) datarootdir="$(datarootdir)" uninstall
-	cd ui && $(MAKE) datarootdir="$(datarootdir)" \
-		exec_prefix="$(exec_prefix)" INSTALL_DATA="$(INSTALL_DATA)" \
-		INSTALL_PROGRAM="$(INSTALL_PROGRAM)" R3R_UI="$(R3R_UI)" \
-		datarootdir="$(datarootdir)" prefix="$(prefix)"	uninstall
+	cd docs && $(MAKE) uninstall
+	cd icons && $(MAKE) uninstall
+	cd libr3r && $(MAKE) uninstall
+	cd ui && $(MAKE) uninstall
 
 uninstall-win32:
 	$(MAKE) prefix="\"C:/Program Files/R3R\"" EXEEXT=.exe uninstall
 
 # Documentation rules
 docs html:
-	cd docs && $(MAKE) datarootdir="$(datarootdir)" all
+	cd docs && $(MAKE) all
 
 install-docs:
-	cd docs && $(MAKE) datarootdir="$(datarootdir)" \
-		INSTALL_DATA="$(INSTALL_DATA)" install
+	cd docs && $(MAKE) install
 
 install-docs-win32:
 	$(MAKE) prefix="\"C:/Program Files/R3R\"" install-docs
@@ -95,12 +88,10 @@ dist-src: maintainer-clean
 	mv r3r-$(VERSION).tar.gz ..
 
 dist-linux:
-	cd scripts/setup && $(MAKE) VERSION="`cat ../../.version`" \
-	R3R_UI="$(R3R_UI)" dist-linux
+	cd scripts/setup && $(MAKE) dist-linux
 
 dist-win32:
-	cd scripts/setup && $(MAKE) VERSION="`cat ../../.version`" \
-	R3R_UI="$(R3R_UI)" dist-win32
+	cd scripts/setup && $(MAKE) dist-win32
 
 # Cleaning rules
 mostlyclean:
@@ -108,14 +99,14 @@ mostlyclean:
 
 cleanall: mostlyclean
 	cd libr3r && $(MAKE) clean
-	cd ui && $(MAKE) clean R3R_UI="$(R3R_UI)"
+	cd ui && $(MAKE) clean
 
 distclean: clean
 	cd docs && $(MAKE) distclean
 	cd icons && $(MAKE) distclean
 	cd libr3r && $(MAKE) distclean
 	cd scripts/setup && $(MAKE) distclean
-	cd ui && $(MAKE) distclean R3R_UI="$(R3R_UI)"
+	cd ui && $(MAKE) distclean
 	-delp -eq .
 	rm -f .*.built
 
@@ -135,7 +126,7 @@ fpc:
 		OBJEXT=.o PC_OUTDIR=-FE UNITDIR=-Fu OS=`fpc -iTO` fpc-cross
 
 fpc-cross:
-	$(MAKE) PC=fpc PCFLAGS_EXTRA="$(PCFLAGS_EXTRA) -T$(OS)" all
+	$(MAKE) PC="fpc -T$(OS)" all
 
 fpc-win32:
 	$(MAKE) PCFLAGS_EXTRA="$(PCFLAGS_EXTRA) -Twin32" \

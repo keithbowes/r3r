@@ -1,3 +1,5 @@
+SHELL = sh
+
 all:
 	cd $(R3R_UI) && $(MAKE) all
 

@@ -1,4 +1,4 @@
-.POSIX: 
+SHELL = sh
 
 .SUFFIXES:
 .SUFFIXES: $(OBJEXT) .pas

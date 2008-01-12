@@ -1,14 +1,13 @@
-.POSIX: 
+SHELL = sh
 
 localedir = $(datarootdir)/locale
 
 .SUFFIXES:
 .SUFFIXES: $(OBJEXT) .mo .pas .po .pot .rst
 
-all:
+all: $(subst .po,.mo, $(wildcard *.po))
 	$(MAKE) libr3rstrings.rst
 	$(MAKE) libr3rstrings.pot
-	for lang in *.po; do $(MAKE) `echo $$lang | sed 's/\.po$$/\.mo/g'`; done
 
 clean:
 	rm -f *$(OBJEXT) *$(UNITEXT) *.rst
@@ -18,9 +17,7 @@ distclean:
 
 install:
 	-mkdir $(localedir)
-	-for lang in *.mo; do l=`echo $$lang | sed 's/\.mo$$//g'`; \
-		mkdir $(localedir)/$$l; mkdir $(localedir)/$$l/LC_MESSAGES; \
-		$(INSTALL_DATA) $$lang $(localedir)/$$l/LC_MESSAGES/libr3r.mo; done
+	-$(foreach l, $(subst .po,, $(wildcard *.po)), mkdir $(localedir)/$l; mkdir $(localedir)/$l/LC_MESSAGES; $(INSTALL_DATA) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo)
 
 uninstall:
 	rm -f $(localedir)/*/LC_MESSAGES/libr3r.mo

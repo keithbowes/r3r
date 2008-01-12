@@ -1,4 +1,4 @@
-.POSIX: 
+SHELL = sh
 
 RM = rm -fr
 
@@ -8,4 +8,4 @@ clean:
 	rm -f *$(OBJEXT) *$(UNITEXT)
 
 RegExpr$(OBJEXT): RegExpr.pas
-	$(PC) $(PCFLAGS) RegExpr.pas
+	$(PC) $(PCFLAGS) $<
