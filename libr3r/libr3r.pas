@@ -55,7 +55,7 @@ begin
     ParseURL(Resource, Prot, User, Pass, Host, Port, Path, Para);
     if Prot = 'http' then
     begin
-      FSock := THttpSock.Create(Host, Port, Path);
+      FSock := THttpSock.Create(Host, Port, Path, Para);
     end
     else
     begin

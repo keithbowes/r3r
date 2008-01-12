@@ -15,7 +15,7 @@ type
     procedure SendHeader(const Name: String);
     property Headers: THeaders read FHeaders;
   public
-    constructor Create(Host, Port, Path: String);
+    constructor Create(Host, Port, Path, Search: String);
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
   end;
@@ -89,11 +89,16 @@ begin
   end;
 end;
 
-constructor THttpSock.Create(Host, Port, Path: String);
+constructor THttpSock.Create(Host, Port, Path, Search: String);
 begin
   inherited Create(Host, Port);
   FHeaders.ContentType := ftUnset;
   FPath := Path;
+
+  if Search <> '' then
+  begin
+    FPath := FPath + '?' + Search
+  end
 end;
 
 procedure THttpSock.Execute;
