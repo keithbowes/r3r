@@ -30,7 +30,7 @@ var
 implementation
 
 uses
-  Dos, SysUtils;
+  Dos, RSettings_Routines, SysUtils;
 
 type
   TSettingEnum = (seProxyAddress, seProxyPort);
@@ -48,8 +48,6 @@ begin
   SetSection('Networking');
   SetString('Proxy', Proxy);
 end;
-
-{$I routines.inc}
 
 {$IFDEF SETTINGS_REGISTRY}
 {$I regsettings.inc}

@@ -1,9 +1,12 @@
 SHELL = sh
 
-all: rsettings$(OBJEXT)
+%$(OBJEXT): %.pas
+	$(PC) $(PCFLAGS) $<
+
+all: rsettings_routines$(OBJEXT) rsettings$(OBJEXT)
 
 clean:
 	rm -f *$(OBJEXT) *$(UNITEXT)
 
-rsettings$(OBJEXT): rsettings.pas
-	$(PC) $(PCFLAGS) $<
+#rsettings$(OBJEXT): rsettings.pas
+#	$(PC) $(PCFLAGS) $<

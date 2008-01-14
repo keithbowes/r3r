@@ -1,3 +1,15 @@
+unit RSettings_Routines;
+
+interface
+
+procedure CheckDir(const Dir: String);
+function SettingsDir: String;
+
+implementation
+
+uses
+  DOS, SysUtils;
+
 procedure CheckDir(const Dir: String);
 begin
   if not DirectoryExists(Dir) then
@@ -28,3 +40,5 @@ begin
 
   Result := Result + PathDelim;
 end;
+
+end.
