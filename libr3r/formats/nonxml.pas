@@ -3,12 +3,7 @@ unit NonXml;
 interface
 
 uses
-  Feed,
-  {$IFNDEF NO_LAZARUS}
-    SynRegExpr
-  {$ELSE}
-    RegExpr
-  {$ENDIF};
+  Feed, RegExpr;
 
 type
   TNonXmlFeed = class(TFeed)
