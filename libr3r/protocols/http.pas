@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  BlckSock, Feed, Info, RegExpr, SysUtils;
+  BlckSock, Classes, Feed, Info, RegExpr, SysUtils;
 
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
@@ -34,6 +34,8 @@ var
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
   Line: String;
+  RegExp: TRegExpr;
+  RespList: TStringList;
 begin
   HeaderState := hsUnstarted;
 
@@ -46,7 +48,17 @@ begin
     end
     else if (Line <> '') and (HeaderState = hsUnstarted) then
     begin
-     HeaderState := hsStarted;
+      HeaderState := hsStarted;
+
+			RespList := TStringList.Create;
+
+		  RegExp := TRegExpr.Create;
+			RegExp.Expression := '\s+';
+			RegExp.Split(Line, RespList);
+			FHeaders.Status := RespList[1];
+
+			RespList.Free;
+			RegExp.Free;
     end
     else
     begin

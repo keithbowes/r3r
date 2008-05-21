@@ -5,7 +5,8 @@ SHELL = sh
 
 formatdeps: sockconsts$(OBJEXT)
 
-all: rsock$(OBJEXT) localfile$(OBJEXT) headers$(OBJEXT) http$(OBJEXT)
+all: rsock$(OBJEXT) localfile$(OBJEXT) headers$(OBJEXT) \
+	httpcache$(OBJEXT) http$(OBJEXT)
 
 clean:
 	rm -f *$(OBJEXT) *$(UNITEXT)
