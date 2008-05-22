@@ -70,7 +70,7 @@ else
 fi
 
 AC_MSG_CHECKING(for PHP-GTK presence)
-php_gtk_out=`php -r "@dl('php_gtk.' . PHP_SHLIB_SUFFIX); if(!class_exists('gtk')) echo 'Couldn\'t load the extension';"`
+php_gtk_out=`php -r "@dl('php_gtk.' . PHP_SHLIB_SUFFIX); @dl('php_gtk2.' . PHP_SHLIB_SUFFIX); if(!class_exists('gtk')) echo 'Couldn\'t load the extension';"`
 echo $php_gtk_out
 if test -z "$php_gtk_out";
 then

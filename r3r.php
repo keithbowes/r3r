@@ -7,7 +7,10 @@ define('ENABLE_DEPRECATED', getenv('ENABLE_DEPRECATED'));
 
 if (!class_exists('gtk'))
 {
-  if (!dl('php_gtk.' . PHP_SHLIB_SUFFIX))
+  if (PHP_GTK_MAJOR == 2) $lib = 'php_gtk2.';
+  else $lib = 'php_gtk.';
+
+  if (!@dl($lib . PHP_SHLIB_SUFFIX))
     trigger_error(ALERT_NO_PHP_GTK, E_USER_ERROR);
 }
 
