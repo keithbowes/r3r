@@ -150,7 +150,7 @@ if (PHP_GTK_MAJOR > 1)
       $renderer->set_property('text', $data);
     }
 
-    $feedList = new GtkListStore(Gtk::TYPE_STRING, Gtk::TYPE_STRING, Gtk::TYPE_STRING, Gtk::TYPE_STRING);
+    $feedList = new GtkListStore(G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     $feedTree = new GtkTreeView();
     $feedTree->set_model($feedList);
     $listitems = count($listArray);
