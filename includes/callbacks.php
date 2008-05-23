@@ -335,11 +335,25 @@ function feedListRowSelected($widget, $row)
   global $feedItemView, $mime_type, $statusBar;
   list($feed) = $widget->get_data($row);
 
-  $text = &new GtkText();
-  $text->insert_text($feed['description'], 0);
+  if (class_exists('GtkTextView'))
+  {
+    $text = &new GtkTextView();
+    $buffer = $text->get_buffer();
+    $buffer->set_text($feed['description']);
+    $text->set_editable(false);
 
-  if (getSetting('wrap-desc') && $mime_type != 'text/x-rss')
-    $text->set_word_wrap(true);
+    if (getSetting('wrap-desc') && $mime_type != 'text/x-rss')
+      $text->set_wrap_mode(GTK_WRAP_WORD);
+
+  }
+  else
+  {
+    $text = &new GtkText();
+    $text->insert_text($feed['description'], 0);
+
+    if (getSetting('wrap-desc') && $mime_type != 'text/x-rss')
+      $text->set_word_wrap(true);
+  }
 
   $scrolledBox = &new GtkVBox();
   $scrolled = &new GtkScrolledWindow();
