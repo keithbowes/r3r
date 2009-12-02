@@ -1,0 +1,62 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0.0-alpha5\n"
+"PO-Revision-Date: 2008-11-09 18:34-0500\n"
+"Last-Translator: Keith Bowes\n"
+"Language-Team: Spanish <translation-team-es@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: classicstrings:filemnucap
+msgid "&File"
+msgstr "A&rchivo"
+
+#: classicstrings:openitmcap
+msgid "&Open"
+msgstr "&Abrir"
+
+#: classicstrings:closeitmcap
+msgid "&Close"
+msgstr "&Cerrar"
+
+#: classicstrings:toolsmnucap
+msgid "&Tools"
+msgstr "&Herramientas"
+
+#: classicstrings:settingsitmcap
+msgid "&Settings..."
+msgstr "&Configuración..."
+
+#: classicstrings:helpmnucap
+msgid "&Help"
+msgstr "Ayu&da"
+
+#: classicstrings:infoitmcap
+msgid "&Info..."
+msgstr "&Información..."
+
+#: classicstrings:namecol
+msgid "Feed Name"
+msgstr "Nomo del fuente"
+
+#: classicstrings:titlecol
+msgid "Title"
+msgstr "Título"
+
+#: classicstrings:subjcol
+msgid "Subject"
+msgstr "Temas"
+
+#: classicstrings:createdcol
+msgid "Created"
+msgstr "Creado"
+
+#: classicstrings:emptyfield
+msgid "[None]"
+msgstr "[Ninguno]"
+
+#: classicstrings:go
+msgid "Go"
+msgstr "Ir"

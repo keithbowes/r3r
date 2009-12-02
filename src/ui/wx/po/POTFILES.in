@@ -1,0 +1,12 @@
+app.cpp
+desc.cpp
+events.cpp
+feedlist.cpp
+location.cpp
+menu.cpp
+settings-display.cpp
+settingsdialog.cpp
+settings-headers.cpp
+settings-http.cpp
+settings-programs.cpp
+settings-subscriptions.cpp

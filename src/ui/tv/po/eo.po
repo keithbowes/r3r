@@ -1,0 +1,110 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0-alpha6\n"
+"PO-Revision-Date: 2008-01-12 20:11-0400\n"
+"Last-Translator: Keith Bowes\n"
+"Language-Team: Esperanto <eo@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tvstrings:filemenu
+msgid "~F~ile"
+msgstr "~D~osiero"
+
+#: tvstrings:openitem
+msgid "~O~pen"
+msgstr "~M~alfermi"
+
+#: tvstrings:openshortcut
+msgid "F2"
+msgstr ""
+
+#: tvstrings:openkey
+msgid "kbF2"
+msgstr ""
+
+#: tvstrings:quit
+msgid "E~x~it"
+msgstr "~E~liri"
+
+#: tvstrings:quitshortcut
+msgid "Esc"
+msgstr "Esk"
+
+#: tvstrings:quitkey
+msgid "kbEsc"
+msgstr ""
+
+#: tvstrings:tools
+msgid "~T~ools"
+msgstr "~I~lrimedoj"
+
+#: tvstrings:settings
+msgid "~S~ettings"
+msgstr "~A~gordo"
+
+#: tvstrings:feeds
+msgid "~F~eeds"
+msgstr "~F~luoj"
+
+#: tvstrings:feedsshortcut
+msgid "Ctrl-F"
+msgstr "Stir-K"
+
+#: tvstrings:feedskey
+msgid "kbCtrlF"
+msgstr "kbCtrlK"
+
+#: tvstrings:http
+msgid "~H~TTP"
+msgstr ""
+
+#: tvstrings:httpshortcut
+msgid "Ctrl-H"
+msgstr ""
+
+#: tvstrings:httpkey
+msgid "kbCtrlH"
+msgstr ""
+
+#: tvstrings:programs
+msgid "~P~rograms"
+msgstr "~P~rogramoj"
+
+#: tvstrings:programsshortcut
+msgid "Ctrl-P"
+msgstr ""
+
+#: tvstrings:programskey
+msgid "kbCtrlP"
+msgstr ""
+
+#: tvstrings:help
+msgid "~H~elp"
+msgstr "~H~elpo"
+
+#: tvstrings:about
+msgid "~A~bout"
+msgstr "~P~ri"
+
+#: tvstrings:aboutshortcut
+msgid "F1"
+msgstr ""
+
+#: tvstrings:aboutkey
+msgid "kbF1"
+msgstr ""
+
+#: tvstrings:openfile
+msgid "Open File"
+msgstr "Malfermi dosieron"
+
+#: tvstrings:thefilename
+msgid "~F~ile Name"
+msgstr "~D~osiernomo"
+
+#: tvstrings:go
+msgid "Go"
+msgstr "Iri"

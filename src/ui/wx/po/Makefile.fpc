@@ -1,0 +1,26 @@
+[prerules]
+pofiles=$(wildcard *.po)
+mofiles=$(subst .po,.mo,$(pofiles))
+
+[rules]
+include ../../../../scripts/common.make
+all: $(mofiles)
+
+install:
+	-$(foreach l, $(subst .po,, $(pofiles)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_wx.mo;)
+
+uninstall:
+	$(DEL) -f $(wildcard $(localedir)/*/LC_MESSAGES/r3r_wx.mo)
+
+clean:
+	$(DEL) $(mofiles)
+
+%.mo: %.po
+	msgfmt -o $@ $<
+
+%.po: r3r.pot
+	msgmerge --backup=none --silent --update $@ $<
+	$(TOUCH) $@
+
+r3r.pot: POTFILES.in
+	-intltool-update --gettext-package=r3r --pot

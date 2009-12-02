@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0-alpha6\n"
+"PO-Revision-Date: 2008-11-08 21:02-0500\n"
+"Last-Translator: Keith Bowes\n"
+"Language-Team: Esperanto <eo@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: libr3rstrings:errorgetting
+msgid "Couldn't retrieve the feed."
+msgstr "Ne povis atingi la fluon."
+
+#: libr3rstrings:invalidheaders
+msgid "The web server doesn't exist or sent invalid information."
+msgstr "La TTT-servilo ne ekzistas aŭ sendis nepravajn informojn."

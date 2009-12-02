@@ -1,0 +1,12 @@
+[prerules]
+UNIT_DIRS=.. ../* ../../third-party/* ../../utils/*
+UNITS = rsock localfile headers http
+
+[rules]
+include ../../../scripts/common.make
+
+all:
+	cd .. && $(MAKE) info.pas
+	$(MAKE) $(addsuffix $(PPUEXT), $(UNITS))
+
+formatsdeps: sockconsts$(PPUEXT)

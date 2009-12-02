@@ -1,0 +1,28 @@
+[prerules]
+.SUFFIXES:
+.SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+
+[rules]
+include ../../../scripts/common.make
+
+all: libr3rstrings.pot $(subst .po,.mo, $(wildcard *.po))
+
+clean:
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~) libr3rstrings.pot
+
+install:
+	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
+
+uninstall:
+	$(DEL) -f $(localedir)/*/LC_MESSAGES/libr3r.mo
+
+libr3rstrings.pot: libr3rstrings$(RSTEXT)
+	-rstconv -i $< -o $@
+	$(TOUCH) *.po
+
+.po.mo:
+	-msgmerge -Uq $< libr3rstrings.pot
+	-msgfmt -o $@ $<
+
+libr3rstrings$(RSTEXT): libr3rstrings.pas
+	$(PC) $(PCFLAGS) $<

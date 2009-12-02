@@ -1,0 +1,52 @@
+[prerules]
+CXX ?= g++
+CXXFLAGS += $(shell wx-config --cflags) \
+						-DICONFILE=\"$(icondir)/r3r.png\" \
+						-DLOCALEDIR=\"$(localedir)\" -Wall
+LDFLAGS += $(shell wx-config --libs) -llibr3r_shared -L../../libr3r
+
+CXXEXT = .cpp
+HEXT = .h
+
+objects = app desc events feedlist feedlistview frame gofield \
+					location menu settings-display settings-headers \
+					settings-http settings-main settings-programs \
+					settings-subscriptions settingscheckbox settingsdialog \
+					settingsentry settingslist subscriptions
+
+[rules]
+include ../../../scripts/common.make
+
+ifdef inWindows
+rcobjs = ../../../icons/r3r.res
+else
+rcobjs =
+endif
+
+all: r3r$(EXEEXT)
+	cd po && $(MAKE) all
+
+clean:
+	cd po && $(MAKE) clean
+	$(DEL) r3r$(EXEEXT)
+
+install:
+	cd po && $(MAKE) install
+
+uninstall:
+	cd po && $(MAKE) uninstall
+
+r3r$(EXEEXT): $(addsuffix $(OEXT),$(objects))
+	$(CXX) -o $@ $(LDFLAGS) $^ $(rcobjs)
+
+%$(OEXT): %$(CXXEXT)
+	$(CXX) -c -o $@ $(CXXFLAGS) $<
+
+%$(CXXEXT): %$(HEXT) wx.h
+	$(TOUCH) $@
+
+events.h: eventtables.h
+	$(TOUCH) $@
+
+feedlist.h settingscheckbox.h: libr3r.h
+	$(TOUCH) $@

@@ -1,0 +1,38 @@
+[prerules]
+EXEOUT = .
+TARGET_DIRS = po settings protocols formats
+UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/*
+UNITS = info rgetfeed rmessage
+
+[rules]
+include ../../scripts/common.make
+
+ifeq ($(SHAREDLIBEXT),.so)
+	SHAREDLIBPREFIX = lib
+else
+	SHAREDLIBPREFIX =
+endif
+
+all: info.pas
+	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
+	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
+	$(MAKE) libr3r$(PPUEXT)
+	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
+
+clean: _clean
+	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)
+	$(DEL) info.pas
+	$(DEL) $(wildcard $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT))
+	
+install:
+	cd po && $(MAKE) install
+	$(INSTALL) $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(libdir)
+	-ldconfig
+
+uninstall:
+	cd po && $(MAKE) uninstall
+	$(DEL) $(libdir)/*libr3r_shared$(SHAREDLIBEXT)
+
+info.pas: _info.pas ../../scripts/common.make
+	$(SED) 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas
+	$(MAKE) info$(PPUEXT)

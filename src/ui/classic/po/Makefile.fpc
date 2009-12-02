@@ -1,0 +1,28 @@
+[prerules]
+.SUFFIXES:
+.SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+
+[rules]
+include ../../../../scripts/common.make
+
+all: classicstrings.pot $(subst .po,.mo, $(wildcard *.po))
+
+clean:
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~) classicstrings.pot
+
+install:
+	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_classic.mo;)
+
+uninstall:
+	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_classic.mo
+
+classicstrings.pot: classicstrings$(RSTEXT)
+	-rstconv -i $< -o $@
+	$(TOUCH) *.po
+
+.po.mo:
+	-msgmerge -Uq $< classicstrings.pot
+	-msgfmt -o $@ $<
+
+classicstrings$(RSTEXT): classicstrings.pas
+	$(PC) $(PCFLAGS) $<

@@ -1,0 +1,161 @@
+# English translations for r package.
+# Copyright (C) 2009 THE r'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the r package.
+# Keith Bowes <keith@localhost>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: r 3r\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-01 01:06-0500\n"
+"PO-Revision-Date: 2009-11-30 14:49-0500\n"
+"Last-Translator: Keith Bowes <keith@localhost>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../app.cpp:13
+msgid "R3R"
+msgstr "R3R"
+
+#: ../desc.cpp:22
+msgid "&Contact"
+msgstr "&Contact"
+
+#: ../desc.cpp:26
+msgid "&Subscribe"
+msgstr "&Subscribe"
+
+#: ../events.cpp:139
+msgid "About R3R"
+msgstr "About R3R"
+
+#: ../feedlist.cpp:26
+msgid "[None]"
+msgstr "[None]"
+
+#: ../feedlist.cpp:107
+msgid "Feed Title"
+msgstr "Feed Title"
+
+#: ../feedlist.cpp:110
+msgid "Item Title"
+msgstr "Item Title"
+
+#: ../feedlist.cpp:113
+msgid "Subject"
+msgstr "Subject"
+
+#: ../feedlist.cpp:116
+msgid "Date Created"
+msgstr "Date Created"
+
+#: ../location.cpp:15
+msgid "Go"
+msgstr "Go"
+
+#: ../menu.cpp:10
+msgid "&Open"
+msgstr "&Open"
+
+#: ../menu.cpp:12
+msgid "E&xit"
+msgstr "E&xit"
+
+#: ../menu.cpp:16
+msgid "&Settings"
+msgstr "&Settings"
+
+#: ../menu.cpp:20
+msgid "&Donate"
+msgstr "&Donate"
+
+#: ../menu.cpp:22
+msgid "&About"
+msgstr "&About"
+
+#: ../menu.cpp:26
+msgid "&File"
+msgstr "&File"
+
+#: ../menu.cpp:27
+msgid "&Tools"
+msgstr "&Tools"
+
+#: ../menu.cpp:28
+msgid "&Help"
+msgstr "&Help"
+
+#: ../settings-display.cpp:12
+msgid "Show &messages from the back-end"
+msgstr "Show &messages from the back-end"
+
+#: ../settings-display.cpp:15
+msgid "Show &feed titles only"
+msgstr "Show &feed titles only"
+
+#: ../settings-display.cpp:18
+msgid "Hide &cached feeds"
+msgstr "Hide &cached feeds"
+
+#: ../settings-display.cpp:21
+msgid "&Hide cached feed items"
+msgstr "&Hide cached feed items"
+
+#: ../settings-display.cpp:24
+msgid "&Guess the file types of feeds"
+msgstr "&Guess the file types of feeds"
+
+#: ../settings-display.cpp:27
+msgid "Display"
+msgstr "Display"
+
+#: ../settingsdialog.cpp:4
+msgid "Settings"
+msgstr "Settings"
+
+#: ../settings-headers.cpp:11
+msgid "Custom Accept &Types: "
+msgstr "Custom Accept &Types: "
+
+#: ../settings-headers.cpp:17
+msgid "Custom Accept &Languages: "
+msgstr "Custom Accept &Languages: "
+
+#: ../settings-headers.cpp:23
+msgid "HTTP Headers"
+msgstr "HTTP Headers"
+
+#: ../settings-http.cpp:11
+msgid "Proxy &Address: "
+msgstr "Proxy &Address: "
+
+#: ../settings-http.cpp:17
+msgid "&Proxy Port: "
+msgstr "&Proxy Port: "
+
+#: ../settings-http.cpp:23
+msgid "HTTP"
+msgstr "HTTP"
+
+#: ../settings-programs.cpp:11
+msgid "&Browser"
+msgstr "&Browser"
+
+#: ../settings-programs.cpp:17
+msgid "&Mail Client"
+msgstr "&Mail Client"
+
+#: ../settings-programs.cpp:23
+msgid "&Editor"
+msgstr "&Editor"
+
+#: ../settings-programs.cpp:29
+msgid "Programs"
+msgstr "Programs"
+
+#: ../settings-subscriptions.cpp:27
+msgid "Subscriptions"
+msgstr "Subscriptions"

@@ -1,0 +1,118 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0-alpha6\n"
+"PO-Revision-Date: 2009-01-20 20:11-0400\n"
+"Last-Translator: Keith Bowes\n"
+"Language-Team: Esperanto <eo@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tuistrings:feed
+msgid "Feed Address: "
+msgstr "Retadreso de fluo: "
+
+#: tuistrings:gourl
+msgid "g)o to a URL"
+msgstr "i)ri al retadreso"
+
+#: tuistrings:aboutitem
+msgid "a)bout item number"
+msgstr "p)ri era numero"
+
+#: tuistrings:openlink
+msgid "open l)ink"
+msgstr "m)alfermi ligilon"
+
+#: tuistrings:options
+msgid "o)ptions"
+msgstr "a)gordo"
+
+#: tuistrings:donate
+msgid "d)onate"
+msgstr "d)onaci"
+
+#: tuistrings:quit
+msgid "q)uit the program"
+msgstr "e)liri el la programo"
+
+#: tuistrings:aboutkey
+msgid "a"
+msgstr "p"
+
+#: tuistrings:openkey
+msgid "l"
+msgstr "m"
+
+#: tuistrings:gokey
+msgid "g"
+msgstr "i"
+
+#: tuistrings:optionskey
+msgid "o"
+msgstr "a"
+
+#: tuistrings:donatekey
+msgid "d"
+msgstr ""
+
+#: tuistrings:quitkey
+msgid "q"
+msgstr "e"
+
+#: tuistrings:itemno
+msgid "Item number: "
+msgstr "Era numero: "
+
+#: tuistrings:itemtitle
+msgid "Title: "
+msgstr "Titolo: "
+
+#: tuistrings:itemsubject
+msgid "Subject: "
+msgstr "Temoj: "
+
+#: tuistrings:itemcreated
+msgid "Created: "
+msgstr "Kreita: "
+
+#: tuistrings:itemdesc
+msgid "Description: "
+msgstr "Priskribo: "
+
+#: tuistrings:itemlink
+msgid "Link %d: %s"
+msgstr "Ligilo %d: %s"
+
+#: tuistrings:invalidnumber
+msgid "Invalid Number!"
+msgstr "Nevalida numero!"
+
+#: tuistrings:linkno
+msgid "Link number: "
+msgstr "Ligila numero: "
+
+#: tuistrings:errorerror
+msgid "Error"
+msgstr "Eraro"
+
+#: tuistrings:errorwarning
+msgid "Warning"
+msgstr "Averto"
+
+#: tuistrings:optionname
+msgid "Option Name"
+msgstr "Parametra nomo"
+
+#: tuistrings:optionval
+msgid "Option Value"
+msgstr "Parametra valoro"
+
+#: tuistrings:settingtochange
+msgid "Option to Change: "
+msgstr "Ŝanĝota parametro: "
+
+#: tuistrings:newvalue
+msgid "New Value: "
+msgstr "Nova valoro: "

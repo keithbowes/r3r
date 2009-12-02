@@ -1,0 +1,28 @@
+[prerules]
+.SUFFIXES:
+.SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+
+[rules]
+include ../../../../scripts/common.make
+
+all: tvstrings.pot $(subst .po,.mo, $(wildcard *.po))
+
+clean:
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~) tvstrings.pot
+
+install:
+	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tv.mo;)
+
+uninstall:
+	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_tv.mo
+
+tvstrings.pot: tvstrings$(RSTEXT)
+	-rstconv -i $< -o $@
+	$(TOUCH) *.po
+
+.po.mo:
+	-msgmerge -Uq $< tvstrings.pot
+	-msgfmt -o $@ $<
+
+tvstrings$(RSTEXT): tvstrings.pas
+	$(PC) $(PCFLAGS) $<

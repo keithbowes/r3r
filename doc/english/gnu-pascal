@@ -1,0 +1,20 @@
+It would be nice if this project could be built with GNU Pascal (GPC), due to
+its portability (it exists everywhere where GCC can).  But below are some
+of its limitations/incompatibilities with the way I'm currently coding.  These
+might be worked around later, but for now, Free Pascal is required.
+
+* No classes, only objects.
+* No class-related functionality, like properties, method callbacks, etc.
+* No SysUtils unit (can be partially faked with Dos and Strings).
+* No Classes unit (threads, lists, etc).
+* No Keyboard unit (can be partially faked with Crt).
+* No resourcestring section (can be faked with constants).
+* No GetText unit (can be faked with Intl).
+* No dynamic arrays (can be faked with pointers, but that's not something that
+  should be done).
+* 99% incompatible strings model.
+* No SAX units (can be faked with writing a wrapper for Expat).
+* TRegExpr doesn't work (might be able to be faked with the built-in regular-
+  expressions unit).
+* Synapse doesn't work (can be faked with a wrapper for BSD sockets).
+* ...

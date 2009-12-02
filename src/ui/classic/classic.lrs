@@ -1,0 +1,27 @@
+{ This is an automatically generated lazarus resource file }
+
+LazarusResources.Add('TR3RForm','FORMDATA',[
+  'TPF0'#8'TR3RForm'#7'R3RForm'#4'Left'#3#160#0#6'Height'#3','#1#3'Top'#2'K'#5
+  +'Width'#3#245#1#7'Caption'#6#3'R3R'#12'ClientHeight'#3#16#1#11'ClientWidth'#3
+  +#245#1#4'Menu'#7#7'R3RMenu'#8'OnCreate'#7#7'Created'#10'ParentFont'#8#10'LCL'
+  +'Version'#6#6'0.9.26'#0#10'TStatusBar'#9'StatusBar'#6'Height'#2#24#3'Top'#3
+  +#248#0#5'Width'#3#245#1#6'Panels'#14#0#0#0#7'TButton'#5'GoBtn'#22'AnchorSide'
+  +'Left.Control'#7#7'UriEdit'#21'AnchorSideTop.Control'#7#7'DescBox'#24'Anchor'
+  +'SideBottom.Control'#7#9'StatusBar'#4'Left'#2#8#6'Height'#2#26#3'Top'#3#222#0
+  +#5'Width'#3#232#1#5'Align'#7#8'alCustom'#7'Anchors'#11#6'akLeft'#7'akRight'#8
+  +'akBottom'#0#8'AutoSize'#9#7'OnClick'#7#10'GoBtnClick'#8'TabOrder'#2#0#0#0#5
+  +'TEdit'#7'UriEdit'#21'AnchorSideTop.Control'#7#7'DescBox'#23'AnchorSideRight'
+  +'.Control'#7#5'GoBtn'#24'AnchorSideBottom.Control'#7#9'StatusBar'#4'Left'#2#8
+  +#6'Height'#2#26#3'Top'#3#222#0#5'Width'#3#196#1#7'Anchors'#11#6'akLeft'#8'ak'
+  +'Bottom'#0#9'OnKeyDown'#7#14'UriEditKeyDown'#8'TabOrder'#2#1#4'Text'#6#7'htt'
+  +'p://'#0#0#9'TGroupBox'#7'DescBox'#24'AnchorSideBottom.Control'#7#7'UriEdit'
+  +#4'Left'#2#8#6'Height'#3#222#0#5'Width'#3#232#1#7'Anchors'#11#5'akTop'#6'akL'
+  +'eft'#7'akRight'#8'akBottom'#0#7'Caption'#6#3'R3R'#12'ClientHeight'#3#201#0
+  +#11'ClientWidth'#3#228#1#8'TabOrder'#2#2#0#9'TListView'#8'FeedList'#4'Left'#2
+  +#6#6'Height'#3#192#0#3'Top'#2#5#5'Width'#3#211#1#7'Columns'#14#1#0#1#0#1#0#1
+  +#0#0#8'TabOrder'#2#0#0#0#0#9'TMainMenu'#7'R3RMenu'#0#9'TMenuItem'#8'FileMenu'
+  +#0#9'TMenuItem'#8'OpenItem'#7'OnClick'#7#13'OpenItemClick'#0#0#9'TMenuItem'#9
+  +'CloseItem'#7'OnClick'#7#14'CloseItemClick'#0#0#0#9'TMenuItem'#9'ToolsMenu'#0
+  +#9'TMenuItem'#12'SettingsItem'#0#0#0#9'TMenuItem'#8'HelpMenu'#12'RightJustif'
+  +'y'#9#0#9'TMenuItem'#8'InfoItem'#7'OnClick'#7#13'InfoMenuClick'#0#0#0#0#0
+]);

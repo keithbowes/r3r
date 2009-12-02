@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<fpdoc-description>
+  <package name="libr3r">
+    <descr>
+      The back-end library for R3R, containing code for processing feeds.
+    </descr>
+    <module name="LibR3R">
+      <descr>
+        The higher-level part of libr3r.  This is a bridge between the feed processor and front-end user interfaces (UIs).
+      </descr>
+      <element name="TParsedEvent">
+        <short>Parsed Event</short>
+        <descr>
+          The type of the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  Don't use directly.
+        </descr>
+      </element>
+      <element name="TFeedItem">
+        <short>Information about the concerned feed item.</short>
+        <descr>
+          This is the same as FeedItem.TFeedItem.  The only reason for it is so that this unit is all you need to include in your uses clause (the less back-end stuff in the front end, the better).
+          Only use with the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  In this context, you won't get access violations.
+          &lt;rant&gt;If only units had the exportation of imported symbols, like Extended Pascal modules do, this wouldn't be needed at all.&lt;/rant&gt;
+        </descr>
+        <errors>
+          Accessing an out-of-bounds element in the field "Links" will raise an exception.  Specifically, don't access even the first element until you can verify that there is one.  The list is only guaranteed to have been allocated for the OnItemParsed event.  For best results, use only in a for loop.
+        </errors>
+      </element>
+      <element name="TLibR3R">
+        <descr>
+          A simple high-level bridge class, which wraps the complicated back-end, making it easier and safer to create new user interfaces.  The general procedure for using the class in a front end: <link id="TLibR3R.Create">Create</link>
+          the class, set the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event to a class's method (or override the <link id="TLibR3R.DisplayItem">DisplayItem</link> method),
+          tell the back-end to <link id="TLibR3R.Parse">parse</link> the feed, and finally,
+          <link id="TLibR3R.Destroy">free</link> the back-end.
+          See the existing front ends for examples.
+        </descr>
+      </element>
+      <element name="TLibR3R.DoParseItem">
+        <descr>
+          The procedure which calls the method to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points, when conditions permit it.
+        </descr>
+      </element>
+      <element name="TLibR3R.Create">
+        <descr>
+          Initializes the library. It has a deprecated optional parameter, the initial feed to retrieve, for backwards compatibility.
+        </descr>
+      </element>
+      <element name="TLibR3R.Destroy">
+        <descr>
+          Disconnects from the address, clears used memory, etc.  This should be called indirectly via the Free procedure.
+        </descr>
+      </element>
+      <element name="TLibR3R.Parse">
+        <descr>
+          Parses the feed at the connected address, and calls (indirectly via <link id="TLibR3R.DoParseItem">DoParseItem</link>) the callback to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points each time an entire feed item has been parsed.
+        </descr>
+      </element>
+      <element name="TLibR3R.RetrieveFeed">
+        <descr>
+          Retrieves a new feed.
+        </descr>
+      </element>
+      <element name="TLibR3R.HandleMessage">
+        <descr>
+          A virtual method that must be overridden and given code which will handle any messages LibR3R generates.  It's the same as setting the <link id="TLibR3R.OnMessage">OnMessage</link> event.
+        </descr>
+      </element>
+      <element name="TLibR3R.DisplayItem">
+        <descr>
+          A virtual method that must be overriden and given code which will display the feed item given from the back end in a way suitable for the current UI.  It's the same as setting the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.
+        </descr>
+      </element>
+      <element name="TLibR3R.OnItemParsed">
+        <descr>
+          An event, which points to a class' method that is to be called whenever a feed item has been <link id="TLibR3R.Parse">parse</link>d.  Its one parameter is of type <link id="TFeedItem">TFeedItem</link>.
+        </descr>
+      </element>
+      <element name="TLibR3R.OnMessage">
+        <descr>
+          An event, which points to a class' method that is to be called whenever the backend needs to send a message to the UI.  If an error occurred, the second parameter will be true and the UI can act accordingly.
+        </descr>
+      </element>
+      <element name="Settings">
+        <descr>
+          Gives you access to the <link id="TRSettings">TRSettings</link> class.
+        </descr>
+      </element>
+    </module>
+    <module name="RSettings">
+      <element name="TRSettings">
+        <descr>
+          The class giving you access to settings.
+        </descr>
+      </element>
+      <element name="TRSettings.Enumerate">
+        <descr>
+          Get an array of setting names and values and the number there are.
+        </descr>
+      </element>
+      <element name="TRSettings.IndexOf">
+        <descr>
+          Get the index of a specific setting for a call to one of the Get* or Set* methods.  The number shouldn't be hard-coded, because they can vary per installation.  It will return -1 if the index isn't found.
+        </descr>
+      </element>
+      <element name="TRSettings.GetBoolean">
+        <descr>
+          Get a boolean value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.GetInteger">
+        <descr>
+          Get a integer value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.GetString">
+        <descr>
+          Get a string value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.SetBoolean">
+        <descr>
+          Set a boolean value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.SetInteger">
+        <descr>
+          Set a integer value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.SetString">
+        <descr>
+          Set a string value at the specified index.
+        </descr>
+      </element>
+      <element name="TRSettings.Access">
+        <descr>
+          Access information about the settings.  This is the only method available to the shared library, but those coding in Object Pascal should use the othehr methods.  Index should be set to 0 to get the index of a setting name; if set to a value greater than 0, it will give you the setting name at the specified index.  The value should be cast to and from pointers (not referenced and dereferenced).  For SettingsMode, use SettingsRead and/or SettingsWrite depending on whether you want to get or set the values.
+        </descr>
+      </element>
+    </module>
+  </package>
+</fpdoc-description>

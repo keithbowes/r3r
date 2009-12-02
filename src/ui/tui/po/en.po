@@ -1,0 +1,121 @@
+# This is an English translation file.  It solves the problem with what if you
+# prefer program messages to be in some languages above English but English
+# above other languages.  A very real possibility.
+msgid ""
+msgstr ""
+"Project-Id-Version: R3R 2.0-alpha6\n"
+"PO-Revision-Date: 2009-01-20 20:11-0400\n"
+"Last-Translator: Keith Bowes\n"
+"Language-Team: English <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: tuistrings:feed
+msgid "Feed Address: "
+msgstr ""
+
+#: tuistrings:gourl
+msgid "g)o to a URL"
+msgstr ""
+
+#: tuistrings:aboutitem
+msgid "a)bout item number"
+msgstr ""
+
+#: tuistrings:openlink
+msgid "open l)ink"
+msgstr ""
+
+#: tuistrings:options
+msgid "o)ptions"
+msgstr ""
+
+#: tuistrings:donate
+msgid "d)onate"
+msgstr ""
+
+#: tuistrings:quit
+msgid "q)uit the program"
+msgstr ""
+
+#: tuistrings:aboutkey
+msgid "a"
+msgstr ""
+
+#: tuistrings:openkey
+msgid "l"
+msgstr ""
+
+#: tuistrings:gokey
+msgid "g"
+msgstr ""
+
+#: tuistrings:optionskey
+msgid "o"
+msgstr ""
+
+#: tuistrings:donatekey
+msgid "d"
+msgstr ""
+
+#: tuistrings:quitkey
+msgid "q"
+msgstr ""
+
+#: tuistrings:itemno
+msgid "Item number: "
+msgstr ""
+
+#: tuistrings:itemtitle
+msgid "Title: "
+msgstr ""
+
+#: tuistrings:itemsubject
+msgid "Subject: "
+msgstr ""
+
+#: tuistrings:itemcreated
+msgid "Created: "
+msgstr ""
+
+#: tuistrings:itemdesc
+msgid "Description: "
+msgstr ""
+
+#: tuistrings:itemlink
+msgid "Link %d: %s"
+msgstr ""
+
+#: tuistrings:invalidnumber
+msgid "Invalid Number!"
+msgstr ""
+
+#: tuistrings:linkno
+msgid "Link number: "
+msgstr ""
+
+#: tuistrings:errorerror
+msgid "Error"
+msgstr ""
+
+#: tuistrings:errorwarning
+msgid "Warning"
+msgstr ""
+
+#: tuistrings:optionname
+msgid "Option Name"
+msgstr ""
+
+#: tuistrings:optionval
+msgid "Option Value"
+msgstr ""
+
+#: tuistrings:settingtochange
+msgid "Option to Change: "
+msgstr ""
+
+#: tuistrings:newvalue
+msgid "New Value: "
+msgstr ""

@@ -1,0 +1,16 @@
+[prerules]
+EXEOUT=.
+
+[rules]
+include common.make
+
+.PHONY: unit program
+
+all: unit program
+
+unit: expas$(PPUEXT)
+
+program: example$(PPUEXT)
+
+clean:
+	$(DEL) example$(EXEEXT)

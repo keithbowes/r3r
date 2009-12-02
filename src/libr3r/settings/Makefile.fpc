@@ -1,0 +1,8 @@
+[prerules]
+UNIT_DIRS = ../../utils/*
+UNITS = rsettings_routines rsettings
+
+[rules]
+include ../../../scripts/common.make
+
+all: $(addsuffix $(PPUEXT),$(UNITS))

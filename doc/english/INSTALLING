@@ -1,0 +1,10 @@
+For information on installing from source, get r3r-<version>.tar.gz and then
+read the file BUILDING.
+
+For installing on x86 Linux, run r3r-<version>.x86.package.  See
+<http://autopackage.org/docs/howto-install/> if you need help installing it.
+
+For installing on Windows, run r3r-<version>.exe.
+
+These files can be found at
+<http://sourceforge.net/project/showfiles.php?group_id=90897>.
