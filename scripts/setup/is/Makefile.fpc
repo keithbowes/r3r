@@ -1,0 +1,28 @@
+[default]
+rule = installer
+
+[prerules]
+include ../../common.make
+ISCC ?= iscc
+
+
+rootdir = $(BASDIR)/../../..
+
+mos_lib = $(wildcard $(rootdir)/src/libr3r/po/*.mo)
+mos_ui = $(wildcard $(rootdir)/src/ui/$(R3R_UI)/po/*.mo)
+
+ifeq ($(VERSION),)
+$(error VERSION should be set.  Try running from the root dir)
+endif
+
+[rules]
+installer: setup.exe
+
+setup.exe: r3r.iss
+	$(ISCC) $<
+	$(MOVE) $@  ../../../../r3r-$(VERSION).exe
+
+r3r.iss: _r3r.iss
+	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
+	 -e	's/@UI@/$(R3R_UI)/g' \
+	 -e 's/;insert_next_lang/$(foreach file,$(mos_lib),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "libr3r.mo";)\r\n$(foreach file,$(mos_ui),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "r3r_$(R3R_UI).mo";)\r\n;insert_next_lang/g' _r3r.iss > r3r.iss

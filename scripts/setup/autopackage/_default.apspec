@@ -4,9 +4,9 @@
 RootName: @r3r.sourceforge.net/default:$SOFTWAREVERSION:$PACKAGEVERSION
 ShortName: r3r
 DisplayName: R3R Feed Reader
-Summary: R3R is a feed reader
+Summary: R3R feed reader for RSS, Atom, RSS 3.0, and ESF
 Maintainer: The R3R Developers - http://sourceforge.net/project/memberlist.php?group_id=90897
-Packager: Anonymous <anonymous@nowhere.com>
+Packager: Keith Bowes <zooplah@users.sourceforge.net>
 SoftwareVersion: @VERSION@
 
 # Only uncomment InterfaceVersion if your package exposes interfaces to other software,
@@ -20,7 +20,7 @@ PackageVersion: 1
 Language: de eo
 
 DisplayName[de]: R3R Feedreader
-DisplayName[eo]: R3R Kanala legilo
+DisplayName[eo]: R3R Flua legilo
 
 Summary[de]: R3R ist ein Feedreader
 Summary[eo]: R3R estas kanala legilo
@@ -37,7 +37,7 @@ R3R is a reader for RSS, ESF and Atom feeds.
 R3R ist ein Reader für RSS, ESF und Atom Feeds.
 
 [Description:eo]
-R3R estas legilo por kanaloj RSS-aj, ESF-aj kaj Atom-aj.
+R3R estas legilo por fluoj RSS-aj, ESF-aj kaj Atom-aj.
 
 [BuildPrepare]
 #prepareBuild
@@ -50,8 +50,7 @@ cd $source_dir/../..
 
 echo 'r3r' | import
 
-echo 'libr3r' | import
-echo 'ui/@UI@' | import
+echo 'src' | import
 
 echo 'icons/r3r.png' | import
 
@@ -60,38 +59,43 @@ echo $source_dir'/autopackage/r3r.desktop' | import
 [Prepare]
 # Dependency checking
 # require @whatever.you/need 1.0
-
-if test "@UI@" = "tui";
-then
-  require @gnu.org/ncurses 5.3
-elif test "@UI@" = "classic";
+if test "@UI@" = "classic";
 then
   require @gtk.org/gtk 1.2
+fi
+
+if test "@DEFS_SAX@" = "SAX_EXPAT";
+then
+  require @libexpat.org/expat 1.2
+elif test "@DEFS_SAX@" = "SAX_LIBXML2";
+then
+  require @xmlsoft.org/libxml2 2.6.26
 fi
 
 [Install]
 # Put your installation script here
 installExe r3r
 installIcon r3r.png
+installLib src/libr3r/liblibr3r_shared.so
 installDesktop "Network/Aggregators" r3r.desktop
 
-cd libr3r/po
+cd src/libr3r/po
 for lang in *.mo;
 do
   l=`echo $lang | sed 's/\.mo$//g'`
   copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/libr3r.mo"
 done
 
-cd ../..
+cd ../../..
 
-cd @UI@/po
+cd src/ui/@UI@/po
 for lang in *.mo;
 do
   l=`echo $lang | sed 's/\.mo$//g'`
   copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/r3r_@UI@.mo"
 done
 
-cd ../..
+cd ../../..
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything
