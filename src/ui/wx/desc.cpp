@@ -1,11 +1,14 @@
 #include "desc.h"
 #include "widgetids.h"
 
+#include "i18n.h"
+
 wxButton * contact, * subscribe;
 wxStaticBox * descBox;
 
 void CreateDescriptionBox(wxPanel * parent)
 {
+  InitGettext();
   wxSizer * sizer = parent->GetSizer();
 
   descBox = new wxStaticBox(parent, -1, "");

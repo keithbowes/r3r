@@ -116,13 +116,13 @@ begin
 end;
 
 procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+const
+  LastLine: String = '';
 var
   SepPos: word;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
   ItemFinished := (Line = '') or (Line = SockEof);
-
-  FData := '';
 
   if not ItemFinished then
   begin
@@ -148,6 +148,8 @@ begin
   begin
     FInHead := false;
   end;
+
+  LastLine := Line;
 end;
 
 end.

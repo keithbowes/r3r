@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-01 01:06-0500\n"
+"POT-Creation-Date: 2009-12-03 20:58-0500\n"
 "PO-Revision-Date: 2009-11-30 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
@@ -16,43 +16,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../app.cpp:13
+#: ../app.cpp:11
 msgid "R3R"
 msgstr "R3R"
 
-#: ../desc.cpp:22
+#: ../desc.cpp:25
 msgid "&Contact"
 msgstr "&Kontakti"
 
-#: ../desc.cpp:26
+#: ../desc.cpp:29
 msgid "&Subscribe"
 msgstr "&Aboni"
 
-#: ../events.cpp:139
+#: ../events.cpp:143
 msgid "About R3R"
 msgstr "&Pri R3R"
 
-#: ../feedlist.cpp:26
+#: ../feedlist.cpp:28
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:107
+#: ../feedlist.cpp:111
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:114
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:117
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:120
 msgid "Date Created"
 msgstr "Dato kreita"
 
-#: ../location.cpp:15
+#: ../location.cpp:18
 msgid "Go"
 msgstr "Iri"
 
@@ -88,74 +88,74 @@ msgstr "&Ilrimedoj"
 msgid "&Help"
 msgstr "&Helpo"
 
-#: ../settings-display.cpp:12
+#: ../settings-display.cpp:16
 msgid "Show &messages from the back-end"
 msgstr "&Montri mesaĝojn de la fonta kodo"
 
-#: ../settings-display.cpp:15
+#: ../settings-display.cpp:19
 msgid "Show &feed titles only"
 msgstr "Nur montri &gluajn titolojn"
 
-#: ../settings-display.cpp:18
+#: ../settings-display.cpp:22
 msgid "Hide &cached feeds"
 msgstr "Kaŝi &konservitajn fluojn"
 
-#: ../settings-display.cpp:21
+#: ../settings-display.cpp:25
 msgid "&Hide cached feed items"
 msgstr "&Kaŝi konservitajn fluajn erojn"
 
-#: ../settings-display.cpp:24
+#: ../settings-display.cpp:28
 msgid "&Guess the file types of feeds"
 msgstr "&Diveni la dosiertipojn de fluoj"
 
-#: ../settings-display.cpp:27
+#: ../settings-display.cpp:31
 msgid "Display"
 msgstr "Montro"
 
-#: ../settingsdialog.cpp:4
-msgid "Settings"
-msgstr "Agordo"
-
-#: ../settings-headers.cpp:11
+#: ../settings-headers.cpp:14
 msgid "Custom Accept &Types: "
 msgstr "Kutimaj akceptaj &tipoj: "
 
-#: ../settings-headers.cpp:17
+#: ../settings-headers.cpp:20
 msgid "Custom Accept &Languages: "
 msgstr "Kutimaj akceptaj &lingvoj: "
 
-#: ../settings-headers.cpp:23
+#: ../settings-headers.cpp:26
 msgid "HTTP Headers"
 msgstr "HTTP-ĉapoj"
 
-#: ../settings-http.cpp:11
+#: ../settings-http.cpp:14
 msgid "Proxy &Address: "
 msgstr "Prokura &adreso: "
 
-#: ../settings-http.cpp:17
+#: ../settings-http.cpp:20
 msgid "&Proxy Port: "
 msgstr "&Prokura pordo: "
 
-#: ../settings-http.cpp:23
+#: ../settings-http.cpp:26
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../settings-programs.cpp:11
+#: ../settings-programs.cpp:14
 msgid "&Browser"
-msgstr "&TTT-legilo"
+msgstr "TTT-&legilo"
 
-#: ../settings-programs.cpp:17
+#: ../settings-programs.cpp:20
 msgid "&Mail Client"
 msgstr "&Retpoŝtilo"
 
-#: ../settings-programs.cpp:23
+#: ../settings-programs.cpp:26
 msgid "&Editor"
 msgstr "&Tekstoredaktilo"
 
-#: ../settings-programs.cpp:29
+#: ../settings-programs.cpp:32
 msgid "Programs"
-msgstr "&Programoj"
+msgstr "Programoj"
 
-#: ../settings-subscriptions.cpp:27
+#: ../settings-subscriptions.cpp:31
 msgid "Subscriptions"
 msgstr "Abonoj"
+
+#: ../settingsdialog.cpp:6
+msgid "Settings"
+msgstr "Agordo"

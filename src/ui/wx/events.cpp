@@ -7,6 +7,8 @@
 #include "settingsentry.h"
 #include "subscriptions.h"
 
+#include "i18n.h"
+
 void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
 {
   char * name;
@@ -135,6 +137,8 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
 
 void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
 {
+  InitGettext();
+
   char * user_agent = libr3r_get_user_agent();
   wxMessageBox(user_agent, _("About R3R"), wxOK | wxICON_INFORMATION);
 }

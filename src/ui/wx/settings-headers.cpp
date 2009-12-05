@@ -1,8 +1,11 @@
 #include "settings-headers.h"
 #include "settingsentry.h"
 
+#include "i18n.h"
+
 void CreateHeadersPage(wxTreebook * parent)
 {
+  InitGettext();
   wxPanel * panel = new wxPanel(parent);
 
   wxFlexGridSizer * table = new wxFlexGridSizer(2, 2, 0, 0);

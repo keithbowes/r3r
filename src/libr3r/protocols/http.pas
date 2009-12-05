@@ -306,6 +306,7 @@ begin
   end
   else if (FHeaders.Status = 304) and not Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds')) then
   begin
+    CurrentCache := nil;
     Ext := FCache.GetFeedExtension(FHeaders.ContentType);
     if Ext = 'unknown' then
     begin
@@ -325,6 +326,8 @@ begin
     begin
       FLocal.Free;
     end;
+
+    ShouldShow := not Result;
   end
   else
   begin

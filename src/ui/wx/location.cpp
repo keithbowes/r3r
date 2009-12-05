@@ -3,8 +3,11 @@
 #include "location.h"
 #include "widgetids.h"
 
+#include "i18n.h"
+
 void CreateLocationBar(wxPanel * parent)
 {
+  InitGettext();
   wxSizer * sizer = parent->GetSizer();
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
 

@@ -6,52 +6,63 @@ unit DC;
 interface
 
 uses
-  FeedItem;
+  Feed, FeedItem, Xml;
 
-procedure DCFill(var Item: TFeedItem; const Element, Content: String);
+type
+  TDCFeed = class(TXmlFeed)
+  protected
+    function GetFormat: TFeedType; override;
+  public
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+  end;
 
 implementation
 
 uses
   SysUtils;
 
-{ This assumes that Dublin Core has the dc: namespace prefix.
-  It will be better when proper namespaces come into the code
-  in beta 2. }
-procedure DCFill(var Item: TFeedItem; const Element, Content: String);
+procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
   DT: TDateTime;
 begin
-  if Element = 'dc:title' then
+  with Item, FXmlElement do
   begin
-    Item.Title := Content;
-  end
-  else if Element = 'dc:subject' then
-  begin
-    Item.Subject := Content;
-  end
-  else if Element = 'dc:description' then
-  begin
-    Item.Description := Content;
-  end
-  else if Element = 'dc:creator' then
-  begin
-    Item.Contact^.Toee := Content;
-  end
-  else if Element = 'dc:rights' then
-  begin
-    Item.Copyright := Content;
-  end
-  else if Element = 'dc:date' then
-  begin
-    ShortDateFormat := 'YYY-MM-DD';
-    DT := StrToDateTime(Content);
-    Item.Created := FormatDateTime('DD MMMM YYYY hh:nn', DT);
-  end
-  else if Element = 'dc:identifier' then
-  begin
-    Item.Id := Content;
+    if Name = 'title' then
+    begin
+      Title := Content;
+    end
+    else if Name = 'subject' then
+    begin
+      Subject := Content;
+    end
+    else if Name = 'description' then
+    begin
+      Description := Content;
+    end
+    else if Name = 'creator' then
+    begin
+      Contact^.Toee := Content;
+    end
+    else if Name = 'rights' then
+    begin
+      Copyright := Content;
+    end
+    else if Name = 'date' then
+    begin
+      ShortDateFormat := 'YYY-MM-DD';
+      DT := StrToDateTime(Content);
+      Created := FormatDateTime('DD MMMM YYYY hh:nn', DT);
+    end
+    else if Name = 'identifier' then
+    begin
+      Id := Content;
+    end;
   end;
+end;
+
+function TDCFeed.GetFormat: TFeedType;
+begin
+  Result := ftDC;
 end;
 
 end.

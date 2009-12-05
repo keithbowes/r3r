@@ -11,7 +11,7 @@ procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: Strin
 implementation
 
 uses
-  LibR3R;
+  LibR3R, RSock;
 
 var
   MessageEvent: TRMessage;
@@ -27,6 +27,7 @@ begin
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then
   begin
     MessageEvent(Sender, IsError, MessageName, Extra);
+    (Sender as TRSock).ShouldShow := false;
   end;
 end;
 

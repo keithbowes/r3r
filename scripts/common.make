@@ -68,7 +68,7 @@ PC=fpc
 PCFLAGS_BASE=-FU. -Mobjfpc -Sh -WR
 DIRFLAG=-Fu
 ifndef RELEASE
-PCFLAGS_DEBUG=-Ciort -gh -gl
+PCFLAGS_DEBUG=-Ci -Co -Cr -Ct -gh -gl
 endif
 
 ifneq ($(inWindows),)
@@ -81,7 +81,6 @@ else
 ifdef USE_GPC
 PC=gpc
 PCFLAGS_BASE=--automake --cstrings-as-strings --no-warnings --pointer-arithmetic
-DEFS_SAX ?= SAX_EXPAT
 DEFS_SETTINGS ?= SETTINGS_BIN
 DIRFLAG=-B
 

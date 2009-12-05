@@ -26,8 +26,8 @@ uses
 
 constructor TLocalFile.Create(FileName: String);
 begin
-  Read;
   FFileName := FileName;
+  ShouldShow := true;
 end;
 
 destructor TLocalFile.Destroy;
@@ -46,11 +46,11 @@ function TLocalFile.GetLine: String;
 begin
   if not Eof(FFileHandle) then
   begin
-    ReadLn(FFileHandle, Result)
+    ReadLn(FFileHandle, Result);
   end
   else
   begin
-    Result := SockEof
+    Result := SockEof;
   end;
 end;
 

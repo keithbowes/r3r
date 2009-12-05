@@ -265,6 +265,7 @@ endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
 .SUFFIXES:
 .SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+UNIT_DIRS = ../../../third-party/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1383,18 +1384,16 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../../scripts/common.make
-all: tuistrings.pot $(subst .po,.mo, $(wildcard *.po))
+all: $(subst .po,.mo, $(wildcard *.po)) tuistrings.pas
 clean:
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~) tuistrings.pot
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~) tuistrings.pas
 install:
 	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tui.mo;)
 uninstall:
 	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_tui.mo
-tuistrings.pot: tuistrings$(RSTEXT)
-	-rstconv -i $< -o $@
-	$(TOUCH) *.po
 .po.mo:
 	-msgmerge -Uq $< tuistrings.pot
 	-msgfmt -o $@ $<
-tuistrings$(RSTEXT): tuistrings.pas
-	$(PC) $(PCFLAGS) $<
+tuistrings.pas: _tuistrings.pas
+	$(SED) -e 's/@localedir@/$(subst /,\/,$(localedir))/g' $< > $@
+	$(MAKE) tuistrings$(PPUEXT)

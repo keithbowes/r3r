@@ -3,8 +3,12 @@
 #include "menu.h"
 #include "widgetids.h"
 
+#include "i18n.h"
+
 void CreateMenus(wxFrame * parent)
 {
+  InitGettext();
+
   /* The File Menu */
   wxMenu * menuFile = new wxMenu;
   menuFile->Append(wxID_OPEN, _("&Open"));

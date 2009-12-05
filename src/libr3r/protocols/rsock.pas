@@ -16,6 +16,7 @@ type
     FFeedType: TFeedType;
     FHost: String;
     FPort: String;
+    FShouldShow: Boolean;
     FUseChunked: Boolean;
     function GetLine: String; virtual;
     property FeedType: TFeedType read FFeedType write FFeedType;
@@ -27,6 +28,7 @@ type
     function ParseItem(var Item: TFeedItem): Boolean; virtual;
     property Sock: TTCPBlockSocket read FSock;
     property Error: Boolean read FError;
+    property ShouldShow: Boolean read FShouldShow write FShouldShow;
   end;
 
 implementation
@@ -38,6 +40,7 @@ constructor TRSock.Create(Host, Port: String);
 begin
   inherited Create;
   DomainSet(Host, Port);
+  FShouldShow := true;
 end;
 
 destructor TRSock.Destroy;
@@ -83,6 +86,8 @@ var
   Len: integer;
   Line: String;
 begin
+  ShouldShow := true;
+
   if not Assigned(FAbstractFeed) then
   begin
     if FeedType = ftEsf then
@@ -136,6 +141,7 @@ begin
     until ItemFinished;
   end;
 
+  ShouldShow := ShouldShow and FAbstractFeed.ShouldShow;
   Result := Line = SockEof;
 end;
 

@@ -1,6 +1,8 @@
 #include "feedlist.h"
 #include "libr3r.h"
 
+#include "i18n.h"
+
 void * rlib;
 FeedListView * feedList;
 bool topItem = FALSE;
@@ -99,6 +101,8 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 
 void CreateFeedList(wxPanel * parent)
 {
+  InitGettext();
+
   wxListItem listItem;
   wxSizer * sizer = parent->GetSizer();
 

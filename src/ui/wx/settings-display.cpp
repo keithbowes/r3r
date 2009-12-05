@@ -2,8 +2,12 @@
 #include "settings-main.h"
 #include "settingscheckbox.h"
 
+#include "i18n.h"
+
 void CreateDisplayPage(wxTreebook * parent)
 {
+  InitGettext();
+
   wxPanel * panel = new wxPanel(parent);
 
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);

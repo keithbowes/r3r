@@ -1,0 +1,8 @@
+#: libr3rstrings:errorgetting
+msgid "Couldn't retrieve the feed."
+msgstr ""
+
+#: libr3rstrings:invalidheaders
+msgid "The web server doesn't exist or sent invalid information."
+msgstr ""
+

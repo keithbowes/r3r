@@ -19,13 +19,51 @@ type
 implementation
 
 uses
-  DC, RStrings, SockConsts;
+  Atom, DC, RStrings, SockConsts;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+var
+  AFeed: TFeed;
+  IsRDF: Boolean;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
-  FillItem(Item);
-  ItemFinished := (FXmlElement.Name = 'item') or (Line = SockEof);
+
+  if Pos(DCNS, FXmlElement.Name) = 1 then
+  begin
+    AFeed := TDCFeed.Create;
+    StripNS(FXmlElement.Name, DCNS);
+    (AFeed as TXmlFeed).Clone(FXmlElement);
+    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.Free;
+  end
+  else if Pos(AtomNS, FXMLElement.Name) = 1 then
+  begin
+    AFeed := TAtomFeed.Create;
+    StripNS(FXmlElement.Name, AtomNS);
+    (AFeed as TXmlFeed).Clone(FXmlElement);
+    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.Free;
+  end
+  else
+  begin
+    IsRDF := Pos(RSS1NS, FXmlElement.Name) <> 0;
+
+    if IsRDF then
+    begin
+      StripNS(FXmlElement.Name, RSS1NS);
+    end;
+    
+    FillItem(Item);
+  end;
+
+  {$IFDEF SAX_LIBXML2}
+    ItemFinished := (FXmlElement.Name = 'item') or (Line = SockEof);
+  {$ELSE}
+    ItemFinished := ((FXmlElement.Name = 'item') and ((PreviousElement.Name = 'item') or IsRDF)) or (Line = SockEof);
+
+    StripNS(FXmlElement.Name, RDFNS);
+    ShouldShow := FXmlElement.Name <> 'RDF';
+  {$ENDIF}
 end;
 
 function TRssFeed.GetFormat: TFeedType;
@@ -94,10 +132,6 @@ begin
     begin
       Item.Id := Item.Id + Content;
       Item.Uri := Item.Id;
-    end
-    else
-    begin
-      DCFill(Item, Name, Content);
     end;
   end;
 end;

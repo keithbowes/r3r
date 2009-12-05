@@ -53,7 +53,7 @@ begin
       Break;
     end;
     Finished := Sock.ParseItem(Item);
-    if (Item.Title <> '') and Assigned(UserFunc) then
+    if Assigned(UserFunc) and Sock.ShouldShow then
     begin
       UserFunc(Item);
     end;

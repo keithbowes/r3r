@@ -1,4 +1,4 @@
-# English translations for r package.
+# German translations for r package.
 # Copyright (C) 2009 THE r'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the r package.
 # Keith Bowes <keith@localhost>, 2009.
@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-12-03 20:58-0500\n"
-"PO-Revision-Date: 2009-11-30 14:49-0500\n"
+"PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
-"Language-Team: English\n"
+"Language-Team: German\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -22,140 +22,140 @@ msgstr "R3R"
 
 #: ../desc.cpp:25
 msgid "&Contact"
-msgstr "&Contact"
+msgstr "&Kontaktieren"
 
 #: ../desc.cpp:29
 msgid "&Subscribe"
-msgstr "&Subscribe"
+msgstr "&Abonnieren"
 
 #: ../events.cpp:143
 msgid "About R3R"
-msgstr "About R3R"
+msgstr "Über R3R"
 
 #: ../feedlist.cpp:28
 msgid "[None]"
-msgstr "[None]"
+msgstr "Keine"
 
 #: ../feedlist.cpp:111
 msgid "Feed Title"
-msgstr "Feed Title"
+msgstr "Feed-Titel"
 
 #: ../feedlist.cpp:114
 msgid "Item Title"
-msgstr "Item Title"
+msgstr "Item-Titel"
 
 #: ../feedlist.cpp:117
 msgid "Subject"
-msgstr "Subject"
+msgstr "Themen"
 
 #: ../feedlist.cpp:120
 msgid "Date Created"
-msgstr "Date Created"
+msgstr "Datum der es erstellt wurde"
 
 #: ../location.cpp:18
 msgid "Go"
-msgstr "Go"
+msgstr "Gehen"
 
 #: ../menu.cpp:10
 msgid "&Open"
-msgstr "&Open"
+msgstr "&Öffnen"
 
 #: ../menu.cpp:12
 msgid "E&xit"
-msgstr "E&xit"
+msgstr "&Beenden"
 
 #: ../menu.cpp:16
 msgid "&Settings"
-msgstr "&Settings"
+msgstr "&Einstellungen"
 
 #: ../menu.cpp:20
 msgid "&Donate"
-msgstr "&Donate"
+msgstr "&Spenden"
 
 #: ../menu.cpp:22
 msgid "&About"
-msgstr "&About"
+msgstr "&Über"
 
 #: ../menu.cpp:26
 msgid "&File"
-msgstr "&File"
+msgstr "&Seit"
 
 #: ../menu.cpp:27
 msgid "&Tools"
-msgstr "&Tools"
+msgstr "&Zeuge"
 
 #: ../menu.cpp:28
 msgid "&Help"
-msgstr "&Help"
+msgstr "&Hilfe"
 
 #: ../settings-display.cpp:16
 msgid "Show &messages from the back-end"
-msgstr "Show &messages from the back-end"
+msgstr "Show &Nachrichten aus dem Back-End"
 
 #: ../settings-display.cpp:19
 msgid "Show &feed titles only"
-msgstr "Show &feed titles only"
+msgstr "&Feed anzeigen Nur Titel"
 
 #: ../settings-display.cpp:22
 msgid "Hide &cached feeds"
-msgstr "Hide &cached feeds"
+msgstr "Hide &zwischengespeichert Feeds"
 
 #: ../settings-display.cpp:25
 msgid "&Hide cached feed items"
-msgstr "&Hide cached feed items"
+msgstr "&Hide zwischengespeichert Feed-Einträge"
 
 #: ../settings-display.cpp:28
 msgid "&Guess the file types of feeds"
-msgstr "&Guess the file types of feeds"
+msgstr "&Erraten Sie die Dateitypen von Feeds"
 
 #: ../settings-display.cpp:31
 msgid "Display"
-msgstr "Display"
+msgstr "Anzeige"
 
 #: ../settings-headers.cpp:14
 msgid "Custom Accept &Types: "
-msgstr "Custom Accept &Types: "
+msgstr "Benutzerdefinierte &Typen akzeptieren"
 
 #: ../settings-headers.cpp:20
 msgid "Custom Accept &Languages: "
-msgstr "Custom Accept &Languages: "
+msgstr "Benutzerdefinierte akzeptieren &Sprachen"
 
 #: ../settings-headers.cpp:26
 msgid "HTTP Headers"
-msgstr "HTTP Headers"
+msgstr "HTTP-Köpfe"
 
 #: ../settings-http.cpp:14
 msgid "Proxy &Address: "
-msgstr "Proxy &Address: "
+msgstr "Proxy-Adresse: "
 
 #: ../settings-http.cpp:20
 msgid "&Proxy Port: "
-msgstr "&Proxy Port: "
+msgstr "&Proxy-Port: "
 
 #: ../settings-http.cpp:26
 msgid "HTTP"
-msgstr "HTTP"
+msgstr ""
 
 #: ../settings-programs.cpp:14
 msgid "&Browser"
-msgstr "&Browser"
+msgstr ""
 
 #: ../settings-programs.cpp:20
 msgid "&Mail Client"
-msgstr "&Mail Client"
+msgstr "Mail-Client"
 
 #: ../settings-programs.cpp:26
 msgid "&Editor"
-msgstr "&Editor"
+msgstr ""
 
 #: ../settings-programs.cpp:32
 msgid "Programs"
-msgstr "Programs"
+msgstr "Programms"
 
 #: ../settings-subscriptions.cpp:31
 msgid "Subscriptions"
-msgstr "Subscriptions"
+msgstr "Abbonements"
 
 #: ../settingsdialog.cpp:6
 msgid "Settings"
-msgstr "Settings"
+msgstr "Einstellungen"

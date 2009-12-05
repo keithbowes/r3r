@@ -268,10 +268,13 @@ CXXFLAGS += $(shell wx-config --cflags) \
 						-DICONFILE=\"$(icondir)/r3r.png\" \
 						-DLOCALEDIR=\"$(localedir)\" -Wall
 LDFLAGS += $(shell wx-config --libs) -llibr3r_shared -L../../libr3r
+ifndef RELEASE
+	CXXFLAGS += -g
+endif
 CXXEXT = .cpp
 HEXT = .h
 objects = app desc events feedlist feedlistview frame gofield \
-					location menu settings-display settings-headers \
+					i18n location menu settings-display settings-headers \
 					settings-http settings-main settings-programs \
 					settings-subscriptions settingscheckbox settingsdialog \
 					settingsentry settingslist subscriptions

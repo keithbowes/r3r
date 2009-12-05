@@ -191,10 +191,6 @@ begin
       begin
         Id := '';
       end;
-    end
-    else
-    begin
-      DCFill(Item, Name, Content);
     end;
   end;
 end;
@@ -206,11 +202,35 @@ begin
 end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+var
+  AFeed: TFeed;
+  Prev: TXmlElement;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
-  FillItem(Item);
 
-  ItemFinished := (FXmlElement.Name = 'entry') or (Line = SockEof);
+  if Pos(DCNS, FXmlElement.Name) = 0 then
+  begin
+    StripNS(FXmlELement.Name, AtomNS);
+    FillItem(Item);
+  end
+  else
+  begin
+    AFeed := TDCFeed.Create;
+    StripNS(FXmlElement.Name, DCNS);
+    (AFeed as TXmlFeed).Clone(FXmlElement);
+    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.Free;
+  end;
+
+  {$IFDEF SAX_LIBXML2}
+    ItemFinished := (FXmlElement.Name = 'entry') or (Line = SockEof);
+  {$ELSE}
+    Prev := PreviousElement;
+    StripNS(Prev.Name, AtomNS);
+
+    ItemFinished := ((FXmlElement.Name = 'entry') and (Prev.Name = 'entry')) or (Line = SockEof);
+    FXmlElement.Name := '';
+  {$ENDIF}
 end;
 
 end.

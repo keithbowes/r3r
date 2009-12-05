@@ -1,0 +1,97 @@
+unit TuiStrings;
+
+{$codepage utf8}
+{$X+}
+
+interface
+
+uses
+  LibIntl;
+
+var
+  Feed: String;
+  GoUrl: String;
+  AboutItem: String;
+  OpenLink: String;
+  Options: String;
+  Donate: String;
+  Quit: String;
+
+  AboutKey: String;
+  OpenKey: String;
+  GoKey: String;
+  OptionsKey: String;
+  DonateKey: String;
+  QuitKey: String;
+
+  ItemNo: String;
+
+  ItemTitle: String;
+  ItemSubject: String;
+  ItemCreated: String;
+  ItemDesc: String;
+  ItemLink: String;
+
+  InvalidNumber: String;
+
+  LinkNo: String;
+  
+  ErrorError: String;
+  ErrorWarning: String;
+
+  OptionName: String;
+  OptionVal: String;
+
+  SettingToChange: String;
+  NewValue: String;
+
+implementation
+
+procedure InitStrings;
+begin
+  Feed := _('Feed Address: ');
+  GoUrl :=_('g)o to a URL');
+  AboutItem :=_('a)bout item number');
+  OpenLink :=_('open l)ink');
+  Options := _('o)ptions');
+  Donate := _('d)onate');
+  Quit :=_('q)uit the program');
+
+  AboutKey := _('a');
+  OpenKey := _('l');
+  GoKey := _('g');
+  OptionsKey := _('o');
+  DonateKey := _('d');
+  QuitKey := _('q');
+
+  ItemNo := _('Item number: ');
+
+  ItemTitle := _('Title: ');
+  ItemSubject := _('Subject: ');
+  ItemCreated := _('Created: ');
+  ItemDesc := _('Description: ');
+  ItemLink := _('Link %d: %s');
+
+  InvalidNumber := _('Invalid Number!');
+
+  LinkNo := _('Link number: ');
+  
+  ErrorError := _('Error');
+  ErrorWarning := _('Warning');
+
+  OptionName := _('Option Name');
+  OptionVal := _('Option Value');
+
+  SettingToChange := _('Option to Change: ');
+  NewValue := _('New Value: ');
+end;
+
+initialization
+
+setlocale(LC_ALL, '');
+textdomain('r3r_tui');
+bindtextdomain('r3r_tui', '@localedir@');
+
+InitStrings;
+
+end.

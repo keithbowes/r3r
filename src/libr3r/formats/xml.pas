@@ -6,10 +6,16 @@ uses
   Feed, FeedItem,
   {$IFDEF SAX_LIBXML2}
     LibXml2
-  {$ENDIF}
-  {$IFDEF SAX_EXPAT}
+  {$ELSE}
     Expas
   {$ENDIF};
+
+const
+  AtomNS = 'http://www.w3.org/2005/Atom';
+  DCNS = 'http://purl.org/dc/elements/1.1/';
+  RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+  RSS1NS = 'http://purl.org/rss/1.0/';
+  XMLNSNS = 'http://www.w3.org/XML/1998/namespace';
 
 type
   TXmlAttr = record
@@ -33,26 +39,24 @@ type
     FIgnoreWhiteSpace: Boolean;
     {$IFDEF SAX_LIBXML2}
       FHandler: XmlSaxHandler;
-    {$ENDIF}
-    {$IFDEF SAX_EXPAT}
+    {$ELSE}
       FParser: XML_PARSER;
     {$ENDIF}
   protected
     FXmlElement: TXmlElement;
     function GetCurrentElement: TXmlElement;
     function GetPreviousElement: TXmlElement;
+    procedure StripNS(var Element: String; const NS: String);
   public
     constructor Create;
     destructor Destroy; override;
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure Clone(const Element: TXmlElement);
     property CurrentElement: TXmlElement read GetCurrentElement;
     property PreviousElement: TXmlElement read GetPreviousElement;
   end;
 
 implementation
-
-uses
-  SysUtils;
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl; forward;
 procedure ElementEnded(user_data: Pointer; name: PChar); cdecl; forward;
@@ -71,14 +75,14 @@ begin
 
     with FHandler do
     begin
+      initialized := $DEEDBEAF; // Make sure we're using SAX 2
       startElement := @ElementStarted;
       endElement := @ElementEnded;
       characters := @CharactersReceived;
       ignorableWhitespace := @WhitespaceReceived;
     end;
-  {$ENDIF}
-  {$IFDEF SAX_EXPAT}
-    FParser := XML_ParserCreate('UTF-8');
+  {$ELSE}
+    FParser := XML_ParserCreateNS('UTF-8', #0);
     XML_SetElementHandler(FParser, @ElementStarted, @ElementEnded);
     XML_SetCharacterDataHandler(FParser, @CharactersReceived);
     XML_SetUserData(FParser, Self);
@@ -90,23 +94,26 @@ begin
   inherited ParseLine(Line, Item, ItemFinished);
   {$IFDEF SAX_LIBXML2}
     XmlSaxUserParseMemory(@FHandler, Self, PChar(Line), Length(Line));
-  {$ENDIF}
-  {$IFDEF SAX_EXPAT}
+  {$ELSE}
     XML_Parse(FParser, PChar(Line), Length(Line), 0);
   {$ENDIF}
 
   ItemFinished := true;
 end;
 
+procedure TXmlFeed.Clone(const Element: TXmlElement);
+begin
+  FXmlElement := Element;
+end;
+
 destructor TXmlFeed.Destroy;
 begin
   FElemList := nil;
 
-  {$IFDEF SAX_EXPAT}
-    Xml_ParserFree(FParser);
-  {$ENDIF}
   {$IFDEF SAX_LIBXML2}
     XmlCleanupParser;
+  {$ELSE}
+    Xml_ParserFree(FParser);
   {$ENDIF}
 
   inherited Destroy;
@@ -124,8 +131,20 @@ begin
   Result := FElemList[FElems - 1];
 end;
 
+procedure TXmlFeed.StripNS(var Element: String; const NS: String);
+var
+  Len: word;
+begin
+  if Pos(NS, Element) = 1 then
+  begin
+    Len := Length(NS);
+    Delete(Element, 1, Len);
+  end;
+end;
+
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl;
 var
+  attr: String;
   i, j: word;
 begin
   i := 0;
@@ -140,11 +159,15 @@ begin
     begin
       while Assigned(attrs[i]) do
       begin
-        if attrs[i] = 'xml:base' then
+        attr := String(attrs[i]);
+        StripNS(attr, XMLNSNS);
+        attrs[i] := PChar(attr);
+
+        if attrs[i] = 'base' then
         begin
           FXmlElement.Base := attrs[i + 1];
         end
-        else if attrs[i] = 'xml:lang' then
+        else if attrs[i] = 'lang' then
         begin
           FXmlElement.Lang := attrs[i + 1];
         end
@@ -175,7 +198,7 @@ begin
       SetLength(FElemList, FElems - 1);
     end;
 
-    FXmlElement.Name := LowerCase(name);
+    FXmlElement.Name := name;
   end;
 end;
 

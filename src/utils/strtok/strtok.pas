@@ -132,6 +132,10 @@ begin
           end;
 
           IsFound := true;
+          
+          {$IFNDEF UCSD}
+            Break;
+          {$ENDIF}
         end;
       end;
     end;

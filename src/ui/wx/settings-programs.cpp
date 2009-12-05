@@ -1,8 +1,11 @@
 #include "settings-programs.h"
 #include "settingsentry.h"
 
+#include "i18n.h"
+
 void CreateProgramsPage(wxTreebook * parent)
 {
+  InitGettext();
   wxPanel * panel = new wxPanel(parent);
 
   wxFlexGridSizer * table = new wxFlexGridSizer(3, 2, 0, 0);

@@ -1,8 +1,12 @@
 #include "settings-subscriptions.h"
 #include "subscriptions.h"
 
+#include "i18n.h"
+
 void CreateSubscriptionsPage(wxTreebook * parent)
 {
+  InitGettext();
+
   char * s;
   int i = 0;
   wxString * str;

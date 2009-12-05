@@ -263,9 +263,6 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-.SUFFIXES:
-.SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
-UNIT_DIRS = ../../third-party/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1368,6 +1365,7 @@ release:
 units:
 examples:
 shared:
+install:
 sourceinstall:
 exampleinstall:
 distinstall:
@@ -1375,25 +1373,14 @@ zipinstall:
 zipsourceinstall:
 zipexampleinstall:
 zipdistinstall:
+clean:
 distclean:
 cleanall:
 info: fpc_info
 makefiles: fpc_makefiles
-.PHONY: debug smart release units examples shared sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
+.PHONY: debug smart release units examples shared install sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall clean distclean cleanall info makefiles
 ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: libr3rstrings.pas $(subst .po,.mo, $(wildcard *.po))
-clean:
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~) libr3rstrings.pas
-install:
-	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
-uninstall:
-	$(DEL) -f $(localedir)/*/LC_MESSAGES/libr3r.mo
-.po.mo:
-	-msgmerge -Uq $< libr3rstrings.pot
-	-msgfmt -o $@ $<
-libr3rstrings.pas: _libr3rstrings.pas
-	$(SED) -e 's/@localedir@/$(subst /,\/,$(localedir))/g' $< > $@
-	$(MAKE) libr3rstrings$(PPUEXT)
+all: libintl$(PPUEXT)
