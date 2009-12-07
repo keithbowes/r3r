@@ -10,7 +10,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
 
   char * s;
   int i = 0;
-  SubscriptionData * data;
+  SubscriptionData * data = (SubscriptionData *) malloc(sizeof(SubscriptionData));
   wxString * str;
 
   wxPanel * panel = new wxPanel(parent);

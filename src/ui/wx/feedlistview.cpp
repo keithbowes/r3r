@@ -14,10 +14,13 @@ FeedListView::~FeedListView()
 void FeedListView::ResizeColumns()
 {
   int h, w;
-  GetClientSize(&w, &h);
+  if(this)
+  {
+    GetClientSize(&w, &h);
 
-  SetColumnWidth(0, w / 5);
-  SetColumnWidth(1, w / 3);
-  SetColumnWidth(2, w / 5);
-  SetColumnWidth(3, w / 4);
+    SetColumnWidth(0, w / 5);
+    SetColumnWidth(1, w / 3);
+    SetColumnWidth(2, w / 5);
+    SetColumnWidth(3, w / 4);
+  }
 }

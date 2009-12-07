@@ -39,7 +39,7 @@ void DescriptionBoxEvents::OnSubscribe(wxCommandEvent & event)
   subscribe->Disable();
 
   ItemInfo * info = (ItemInfo *) subscribe->GetClientData();
-  if (strlen(info->self) > 0)
+  if (info->self != "")
   {
     link = info->self;
   }
@@ -87,7 +87,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   wxButton * subscribe = GetSubscribeButton();
   Subscriptions * subs = GetSubscriptionsObject();
 
-  if (strlen(info->self) > 0)
+  if (info->self != "")
   {
     link = info->self;
   }

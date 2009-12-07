@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <string.h>
 
 #include "libr3r.h"

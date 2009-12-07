@@ -135,8 +135,6 @@ FeedListView * GetFeedList()
 
 void ParseFeed(char * res)
 {
-  topItem = TRUE;
-
   libr3r_on_item_parsed(rlib, &item_parsed);
   libr3r_on_message_received(rlib, &message_received);
   libr3r_retrieve_feed(rlib, res);

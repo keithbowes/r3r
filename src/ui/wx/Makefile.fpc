@@ -1,6 +1,6 @@
 [prerules]
 CXX ?= g++
-CXXFLAGS += $(shell wx-config --cflags) \
+CXXFLAGS += $(shell wx-config --cxxflags) \
 						-DICONFILE=\"$(icondir)/r3r.png\" \
 						-DLOCALEDIR=\"$(localedir)\" -Wall
 LDFLAGS += $(shell wx-config --libs) -llibr3r_shared -L../../libr3r
