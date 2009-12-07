@@ -3,6 +3,11 @@ library LibR3R_Shared;
 uses
   Info, LibR3R, RSettings, RStrings;
 
+const
+  SubscriptionAdd = 1;
+  SubscriptionDelete = 2;
+  SubscriptionGet = 3;
+
 type
   TMessageProc = procedure(IsError: byte; MessageName, Extra: PChar); cdecl;
   TParsedProc = procedure(Item: Pointer); cdecl;
@@ -131,6 +136,10 @@ begin
     begin
       Result := StrToPChar(Uri);
     end
+    else if FieldName = 'myself' then
+    begin
+      Result := StrToPChar(Myself);
+    end
     else
     begin
       Result := nil;
@@ -152,11 +161,37 @@ begin
   setting_name := StrToPChar(SettingName);
 end;
 
+procedure libr3r_access_subscriptions(Index, Mode: byte; var Subscription: PChar; var Count: word); cdecl;
+begin
+  Count := Subscriptions^.Count;
+
+  if Mode = SubscriptionAdd then
+  begin
+    Subscriptions^.Add(StrPas(Subscription));
+  end
+  else if Mode = SubscriptionDelete then
+  begin
+    if (Index = 0) and (Subscription <> nil) then
+    begin
+      Subscriptions^.DeleteString(StrPas(Subscription));
+    end
+    else
+    begin
+      Subscriptions^.DeleteIndex(Index);
+    end
+  end
+  else if Mode = SubscriptionGet then
+  begin
+    Subscription := StrToPChar(Subscriptions^.Get(Index));
+  end;
+end;
+
 exports
   libr3r_create, libr3r_free,
   libr3r_retrieve_feed, libr3r_on_item_parsed, libr3r_on_message_received,
   libr3r_get_item_field,
   libr3r_get_user_agent,
-  libr3r_access_settings;
+  libr3r_access_settings,
+  libr3r_access_subscriptions;
 
 end.

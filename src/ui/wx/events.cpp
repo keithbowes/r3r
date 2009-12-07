@@ -4,6 +4,7 @@
 #include "frame.h"
 #include "libr3r.h"
 #include "settings-main.h"
+#include "settings-subscriptions.h"
 #include "settingsentry.h"
 #include "subscriptions.h"
 
@@ -32,24 +33,23 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
 
 void DescriptionBoxEvents::OnSubscribe(wxCommandEvent & event)
 {
-  char * name;
-  unsigned char count, index, type;
-  void * value;
+  char * link;
 
   wxButton * subscribe = (wxButton *) event.GetEventObject();
   subscribe->Disable();
 
-  char * link = (char *) subscribe->GetClientData();
+  ItemInfo * info = (ItemInfo *) subscribe->GetClientData();
+  if (strlen(info->self) > 0)
+  {
+    link = info->self;
+  }
+  else
+  {
+    link = info->link;
+  }
 
   Subscriptions * subs = GetSubscriptionsObject();
   subs->Add(link);
-
-  index = 0;
-  name = (char *) "subscriptions";
-  value = (void *) subs->GetAll();
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_WRITE);
-
-  subs->Load();
 }
 
 void FeedListViewEvents::OnActivate(wxListEvent & event)
@@ -60,6 +60,7 @@ void FeedListViewEvents::OnActivate(wxListEvent & event)
 
 void FeedListViewEvents::OnSelect(wxListEvent & event)
 {
+  char * link;
   ItemInfo * info = (ItemInfo *) event.GetData();
 
   wxStaticBox * box = GetDescriptionBox();
@@ -86,10 +87,19 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   wxButton * subscribe = GetSubscribeButton();
   Subscriptions * subs = GetSubscriptionsObject();
 
-  if (info->isTopLevel && subs->IndexOf(info->link) == -1)
+  if (strlen(info->self) > 0)
+  {
+    link = info->self;
+  }
+  else
+  {
+    link = info->link;
+  }
+
+  if (info->isTopLevel && subs->IndexOf(link) == -1)
   {
 
-    subscribe->SetClientData(info->link);
+    subscribe->SetClientData(info);
     subscribe->Enable();
   }
   else
@@ -148,6 +158,17 @@ void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
   GoBrowser((char *) "http://sourceforge.net/donate/index.php?group_id=90897");
 }
 
+void MenuEvents::OnLoadSubscriptions(wxCommandEvent & WXUNUSED(event))
+{
+  char *s;
+  Subscriptions * subs = GetSubscriptionsObject();
+
+  while((s = subs->GetNext()))
+  {
+    ParseFeed(s);
+  }
+}
+
 void MenuEvents::OnOpen(wxCommandEvent & event)
 {
   wxFileDialog * openFileDialog = new wxFileDialog(this);
@@ -166,6 +187,7 @@ void MenuEvents::OnQuit(wxCommandEvent & WXUNUSED(event))
 
 void MenuEvents::OnSettings(wxCommandEvent & WXUNUSED(event))
 {
+  HideSettingsDialog();
   ShowSettingsDialog();
 }
 
@@ -233,6 +255,50 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
     {
       bool has_changed = true;
       tog->SetValue((void *) has_changed);
+    }
+  }
+}
+
+void SubscriptionsEvents::OnAdd(wxCommandEvent & event)
+{
+  wxButton * button = (wxButton *) event.GetEventObject();
+  SubscriptionData * data = (SubscriptionData *) button->GetClientData();
+  wxListBox * box = data->box;
+  wxTextCtrl * entry = data->entry;
+
+  if (strlen(entry->GetValue()) > 0)
+  {
+    wxString * value = new wxString();
+    *value = entry->GetValue();
+    box->InsertItems(1, value, box->GetCount());
+
+    Subscriptions * subs = GetSubscriptionsObject();
+    subs->Add((char *) value->c_str());
+
+    entry->SetFocus();
+  }
+}
+
+void SubscriptionsEvents::OnDelete(wxCommandEvent & event)
+{
+  wxButton * button = (wxButton *) event.GetEventObject();
+  SubscriptionData * data = (SubscriptionData *) button->GetClientData();
+  wxListBox * box = data->box;
+  
+  int sel = box->GetSelection();
+
+  if (sel != wxNOT_FOUND)
+  {
+    box->Delete(sel);
+
+    char * sub;
+    unsigned int count = 0;
+    sub = NULL;
+    libr3r_access_subscriptions(sel, SUBSCRIPTIONS_DELETE, &sub, &count);
+
+    if (box->GetCount() > 0)
+    {
+      box->Select(sel);
     }
   }
 }

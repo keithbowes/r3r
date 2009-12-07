@@ -101,6 +101,7 @@ begin
   ItemFinished := true;
 end;
 
+{ Clones an element.  This is necessary for namespace support. }
 procedure TXmlFeed.Clone(const Element: TXmlElement);
 begin
   FXmlElement := Element;

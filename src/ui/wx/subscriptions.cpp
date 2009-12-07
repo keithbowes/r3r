@@ -1,73 +1,27 @@
-#include "libr3r.h"
-#include "settingslist.h"
-#include "subscriptions.h"
+#include <stdio.h>
 #include <string.h>
 
-#define ALLOC_CHARS 100000
+#include "libr3r.h"
+#include "subscriptions.h"
 
-char *tmp;
 Subscriptions * subs;
-
-#ifdef WIN32
-// Windows doesn't have the reentrant strtok_r, so:
-#define strtok_r(str, delim, saved) strtok(str, delim)
-#endif
 
 Subscriptions::Subscriptions()
 {
-  m_first_get = true;
-  m_internal = (char *) malloc(ALLOC_CHARS);
+  m_current = 0;
   subs = this;
-}
-
-Subscriptions::~Subscriptions()
-{
-  free(m_internal);
-}
-
-void Subscriptions::Load()
-{
-  char * name;
-  unsigned char count, index, type;
-  void * value;
-
-  index = 0;
-  name = (char *) "subscriptions";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
-
-  strcpy(m_internal, (char *) value);
-}
-
-void Subscriptions::Queue()
-{
-  SettingsList * list = GetSettingsList();
-
-  SettingsListElement * elem = new SettingsListElement();
-  elem->SetName((char *) "subscriptions");
-  elem->SetValue((void *) m_internal);
-
-  list->Append(elem);
 }
 
 void Subscriptions::Add(char * sub)
 {
-  strcat(m_internal, sub);
-  strcat(m_internal, SEPARATOR_CHAR);
+  unsigned int count;
+  libr3r_access_subscriptions(0, SUBSCRIPTIONS_ADD, &sub, &count);
 }
 
 void Subscriptions::Delete(char * sub)
 {
-  char * s, * str;
-
-  while ((s = GetNext()))
-  {
-    if (strcmp(sub, s) != 0)
-    {
-      strcpy(str, s);
-    }
-  }
-
-  m_internal = str;
+  unsigned int count;
+  libr3r_access_subscriptions(0, SUBSCRIPTIONS_DELETE, &sub, &count);
 }
 
 int Subscriptions::IndexOf(char * sub)
@@ -76,7 +30,7 @@ int Subscriptions::IndexOf(char * sub)
   char * s;
   int i = 0;
 
-  m_first_get = true;
+  m_current = 0;
   while ((s = GetNext()))
   {
     i++;
@@ -87,7 +41,6 @@ int Subscriptions::IndexOf(char * sub)
       break;
     }
   }
-  m_first_get = true;
 
   if (is_found)
   {
@@ -101,34 +54,21 @@ int Subscriptions::IndexOf(char * sub)
 
 char * Subscriptions::GetNext()
 {
-  char * str;
+  char * ret;
+  unsigned int count = 0;
+  libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
 
-  if (m_first_get)
+  if (m_current < count)
   {
-    tmp = (char *) malloc(ALLOC_CHARS);
-    strcpy(tmp, m_internal);
-
-    str = strtok_r(tmp, SEPARATOR_CHAR, &m_saved);
-    m_first_get = false;
-
+    m_current++;
   }
   else
   {
-    str = strtok_r(NULL, SEPARATOR_CHAR, &m_saved);
+    m_current = 0;
+    ret = NULL;
   }
 
-  if (!str)
-  {
-    free(tmp);
-    m_first_get = true;
-  }
-
-  return str;
-}
-
-char * Subscriptions::GetAll()
-{
-  return m_internal;
+  return ret;
 }
 
 Subscriptions * GetSubscriptionsObject()

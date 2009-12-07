@@ -9,6 +9,7 @@ typedef struct
   char * desc;
   char * link;
   char * title;
+  char * self;
 } ItemInfo;
 
 void CreateFeedList(wxPanel * parent);

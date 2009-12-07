@@ -145,7 +145,11 @@ var
   w: integer;
 begin
   w := IndexOf(Data);
-  Delete(w);
+  
+  if w <> -1 then
+  begin
+    Delete(w);
+  end;
 end;
 
 function TRList.Count: word;

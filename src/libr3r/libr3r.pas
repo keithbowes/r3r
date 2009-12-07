@@ -3,7 +3,7 @@ unit LibR3R;
 interface
 
 uses
-  FeedItem, RMessage, RSettings, RSock;
+  FeedItem, RMessage, RSettings, RSock, RSubscriptions;
 
 const
   SettingsRead = RSettings.SettingsRead;
@@ -43,6 +43,7 @@ type
 
 var
   Settings: TRSettings;
+  Subscriptions: PRSubscriptions;
 
 implementation
 
@@ -135,5 +136,6 @@ end;
 initialization
 
 Settings := RSettings.Settings;
+Subscriptions := RSubscriptions.Subscriptions;
 
 end.

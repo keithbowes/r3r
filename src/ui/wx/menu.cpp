@@ -11,13 +11,15 @@ void CreateMenus(wxFrame * parent)
 
   /* The File Menu */
   wxMenu * menuFile = new wxMenu;
-  menuFile->Append(wxID_OPEN, _("&Open"));
+  menuFile->Append(wxID_OPEN, _("&Open..."));
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT, _("E&xit"));
 
   /* The Tools Menu */
   wxMenu * menuTools = new wxMenu;
-  menuTools->Append(wxID_SETTINGS, _("&Settings"));
+  menuTools->Append(wxID_LOAD_SUBSCRIPTIONS, _("&Load Subscriptions"));
+  menuTools->AppendSeparator();
+  menuTools->Append(wxID_SETTINGS, _("&Settings..."));
 
   /* The Help Menu */
   wxMenu * menuHelp = new wxMenu;

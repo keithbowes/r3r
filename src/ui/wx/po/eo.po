@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 20:58-0500\n"
+"POT-Creation-Date: 2009-12-06 19:04-0500\n"
 "PO-Revision-Date: 2009-11-30 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
@@ -28,27 +28,27 @@ msgstr "&Kontakti"
 msgid "&Subscribe"
 msgstr "&Aboni"
 
-#: ../events.cpp:143
+#: ../events.cpp:153
 msgid "About R3R"
-msgstr "&Pri R3R"
+msgstr "Pri R3R"
 
 #: ../feedlist.cpp:28
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:111
+#: ../feedlist.cpp:112
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:114
+#: ../feedlist.cpp:115
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:117
+#: ../feedlist.cpp:118
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:120
+#: ../feedlist.cpp:121
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -56,35 +56,39 @@ msgstr "Dato kreita"
 msgid "Go"
 msgstr "Iri"
 
-#: ../menu.cpp:10
-msgid "&Open"
-msgstr "&Malfermi"
+#: ../menu.cpp:14
+msgid "&Open..."
+msgstr "&Malfermi..."
 
-#: ../menu.cpp:12
+#: ../menu.cpp:16
 msgid "E&xit"
 msgstr "&Ĉesi"
 
-#: ../menu.cpp:16
-msgid "&Settings"
-msgstr "&Agordo"
-
 #: ../menu.cpp:20
+msgid "&Load Subscriptions"
+msgstr "&Ŝargi abonojn"
+
+#: ../menu.cpp:22
+msgid "&Settings..."
+msgstr "&Agordo..."
+
+#: ../menu.cpp:26
 msgid "&Donate"
 msgstr "&Donaci"
 
-#: ../menu.cpp:22
+#: ../menu.cpp:28
 msgid "&About"
 msgstr "&Pri"
 
-#: ../menu.cpp:26
+#: ../menu.cpp:32
 msgid "&File"
 msgstr "&Dosiero"
 
-#: ../menu.cpp:27
+#: ../menu.cpp:33
 msgid "&Tools"
 msgstr "&Ilrimedoj"
 
-#: ../menu.cpp:28
+#: ../menu.cpp:34
 msgid "&Help"
 msgstr "&Helpo"
 
@@ -109,6 +113,10 @@ msgid "&Guess the file types of feeds"
 msgstr "&Diveni la dosiertipojn de fluoj"
 
 #: ../settings-display.cpp:31
+msgid "&Load subscriptions on startup"
+msgstr "&Ŝargi abonojn je programplenumo"
+
+#: ../settings-display.cpp:34
 msgid "Display"
 msgstr "Montro"
 
@@ -152,7 +160,15 @@ msgstr "&Tekstoredaktilo"
 msgid "Programs"
 msgstr "Programoj"
 
-#: ../settings-subscriptions.cpp:31
+#: ../settings-subscriptions.cpp:37
+msgid "&Delete"
+msgstr "&Forigi"
+
+#: ../settings-subscriptions.cpp:41
+msgid "&Add"
+msgstr "&Aldoni"
+
+#: ../settings-subscriptions.cpp:49
 msgid "Subscriptions"
 msgstr "Abonoj"
 

@@ -31,6 +31,7 @@ type
     FCopyright: String;
     FId: String;
     FUri: String;
+    FMyself: String;
 
     function GetLinksCount: cardinal;
     function GetMainLink: String;
@@ -52,6 +53,7 @@ type
     property Id: String read FId write FId;
     property Copyright: String read FCopyright write FCopyright;
     property Uri: String read FUri write FUri;
+    property Myself: String read FMyself write FMyself;
 
     procedure Clear;
   end;
@@ -113,6 +115,7 @@ begin
   Copyright := '';
   Id := '';
   Uri := '';
+  Myself := '';
 
   if Links^.Count > 0 then
   begin

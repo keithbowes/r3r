@@ -1,5 +1,6 @@
 #include "feedlist.h"
 #include "libr3r.h"
+#include "subscriptions.h"
 
 #include "i18n.h"
 
@@ -50,6 +51,7 @@ void item_parsed(void * item)
   info->link = (char *) libr3r_get_item_field(item, (char *) "main-link");
   info->title = title;
   info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");
+  info->self = (char *) libr3r_get_item_field(item, (char *) "myself");
 
   wxListItem listItem;
   listItem.SetColumn(0);
@@ -142,11 +144,27 @@ void ParseFeed(char * res)
 
 void GetAllFeeds(int argc, char ** argv)
 {
+  char * name, * s;
   int i;
+  unsigned char count, index, type;
+  void * value;
 
   for (i = 1; i < argc; i++)
   {
     ParseFeed(argv[i]);
+  }
+
+  index = 0;
+  name = (char *) "load-subscriptions-on-startup";
+  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+
+  if ((bool) value)
+  {
+    Subscriptions * subs = GetSubscriptionsObject();
+    while ((s = subs->GetNext()))
+    {
+      ParseFeed(s);
+    }
   }
 }
 

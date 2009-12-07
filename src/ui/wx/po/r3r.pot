@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-03 20:58-0500\n"
+"POT-Creation-Date: 2009-12-06 19:04-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgstr ""
 msgid "&Subscribe"
 msgstr ""
 
-#: ../events.cpp:143
+#: ../events.cpp:153
 msgid "About R3R"
 msgstr ""
 
@@ -36,19 +36,19 @@ msgstr ""
 msgid "[None]"
 msgstr ""
 
-#: ../feedlist.cpp:111
+#: ../feedlist.cpp:112
 msgid "Feed Title"
 msgstr ""
 
-#: ../feedlist.cpp:114
+#: ../feedlist.cpp:115
 msgid "Item Title"
 msgstr ""
 
-#: ../feedlist.cpp:117
+#: ../feedlist.cpp:118
 msgid "Subject"
 msgstr ""
 
-#: ../feedlist.cpp:120
+#: ../feedlist.cpp:121
 msgid "Date Created"
 msgstr ""
 
@@ -56,35 +56,39 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: ../menu.cpp:10
-msgid "&Open"
-msgstr ""
-
-#: ../menu.cpp:12
-msgid "E&xit"
+#: ../menu.cpp:14
+msgid "&Open..."
 msgstr ""
 
 #: ../menu.cpp:16
-msgid "&Settings"
+msgid "E&xit"
 msgstr ""
 
 #: ../menu.cpp:20
-msgid "&Donate"
+msgid "&Load Subscriptions"
 msgstr ""
 
 #: ../menu.cpp:22
-msgid "&About"
+msgid "&Settings..."
 msgstr ""
 
 #: ../menu.cpp:26
-msgid "&File"
-msgstr ""
-
-#: ../menu.cpp:27
-msgid "&Tools"
+msgid "&Donate"
 msgstr ""
 
 #: ../menu.cpp:28
+msgid "&About"
+msgstr ""
+
+#: ../menu.cpp:32
+msgid "&File"
+msgstr ""
+
+#: ../menu.cpp:33
+msgid "&Tools"
+msgstr ""
+
+#: ../menu.cpp:34
 msgid "&Help"
 msgstr ""
 
@@ -109,6 +113,10 @@ msgid "&Guess the file types of feeds"
 msgstr ""
 
 #: ../settings-display.cpp:31
+msgid "&Load subscriptions on startup"
+msgstr ""
+
+#: ../settings-display.cpp:34
 msgid "Display"
 msgstr ""
 
@@ -152,7 +160,15 @@ msgstr ""
 msgid "Programs"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:31
+#: ../settings-subscriptions.cpp:37
+msgid "&Delete"
+msgstr ""
+
+#: ../settings-subscriptions.cpp:41
+msgid "&Add"
+msgstr ""
+
+#: ../settings-subscriptions.cpp:49
 msgid "Subscriptions"
 msgstr ""
 

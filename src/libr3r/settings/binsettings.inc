@@ -4,9 +4,10 @@ begin
     (Setting = 'browser') or (Setting = 'display-feed-title-only') or
     (Setting = 'editor') or (Setting = 'enable-mime-guess') or
     (Setting = 'hide-cached-feed-items') or (Setting = 'hide-cached-feeds') or
+    (Setting = 'load-subscriptions-on-startup') or
     (Setting = 'mail-client') or (Setting = 'proxy-address') or
     (Setting = 'proxy-port') or (Setting = 'show-messages') or
-    (Setting = 'subscriptions') or (Setting = 'use-custom-accept-langs') or
+    (Setting = 'use-custom-accept-langs') or
     (Setting = 'use-custom-accept-types') or (Setting = 'use-proxy');
 end;
 
@@ -109,20 +110,12 @@ begin
     else
     begin
       Result := true;
-      if FRef > 0 then
-      begin
-        Dec(FRef);
-      end;
     end;
   end;
 
   if FRef = 0 then
   begin
     FRef := 1;
-  end
-  else if Result then
-  begin
-    Dec(FRef);
   end;
 end;
 

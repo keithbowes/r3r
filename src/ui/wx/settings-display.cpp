@@ -28,5 +28,8 @@ void CreateDisplayPage(wxTreebook * parent)
   SettingsCheckBox * guessCheck = new SettingsCheckBox(panel, _("&Guess the file types of feeds"), (char *) "enable-mime-guess");
   vbox->Add(guessCheck, 1);
 
+  SettingsCheckBox * subCheck = new SettingsCheckBox(panel, _("&Load subscriptions on startup"), (char *) "load-subscriptions-on-startup");
+  vbox->Add(subCheck, 1);
+
   parent->AddPage(panel, _("Display"));
 }

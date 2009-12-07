@@ -1,6 +1,10 @@
 #define SETTINGS_READ 1
 #define SETTINGS_WRITE 2
 
+#define SUBSCRIPTIONS_ADD 1
+#define SUBSCRIPTIONS_DELETE 2
+#define SUBSCRIPTIONS_GET 3
+
 #define TYPE_NONE 0
 #define TYPE_STRING 1
 #define TYPE_INTEGER 2
@@ -26,6 +30,8 @@ extern void * libr3r_get_item_field(void * item, char * field_name);
 extern char * libr3r_get_user_agent(void);
 
 extern void libr3r_access_settings(unsigned char * index, char ** setting_name, void ** setting_value, unsigned char * setting_type, unsigned char * settings_count, unsigned char settings_mode);
+
+extern void libr3r_access_subscriptions(unsigned char index, unsigned char mode, char ** sub, unsigned int * count);
 
 #ifdef __cplusplus
  }

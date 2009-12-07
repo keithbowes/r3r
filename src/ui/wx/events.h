@@ -38,6 +38,7 @@ class MenuEvents : public wxWindow
   public:
     void OnAbout(wxCommandEvent & event);
     void OnDonate(wxCommandEvent & event);
+    void OnLoadSubscriptions(wxCommandEvent & event);
     void OnOpen(wxCommandEvent & event);
     void OnQuit(wxCommandEvent & event);
     void OnSettings(wxCommandEvent & event);
@@ -60,4 +61,11 @@ class SettingsEntryEvents: public wxWindow
 {
   public:
     void OnChange(wxCommandEvent & event);
+};
+
+class SubscriptionsEvents: public wxWindow
+{
+  public:
+    void OnAdd(wxCommandEvent & event);
+    void OnDelete(wxCommandEvent & event);
 };

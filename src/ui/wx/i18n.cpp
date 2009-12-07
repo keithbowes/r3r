@@ -13,10 +13,10 @@ void InitGettext()
     textdomain("r3r_wx");
     bindtextdomain("r3r_wx", LOCALEDIR);
   #else
-    wxLocale locale;
-    locale.Init();
-    locale.AddCatalogLookupPathPrefix(LOCALEDIR);
-    locale.AddCatalog("r3r_wx");
+    wxLocale * locale = new wxLocale();
+    locale->Init();
+    locale->AddCatalogLookupPathPrefix(LOCALEDIR);
+    locale->AddCatalog("r3r_wx");
   #endif
 }
 

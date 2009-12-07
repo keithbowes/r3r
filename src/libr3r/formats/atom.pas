@@ -10,6 +10,7 @@ type
   private
     { Category Type }
     FCatType: String;
+    FHasSelf: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
     function GetFormat: TFeedType; override;
@@ -104,6 +105,17 @@ begin
           Link := GetAbsoluteURL(Attributes[Idx].Value);
           PLink := StrToPChar(Link);
           Links^.Add(PLink);
+
+          if FHasSelf then
+          begin
+            Myself := Link;
+            FHasSelf := false;
+          end;
+        end
+        else if (Attributes[Idx].Name = 'rel') and (Attributes[Idx].Value = 'self') then
+        begin
+          FHasSelf := true;
+          Myself := MainLink;
         end;
       end;
     end
@@ -144,12 +156,13 @@ begin
     end
     else if Name = 'published' then
     begin
-    Created := Created + Content;
-    try
-      DT := StrToDateTime(Created);
-    except
-    end;
-    Created := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+      Created := Created + Content;
+      try
+        DT := StrToDateTime(Created);
+      except
+      end;
+
+      Created := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
     end
     else if Name = 'name' then
     begin
@@ -199,6 +212,7 @@ constructor TAtomFeed.Create;
 begin
   inherited Create;
   FCatType := '';
+  FHasSelf := false;
 end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);

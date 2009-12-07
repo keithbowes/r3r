@@ -227,13 +227,14 @@ procedure TRSettings.InitRec;
 begin
   CleanRec;
 
-  if FRef < SettingsCount then
+  if true then
   begin
     CheckBoolean('show-messages', 'Display', true);
     CheckBoolean('display-feed-title-only', 'Display', false);
     CheckBoolean('hide-cached-feeds', 'Display', true);
     CheckBoolean('hide-cached-feed-items', 'Display', true);
     CheckBoolean('enable-mime-guess', 'Display', false);
+    CheckBoolean('load-subscriptions-on-startup', 'Display', false);
 
     CheckBoolean('use-proxy', 'HTTP', false);
     CheckString('proxy-address', 'HTTP', '127.0.0.1');
@@ -247,8 +248,6 @@ begin
     CheckString('browser', 'Programs', 'lynx');
     CheckString('mail-client', 'Programs', 'sendmail');
     CheckString('editor', 'Programs', 'vim');
-
-    CheckString('subscriptions', 'Subscriptions', '');
   end;
 end;
 

@@ -2,7 +2,7 @@
 EXEOUT = .
 TARGET_DIRS = po settings protocols formats
 UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/*
-UNITS = info rgetfeed rmessage
+UNITS = info rgetfeed rmessage rsubscriptions
 
 [rules]
 include ../../scripts/common.make
