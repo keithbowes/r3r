@@ -3,7 +3,6 @@ unit LibIntl;
 interface
 
 {$CALLING cdecl}
-{$LINKLIB intl}
 {$MODE delphi}
 
 {
@@ -74,65 +73,65 @@ interface
      LC_MESSAGES locale.  If not found, returns MSGID itself (the default
      text).   }
 (* Const before type ignored *)
-  function gettext(__msgid:Pchar):Pchar;external;
+  function gettext(__msgid:Pchar):Pchar;external 'intl';
 
   { Look up MSGID in the DOMAINNAME message catalog for the current
      LC_MESSAGES locale.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external;
+  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external 'intl';
 
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external;
+  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external 'intl';
 
   { Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
      locale.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external;
+  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external 'intl';
 
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external;
+  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external 'intl';
 
   { Similar to `gettext' but select the plural form corresponding to the
      number N.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external;
+  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external 'intl';
 
   { Similar to `dgettext' but select the plural form corresponding to the
      number N.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external;
+  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external 'intl';
 
   { Similar to `dcgettext' but select the plural form corresponding to the
      number N.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword; __category:longint):Pchar;external;
+  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword; __category:longint):Pchar;external 'intl';
 
   { Set the current default message catalog to DOMAINNAME.
      If DOMAINNAME is null, return the current default.
      If DOMAINNAME is "", reset to the default of "messages".   }
 (* Const before type ignored *)
-  function textdomain(__domainname:Pchar):Pchar;external;
+  function textdomain(__domainname:Pchar):Pchar;external 'intl';
 
   { Specify that the DOMAINNAME message catalog will be found
      in DIRNAME rather than in the system locale data base.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external;
+  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external 'intl';
 
   { Specify the character encoding in which the messages from the
      DOMAINNAME message catalog will be returned.   }
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external;
+  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external 'intl';
 
 { Additions }
 const
@@ -150,7 +149,7 @@ const
   LC_MEASUREMENT    = 11;
   LC_IDENTIFICATION = 12;
 
-function setlocale(category: LongInt; locale: PChar): PChar; external;
+function setlocale(category: LongInt; locale: PChar): PChar; external 'intl';
 
 function _(msgid: PChar): String;
 
