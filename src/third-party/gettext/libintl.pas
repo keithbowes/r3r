@@ -1,4 +1,3 @@
-
 unit LibIntl;
 interface
 
@@ -149,7 +148,7 @@ const
   LC_MEASUREMENT    = 11;
   LC_IDENTIFICATION = 12;
 
-function setlocale(category: LongInt; locale: PChar): PChar; external 'intl';
+function setlocale(category: LongInt; locale: PChar): PChar; external {$ifdef WIN32}'msvrct'{$else}'intl'{$endif};
 
 function _(msgid: PChar): String;
 

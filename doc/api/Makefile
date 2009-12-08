@@ -1389,11 +1389,12 @@ index.html: libr3r.pas.xml ../../src/libr3r/formats/feeditem.pas \
 	-$(FPDOC) --input=../../src/libr3r/libr3r.pas \
 		--input=../../src/libr3r/formats/feeditem.pas \
 		--input=../../src/libr3r/rmessage.pas \
+		--input=../../src/libr3r/rsubscriptions.pas \
 		--input=../../src/libr3r/settings/rsettings.pas  \
-		--descr=libr3r.pas.xml --package=LibR3R
+		--descr=libr3r.pas.xml --package=LibR3R --format=rtf
 clean:
 	$(RM) $(wildcard *.html)
-	$(DELTREE) feeditem libr3r rmessage rsettings
+	$(DELTREE) feeditem libr3r rmessage rsettings rsubscriptions
 install: all
 	-$(MKDIR) $(docdir)
 	$(foreach doc,$(wildcard *.html) $(wildcard */*.html), $(INSTALL) $(doc) $(docdir))

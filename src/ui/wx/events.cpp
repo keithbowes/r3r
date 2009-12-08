@@ -112,6 +112,7 @@ void FrameEvents::OnClose(wxCloseEvent & event)
 {
   delete GetDescriptionBox();
   delete GetFeedList();
+  delete GetSubscriptionsObject();
 
   HideSettingsDialog();
   Destroy();

@@ -19,4 +19,3 @@ void InitGettext()
     locale->AddCatalog("r3r_wx");
   #endif
 }
-

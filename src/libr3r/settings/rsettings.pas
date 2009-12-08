@@ -182,7 +182,7 @@ begin
     SettingName := FSettings[Index].Name;
     SettingType := FSettings[Index].ValueType;
 
-    if SettingsMode and SettingsWrite = SettingsWrite then
+    if SettingsMode and SettingsWrite <> 0 then
     begin
       case SettingType of
         TypeBoolean:
@@ -200,7 +200,7 @@ begin
       end;
     end;
 
-    if SettingsMode and SettingsRead = SettingsRead then
+    if SettingsMode and SettingsRead <> 0 then
     begin
       case SettingType of
         TypeBoolean:

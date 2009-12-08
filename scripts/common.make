@@ -103,7 +103,6 @@ _clean:
 	$(DEL) $(wildcard *$(OEXT))
 	$(DEL) $(wildcard *$(PPUEXT))
 	$(DEL) $(wildcard *$(RSTEXT))
-	$(DEL) $(wildcard *$(SHAREDLIBEXT))
 	$(DEL) $(wildcard *$(STATICLIBEXT))
 
 clean: _clean

@@ -16,8 +16,8 @@ type
     constructor Init;
     destructor Done;
     procedure Add(const Sub: String);
+    procedure Delete(const Sub: String);
     procedure DeleteIndex(const Index: word);
-    procedure DeleteString(const Sub: String);
     function Get(const N: word): String;
     function Count: word;
   end;
@@ -28,7 +28,7 @@ var
 implementation
 
 uses
-  Dos, RSettings_Routines, RStrings;
+  Dos, RSettings_Routines, RStrings, Strings;
 
 constructor TRSubscriptions.Init;
 var
@@ -83,14 +83,25 @@ begin
   FList^.Add(StrToPChar(Sub));
 end;
 
+procedure TRSubscriptions.Delete(const Sub: String);
+var
+  i: word;
+begin
+  i := 0;
+  while (i < Count) and (StrComp(StrToPChar(Sub), FList^.GetNth(i)) <> 0 ) do
+  begin
+    Inc(i);
+  end;
+
+  if i <> Count then
+  begin
+    DeleteIndex(i);
+  end;
+end;
+
 procedure TRSubscriptions.DeleteIndex(const Index: word);
 begin
   FList^.Delete(Index);
-end;
-
-procedure TRSubscriptions.DeleteString(const Sub: String);
-begin
-  FList^.DeleteObject(StrToPChar(Sub));
 end;
 
 function TRSubscriptions.Get(const N: word): String;

@@ -173,7 +173,7 @@ begin
   begin
     if (Index = 0) and (Subscription <> nil) then
     begin
-      Subscriptions^.DeleteString(StrPas(Subscription));
+      Subscriptions^.Delete(StrPas(Subscription));
     end
     else
     begin

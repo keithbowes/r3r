@@ -84,6 +84,11 @@
           Gives you access to the <link id="TRSettings">TRSettings</link> class.
         </descr>
       </element>
+      <element name="Subscriptions">
+        <descr>
+          Gives access to the <link id="TRSubscriptions">TRSubscriptions</link> object.
+        </descr>
+      </element>
     </module>
     <module name="RSettings">
       <element name="TRSettings">
@@ -134,6 +139,38 @@
       <element name="TRSettings.Access">
         <descr>
           Access information about the settings.  This is the only method available to the shared library, but those coding in Object Pascal should use the othehr methods.  Index should be set to 0 to get the index of a setting name; if set to a value greater than 0, it will give you the setting name at the specified index.  The value should be cast to and from pointers (not referenced and dereferenced).  For SettingsMode, use SettingsRead and/or SettingsWrite depending on whether you want to get or set the values.
+        </descr>
+      </element>
+    </module>
+    <module name="RSubscriptions">
+      <element name="TRSubscriptions">
+        <descr>
+          The TRSubscriptions object.
+        </descr>
+      </element>
+      <element name="TRSubscriptions.Add">
+        <descr>
+          Adds a new subscription.
+        </descr>
+      </element>
+      <element name="TRSubscriptions.Delete">
+        <descr>
+          Deletes a subscription.
+        </descr>
+      </element>
+      <element name="TRSubscriptions.DeleteIndex">
+        <descr>
+          Deletes the nth (zero-based) subscription.
+        </descr>
+      </element>
+      <element name="TRSubscriptions.Get">
+        <descr>
+          Gets the Nth (zero-based) subscription.
+        </descr>
+      </element>
+      <element name="TRSubscriptions.Count">
+        <descr>
+          Gets the number of subscriptions that currently exist.
         </descr>
       </element>
     </module>
