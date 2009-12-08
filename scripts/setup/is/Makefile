@@ -748,4 +748,622 @@ ZIPSOURCESUFFIX=.source
 ZIPEXAMPLESUFFIX=.examples
 ifdef CROSSCOMPILE
 ZIPSUFFIX=.$(SOURCESUFFIX)
-ZIPCROSSPREFIX=$(TARGETSUFF
+ZIPCROSSPREFIX=$(TARGETSUFFIX)-
+else
+ZIPSUFFIX=.$(TARGETSUFFIX)
+ZIPCROSSPREFIX=
+endif
+endif
+ifndef ECHO
+ECHO:=$(strip $(wildcard $(addsuffix /gecho$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(ECHO),)
+ECHO:=$(strip $(wildcard $(addsuffix /echo$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(ECHO),)
+ECHO= __missing_command_ECHO
+else
+ECHO:=$(firstword $(ECHO))
+endif
+else
+ECHO:=$(firstword $(ECHO))
+endif
+endif
+export ECHO
+ifndef DATE
+DATE:=$(strip $(wildcard $(addsuffix /gdate$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(DATE),)
+DATE:=$(strip $(wildcard $(addsuffix /date$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(DATE),)
+DATE= __missing_command_DATE
+else
+DATE:=$(firstword $(DATE))
+endif
+else
+DATE:=$(firstword $(DATE))
+endif
+endif
+export DATE
+ifndef GINSTALL
+GINSTALL:=$(strip $(wildcard $(addsuffix /ginstall$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(GINSTALL),)
+GINSTALL:=$(strip $(wildcard $(addsuffix /install$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(GINSTALL),)
+GINSTALL= __missing_command_GINSTALL
+else
+GINSTALL:=$(firstword $(GINSTALL))
+endif
+else
+GINSTALL:=$(firstword $(GINSTALL))
+endif
+endif
+export GINSTALL
+ifndef CPPROG
+CPPROG:=$(strip $(wildcard $(addsuffix /cp$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(CPPROG),)
+CPPROG= __missing_command_CPPROG
+else
+CPPROG:=$(firstword $(CPPROG))
+endif
+endif
+export CPPROG
+ifndef RMPROG
+RMPROG:=$(strip $(wildcard $(addsuffix /rm$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(RMPROG),)
+RMPROG= __missing_command_RMPROG
+else
+RMPROG:=$(firstword $(RMPROG))
+endif
+endif
+export RMPROG
+ifndef MVPROG
+MVPROG:=$(strip $(wildcard $(addsuffix /mv$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(MVPROG),)
+MVPROG= __missing_command_MVPROG
+else
+MVPROG:=$(firstword $(MVPROG))
+endif
+endif
+export MVPROG
+ifndef MKDIRPROG
+MKDIRPROG:=$(strip $(wildcard $(addsuffix /gmkdir$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(MKDIRPROG),)
+MKDIRPROG:=$(strip $(wildcard $(addsuffix /mkdir$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(MKDIRPROG),)
+MKDIRPROG= __missing_command_MKDIRPROG
+else
+MKDIRPROG:=$(firstword $(MKDIRPROG))
+endif
+else
+MKDIRPROG:=$(firstword $(MKDIRPROG))
+endif
+endif
+export MKDIRPROG
+ifndef ECHOREDIR
+ifndef inUnix
+ECHOREDIR=echo
+else
+ECHOREDIR=$(ECHO)
+endif
+endif
+ifndef COPY
+COPY:=$(CPPROG) -fp
+endif
+ifndef COPYTREE
+COPYTREE:=$(CPPROG) -Rfp
+endif
+ifndef MKDIRTREE
+MKDIRTREE:=$(MKDIRPROG) -p
+endif
+ifndef MOVE
+MOVE:=$(MVPROG) -f
+endif
+ifndef DEL
+DEL:=$(RMPROG) -f
+endif
+ifndef DELTREE
+DELTREE:=$(RMPROG) -rf
+endif
+ifndef INSTALL
+ifdef inUnix
+INSTALL:=$(GINSTALL) -c -m 644
+else
+INSTALL:=$(COPY)
+endif
+endif
+ifndef INSTALLEXE
+ifdef inUnix
+INSTALLEXE:=$(GINSTALL) -c -m 755
+else
+INSTALLEXE:=$(COPY)
+endif
+endif
+ifndef MKDIR
+MKDIR:=$(GINSTALL) -m 755 -d
+endif
+export ECHOREDIR COPY COPYTREE MOVE DEL DELTREE INSTALL INSTALLEXE MKDIR
+ifndef PPUMOVE
+PPUMOVE:=$(strip $(wildcard $(addsuffix /ppumove$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(PPUMOVE),)
+PPUMOVE= __missing_command_PPUMOVE
+else
+PPUMOVE:=$(firstword $(PPUMOVE))
+endif
+endif
+export PPUMOVE
+ifndef FPCMAKE
+FPCMAKE:=$(strip $(wildcard $(addsuffix /fpcmake$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(FPCMAKE),)
+FPCMAKE= __missing_command_FPCMAKE
+else
+FPCMAKE:=$(firstword $(FPCMAKE))
+endif
+endif
+export FPCMAKE
+ifndef ZIPPROG
+ZIPPROG:=$(strip $(wildcard $(addsuffix /zip$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(ZIPPROG),)
+ZIPPROG= __missing_command_ZIPPROG
+else
+ZIPPROG:=$(firstword $(ZIPPROG))
+endif
+endif
+export ZIPPROG
+ifndef TARPROG
+TARPROG:=$(strip $(wildcard $(addsuffix /gtar$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(TARPROG),)
+TARPROG:=$(strip $(wildcard $(addsuffix /tar$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(TARPROG),)
+TARPROG= __missing_command_TARPROG
+else
+TARPROG:=$(firstword $(TARPROG))
+endif
+else
+TARPROG:=$(firstword $(TARPROG))
+endif
+endif
+export TARPROG
+ASNAME=$(BINUTILSPREFIX)as
+LDNAME=$(BINUTILSPREFIX)ld
+ARNAME=$(BINUTILSPREFIX)ar
+RCNAME=$(BINUTILSPREFIX)rc
+ifneq ($(findstring 1.0.,$(FPC_VERSION)),)
+ifeq ($(OS_TARGET),win32)
+ifeq ($(CROSSBINDIR),)
+ASNAME=asw
+LDNAME=ldw
+ARNAME=arw
+endif
+endif
+endif
+ifndef ASPROG
+ifdef CROSSBINDIR
+ASPROG=$(CROSSBINDIR)/$(ASNAME)$(SRCEXEEXT)
+else
+ASPROG=$(ASNAME)
+endif
+endif
+ifndef LDPROG
+ifdef CROSSBINDIR
+LDPROG=$(CROSSBINDIR)/$(LDNAME)$(SRCEXEEXT)
+else
+LDPROG=$(LDNAME)
+endif
+endif
+ifndef RCPROG
+ifdef CROSSBINDIR
+RCPROG=$(CROSSBINDIR)/$(RCNAME)$(SRCEXEEXT)
+else
+RCPROG=$(RCNAME)
+endif
+endif
+ifndef ARPROG
+ifdef CROSSBINDIR
+ARPROG=$(CROSSBINDIR)/$(ARNAME)$(SRCEXEEXT)
+else
+ARPROG=$(ARNAME)
+endif
+endif
+AS=$(ASPROG)
+LD=$(LDPROG)
+RC=$(RCPROG)
+AR=$(ARPROG)
+PPAS=ppas$(SRCBATCHEXT)
+ifdef inUnix
+LDCONFIG=ldconfig
+else
+LDCONFIG=
+endif
+ifdef DATE
+DATESTR:=$(shell $(DATE) +%Y%m%d)
+else
+DATESTR=
+endif
+ifndef UPXPROG
+ifeq ($(OS_TARGET),go32v2)
+UPXPROG:=1
+endif
+ifeq ($(OS_TARGET),win32)
+UPXPROG:=1
+endif
+ifdef UPXPROG
+UPXPROG:=$(strip $(wildcard $(addsuffix /upx$(SRCEXEEXT),$(SEARCHPATH))))
+ifeq ($(UPXPROG),)
+UPXPROG=
+else
+UPXPROG:=$(firstword $(UPXPROG))
+endif
+else
+UPXPROG=
+endif
+endif
+export UPXPROG
+ZIPOPT=-9
+ZIPEXT=.zip
+ifeq ($(USETAR),bz2)
+TAROPT=vj
+TAREXT=.tar.bz2
+else
+TAROPT=vz
+TAREXT=.tar.gz
+endif
+ifndef NOCPUDEF
+override FPCOPTDEF=$(CPU_TARGET)
+endif
+ifneq ($(OS_TARGET),$(OS_SOURCE))
+override FPCOPT+=-T$(OS_TARGET)
+endif
+ifneq ($(CPU_TARGET),$(CPU_SOURCE))
+override FPCOPT+=-P$(CPU_TARGET)
+endif
+ifeq ($(OS_SOURCE),openbsd)
+override FPCOPT+=-FD$(NEW_BINUTILS_PATH)
+endif
+ifndef CROSSBOOTSTRAP
+ifneq ($(BINUTILSPREFIX),)
+override FPCOPT+=-XP$(BINUTILSPREFIX)
+endif
+ifneq ($(BINUTILSPREFIX),)
+override FPCOPT+=-Xr$(RLINKPATH)
+endif
+endif
+ifdef UNITDIR
+override FPCOPT+=$(addprefix -Fu,$(UNITDIR))
+endif
+ifdef LIBDIR
+override FPCOPT+=$(addprefix -Fl,$(LIBDIR))
+endif
+ifdef OBJDIR
+override FPCOPT+=$(addprefix -Fo,$(OBJDIR))
+endif
+ifdef INCDIR
+override FPCOPT+=$(addprefix -Fi,$(INCDIR))
+endif
+ifdef LINKSMART
+override FPCOPT+=-XX
+endif
+ifdef CREATESMART
+override FPCOPT+=-CX
+endif
+ifdef DEBUG
+override FPCOPT+=-gl
+override FPCOPTDEF+=DEBUG
+endif
+ifdef RELEASE
+ifneq ($(findstring 2.0.,$(FPC_VERSION)),)
+ifeq ($(CPU_TARGET),i386)
+FPCCPUOPT:=-OG2p3
+endif
+ifeq ($(CPU_TARGET),powerpc)
+FPCCPUOPT:=-O1r
+endif
+else
+FPCCPUOPT:=-O2
+endif
+override FPCOPT+=-Ur -Xs $(FPCCPUOPT) -n
+override FPCOPTDEF+=RELEASE
+endif
+ifdef STRIP
+override FPCOPT+=-Xs
+endif
+ifdef OPTIMIZE
+override FPCOPT+=-O2
+endif
+ifdef VERBOSE
+override FPCOPT+=-vwni
+endif
+ifdef COMPILER_OPTIONS
+override FPCOPT+=$(COMPILER_OPTIONS)
+endif
+ifdef COMPILER_UNITDIR
+override FPCOPT+=$(addprefix -Fu,$(COMPILER_UNITDIR))
+endif
+ifdef COMPILER_LIBRARYDIR
+override FPCOPT+=$(addprefix -Fl,$(COMPILER_LIBRARYDIR))
+endif
+ifdef COMPILER_OBJECTDIR
+override FPCOPT+=$(addprefix -Fo,$(COMPILER_OBJECTDIR))
+endif
+ifdef COMPILER_INCLUDEDIR
+override FPCOPT+=$(addprefix -Fi,$(COMPILER_INCLUDEDIR))
+endif
+ifdef CROSSBINDIR
+override FPCOPT+=-FD$(CROSSBINDIR)
+endif
+ifdef COMPILER_TARGETDIR
+override FPCOPT+=-FE$(COMPILER_TARGETDIR)
+ifeq ($(COMPILER_TARGETDIR),.)
+override TARGETDIRPREFIX=
+else
+override TARGETDIRPREFIX=$(COMPILER_TARGETDIR)/
+endif
+endif
+ifdef COMPILER_UNITTARGETDIR
+override FPCOPT+=-FU$(COMPILER_UNITTARGETDIR)
+ifeq ($(COMPILER_UNITTARGETDIR),.)
+override UNITTARGETDIRPREFIX=
+else
+override UNITTARGETDIRPREFIX=$(COMPILER_UNITTARGETDIR)/
+endif
+else
+ifdef COMPILER_TARGETDIR
+override COMPILER_UNITTARGETDIR=$(COMPILER_TARGETDIR)
+override UNITTARGETDIRPREFIX=$(TARGETDIRPREFIX)
+endif
+endif
+ifdef CREATESHARED
+override FPCOPT+=-Cg
+ifeq ($(CPU_TARGET),i386)
+override FPCOPT+=-Aas
+endif
+endif
+ifeq ($(findstring 2.0.,$(FPC_VERSION)),)
+ifeq ($(OS_TARGET),linux)
+ifeq ($(CPU_TARGET),x86_64)
+override FPCOPT+=-Cg
+endif
+endif
+endif
+ifdef LINKSHARED
+endif
+ifdef OPT
+override FPCOPT+=$(OPT)
+endif
+ifdef FPCOPTDEF
+override FPCOPT+=$(addprefix -d,$(FPCOPTDEF))
+endif
+ifdef CFGFILE
+override FPCOPT+=@$(CFGFILE)
+endif
+ifdef USEENV
+override FPCEXTCMD:=$(FPCOPT)
+override FPCOPT:=!FPCEXTCMD
+export FPCEXTCMD
+endif
+override AFULL_TARGET=$(CPU_TARGET)-$(OS_TARGET)
+override AFULL_SOURCE=$(CPU_SOURCE)-$(OS_SOURCE)
+ifneq ($(AFULL_TARGET),$(AFULL_SOURCE))
+override ACROSSCOMPILE=1
+endif
+ifdef ACROSSCOMPILE
+override FPCOPT+=$(CROSSOPT)
+endif
+override COMPILER:=$(FPC) $(FPCOPT)
+ifeq (,$(findstring -s ,$(COMPILER)))
+EXECPPAS=
+else
+ifeq ($(FULL_SOURCE),$(FULL_TARGET))
+ifdef RUNBATCH
+EXECPPAS:=@$(RUNBATCH) $(PPAS)
+else
+EXECPPAS:=@$(PPAS)
+endif
+endif
+endif
+ifdef TARGET_RSTS
+override RSTFILES=$(addsuffix $(RSTEXT),$(TARGET_RSTS))
+override CLEANRSTFILES+=$(RSTFILES)
+endif
+.PHONY: fpc_clean fpc_cleanall fpc_distclean
+ifdef EXEFILES
+override CLEANEXEFILES:=$(addprefix $(TARGETDIRPREFIX),$(CLEANEXEFILES))
+endif
+ifdef CLEAN_UNITS
+override CLEANPPUFILES+=$(addsuffix $(PPUEXT),$(CLEAN_UNITS))
+endif
+ifdef CLEANPPUFILES
+override CLEANPPULINKFILES:=$(subst $(PPUEXT),$(OEXT),$(CLEANPPUFILES)) $(addprefix $(STATICLIBPREFIX),$(subst $(PPUEXT),$(STATICLIBEXT),$(CLEANPPUFILES))) $(addprefix $(IMPORTLIBPREFIX),$(subst $(PPUEXT),$(STATICLIBEXT),$(CLEANPPUFILES)))
+ifdef DEBUGSYMEXT
+override CLEANPPULINKFILES+=$(subst $(PPUEXT),$(DEBUGSYMEXT),$(CLEANPPUFILES))
+endif
+override CLEANPPUFILES:=$(addprefix $(UNITTARGETDIRPREFIX),$(CLEANPPUFILES))
+override CLEANPPULINKFILES:=$(wildcard $(addprefix $(UNITTARGETDIRPREFIX),$(CLEANPPULINKFILES)))
+endif
+fpc_clean: $(CLEANTARGET)
+ifdef CLEANEXEFILES
+	-$(DEL) $(CLEANEXEFILES)
+endif
+ifdef CLEANPPUFILES
+	-$(DEL) $(CLEANPPUFILES)
+endif
+ifneq ($(CLEANPPULINKFILES),)
+	-$(DEL) $(CLEANPPULINKFILES)
+endif
+ifdef CLEANRSTFILES
+	-$(DEL) $(addprefix $(UNITTARGETDIRPREFIX),$(CLEANRSTFILES))
+endif
+ifdef CLEAN_FILES
+	-$(DEL) $(CLEAN_FILES)
+endif
+ifdef LIB_NAME
+	-$(DEL) $(LIB_NAME) $(LIB_FULLNAME)
+endif
+	-$(DEL) $(FPCMADE) Package.fpc $(PPAS) script.res link.res $(FPCEXTFILE) $(REDIRFILE)
+	-$(DEL) *$(ASMEXT) *_ppas$(BATCHEXT)
+fpc_cleanall: $(CLEANTARGET)
+ifdef CLEANEXEFILES
+	-$(DEL) $(CLEANEXEFILES)
+endif
+ifdef COMPILER_UNITTARGETDIR
+ifdef CLEANPPUFILES
+	-$(DEL) $(CLEANPPUFILES)
+endif
+ifneq ($(CLEANPPULINKFILES),)
+	-$(DEL) $(CLEANPPULINKFILES)
+endif
+ifdef CLEANRSTFILES
+	-$(DEL) $(addprefix $(UNITTARGETDIRPREFIX),$(CLEANRSTFILES))
+endif
+endif
+	-$(DELTREE) units
+	-$(DEL) *$(OEXT) *$(PPUEXT) *$(RSTEXT) *$(ASMEXT) *$(STATICLIBEXT) *$(SHAREDLIBEXT) *$(PPLEXT)
+ifneq ($(PPUEXT),.ppu)
+	-$(DEL) *.o *.ppu *.a
+endif
+	-$(DELTREE) *$(SMARTEXT)
+	-$(DEL) fpcmade.* Package.fpc $(PPAS) script.res link.res $(FPCEXTFILE) $(REDIRFILE)
+	-$(DEL) *_ppas$(BATCHEXT)
+ifdef AOUTEXT
+	-$(DEL) *$(AOUTEXT)
+endif
+ifdef DEBUGSYMEXT
+	-$(DEL) *$(DEBUGSYMEXT)
+endif
+fpc_distclean: cleanall
+.PHONY: fpc_baseinfo
+override INFORULES+=fpc_baseinfo
+fpc_baseinfo:
+	@$(ECHO)
+	@$(ECHO)  == Package info ==
+	@$(ECHO)  Package Name..... $(PACKAGE_NAME)
+	@$(ECHO)  Package Version.. $(PACKAGE_VERSION)
+	@$(ECHO)
+	@$(ECHO)  == Configuration info ==
+	@$(ECHO)
+	@$(ECHO)  FPC.......... $(FPC)
+	@$(ECHO)  FPC Version.. $(FPC_VERSION)
+	@$(ECHO)  Source CPU... $(CPU_SOURCE)
+	@$(ECHO)  Target CPU... $(CPU_TARGET)
+	@$(ECHO)  Source OS.... $(OS_SOURCE)
+	@$(ECHO)  Target OS.... $(OS_TARGET)
+	@$(ECHO)  Full Source.. $(FULL_SOURCE)
+	@$(ECHO)  Full Target.. $(FULL_TARGET)
+	@$(ECHO)  SourceSuffix. $(SOURCESUFFIX)
+	@$(ECHO)  TargetSuffix. $(TARGETSUFFIX)
+	@$(ECHO)
+	@$(ECHO)  == Directory info ==
+	@$(ECHO)
+	@$(ECHO)  Required pkgs... $(REQUIRE_PACKAGES)
+	@$(ECHO)
+	@$(ECHO)  Basedir......... $(BASEDIR)
+	@$(ECHO)  FPCDir.......... $(FPCDIR)
+	@$(ECHO)  CrossBinDir..... $(CROSSBINDIR)
+	@$(ECHO)  UnitsDir........ $(UNITSDIR)
+	@$(ECHO)  PackagesDir..... $(PACKAGESDIR)
+	@$(ECHO)
+	@$(ECHO)  GCC library..... $(GCCLIBDIR)
+	@$(ECHO)  Other library... $(OTHERLIBDIR)
+	@$(ECHO)
+	@$(ECHO)  == Tools info ==
+	@$(ECHO)
+	@$(ECHO)  As........ $(AS)
+	@$(ECHO)  Ld........ $(LD)
+	@$(ECHO)  Ar........ $(AR)
+	@$(ECHO)  Rc........ $(RC)
+	@$(ECHO)
+	@$(ECHO)  Mv........ $(MVPROG)
+	@$(ECHO)  Cp........ $(CPPROG)
+	@$(ECHO)  Rm........ $(RMPROG)
+	@$(ECHO)  GInstall.. $(GINSTALL)
+	@$(ECHO)  Echo...... $(ECHO)
+	@$(ECHO)  Shell..... $(SHELL)
+	@$(ECHO)  Date...... $(DATE)
+	@$(ECHO)  FPCMake... $(FPCMAKE)
+	@$(ECHO)  PPUMove... $(PPUMOVE)
+	@$(ECHO)  Upx....... $(UPXPROG)
+	@$(ECHO)  Zip....... $(ZIPPROG)
+	@$(ECHO)
+	@$(ECHO)  == Object info ==
+	@$(ECHO)
+	@$(ECHO)  Target Loaders........ $(TARGET_LOADERS)
+	@$(ECHO)  Target Units.......... $(TARGET_UNITS)
+	@$(ECHO)  Target Implicit Units. $(TARGET_IMPLICITUNITS)
+	@$(ECHO)  Target Programs....... $(TARGET_PROGRAMS)
+	@$(ECHO)  Target Dirs........... $(TARGET_DIRS)
+	@$(ECHO)  Target Examples....... $(TARGET_EXAMPLES)
+	@$(ECHO)  Target ExampleDirs.... $(TARGET_EXAMPLEDIRS)
+	@$(ECHO)
+	@$(ECHO)  Clean Units......... $(CLEAN_UNITS)
+	@$(ECHO)  Clean Files......... $(CLEAN_FILES)
+	@$(ECHO)
+	@$(ECHO)  Install Units....... $(INSTALL_UNITS)
+	@$(ECHO)  Install Files....... $(INSTALL_FILES)
+	@$(ECHO)
+	@$(ECHO)  == Install info ==
+	@$(ECHO)
+	@$(ECHO)  DateStr.............. $(DATESTR)
+	@$(ECHO)  ZipName.............. $(ZIPNAME)
+	@$(ECHO)  ZipPrefix............ $(ZIPPREFIX)
+	@$(ECHO)  ZipCrossPrefix....... $(ZIPCROSSPREFIX)
+	@$(ECHO)  ZipSuffix............ $(ZIPSUFFIX)
+	@$(ECHO)  FullZipName.......... $(FULLZIPNAME)
+	@$(ECHO)  Install FPC Package.. $(INSTALL_FPCPACKAGE)
+	@$(ECHO)
+	@$(ECHO)  Install base dir..... $(INSTALL_BASEDIR)
+	@$(ECHO)  Install binary dir... $(INSTALL_BINDIR)
+	@$(ECHO)  Install library dir.. $(INSTALL_LIBDIR)
+	@$(ECHO)  Install units dir.... $(INSTALL_UNITDIR)
+	@$(ECHO)  Install source dir... $(INSTALL_SOURCEDIR)
+	@$(ECHO)  Install doc dir...... $(INSTALL_DOCDIR)
+	@$(ECHO)  Install example dir.. $(INSTALL_EXAMPLEDIR)
+	@$(ECHO)  Install data dir..... $(INSTALL_DATADIR)
+	@$(ECHO)
+	@$(ECHO)  Dist destination dir. $(DIST_DESTDIR)
+	@$(ECHO)  Dist zip name........ $(DIST_ZIPNAME)
+	@$(ECHO)
+.PHONY: fpc_info
+fpc_info: $(INFORULES)
+.PHONY: fpc_makefile fpc_makefiles fpc_makefile_sub1 fpc_makefile_sub2 \
+	fpc_makefile_dirs
+fpc_makefile:
+	$(FPCMAKE) -w -T$(OS_TARGET) Makefile.fpc
+fpc_makefile_sub1:
+ifdef TARGET_DIRS
+	$(FPCMAKE) -w -T$(OS_TARGET) $(addsuffix /Makefile.fpc,$(TARGET_DIRS))
+endif
+ifdef TARGET_EXAMPLEDIRS
+	$(FPCMAKE) -w -T$(OS_TARGET) $(addsuffix /Makefile.fpc,$(TARGET_EXAMPLEDIRS))
+endif
+fpc_makefile_sub2: $(addsuffix _makefile_dirs,$(TARGET_DIRS) $(TARGET_EXAMPLEDIRS))
+fpc_makefile_dirs: fpc_makefile_sub1 fpc_makefile_sub2
+fpc_makefiles: fpc_makefile fpc_makefile_dirs
+all:
+debug:
+smart:
+release:
+units:
+examples:
+shared:
+install:
+sourceinstall:
+exampleinstall:
+distinstall:
+zipinstall:
+zipsourceinstall:
+zipexampleinstall:
+zipdistinstall:
+clean:
+distclean:
+cleanall:
+info: fpc_info
+makefiles: fpc_makefiles
+.PHONY: all debug smart release units examples shared install sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall clean distclean cleanall info makefiles
+ifneq ($(wildcard fpcmake.loc),)
+include fpcmake.loc
+endif
+installer: setup.exe
+setup.exe: r3r.iss
+	$(ISCC) $<
+	$(MOVE) $@  ../../../../r3r-$(VERSION).exe
+r3r.iss: _r3r.iss
+	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
+	 -e	's/@UI@/$(R3R_UI)/g' \
+	 -e 's/;insert_next_lang/$(foreach file,$(mos_lib),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "libr3r.mo";)\r\n$(foreach file,$(mos_ui),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "r3r_$(R3R_UI).mo";)\r\n;insert_next_lang/g' _r3r.iss > r3r.iss

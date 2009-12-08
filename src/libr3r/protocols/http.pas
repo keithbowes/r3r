@@ -194,10 +194,15 @@ begin
 end;
 
 constructor THttpSock.Create(Host, Port, Path, Search: String);
+var
+  FullPath: String;
 begin
   inherited Create(Host, Port);
   Connect(Host, Port, Path, Search);
-  FCache := THttpCache.Create(StringReplace(FIndirectHost + FPath, '/', Pred(PathDelim), [rfReplaceAll]));
+
+  FullPath := StringReplace(FIndirectHost + FPath, '/', Pred(PathDelim), [rfReplaceAll]);
+  FullPath := StringReplace(FullPath, '?', '_', [rfReplaceAll]);
+  FCache := THttpCache.Create(FullPath);
 end;
 
 procedure THttpSock.Connect(Host, Port, Path, Search: String);
@@ -358,7 +363,7 @@ end;
   else if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or (Pos('xml', Line) <> 0) then
     (Pos('xml', Line) <> 0) then
     Result := ftRss;
-  end
+    end;
   GetType := ContentType;
 end;
 

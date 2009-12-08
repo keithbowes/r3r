@@ -59,7 +59,6 @@ var
 begin
   FIdsList := TStringList.Create;
   FUrl := Url;
-  New(FCacheInfo);
 
   FCacheDir := SettingsDir + PathDelim + 'cache';
   CheckDir(FCacheDir);
@@ -81,6 +80,7 @@ begin
     Close(IdsFile);
   end;
 
+  New(FCacheInfo);
   CurrentCache := Self;
 end;
 

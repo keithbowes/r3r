@@ -19,6 +19,7 @@ Name: desktopicon; Description: "&Create a desktop icon"
 Source: "r3r.exe"; DestDir: "{app}\bin";
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
 Source: "src\third-party\expas\expat.dll"; DestDir: "{app}\bin"
+Source: "*.dll"; DestDir: "{app}\bin"
 ;insert_next_lang
 
 [Icons]
