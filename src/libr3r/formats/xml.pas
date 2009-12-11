@@ -3,12 +3,7 @@ unit Xml;
 interface
 
 uses
-  Feed, FeedItem,
-  {$IFDEF SAX_LIBXML2}
-    LibXml2
-  {$ELSE}
-    Expas
-  {$ENDIF};
+  Expas, Feed, FeedItem;
 
 const
   AtomNS = 'http://www.w3.org/2005/Atom';
@@ -36,16 +31,11 @@ type
   private
     FElemList: array of TXmlElement;
     FElems: cardinal;
-    FIgnoreWhiteSpace: Boolean;
-    {$IFDEF SAX_LIBXML2}
-      FHandler: XmlSaxHandler;
-    {$ELSE}
-      FParser: XML_PARSER;
-    {$ENDIF}
+    FParser: XML_PARSER;
   protected
     FXmlElement: TXmlElement;
     function GetCurrentElement: TXmlElement;
-    function GetPreviousElement: TXmlElement;
+    function GetPreviousElement: TXmlElement; virtual;
     procedure StripNS(var Element: String; const NS: String);
   public
     constructor Create;
@@ -61,43 +51,24 @@ implementation
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl; forward;
 procedure ElementEnded(user_data: Pointer; name: PChar); cdecl; forward;
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl; forward;
-procedure WhitespaceReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl; forward;
 
 constructor TXmlFeed.Create;
 begin
   inherited Create;
 
   SetLength(FElemList, 2);
-  FIgnoreWhiteSpace := false;
 
-  {$IFDEF SAX_LIBXML2}
-    XmlInitParser;
-
-    with FHandler do
-    begin
-      initialized := $DEEDBEAF; // Make sure we're using SAX 2
-      startElement := @ElementStarted;
-      endElement := @ElementEnded;
-      characters := @CharactersReceived;
-      ignorableWhitespace := @WhitespaceReceived;
-    end;
-  {$ELSE}
-    FParser := XML_ParserCreateNS('UTF-8', #0);
-    XML_SetElementHandler(FParser, @ElementStarted, @ElementEnded);
-    XML_SetCharacterDataHandler(FParser, @CharactersReceived);
-    XML_SetUserData(FParser, Self);
-  {$ENDIF}
+  FParser := XML_ParserCreateNS('UTF-8', #0);
+  XML_SetElementHandler(FParser, @ElementStarted, @ElementEnded);
+  XML_SetCharacterDataHandler(FParser, @CharactersReceived);
+  XML_SetUserData(FParser, Self);
 end;
 
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
   inherited ParseLine(Line, Item, ItemFinished);
-  {$IFDEF SAX_LIBXML2}
-    XmlSaxUserParseMemory(@FHandler, Self, PChar(Line), Length(Line));
-  {$ELSE}
-    XML_Parse(FParser, PChar(Line), Length(Line), 0);
-  {$ENDIF}
 
+  XML_Parse(FParser, PChar(Line), Length(Line), 0);
   ItemFinished := true;
 end;
 
@@ -110,12 +81,7 @@ end;
 destructor TXmlFeed.Destroy;
 begin
   FElemList := nil;
-
-  {$IFDEF SAX_LIBXML2}
-    XmlCleanupParser;
-  {$ELSE}
-    Xml_ParserFree(FParser);
-  {$ENDIF}
+  Xml_ParserFree(FParser);
 
   inherited Destroy;
 end;
@@ -133,13 +99,10 @@ begin
 end;
 
 procedure TXmlFeed.StripNS(var Element: String; const NS: String);
-var
-  Len: word;
 begin
   if Pos(NS, Element) = 1 then
   begin
-    Len := Length(NS);
-    Delete(Element, 1, Len);
+    Delete(Element, 1, Length(NS));
   end;
 end;
 
@@ -212,17 +175,6 @@ begin
   with TXmlFeed(ctx) do
   begin
     FXmlElement.Content := FXmlElement.Content + enh;
-  end;
-end;
-
-procedure WhitespaceReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl;
-begin
-  with TXmlFeed(ctx) do
-  begin
-    if not FIgnoreWhiteSpace then
-    begin
-      FXmlElement.Content := FXmlElement.Content + ch;
-    end;
   end;
 end;
 

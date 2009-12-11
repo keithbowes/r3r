@@ -53,18 +53,16 @@ begin
 
       if Item.Id <> '' then
       begin
-        if (IdsList.IndexOf(Item.Id) <> -1) and HideItems then
-        begin
-          Item.Clear;
-          ShouldShow := false;
-        end;
-
         if HideItems then
         begin
           WriteData(Item.Id, cdtIds);
         end;
 
-        Item.Id := '';
+        if (IdsList.IndexOf(Item.Id) <> -1) and HideItems then
+        begin
+          Item.Clear;
+          ShouldShow := false;
+        end;
       end;
     end;
   end;

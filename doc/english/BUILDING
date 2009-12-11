@@ -58,11 +58,6 @@ DEFS_EXTRA
   Extra defines to send to the compiler.
 DEFS_NET
   The networking library to use (defaults to -dUSE_SYNAPSE).
-DEFS_SAX
-  The SAX implementation to use for parsing XML feeds.  The choices are:
-  * SAX_FPC: Use Free Pascal's built-in SAX units (default).
-  * SAX_LIBXML2: Use the libxml2 library <http://xmlsoft.org>.
-  * SAX_EXPAT: Use the expat library <http://expat.sf.net>.
 DEFS_SETTINGS
   The type of settings to use:
   * DEFS_BIN: Dump the internal settings structure to a binary file and read

@@ -1,7 +1,8 @@
 function IsValidSetting(Setting: String): Boolean;
 begin
   Result := (Setting = 'accept-langs') or (Setting = 'accept-types') or
-    (Setting = 'browser') or (Setting = 'display-feed-title-only') or
+    (Setting = 'browser') or (Setting = 'check-for-updates') or
+    (Setting = 'display-feed-title-only') or
     (Setting = 'editor') or (Setting = 'enable-mime-guess') or
     (Setting = 'hide-cached-feed-items') or (Setting = 'hide-cached-feeds') or
     (Setting = 'load-subscriptions-on-startup') or

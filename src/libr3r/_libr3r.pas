@@ -6,6 +6,9 @@ uses
   FeedItem, RMessage, RSettings, RSock, RSubscriptions;
 
 const
+  Timestamp = @TIMESTAMP@;
+
+const
   SettingsRead = RSettings.SettingsRead;
   SettingsWrite = RSettings.SettingsWrite;
 
@@ -27,7 +30,9 @@ type
   protected
     procedure DisplayItem(const Item: TFeedItem); virtual;
     procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); virtual;
+    procedure NotifyUpdate; virtual;
     procedure DoParseItem(Item: TFeedItem);
+    procedure DoUpdate;
   public
     constructor Create; overload;
     constructor Create(const Resource: String); overload;
@@ -48,13 +53,18 @@ var
 implementation
 
 uses
-  Classes, Http, LibR3RStrings, LocalFile, RGetFeed;
+  Classes, Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate;
 
 constructor TLibR3R.Create;
 begin
   inherited Create;
   FFreeLinks := true;
   FSock := nil;
+
+  if Settings.GetBoolean(Settings.IndexOf('check-for-updates')) then
+  begin
+    DoUpdate;
+  end;
 end;
 
 constructor TLibR3R.Create(const Resource: String);
@@ -113,7 +123,17 @@ begin
   ParseFeed(Self, @DoParseItem, FSock);
 end;
 
+{ Implement as empty so if the UI doens't implement them,
+  there won't be crashes. }
 procedure TLibR3R.DisplayItem(const Item: TFeedItem);
+begin
+end;
+
+procedure TLibR3R.HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+begin
+end;
+
+procedure TLibR3R.NotifyUpdate;
 begin
 end;
 
@@ -129,8 +149,17 @@ begin
   end;
 end;
 
-procedure TLibR3R.HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+procedure TLibR3R.DoUpdate;
 begin
+  with TRUpdate.Create do
+  begin
+    if Available then
+    begin
+      NotifyUpdate;
+    end;
+
+    Free;
+  end;
 end;
 
 initialization
@@ -139,3 +168,4 @@ Settings := RSettings.Settings;
 Subscriptions := RSubscriptions.Subscriptions;
 
 end.
+

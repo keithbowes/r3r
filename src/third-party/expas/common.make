@@ -1,6 +1,7 @@
 programpath = $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH))))
 
-VERSION = 2.0-beta2
+VERSION = 2.0-beta3
+TIMESTAMP=$(shell date +%s)
 
 PREFIX ?= $(DESTDIR)
 
@@ -31,9 +32,7 @@ PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 	$(UNITDIRS)
 
 # Defines, for enabling different features/dialect syntax
-DEFFLAG ?= -D
-DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SAX) $(DEFS_SETTINGS), \
-	$(DEFFLAG)$(opt))
+DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS), $(DEFFLAG)$(opt))
 
 UNITDIRS=$(foreach dir,$(UNIT_DIRS),$(DIRFLAG)$(dir))
 
@@ -63,7 +62,6 @@ endif
 
 ifdef USE_FPC
 DEFFLAG=-d
-DEFS_SAX ?= SAX_LIBXML2
 PC=fpc
 PCFLAGS_BASE=-FU. -Mobjfpc -Sh -WR
 DIRFLAG=-Fu
@@ -81,6 +79,7 @@ else
 ifdef USE_GPC
 PC=gpc
 PCFLAGS_BASE=--automake --cstrings-as-strings --no-warnings --pointer-arithmetic
+DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_BIN
 DIRFLAG=-B
 
@@ -92,7 +91,7 @@ endif
 
 R3R_UI ?= tui
 
-export DEFS DEFS_SAX PCFLAGS R3R_UI VERSION \
+export DEFS PCFLAGS R3R_UI VERSION \
 	bindir datadir prefix rootdir
 
 _all: Makefile

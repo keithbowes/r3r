@@ -1,7 +1,7 @@
 [Setup]
 AllowNoIcons=yes
 AppName=R3R
-AppPublisher=The R3R Developers
+AppPublisher=Keith Bowes
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
 AppVerName=R3R @VERSION@ 
@@ -18,9 +18,17 @@ Name: desktopicon; Description: "&Create a desktop icon"
 [Files]
 Source: "r3r.exe"; DestDir: "{app}\bin";
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
-Source: "src\third-party\expas\expat.dll"; DestDir: "{app}\bin"
 Source: "*.dll"; DestDir: "{app}\bin"
-;insert_next_lang
+
+Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de\libr3r.mo"
+Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en\libr3r.mo"
+Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo\libr3r.mo"
+Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es\libr3r.mo"
+
+Source: "src/ui/@UI/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de\r3r_@UI@.mo"
+Source: "src/ui/@UI/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en\r3r_@UI@.mo"
+Source: "src/ui/@UI/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo\r3r_@UI@.mo"
+Source: "src/ui/@UI/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es\r3r_@UI@.mo"
 
 [Icons]
 Name: "{userdesktop}\R3R"; FileName: "{app}\bin\r3r.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
@@ -34,5 +42,3 @@ Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [Registry]
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
-
-

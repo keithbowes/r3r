@@ -56,14 +56,10 @@ begin
     FillItem(Item);
   end;
 
-  {$IFDEF SAX_LIBXML2}
-    ItemFinished := (FXmlElement.Name = 'item') or (Line = SockEof);
-  {$ELSE}
-    ItemFinished := ((FXmlElement.Name = 'item') and ((PreviousElement.Name = 'item') or IsRDF)) or (Line = SockEof);
+  ItemFinished := ((FXmlElement.Name = 'item') and ((PreviousElement.Name = 'item') or IsRDF)) or (Line = SockEof);
 
-    StripNS(FXmlElement.Name, RDFNS);
-    ShouldShow := FXmlElement.Name <> 'RDF';
-  {$ENDIF}
+  StripNS(FXmlElement.Name, RDFNS);
+  ShouldShow := FXmlElement.Name <> 'RDF';
 end;
 
 function TRssFeed.GetFormat: TFeedType;

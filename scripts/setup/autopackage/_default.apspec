@@ -64,13 +64,7 @@ then
   require @gtk.org/gtk 1.2
 fi
 
-if test "@DEFS_SAX@" = "SAX_EXPAT";
-then
-  require @libexpat.org/expat 1.2
-elif test "@DEFS_SAX@" = "SAX_LIBXML2";
-then
-  require @xmlsoft.org/libxml2 2.6.26
-fi
+require @libexpat.org/expat 1.2
 
 [Install]
 # Put your installation script here

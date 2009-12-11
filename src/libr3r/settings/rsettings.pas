@@ -5,7 +5,7 @@ unit RSettings;
 interface
 
 const
-  SettingsCount = 16;
+  SettingsCount = 17;
 
   SettingsRead = 1;
   SettingsWrite = 2;
@@ -227,13 +227,14 @@ procedure TRSettings.InitRec;
 begin
   CleanRec;
 
-  if true then
+  if FRef < SettingsCount then
   begin
     CheckBoolean('show-messages', 'Display', true);
     CheckBoolean('display-feed-title-only', 'Display', false);
     CheckBoolean('hide-cached-feeds', 'Display', true);
     CheckBoolean('hide-cached-feed-items', 'Display', true);
     CheckBoolean('enable-mime-guess', 'Display', false);
+    CheckBoolean('check-for-updates', 'Display', true);
     CheckBoolean('load-subscriptions-on-startup', 'Display', false);
 
     CheckBoolean('use-proxy', 'HTTP', false);

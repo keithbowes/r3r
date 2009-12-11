@@ -51,20 +51,29 @@ var
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
   Line: String;
+  NullLines: 0..49;
   RespList: TStringsList;
   Prot, Host, Port, Path, Para: String;
 begin
   HeaderState := hsUnstarted;
+  NullLines := 0;
 
   while (HeaderState <> hsFinished) do
   begin
     Line := GetLine;
+
     if (Line = '') and (HeaderState = hsStarted) then
     begin
       HeaderState := hsFinished;
     end
     else if (Line <> '') and (HeaderState = hsUnstarted) then
     begin
+      if (Line = #0) and (NullLines < 50) then
+      begin
+        Inc(NullLines);
+        Continue;
+      end;
+
       HeaderState := hsStarted;
 
       RespList := Split(Line, WhitespaceChars);

@@ -12,6 +12,7 @@ type
   protected
     procedure DisplayItem(const Item: TFeedItem); override;
     procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); override;
+    procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
     procedure GoItem;
@@ -146,6 +147,11 @@ begin
   WriteLn;
 end;
 
+procedure TTui.NotifyUpdate;
+begin
+  WriteLn('A new version is available from http://sourceforge.net/projects/r3r');
+end;
+
 procedure TTui.ShowHelp;
 begin
   WriteLn(UserAgent:75);
@@ -177,7 +183,6 @@ end;
 
 procedure TTui.GoItem;
 var
-  LinkIndex: cardinal;
   No: String;
 begin
   Write(ItemNo);
@@ -216,7 +221,7 @@ begin
   Val(No, iNo, ErrPos);
 
   if (ErrPos = 0) and (FItems[iNo].MainLink <> '') and
-    (iNo < Length(FItems)) then
+    (iNo < cardinal(Length(FItems))) then
   begin
     OpenBrowser(FItems[iNo].MainLink);
   end;
@@ -227,7 +232,6 @@ end;
 procedure TTui.OpenBrowser(const Link: String);
 var
   Browser: String;
-  i: cardinal;
 begin
   Browser := Settings.GetString(Settings.IndexOf('browser'));
 

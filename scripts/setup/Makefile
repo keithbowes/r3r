@@ -6,13 +6,7 @@ else
 	DEPS=glibc
 endif
 
-ifeq ($(DEFS_SAX),SAX_EXPAT)
-	DEPS=libexpat1
-endif
-
-ifeq ($(DEFS_SAX),SAX_LIBXML2)
-	DEPS=libxml2
-endif
+DEPS=libexpat1
 
 ifeq ($(TYPE),debian)
 	GTK_DEP=libgtk1.2

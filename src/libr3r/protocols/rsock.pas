@@ -63,7 +63,7 @@ end;
 
 function TRSock.GetLine: String;
 begin
-  Result := FSock.RecvString(5000);
+  Result := FSock.RecvString(256);
   FError := FSock.LastError <> 0;
 
   if FError then

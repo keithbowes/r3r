@@ -15,6 +15,7 @@ type
   protected
     function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
+    function GetPreviousElement: TXmlElement; override;
   public
     constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
@@ -208,6 +209,12 @@ begin
   end;
 end;
 
+function TAtomFeed.GetPreviousElement: TXmlElement;
+begin
+  Result := inherited GetPreviousElement;
+  StripNS(Result.Name, AtomNS);
+end;
+
 constructor TAtomFeed.Create;
 begin
   inherited Create;
@@ -218,7 +225,6 @@ end;
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
   AFeed: TFeed;
-  Prev: TXmlElement;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
 
@@ -236,15 +242,9 @@ begin
     AFeed.Free;
   end;
 
-  {$IFDEF SAX_LIBXML2}
-    ItemFinished := (FXmlElement.Name = 'entry') or (Line = SockEof);
-  {$ELSE}
-    Prev := PreviousElement;
-    StripNS(Prev.Name, AtomNS);
 
-    ItemFinished := ((FXmlElement.Name = 'entry') and (Prev.Name = 'entry')) or (Line = SockEof);
-    FXmlElement.Name := '';
-  {$ENDIF}
+  ItemFinished := ((FXmlElement.Name = 'entry') and (PreviousElement.Name = 'entry')) or (Line = SockEof);
+  FXmlElement.Name := '';
 end;
 
 end.
