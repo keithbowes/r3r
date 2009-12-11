@@ -149,7 +149,7 @@ end;
 
 procedure TTui.NotifyUpdate;
 begin
-  WriteLn('A new version is available from http://sourceforge.net/projects/r3r');
+  WriteLn(UpdateAvailable);
 end;
 
 procedure TTui.ShowHelp;

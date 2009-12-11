@@ -1391,7 +1391,7 @@ index.html: libr3r.pas.xml ../../src/libr3r/formats/feeditem.pas \
 		--input=../../src/libr3r/rmessage.pas \
 		--input=../../src/libr3r/rsubscriptions.pas \
 		--input=../../src/libr3r/settings/rsettings.pas  \
-		--descr=libr3r.pas.xml --package=LibR3R --format=rtf
+		--descr=libr3r.pas.xml --package=LibR3R
 clean:
 	$(RM) $(wildcard *.html)
 	$(DELTREE) feeditem libr3r rmessage rsettings rsubscriptions

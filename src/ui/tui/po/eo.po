@@ -116,3 +116,6 @@ msgstr "Ŝanĝota parametro: "
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr "Nova valoro: "
+
+msgid "A new version is available from http://sourceforge.net/projects/r3r"
+msgstr "Nova eldono el http://sourceforge.net/projects/r3r haveblas"

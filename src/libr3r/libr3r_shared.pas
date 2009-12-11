@@ -11,17 +11,21 @@ const
 type
   TMessageProc = procedure(IsError: byte; MessageName, Extra: PChar); cdecl;
   TParsedProc = procedure(Item: Pointer); cdecl;
+  TUpdateProc = procedure; cdecl;
 
   TLibR3R_Shared = class(TLibR3R)
   private
     FMessageProc: TMessageProc;
     FParsedProc: TParsedProc;
+    FUpdateProc: TUpdateProc;
   public
     procedure DisplayItem(const Item: TFeedItem); override;
     procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); override;
+    procedure NotifyUpdate; override;
 
     property MessageProc: TMessageProc write FMessageProc;
     property ParsedProc: TParsedProc write FParsedProc;
+    property UpdateProc: TUpdateProc write FUpdateProc;
   end;
 
 { Implemetation of the helper class }
@@ -38,6 +42,14 @@ begin
   if Assigned(FMessageProc) then
   begin
     FMessageProc(Ord(IsError), StrToPChar(MessageName), StrToPChar(Extra));
+  end;
+end;
+
+procedure TLibR3R_Shared.NotifyUpdate;
+begin
+  if Assigned(FUpdateProc) then
+  begin
+    FUpdateProc;
   end;
 end;
 
@@ -65,6 +77,11 @@ end;
 procedure libr3r_on_message_received(Lib: Pointer; Proc: TMessageProc); cdecl;
 begin
   TLibR3R_Shared(Lib).MessageProc := Proc;
+end;
+
+procedure libr3r_on_update(Lib: Pointer; Proc: TUpdateProc); cdecl;
+begin
+  TLibR3R_Shared(Lib).UpdateProc := Proc;
 end;
 
 function libr3r_get_item_field(Item: Pointer; FieldName: PChar): Pointer; cdecl;
@@ -187,8 +204,8 @@ begin
 end;
 
 exports
-  libr3r_create, libr3r_free,
-  libr3r_retrieve_feed, libr3r_on_item_parsed, libr3r_on_message_received,
+  libr3r_create, libr3r_free, libr3r_retrieve_feed,
+  libr3r_on_item_parsed, libr3r_on_message_received, libr3r_on_update,
   libr3r_get_item_field,
   libr3r_get_user_agent,
   libr3r_access_settings,

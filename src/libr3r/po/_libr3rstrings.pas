@@ -5,14 +5,14 @@ unit LibR3RStrings;
 
 interface
 
-uses
-  LibIntl;
-
 var
   ErrorGetting: String;
   InvalidHeaders: String;
 
 implementation
+
+uses
+  LibIntl;
 
 procedure InitStrings;
 begin

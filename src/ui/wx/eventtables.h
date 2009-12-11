@@ -1,7 +1,6 @@
 #include "gofield.h"
 #include "settingscheckbox.h"
 #include "settingsdialog.h"
-#include "widgetids.h"
   
 BEGIN_EVENT_TABLE(FeedListView, wxListView)
   EVT_LIST_ITEM_ACTIVATED(wxID_ANY, FeedListViewEvents::OnActivate)

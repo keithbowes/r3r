@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-06 19:04-0500\n"
+"POT-Creation-Date: 2009-12-10 20:43-0500\n"
 "PO-Revision-Date: 2009-11-30 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
@@ -28,27 +28,31 @@ msgstr "&Kontakti"
 msgid "&Subscribe"
 msgstr "&Aboni"
 
-#: ../events.cpp:153
+#: ../events.cpp:154
 msgid "About R3R"
 msgstr "Pri R3R"
 
-#: ../feedlist.cpp:28
+#: ../feedlist.cpp:29
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:106
+msgid "An update is available."
+msgstr ""
+
+#: ../feedlist.cpp:121
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:124
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:127
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:130
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -56,39 +60,39 @@ msgstr "Dato kreita"
 msgid "Go"
 msgstr "Iri"
 
-#: ../menu.cpp:14
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr "&Malfermi..."
 
-#: ../menu.cpp:16
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr "&Ĉesi"
 
-#: ../menu.cpp:20
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr "&Ŝargi abonojn"
 
-#: ../menu.cpp:22
+#: ../menu.cpp:33
 msgid "&Settings..."
 msgstr "&Agordo..."
 
-#: ../menu.cpp:26
+#: ../menu.cpp:39
 msgid "&Donate"
 msgstr "&Donaci"
 
-#: ../menu.cpp:28
+#: ../menu.cpp:41
 msgid "&About"
 msgstr "&Pri"
 
-#: ../menu.cpp:32
+#: ../menu.cpp:45
 msgid "&File"
 msgstr "&Dosiero"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:46
 msgid "&Tools"
 msgstr "&Ilrimedoj"
 
-#: ../menu.cpp:34
+#: ../menu.cpp:47
 msgid "&Help"
 msgstr "&Helpo"
 
@@ -113,10 +117,14 @@ msgid "&Guess the file types of feeds"
 msgstr "&Diveni la dosiertipojn de fluoj"
 
 #: ../settings-display.cpp:31
+msgid "&Notify of updates"
+msgstr "&Sciigi pri promocioj min"
+
+#: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
 msgstr "&Ŝargi abonojn je programplenumo"
 
-#: ../settings-display.cpp:34
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Montro"
 

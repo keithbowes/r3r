@@ -1,5 +1,6 @@
 #include "events.h"
 #include "frame.h"
+#include "libr3r.h"
 #include "menu.h"
 #include "widgetids.h"
 
@@ -7,6 +8,15 @@
 
 void CreateMenus(wxFrame * parent)
 {
+  char * name;
+  unsigned char count, index, type;
+  void * value;
+  wxMenuItem * load;
+
+  index = 0;
+  name = "load-subscriptions-on-startup";
+  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+
   InitGettext();
 
   /* The File Menu */
@@ -17,9 +27,11 @@ void CreateMenus(wxFrame * parent)
 
   /* The Tools Menu */
   wxMenu * menuTools = new wxMenu;
-  menuTools->Append(wxID_LOAD_SUBSCRIPTIONS, _("&Load Subscriptions"));
+  load = menuTools->Append(wxID_LOAD_SUBSCRIPTIONS, _("&Load Subscriptions"));
   menuTools->AppendSeparator();
   menuTools->Append(wxID_SETTINGS, _("&Settings..."));
+
+  load->Enable(!(bool) value);
 
   /* The Help Menu */
   wxMenu * menuHelp = new wxMenu;

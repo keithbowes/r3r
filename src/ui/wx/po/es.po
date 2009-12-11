@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-06 19:04-0500\n"
+"POT-Creation-Date: 2009-12-10 20:43-0500\n"
 "PO-Revision-Date: 2009-12-04 00:00-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
@@ -29,27 +29,31 @@ msgstr "&Contactar"
 msgid "&Subscribe"
 msgstr "&Abonarse"
 
-#: ../events.cpp:153
+#: ../events.cpp:154
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../feedlist.cpp:28
+#: ../feedlist.cpp:29
 msgid "[None]"
 msgstr "Ningún"
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:106
+msgid "An update is available."
+msgstr ""
+
+#: ../feedlist.cpp:121
 msgid "Feed Title"
 msgstr "Título Fuente"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:124
 msgid "Item Title"
 msgstr "Título de Entrada"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:127
 msgid "Subject"
 msgstr "Tema"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:130
 msgid "Date Created"
 msgstr "Fecha Creado"
 
@@ -57,39 +61,39 @@ msgstr "Fecha Creado"
 msgid "Go"
 msgstr "Ir"
 
-#: ../menu.cpp:14
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr "&Abrir..."
 
-#: ../menu.cpp:16
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr "&Salir"
 
-#: ../menu.cpp:20
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr "&Cargar Subscripciones"
 
-#: ../menu.cpp:22
+#: ../menu.cpp:33
 msgid "&Settings..."
 msgstr "&Configuración..."
 
-#: ../menu.cpp:26
+#: ../menu.cpp:39
 msgid "&Donate"
 msgstr "&Donar"
 
-#: ../menu.cpp:28
+#: ../menu.cpp:41
 msgid "&About"
 msgstr "&Sobre"
 
-#: ../menu.cpp:32
+#: ../menu.cpp:45
 msgid "&File"
 msgstr "&Archivo"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:46
 msgid "&Tools"
 msgstr "&Herramientas"
 
-#: ../menu.cpp:34
+#: ../menu.cpp:47
 msgid "&Help"
 msgstr "&Ayuda"
 
@@ -114,10 +118,14 @@ msgid "&Guess the file types of feeds"
 msgstr "&Conjeturar el tipos de fuentes"
 
 #: ../settings-display.cpp:31
+msgid "&Notify of updates"
+msgstr "&Notifiqueme de cambios"
+
+#: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
 msgstr "&Cargar subscripciones a rodando"
 
-#: ../settings-display.cpp:34
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Visualización"
 

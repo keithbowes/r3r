@@ -7,6 +7,7 @@
 #include "settings-subscriptions.h"
 #include "settingsentry.h"
 #include "subscriptions.h"
+#include "widgetids.h"
 
 #include "i18n.h"
 
@@ -159,10 +160,14 @@ void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
   GoBrowser((char *) "http://sourceforge.net/donate/index.php?group_id=90897");
 }
 
-void MenuEvents::OnLoadSubscriptions(wxCommandEvent & WXUNUSED(event))
+void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 {
   char *s;
   Subscriptions * subs = GetSubscriptionsObject();
+  wxMenu * menu = (wxMenu *) event.GetEventObject();
+  wxMenuItem * item = menu->FindItem(wxID_LOAD_SUBSCRIPTIONS);
+
+  item->Enable(FALSE);
 
   while((s = subs->GetNext()))
   {

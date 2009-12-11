@@ -1391,7 +1391,7 @@ install:
 	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
 uninstall:
 	$(DEL) -f $(localedir)/*/LC_MESSAGES/libr3r.mo
-.po.mo:
+%.mo: %.po libr3rstrings.pot
 	-msgmerge -Uq $< libr3rstrings.pot
 	-msgfmt -o $@ $<
 libr3rstrings.pas: _libr3rstrings.pas

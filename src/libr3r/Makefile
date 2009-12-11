@@ -266,7 +266,7 @@ PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(F
 EXEOUT = .
 TARGET_DIRS = po settings protocols formats
 UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/*
-UNITS = info rgetfeed rmessage rsubscriptions rupdate
+UNITS = info rgetfeed rmessage rsubscriptions
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1390,14 +1390,14 @@ ifeq ($(SHAREDLIBEXT),.so)
 else
 	SHAREDLIBPREFIX =
 endif
-all: info.pas libr3r.pas
+all: info.pas rupdate.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)
 	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
 clean: _clean
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)
-	$(DEL) info.pas libr3r.pas
+	$(DEL) info.pas rupdate.pas
 	$(DEL) $(wildcard $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT))
 install:
 	cd po && $(MAKE) install
@@ -1409,5 +1409,5 @@ uninstall:
 info.pas: _info.pas ../../scripts/common.make
 	$(SED) 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas
 	$(MAKE) info$(PPUEXT)
-libr3r.pas: _libr3r.pas ../../scripts/common.make
+rupdate.pas: _rupdate.pas
 	$(SED) -e 's/@TIMESTAMP@/$(TIMESTAMP)/g' $< > $@

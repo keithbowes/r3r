@@ -12,6 +12,12 @@ typedef struct
   char * self;
 } ItemInfo;
 
+typedef struct
+{
+  void * lib;
+  char * res;
+} FeedResource;
+
 void CreateFeedList(wxPanel * parent);
 FeedListView * GetFeedList();
 void ResizeColumns(FeedListView * list);

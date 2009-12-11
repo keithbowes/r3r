@@ -6,9 +6,6 @@ uses
   FeedItem, RMessage, RSettings, RSock, RSubscriptions;
 
 const
-  Timestamp = @TIMESTAMP@;
-
-const
   SettingsRead = RSettings.SettingsRead;
   SettingsWrite = RSettings.SettingsWrite;
 
@@ -168,4 +165,3 @@ Settings := RSettings.Settings;
 Subscriptions := RSubscriptions.Subscriptions;
 
 end.
-

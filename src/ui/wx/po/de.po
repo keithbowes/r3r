@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-06 19:04-0500\n"
+"POT-Creation-Date: 2009-12-10 20:43-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
@@ -28,27 +28,31 @@ msgstr "&Kontaktieren"
 msgid "&Subscribe"
 msgstr "&Abonnieren"
 
-#: ../events.cpp:153
+#: ../events.cpp:154
 msgid "About R3R"
 msgstr "Über R3R"
 
-#: ../feedlist.cpp:28
+#: ../feedlist.cpp:29
 msgid "[None]"
 msgstr "Keine"
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:106
+msgid "An update is available."
+msgstr ""
+
+#: ../feedlist.cpp:121
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:124
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:127
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:130
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
@@ -56,39 +60,39 @@ msgstr "Datum der es erstellt wurde"
 msgid "Go"
 msgstr "Gehen"
 
-#: ../menu.cpp:14
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr "&Öffnen..."
 
-#: ../menu.cpp:16
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr "&Beenden"
 
-#: ../menu.cpp:20
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr "&Laden Abbonements"
 
-#: ../menu.cpp:22
+#: ../menu.cpp:33
 msgid "&Settings..."
 msgstr "&Einstellungen..."
 
-#: ../menu.cpp:26
+#: ../menu.cpp:39
 msgid "&Donate"
 msgstr "&Spenden"
 
-#: ../menu.cpp:28
+#: ../menu.cpp:41
 msgid "&About"
 msgstr "&Über"
 
-#: ../menu.cpp:32
+#: ../menu.cpp:45
 msgid "&File"
 msgstr "&Seit"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:46
 msgid "&Tools"
 msgstr "&Zeuge"
 
-#: ../menu.cpp:34
+#: ../menu.cpp:47
 msgid "&Help"
 msgstr "&Hilfe"
 
@@ -113,10 +117,14 @@ msgid "&Guess the file types of feeds"
 msgstr "&Erraten Sie die Dateitypen von Feeds"
 
 #: ../settings-display.cpp:31
+msgid "&Notify of updates"
+msgstr "&Benachrichtigen über Aktuelles"
+
+#: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
 msgstr "&Laden abbonements an ausführen"
 
-#: ../settings-display.cpp:34
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Anzeige"
 

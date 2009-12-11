@@ -116,3 +116,6 @@ msgstr "Opción de cambio: "
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr "Nuevo valor: "
+
+msgid "A new version is available from http://sourceforge.net/projects/r3r"
+msgstr "Un nueve versión es disponible en http://sourceforge.net/projects/r3r"

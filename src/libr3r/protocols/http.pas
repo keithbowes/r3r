@@ -35,7 +35,7 @@ implementation
 
 uses
   Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
-  StrTok, SysUtils;
+  SockConsts, StrTok, SysUtils;
 
 const
   Tab = #9;
@@ -51,7 +51,7 @@ var
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
   Line: String;
-  NullLines: 0..49;
+  NullLines: 0..50;
   RespList: TStringsList;
   Prot, Host, Port, Path, Para: String;
 begin
@@ -68,7 +68,7 @@ begin
     end
     else if (Line <> '') and (HeaderState = hsUnstarted) then
     begin
-      if (Line = #0) and (NullLines < 50) then
+      if (Line = SockEof) and (NullLines < 50) then
       begin
         Inc(NullLines);
         Continue;

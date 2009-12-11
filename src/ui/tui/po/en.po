@@ -119,3 +119,6 @@ msgstr ""
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr ""
+
+msgid "A new version is available from http://sourceforge.net/projects/r3r"
+msgstr ""

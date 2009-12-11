@@ -1,3 +1,7 @@
+#ifdef HAS_PTHREAD
+#include <pthread.h>
+#endif
+
 #include "feedlist.h"
 #include "libr3r.h"
 #include "subscriptions.h"
@@ -7,6 +11,7 @@
 void * rlib;
 FeedListView * feedList;
 bool topItem = FALSE;
+bool readyNextThread = TRUE;
 
 int wxCALLBACK sort_items(long item1, long item2, long WXUNUSED(sortData))
 {
@@ -101,6 +106,14 @@ void message_received(unsigned short int is_error, char * message_name, char * e
   wxMessageBox(message_name, extra, wxOK | error_type);
 }
 
+void update_available()
+{
+  if (wxMessageBox(_("An update is available."), "", wxOK | wxCANCEL) == wxOK)
+  {
+    GoBrowser((char *) "http://sourceforge.net/projects/r3r");
+  }
+}
+
 void CreateFeedList(wxPanel * parent)
 {
   InitGettext();
@@ -125,6 +138,10 @@ void CreateFeedList(wxPanel * parent)
   sizer->Add(feedList, 2, wxEXPAND, 10);
 
   rlib = libr3r_create();
+  libr3r_on_item_parsed(rlib, &item_parsed);
+  libr3r_on_message_received(rlib, &message_received);
+  libr3r_on_update(rlib, &update_available);
+
   feedList->SetClientData(rlib);
 }
 
@@ -133,13 +150,44 @@ FeedListView * GetFeedList()
   return feedList;
 }
 
+void * ParseFeedThread(void * resource)
+{
+  FeedResource * res = (FeedResource *) resource;
+
+  // Wait until the previous thread is through parsing first.
+  while (!readyNextThread)
+  {
+  }
+
+  readyNextThread = false;
+  topItem = true;
+  libr3r_retrieve_feed(res->lib, res->res);
+  readyNextThread = true;
+
+#ifdef HAS_PTHREAD
+#ifndef WIN32
+  pthread_exit(NULL);
+#endif
+#endif
+
+  return NULL;
+}
+
 void ParseFeed(char * res)
 {
-  topItem = TRUE;
-
-  libr3r_on_item_parsed(rlib, &item_parsed);
-  libr3r_on_message_received(rlib, &message_received);
-  libr3r_retrieve_feed(rlib, res);
+#ifdef HAS_PTHREAD
+  pthread_t thread;
+#endif
+  
+  FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
+  resource->lib = rlib;  
+  resource->res = res;  
+  
+#ifdef HAS_PTHREAD
+  pthread_create(&thread, NULL, &ParseFeedThread, resource);
+#else
+  ParseFeedThread(resource);
+#endif
 }
 
 void GetAllFeeds(int argc, char ** argv)

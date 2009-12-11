@@ -43,8 +43,8 @@ inWindows = 1
 else
 ifdef inCygwin
 inWindows = 1
-endif
-endif
+endif #inCygwin
+endif # inWinNT
 
 ifdef inUnix
 EXEEXT = 
@@ -56,9 +56,9 @@ USE_FPC=1
 else
 ifneq ($(call programpath,gpc)),)
 USE_GPC=1
-endif
-endif
-endif
+endif # USE_GPC
+endif # USE_FPC
+endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
 DEFFLAG=-d
@@ -66,14 +66,20 @@ PC=fpc
 PCFLAGS_BASE=-FU. -Mobjfpc -Sh -WR
 DIRFLAG=-Fu
 ifndef RELEASE
-PCFLAGS_DEBUG=-Ci -Co -Cr -Ct -gh -gl
-endif
+PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
+
+ifneq ($(R3R_UI),wx)
+# The wx UI incorrectly reports stack checking problems whenever
+# threads are used
+PCFLAGS_DUBUG+=-Ct
+endif # R3R_UI
+endif # RELEASE
 
 ifneq ($(inWindows),)
 DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_INI
-endif
+endif # inWindows
 
 else
 ifdef USE_GPC
@@ -85,9 +91,9 @@ DIRFLAG=-B
 
 ifndef RELEASE
 PCFLAGS_DEBUG=-ggdb3
-endif
-endif
-endif
+endif # RELEASE
+endif # USE_GPC
+endif # USE_FPC
 
 R3R_UI ?= tui
 

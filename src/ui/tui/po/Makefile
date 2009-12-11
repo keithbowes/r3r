@@ -1391,7 +1391,7 @@ install:
 	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tui.mo;)
 uninstall:
 	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_tui.mo
-.po.mo:
+%.mo: %.po tuistrings.pot
 	-msgmerge -Uq $< tuistrings.pot
 	-msgfmt -o $@ $<
 tuistrings.pas: _tuistrings.pas

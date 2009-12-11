@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-06 19:04-0500\n"
+"POT-Creation-Date: 2009-12-10 20:43-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,27 +28,31 @@ msgstr ""
 msgid "&Subscribe"
 msgstr ""
 
-#: ../events.cpp:153
+#: ../events.cpp:154
 msgid "About R3R"
 msgstr ""
 
-#: ../feedlist.cpp:28
+#: ../feedlist.cpp:29
 msgid "[None]"
 msgstr ""
 
-#: ../feedlist.cpp:112
-msgid "Feed Title"
-msgstr ""
-
-#: ../feedlist.cpp:115
-msgid "Item Title"
-msgstr ""
-
-#: ../feedlist.cpp:118
-msgid "Subject"
+#: ../feedlist.cpp:106
+msgid "An update is available."
 msgstr ""
 
 #: ../feedlist.cpp:121
+msgid "Feed Title"
+msgstr ""
+
+#: ../feedlist.cpp:124
+msgid "Item Title"
+msgstr ""
+
+#: ../feedlist.cpp:127
+msgid "Subject"
+msgstr ""
+
+#: ../feedlist.cpp:130
 msgid "Date Created"
 msgstr ""
 
@@ -56,39 +60,39 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
-#: ../menu.cpp:14
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr ""
 
-#: ../menu.cpp:16
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr ""
 
-#: ../menu.cpp:20
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr ""
 
-#: ../menu.cpp:22
+#: ../menu.cpp:33
 msgid "&Settings..."
 msgstr ""
 
-#: ../menu.cpp:26
+#: ../menu.cpp:39
 msgid "&Donate"
 msgstr ""
 
-#: ../menu.cpp:28
+#: ../menu.cpp:41
 msgid "&About"
 msgstr ""
 
-#: ../menu.cpp:32
+#: ../menu.cpp:45
 msgid "&File"
 msgstr ""
 
-#: ../menu.cpp:33
+#: ../menu.cpp:46
 msgid "&Tools"
 msgstr ""
 
-#: ../menu.cpp:34
+#: ../menu.cpp:47
 msgid "&Help"
 msgstr ""
 
@@ -113,10 +117,14 @@ msgid "&Guess the file types of feeds"
 msgstr ""
 
 #: ../settings-display.cpp:31
-msgid "&Load subscriptions on startup"
+msgid "&Notify of updates"
 msgstr ""
 
 #: ../settings-display.cpp:34
+msgid "&Load subscriptions on startup"
+msgstr ""
+
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr ""
 

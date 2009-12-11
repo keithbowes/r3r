@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-06 19:04-0500\n"
+"POT-Creation-Date: 2009-12-10 20:43-0500\n"
 "PO-Revision-Date: 2009-11-30 14:49-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
@@ -28,27 +28,31 @@ msgstr "&Contact"
 msgid "&Subscribe"
 msgstr "&Subscribe"
 
-#: ../events.cpp:153
+#: ../events.cpp:154
 msgid "About R3R"
 msgstr "About R3R"
 
-#: ../feedlist.cpp:28
+#: ../feedlist.cpp:29
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:106
+msgid "An update is available."
+msgstr ""
+
+#: ../feedlist.cpp:121
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:124
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:127
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:130
 msgid "Date Created"
 msgstr "Date Created"
 
@@ -56,39 +60,39 @@ msgstr "Date Created"
 msgid "Go"
 msgstr "Go"
 
-#: ../menu.cpp:14
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr "&Open..."
 
-#: ../menu.cpp:16
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr "E&xit"
 
-#: ../menu.cpp:20
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr "&Load Subscriptions"
 
-#: ../menu.cpp:22
+#: ../menu.cpp:33
 msgid "&Settings..."
 msgstr "&Settings..."
 
-#: ../menu.cpp:26
+#: ../menu.cpp:39
 msgid "&Donate"
 msgstr "&Donate"
 
-#: ../menu.cpp:28
+#: ../menu.cpp:41
 msgid "&About"
 msgstr "&About"
 
-#: ../menu.cpp:32
+#: ../menu.cpp:45
 msgid "&File"
 msgstr "&File"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:46
 msgid "&Tools"
 msgstr "&Tools"
 
-#: ../menu.cpp:34
+#: ../menu.cpp:47
 msgid "&Help"
 msgstr "&Help"
 
@@ -113,10 +117,14 @@ msgid "&Guess the file types of feeds"
 msgstr "&Guess the file types of feeds"
 
 #: ../settings-display.cpp:31
+msgid "&Notify of updates"
+msgstr ""
+
+#: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
 msgstr "&Load subscriptions on startup"
 
-#: ../settings-display.cpp:34
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Display"
 

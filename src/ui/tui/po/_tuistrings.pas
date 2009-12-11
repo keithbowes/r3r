@@ -45,6 +45,8 @@ var
   SettingToChange: String;
   NewValue: String;
 
+  UpdateAvailable: String;
+
 implementation
 
 procedure InitStrings;
@@ -84,6 +86,8 @@ begin
 
   SettingToChange := _('Option to Change: ');
   NewValue := _('New Value: ');
+
+  UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
 end;
 
 initialization

@@ -18,7 +18,7 @@ install:
 uninstall:
 	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_tui.mo
 
-.po.mo:
+%.mo: %.po tuistrings.pot
 	-msgmerge -Uq $< tuistrings.pot
 	-msgfmt -o $@ $<
 
