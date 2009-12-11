@@ -6,6 +6,7 @@ CXXFLAGS += $(shell wx-config --cxxflags) \
 						-Wall
 LDFLAGS += $(shell wx-config --libs) -llibr3r_shared -lpthread \
 					 -L../../libr3r
+LIBS += -llibr3r_shared -lpthread
 
 ifndef RELEASE
 	CXXFLAGS += -g
@@ -43,7 +44,7 @@ uninstall:
 	cd po && $(MAKE) uninstall
 
 r3r$(EXEEXT): $(addsuffix $(OEXT),$(objects))
-	$(CXX) -o $@ $(LDFLAGS) $^ $(rcobjs)
+	$(CXX) -o $@ $(LDFLAGS) $^ $(rcobjs) $(LIBS)
 
 %$(OEXT): %$(CXXEXT)
 	$(CXX) -c -o $@ $(CXXFLAGS) $<

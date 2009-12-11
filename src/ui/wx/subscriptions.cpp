@@ -33,8 +33,7 @@ int Subscriptions::IndexOf(char * sub)
   while ((s = GetNext()))
   {
     i++;
-
-    if (strcmp(sub, s) == 0)
+    if (sub && strcmp(sub, s) == 0)
     {
       is_found = true;
       break;

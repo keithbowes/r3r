@@ -167,7 +167,10 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
   wxMenu * menu = (wxMenu *) event.GetEventObject();
   wxMenuItem * item = menu->FindItem(wxID_LOAD_SUBSCRIPTIONS);
 
-  item->Enable(FALSE);
+  if (item)
+  {
+    item->Enable(FALSE);
+  }
 
   while((s = subs->GetNext()))
   {
