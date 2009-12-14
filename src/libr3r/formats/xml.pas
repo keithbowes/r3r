@@ -29,18 +29,18 @@ type
 
   TXmlFeed = class(TFeed)
   private
-    FElemList: array of TXmlElement;
-    FElems: cardinal;
     FParser: XML_PARSER;
   protected
-    FXmlElement: TXmlElement;
     function GetCurrentElement: TXmlElement;
     function GetPreviousElement: TXmlElement; virtual;
-    procedure StripNS(var Element: String; const NS: String);
   public
+    FElemList: array of TXmlElement;
+    FElems: cardinal;
+    FXmlElement: TXmlElement;
     constructor Create;
     destructor Destroy; override;
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure StripNS(var Element: String; const NS: String);
     procedure Clone(const Element: TXmlElement);
     property CurrentElement: TXmlElement read GetCurrentElement;
     property PreviousElement: TXmlElement read GetPreviousElement;
@@ -48,9 +48,8 @@ type
 
 implementation
 
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl; forward;
-procedure ElementEnded(user_data: Pointer; name: PChar); cdecl; forward;
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl; forward;
+uses
+  SaxCallbacks;
 
 constructor TXmlFeed.Create;
 begin
@@ -103,78 +102,6 @@ begin
   if Pos(NS, Element) = 1 then
   begin
     Delete(Element, 1, Length(NS));
-  end;
-end;
-
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl;
-var
-  attr: String;
-  i, j: word;
-begin
-  i := 0;
-  j := 0;
-
-  with TXmlFeed(user_data) do
-  begin
-    FXmlElement.Name := name;
-    FXmlElement.Content := '';
-
-    if Assigned(attrs) then
-    begin
-      while Assigned(attrs[i]) do
-      begin
-        attr := String(attrs[i]);
-        StripNS(attr, XMLNSNS);
-        attrs[i] := PChar(attr);
-
-        if attrs[i] = 'base' then
-        begin
-          FXmlElement.Base := attrs[i + 1];
-        end
-        else if attrs[i] = 'lang' then
-        begin
-          FXmlElement.Lang := attrs[i + 1];
-        end
-        else if j < 11 then
-        begin
-          FXmlElement.Attributes[j].Name := attrs[i];
-          FXmlElement.Attributes[j].Value := attrs[i + 1];
-          Inc(j);
-        end;
-
-        Inc(i, 2);
-      end;
-    end;
-
-    FElems := Length(FElemList);
-    SetLength(FElemList, FElems + 1);
-    FElemList[FElems] := FXmlElement;
-  end;
-end;
-
-procedure ElementEnded(user_data: Pointer; name: PChar); cdecl;
-begin
-  with TXmlFeed(user_data) do
-  begin
-    FElems := Length(FElemList);
-    if FElems > 0 then
-    begin
-      SetLength(FElemList, FElems - 1);
-    end;
-
-    FXmlElement.Name := name;
-  end;
-end;
-
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl;
-var
-  enh: String;
-begin
-  enh := Copy(ch, 1, len);
-
-  with TXmlFeed(ctx) do
-  begin
-    FXmlElement.Content := FXmlElement.Content + enh;
   end;
 end;
 

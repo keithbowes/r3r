@@ -46,17 +46,19 @@ begin
 end;
 
 function TEsfFeed.UnixToDate(const TS: String): String;
+const
+  SecondsPerDay = 24 * 60 * 60;
 var
   DT: TDateTime;
   ErrPos: word;
-  NTS: integer;
+  NTS: real;
 begin
   Val(TS, NTS, ErrPos);
   if ErrPos = 0 then
   begin
-      Result := DateTimeToStr((double(NTS) / (24 * 60 * 60)) + EncodeDate(1970, 1, 1));
-      DT := StrToDateTime(Result);
-      Result := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+    Result := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
+    DT := StrToDateTime(Result);
+    Result := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
   end
   else
   begin

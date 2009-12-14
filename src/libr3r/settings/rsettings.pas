@@ -4,9 +4,10 @@ unit RSettings;
 
 interface
 
-const
-  SettingsCount = 17;
+uses
+  RList;
 
+const
   SettingsRead = 1;
   SettingsWrite = 2;
 
@@ -16,8 +17,9 @@ const
   TypeBoolean = 3;
 
 type
-  TRSetIndex = -1..SettingsCount;
+  TRSetIndex = integer;
 
+  PRSetting = ^TRSetting;
   TRSetting = packed record
     Name: String;
     Section: String;
@@ -28,14 +30,10 @@ type
       TypeBoolean: (ValueBoolean: Boolean);
   end;
 
-  TRSettingsRec = array[1..SettingsCount] of TRSetting;
-
   TRSettings = class
   private
-    FRef: byte;
-    FSettings: TRSettingsRec;
+    FSettings: PRList;
     FSettingsFile: String;
-    function CleanRec: Boolean;
     procedure InitRec;
     function CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
     function CheckInteger(const Setting, ASection: String; const Value: integer): Boolean;
@@ -45,7 +43,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Enumerate(var Settings: TRSettingsRec; var Count): Boolean;
+    function Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
     function IndexOf(const Name: String): TRSetIndex;
     function GetBoolean(const Index: TRSetIndex): Boolean;
     function GetInteger(const Index: TRSetIndex): integer;
@@ -69,6 +67,10 @@ uses
   
 {$IFDEF SETTINGS_REG}
   , Registry
+{$ENDIF}
+  
+{$IFDEF SETTINGS_TAB}
+  , TabFiles
 {$ENDIF};
 
 {$IFDEF SETTINGS_BIN}
@@ -83,14 +85,18 @@ uses
   {$INCLUDE regsettings.inc}
 {$ENDIF}
 
-function TRSettings.Enumerate(var Settings: TRSettingsRec; var Count): Boolean;
+{$IFDEF SETTINGS_TAB}
+  {$INCLUDE tabsettings.inc}
+{$ENDIF}
+
+function TRSettings.Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
 var
   OrigCount: TRSetIndex;
 begin
-  OrigCount := TRSetIndex(Count);
+  OrigCount := Count;
   Settings := FSettings;
-  TRSetIndex(Count) := SettingsCount;
-  Result := TRSetIndex(Count) = OrigCount;
+  Count := FSettings^.Count;
+  Result := Count = OrigCount;
 end;
 
 function TRSettings.IndexOf(const Name: String): TRSetIndex;
@@ -98,13 +104,13 @@ var
   Found: Boolean;
   i: byte;
 begin
-  i := 1;
+  i := 0;
 
   repeat
     Result := i;
-    Found := FSettings[i].Name = Name;
+    Found := (FSettings^.Count > 0) and (TRSetting(FSettings^.GetNth(i)^).Name = Name);
     Inc(i);
-  until Found or (i > SettingsCount);
+  until Found or (i > FSettings^.Count);
 
   if not Found then
   begin
@@ -116,7 +122,7 @@ function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
 begin
   if Index <> -1 then
   begin
-    Result := FSettings[Index].ValueBoolean;
+    Result := TRSetting(FSettings^.GetNth(Index)^).ValueBoolean;
   end;
 end;
 
@@ -124,7 +130,7 @@ function TRSettings.GetInteger(const Index: TRSetIndex): integer;
 begin
   if Index <> -1 then
   begin
-    Result := FSettings[Index].ValueInteger;
+    Result := TRSetting(FSettings^.GetNth(Index)^).ValueInteger;
   end;
 end;
 
@@ -132,7 +138,7 @@ function TRSettings.GetString(const Index: TRSetIndex): String;
 begin
   if Index <> -1 then
   begin
-    Result := FSettings[Index].ValueString;
+    Result := TRSetting(FSettings^.GetNth(Index)^).ValueString;
   end;
 end;
 
@@ -140,7 +146,7 @@ procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean)
 begin
   if Index <> -1 then
   begin
-    FSettings[Index].ValueBoolean := Setting;
+    TRSetting(FSettings^.GetNth(Index)^).ValueBoolean := Setting;
   end;
 end;
 
@@ -148,7 +154,7 @@ procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer)
 begin
   if Index <> -1 then
   begin
-    FSettings[Index].ValueInteger := Setting;
+    TRSetting(FSettings^.GetNth(Index)^).ValueInteger := Setting;
   end;
 end;
 
@@ -156,7 +162,7 @@ procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
 begin
   if Index <> -1 then
   begin
-    FSettings[Index].ValueString := Setting;
+    TRSetting(FSettings^.GetNth(Index)^).ValueString := Setting;
   end;
 end;
 
@@ -170,7 +176,7 @@ var
   IntVal: integer;
   StrVal: String;
 begin
-  Count := SettingsCount;
+  Count := FSettings^.Count;
 
   if Index = 0 then
   begin
@@ -179,8 +185,8 @@ begin
 
   if Index <> -1 then
   begin
-    SettingName := FSettings[Index].Name;
-    SettingType := FSettings[Index].ValueType;
+    SettingName := TRSetting(FSettings^.GetNth(Index)^).Name;
+    SettingType := TRSetting(FSettings^.GetNth(Index)^).ValueType;
 
     if SettingsMode and SettingsWrite <> 0 then
     begin
@@ -225,31 +231,26 @@ end;
 
 procedure TRSettings.InitRec;
 begin
-  CleanRec;
+  CheckBoolean('show-messages', 'Display', true);
+  CheckBoolean('display-feed-title-only', 'Display', false);
+  CheckBoolean('hide-cached-feeds', 'Display', true);
+  CheckBoolean('hide-cached-feed-items', 'Display', true);
+  CheckBoolean('enable-mime-guess', 'Display', false);
+  CheckBoolean('check-for-updates', 'Display', true);
+  CheckBoolean('load-subscriptions-on-startup', 'Display', false);
 
-  if FRef < SettingsCount then
-  begin
-    CheckBoolean('show-messages', 'Display', true);
-    CheckBoolean('display-feed-title-only', 'Display', false);
-    CheckBoolean('hide-cached-feeds', 'Display', true);
-    CheckBoolean('hide-cached-feed-items', 'Display', true);
-    CheckBoolean('enable-mime-guess', 'Display', false);
-    CheckBoolean('check-for-updates', 'Display', true);
-    CheckBoolean('load-subscriptions-on-startup', 'Display', false);
+  CheckBoolean('use-proxy', 'HTTP', false);
+  CheckString('proxy-address', 'HTTP', '127.0.0.1');
+  CheckInteger('proxy-port', 'HTTP', 8118);
 
-    CheckBoolean('use-proxy', 'HTTP', false);
-    CheckString('proxy-address', 'HTTP', '127.0.0.1');
-    CheckInteger('proxy-port', 'HTTP', 8118);
+  CheckBoolean('use-custom-accept-types', 'HTTP Headers', false);
+  CheckString('accept-types', 'HTTP Headers', '');
+  CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false);
+  CheckString('accept-langs', 'HTTP Headers', '');
 
-    CheckBoolean('use-custom-accept-types', 'HTTP Headers', false);
-    CheckString('accept-types', 'HTTP Headers', '');
-    CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false);
-    CheckString('accept-langs', 'HTTP Headers', '');
-
-    CheckString('browser', 'Programs', 'lynx');
-    CheckString('mail-client', 'Programs', 'sendmail');
-    CheckString('editor', 'Programs', 'vim');
-  end;
+  CheckString('browser', 'Programs', 'lynx');
+  CheckString('mail-client', 'Programs', 'sendmail');
+  CheckString('editor', 'Programs', 'vim');
 end;
 
 initialization

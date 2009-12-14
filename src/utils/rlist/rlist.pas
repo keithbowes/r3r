@@ -8,7 +8,7 @@ type
   PRListNode = ^TRListNode;
   TRListNode = record
     Data: Pointer;
-    Next: PRListNode;
+    Next: PRListNode
   end;
 
   PRList = ^TRList;
@@ -33,8 +33,27 @@ type
     function IndexOf(Data: Pointer): integer;
   end;
 
+  PRStringList = ^TRStringList;
+  TRStringList = object(TRList)
+  private
+    FStrings: PRList;
+    function StrToPChar(s: String): PChar;
+  public
+    constructor Init;
+    destructor Done;
+    procedure Add(Data: String);
+    procedure Insert(Data: String; Index: word);
+    procedure DeleteString(Data: String);
+    function GetNth(N: word): String;
+    function IndexOf(Data: String): integer;
+  end;
+
 implementation
 
+uses
+  Strings;
+
+{ TRList: a simple list object }
 constructor TRList.Init;
 begin
   FCount := 0;
@@ -235,6 +254,97 @@ begin
   end;
 
   Dispose(List);
+end;
+
+{ TRStringList: work with strings }
+constructor TRStringList.Init;
+begin
+  inherited Init;
+  New(FStrings, Init);
+end;
+
+destructor TRStringList.Done;
+var
+  i: word;
+begin
+  if FStrings^.Count > 0 then
+  begin
+    for i := 0 to FStrings^.Count - 1 do
+    begin
+      FreeMem(FStrings^.GetNth(i));
+    end;
+  end;
+
+  Dispose(FStrings, Done);
+  inherited Done;
+end;
+
+procedure TRStringList.Add(Data: String);
+begin
+  inherited Add(StrToPChar(Data));
+end;
+
+procedure TRStringList.Insert(Data: String; Index: word);
+begin
+  inherited Insert(StrToPChar(Data), Index);
+end;
+
+procedure TRStringList.DeleteString(Data: String);
+var
+  w: integer;
+begin
+  w := IndexOf(Data);
+
+  if w <> -1 then
+  begin
+    Delete(w);
+  end;
+end;
+
+function TRStringList.GetNth(N: word): String;
+begin
+  GetNth := StrPas(inherited GetNth(N));
+end;
+
+function TRStringList.IndexOf(Data: String): integer;
+var
+  i, Len: word;
+  p: PChar;
+begin
+  i := 0;
+  Len := FStrings^.Count;
+  p := StrToPChar(Data);
+
+  while (i < Len) and (StrComp(p, FStrings^.GetNth(i)) <> 0) do
+  begin
+    Inc(i);
+  end;
+
+  if i <> Len then
+  begin
+    IndexOf := i;
+  end
+  else
+  begin
+    IndexOf := -1;
+
+    if Count > 0 then
+    begin
+      FStrings^.Delete(i);
+      FreeMem(p);
+    end;
+  end;
+end;
+
+function TRStringList.StrToPChar(s: String): PChar;
+var
+  p: PChar;
+begin
+  GetMem(p, Length(s) + 1);
+  StrPCopy(p, s);
+  StrToPChar := p;
+
+  FStrings^.Add(p);
 end;
 
 end.

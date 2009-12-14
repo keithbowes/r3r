@@ -19,7 +19,7 @@ type
 implementation
 
 uses
-  Atom, DC, RStrings, SockConsts;
+  Atom, DC, RDate, RStrings, SockConsts;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
@@ -102,6 +102,7 @@ begin
     else if Name = 'pubdate' then
     begin
       Item.Created := Item.Created + Content;
+      Item.Created := TimeToString(LongDateToTime(Item.Created));
     end
     else if Name = 'managingeditor' then
     begin
@@ -114,6 +115,7 @@ begin
     else if Name = 'lastpubdate' then
     begin
       Item.LastModified := Item.LastModified + Content;
+      Item.LastModified := TimeToString(LongDateToTime(Item.LastModified));
     end
     else if Name = 'language' then
     begin

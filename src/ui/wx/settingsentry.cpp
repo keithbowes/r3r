@@ -5,7 +5,8 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name, char * togg
   wxTextCtrl(parent, -1)
 {
   char * name, * text;
-  unsigned char count, index, type;
+  int count, index;
+  unsigned char type;
   void * value;
 
   m_toggle = NULL;

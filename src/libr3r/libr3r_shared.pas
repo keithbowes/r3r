@@ -169,17 +169,20 @@ begin
   Result := StrToPChar(UserAgent);
 end;
 
-procedure libr3r_access_settings(var Index: byte; var setting_name: PChar; var SettingValue: Pointer; var SettingType, Count: byte; const SettingsMode: byte); cdecl;
+procedure libr3r_access_settings(var Index: integer; var setting_name: PChar; var SettingValue: Pointer; var SettingType: byte; var Count: integer; const SettingsMode: byte); cdecl;
 var
   SettingName: ShortString;
 begin
+  RemoveDuplicatePChars := false;
+
   SettingName := StrPas(setting_name);
-  Settings.Access(TRSetIndex(Index), SettingName, SettingValue, SettingType, TRSetIndex(Count), SettingsMode);
+  Settings.Access(Index, SettingName, SettingValue, SettingType, Count, SettingsMode);
   setting_name := StrToPChar(SettingName);
 end;
 
 procedure libr3r_access_subscriptions(Index, Mode: byte; var Subscription: PChar; var Count: word); cdecl;
 begin
+  RemoveDuplicatePChars := false;
   Count := Subscriptions^.Count;
 
   if Mode = SubscriptionAdd then
@@ -190,7 +193,7 @@ begin
   begin
     if (Index = 0) and (Subscription <> nil) then
     begin
-      Subscriptions^.Delete(StrPas(Subscription));
+      Subscriptions^.DeleteString(StrPas(Subscription));
     end
     else
     begin
@@ -199,7 +202,8 @@ begin
   end
   else if Mode = SubscriptionGet then
   begin
-    Subscription := StrToPChar(Subscriptions^.Get(Index));
+    Subscription := StrToPChar(Subscriptions^.GetNth(Index));
+    Subscription := 'foo';
   end;
 end;
 

@@ -19,11 +19,9 @@ type
 implementation
 
 uses
-  SysUtils;
+  RDate;
 
 procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
-var
-  DT: TDateTime;
 begin
   with Item, FXmlElement do
   begin
@@ -49,15 +47,15 @@ begin
     end
     else if Name = 'date' then
     begin
-      ShortDateFormat := 'YYY-MM-DD';
-      DT := StrToDateTime(Content);
-      Created := FormatDateTime('DD MMMM YYYY hh:nn', DT);
+      Created := TimeToString(ShortDateToTime(Content));
     end
     else if Name = 'identifier' then
     begin
       Id := Content;
     end;
   end;
+  
+  inherited ParseLine(Line, Item, ItemFinished);
 end;
 
 function TDCFeed.GetFormat: TFeedType;

@@ -193,8 +193,8 @@ void ParseFeed(char * res)
 void GetAllFeeds(int argc, char ** argv)
 {
   char * name, * s;
-  int i;
-  unsigned char count, index, type;
+  int count, i, index;
+  unsigned char type;
   void * value;
 
   for (i = 1; i < argc; i++)
@@ -219,7 +219,8 @@ void GetAllFeeds(int argc, char ** argv)
 void GoBrowser(char * url)
 {
   char * name;
-  unsigned char count, index, type;
+  int count, index;
+  unsigned char type;
   void * value;
   wxString browser, command, URL;
 

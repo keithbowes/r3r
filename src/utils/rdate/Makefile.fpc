@@ -1,0 +1,9 @@
+[prerules]
+UNIT_DIRS=../* ../../libr3r/po ../../third-party/*
+
+[rules]
+include ../../../scripts/common.make
+all: libr3rstrings rdate$(PPUEXT)
+
+libr3rstrings:
+	cd ../../libr3r/po && $(MAKE)

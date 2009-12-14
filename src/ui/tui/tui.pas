@@ -28,7 +28,7 @@ type
 implementation
 
 uses
-  Crt, Info, Process, SysUtils, TuiStrings;
+  Crt, Dos, Info, RList, TuiStrings;
 
 constructor TTui.Create;
 var
@@ -49,7 +49,7 @@ begin
   begin
     for FeedIndex := 0 to Subscriptions^.Count - 1 do
     begin
-      RetrieveFeed(Subscriptions^.Get(FeedIndex));
+      RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
     end;
   end;
 
@@ -183,13 +183,18 @@ end;
 
 procedure TTui.GoItem;
 var
+  ErrPos: word;
+  iNo: cardinal;
   No: String;
 begin
   Write(ItemNo);
   ReadLn(No);
 
-  try
-    with FItems[StrToInt(No)] do
+  Val(No, iNo, ErrPos);
+
+  if ErrPos = 0 then
+  begin
+    with FItems[iNo] do
     begin
       if Length(Description) > 75 then
       begin
@@ -200,9 +205,11 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Description);
-      WriteLn(Format(ItemLink, [1, MainLink]));
+      WriteLn(ItemLink + MainLink);
     end;
-  except
+  end
+  else
+  begin
     WriteLn(InvalidNumber);
   end;
 
@@ -235,23 +242,20 @@ var
 begin
   Browser := Settings.GetString(Settings.IndexOf('browser'));
 
-  with TProcess.Create(nil) do
-  begin
-    CommandLine := Browser + ' ' + Link;
-    Execute;
-    Free;
-  end;
+  SwapVectors;
+  Exec(Browser, Link);
+  SwapVectors;
 end;
 
 procedure TTui.SetOptions;
 const
   Width = 30;
 var
-  i, HBound, Len: byte;
-  Index, SetInt: integer;
+  i, ErrPos, Len: byte;
+  HBound, Index, SetInt: integer;
   SetBool: Boolean;
   SetName, SetVal: ShortString;
-  SRec: TRSettingsRec;
+  SRec: PRList;
 begin
   WriteLn;
   WriteLn(OptionName, OptionVal:Width - Length(OptionName) div 2 + 3);
@@ -261,22 +265,31 @@ begin
   begin
     Enumerate(SRec, HBound);
 
-    for i := 1 to HBound do
+    for i := 0 to HBound - 1 do
     begin
-      Write(SRec[i].Name);
+      Write(TRSetting(SRec^.GetNth(i)^).Name);
 
-      case SRec[i].ValueType of
+      case TRSetting(SRec^.GetNth(i)^).ValueType of
         TypeString:
         begin
-          Write(SRec[i].ValueString:Width - Length(SRec[i].Name) + Length(SRec[i].ValueString));
+          Write(TRSetting(SRec^.GetNth(i)^).ValueString:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + Length(TRSetting(SRec^.GetNth(i)^).ValueString));
         end;
         TypeInteger:
         begin
-          Write(SRec[i].ValueInteger:Width - Length(SRec[i].Name) + Length(IntToStr(SRec[i].ValueInteger)));
+          Index := TRSetting(SRec^.GetNth(i)^).ValueInteger;
+          Len := 0;
+
+          while Index > 0 do
+          begin
+            Inc(Len);
+            Index := Index div 10;
+          end;
+
+          Write(TRSetting(SRec^.GetNth(i)^).ValueInteger:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + Len);
         end;
         TypeBoolean:
         begin
-          Write(SRec[i].ValueBoolean:Width - Length(SRec[i].Name) + 5);
+          Write(TRSetting(SRec^.GetNth(i)^).ValueBoolean:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + 5);
         end;
       end;
 
@@ -295,14 +308,14 @@ begin
         Write(NewValue);
         ReadLn(SetVal);
 
-        case SRec[Index].ValueType of
+        case TRSetting(SRec^.GetNth(Index)^).ValueType of
           TypeString:
           begin
             SetString(Index, SetVal);
           end;
           TypeInteger:
           begin
-            SetInt := StrToInt(SetVal);
+            Val(SetVal, SetInt, ErrPos);
             SetInteger(Index, SetInt);
           end;
           TypeBoolean:

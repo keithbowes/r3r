@@ -3,7 +3,7 @@ unit HttpCache;
 interface
 
 uses
-	Classes, Feed, Headers;
+	Feed, Headers, RList;
 
 const
   CacheFeedFile = 'feed';
@@ -28,7 +28,7 @@ type
   THttpCache = class
   private
     FCacheInfo: PCacheInfo;
-    FIdsList: TStringList;
+    FIdsList: PRStringList;
     FUrl: String;
     procedure InvalidateFile(CFile: String);
     procedure WriteRawData(Data, CacheFile: String);
@@ -39,7 +39,7 @@ type
     function GetFeedExtension(FeedType: TFeedType): String;
     procedure Invalidate;
     procedure WriteData(const Data: String; DataType: TCacheDataType);
-    property IdsList: TStringList read FIdsList;
+    property IdsList: PRStringList read FIdsList;
     property Info: PCacheInfo read FCacheInfo write FCacheInfo;
   end;
 
@@ -57,7 +57,7 @@ var
   Id: String;
   IdsFile: text;
 begin
-  FIdsList := TStringList.Create;
+  New(FIdsList, Init);
   FUrl := Url;
 
   FCacheDir := SettingsDir + PathDelim + 'cache';
@@ -75,7 +75,7 @@ begin
     while not Eof(IdsFile) do
     begin
       ReadLn(IdsFile, Id);
-      FIdsList.Add(Id);
+      FIdsList^.Add(Id);
     end;
     Close(IdsFile);
   end;
@@ -86,7 +86,7 @@ end;
 
 destructor THttpCache.Destroy;
 begin
-  FIdsList.Free;
+  Dispose(FIdsList, Done);
   Dispose(FCacheInfo);
   inherited Destroy
 end;
@@ -94,22 +94,29 @@ end;
 function THttpCache.GetCacheHeader: String;
 var
   CacheHeader: String;
+  CacheType, ErrPos: byte;
+  FileOpen: Boolean;
   InfoList: TStringsList;
   InfoText: String;
   InfoFile: text;
 begin
+  FileOpen := false;
+
   ChDir(FCacheDir);
   Assign(InfoFile, CacheInfoFile);
   if FileExists(CacheInfoFile) then
   begin
     Reset(InfoFile);
     ReadLn(InfoFile, InfoText);
+    FileOpen := true;
   end;
 
   InfoList := Split(InfoText, Tab);
 
-  try
-    case TCacheType(StrToInt(InfoList.Strings[0])) of
+  Val(InfoList.Strings[0], CacheType, ErrPos);
+  if ErrPos = 0 then
+  begin
+    case TCacheType(CacheType) of
       ctEtag:
       begin
         CacheHeader := 'If-None-Match';
@@ -125,13 +132,15 @@ begin
     end;
 
     Result := CacheHeader + ': ' + InfoList.Strings[1];
-  except
+  end
+  else
+  begin
     Result := '';
   end;
 
-  try
+  if FileOpen then
+  begin
     Close(InfoFile);
-  except
   end;
 end;
 

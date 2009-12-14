@@ -17,6 +17,7 @@ const
 type
   TFeedItem = FeedItem.TFeedItem;
   TParsedEvent = procedure(Item: TFeedItem) of object;
+  TRSetting = RSettings.TRSetting;
 
   TLibR3R = class
   private
@@ -41,8 +42,6 @@ type
     property OnMessage: TRMessage write FOnMessage;
   end;
 
-  TRSettingsRec = RSettings.TRSettingsRec;
-
 var
   Settings: TRSettings;
   Subscriptions: PRSubscriptions;
@@ -50,7 +49,7 @@ var
 implementation
 
 uses
-  Classes, Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate;
+  Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate;
 
 constructor TLibR3R.Create;
 begin
@@ -114,10 +113,10 @@ begin
   end
   else
   begin
-    SetMessageEvent(@HandleMessage);
+    SetMessageEvent(HandleMessage);
   end;
 
-  ParseFeed(Self, @DoParseItem, FSock);
+  ParseFeed(Self, DoParseItem, FSock);
 end;
 
 { Implement as empty so if the UI doens't implement them,

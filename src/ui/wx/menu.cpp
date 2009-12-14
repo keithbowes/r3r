@@ -9,12 +9,13 @@
 void CreateMenus(wxFrame * parent)
 {
   char * name;
-  unsigned char count, index, type;
+  int count, index;
+  unsigned char type;
   void * value;
   wxMenuItem * load;
 
   index = 0;
-  name = "load-subscriptions-on-startup";
+  name = (char *) "load-subscriptions-on-startup";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   InitGettext();

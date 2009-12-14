@@ -1,10 +1,12 @@
 function IsValidSetting(Setting: String): Boolean;
 begin
-  Result := (Setting = 'accept-langs') or (Setting = 'accept-types') or
-    (Setting = 'browser') or (Setting = 'check-for-updates') or
-    (Setting = 'display-feed-title-only') or
-    (Setting = 'editor') or (Setting = 'enable-mime-guess') or
-    (Setting = 'hide-cached-feed-items') or (Setting = 'hide-cached-feeds') or
+  Result := (Setting = 'accept-langs') or
+    (Setting = 'accept-types') or (Setting = 'browser') or
+    (Setting = 'check-for-updates') or
+    (Setting = 'display-feed-title-only') or (Setting = 'editor') or
+    (Setting = 'enable-mime-guess') or
+    (Setting = 'hide-cached-feed-items') or
+    (Setting = 'hide-cached-feeds') or
     (Setting = 'load-subscriptions-on-startup') or
     (Setting = 'mail-client') or (Setting = 'proxy-address') or
     (Setting = 'proxy-port') or (Setting = 'show-messages') or
@@ -15,6 +17,7 @@ end;
 constructor TRSettings.Create;
 begin
   inherited Create;
+  New(FSettings, Init);
 
   FSettingsFile := SettingsDir + 'r3rrc';
 
@@ -29,107 +32,94 @@ end;
 destructor TRSettings.Destroy;
 begin
   WriteRec;
+
+  Dispose(FSettings, Done);
   inherited Destroy;
 end;
 
 function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
+var
+  ASetting: PRSetting;
 begin
   Result := IndexOf(Setting) <> -1;
 
   if not Result then
   begin
-    with FSettings[FRef] do
+    New(ASetting);
+    with ASetting^ do
     begin
       Name := Setting;
       Section := ASection;
       ValueBoolean := Value;
       ValueType := TypeBoolean;
-      Inc(FRef);
+      FSettings^.Add(ASetting);
     end;
   end;
 end;
 
 function TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer): Boolean;
+var
+  ASetting: PRSetting;
 begin
   Result := IndexOf(Setting) <> -1;
 
   if not Result then
   begin
-    with FSettings[FRef] do
+    New(ASetting);
+    with ASetting^ do
     begin
       Name := Setting;
       Section := ASection;
       ValueInteger := Value;
       ValueType := TypeInteger;
-      Inc(FRef);
+      FSettings^.Add(ASetting);
     end;
   end;
 end;
 
 function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean;
+var
+  ASetting: PRSetting;
 begin
   Result := IndexOf(Setting) <> -1;
 
   if not Result then
   begin
-    with FSettings[FRef] do
+    New(ASetting);
+    with ASetting^ do
     begin
       Name := Setting;
       Section := ASection;
       ValueString := Value;
       ValueType := TypeString;
-      Inc(FRef);
+      FSettings^.Add(ASetting);
     end;
-  end;
-end;
-
-{ Clean up the corrupted elements }
-function TRSettings.CleanRec: Boolean;
-var
-  i: byte;
-  TmpSet: TRSettingsRec;
-  ValueType: byte;
-begin
-  FRef := 0;
-  TmpSet := FSettings;
-  Result := false;
-
-  for i := 1 to SettingsCount do
-  begin
-    ValueType := TmpSet[i].ValueType;
-
-    if not IsValidSetting(TmpSet[i].Name) then
-    begin
-      ValueType := TypeNone;
-    end;
-
-    if ValueType <> TypeNone then
-    begin
-      Inc(FRef);
-      FSettings[FRef] := TmpSet[i];
-    end
-    else
-    begin
-      Result := true;
-    end;
-  end;
-
-  if FRef = 0 then
-  begin
-    FRef := 1;
   end;
 end;
 
 procedure TRSettings.ReadRec;
 var
-  f: file of TRSettingsRec;
+  ASetting: PRSetting;
+  f: file;
+  Last: String;
   NumRead: integer;
 begin
   Assign(f, FSettingsFile);
   Reset(f, 1);
 
   repeat
-    BlockRead(f, FSettings, SizeOf(FSettings), NumRead);
+    New(ASetting);
+    BlockRead(f, ASetting^, SizeOf(ASetting^), NumRead);
+
+    if (ASetting^.Name <> Last) and IsValidSetting(ASetting^.Name) then
+    begin
+      Last := ASetting^.Name;
+      FSettings^.Add(ASetting);
+    end
+    else
+    begin
+      Dispose(ASetting);
+    end;
   until NumRead = 0;
 
   Close(f);
@@ -137,16 +127,29 @@ end;
 
 procedure TRSettings.WriteRec;
 var
-  f: file of TRSettingsRec;
+  ASetting: PRSetting;
+  f: file;
+  i: word;
   LastNum, NumWritten: integer;
 begin
+  i := 0;
+
   Assign(f, FSettingsFile);
   Rewrite(f, 1);
 
-  repeat
-    LastNum := NumWritten;
-    BlockWrite(f, FSettings, SizeOf(FSettings), NumWritten);
-  until (NumWritten = 0) or (NumWritten = LastNum);
+  if FSettings^.Count > 0 then
+  begin
+    for i := 0 to FSettings^.Count - 1 do
+    begin
+      ASetting := FSettings^.GetNth(i);
+      repeat
+        LastNum := NumWritten;
+        BlockWrite(f, ASetting^, SizeOf(ASetting^), NumWritten);
+      until (NumWritten = LastNum) or (NumWritten = 0);
+
+      Dispose(ASetting);
+    end;
+  end;
 
   Close(f);
 end;

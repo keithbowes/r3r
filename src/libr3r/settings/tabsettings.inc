@@ -1,15 +1,11 @@
 var
-  Reg: TRegistry;
-
-const
-  SectionPrefix = '\Software\R3R\';
+  TabFile: PTabFile;
 
 constructor TRSettings.Create;
 begin
-  Reg := TRegistry.Create;
-  Reg.RootKey := HKEY_CURRENT_USER;
-
+  New(TabFile, Init(SettingsDir + 'r3r.tab'));
   New(FSettings, Init);
+
   InitRec;
 end;
 
@@ -18,92 +14,58 @@ begin
   WriteRec;
 
   Dispose(FSettings, Done);
-  Reg.Free;
+  Dispose(TabFile, Done);
 end;
 
 function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
 var
   ASetting: PRSetting;
 begin
+  Result := TabFile^.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
-    Reg.OpenKey(SectionPrefix + ASection, true);
-    Result := Reg.ValueExists(Setting);
-    
     Name := Setting;
     Section := ASection;
+    ValueBoolean := TabFile^.ReadBool(ASection, Setting, Value);
     ValueType := TypeBoolean;
-
-    if Result then
-    begin
-      ValueBoolean := Reg.ReadBool(Setting);
-    end
-    else
-    begin
-      ValueBoolean := Value;
-    end;
   end;
   FSettings^.Add(ASetting);
-
-  Reg.CloseKey;
 end;
 
 function TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer): Boolean;
 var
   ASetting: PRSetting;
 begin
+  Result := TabFile^.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
-    Reg.OpenKey(SectionPrefix + ASection, true);
-    Result := Reg.ValueExists(Setting);
-
     Name := Setting;
     Section := ASection;
+    ValueInteger := TabFile^.ReadInteger(ASection, Setting, Value);
     ValueType := TypeInteger;
-
-    if Result then
-    begin
-      ValueInteger := Reg.ReadInteger(Setting);
-    end
-    else
-    begin
-      ValueInteger := Value;
-    end;
   end;
   FSettings^.Add(ASetting);
-
-  Reg.CloseKey;
 end;
 
 function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean;
 var
   ASetting: PRSetting;
 begin
+  Result := TabFile^.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
-    Reg.OpenKey(SectionPrefix + ASection, true);
-    Result := Reg.ValueExists(Setting);
-
     Name := Setting;
     Section := ASection;
-    ValueString := Reg.ReadString(Setting);
+    ValueString := TabFile^.ReadString(ASection, Setting, Value);
     ValueType := TypeString;
-
-    if Result then
-    begin
-      ValueString := Reg.ReadString(Setting);
-    end
-    else
-    begin
-      ValueString := Value;
-    end;
   end;
   FSettings^.Add(ASetting);
-
-  Reg.CloseKey;
 end;
 
 procedure TRSettings.ReadRec;
@@ -115,35 +77,32 @@ var
   ASetting: PRSetting;
   i: byte;
 begin
+  TabFile^.StartWriting;
+
   for i := 0 to FSettings^.Count - 1 do
   begin
     ASetting := PRSetting(FSettings^.GetNth(i));
 
-    with ASetting^, Reg do
+    with ASetting^, TabFile^ do
     begin
-      OpenKey(SectionPrefix + Section, true);
-
       case ValueType of
         TypeBoolean:
         begin
-          WriteBool(Name, ValueBoolean);
+          WriteBool(Section, Name, ValueBoolean);
         end;
         TypeInteger:
         begin
-          WriteInteger(Name, ValueInteger);
+          WriteInteger(Section, Name, ValueInteger);
         end;
         TypeString:
         begin
-          if ValueString <> '' then
-          begin
-            WriteString(Name, ValueString);
-          end;
+          WriteString(Section, Name, ValueString);
         end;
       end;
-
-      CloseKey;
     end;
 
     Dispose(ASetting);
   end;
+
+  TabFile^.EndWriting;
 end;

@@ -16,3 +16,39 @@ msgstr "Ne povis atingi la fluon."
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "La TTT-servilo ne ekzistas aŭ sendis nepravajn informojn."
+
+msgid "Jan"
+msgstr "jan"
+
+msgid "Feb"
+msgstr "feb"
+
+msgid "Mar"
+msgstr "mar"
+
+msgid "Apr"
+msgstr "apr"
+
+msgid "May"
+msgstr "maj"
+
+msgid "Jun"
+msgstr "jun"
+
+msgid "Jul"
+msgstr "jul"
+
+msgid "Aug"
+msgstr "aŭg"
+
+msgid "Sep"
+msgstr "sep"
+
+msgid "Oct"
+msgstr "okt"
+
+msgid "Nov"
+msgstr "nov"
+
+msgid "Dec"
+msgstr "dec"

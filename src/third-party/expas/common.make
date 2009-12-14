@@ -1,5 +1,6 @@
 programpath = $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH))))
 
+PROGNAME = r3r
 VERSION = 2.0-beta3
 TIMESTAMP=$(shell date +%s)
 
@@ -63,15 +64,13 @@ endif # COMPILER_OVERRIDE
 ifdef USE_FPC
 DEFFLAG=-d
 PC=fpc
-PCFLAGS_BASE=-FU. -Mobjfpc -Sh -WR
+PCFLAGS_BASE=-FU. -Mdelphi -Sh -WR
 DIRFLAG=-Fu
 ifndef RELEASE
 PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
 
 ifneq ($(R3R_UI),wx)
-# The wx UI incorrectly reports stack checking problems whenever
-# threads are used
-PCFLAGS_DUBUG+=-Ct
+PCFLAGS_DEBUG += -Ct
 endif # R3R_UI
 endif # RELEASE
 
@@ -84,10 +83,15 @@ endif # inWindows
 else
 ifdef USE_GPC
 PC=gpc
-PCFLAGS_BASE=--automake --cstrings-as-strings --no-warnings --pointer-arithmetic
+PCFLAGS_BASE=--automake --cstrings-as-strings --extended-syntax \
+	--no-warning --pointer-arithmetic
+UNITFLAGS=-c
+PROGFLAGS=-o $(PROGNAME)$(EXEEXT)
+
 DEFFLAG=-D
-DEFS_SETTINGS ?= SETTINGS_BIN
-DIRFLAG=-B
+DEFS_SETTINGS ?= SETTINGS_TAB
+DIRFLAG=--unit-path=
+PPUEXT=.gpi
 
 ifndef RELEASE
 PCFLAGS_DEBUG=-ggdb3
@@ -95,9 +99,13 @@ endif # RELEASE
 endif # USE_GPC
 endif # USE_FPC
 
+ifndef RELEASE
 R3R_UI ?= tui
+else
+R3R_UI ?= wx
+endif #RELEASE
 
-export DEFS PCFLAGS R3R_UI VERSION \
+export DEFS R3R_UI VERSION \
 	bindir datadir prefix rootdir
 
 _all: Makefile
@@ -113,7 +121,7 @@ _clean:
 clean: _clean
 
 %$(PPUEXT): %.pas
-	$(PC) $(PCFLAGS) $<
+	$(PC) $(UNITFLAGS) $(PCFLAGS) $<
 
 Makefile: Makefile.fpc
 	-fpcmake -Tall

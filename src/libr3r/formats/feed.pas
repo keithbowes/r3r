@@ -13,9 +13,9 @@ type
     FFormat: TFeedType;
     FShouldShow: Boolean;
   protected
-    constructor Create;
     function GetFormat: TFeedType; virtual; abstract;
   public
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); virtual;
     property Format: TFeedType read GetFormat write FFormat;
     property ShouldShow: Boolean read FShouldShow write FShouldShow;
@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  Headers, HttpCache, RSettings, SockConsts;
+  HttpCache, RSettings, SockConsts;
 
 constructor TFeed.Create;
 begin
@@ -58,11 +58,13 @@ begin
           WriteData(Item.Id, cdtIds);
         end;
 
-        if (IdsList.IndexOf(Item.Id) <> -1) and HideItems then
+        if (IdsList^.IndexOf(Item.Id) <> -1) and HideItems then
         begin
           Item.Clear;
           ShouldShow := false;
         end;
+
+        Item.Id := '';
       end;
     end;
   end;

@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  RStrings, SockConsts, SysUtils;
+  RDate, RStrings, SockConsts, SysUtils;
 
 const
   WhiteSpaceChars: set of char = [#0, #8, #9, #10, #13, #32];
@@ -41,12 +41,10 @@ end;
 procedure TRss3Feed.FillItem(var Item: TFeedItem);
 var
   Data: String;
-  DT: TDateTime;
   NumLinks: cardinal;
   PData: PChar;
 begin
   Data := FData + ' ';
-  ShortDateFormat := 'YYYY-MM-DDThh:nn:ssZ';
 
   if FCurrentField = 'title' then
   begin
@@ -79,8 +77,7 @@ begin
   else if FCurrentField = 'created' then
   begin
     Item.Created := Item.Created + Data;
-    DT := StrToDateTime(Item.Created);
-    Item.Created := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+    Item.Created := TimeToString(ShortDateToTime(Item.Created));
   end
   else if FCurrentField = 'creator' then
   begin
@@ -94,8 +91,7 @@ begin
   else if FCurrentField = 'last-modified' then
   begin
     Item.LastModified := Item.LastModified + Data;
-    DT := StrToDateTime(Item.LastModified);
-    Item.LastModified := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+    Item.LastModified := TimeToString(ShortDateToTime(Item.LastModified));
   end
   else if FCurrentField = 'language' then
   begin
@@ -116,8 +112,6 @@ begin
 end;
 
 procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
-const
-  LastLine: String = '';
 var
   SepPos: word;
 begin
@@ -148,8 +142,6 @@ begin
   begin
     FInHead := false;
   end;
-
-  LastLine := Line;
 end;
 
 end.

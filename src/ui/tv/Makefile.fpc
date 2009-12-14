@@ -1,4 +1,3 @@
-
 [prerules]
 UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* ../../utils/*
 
@@ -7,7 +6,7 @@ include ../../../scripts/common.make
 all:
 	cd po && $(MAKE)
 	cd ../../libr3r && $(MAKE) info.pas
-	$(MAKE) tv$(PPUEXT) r3r$(PPUEXT)
+	$(MAKE) tv$(PPUEXT) r3r$(EXEEXT)
 
 clean:
 	cd po && $(MAKE) clean
@@ -20,3 +19,6 @@ install:
 uninstall:
 	cd po && $(MAKE) uninstall
 	rm -f $(bindir)/r3r$(EXEEXT)
+
+r3r$(EXEEXT): r3r.pas
+	$(PC) $(PROGFLAGS) $(PCFLAGS) $<

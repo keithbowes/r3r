@@ -1385,7 +1385,7 @@ include ../../../scripts/common.make
 all:
 	cd po && $(MAKE)
 	cd ../../libr3r && $(MAKE) info.pas
-	$(MAKE) tui$(PPUEXT) r3r$(PPUEXT)
+	$(MAKE) tui$(PPUEXT) r3r$(EXEEXT)
 clean:
 	cd po && $(MAKE) clean
 	-delp -q .
@@ -1395,5 +1395,5 @@ install:
 uninstall:
 	cd po && $(MAKE) uninstall
 	rm -f $(bindir)/r3r$(EXEEXT)
-r3r$(EXEEXT):
-	$(PC) $(PCFLAGS) $@
+r3r$(EXEEXT): r3r.pas
+	$(PC) $(PROGFLAGS) $(PCFLAGS) $<

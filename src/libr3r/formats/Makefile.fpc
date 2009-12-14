@@ -1,6 +1,6 @@
 [prerules]
-UNIT_DIRS=.. ../* ../../third-party/* ../../utils/*
-UNITS=feeditem feed nonxml esf rss3 xml dc rss atom
+UNIT_DIRS=$(wildcard .. ../* ../../third-party/* ../../utils/*)
+UNITS=feeditem feed nonxml esf rss3 saxcallbacks xml dc atom rss
 
 [rules]
 include ../../../scripts/common.make

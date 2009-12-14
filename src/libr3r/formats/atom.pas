@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  DC, RStrings, SockConsts, SynaUtil, SysUtils;
+  DC, RDate, RStrings, SockConsts, SynaUtil;
 
 function TAtomFeed.GetAbsoluteURL(const URL: String): String;
 var
@@ -78,13 +78,10 @@ end;
 
 procedure TAtomFeed.FillItem(var Item: TFeedItem);
 var
-  DT: TDateTime;
   Idx: integer;
   Link: String;
   PLink: PChar;
 begin
-  ShortDateFormat := 'YYYY-MM-DDThh:nn:ssZ';
-
   with Item, FXmlElement do
   begin
     Language := Lang;
@@ -158,12 +155,7 @@ begin
     else if Name = 'published' then
     begin
       Created := Created + Content;
-      try
-        DT := StrToDateTime(Created);
-      except
-      end;
-
-      Created := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+      Created := TimeToString(ShortDateToTime(Created));
     end
     else if Name = 'name' then
     begin
@@ -186,11 +178,7 @@ begin
     else if Name = 'updated' then
     begin
       LastModified := LastModified + Content;
-      try
-        DT := StrToDateTime(LastModified);
-      except
-      end;
-      LastModified := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+      LastModified := TimeToString(ShortDateToTime(LastModified));
     end
     else if Name = 'rights' then
     begin
@@ -230,7 +218,9 @@ begin
 
   if Pos(DCNS, FXmlElement.Name) = 0 then
   begin
-    StripNS(FXmlELement.Name, AtomNS);
+    { Expat seems to be quite fickle with the casing }
+    StripNS(FXmlElement.Name, AtomNS);
+    StripNS(FXmlELement.Name, LowerCase(AtomNS));
     FillItem(Item);
   end
   else
@@ -241,7 +231,6 @@ begin
     AFeed.ParseLine(Line, Item, ItemFinished);
     AFeed.Free;
   end;
-
 
   ItemFinished := ((FXmlElement.Name = 'entry') and (PreviousElement.Name = 'entry')) or (Line = SockEof);
   FXmlElement.Name := '';

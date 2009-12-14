@@ -14,7 +14,8 @@
 void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
 {
   char * name;
-  unsigned char count, index, type;
+  int count, index;
+  unsigned char type;
   void * value;
   wxString cl, mclient, recep;
 
@@ -40,7 +41,7 @@ void DescriptionBoxEvents::OnSubscribe(wxCommandEvent & event)
   subscribe->Disable();
 
   ItemInfo * info = (ItemInfo *) subscribe->GetClientData();
-  if (info->self != "")
+  if (info->self && strlen(info->self) > 0)
   {
     link = info->self;
   }
@@ -88,7 +89,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   wxButton * subscribe = GetSubscribeButton();
   Subscriptions * subs = GetSubscriptionsObject();
 
-  if (info->self != "")
+  if (info->self && strlen(info->self) > 0)
   {
     link = info->self;
   }
@@ -216,8 +217,9 @@ void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
 
 void SettingsDialogEvents::OnOK(wxCommandEvent & event)
 {
-  unsigned char count, index, type;
   char * name;
+  int count, index;
+  unsigned char type;
   void * value;
 
   SettingsList * list = GetSettingsList();

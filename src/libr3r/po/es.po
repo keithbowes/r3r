@@ -16,3 +16,39 @@ msgstr "No podía recuperar el canal."
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "El servidor web no exista o mandó información inválido."
+
+msgid "Jan"
+msgstr "ene"
+
+msgid "Feb"
+msgstr "feb"
+
+msgid "Mar"
+msgstr "mar"
+
+msgid "Apr"
+msgstr "abr"
+
+msgid "May"
+msgstr "may"
+
+msgid "Jun"
+msgstr "jun"
+
+msgid "Jul"
+msgstr "jul"
+
+msgid "Aug"
+msgstr "aug"
+
+msgid "Sep"
+msgstr "sep"
+
+msgid "Oct"
+msgstr "oct"
+
+msgid "Nov"
+msgstr "nov"
+
+msgid "Dec"
+msgstr "dic"

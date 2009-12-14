@@ -52,15 +52,14 @@ r3r$(EXEEXT): $(addsuffix $(OEXT),$(objects))
 %$(CXXEXT): %$(HEXT) wx.h
 	$(TOUCH) $@
 
-desc.cpp events.cpp location.cpp settingsentry.cpp \
-	settings-subscriptions.cpp: widgetids.h
+desc.cpp location.cpp settings-subscriptions.cpp: widgetids.h
 	$(TOUCH) $@
 
-events.h: eventtables.h libr3r.h
+events.cpp: eventtables.h libr3r.h widgetids.h
 	$(TOUCH) $@
 
 feedlist.h settingscheckbox.h subscriptions.h: libr3r.h
 	$(TOUCH) $@
 
-menu.cpp: libr3r.h widgetids.h
+menu.cpp settingsentry.cpp: libr3r.h widgetids.h
 	$(TOUCH) $@

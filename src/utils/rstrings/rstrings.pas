@@ -3,74 +3,70 @@ unit RStrings;
 interface
 
 function StrToPChar(const Str: String): PChar;
-function StrToPChar2(const Str: String): PChar;
 function GetPChar(const N: cardinal): PChar;
 procedure SetPChar(const N: cardinal; const p: PChar);
 function GetPCharIndex(const p: PChar): longint;
 
+var
+  RemoveDuplicatePChars: Boolean;
+
 implementation
 
 uses
-  SysUtils;
-
-type
-  TPChars = array of PChar;
+  RList, SysUtils;
 
 var
-  PChars: TPChars;
+  PChars: PRList;
 
 procedure InitPChars;
 begin
-  SetLength(PChars, 1);
+  New(PChars, Init);
 end;
 
 procedure FreePChars;
 var
-  i, l: cardinal;
+  i: cardinal;
 begin
-  l := Length(PChars);
-
-  for i := 0 to l - 1 do
+  if PChars^.Count > 0 then
   begin
-    StrDispose(PChars[i]);
+    for i := 0 to PChars^.Count - 1 do
+    begin
+      FreeMem(PChars^.GetNth(i));
+    end;
   end;
 
-  SetLength(PChars, 0);
-  PChars := nil;
+  Dispose(PChars, Done);
 end;
 
 function StrToPChar(const Str: String): PChar;
 var
-  Len: cardinal;
+  Index: integer;
+  p: PChar;
 begin
-  Len := Length(PChars);
+  GetMem(p, Length(Str) + 1);
+  StrPCopy(p, Str);
 
-  Result := StrAlloc(Length(Str) + 1);
-  StrPCopy(Result, Str);
+  PChars^.Add(p);
 
-  SetLength(PChars, Len + 1);
-  PChars[Len] := Result;
-end;
-
-function StrToPChar2(const Str: String): PChar;
-begin
-  Result := StrToPChar(Str);
-
-  if GetPCharIndex(Result) <> -1 then
+  Index := GetPCharIndex(p);
+  if (Index <> - 1) and RemoveDuplicatePChars then
   begin
-    SetLength(PChars, Length(PChars) - 1);
-    Result := GetPChar(Length(PChars) - 1);
+    PChars^.Delete(Index);
+    FreeMem(PChars^.GetNth(Index));
   end;
+
+  StrToPChar := p;
 end;
 
 function GetPChar(const N: cardinal): PChar;
 begin
-  Result := PChars[N];
+  GetPChar := PChars^.GetNth(N);
 end;
 
 procedure SetPChar(const N: cardinal; const p: PChar);
 begin
-  PChars[N] := p;
+  PChars^.Delete(N);
+  PChars^.Insert(p, N);
 end;
 
 function GetPCharIndex(const p: PChar): longint;
@@ -78,24 +74,27 @@ var
   i, Len: longint;
 begin
   i := 0;
-  Len := Length(PChars);
-
-  while (i < Len) and (StrComp(p, PChars[i]) <> 0) do
+  Len := PChars^.Count;
+;
+  while (i < Len) and (StrComp(p, PChars^.GetNth(i)) <> 0) do
   begin
     Inc(i);
   end;
 
-  Result := i;
-
-  if i = Len - 1 then
+  if i + 1 <> Len then
   begin
-    Result := -1;
+    GetPCharIndex := i;
+  end
+  else
+  begin
+    GetPCharIndex := -1;
   end;
 end;
 
 initialization
 
 InitPChars;
+RemoveDuplicatePChars := true;
 
 finalization
 

@@ -263,7 +263,6 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS = $(wildcard ../*)
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1384,4 +1383,4 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: rstrings$(PPUEXT)
+all: tabfiles$(PPUEXT)

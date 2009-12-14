@@ -7,7 +7,8 @@ SettingsCheckBox::SettingsCheckBox(wxWindow * parent, const wxString & label, ch
 {
   bool is_enabled;
   char * name;
-  unsigned char count, index, type;
+  int count, index;
+  unsigned char type;
   void * setting_value;
 
   index = 0;

@@ -16,3 +16,39 @@ msgstr "Ich könnte nicht das Feed erlangen."
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "Der Web-server existiert nich oder gesendet ungültigen Informationen."
+
+msgid "Jan"
+msgstr ""
+
+msgid "Feb"
+msgstr ""
+
+msgid "Mar"
+msgstr "Mär"
+
+msgid "Apr"
+msgstr ""
+
+msgid "May"
+msgstr "Maj"
+
+msgid "Jun"
+msgstr ""
+
+msgid "Jul"
+msgstr ""
+
+msgid "Aug"
+msgstr ""
+
+msgid "Sep"
+msgstr ""
+
+msgid "Oct"
+msgstr "Okt"
+
+msgid "Nov"
+msgstr ""
+
+msgid "Dec"
+msgstr "Dez"

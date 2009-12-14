@@ -82,8 +82,9 @@ msgid "Description: "
 msgstr "Descripción: "
 
 #: tuistrings:itemlink
+#, fuzzy
 msgid "Link %d: %s"
-msgstr "Vínculo %d: %s"
+msgstr "Vínculo: "
 
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"

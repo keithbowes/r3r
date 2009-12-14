@@ -3,7 +3,7 @@ unit RSock;
 interface
 
 uses
-  BlckSock, Classes, Feed, FeedItem;
+  BlckSock, Feed, FeedItem;
 
 type
   TRSock = class

@@ -7,19 +7,14 @@ uses
 
 type
   PRSubscriptions = ^TRSubscriptions;
-  TRSubscriptions = object
+  TRSubscriptions = object(TRStringList)
   private
     FFile: String;
-    FList: PRList;
     FText: text;
   public
     constructor Init;
     destructor Done;
-    procedure Add(const Sub: String);
-    procedure Delete(const Sub: String);
     procedure DeleteIndex(const Index: word);
-    function Get(const N: word): String;
-    function Count: word;
   end;
 
 var
@@ -35,8 +30,8 @@ var
   f: SearchRec;
   Line: String;
 begin
+  inherited Init;
   FFile := SettingsDir + 'subscriptions.txt';
-  New(FList, Init);
 
   Assign(FText, FFile);
 
@@ -65,56 +60,21 @@ begin
   Assign(FText, FFile);
   Rewrite(FText);
 
-  if FList^.Count > 0 then
+  if Count > 0 then
   begin
-    for i := 0 to FList^.Count - 1 do
+    for i := 0 to Count - 1 do
     begin
-      WriteLn(FText, Get(i));
+      WriteLn(FText, GetNth(i));
     end;
   end;
 
-  Dispose(FList, Done);
-
   Close(FText);
-end;
-
-procedure TRSubscriptions.Add(const Sub: String);
-begin
-  FList^.Add(StrToPChar(Sub));
-end;
-
-procedure TRSubscriptions.Delete(const Sub: String);
-var
-  i: word;
-begin
-  i := 0;
-  while (i < Count) and (StrComp(StrToPChar(Sub), FList^.GetNth(i)) <> 0 ) do
-  begin
-    Inc(i);
-  end;
-
-  if i <> Count then
-  begin
-    DeleteIndex(i);
-  end;
+  inherited Done;
 end;
 
 procedure TRSubscriptions.DeleteIndex(const Index: word);
 begin
-  FList^.Delete(Index);
-end;
-
-function TRSubscriptions.Get(const N: word): String;
-begin
-  if Count > 0 then
-  begin
-    Result := StrPas(FList^.GetNth(N));
-  end;
-end;
-
-function TRSubscriptions.Count: word;
-begin
-  Result := FList^.Count;
+  Delete(Index);
 end;
 
 initialization

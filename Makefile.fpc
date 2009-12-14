@@ -32,6 +32,13 @@ install:
 	cd src && $(MAKE) install
 	$(INSTALLEXE) r3r$(EXEEXT) $(bindir)
 
+docs:
+	cd doc/api && $(MAKE)
+
+dist-docs: docs
+	$(PAX) $(PAXFLAGS) doc/api | gzip -cf > ../r3r-$(VERSION)-api.tar.gz
+
+
 # Uninstallation rules
 uninstall:
 	cd doc && $(MAKE) uninstall
@@ -82,15 +89,15 @@ fpc-debug:
 	$(MAKE) PCFLAGS_DEBUG="-Xs- -gh -gl -gv -CX- -XX-" fpc-release
 
 gpc:
-	-$(MAKE) COMPILER=gpc $(DEFAULT_RULE)
-	@echo "Unless you really know what you're doing, the build" \
+	-$(MAKE) COMPILER_OVERRIDE=1 USE_GPC=1 $(DEFAULT_RULE)
+	@$(ECHO) "Unless you really know what you're doing, the build" \
 		"has failed.  Hopefully, it will work in the future."
 
 for-borland-compilers:
 	-$(MAKE) \
 	PCFLAGS_BASE="-B -CC -E. -M -O$(R3R_UI) -Upo -Ulibr3r -V" \
 	DEFS=-DNO_GETTEXT OBJEXT=.obj UNITEXT=.dcu all
-	@echo "Compiling with Delphi/Kylix is currently unsupported.  If that" \
+	@$(ECHO) "Compiling with Delphi/Kylix is currently unsupported.  If that" \
 	"concerns you, send patches."
 
 delphi:
