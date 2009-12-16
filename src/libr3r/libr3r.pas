@@ -16,12 +16,11 @@ const
 
 type
   TFeedItem = FeedItem.TFeedItem;
-  TParsedEvent = procedure(Item: TFeedItem) of object;
+  TParsedEvent = procedure(Item: TFeedItem){$IFNDEF __GPC__} of object{$ENDIF};
   TRSetting = RSettings.TRSetting;
 
   TLibR3R = class
   private
-    FFreeLinks: Boolean;
     FOnItemParsed: TParsedEvent;
     FOnMessage: TRMessage;
     FSock: TRSock;
@@ -31,15 +30,11 @@ type
     procedure NotifyUpdate; virtual;
     procedure DoParseItem(Item: TFeedItem);
     procedure DoUpdate;
-  public
-    constructor Create; overload;
-    constructor Create(const Resource: String); overload;
-    destructor Destroy; override;
-    procedure RetrieveFeed(Resource: String; AlsoParse: Boolean = true);
     procedure Parse;
-    property FreeLinks: Boolean read FFreeLinks write FFreeLinks;
-    property OnItemParsed: TParsedEvent write FOnItemParsed;
-    property OnMessage: TRMessage write FOnMessage;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    procedure RetrieveFeed(Resource: String);
   end;
 
 var
@@ -53,8 +48,9 @@ uses
 
 constructor TLibR3R.Create;
 begin
+{$IFNDEF __GPC__}
   inherited Create;
-  FFreeLinks := true;
+{$ENDIF}
   FSock := nil;
 
   if Settings.GetBoolean(Settings.IndexOf('check-for-updates')) then
@@ -63,30 +59,30 @@ begin
   end;
 end;
 
-constructor TLibR3R.Create(const Resource: String);
-begin
-  Create;
-  RetrieveFeed(Resource, false);
-end;
-
 destructor TLibR3R.Destroy;
 begin
+{$IFNDEF __GPC__}
   inherited Destroy;
+{$ENDIF}
 end;
 
-procedure TLibR3R.RetrieveFeed(Resource: String; AlsoParse: Boolean = true);
+procedure TLibR3R.RetrieveFeed(Resource: String);
 var
-  Prot, User, Pass, Host, Port, Path, Para: String;
+  Prot, Pass, Host, Port, Path, Para: String;
 begin
   GetFeed(Resource, Prot, Host, Port, Path, Para);
 
   if Prot = 'file' then
   begin
+{$IFNDEF __GPC__}
     FSock := TLocalFile.Create(Resource);
+{$ENDIF}
   end
   else if Prot = 'http' then
   begin
+{$IFNDEF __GPC__}
     FSock := THttpSock.Create(Host, Port, Path, Para);
+{$ENDIF}
   end
   else
   begin
@@ -95,28 +91,26 @@ begin
 
   FSock.Execute;
 
-  if AlsoParse then
+  Parse;
+
+{$IFNDEF __GPC__}
+  if Assigned(FSock) then
   begin
-    Parse;
-    if Assigned(FSock) then
-    begin
-      FSock.Free;
-    end;
+    FSock.Free;
   end;
+{$ENDIF}
 end;
 
 procedure TLibR3R.Parse;
+{$IFDEF __GPC__}
+var
+  Item: TFeedItem;
+{$ENDIF}
 begin
-  if Assigned(FOnMessage) then
-  begin
-    SetMessageEvent(FOnMessage);
-  end
-  else
-  begin
-    SetMessageEvent(HandleMessage);
-  end;
-
-  ParseFeed(Self, DoParseItem, FSock);
+{$IFNDEF __GPC__}
+  SetMessageEvent(HandleMessage);
+  ParseFeed(TObject(Self), DoParseItem, FSock);
+{$ENDIF}
 end;
 
 { Implement as empty so if the UI doens't implement them,
@@ -135,18 +129,12 @@ end;
 
 procedure TLibR3R.DoParseItem(Item: TFeedItem);
 begin
-  if Assigned(FOnItemParsed) then
-  begin
-    FOnItemParsed(Item);
-  end
-  else
-  begin
-    DisplayItem(Item)
-  end;
+  DisplayItem(Item)
 end;
 
 procedure TLibR3R.DoUpdate;
 begin
+{$IFNDEF __GPC__}
   with TRUpdate.Create do
   begin
     if Available then
@@ -156,6 +144,7 @@ begin
 
     Free;
   end;
+{$ENDIF}
 end;
 
 initialization

@@ -3,10 +3,10 @@ unit RGetFeed;
 interface
 
 uses
-  FeedItem, RSock;
+  FeedItem, RSock, RMessage;
 
 type
-  TParseMethod = procedure(Item: TFeedItem) of object;
+  TParseMethod = procedure(Item: TFeedItem){$IFNDEF __GPC__} of object{$ENDIF};
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
 procedure ParseFeed(const Sender: TObject; const UserFunc: TParseMethod; const Sock: TRSock);
@@ -14,13 +14,27 @@ procedure ParseFeed(const Sender: TObject; const UserFunc: TParseMethod; const S
 implementation
 
 uses
-  LibR3RStrings, RMessage, SynaUtil, SysUtils;
+  LibR3RStrings, SysUtils,
+{$IFDEF __GPC__}
+  GPC,
+{$ENDIF}
+{$IFDEF SOCKETS_SYNAPSE}
+  SynaUtil
+{$ENDIF}
+  
+{$IFDEF SOCKETS_BSD}
+  SockWrap
+{$ENDIF};
 
 var
   Item: TFeedItem;
   ItemCreated: Boolean;
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
+{$IFDEF __GPC__}
+const
+  PathDelim = DirSeparator;
+{$ENDIF}
 var
   Pass, User: String;
 begin
@@ -66,6 +80,8 @@ Item := TFeedItem.Create;
 
 finalization
 
+{$IFNDEF __GPC__}
 Item.Free;
+{$ENDIF}
 
 end.

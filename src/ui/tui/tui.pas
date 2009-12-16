@@ -3,15 +3,17 @@ unit Tui;
 interface
 
 uses
-  LibR3R;
+  LibR3R, RMessage, RList;
 
 type
   TTui = class(TLibR3R)
   private
-    FItems: array of TFeedItem;
+    FItems: PRList;
   protected
     procedure DisplayItem(const Item: TFeedItem); override;
+{$IFNDEF __GPC__}
     procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); override;
+{$ENDIF}
     procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
@@ -21,14 +23,17 @@ type
     procedure SetOptions;
     procedure GoDonate;
   public
-    constructor Create;
+    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
   end;
 
 implementation
 
 uses
-  Crt, Dos, Info, RList, TuiStrings;
+  Crt, Dos, Info, RSettings, TuiStrings
+{$IFDEF __GPC__}
+  , SysUtils
+{$ENDIF};
 
 constructor TTui.Create;
 var
@@ -36,9 +41,7 @@ var
   KeyChar: char;
 begin
   inherited Create;
-  FreeLinks := false;
-
-  SetLength(FItems, 1);
+  New(FItems, Init);
 
   for FeedIndex := 1 to ParamCount do
   begin
@@ -85,37 +88,49 @@ end;
 
 destructor TTui.Destroy;
 var
-  i, Items: cardinal;
+  i: cardinal;
+  p: TFeedItem;
 begin
-  Items := Length(FItems);
-
-  for i := 0 to Items - 1 do
+  if FItems^.Count > 0 then
   begin
-    FItems[i].Free;
+    for i := 0 to FItems^.Count - 1 do
+    begin
+      p := FItems^.GetNth(i);
+{$IFNDEF __GPC__}
+      p.Free;
+{$ENDIF}
+    end;
   end;
 
+  Dispose(FItems, Done);
+
+{$IFNDEF __GPC__}
   inherited Destroy;
+{$ENDIF}
 end;
 
 procedure TTui.DisplayItem(const Item: TFeedItem);
 var
+  AItem: TFeedItem;
   Items: cardinal;
 begin
-  Items := Length(FItems);
-  SetLength(FItems, Items + 1);
+  Items := FItems^.Count + 1;
 
-  FItems[Items] := TFeedItem.Create;
-  FItems[Items].Title := Item.Title;
-  FItems[Items].Subject := Item.Subject;
-  FItems[Items].Created := Item.Created;
-  FItems[Items].Description := Item.Description;
-  FItems[Items].MainLink := Item.MainLink;
+{$IFNDEF __GPC__}
+  AItem := TFeedItem.Create;
+{$ENDIF}
+  AItem.Title := Item.Title;
+  AItem.Subject := Item.Subject;
+  AItem.Created := Item.Created;
+  AItem.Description := Item.Description;
+  AItem.MainLink := Item.GetMainLink;
+  FItems^.Add(AItem);
 
   Write(Items, ': ', Item.Title);
 
   if Item.LinksCount > 0 then
   begin
-    Write(' <', Item.MainLink, '>');
+    Write(' <', Item.GetMainLink, '>');
   end;
 
   if Item.Contact^.Address <> '' then
@@ -126,6 +141,7 @@ begin
   WriteLn;
 end;
 
+{$IFNDEF __GPC__}
 procedure TTui.HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String);
 begin
   if Error then
@@ -146,6 +162,7 @@ begin
 
   WriteLn;
 end;
+{$ENDIF}
 
 procedure TTui.NotifyUpdate;
 begin
@@ -159,7 +176,7 @@ begin
   Write(GoURL);
   Write(Options:25 - Length(GoUrl) + Length(Options));
   WriteLn;
-  if Length(FItems) > 1 then
+  if FItems^.Count > 1 then
   begin
     Write(AboutItem);
     Write(OpenLink:25 - Length(AboutItem) + Length(OpenLink));
@@ -194,18 +211,21 @@ begin
 
   if ErrPos = 0 then
   begin
-    with FItems[iNo] do
+    with TFeedItem(FItems^.GetNth(iNo)) do
     begin
       if Length(Description) > 75 then
       begin
+{$IFNDEF __GPC__}
         Description := Copy(Description, 1, 75) + '...';
+{$ENDIF}
       end;
 
       WriteLn(ItemTitle, Title);
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Description);
-      WriteLn(ItemLink + MainLink);
+      Write(ItemLink);
+      WriteLn(MainLink);
     end;
   end
   else
@@ -227,10 +247,10 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if (ErrPos = 0) and (FItems[iNo].MainLink <> '') and
-    (iNo < cardinal(Length(FItems))) then
+  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo)).GetMainLink <> '') and
+    (FItems^.Count > 0) then
   begin
-    OpenBrowser(FItems[iNo].MainLink);
+    OpenBrowser(TFeedItem(FItems^.GetNth(iNo)).GetMainLink);
   end;
 
   ShowHelp;
@@ -254,7 +274,7 @@ var
   i, ErrPos, Len: byte;
   HBound, Index, SetInt: integer;
   SetBool: Boolean;
-  SetName, SetVal: ShortString;
+  SetName, SetVal: String;
   SRec: PRList;
 begin
   WriteLn;
@@ -267,16 +287,16 @@ begin
 
     for i := 0 to HBound - 1 do
     begin
-      Write(TRSetting(SRec^.GetNth(i)^).Name);
+      Write(PRSetting(SRec^.GetNth(i))^.Name);
 
-      case TRSetting(SRec^.GetNth(i)^).ValueType of
+      case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
         begin
-          Write(TRSetting(SRec^.GetNth(i)^).ValueString:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + Length(TRSetting(SRec^.GetNth(i)^).ValueString));
+          Write(PRSetting(SRec^.GetNth(i))^.ValueString:Width - Length(PRSetting(SRec^.GetNth(i))^.Name) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
         end;
         TypeInteger:
         begin
-          Index := TRSetting(SRec^.GetNth(i)^).ValueInteger;
+          Index := PRSetting(SRec^.GetNth(i))^.ValueInteger;
           Len := 0;
 
           while Index > 0 do
@@ -285,11 +305,11 @@ begin
             Index := Index div 10;
           end;
 
-          Write(TRSetting(SRec^.GetNth(i)^).ValueInteger:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + Len);
+          Write(PRSetting(SRec^.GetNth(i))^.ValueInteger:Width - Length(PRSetting(SRec^.GetNth(i))^.Name) + Len);
         end;
         TypeBoolean:
         begin
-          Write(TRSetting(SRec^.GetNth(i)^).ValueBoolean:Width - Length(TRSetting(SRec^.GetNth(i)^).Name) + 5);
+          Write(PRSetting(SRec^.GetNth(i))^.ValueBoolean:Width - Length(PRSetting(SRec^.GetNth(i))^.Name) + 5);
         end;
       end;
 
@@ -308,7 +328,7 @@ begin
         Write(NewValue);
         ReadLn(SetVal);
 
-        case TRSetting(SRec^.GetNth(Index)^).ValueType of
+        case PRSetting(SRec^.GetNth(Index))^.ValueType of
           TypeString:
           begin
             SetString(Index, SetVal);
@@ -316,7 +336,11 @@ begin
           TypeInteger:
           begin
             Val(SetVal, SetInt, ErrPos);
-            SetInteger(Index, SetInt);
+
+            if ErrPos = 0 then
+            begin
+              SetInteger(Index, SetInt);
+            end;
           end;
           TypeBoolean:
           begin

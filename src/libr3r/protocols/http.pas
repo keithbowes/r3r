@@ -8,9 +8,7 @@ uses
 type
   THttpSock = class(TRSock)
   private
-    FCache: THttpCache;
     FCachable: Boolean;
-    FHeaders: THeaders;
     FHttpVersion: real;
     FIndirectHost: String;
     FLocal: TLocalFile;
@@ -18,24 +16,28 @@ type
     FURL: String;
     function GetType: TFeedType;
   protected
+    Cache: THttpCache;
+    Headers: THeaders;
     procedure Connect(Host, Port, Path, Search: String);
-    procedure GetHeaders;
     procedure SendHeader(const Name: String);
     procedure SendHeaders;
-    property Cache: THttpCache read FCache write FCache;
-    property Headers: THeaders read FHeaders;
   public
-    constructor Create(Host, Port, Path, Search: String);
+    constructor Create(Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     destructor Destroy; override;
+    procedure GetHeaders;
   end;
 
 implementation
 
 uses
   Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
-  SockConsts, StrTok, SysUtils;
+  SockConsts, StrTok, SysUtils
+  
+{$IFDEF __GPC__}
+  ,GPC
+{$ENDIF};
 
 const
   Tab = #9;
@@ -62,7 +64,7 @@ begin
   begin
     Line := GetLine;
 
-    if (Line = '') and (HeaderState = hsStarted) then
+    if ((Line = '') or (Line = #13)) and (HeaderState = hsStarted) then
     begin
       HeaderState := hsFinished;
     end
@@ -74,23 +76,22 @@ begin
         Continue;
       end;
 
+      Delete(Line, Pos(#13, Line), 1);
       HeaderState := hsStarted;
-
       RespList := Split(Line, WhitespaceChars);
 
-      Val(Copy(RespList.Strings[0], 6, Length(RespList.Strings[0]) - 5), FHttpVersion, ErrPos);
-
+      Val(Copy(RespList.Strings[0], 6, 3), FHttpVersion, ErrPos);
       if ErrPos <> 0 then
       begin
-        CallMessageEvent(Self, true, InvalidHeaders, FURL);
+        CallMessageEventEx(TObject(Self), true, InvalidHeaders, FURL);
         Break;
       end;
 
-      Val(RespList.Strings[1], FHeaders.Status, ErrPos);
+      Val(RespList.Strings[1], Headers.Status, ErrPos);
 
-      if FHeaders.Status = 200 then
+      if Headers.Status = 200 then
       begin
-        FCache.Invalidate;
+        Cache.Invalidate;
       end
     end
     else
@@ -101,48 +102,51 @@ begin
 
       if HeaderName = 'date' then
       begin
-        FHeaders.Date := HeaderValue;
+        Headers.Date := HeaderValue;
       end
       else if HeaderName = 'content-encoding' then
       begin
-        FHeaders.ContentEncoding := HeaderValue;
+        Headers.ContentEncoding := HeaderValue;
       end
       else if HeaderName = 'content-type' then
       begin
         if (Pos('esf', HeaderValue) <> 0) or (Pos('text/plain', HeaderValue) <> 0) then
         begin
-          FHeaders.ContentType := ftEsf;
+          Headers.ContentType := ftEsf;
         end
         else if Pos('text/x-rss', HeaderValue) = 1 then
         begin
-          FHeaders.ContentType := ftRss3
+          Headers.ContentType := ftRss3
         end
         else if Pos('atom', HeaderValue) <> 0 then
         begin
-          FHeaders.ContentType := ftAtom;
+          Headers.ContentType := ftAtom;
         end
         else if Pos('rss', HeaderValue) <> 0 then
         begin
-          FHeaders.ContentType := ftRss;
+          Headers.ContentType := ftRss;
         end
         else if Pos('xml', HeaderValue) <> 0 then
         begin
-          FHeaders.ContentType := ftXml;
+          Headers.ContentType := ftXml;
         end
         else
         begin
-          FHeaders.ContentType := ftUnknown;
+          Headers.ContentType := ftUnknown;
         end;
       end
       else if HeaderName = 'location' then
       begin
-        FHeaders.Status := 200;
+        Headers.Status := 200;
+
+{$IFNDEF __GPC__}
         Sock.Free;
+{$ENDIF}
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
         Connect(Host, Port, Path, Para);
         Execute;
-        ParseFeed(Self, nil, Self);
+        ParseFeed(TObject(Self), nil, Self);
       end
       else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
       begin
@@ -153,14 +157,14 @@ begin
         { Etags won't work in HTTP/0.9 and HTTP/1.0 }
         if FHttpVersion >= 1.1 then
         begin
-          FHeaders.Etag := HeaderValue;
+          Headers.Etag := HeaderValue;
           Cache.Info^.CacheType := ctEtag;
           Cache.Info^.CacheParam := HeaderValue
         end
       end
       else if HeaderName = 'expires' then
       begin
-        FHeaders.Expires := HeaderValue;
+        Headers.Expires := HeaderValue;
 
         if (Cache.Info^.CacheType <> ctEtag) and (Cache.Info^.CacheType <> ctLastModified) then
         begin
@@ -172,7 +176,7 @@ begin
       begin
         if Cache.Info^.CacheType <> ctEtag then
         begin
-          FHeaders.LastModified := HeaderValue;
+          Headers.LastModified := HeaderValue;
           Cache.Info^.CacheType := ctLastModified;
           Cache.Info^.CacheParam := HeaderValue
         end;
@@ -183,26 +187,30 @@ begin
       end
     end;
 
-    if FHeaders.Status = 200 then
+    if Headers.Status = 200 then
     begin
       Cache.WriteData(Line, cdtResponse);
     end
   end;
 
-  if Settings.GetBoolean(Settings.IndexOf('enable-mime-guess')) or (FHeaders.ContentType = ftXml) then
+  if Settings.GetBoolean(Settings.IndexOf('enable-mime-guess')) or (Headers.ContentType = ftXml) then
   begin
-    FHeaders.ContentType := GetType;
+    Headers.ContentType := GetType;
   end;
 
-  Cache.Info^.HeaderRec := FHeaders;
+  Cache.Info^.HeaderRec := Headers;
 
-  if FCachable and (FHeaders.Status = 200) then
+  if FCachable and (Headers.Status = 200) then
   begin
     Cache.WriteData(IntToStr(Ord(Cache.Info^.CacheType)) + Tab + Cache.Info^.CacheParam + Tab + IntToStr(Ord(Cache.Info^.HeaderRec.ContentType)), cdtInfo);
   end;
 end;
 
 constructor THttpSock.Create(Host, Port, Path, Search: String);
+{$IFDEF __GPC__}
+const
+  PathDelim = DirSeparator;
+{$ENDIF}
 var
   FullPath: String;
 begin
@@ -211,7 +219,10 @@ begin
 
   FullPath := StringReplace(FIndirectHost + FPath, '/', Pred(PathDelim), [rfReplaceAll]);
   FullPath := StringReplace(FullPath, '?', '_', [rfReplaceAll]);
-  FCache := THttpCache.Create(FullPath);
+
+{$IFNDEF __GPC__}
+  Cache := THttpCache.Create(FullPath);
+{$ENDIF}
 end;
 
 procedure THttpSock.Connect(Host, Port, Path, Search: String);
@@ -235,7 +246,7 @@ begin
   DomainSet(Host, Port);
 
   FCachable := true;
-  FHeaders.ContentType := ftUnset;
+  Headers.ContentType := ftUnset;
   FPath := Path;
 
   if Search <> '' then
@@ -253,8 +264,10 @@ end;
 
 destructor THttpSock.Destroy;
 begin
-  FCache.Free;
+{$IFNDEF __GPC__}
+  Cache.Free;
   inherited Destroy;
+{$ENDIF}
 end;
 
 procedure THttpSock.Execute;
@@ -273,7 +286,7 @@ procedure THttpSock.SendHeaders;
 var
   CacheHeader: String;
 begin
-  CacheHeader := FCache.GetCacheHeader;
+  CacheHeader := Cache.GetCacheHeader;
 
   SendHeader('GET ' + FPath + ' HTTP/1.1');
   SendHeader('Host: ' + FIndirectHost);
@@ -304,8 +317,13 @@ begin
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;
+{$IFDEF __GPC__}
+const
+  PathDelim = DirSeparator;
+{$ENDIF}
 var
   Ext: String;
+  Res: Boolean;
 begin
   if Headers.Status = 0 then
   begin
@@ -314,39 +332,44 @@ begin
 
   FeedType := Headers.ContentType;
 
-  if FHeaders.Status = 200 then
+  if Headers.Status = 200 then
   begin
-    Result := inherited ParseItem(Item);
+    Res := inherited ParseItem(Item);
   end
-  else if (FHeaders.Status = 304) and not Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds')) then
+  else if (Headers.Status = 304) and not Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds')) then
   begin
     CurrentCache := nil;
-    Ext := FCache.GetFeedExtension(FHeaders.ContentType);
+    Ext := Cache.GetFeedExtension(Headers.ContentType);
     if Ext = 'unknown' then
     begin
-      Exit(true);
+      ParseItem := true;
+      Exit;
     end;
 
+{$IFNDEF __GPC__}
     if not Assigned(FLocal) then
     begin
       FLocal := TLocalFile.Create(FCacheDir + PathDelim +
-        CacheFeedFile + '.' + FCache.GetFeedExtension(FHeaders.ContentType));
+        CacheFeedFile + '.' + Cache.GetFeedExtension(Headers.ContentType));
       FLocal.Execute;
     end;
 
-    Result := FLocal.ParseItem(Item);
+    Res := FLocal.ParseItem(Item);
 
-    if Result then
+    if Res then
     begin
       FLocal.Free;
     end;
+{$ENDIF}
 
-    ShouldShow := not Result;
+    ShouldShow := not Res;
   end
   else
   begin
-    Result := true;
+    Res := true;
   end;
+
+  ParseItem := Res;
 end;
 
 function THttpSock.GetType: TFeedType;
@@ -355,23 +378,23 @@ var
 function IsAtom: Boolean;
   Line := LowerCase(FIndirectHost + FPath);
   end;
-  Result := FHeaders.ContentType;
+  GetType := Headers.ContentType;
 end;
   if Pos('atom', Line) <> 0 then
   if Pos('esf', Line) <> 0 then
-    Result := ftAtom;
+    GetType := ftAtom;
   end
   else if Pos('esf', Line) <> 0 then
   if ContentType <> ftRss then
-    Result := ftEsf;
+    GetType := ftEsf;
   end
   else if (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0) or ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0)) or (Pos('txt', Line) <> 0) then
   if b then
-    Result := ftRss3;
+    GetType := ftRss3;
   end
   else if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or (Pos('xml', Line) <> 0) then
     (Pos('xml', Line) <> 0) then
-    Result := ftRss;
+    GetType := ftRss;
     end;
   GetType := ContentType;
 end;

@@ -33,9 +33,9 @@ PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 	$(UNITDIRS)
 
 # Defines, for enabling different features/dialect syntax
-DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS), $(DEFFLAG)$(opt))
+DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS) $(DEFS_SOCKETS), $(DEFFLAG)$(opt))
 
-UNITDIRS=$(foreach dir,$(UNIT_DIRS),$(DIRFLAG)$(dir))
+UNITDIRS=$(foreach dir,$(wildcard $(UNIT_DIRS)),$(DIRFLAG)$(dir))
 
 override COMPILER_OPTIONS += $(PCFLAGS)
 
@@ -74,22 +74,26 @@ PCFLAGS_DEBUG += -Ct
 endif # R3R_UI
 endif # RELEASE
 
+DEFS_SOCKETS ?= SOCKETS_SYNAPSE
+
 ifneq ($(inWindows),)
 DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
+BUILD_SHARED=1
+
 else
 ifdef USE_GPC
 PC=gpc
-PCFLAGS_BASE=--automake --cstrings-as-strings --extended-syntax \
-	--no-warning --pointer-arithmetic
+PCFLAGS_BASE=--automake --extended-syntax --no-warning
 UNITFLAGS=-c
-PROGFLAGS=-o $(PROGNAME)$(EXEEXT)
+PROGFLAGS=-o $(PROGNAME)$(EXEEXT) $(LDFLAGS)
 
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_TAB
+DEFS_SOCKETS ?= SOCKETS_BSD
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
@@ -105,7 +109,7 @@ else
 R3R_UI ?= wx
 endif #RELEASE
 
-export DEFS R3R_UI VERSION \
+export DEFS DEFS_SOCKETS R3R_UI VERSION \
 	bindir datadir prefix rootdir
 
 _all: Makefile

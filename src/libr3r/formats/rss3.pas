@@ -15,7 +15,7 @@ type
     function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
   public
-    constructor Create;
+    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
@@ -35,7 +35,7 @@ end;
 
 function TRss3Feed.GetFormat: TFeedType;
 begin
-  Result := ftRss3;
+  GetFormat := ftRss3;
 end;
 
 procedure TRss3Feed.FillItem(var Item: TFeedItem);
@@ -56,7 +56,11 @@ begin
   end
   else if FCurrentField = 'link' then
   begin
+{$IFNDEF __GPC__}
     Data := TrimRight(Data);
+{$ELSE}
+    Data := wTrimRight(Data);
+{$ENDIF}
     NumLinks := Item.LinksCount;
 
     if NumLinks > 0 then

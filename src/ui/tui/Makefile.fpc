@@ -1,5 +1,6 @@
 [prerules]
-UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* ../../utils/*
+UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* \
+					../../utils/* ../../wrappers/*
 
 [rules]
 include ../../../scripts/common.make

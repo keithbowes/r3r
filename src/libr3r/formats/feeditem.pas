@@ -8,8 +8,6 @@ uses
   RList;
 
 type
-  TFeedItemLink = array of String;
-
   PEmail = ^TEmail;
   TEmail = record
     Toee: String;
@@ -17,44 +15,28 @@ type
   end;
 
   TFeedItem = class
-  private
-    FTitle: String;
-    FLinks: PRList;
-    FMainLink: String;
-    FDescription: String;
-    FSubject: String;
-    FCreated: String;
-    FContact: PEmail;
-    FGenerator: String;
-    FLastModified: String;
-    FLanguage: String;
-    FCopyright: String;
-    FId: String;
-    FUri: String;
-    FMyself: String;
-
-    function GetLinksCount: cardinal;
-    function GetMainLink: String;
+  protected
+    procedure Cleanup;
   public
+    Title: String;
+    Links: PRList;
+    MainLink: String;
+    Description: String;
+    Subject: String;
+    Created: String;
+    Contact: PEmail;
+    Generator: String;
+    LastModified: String;
+    Language: String;
+    Id: String;
+    Copyright: String;
+    Uri: String;
+    Myself: String;
+
     constructor Create;
     destructor Destroy; override;
-    procedure Cleanup;
-    property Title: String read FTitle write FTitle;
-    property Links: PRList read FLinks write FLinks;
-    property LinksCount: cardinal read GetLinksCount;
-    property MainLink: String read GetMainLink write FMainLink;
-    property Description: String read FDescription write FDescription;
-    property Subject: String read FSubject write FSubject;
-    property Created: String read FCreated write FCreated;
-    property Contact: PEmail read FContact write FContact;
-    property Generator: String read FGenerator write FGenerator;
-    property LastModified: String read FLastModified write FLastModified;
-    property Language: String read FLanguage write FLanguage;
-    property Id: String read FId write FId;
-    property Copyright: String read FCopyright write FCopyright;
-    property Uri: String read FUri write FUri;
-    property Myself: String read FMyself write FMyself;
-
+    function LinksCount: cardinal;
+    function GetMainLink: String;
     procedure Clear;
   end;
 
@@ -70,31 +52,37 @@ var
 
 constructor TFeedItem.Create;
 begin
+{$IFNDEF __GPC__}
   inherited Create;
-  New(FContact);
+{$ENDIF}
+
+  New(Contact);
 
   if not AlreadyAllocated then
   begin
-    New(FLinks, Init);
+    New(Links, Init);
     AlreadyAllocated := true;
   end;
 end;
 
 destructor TFeedItem.Destroy;
 begin
-  Dispose(FContact);
+  Dispose(Contact);
   Cleanup;
+
+{$IFNDEF __GPC__}
   inherited Destroy;
+{$ENDIF}
 end;
 
 procedure TFeedItem.Cleanup;
 begin
   if AlreadyAllocated then
   begin
-    if FLinks <> nil then
+    if Links <> nil then
     begin
       Links^.Add(nil); // Hack: Have at least one node to destroy
-      Dispose(FLinks, Done);
+      Dispose(Links, Done);
       AlreadyAllocated := false;
     end;
   end;
@@ -123,9 +111,9 @@ begin
   end;
 end;
 
-function TFeedItem.GetLinksCount: cardinal;
+function TFeedItem.LinksCount: cardinal;
 begin
-  Result := Links^.Count;
+  LinksCount := Links^.Count;
 end;
 
 function TFeedItem.GetMainLink: String;
@@ -148,20 +136,21 @@ begin
 
   if Link <> '' then
   begin
-    FMainLink := Link;
+    MainLink := Link;
   end;
 
-  Result := FMainLink;
+  GetMainLink := MainLink;
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;
 var
   BegName: cardinal;
+  Rec: TEmail;
 begin
   EmailStr := Trim(EmailStr);
 
   BegName := Pos(Delim, EmailStr);
-  with Result do
+  with Rec do
   begin
     if BegName <> 0 then
     begin
@@ -173,6 +162,8 @@ begin
       Address := EmailStr;
     end;
   end;
+
+  CreateEmailRecord := Rec;
 end;
 
 end.

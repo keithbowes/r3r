@@ -1586,13 +1586,13 @@ dist-slackware:
 	cd scripts/setup && $(MAKE) dist-slackware
 dist-inno_setup:
 	cd scripts/setup && $(MAKE) dist-inno_setup
-ifdef $(RELEASE)
+ifdef RELEASE
 fpc: fpc-release
 else
 fpc: fpc-debug
 endif
 fpc-release:
-	$(MAKE) DEFFLAG=-d all
+	$(MAKE) COMPILER_OVERRIDE=1 USE_FPC=1 all
 fpc-debug:
 	$(MAKE) PCFLAGS_DEBUG="-Xs- -gh -gl -gv -CX- -XX-" fpc-release
 gpc:

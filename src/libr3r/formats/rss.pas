@@ -9,71 +9,91 @@ type
   TRssFeed = class(TXmlFeed)
   private
     FLastCat: String;
+    FLeftChannel: Boolean;
   protected
     function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
   public
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    function GetCurrentElement: TXmlElement; override;
   end;
 
 implementation
 
 uses
-  Atom, DC, RDate, RStrings, SockConsts;
+  Atom, DC, RDate, RStrings, SockConsts, SysUtils;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
   AFeed: TFeed;
+  Elem, Prev: TXmlElement;
   IsRDF: Boolean;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
 
-  if Pos(DCNS, FXmlElement.Name) = 1 then
+  if Pos(DCNS, GetCurrentElement.Name) = 1 then
   begin
     AFeed := TDCFeed.Create;
-    StripNS(FXmlElement.Name, DCNS);
-    (AFeed as TXmlFeed).Clone(FXmlElement);
+    Elem := GetCurrentElement;
+    (AFeed as TXmlFeed).Clone(FElemList);
     AFeed.ParseLine(Line, Item, ItemFinished);
+{$IFNDEF __GPC__}
     AFeed.Free;
+{$ENDIF}
   end
-  else if Pos(AtomNS, FXMLElement.Name) = 1 then
+  else if Pos(LowerCase(AtomNS), GetCurrentElement.Name) = 1 then
   begin
+{$IFNDEF __GPC__}
+{ I'm not sure why the constructor produces an error in GPC. }
     AFeed := TAtomFeed.Create;
-    StripNS(FXmlElement.Name, AtomNS);
-    (AFeed as TXmlFeed).Clone(FXmlElement);
+    Elem := GetCurrentElement;
+    (AFeed as TXmlFeed).Clone(FElemList);
     AFeed.ParseLine(Line, Item, ItemFinished);
     AFeed.Free;
+{$ENDIF}
   end
   else
   begin
-    IsRDF := Pos(RSS1NS, FXmlElement.Name) <> 0;
-
+    Elem := GetCurrentElement;
+    IsRDF := Pos(RSS1NS, Elem.Name) <> 0;
     if IsRDF then
     begin
-      StripNS(FXmlElement.Name, RSS1NS);
+      StripNS(Elem.Name, RSS1NS);
     end;
-    
-    FillItem(Item);
   end;
 
-  ItemFinished := ((FXmlElement.Name = 'item') and ((PreviousElement.Name = 'item') or IsRDF)) or (Line = SockEof);
+  FillItem(Item);
 
-  StripNS(FXmlElement.Name, RDFNS);
-  ShouldShow := FXmlElement.Name <> 'RDF';
+  Elem := GetCurrentElement;
+  StripNS(Elem.Name, RSS1NS);
+
+  Prev := GetPreviousElement;
+  StripNS(Prev.Name, RSS1NS);
+
+  ItemFinished := ((Elem.Name = 'item') and ((Prev.Name = 'item') or FLeftChannel)) or (Line = SockEof);
+
+  if ItemFinished and FLeftChannel then
+  begin
+    FLeftChannel :=  false;
+  end;
+
+  ShouldShow := Elem.Name <> 'RDF';
 end;
 
 function TRssFeed.GetFormat: TFeedType;
 begin
-  Result := ftRss;
+  GetFormat := ftRss;
 end;
 
 procedure TRssFeed.FillItem(var Item: TFeedItem);
 var
+  i: cardinal;
   PLink: PChar;
 begin
-  with FXmlElement do
+  with GetCurrentElement do
   begin
-    if (Name = 'title') and (PreviousElement.Name <> 'image') then
+    StripNS(Name, RSS1NS);
+    if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
     begin
       Item.Title := Item.Title + Content;
     end
@@ -83,7 +103,7 @@ begin
     end
     else if Name = 'link' then
     begin
-      PLink := StrToPChar(Content);
+      PLink := PChar(Content);
       Item.Links^.Add(PLink);
     end
     else if Name = 'category' then
@@ -120,7 +140,7 @@ begin
     else if Name = 'language' then
     begin
       Item.Language := Item.Language + Content;
-      FXmlElement.Lang := Item.Language;
+      Lang := Item.Language;
     end
     else if Name = 'copyright' then
     begin
@@ -130,8 +150,22 @@ begin
     begin
       Item.Id := Item.Id + Content;
       Item.Uri := Item.Id;
+    end
+    else if Name = 'channel' then
+    begin
+      FLeftChannel := true;
     end;
   end;
+end;
+
+function TRssFeed.GetCurrentElement: TXmlElement;
+var
+  Res: TXmlElement;
+begin
+  Res := inherited GetCurrentElement;
+  StripNS(Res.Name, RDFNS);
+
+  GetCurrentElement := Res;
 end;
 
 end.

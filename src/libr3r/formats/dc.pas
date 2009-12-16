@@ -23,7 +23,7 @@ uses
 
 procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 begin
-  with Item, FXmlElement do
+  with Item, GetCurrentElement do
   begin
     if Name = 'title' then
     begin
@@ -60,7 +60,7 @@ end;
 
 function TDCFeed.GetFormat: TFeedType;
 begin
-  Result := ftDC;
+  GetFormat := ftDC;
 end;
 
 end.

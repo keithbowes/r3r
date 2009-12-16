@@ -4,18 +4,25 @@ unit SaxCallbacks;
 
 interface
 
+uses
+  Expas;
+
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 procedure ElementEnded(user_data: Pointer; name: PChar);
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: Longint);
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 
 implementation
 
 uses
-  Xml;
+  RStrings, Xml
+{$IFNDEF FPC}
+  , SysUtils
+{$ENDIF};
 
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar); cdecl;
+procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
   attr: String;
+  Elem: PXmlElement;
   i, j: word;
 begin
   i := 0;
@@ -23,8 +30,9 @@ begin
 
   with TXmlFeed(user_data) do
   begin
-    FXmlElement.Name := name;
-    FXmlElement.Content := '';
+    New(Elem);
+    Elem^.Name := StrPas(name);
+    Elem^.Content := '';
 
     if Assigned(attrs) then
     begin
@@ -34,18 +42,18 @@ begin
         StripNS(attr, XMLNSNS);
         attrs^ := PChar(attr);
 
-        if attrs^ = 'base' then
+        if StrPas(attrs^) = 'base' then
         begin
-          FXmlElement.Base := (attrs + 1)^;
+          Elem^.Base := StrPas((attrs + 1)^);
         end
-        else if attrs^ = 'lang' then
+        else if StrPas(attrs^) = 'lang' then
         begin
-          FXmlElement.Lang := (attrs + 1)^;
+          Elem^.Lang := StrPas((attrs + 1)^);
         end
         else if j < 11 then
         begin
-          FXmlElement.Attributes[j].Name := attrs^;
-          FXmlElement.Attributes[j].Value := (attrs + 1)^;
+          Elem^.Attributes[j].Name := StrPas(attrs^);
+          Elem^.Attributes[j].Value := StrPas((attrs + 1)^);
           Inc(j);
         end;
 
@@ -54,35 +62,36 @@ begin
       end;
     end;
 
-    FElems := Length(FElemList);
-    SetLength(FElemList, FElems + 1);
-    FElemList[FElems] := FXmlElement;
+    FElemList^.Add(ELem);
   end;
 end;
 
-procedure ElementEnded(user_data: Pointer; name: PChar); cdecl;
+procedure ElementEnded(user_data: Pointer; name: PChar);
+var
+  ELem: PXmlElement;
+  i: word;
 begin
   with TXmlFeed(user_data) do
   begin
-    FElems := Length(FElemList);
-    if FElems > 0 then
+    if FElemList^.Count > 0 then
     begin
-      SetLength(FElemList, FElems - 1);
+      Elem := FElemList^.GetNth(FElemLIst^.Count - 1);
+      Elem^.Name := LowerCase(StrPas(name));
     end;
-
-    FXmlElement.Name := LowerCase(name);
   end;
 end;
 
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: Longint); cdecl;
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 var
+  Elem: PXmlElement;
   enh: String;
 begin
-  enh := Copy(ch, 1, len);
+  enh := Copy(StrPas(ch), 1, len);
 
   with TXmlFeed(ctx) do
   begin
-    FXmlElement.Content := FXmlElement.Content + enh;
+    Elem := FElemList^.GetNth(FElemList^.Count - 1);
+    Elem^.Content := enh;
   end;
 end;
 

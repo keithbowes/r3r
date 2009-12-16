@@ -3,7 +3,7 @@ unit HttpCache;
 interface
 
 uses
-	Feed, Headers, RList;
+	Feed, Headers, RList, SysUtils;
 
 const
   CacheFeedFile = 'feed';
@@ -27,20 +27,18 @@ type
 
   THttpCache = class
   private
-    FCacheInfo: PCacheInfo;
     FIdsList: PRStringList;
-    FUrl: String;
     procedure InvalidateFile(CFile: String);
     procedure WriteRawData(Data, CacheFile: String);
   public
+    Info: PCacheInfo;
     constructor Create(const Url: String);
     destructor Destroy; override;
     function GetCacheHeader: String;
     function GetFeedExtension(FeedType: TFeedType): String;
     procedure Invalidate;
     procedure WriteData(const Data: String; DataType: TCacheDataType);
-    property IdsList: PRStringList read FIdsList;
-    property Info: PCacheInfo read FCacheInfo write FCacheInfo;
+    function GetIdsList: PRStringList;
   end;
 
 var
@@ -50,15 +48,21 @@ var
 implementation
 
 uses
-  RSettings, RSettings_Routines, StrTok, SysUtils;
+{$IFDEF __GPC__}
+  GPC,
+{$ENDIF}
+  RSettings, RSettings_Routines, StrTok;
 
 constructor THttpCache.Create(const Url: String);
+{$IFDEF __GPC__}
+const
+  PathDelim = DirSeparator;
+{$ENDIF}
 var
   Id: String;
   IdsFile: text;
 begin
   New(FIdsList, Init);
-  FUrl := Url;
 
   FCacheDir := SettingsDir + PathDelim + 'cache';
   CheckDir(FCacheDir);
@@ -80,15 +84,18 @@ begin
     Close(IdsFile);
   end;
 
-  New(FCacheInfo);
+  New(Info);
   CurrentCache := Self;
 end;
 
 destructor THttpCache.Destroy;
 begin
   Dispose(FIdsList, Done);
-  Dispose(FCacheInfo);
-  inherited Destroy
+  Dispose(Info);
+
+{$IFNDEF __GPC__}
+  inherited Destroy;
+{$ENDIF}
 end;
 
 function THttpCache.GetCacheHeader: String;
@@ -131,11 +138,11 @@ begin
       end;
     end;
 
-    Result := CacheHeader + ': ' + InfoList.Strings[1];
+    GetCacheHeader := CacheHeader + ': ' + InfoList.Strings[1];
   end
   else
   begin
-    Result := '';
+    GetCacheHeader := '';
   end;
 
   if FileOpen then
@@ -190,25 +197,30 @@ begin
   case FeedType of
     ftAtom:
     begin
-      Result := 'atom';
+      GetFeedExtension := 'atom';
     end;
     ftEsf:
     begin
-      Result := 'esf';
+      GetFeedExtension := 'esf';
     end;
     ftRss:
     begin
-      Result := 'rss';
+      GetFeedExtension := 'rss';
     end;
     ftRss3:
     begin
-      Result := 'r3'
+      GetFeedExtension := 'r3'
     end;
     otherwise
     begin
-      Result := 'unknown';
+      GetFeedExtension := 'unknown';
     end;
   end;
+end;
+
+function THttpCache.GetIdsList: PRStringList;
+begin
+  GetIdsList := FIdsList;
 end;
 
 procedure THttpCache.InvalidateFile(CFile: String);

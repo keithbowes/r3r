@@ -1,6 +1,6 @@
 function IsValidSetting(Setting: String): Boolean;
 begin
-  Result := (Setting = 'accept-langs') or
+  IsValidSetting := (Setting = 'accept-langs') or
     (Setting = 'accept-types') or (Setting = 'browser') or
     (Setting = 'check-for-updates') or
     (Setting = 'display-feed-title-only') or (Setting = 'editor') or
@@ -16,7 +16,9 @@ end;
 
 constructor TRSettings.Create;
 begin
+{$IFNDEF __GPC__}
   inherited Create;
+{$ENDIF}
   New(FSettings, Init);
 
   FSettingsFile := SettingsDir + 'r3rrc';
@@ -34,16 +36,21 @@ begin
   WriteRec;
 
   Dispose(FSettings, Done);
+
+{$IFNDEF __GPC__}
   inherited Destroy;
+{$ENDIF}
 end;
 
 function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
 var
   ASetting: PRSetting;
+  Ret: Boolean;
 begin
-  Result := IndexOf(Setting) <> -1;
+  Ret := IndexOf(Setting) <> -1;
+  CheckBoolean := Ret;
 
-  if not Result then
+  if not Ret then
   begin
     New(ASetting);
     with ASetting^ do
@@ -60,10 +67,12 @@ end;
 function TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer): Boolean;
 var
   ASetting: PRSetting;
+  Ret: Boolean;
 begin
-  Result := IndexOf(Setting) <> -1;
+  Ret := IndexOf(Setting) <> -1;
+  CheckInteger := Ret;
 
-  if not Result then
+  if not Ret then
   begin
     New(ASetting);
     with ASetting^ do
@@ -80,10 +89,12 @@ end;
 function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean;
 var
   ASetting: PRSetting;
+  Ret: Boolean;
 begin
-  Result := IndexOf(Setting) <> -1;
+  Ret := IndexOf(Setting) <> -1;
+  CheckString := Ret;
 
-  if not Result then
+  if not Ret then
   begin
     New(ASetting);
     with ASetting^ do

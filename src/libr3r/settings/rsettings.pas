@@ -17,6 +17,14 @@ const
   TypeBoolean = 3;
 
 type
+{$IFNDEF __GPC__}
+{$IFDEF FPC}
+  PtrWord = PtrUInt;
+{$ELSE}
+  PtrWord = cardinal;
+{$ENDIF FPC}
+{$ENDIF __GPC__}
+
   TRSetIndex = integer;
 
   PRSetting = ^TRSetting;
@@ -74,19 +82,19 @@ uses
 {$ENDIF};
 
 {$IFDEF SETTINGS_BIN}
-  {$INCLUDE binsettings.inc}
+  {$INCLUDE "binsettings.inc"}
 {$ENDIF}
 
 {$IFDEF SETTINGS_INI}
-  {$INCLUDE inisettings.inc}
+  {$INCLUDE "inisettings.inc"}
 {$ENDIF}
 
 {$IFDEF SETTINGS_REG}
-  {$INCLUDE regsettings.inc}
+  {$INCLUDE "regsettings.inc"}
 {$ENDIF}
 
 {$IFDEF SETTINGS_TAB}
-  {$INCLUDE tabsettings.inc}
+  {$INCLUDE "tabsettings.inc"}
 {$ENDIF}
 
 function TRSettings.Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
@@ -96,7 +104,7 @@ begin
   OrigCount := Count;
   Settings := FSettings;
   Count := FSettings^.Count;
-  Result := Count = OrigCount;
+  Enumerate := Count = OrigCount;
 end;
 
 function TRSettings.IndexOf(const Name: String): TRSetIndex;
@@ -107,14 +115,17 @@ begin
   i := 0;
 
   repeat
-    Result := i;
-    Found := (FSettings^.Count > 0) and (TRSetting(FSettings^.GetNth(i)^).Name = Name);
+    Found := (FSettings^.Count > 0) and (PRSetting(FSettings^.GetNth(i))^.Name = Name);
     Inc(i);
   until Found or (i > FSettings^.Count);
 
-  if not Found then
+  if Found then
   begin
-    Result := -1;
+    IndexOf := i - 1;
+  end
+  else
+  begin
+    IndexOf := -1;
   end;
 end;
 
@@ -122,7 +133,7 @@ function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
 begin
   if Index <> -1 then
   begin
-    Result := TRSetting(FSettings^.GetNth(Index)^).ValueBoolean;
+    GetBoolean := PRSetting(FSettings^.GetNth(Index))^.ValueBoolean;
   end;
 end;
 
@@ -130,7 +141,7 @@ function TRSettings.GetInteger(const Index: TRSetIndex): integer;
 begin
   if Index <> -1 then
   begin
-    Result := TRSetting(FSettings^.GetNth(Index)^).ValueInteger;
+    GetInteger := PRSetting(FSettings^.GetNth(Index))^.ValueInteger;
   end;
 end;
 
@@ -138,7 +149,7 @@ function TRSettings.GetString(const Index: TRSetIndex): String;
 begin
   if Index <> -1 then
   begin
-    Result := TRSetting(FSettings^.GetNth(Index)^).ValueString;
+    GetString := PRSetting(FSettings^.GetNth(Index))^.ValueString;
   end;
 end;
 
@@ -146,7 +157,7 @@ procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean)
 begin
   if Index <> -1 then
   begin
-    TRSetting(FSettings^.GetNth(Index)^).ValueBoolean := Setting;
+    PRSetting(FSettings^.GetNth(Index))^.ValueBoolean := Setting;
   end;
 end;
 
@@ -154,7 +165,7 @@ procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer)
 begin
   if Index <> -1 then
   begin
-    TRSetting(FSettings^.GetNth(Index)^).ValueInteger := Setting;
+    PRSetting(FSettings^.GetNth(Index))^.ValueInteger := Setting;
   end;
 end;
 
@@ -162,7 +173,7 @@ procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
 begin
   if Index <> -1 then
   begin
-    TRSetting(FSettings^.GetNth(Index)^).ValueString := Setting;
+    PRSetting(FSettings^.GetNth(Index))^.ValueString := Setting;
   end;
 end;
 
@@ -185,19 +196,19 @@ begin
 
   if Index <> -1 then
   begin
-    SettingName := TRSetting(FSettings^.GetNth(Index)^).Name;
-    SettingType := TRSetting(FSettings^.GetNth(Index)^).ValueType;
+    SettingName := PRSetting(FSettings^.GetNth(Index))^.Name;
+    SettingType := PRSetting(FSettings^.GetNth(Index))^.ValueType;
 
     if SettingsMode and SettingsWrite <> 0 then
     begin
       case SettingType of
         TypeBoolean:
         begin
-          SetBoolean(Index, Boolean(PtrUInt(SettingValue)));
+          SetBoolean(Index, Boolean(PtrWord(SettingValue)));
         end;
         TypeInteger:
         begin
-          SetInteger(Index, PtrInt(SettingValue));
+          SetInteger(Index, PtrWord(SettingValue));
         end;
         TypeString:
         begin
@@ -259,6 +270,8 @@ Settings := TRSettings.Create;
 
 finalization
 
+{$IFNDEF __GPC__}
 Settings.Free;
+{$ENDIF}
 
 end.

@@ -12,9 +12,9 @@ type
   PTabFile = ^TTabFile;
   TTabFile = object
   private
-    FAmWriting: Boolean;
     FFile: text;
     FFileName: String;
+    FInWrite: Boolean;
     FNewFile: Boolean;
     function ParseTab(Line: String): TTab;
     procedure UpdateTabs(const Section, Ident: String; const Keep: byte);
@@ -33,8 +33,8 @@ type
     procedure EraseSection(const Section: String);
     procedure DeleteKey(const Section, Ident: String);
     procedure UpdateFile;
-    procedure StartWriting;
-    procedure EndWriting;
+    procedure BeginWrite;
+    procedure EndWrite;
   end;
 
 implementation
@@ -178,7 +178,7 @@ end;
 
 procedure TTabFile.WriteFloat(const Section, Ident: String; const Val: real);
 begin
-  if not FAmWriting then
+  if not FInWrite then
   begin
     UpdateTabs(Section, Ident, KeepEither);
   end;
@@ -188,7 +188,7 @@ end;
 
 procedure TTabFile.WriteInteger(const Section, Ident: String; const Val: integer);
 begin
-  if not FAmWriting then
+  if not FInWrite then
   begin
     UpdateTabs(Section, Ident, KeepEither);
   end;
@@ -206,7 +206,7 @@ begin
 end;
 
 begin
-  if not FAmWriting then
+  if not FInWrite then
   begin
     UpdateTabs(Section, Ident, KeepEither);
   end;
@@ -260,15 +260,15 @@ begin
   UpdateTabs('', '', KeepAll);
 end;
 
-procedure TTabFile.StartWriting;
+procedure TTabFile.BeginWrite;
 begin
-  FAmWriting := true;
+  FInWrite := true;
   Rewrite(FFile);
 end;
 
-procedure TTabFile.EndWriting;
+procedure TTabFile.EndWrite;
 begin
-  FAmWriting := false;
+  FInWrite := false;
 end;
 
 function TTabFile.ParseTab(Line: String): TTab;
@@ -340,7 +340,7 @@ begin
     end;
     KeepNeither:
     begin
-      Result := not ((Tab.Name = Ident) and (Tab.Section = Section));
+      IsKept := not ((Tab.Name = Ident) and (Tab.Section = Section));
     end;
     KeepSection:
     begin

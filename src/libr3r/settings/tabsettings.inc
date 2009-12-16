@@ -21,7 +21,7 @@ function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: B
 var
   ASetting: PRSetting;
 begin
-  Result := TabFile^.ValueExists(ASection, Setting);
+  CheckBoolean := TabFile^.ValueExists(ASection, Setting);
 
   New(ASetting);
   with ASetting^ do
@@ -38,7 +38,7 @@ function TRSettings.CheckInteger(const Setting, ASection: String; const Value: i
 var
   ASetting: PRSetting;
 begin
-  Result := TabFile^.ValueExists(ASection, Setting);
+  CheckInteger := TabFile^.ValueExists(ASection, Setting);
 
   New(ASetting);
   with ASetting^ do
@@ -55,7 +55,7 @@ function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean
 var
   ASetting: PRSetting;
 begin
-  Result := TabFile^.ValueExists(ASection, Setting);
+  CheckString := TabFile^.ValueExists(ASection, Setting);
 
   New(ASetting);
   with ASetting^ do
@@ -77,7 +77,7 @@ var
   ASetting: PRSetting;
   i: byte;
 begin
-  TabFile^.StartWriting;
+  TabFile^.BeginWrite;
 
   for i := 0 to FSettings^.Count - 1 do
   begin
@@ -104,5 +104,5 @@ begin
     Dispose(ASetting);
   end;
 
-  TabFile^.EndWriting;
+  TabFile^.EndWrite;
 end;

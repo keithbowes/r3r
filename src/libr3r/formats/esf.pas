@@ -23,8 +23,7 @@ type
     procedure ParseDataLine(var Item: TFeedItem);
     procedure ParseMetaLine(var Item: TFeedItem);
   public
-    constructor Create;
-    destructor Destroy; override;
+    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
   end;
 
@@ -40,11 +39,6 @@ begin
   FLineType := ltNone;
 end;
 
-destructor TEsfFeed.Destroy;
-begin
-  inherited Destroy;
-end;
-
 function TEsfFeed.UnixToDate(const TS: String): String;
 const
   SecondsPerDay = 24 * 60 * 60;
@@ -52,23 +46,26 @@ var
   DT: TDateTime;
   ErrPos: word;
   NTS: real;
+  Res: String;
 begin
   Val(TS, NTS, ErrPos);
   if ErrPos = 0 then
   begin
-    Result := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
-    DT := StrToDateTime(Result);
-    Result := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+    Res := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
+    DT := StrToDateTime(Res);
+    Res := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
   end
   else
   begin
-    Result := ''
+    Res := ''
   end;
+
+  UnixToDate := Res;
 end;
 
 function TEsfFeed.GetFormat: TFeedType;
 begin
-  Result := ftEsf;
+  GetFormat := ftEsf;
 end;
 
 procedure TEsfFeed.ParseDataLine(var Item: TFeedItem);

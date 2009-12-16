@@ -10,13 +10,12 @@ type
   private
     FFileHandle: Text;
     FFileName: String;
-  protected
-    function GetLine: String; override;
   public
-    constructor Create(FileName: String);
+    constructor Create(FileName: String); {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
+    function GetLine: String; override;
   end;
 
 implementation
@@ -33,7 +32,10 @@ end;
 destructor TLocalFile.Destroy;
 begin
   Close(FFileHandle);
+
+{$IFNDEF __GPC__}
   inherited Destroy;
+{$ENDIF}
 end;
 
 procedure TLocalFile.Execute;
@@ -43,15 +45,19 @@ begin
 end;
 
 function TLocalFile.GetLine: String;
+var
+  Res: String;
 begin
   if not Eof(FFileHandle) then
   begin
-    ReadLn(FFileHandle, Result);
+    ReadLn(FFileHandle, Res);
   end
   else
   begin
-    Result := SockEof;
+    Res := SockEof;
   end;
+
+  GetLine := Res;
 end;
 
 function TLocalFile.ParseItem(var Item: TFeedItem): Boolean;
@@ -81,7 +87,7 @@ begin
     FeedType := ftUnknown;
   end;
 
-  Result := inherited ParseItem(Item);
+  ParseItem := inherited ParseItem(Item);
 end;
 
 end.

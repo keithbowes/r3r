@@ -20,7 +20,14 @@ uses
   {$ENDIF}
 {$ENDIF},
 
-  BlckSock, SysUtils;
+{$IFDEF __GPC__}
+  GPC,
+{$ENDIF}
+
+{$IFDEF SOCKETS_SYNAPSE}
+  BlckSock,
+{$ENDIF}
+  SysUtils;
 
 function Os: String;
 var
@@ -58,18 +65,25 @@ begin
     end;
     Dispose(LPOSVERSIONINFO(Data));
   {$ELSE}
-    Name := 'DOS';
-    Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));
+    {$IFDEF __GPC__}
+      Name := SystemInfo.OSName;
+      Version := SystemInfo.OSVersion;
+    {$ELSE}
+      Name := 'DOS';
+      Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));
+    {$ENDIF}
   {$ENDIF}
 {$ENDIF}
 
-  Result := Name + ' ' + Version;
+  OS := Name + ' ' + Version;
 end;
 
 function UserAgent: String;
 begin
-  Result := 'R3R/' + Version + ' (' + Os + ')' +
-    ' Synapse/' + SynapseRelease;
+  UserAgent := 'R3R/' + Version + ' (' + Os + ')'
+{$IFDEF SOCKETS_SYNAPSE}
+    + ' Synapse/' + SynapseRelease;
+{$ENDIF}
 end;
 
 end.

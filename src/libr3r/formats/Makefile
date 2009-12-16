@@ -263,7 +263,7 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS=$(wildcard .. ../* ../../third-party/* ../../utils/*)
+UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
 UNITS=feeditem feed nonxml esf rss3 saxcallbacks xml dc atom rss
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)

@@ -1,5 +1,5 @@
 [prerules]
-UNIT_DIRS=.. ../* ../../third-party/* ../../utils/*
+UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
 UNITS = rsock localfile headers http
 
 [rules]

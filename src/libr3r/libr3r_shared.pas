@@ -1,7 +1,7 @@
 library LibR3R_Shared;
 
 uses
-  Info, LibR3R, RSettings, RStrings;
+  Info, LibR3R, RSettings, RStrings, SysUtils;
 
 const
   SubscriptionAdd = 1;
@@ -98,7 +98,7 @@ begin
     begin
       for i := 0 to LinksCount do
       begin
-        String(Result) := String(Links^.GetNth(i)) + #147;
+        Result := StrCat(Links^.GetNth(i), #147);
       end;
     end
     else if FieldName = 'link-count' then

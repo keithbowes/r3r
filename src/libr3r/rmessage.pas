@@ -3,10 +3,16 @@ unit RMessage;
 interface
 
 type
-  TRMessage = procedure(Sender: TObject; Error: Boolean; MessageName, Extra: String) of object;
+{$IFDEF __GPC__}
+  TObject = class
+  end;
+{$ENDIF}
+
+  TRMessage = procedure(Sender: TObject; Error: Boolean; MessageName, Extra: String){$IFNDEF __GPC__} of object{$ENDIF};
 
 procedure SetMessageEvent(Event: TRMessage);
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String = '');
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 
 implementation
 
@@ -21,13 +27,18 @@ begin
   MessageEvent := Event;
 end;
 
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String = '');
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
+begin
+  CallMessageEventEx(Sender, IsError, MessageName, '');
+end;
+
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 begin
   if Assigned(MessageEvent) and
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then
   begin
     MessageEvent(Sender, IsError, MessageName, Extra);
-    (Sender as TRSock).ShouldShow := false;
+    TRSock(Sender).ShouldShow := false;
   end;
 end;
 

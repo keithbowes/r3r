@@ -11,25 +11,35 @@ type
     { Category Type }
     FCatType: String;
     FHasSelf: Boolean;
+    FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
     function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
-    function GetPreviousElement: TXmlElement; override;
   public
-    constructor Create;
+    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    function GetCurrentElement: TXmlElement; override;
+    function GetPreviousElement: TXmlElement; override;
   end;
 
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts, SynaUtil;
+  DC, RDate, RStrings, SockConsts, SysUtils,
+{$IFDEF SOCKETS_SYNAPSE}  
+  SynaUtil
+{$ENDIF}
+
+{$IFDEF SOCKETS_BSD}
+SockWrap
+{$ENDIF};
 
 function TAtomFeed.GetAbsoluteURL(const URL: String): String;
 var
   Prot, User, Pass, Host, Port, Path, Para: String;
   BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara: String;
+  Res: String;
 begin
   ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
 
@@ -37,43 +47,45 @@ begin
     it isn't if it doesn't }
   if Pos(Host, URL) <> 0 then
   begin
-    Result := URL;
+    Res := URL;
   end
   else
   begin
-    ParseURL(FXmlElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
-    Result := BaseProt + '://';
+    ParseURL(GetCurrentElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
+    Res := BaseProt + '://';
 
     if BaseUser <> '' then
     begin
-      Result := Result + BaseUser;
+      Res := Res + BaseUser;
       if BasePass <> '' then
       begin
-        Result := Result + ':' + BasePass;
+        Res := Res + ':' + BasePass;
       end;
 
-      Result := Result + '@';
+      Res := Res + '@';
     end;
 
-    Result := Result + BaseHost;
+    Res := Res + BaseHost;
     
     if Port <> BasePort then
     begin
-      Result := Result + ':' + BasePort;
+      Res := Res + ':' + BasePort;
     end;
 
-    Result := Result + Path;
+    Res := Res + Path;
 
     if Para <> '' then
     begin
-      Result := Result + '?' + Para;
+      Res := Res + '?' + Para;
     end;
   end;
+
+  GetAbsoluteURL := Res;
 end;
 
 function TAtomFeed.GetFormat: TFeedType;
 begin
-  Result := ftAtom;
+  GetFormat := ftAtom;
 end;
 
 procedure TAtomFeed.FillItem(var Item: TFeedItem);
@@ -82,7 +94,7 @@ var
   Link: String;
   PLink: PChar;
 begin
-  with Item, FXmlElement do
+  with Item, GetCurrentElement do
   begin
     Language := Lang;
 
@@ -113,7 +125,7 @@ begin
         else if (Attributes[Idx].Name = 'rel') and (Attributes[Idx].Value = 'self') then
         begin
           FHasSelf := true;
-          Myself := MainLink;
+          Myself := GetMainLink;
         end;
       end;
     end
@@ -159,14 +171,14 @@ begin
     end
     else if Name = 'name' then
     begin
-      if PreviousElement.Name = 'email' then
+      if GetPreviousElement.Name = 'email' then
       begin
         Contact^.Toee := Contact^.Toee + Content;
       end;
     end
     else if Name = 'uri' then
     begin
-      if PreviousElement.Name = 'email' then
+      if GetPreviousElement.Name = 'email' then
       begin
         Contact^.Address := Contact^.Address + Content;
       end;
@@ -189,18 +201,38 @@ begin
       Id := Id + Content;
       Uri := Id;
 
-      if PreviousElement.Name <> 'entry' then
+      if GetPreviousElement.Name <> 'entry' then
       begin
         Id := '';
       end;
+    end
+    else if Name = 'feed' then
+    begin
+      FLeftFeed := true;
     end;
   end;
 end;
 
-function TAtomFeed.GetPreviousElement: TXmlElement;
+function TAtomFeed.GetCurrentElement: TXmlElement;
+var
+  Res: TXmlElement;
 begin
-  Result := inherited GetPreviousElement;
-  StripNS(Result.Name, AtomNS);
+  Res := inherited GetCurrentElement;
+  StripNS(Res.Name, AtomNS);
+  StripNS(Res.Name, LowerCase(AtomNS));
+
+  GetCurrentElement := Res;
+end;
+
+function TAtomFeed.GetPreviousElement: TXmlElement;
+var
+  Res: TXmlElement;
+begin
+  Res := inherited GetPreviousElement;
+  StripNS(Res.Name, AtomNS);
+  StripNS(Res.Name, LowerCase(AtomNS));
+
+  GetPreviousElement := Res;
 end;
 
 constructor TAtomFeed.Create;
@@ -208,32 +240,36 @@ begin
   inherited Create;
   FCatType := '';
   FHasSelf := false;
+  FLeftFeed := false;
 end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
   AFeed: TFeed;
+  Elem: TXmlElement;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
 
-  if Pos(DCNS, FXmlElement.Name) = 0 then
-  begin
-    { Expat seems to be quite fickle with the casing }
-    StripNS(FXmlElement.Name, AtomNS);
-    StripNS(FXmlELement.Name, LowerCase(AtomNS));
-    FillItem(Item);
-  end
-  else
+  if Pos(DCNS, GetCurrentElement.Name) <> 0 then
   begin
     AFeed := TDCFeed.Create;
-    StripNS(FXmlElement.Name, DCNS);
-    (AFeed as TXmlFeed).Clone(FXmlElement);
+    Elem := GetCurrentElement;
+    StripNS(Elem.Name, DCNS);
+    (AFeed as TXmlFeed).Clone(FElemList);
     AFeed.ParseLine(Line, Item, ItemFinished);
+{$IFNDEF __GPC__}
     AFeed.Free;
+{$ENDIF}
   end;
 
-  ItemFinished := ((FXmlElement.Name = 'entry') and (PreviousElement.Name = 'entry')) or (Line = SockEof);
-  FXmlElement.Name := '';
+  FillItem(Item);
+
+  ItemFinished := ((GetCurrentElement.Name = 'entry') and ((GetPreviousElement.Name = 'entry') or (FLeftFeed))) or (Line = SockEof);
+  
+  if ItemFinished and FLeftFeed then
+  begin
+    FLeftFeed := false;
+  end;
 end;
 
 end.

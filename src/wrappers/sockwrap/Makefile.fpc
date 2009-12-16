@@ -1,0 +1,15 @@
+[prerules]
+CC ?= gcc
+COBJEXT = .o
+
+UNIT_DIRS=../../utils/*
+
+[rules]
+include ../../../scripts/common.make
+all: sockwrapc$(COBJEXT) sockwrap$(PPUEXT)
+
+clean:
+	$(RM) $(wildcard *$(COBJEXT))
+
+%$(COBJEXT): %.c
+	$(CC) -c -o $@ $<

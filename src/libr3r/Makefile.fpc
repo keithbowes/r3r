@@ -1,7 +1,7 @@
 [prerules]
 EXEOUT = .
 TARGET_DIRS = po settings protocols formats
-UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/*
+UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/* ../wrappers/*
 UNITS = info rgetfeed rmessage rsubscriptions
 
 [rules]
@@ -17,7 +17,9 @@ all: info.pas rupdate.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)
+ifdef BUILD_SHARED
 	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
+endif
 
 clean: _clean
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)

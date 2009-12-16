@@ -263,7 +263,8 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* ../../utils/*
+UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* \
+					../../utils/* ../../wrappers/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif

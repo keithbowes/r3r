@@ -11,14 +11,12 @@ type
   TFeed = class
   private
     FFormat: TFeedType;
-    FShouldShow: Boolean;
   protected
-    function GetFormat: TFeedType; virtual; abstract;
+    function GetFormat: TFeedType; {$IFNDEF __GPC__}virtual;{$ENDIF}
   public
+    ShouldShow: Boolean;
     constructor Create;
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); virtual;
-    property Format: TFeedType read GetFormat write FFormat;
-    property ShouldShow: Boolean read FShouldShow write FShouldShow;
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); {$IFNDEF __GPC__}virtual;{$ENDIF}
   end; 
 
 implementation
@@ -28,7 +26,10 @@ uses
 
 constructor TFeed.Create;
 begin
+{$IFNDEF __GPC__}
   inherited Create;
+{$ENDIF}
+
   ShouldShow := true;
 end;
 
@@ -44,7 +45,7 @@ begin
 
     with CurrentCache do
     begin
-      Info^.HeaderRec.ContentType := Format;
+      Info^.HeaderRec.ContentType := GetFormat;
 
       if Line <> SockEof then
       begin
@@ -58,7 +59,7 @@ begin
           WriteData(Item.Id, cdtIds);
         end;
 
-        if (IdsList^.IndexOf(Item.Id) <> -1) and HideItems then
+        if (GetIdsList^.IndexOf(Item.Id) <> -1) and HideItems then
         begin
           Item.Clear;
           ShouldShow := false;
@@ -68,6 +69,11 @@ begin
       end;
     end;
   end;
+end;
+
+function TFeed.GetFormat: TFeedType;
+begin
+  GetFormat := ftUnknown;
 end;
 
 end.

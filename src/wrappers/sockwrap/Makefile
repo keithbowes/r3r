@@ -263,10 +263,9 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-EXEOUT = .
-TARGET_DIRS = po settings protocols formats
-UNIT_DIRS = $(TARGET_DIRS) ../third-party/* ../utils/* ../wrappers/*
-UNITS = info rgetfeed rmessage rsubscriptions
+CC ?= gcc
+COBJEXT = .o
+UNIT_DIRS=../../utils/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1369,6 +1368,7 @@ release:
 units:
 examples:
 shared:
+install:
 sourceinstall:
 exampleinstall:
 distinstall:
@@ -1380,36 +1380,13 @@ distclean:
 cleanall:
 info: fpc_info
 makefiles: fpc_makefiles
-.PHONY: debug smart release units examples shared sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
+.PHONY: debug smart release units examples shared install sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
 ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
-include ../../scripts/common.make
-ifeq ($(SHAREDLIBEXT),.so)
-	SHAREDLIBPREFIX = lib
-else
-	SHAREDLIBPREFIX =
-endif
-all: info.pas rupdate.pas
-	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
-	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
-	$(MAKE) libr3r$(PPUEXT)
-ifdef BUILD_SHARED
-	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
-endif
-clean: _clean
-	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)
-	$(DEL) info.pas rupdate.pas
-	$(DEL) $(wildcard $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT))
-install:
-	cd po && $(MAKE) install
-	$(INSTALL) $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(libdir)
-	-ldconfig
-uninstall:
-	cd po && $(MAKE) uninstall
-	$(DEL) $(libdir)/*libr3r_shared$(SHAREDLIBEXT)
-info.pas: _info.pas ../../scripts/common.make
-	$(SED) 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas
-	$(MAKE) info$(PPUEXT)
-rupdate.pas: _rupdate.pas
-	$(SED) -e 's/@TIMESTAMP@/$(TIMESTAMP)/g' $< > $@
+include ../../../scripts/common.make
+all: sockwrapc$(COBJEXT) sockwrap$(PPUEXT)
+clean:
+	$(RM) $(wildcard *$(COBJEXT))
+%$(COBJEXT): %.c
+	$(CC) -c -o $@ $<

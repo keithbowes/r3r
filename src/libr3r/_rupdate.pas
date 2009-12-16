@@ -10,7 +10,7 @@ type
   protected
     function Get: String;
   public
-    constructor Create;
+    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     function Available: Boolean;
   end;
 
@@ -22,6 +22,15 @@ uses
 const
   Timestamp = @TIMESTAMP@;
 
+{$IFNDEF __GPC__}
+type
+{$IFDEF FPC}
+  PtrWord = PtrUInt;
+{$ELSE}
+  PtrWord = cardinal;
+{$ENDIF}
+{$ENDIF}
+
 constructor TRUpdate.Create;
 begin
   inherited Create('r3r.sourceforge.net', '80', '/latest.txt', '');
@@ -32,32 +41,35 @@ function TRUpdate.Available: Boolean;
 var
   Contents: String;
   ErrCode: byte;
-  TS: PtrUInt;
+  TS: PtrWord;
 begin
   Contents := Get;
   Val(Contents, TS, ErrCode);
 
   if ErrCode = 0 then
   begin
-    Result := TS > Timestamp;
+    Available := TS > Timestamp;
   end
   else
   begin
-    Result := false;
+    Available := false;
   end;
 end;
 
 function TRUpdate.Get: String;
 var
   Line: String;
+  Res: String;
 begin
   GetHeaders;
 
   while Line <> SockEof do
   begin
     Line := GetLine;
-    Result := Result + Line;
+    Res := Res + Line;
   end;
+
+  Get := Res;
 end;
 
 end.

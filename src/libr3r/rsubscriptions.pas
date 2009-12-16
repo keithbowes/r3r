@@ -23,7 +23,7 @@ var
 implementation
 
 uses
-  Dos, RSettings_Routines, RStrings, Strings;
+  Dos, RSettings_Routines;
 
 constructor TRSubscriptions.Init;
 var
