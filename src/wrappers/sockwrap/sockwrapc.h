@@ -1,3 +1,8 @@
+#ifndef WIN32
+#define INVALID_SOCKET -1
+#define SOCKET_ERROR -1
+#endif
+
 int socket_init(char * hostname, int port);
 void socket_done(int sock);
 

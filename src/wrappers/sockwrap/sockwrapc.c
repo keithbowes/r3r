@@ -1,4 +1,5 @@
 #ifdef WIN32
+#include <windef.h>
 #include <winsock.h>
 #else
 #include <errno.h>
@@ -6,6 +7,7 @@
 #include <sys/socket.h>
 #endif /* WIN32 */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -13,19 +15,35 @@
 
 typedef struct
 {
-  int socket;
+  long int socket;
   struct sockaddr_in addr;
+  int addrtype;
 } SocketInfo;
+
+void socket_init_win32()
+{
+#ifdef WIN32
+  WSADATA data;
+
+  if (WSAStartup(MAKEWORD(1, 1), &data) != 0)
+  {
+    WSACleanup();
+  }
+#endif
+}
 
 int socket_init(char * hostname, int port)
 {
   struct hostent * host;
   struct sockaddr_in addr;
-  SocketInfo * info = malloc(sizeof(SocketInfo));
+
+  SocketInfo * info = (SocketInfo *) malloc(sizeof(SocketInfo));
+
+  socket_init_win32();
 
   if ((host = gethostbyname(hostname)) == NULL)
   {
-    return -1;
+    return SOCKET_ERROR;
   }
 
   memset(&addr, 0, sizeof(addr));
@@ -35,21 +53,24 @@ int socket_init(char * hostname, int port)
   addr.sin_port = htons((u_short) port);
   info->addr = addr;
 
-  if ((info->socket = socket(host->h_addrtype, SOCK_STREAM, 0)) < 0)
-  {
-  }
-
+  info->socket = INVALID_SOCKET;
+  info->addrtype = host->h_addrtype;
   return (int) info;
 }
 
 void socket_done(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
+
+  if (info->socket != INVALID_SOCKET)
+  {
 #ifdef WIN32
-  closesocket(info->socket);
+    closesocket(info->socket);
+    WSACleanup();
 #else
-  close(info->socket);
+    close(info->socket);
 #endif
+  }
 
   free(info);
 }
@@ -57,6 +78,7 @@ void socket_done(int sock)
 void socket_connect(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
+  info->socket = socket(info->addrtype, SOCK_STREAM, 0);
   connect(info->socket, (struct sockaddr *) &info->addr, sizeof(info->addr));
 }
 
@@ -65,14 +87,8 @@ int socket_send(int sock, char * data)
   int ret;
   SocketInfo * info = (SocketInfo *) sock;
 
-  if (ret = send(info->socket, data, strlen(data), 0) >= 0)
-  {
-    return ret;
-  }
-  else
-  {
-    return -1;
-  }
+  ret = send(info->socket, data, strlen(data), 0);
+  return ret;
 }
 
 int socket_receive(int sock, char * buf, int len)
@@ -91,9 +107,9 @@ int socket_receive(int sock, char * buf, int len)
       total += count;
       buf += count;
     }
-    else if (count < 0)
+    else if (count == SOCKET_ERROR)
     {
-      return -1;
+      return SOCKET_ERROR;
     }
     else
     {

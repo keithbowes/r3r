@@ -38,21 +38,21 @@ begin
     begin
       while Assigned(attrs^) do
       begin
-        attr := String(attrs^);
+        attr := StrPas(attrs^);
         StripNS(attr, XMLNSNS);
         attrs^ := PChar(attr);
 
-        if StrPas(attrs^) = 'base' then
+        if attr = 'base' then
         begin
           Elem^.Base := StrPas((attrs + 1)^);
         end
-        else if StrPas(attrs^) = 'lang' then
+        else if attr = 'lang' then
         begin
           Elem^.Lang := StrPas((attrs + 1)^);
         end
         else if j < 11 then
         begin
-          Elem^.Attributes[j].Name := StrPas(attrs^);
+          Elem^.Attributes[j].Name := attr;
           Elem^.Attributes[j].Value := StrPas((attrs + 1)^);
           Inc(j);
         end;
@@ -62,7 +62,7 @@ begin
       end;
     end;
 
-    FElemList^.Add(ELem);
+    FElemList^.Add(Elem);
   end;
 end;
 
@@ -75,7 +75,7 @@ begin
   begin
     if FElemList^.Count > 0 then
     begin
-      Elem := FElemList^.GetNth(FElemLIst^.Count - 1);
+      Elem := FElemList^.GetNth(FElemList^.Count - 1);
       Elem^.Name := LowerCase(StrPas(name));
     end;
   end;
@@ -90,8 +90,11 @@ begin
 
   with TXmlFeed(ctx) do
   begin
-    Elem := FElemList^.GetNth(FElemList^.Count - 1);
-    Elem^.Content := enh;
+    if FElemList^.Count > 0 then
+    begin
+      Elem := FElemList^.GetNth(FElemList^.Count - 1);
+      Elem^.Content := enh;
+    end;
   end;
 end;
 

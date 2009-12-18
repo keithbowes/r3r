@@ -9,14 +9,12 @@ type
   TFeedType = (ftUnset, ftXml, ftAtom, ftDc, ftEsf, ftRss, ftRss3, ftUnknown);
 
   TFeed = class
-  private
-    FFormat: TFeedType;
   protected
-    function GetFormat: TFeedType; {$IFNDEF __GPC__}virtual;{$ENDIF}
+    function GetFormat: TFeedType; virtual;
   public
     ShouldShow: Boolean;
     constructor Create;
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); {$IFNDEF __GPC__}virtual;{$ENDIF}
+    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); virtual;
   end; 
 
 implementation

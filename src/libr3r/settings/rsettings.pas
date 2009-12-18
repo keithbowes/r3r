@@ -50,7 +50,7 @@ type
     procedure WriteRec;
   public
     constructor Create;
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
     function IndexOf(const Name: String): TRSetIndex;
     function GetBoolean(const Index: TRSetIndex): Boolean;
@@ -270,8 +270,6 @@ Settings := TRSettings.Create;
 
 finalization
 
-{$IFNDEF __GPC__}
 Settings.Free;
-{$ENDIF}
 
 end.

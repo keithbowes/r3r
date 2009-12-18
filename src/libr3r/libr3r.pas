@@ -16,25 +16,22 @@ const
 
 type
   TFeedItem = FeedItem.TFeedItem;
-  TParsedEvent = procedure(Item: TFeedItem){$IFNDEF __GPC__} of object{$ENDIF};
-  TRSetting = RSettings.TRSetting;
+  PRSetting = RSettings.PRSetting;
 
   TLibR3R = class
   private
-    FOnItemParsed: TParsedEvent;
-    FOnMessage: TRMessage;
     FSock: TRSock;
   protected
-    procedure DisplayItem(const Item: TFeedItem); virtual;
-    procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); virtual;
     procedure NotifyUpdate; virtual;
     procedure DoParseItem(Item: TFeedItem);
     procedure DoUpdate;
     procedure Parse;
   public
     constructor Create;
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure RetrieveFeed(Resource: String);
+    procedure DisplayItem(const Item: TFeedItem); virtual;
+    procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); virtual;
   end;
 
 var
@@ -44,7 +41,31 @@ var
 implementation
 
 uses
-  Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate;
+  Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate
+{$IFDEF SOCKETS_BSD}
+  , SockWrap
+{$ENDIF};
+
+function GetSockType(const Resource, Prot, Host, Port, Path, Para: String): TRSock;
+begin
+  if Prot = 'file' then
+  begin
+    GetSockType := TLocalFile.Create(Resource);
+  end
+  else if Prot = 'http' then
+  begin
+    GetSockType := THttpSock.Create(Host, Port, Path, Para);
+  end
+  else
+  begin
+    GetSockType := nil;
+  end;
+end;
+
+function GetUpdateObject: TRUpdate;
+begin
+  GetUpdateObject := TRUpdate.Create;
+end;
 
 constructor TLibR3R.Create;
 begin
@@ -71,46 +92,28 @@ var
   Prot, Pass, Host, Port, Path, Para: String;
 begin
   GetFeed(Resource, Prot, Host, Port, Path, Para);
+  FSock := GetSockType(Resource, Prot, Host, Port, Path, Para);
 
-  if Prot = 'file' then
-  begin
-{$IFNDEF __GPC__}
-    FSock := TLocalFile.Create(Resource);
-{$ENDIF}
-  end
-  else if Prot = 'http' then
-  begin
-{$IFNDEF __GPC__}
-    FSock := THttpSock.Create(Host, Port, Path, Para);
-{$ENDIF}
-  end
-  else
+  if FSock = nil then
   begin
     Exit;
   end;
 
   FSock.Execute;
-
   Parse;
 
-{$IFNDEF __GPC__}
   if Assigned(FSock) then
   begin
     FSock.Free;
   end;
-{$ENDIF}
 end;
 
 procedure TLibR3R.Parse;
-{$IFDEF __GPC__}
 var
   Item: TFeedItem;
-{$ENDIF}
 begin
-{$IFNDEF __GPC__}
-  SetMessageEvent(HandleMessage);
-  ParseFeed(TObject(Self), DoParseItem, FSock);
-{$ENDIF}
+  SetMessageObject(TObject(Self));
+  ParseFeed(TObject(Self), FSock);
 end;
 
 { Implement as empty so if the UI doens't implement them,
@@ -129,13 +132,15 @@ end;
 
 procedure TLibR3R.DoParseItem(Item: TFeedItem);
 begin
-  DisplayItem(Item)
+  DisplayItem(Item);
 end;
 
 procedure TLibR3R.DoUpdate;
+var
+  Up: TRUpdate;
 begin
-{$IFNDEF __GPC__}
-  with TRUpdate.Create do
+  Up := GetUpdateObject;
+  with Up do
   begin
     if Available then
     begin
@@ -144,7 +149,6 @@ begin
 
     Free;
   end;
-{$ENDIF}
 end;
 
 initialization

@@ -263,8 +263,8 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
-UNITS=feeditem feed nonxml esf rss3 saxcallbacks xml dc atom rss
+UNIT_DIRS=../../libr3r ../../libr3r/* ../../third-party/* \
+					../../utils/* ../../wrappers/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1385,11 +1385,9 @@ include fpcmake.loc
 endif
 include ../../../scripts/common.make
 all:
-	$(RM) ../protocols/httpcache$(OEXT) ../protocols/httpcache$(PPUEXT)
-	$(MAKE) httpcache deps
-	$(MAKE) $(addsuffix $(PPUEXT), $(UNITS))
+	$(RM) $(addsuffix ../../libr3r/protocols,libr3r$(PPUEXT) libr3r$(OEXT))
+	$(MAKE) rhtml$(PPUEXT) r3r$(EXEEXT)
 install:
-deps:
-	cd ../protocols && $(MAKE) formatsdeps
-httpcache:
-	$(MAKE) ../protocols/httpcache.pas
+uninstall:
+r3r$(EXEEXT): r3r.pas rhtml.pas
+	$(PC) $(PROGFLAGS) $(PCFLAGS) $<

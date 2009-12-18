@@ -87,7 +87,8 @@ BUILD_SHARED=1
 else
 ifdef USE_GPC
 PC=gpc
-PCFLAGS_BASE=--automake --extended-syntax --no-warning
+PCFLAGS_BASE=--autobuild --automake --extended-syntax \
+	--no-warning -DFree=Destroy -DString="String[65536]"
 UNITFLAGS=-c
 PROGFLAGS=-o $(PROGNAME)$(EXEEXT) $(LDFLAGS)
 

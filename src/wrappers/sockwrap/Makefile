@@ -1388,5 +1388,9 @@ include ../../../scripts/common.make
 all: sockwrapc$(COBJEXT) sockwrap$(PPUEXT)
 clean:
 	$(RM) $(wildcard *$(COBJEXT))
+sockwrap.pas: sockwrapc.c
+	$(TOUCH) $@
 %$(COBJEXT): %.c
 	$(CC) -c -o $@ $<
+%.c: %.h
+	$(TOUCH) $@

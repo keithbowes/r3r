@@ -11,8 +11,8 @@ type
     FLastCat: String;
     FLeftChannel: Boolean;
   protected
-    function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
+    function GetFormat: TFeedType; override;
   public
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
     function GetCurrentElement: TXmlElement; override;
@@ -21,7 +21,16 @@ type
 implementation
 
 uses
-  Atom, DC, RDate, RStrings, SockConsts, SysUtils;
+  Atom, DC, RDate, RStrings, SockConsts
+
+{$IFDEF __GPC__}
+  , SysUtils
+{$ENDIF};
+
+function GetAtomFeed: TAtomFeed;
+begin
+  GetAtomFeed := TAtomFeed.Create;
+end;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
@@ -34,23 +43,16 @@ begin
   if Pos(DCNS, GetCurrentElement.Name) = 1 then
   begin
     AFeed := TDCFeed.Create;
-    Elem := GetCurrentElement;
     (AFeed as TXmlFeed).Clone(FElemList);
     AFeed.ParseLine(Line, Item, ItemFinished);
-{$IFNDEF __GPC__}
-    AFeed.Free;
-{$ENDIF}
+    (AFeed as TXmlFeed).Free;
   end
   else if Pos(LowerCase(AtomNS), GetCurrentElement.Name) = 1 then
   begin
-{$IFNDEF __GPC__}
-{ I'm not sure why the constructor produces an error in GPC. }
-    AFeed := TAtomFeed.Create;
-    Elem := GetCurrentElement;
+    AFeed := GetAtomFeed;
     (AFeed as TXmlFeed).Clone(FElemList);
     AFeed.ParseLine(Line, Item, ItemFinished);
-    AFeed.Free;
-{$ENDIF}
+    (AFeed as TXmlFeed).Free;
   end
   else
   begin
@@ -103,7 +105,7 @@ begin
     end
     else if Name = 'link' then
     begin
-      PLink := PChar(Content);
+      PLink := StrToPChar(Content);
       Item.Links^.Add(PLink);
     end
     else if Name = 'category' then

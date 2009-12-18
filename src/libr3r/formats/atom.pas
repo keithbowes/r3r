@@ -14,8 +14,8 @@ type
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
-    function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
+    function GetFormat: TFeedType; override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
@@ -26,7 +26,12 @@ type
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts, SysUtils,
+  DC, RDate, RStrings, SockConsts, 
+
+{$IFDEF __GPC__}
+  SysUtils,
+{$ENDIF}
+
 {$IFDEF SOCKETS_SYNAPSE}  
   SynaUtil
 {$ENDIF}
@@ -256,10 +261,8 @@ begin
     Elem := GetCurrentElement;
     StripNS(Elem.Name, DCNS);
     (AFeed as TXmlFeed).Clone(FElemList);
-    AFeed.ParseLine(Line, Item, ItemFinished);
-{$IFNDEF __GPC__}
-    AFeed.Free;
-{$ENDIF}
+    ParseLine(Line, Item, ItemFinished);
+    (AFeed as TDCFeed).Free;
   end;
 
   FillItem(Item);

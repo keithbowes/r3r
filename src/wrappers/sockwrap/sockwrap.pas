@@ -4,7 +4,7 @@ unit SockWrap;
 
 interface
 {$IFDEF WIN32}
-{$LINKLIB msvcrt}
+{$LINKLIB winsock}
 {$ELSE}
 {$LINKLIB c}
 {$ENDIF}
@@ -36,7 +36,7 @@ type
     { Does nothing.  Just for Synapse compatibility }
     ConvertLineEnd: Boolean;
     constructor Create;
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure Connect(const Host, Port: String);
     function LastError: integer;
     function RecvString(Len: word): String;
@@ -46,6 +46,9 @@ type
 function ParseURL(URL: String; var Protocol, USer, Password, Host, Port, Path, Search: String): String;
 
 implementation
+
+uses
+  RStrings;
 
 constructor TSockWrap.Create;
 begin
@@ -60,10 +63,11 @@ end;
 procedure TSockWrap.Connect(const Host, Port: String);
 var
   ErrPos: byte;
+  PHost: PChar;
   PortNum: integer;
 begin
   Val(Port, PortNum, ErrPos);
-  FSocket := socket_init(PChar(Host), PortNum);
+  FSocket := socket_init(StrToPChar(Host), PortNum);
   socket_connect(FSocket);
 end;
 
@@ -76,21 +80,25 @@ end;
 function TSockWrap.RecvString(Len: word): String;
 var
   Buf: array [1..255] of char;
-  LastStr: String;
+  CurStr, LastStr: String;
 begin
+  LastStr := '';
+
   if (FStrings.Length = 0) or (FStrings.Length = FStringIndex + 1) or
     (FStringIndex >= 255) then
   begin
     FReceived := socket_receive(FSocket, PChar(@Buf), 255);
     LastStr := FStrings.Strings[FStringIndex];
 
-    FStrings := Split(Copy(Buf, 1, FReceived + 2), #10#13);
+    FStrings := Split(Copy(Buf, 1, FReceived), #10#13);
     FStringIndex := 0;
   end;
   
   if FReceived <> 0 then
   begin
-    RecvString := LastStr + FStrings.Strings[FStringIndex];
+    WriteLn(FStringIndex, ':', FStrings.Length);
+    CurStr := FStrings.Strings[FStringIndex];
+    RecvString := LastStr + CurStr;
   end
   else
   begin
@@ -102,17 +110,18 @@ end;
 
 procedure TSockWrap.SendString(Data: String);
 begin
-  socket_send(FSocket, PChar(Data));
+  socket_send(FSocket, StrToPChar(Data));
 end;
 
 function ParseURL(URL: String; var Protocol, User, Password, Host, Port, Path, Search: String): String;
+const
+  DefaultHost = 'localhost';
 var
   ErrPos, Index, Index2: byte;
   Res: String;
 begin
   Protocol := 'http';
   Port := '80';
-  User := 'anonymous';
 
   Index := Pos('?', URL);
   if Index <> 0 then
@@ -150,6 +159,13 @@ begin
   begin
     Host := Copy(URL, 1, Index - 1);
     Path := Copy(URL, Index, Length(URL) - Index + 1);
+
+    if (Pos('.', Host) = 0) and (Host <> DefaultHost) then
+    begin
+      Path := '/' + Host + Path;
+      Host := DefaultHost;
+    end;
+
     URL := '';
   end;
 
@@ -165,7 +181,7 @@ begin
       Protocol := Port;
     end;
   end;
-
+  
   Res := Path;
   if Search <> '' then
   begin

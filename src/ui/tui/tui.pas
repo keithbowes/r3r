@@ -10,9 +10,8 @@ type
   private
     FItems: PRList;
   protected
-    procedure DisplayItem(const Item: TFeedItem); override;
 {$IFNDEF __GPC__}
-    procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); override;
+    procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); virtual;
 {$ENDIF}
     procedure NotifyUpdate; override;
     procedure ShowHelp;
@@ -25,6 +24,7 @@ type
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
+    procedure DisplayItem(const Item: TFeedItem); override;
   end;
 
 implementation
@@ -34,6 +34,11 @@ uses
 {$IFDEF __GPC__}
   , SysUtils
 {$ENDIF};
+
+function CreateFeedItem: TFeedItem;
+begin
+  CreateFeedItem := TFeedItem.Create;
+end;
 
 constructor TTui.Create;
 var
@@ -114,17 +119,14 @@ var
   AItem: TFeedItem;
   Items: cardinal;
 begin
-  Items := FItems^.Count + 1;
-
-{$IFNDEF __GPC__}
-  AItem := TFeedItem.Create;
-{$ENDIF}
+  AItem := CreateFeedItem;
   AItem.Title := Item.Title;
   AItem.Subject := Item.Subject;
   AItem.Created := Item.Created;
   AItem.Description := Item.Description;
   AItem.MainLink := Item.GetMainLink;
   FItems^.Add(AItem);
+  Items := FItems^.Count;
 
   Write(Items, ': ', Item.Title);
 
@@ -211,7 +213,7 @@ begin
 
   if ErrPos = 0 then
   begin
-    with TFeedItem(FItems^.GetNth(iNo)) do
+    with TFeedItem(FItems^.GetNth(iNo - 1)) do
     begin
       if Length(Description) > 75 then
       begin
@@ -247,10 +249,10 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo)).GetMainLink <> '') and
+  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo - 1)).GetMainLink <> '') and
     (FItems^.Count > 0) then
   begin
-    OpenBrowser(TFeedItem(FItems^.GetNth(iNo)).GetMainLink);
+    OpenBrowser(TFeedItem(FItems^.GetNth(iNo - 1)).GetMainLink);
   end;
 
   ShowHelp;

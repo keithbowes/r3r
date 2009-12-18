@@ -17,6 +17,7 @@ type
     FCount: word;
     FElem: PRListNode;
     FFirst: PRListNode;
+    FHasFirst: Boolean;
     FNext: PRListNode;
     function GetNode(Data: Pointer): PRListNode;
     procedure Free(List: PRListNode);
@@ -57,6 +58,7 @@ uses
 constructor TRList.Init;
 begin
   FCount := 0;
+  FHasFirst := false;
 end;
 
 destructor TRList.Done;
@@ -67,7 +69,7 @@ end;
 
 procedure TRList.Add(Data: Pointer);
 begin
-  if FElem <> nil then
+  if FHasFirst then
   begin
     New(FNext);
 
@@ -85,6 +87,7 @@ begin
     FElem^.Next := nil;
 
     FFirst := FElem;
+    FHasFirst := true;
   end;
 
   Inc(FCount);
@@ -229,6 +232,7 @@ begin
   FElem := nil;
 
   FCount := 0;
+  FHasFirst := false;
   Dispose(FFirst);
 end;
 

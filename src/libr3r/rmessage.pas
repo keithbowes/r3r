@@ -2,15 +2,13 @@ unit RMessage;
 
 interface
 
-type
 {$IFDEF __GPC__}
+type
   TObject = class
   end;
 {$ENDIF}
 
-  TRMessage = procedure(Sender: TObject; Error: Boolean; MessageName, Extra: String){$IFNDEF __GPC__} of object{$ENDIF};
-
-procedure SetMessageEvent(Event: TRMessage);
+procedure SetMessageObject(const Sender: TObject);
 procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
 procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 
@@ -20,11 +18,11 @@ uses
   LibR3R, RSock;
 
 var
-  MessageEvent: TRMessage;
+  MessageObject: TLibR3R;
 
-procedure SetMessageEvent(Event: TRMessage);
+procedure SetMessageObject(const Sender: TObject);
 begin
-  MessageEvent := Event;
+  MessageObject := TLibR3R(Sender);
 end;
 
 procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
@@ -34,10 +32,10 @@ end;
 
 procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 begin
-  if Assigned(MessageEvent) and
+  if Assigned(MessageObject) and
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then
   begin
-    MessageEvent(Sender, IsError, MessageName, Extra);
+    MessageObject.HandleMessage(Sender, IsError, MessageName, Extra);
     TRSock(Sender).ShouldShow := false;
   end;
 end;

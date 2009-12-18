@@ -31,6 +31,8 @@ type
   TXmlFeed = class(TFeed)
   private
     FCloned: Boolean;
+    FLastBase: String;
+    FLastLang: String;
     FParser: XML_PARSER;
   public
     FElemList: PRList;
@@ -67,7 +69,7 @@ procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished
 begin
   inherited ParseLine(Line, Item, ItemFinished);
 
-  XML_Parse(FParser, PChar(Line), Length(Line), 0);
+  XML_Parse(FParser, {$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, Length(Line), 0);
   ItemFinished := true;
 end;
 
@@ -98,7 +100,6 @@ begin
     end;
 
     Dispose(FElemList, Done);
-    FCloned := false;
   end;
 
 {$IFNDEF __GPC__}
@@ -107,15 +108,50 @@ begin
 end;
 
 function TXmlFeed.GetCurrentElement: TXmlElement;
+var
+  Elem: TXmlElement;
 begin
   if FElemList^.Count > 0 then
-  GetCurrentElement := PXmlElement(FElemList^.GetNth(FElemList^.Count - 1))^;
+  begin
+    Elem := PXmlElement(FElemList^.GetNth(FElemList^.Count - 1))^;
+    if Elem.Base <> '' then
+    begin
+      FLastBase := Elem.Base;
+    end
+    else if GetPreviousElement.Base <> '' then
+    begin
+      Elem.Base := GetPreviousElement.Base;
+      FLastBase := Elem.Base;
+    end
+    else
+    begin
+      Elem.Base := FLastBase;
+    end;
+  
+    if Elem.Lang <> '' then
+    begin
+      FLastLang := Elem.Lang;
+    end
+    else if GetPreviousElement.Lang <> '' then
+    begin
+      Elem.Lang := GetPreviousElement.Lang;
+      FLastLang := Elem.Lang;
+    end
+    else
+    begin
+      Elem.Lang := FLastLang;
+    end;
+  end;
+
+  GetCurrentElement := Elem;
 end;
 
 function TXmlFeed.GetPreviousElement: TXmlElement;
 begin
   if FElemList^.Count > 1 then
-  GetPreviousElement := PXmlElement(FElemList^.GetNth(FElemList^.Count - 2))^;
+  begin
+    GetPreviousElement := PXmlElement(FElemList^.GetNth(FElemList^.Count - 2))^;
+  end;
 end;
 
 procedure TXmlFeed.StripNS(var Element: String; const NS: String);

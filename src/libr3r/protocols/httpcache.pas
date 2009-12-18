@@ -33,7 +33,7 @@ type
   public
     Info: PCacheInfo;
     constructor Create(const Url: String);
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function GetCacheHeader: String;
     function GetFeedExtension(FeedType: TFeedType): String;
     procedure Invalidate;
@@ -109,7 +109,6 @@ var
 begin
   FileOpen := false;
 
-  ChDir(FCacheDir);
   Assign(InfoFile, CacheInfoFile);
   if FileExists(CacheInfoFile) then
   begin
@@ -120,16 +119,17 @@ begin
 
   InfoList := Split(InfoText, Tab);
 
-  Val(InfoList.Strings[0], CacheType, ErrPos);
   if ErrPos = 0 then
   begin
     case TCacheType(CacheType) of
       ctEtag:
       begin
+        WriteLn('etag');
         CacheHeader := 'If-None-Match';
       end;
       ctLastModified:
       begin
+        WriteLn('last-modified');
         CacheHeader := 'If-Modified-Since';
       end;
       otherwise
@@ -137,6 +137,7 @@ begin
         { TODO }
       end;
     end;
+
 
     GetCacheHeader := CacheHeader + ': ' + InfoList.Strings[1];
   end

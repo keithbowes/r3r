@@ -1392,6 +1392,7 @@ else
 endif
 all: info.pas rupdate.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
+	$(RM) protocols/rmessage$(OEXT) protocols/rmessage$(PPUEXT)
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)
 ifdef BUILD_SHARED

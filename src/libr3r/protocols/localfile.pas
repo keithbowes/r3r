@@ -11,7 +11,7 @@ type
     FFileHandle: Text;
     FFileName: String;
   public
-    constructor Create(FileName: String); {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create(Filename: String); {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;

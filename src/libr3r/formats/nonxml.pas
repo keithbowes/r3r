@@ -14,7 +14,7 @@ type
 implementation
 
 uses
-  SockConsts, SysUtils;
+  SockConsts;
 
 procedure TNonXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 const

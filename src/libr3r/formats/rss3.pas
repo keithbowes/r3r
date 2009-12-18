@@ -12,8 +12,8 @@ type
     FData: String;
     FInHead: Boolean;
   protected
-    function GetFormat: TFeedType; override;
     procedure FillItem(var Item: TFeedItem);
+    function GetFormat: TFeedType; override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;

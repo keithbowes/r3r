@@ -17,7 +17,6 @@ type
   private
     FError: Boolean;
   protected
-    FAbstractFeed: TFeed;
     FChunkedLength: integer;
     FFeedType: TFeedType;
     FHost: String;
@@ -35,7 +34,7 @@ type
 
     ShouldShow: Boolean;
     constructor Create(Host, Port: String);
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure DomainSet(Host, Port: String);
     procedure Execute; virtual;
     function GetLine: String; virtual;
@@ -46,7 +45,67 @@ type
 implementation
 
 uses
-  Atom, Esf, Rss, Rss3, SockConsts, SysUtils;
+  Atom, Esf, Rss, Rss3, SockConsts, SysUtils
+  
+{$IFNDEF __GPC__}
+  , Math
+{$ENDIF};
+
+var
+  FAbstractFeed: TFeed;
+
+{$IFDEF __GPC__}
+function Power(const Base, Exp: real): real;
+begin
+  Power := Base ** Exp;
+end;
+{$ENDIF}
+
+function CreateSocket:
+{$IFDEF SOCKETS_SYNAPSE}
+TTCPBlockSocket
+{$ENDIF}
+
+{$IFDEF SOCKETS_BSD}
+TSockWrap
+{$ENDIF};
+begin
+  
+{$IFDEF SOCKETS_SYNAPSE}
+  CreateSocket := TTCPBlockSocket.Create;
+{$ENDIF}
+
+{$IFDEF SOCKETS_BSD}
+  CreateSocket := TSockWrap.Create;
+{$ENDIF}
+end;
+
+procedure GetAbstractFeed(const FeedType: TFeedType);
+begin
+  if not Assigned(FAbstractFeed) then
+  begin
+    if FeedType = ftEsf then
+    begin
+      FAbstractFeed := TEsfFeed.Create;
+    end
+    else if FeedType = ftRss3 then
+    begin
+      FAbstractFeed := TRss3Feed.Create;
+    end
+    else if FeedType = ftRss then
+    begin
+      FAbstractFeed := TRssFeed.Create;
+    end
+    else if FeedType = ftAtom then
+    begin
+      FAbstractFeed := TAtomFeed.Create;
+    end
+    else
+    begin
+      FAbstractFeed := nil;
+    end;
+  end;
+end;
 
 constructor TRSock.Create(Host, Port: String);
 begin
@@ -54,17 +113,20 @@ begin
   inherited Create;
 {$ENDIF}
 
+  Sock := CreateSocket;
+  FError := false;
   DomainSet(Host, Port);
   FShouldShow := true;
 end;
 
 destructor TRSock.Destroy;
 begin
-{$IFNDEF __GPC__}
-  Sock.Free;
-  FAbstractFeed.Free;
-{$ENDIF}
+  if Assigned(Sock) then
+  begin
+    Sock.Free;
+  end;
 
+  FAbstractFeed.Free;
   FAbstractFeed := nil;
 
 {$IFNDEF __GPC__}
@@ -95,16 +157,6 @@ end;
 
 procedure TRSock.Execute;
 begin
-{$IFDEF SOCKETS_SYNAPSE}
-  Sock := TTCPBlockSocket.Create;
-{$ENDIF}
-
-{$IFDEF SOCKETS_BSD}
-{$IFNDEF __GPC__}
-  Sock := TSockWrap.Create;
-{$ENDIF}
-{$ENDIF}
-
   Sock.Connect(FHost, FPort);
   Sock.ConvertLineEnd := true;
 end;
@@ -113,36 +165,45 @@ function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   ErrPos: word;
   ItemFinished: Boolean;
-  Len: integer;
-  Line: String;
+  Len: word;
+  Line, Tmp: String;
+
+function HexToDec(const Hex: String): word;
+var
+  HexLen: byte;
+  ErrPos, i: byte;
+  Posit, Tmp, Radix, Res, Value: double;
+begin
+  HexLen := Length(Hex);
+  Radix := 16;
+  Res := 0;
+
+  for i := HexLen downto 1 do
+  begin
+    Posit := HexLen - i + 1;
+    Val(Hex[i], Tmp, ErrPos);
+    Value := Tmp * (Power(Radix, Posit) / Radix);
+    Res := Res + Value;
+  end;
+
+  if ErrPos = 0 then
+  begin
+    HexToDec := Trunc(Res);
+  end
+  else
+  begin
+    HexToDec := 0;
+  end;
+end;
+
 begin
   ShouldShow := true;
+  GetAbstractFeed(FeedType);
 
-  if not Assigned(FAbstractFeed) then
+  if FAbstractFeed = nil then
   begin
-{$IFNDEF __GPC__}
-    if FeedType = ftEsf then
-    begin
-      FAbstractFeed := TEsfFeed.Create;
-    end
-    else if FeedType = ftRss3 then
-    begin
-      FAbstractFeed := TRss3Feed.Create;
-    end
-    else if FeedType = ftRss then
-    begin
-      FAbstractFeed := TRssFeed.Create;
-    end
-    else if FeedType = ftAtom then
-    begin
-      FAbstractFeed := TAtomFeed.Create;
-    end
-    else
-    begin
-      Result := true;
-      Exit;
-    end;
-{$ENDIF}
+    ParseItem := true;
+    Exit;
   end;
   
   with FAbstractFeed do
@@ -159,11 +220,13 @@ begin
         end
         else if Trim(Line) <> '' then
         begin
-          Val('$' + {$IFNDEF __GPC__}TrimRight(Line){$ELSE}wTrimRight(Line){$ENDIF}, Len, ErrPos);
+          Tmp := {$IFNDEF __GPC__}TrimRight(Line){$ELSE}Trim(Line){$ENDIF};
+          Delete(Tmp, Pos('$', Tmp), 1);
+          Len := HexToDec(Tmp);
 
-          if ErrPos = 0 then
+          if Len <> 0 then
           begin
-            FChunkedLength := Len + 1;
+            FChunkedLength := Len;
             Continue;
           end;
         end;

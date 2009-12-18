@@ -1,0 +1,16 @@
+[prerules]
+UNIT_DIRS=../../libr3r ../../libr3r/* ../../third-party/* \
+					../../utils/* ../../wrappers/*
+
+[rules]
+include ../../../scripts/common.make
+all:
+	$(RM) $(addsuffix ../../libr3r/protocols,libr3r$(PPUEXT) libr3r$(OEXT))
+	$(MAKE) rhtml$(PPUEXT) r3r$(EXEEXT)
+
+install:
+
+uninstall:
+
+r3r$(EXEEXT): r3r.pas rhtml.pas
+	$(PC) $(PROGFLAGS) $(PCFLAGS) $<

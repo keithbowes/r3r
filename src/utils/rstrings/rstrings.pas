@@ -41,21 +41,22 @@ end;
 function StrToPChar(const Str: String): PChar;
 var
   Index: integer;
-  p: PChar;
+  p, r: PChar;
 begin
-  GetMem(p, Length(Str) + 1);
-  StrPCopy(p, Str);
+  GetMem(r, Length(Str) + 1);
+  StrPCopy(r, Str);
 
-  PChars^.Add(p);
+  PChars^.Add(r);
 
-  Index := GetPCharIndex(p);
+  Index := GetPCharIndex(r);
   if (Index <> - 1) and RemoveDuplicatePChars then
   begin
+    p := PChars^.GetNth(Index);
     PChars^.Delete(Index);
-    FreeMem(PChars^.GetNth(Index));
+    FreeMem(p);
   end;
 
-  StrToPChar := p;
+  StrToPChar := r;
 end;
 
 function GetPChar(const N: cardinal): PChar;

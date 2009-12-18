@@ -3,7 +3,10 @@ unit Http;
 interface
 
 uses
-  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock;
+  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock
+{$IFDEF SOCKETS_BSD}
+  , SockWrap
+{$ENDIF};
 
 type
   THttpSock = class(TRSock)
@@ -19,7 +22,7 @@ type
     Cache: THttpCache;
     Headers: THeaders;
     procedure Connect(Host, Port, Path, Search: String);
-    procedure SendHeader(const Name: String);
+    procedure SendHeader(Name: String);
     procedure SendHeaders;
   public
     constructor Create(Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
@@ -42,9 +45,22 @@ uses
 const
   Tab = #9;
   WhitespaceChars = #0#8#9#10#13#32;
+{$IFDEF __GPC__}
+  PathDelim = DirSeparator;
+{$ENDIF}
 
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
+
+function CreateCache(const Path: String): THttpCache;
+begin
+  CreateCache := THttpCache.Create(Path);
+end;
+
+function GetLocalFile(const Resource: String): TLocalFile;
+begin
+  GetLocalFile := TLocalFile.Create(Resource);
+end;
 
 procedure THttpSock.GetHeaders;
 var
@@ -53,7 +69,7 @@ var
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
   Line: String;
-  NullLines: 0..50;
+  NullLines: 0..20;
   RespList: TStringsList;
   Prot, Host, Port, Path, Para: String;
 begin
@@ -70,7 +86,7 @@ begin
     end
     else if (Line <> '') and (HeaderState = hsUnstarted) then
     begin
-      if (Line = SockEof) and (NullLines < 50) then
+      if (Line = SockEof) and (NullLines < 20) then
       begin
         Inc(NullLines);
         Continue;
@@ -97,7 +113,7 @@ begin
     else
     begin
       ColonIndex := Pos(':', Line);
-      HeaderName := LowerCase(Copy(Line, 0, ColonIndex - 1));
+      HeaderName := LowerCase(Copy(Line, 1, ColonIndex - 1));
       HeaderValue := Trim(Copy(Line, ColonIndex + 1, Length(Line) - ColonIndex));
 
       if HeaderName = 'date' then
@@ -139,14 +155,12 @@ begin
       begin
         Headers.Status := 200;
 
-{$IFNDEF __GPC__}
         Sock.Free;
-{$ENDIF}
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
         Connect(Host, Port, Path, Para);
         Execute;
-        ParseFeed(TObject(Self), nil, Self);
+        ParseFeed(TObject(Self), Self);
       end
       else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
       begin
@@ -207,22 +221,20 @@ begin
 end;
 
 constructor THttpSock.Create(Host, Port, Path, Search: String);
-{$IFDEF __GPC__}
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
 var
   FullPath: String;
 begin
   inherited Create(Host, Port);
   Connect(Host, Port, Path, Search);
 
-  FullPath := StringReplace(FIndirectHost + FPath, '/', Pred(PathDelim), [rfReplaceAll]);
-  FullPath := StringReplace(FullPath, '?', '_', [rfReplaceAll]);
+  FullPath := FIndirectHost + FPath;
+  FullPath := StringReplace(FullPath, PathDelim, '_', [rfReplaceAll]);
+  FullPath := StringReplace(FullPath, '?', '__', [rfReplaceAll]);
 
-{$IFNDEF __GPC__}
-  Cache := THttpCache.Create(FullPath);
-{$ENDIF}
+  Cache := CreateCache(FullPath);
+  Cache.Info^.CacheParam := '';
+
+  FChunkedLength := 0;
 end;
 
 procedure THttpSock.Connect(Host, Port, Path, Search: String);
@@ -264,8 +276,9 @@ end;
 
 destructor THttpSock.Destroy;
 begin
-{$IFNDEF __GPC__}
   Cache.Free;
+
+{$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
 end;
@@ -276,7 +289,7 @@ begin
   SendHeaders;
 end;
 
-procedure THttpSock.SendHeader(const Name: String);
+procedure THttpSock.SendHeader(Name: String);
 begin
   Sock.SendString(Name);
   Sock.SendString(#13#10);
@@ -285,6 +298,7 @@ end;
 procedure THttpSock.SendHeaders;
 var
   CacheHeader: String;
+  InitLine: String;
 begin
   CacheHeader := Cache.GetCacheHeader;
 
@@ -317,10 +331,6 @@ begin
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;
-{$IFDEF __GPC__}
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
 var
   Ext: String;
   Res: Boolean;
@@ -346,10 +356,9 @@ begin
       Exit;
     end;
 
-{$IFNDEF __GPC__}
     if not Assigned(FLocal) then
     begin
-      FLocal := TLocalFile.Create(FCacheDir + PathDelim +
+      FLocal := GetLocalFile(FCacheDir + PathDelim +
         CacheFeedFile + '.' + Cache.GetFeedExtension(Headers.ContentType));
       FLocal.Execute;
     end;
@@ -360,7 +369,6 @@ begin
     begin
       FLocal.Free;
     end;
-{$ENDIF}
 
     ShouldShow := not Res;
   end
@@ -369,7 +377,7 @@ begin
     Res := true;
   end;
 
-  ParseItem := Res;
+  ParseItem := Res
 end;
 
 function THttpSock.GetType: TFeedType;

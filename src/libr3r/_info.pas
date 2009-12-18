@@ -67,7 +67,7 @@ begin
   {$ELSE}
     {$IFDEF __GPC__}
       Name := SystemInfo.OSName;
-      Version := SystemInfo.OSVersion;
+      Version := SystemInfo.OSRelease;
     {$ELSE}
       Name := 'DOS';
       Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));
@@ -82,8 +82,8 @@ function UserAgent: String;
 begin
   UserAgent := 'R3R/' + Version + ' (' + Os + ')'
 {$IFDEF SOCKETS_SYNAPSE}
-    + ' Synapse/' + SynapseRelease;
-{$ENDIF}
+    + ' Synapse/' + SynapseRelease
+{$ENDIF};
 end;
 
 end.

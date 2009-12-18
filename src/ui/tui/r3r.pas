@@ -10,8 +10,6 @@ uses
 begin
   with TTui.Create do
   begin
-{$IFNDEF __GPC__}
     Free;
-{$ENDIF}
   end;
 end.
