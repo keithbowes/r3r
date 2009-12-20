@@ -1385,7 +1385,6 @@ include fpcmake.loc
 endif
 include ../../../scripts/common.make
 all:
-	$(RM) ../protocols/httpcache$(OEXT) ../protocols/httpcache$(PPUEXT)
 	$(MAKE) httpcache deps
 	$(MAKE) $(addsuffix $(PPUEXT), $(UNITS))
 install:

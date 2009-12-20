@@ -80,6 +80,7 @@ begin
 
     Link := FList.List[3];
     PLink := StrToPChar(Link);
+    Links^.Clear;
     Links^.Add(PLink);
 
     Id := StrPas(Links^.GetNth(0));

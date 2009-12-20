@@ -17,14 +17,6 @@ const
   TypeBoolean = 3;
 
 type
-{$IFNDEF __GPC__}
-{$IFDEF FPC}
-  PtrWord = PtrUInt;
-{$ELSE}
-  PtrWord = cardinal;
-{$ENDIF FPC}
-{$ENDIF __GPC__}
-
   TRSetIndex = integer;
 
   PRSetting = ^TRSetting;
@@ -204,11 +196,11 @@ begin
       case SettingType of
         TypeBoolean:
         begin
-          SetBoolean(Index, Boolean(PtrWord(SettingValue)));
+          SetBoolean(Index, Boolean(PtrUInt(SettingValue)));
         end;
         TypeInteger:
         begin
-          SetInteger(Index, PtrWord(SettingValue));
+          SetInteger(Index, PtrUInt(SettingValue));
         end;
         TypeString:
         begin

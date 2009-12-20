@@ -1388,5 +1388,4 @@ include ../../../scripts/common.make
 all:
 	cd .. && $(MAKE) info.pas
 	$(MAKE) $(addsuffix $(PPUEXT), $(UNITS))
-	$(RM) ../formats/feeditem$(OEXT) ../formats/feeditem$(PPUEXT)
 formatsdeps: sockconsts$(PPUEXT)

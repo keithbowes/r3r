@@ -6,12 +6,11 @@ include ../../../scripts/common.make
 all:
 	cd po && $(MAKE)
 	cd ../../libr3r && $(MAKE) info.pas
-	$(MAKE) tv$(PPUEXT) r3r$(EXEEXT)
+	$(MAKE) tv$(PPUEXT) r3r$(PPUEXT)
 
 clean:
 	cd po && $(MAKE) clean
 	$(DEL) $(wildcard *.or) $(wildcard *.res)
-	-delp -q .
 
 install:
 	cd po && $(MAKE) intall
@@ -19,6 +18,3 @@ install:
 uninstall:
 	cd po && $(MAKE) uninstall
 	rm -f $(bindir)/r3r$(EXEEXT)
-
-r3r$(EXEEXT): r3r.pas
-	$(PC) $(PROGFLAGS) $(PCFLAGS) $<

@@ -3,7 +3,7 @@
 #define SOCKET_ERROR -1
 #endif
 
-int socket_init(char * hostname, int port);
+int socket_init(char * hostname, char * port);
 void socket_done(int sock);
 
 void socket_connect();

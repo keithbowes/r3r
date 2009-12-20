@@ -1556,6 +1556,9 @@ install:
 	cd icons && $(MAKE) install
 	cd src && $(MAKE) install
 	$(INSTALLEXE) r3r$(EXEEXT) $(bindir)
+ifdef RELEASE
+	$(UPX) $(bindir)/r3r$(EXEEXT)
+endif
 docs:
 	cd doc/api && $(MAKE)
 dist-docs: docs
@@ -1616,5 +1619,4 @@ clean:
 	cd src && $(MAKE) clean
 	$(DEL) description-pak
 	$(DEL) r3r$(EXEEXT) r3r-$(R3R_UI)$(EXEEXT)
-	-delp -eq .
 distclean: clean

@@ -263,8 +263,12 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS=../../libr3r ../../libr3r/* ../../third-party/* \
-					../../utils/* ../../wrappers/*
+UNIT_DIRS=../../libr3r ../../libr3r/formats ../../libr3r/po \
+					../../libr3r/protocols ../../libr3r/settings \
+					../../third-party/expas ../../third-party/gettext \
+					../../utils/rdate ../../utils/rlist \
+					../../utils/rstrings ../../utils/strtok \
+					../../utils/tabfiles ../../wrappers/sockwrap
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1385,7 +1389,6 @@ include fpcmake.loc
 endif
 include ../../../scripts/common.make
 all:
-	$(RM) $(addsuffix ../../libr3r/protocols,libr3r$(PPUEXT) libr3r$(OEXT))
 	$(MAKE) rhtml$(PPUEXT) r3r$(EXEEXT)
 install:
 uninstall:

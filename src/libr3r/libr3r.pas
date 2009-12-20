@@ -25,7 +25,7 @@ type
     procedure NotifyUpdate; virtual;
     procedure DoParseItem(Item: TFeedItem);
     procedure DoUpdate;
-    procedure Parse;
+    function Parse: Boolean;
   public
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
@@ -72,7 +72,6 @@ begin
 {$IFNDEF __GPC__}
   inherited Create;
 {$ENDIF}
-  FSock := nil;
 
   if Settings.GetBoolean(Settings.IndexOf('check-for-updates')) then
   begin
@@ -100,20 +99,19 @@ begin
   end;
 
   FSock.Execute;
-  Parse;
 
-  if Assigned(FSock) then
+  if Assigned(FSock) and Parse then
   begin
     FSock.Free;
   end;
 end;
 
-procedure TLibR3R.Parse;
+function TLibR3R.Parse: Boolean;
 var
   Item: TFeedItem;
 begin
   SetMessageObject(TObject(Self));
-  ParseFeed(TObject(Self), FSock);
+  Parse := ParseFeed(TObject(Self), FSock);
 end;
 
 { Implement as empty so if the UI doens't implement them,

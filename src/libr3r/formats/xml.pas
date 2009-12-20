@@ -97,9 +97,9 @@ begin
         p := FElemList^.GetNth(i);
         Dispose(p);
       end;
-    end;
 
-    Dispose(FElemList, Done);
+      Dispose(FElemList, Done);
+    end;
   end;
 
 {$IFNDEF __GPC__}

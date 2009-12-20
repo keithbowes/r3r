@@ -72,7 +72,7 @@ begin
   ItemSubject := _('Subject: ');
   ItemCreated := _('Created: ');
   ItemDesc := _('Description: ');
-  ItemLink := _('Link: ');
+  ItemLink := _('Link %i: ');
 
   InvalidNumber := _('Invalid Number!');
 

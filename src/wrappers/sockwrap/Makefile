@@ -1387,7 +1387,7 @@ endif
 include ../../../scripts/common.make
 all: sockwrapc$(COBJEXT) sockwrap$(PPUEXT)
 clean:
-	$(RM) $(wildcard *$(COBJEXT))
+	$(DEL) $(wildcard *$(COBJEXT))
 sockwrap.pas: sockwrapc.c
 	$(TOUCH) $@
 %$(COBJEXT): %.c

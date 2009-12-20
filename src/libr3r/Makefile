@@ -1410,7 +1410,9 @@ uninstall:
 	cd po && $(MAKE) uninstall
 	$(DEL) $(libdir)/*libr3r_shared$(SHAREDLIBEXT)
 info.pas: _info.pas ../../scripts/common.make
-	$(SED) 's/@VERSION@/$(VERSION)/g' _info.pas > info.pas
+	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
+		-e 's/@COMPILER@/$(COMPILER)/g' _info.pas > info.pas
 	$(MAKE) info$(PPUEXT)
 rupdate.pas: _rupdate.pas
 	$(SED) -e 's/@TIMESTAMP@/$(TIMESTAMP)/g' $< > $@
+	$(MAKE) rupdate$(PPUEXT)

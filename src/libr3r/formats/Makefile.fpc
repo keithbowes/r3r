@@ -6,7 +6,6 @@ UNITS=feeditem feed nonxml esf rss3 saxcallbacks xml dc atom rss
 include ../../../scripts/common.make
 
 all:
-	$(RM) ../protocols/httpcache$(OEXT) ../protocols/httpcache$(PPUEXT)
 	$(MAKE) httpcache deps
 	$(MAKE) $(addsuffix $(PPUEXT), $(UNITS))
 

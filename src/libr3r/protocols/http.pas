@@ -78,9 +78,9 @@ begin
 
   while (HeaderState <> hsFinished) do
   begin
-    Line := GetLine;
+    Line := Trim(GetLine);
 
-    if ((Line = '') or (Line = #13)) and (HeaderState = hsStarted) then
+    if (Line = '') and (HeaderState = hsStarted) then
     begin
       HeaderState := hsFinished;
     end
@@ -92,7 +92,6 @@ begin
         Continue;
       end;
 
-      Delete(Line, Pos(#13, Line), 1);
       HeaderState := hsStarted;
       RespList := Split(Line, WhitespaceChars);
 
@@ -224,7 +223,7 @@ constructor THttpSock.Create(Host, Port, Path, Search: String);
 var
   FullPath: String;
 begin
-  inherited Create(Host, Port);
+  inherited Create('http', Host, Port);
   Connect(Host, Port, Path, Search);
 
   FullPath := FIndirectHost + FPath;
@@ -254,8 +253,6 @@ begin
     Host := Settings.GetString(Settings.IndexOf('proxy-address'));
     Port := IntToStr(Settings.GetInteger(Settings.IndexOf('proxy-port')));
   end;
-
-  DomainSet(Host, Port);
 
   FCachable := true;
   Headers.ContentType := ftUnset;

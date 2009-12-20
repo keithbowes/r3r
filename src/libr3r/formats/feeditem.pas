@@ -5,7 +5,7 @@ unit FeedItem;
 interface
 
 uses
-  RList;
+  RList, StrTok;
 
 type
   PEmail = ^TEmail;
@@ -34,7 +34,7 @@ type
     Myself: String;
 
     constructor Create;
-    destructor Destroy; override;
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function LinksCount: cardinal;
     function GetMainLink: String;
     procedure Clear;
@@ -104,11 +104,9 @@ begin
   Id := '';
   Uri := '';
   Myself := '';
-
-  if Links^.Count > 0 then
-  begin
-    Links^.Clear;
-  end;
+  //if Links^.Count > 0 then
+  //Links^.Clear;
+  Links^.Add(nil);
 end;
 
 function TFeedItem.LinksCount: cardinal;
@@ -121,13 +119,13 @@ var
   CurrentLink: cardinal;
   Link: String;
 begin
-  CurrentLink := 0;
+  CurrentLink := LinksCount;
   if (Links <> nil) and (LinksCount > 0) then
   begin
     repeat
       Link := StrPas(Links^.GetNth(CurrentLink));
-      Inc(CurrentLink);
-    until (Link <> '') or (CurrentLink = LinksCount);
+      Dec(CurrentLink);
+    until (Link <> '') or (CurrentLink = 0);
   end
   else
   begin

@@ -1,4 +1,6 @@
-programpath = $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH))))
+# vim:filetype=make
+
+programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
 PROGNAME = r3r
 VERSION = 2.0-beta3
@@ -35,7 +37,7 @@ PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 # Defines, for enabling different features/dialect syntax
 DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS) $(DEFS_SOCKETS), $(DEFFLAG)$(opt))
 
-UNITDIRS=$(foreach dir,$(wildcard $(UNIT_DIRS)),$(DIRFLAG)$(dir))
+UNITDIRS=$(sort $(foreach d,$(wildcard $(addsuffix /*,$(UNIT_DIRS))),$(DIRFLAG)$(dir $(d))))
 
 override COMPILER_OPTIONS += $(PCFLAGS)
 
@@ -51,19 +53,37 @@ ifdef inUnix
 EXEEXT = 
 endif
 
-ifndef COMPILER_OVERRIDE
-ifneq ($(call programpath,fpc),)
+ifneq ($(or $(USE_GPC),$(USE_FPC)),)
+COMPILER_OVERRIDE=1
+endif
+
+ifneq ($(COMPILER_OVERRIDE),)
+ifneq ($(USE_FPC),)
+PC=$(call programpath,fpc)
+else
+ifneq ($(USE_GPC),)
+PC=$(call programpath,gp)
+endif # USE_GPC
+endif # USE_FPC
+else
+PC=$(call programpath,fpc)
+ifndef ($(findstring fpc,$(PC)))
 USE_FPC=1
 else
-ifneq ($(call programpath,gpc)),)
+PC=$(call programpath,gp)
+ifneq ($(findstring gp,$(PC)))
 USE_GPC=1
+else
+$(error No Pascal compiler detected)
 endif # USE_GPC
 endif # USE_FPC
 endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
+override COMPILER=FPC $(shell $(PC) -iW)
+DELP=delp -eq .
+
 DEFFLAG=-d
-PC=fpc
 PCFLAGS_BASE=-FU. -Mdelphi -Sh -WR
 DIRFLAG=-Fu
 ifndef RELEASE
@@ -82,33 +102,38 @@ else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
-BUILD_SHARED=1
-
-else
-ifdef USE_GPC
-PC=gpc
-PCFLAGS_BASE=--autobuild --automake --extended-syntax \
-	--no-warning -DFree=Destroy -DString="String[65536]"
-UNITFLAGS=-c
-PROGFLAGS=-o $(PROGNAME)$(EXEEXT) $(LDFLAGS)
-
-DEFFLAG=-D
-DEFS_SETTINGS ?= SETTINGS_TAB
-DEFS_SOCKETS ?= SOCKETS_BSD
-DIRFLAG=--unit-path=
-PPUEXT=.gpi
-
-ifndef RELEASE
-PCFLAGS_DEBUG=-ggdb3
-endif # RELEASE
-endif # USE_GPC
-endif # USE_FPC
-
 ifndef RELEASE
 R3R_UI ?= tui
 else
 R3R_UI ?= wx
 endif #RELEASE
+
+BUILD_SHARED=1
+
+else
+ifdef USE_GPC
+override COMPILER=$(shell $(call programpath,gpc) --version | head -n 1)
+DELP=$(DEL) $(wildcard *.gpd)
+
+PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
+						 -DFree=Destroy -DPtrUInt=PtrWord $(LDFLAGS)
+DEFFLAG=-D
+DEFS_SETTINGS ?= SETTINGS_TAB
+DEFS_SOCKETS ?= SOCKETS_BSD
+DIRFLAG=--unit-path=
+PPUEXT=.gpi
+EXTRACLEANFILES=.gpd
+
+ifndef RELEASE
+PCFLAGS_DEBUG=--pointer-checking --progress-messages \
+	--stack-checking -ggdb3
+else
+PCFLAGS_DEBUG=--no-io-checking --no-range-checking --no-warning
+endif # RELEASE
+
+R3R_UI ?= tui
+endif # USE_GPC
+endif # USE_FPC
 
 export DEFS DEFS_SOCKETS R3R_UI VERSION \
 	bindir datadir prefix rootdir
@@ -122,11 +147,12 @@ _clean:
 	$(DEL) $(wildcard *$(PPUEXT))
 	$(DEL) $(wildcard *$(RSTEXT))
 	$(DEL) $(wildcard *$(STATICLIBEXT))
+	$(DELP)
 
 clean: _clean
 
 %$(PPUEXT): %.pas
-	$(PC) $(UNITFLAGS) $(PCFLAGS) $<
+	$(PC) $(PCFLAGS) $<
 
 Makefile: Makefile.fpc
 	-fpcmake -Tall

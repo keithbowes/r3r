@@ -10,9 +10,6 @@ type
   private
     FItems: PRList;
   protected
-{$IFNDEF __GPC__}
-    procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); virtual;
-{$ENDIF}
     procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
@@ -25,15 +22,13 @@ type
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
     procedure DisplayItem(const Item: TFeedItem); override;
+    procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); reintroduce;
   end;
 
 implementation
 
 uses
-  Crt, Dos, Info, RSettings, TuiStrings
-{$IFDEF __GPC__}
-  , SysUtils
-{$ENDIF};
+  Crt, Dos, Info, SysUtils, TuiStrings;
 
 function CreateFeedItem: TFeedItem;
 begin
@@ -101,9 +96,7 @@ begin
     for i := 0 to FItems^.Count - 1 do
     begin
       p := FItems^.GetNth(i);
-{$IFNDEF __GPC__}
       p.Free;
-{$ENDIF}
     end;
   end;
 
@@ -124,6 +117,7 @@ begin
   AItem.Subject := Item.Subject;
   AItem.Created := Item.Created;
   AItem.Description := Item.Description;
+  AItem.Links := Item.Links;
   AItem.MainLink := Item.GetMainLink;
   FItems^.Add(AItem);
   Items := FItems^.Count;
@@ -143,7 +137,6 @@ begin
   WriteLn;
 end;
 
-{$IFNDEF __GPC__}
 procedure TTui.HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String);
 begin
   if Error then
@@ -164,7 +157,6 @@ begin
 
   WriteLn;
 end;
-{$ENDIF}
 
 procedure TTui.NotifyUpdate;
 begin
@@ -196,14 +188,19 @@ begin
   Write(Feed);
   ReadLn(URI);
 
-  RetrieveFeed(URI);
+  if URI <> '' then
+  begin
+    RetrieveFeed(URI);
+  end;
+
   ShowHelp;
 end;
 
 procedure TTui.GoItem;
 var
+  Desc: String;
   ErrPos: word;
-  iNo: cardinal;
+  i, j, k,  iNo: cardinal;
   No: String;
 begin
   Write(ItemNo);
@@ -215,19 +212,38 @@ begin
   begin
     with TFeedItem(FItems^.GetNth(iNo - 1)) do
     begin
-      if Length(Description) > 75 then
+      Desc := Description;
+      if Length(Desc) > 75 then
       begin
-{$IFNDEF __GPC__}
-        Description := Copy(Description, 1, 75) + '...';
-{$ENDIF}
+        Desc := Copy(Desc, 1, 75) + '...';
       end;
 
       WriteLn(ItemTitle, Title);
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
-      WriteLn(ItemDesc, Description);
-      Write(ItemLink);
-      WriteLn(MainLink);
+      WriteLn(ItemDesc, Desc);
+
+      j := 0;
+      k := 0;
+      for i := 0 to Links^.Count - 1 do
+      begin
+        if Links^.GetNth(i) = nil then
+        begin
+          Inc(j);
+          Continue;
+        end;
+
+        if j = iNo then
+        begin
+          Inc(k);
+          WriteLn(StringReplace(ItemLink, '%i', IntToStr(k), [rfReplaceAll]),
+            StrPas(Links^.GetNth(i)));
+        end
+        else if j > iNo then
+        begin
+          Break;
+        end;
+      end;
     end;
   end
   else

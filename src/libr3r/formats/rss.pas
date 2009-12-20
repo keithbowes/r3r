@@ -89,7 +89,6 @@ end;
 
 procedure TRssFeed.FillItem(var Item: TFeedItem);
 var
-  i: cardinal;
   PLink: PChar;
 begin
   with GetCurrentElement do

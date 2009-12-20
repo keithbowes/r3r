@@ -80,7 +80,7 @@ end;
 
 function UserAgent: String;
 begin
-  UserAgent := 'R3R/' + Version + ' (' + Os + ')'
+  UserAgent := 'R3R/@VERSION@ (' + OS + '; @COMPILER@)'
 {$IFDEF SOCKETS_SYNAPSE}
     + ' Synapse/' + SynapseRelease
 {$ENDIF};

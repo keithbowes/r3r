@@ -13,7 +13,7 @@ uses
 {$ENDIF};
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
-procedure ParseFeed(const Sender: TObject; const Sock: TRSock);
+function ParseFeed(const Sender: TObject; const Sock: TRSock): Boolean;
 
 implementation
 
@@ -50,11 +50,13 @@ begin
   end;
 end;
 
-procedure ParseFeed(const Sender: TObject; const Sock: TRSock);
+function ParseFeed(const Sender: TObject; const Sock: TRSock): Boolean;
 var
   Finished: Boolean;
+  Iter: cardinal;
 begin
   Finished := false;
+  Iter := 0;
 
   while not Finished do
   begin
@@ -63,12 +65,18 @@ begin
       CallMessageEvent(Sender, true, ErrorGetting);
       Break;
     end;
+
     Finished := Sock.ParseItem(Item);
+
     if Sock.ShouldShow then
     begin
       TLibR3R(Sender).DisplayItem(Item);
     end;
+
+    Inc(Iter);
   end;
+
+  ParseFeed := Iter > 1;
 end;
 
 initialization
@@ -77,8 +85,6 @@ Item := TFeedItem.Create;
 
 finalization
 
-{$IFNDEF __GPC__}
 Item.Free;
-{$ENDIF}
 
 end.

@@ -33,7 +33,7 @@ type
 {$ENDIF}
 
     ShouldShow: Boolean;
-    constructor Create(Host, Port: String);
+    constructor Create(Protocol, Host, Port: String);
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure DomainSet(Host, Port: String);
     procedure Execute; virtual;
@@ -80,7 +80,7 @@ begin
 {$ENDIF}
 end;
 
-procedure GetAbstractFeed(const FeedType: TFeedType);
+procedure SetAbstractFeed(const FeedType: TFeedType);
 begin
   if not Assigned(FAbstractFeed) then
   begin
@@ -107,7 +107,7 @@ begin
   end;
 end;
 
-constructor TRSock.Create(Host, Port: String);
+constructor TRSock.Create(Protocol, Host, Port: String);
 begin
 {$IFNDEF __GPC__}
   inherited Create;
@@ -167,38 +167,9 @@ var
   ItemFinished: Boolean;
   Len: word;
   Line, Tmp: String;
-
-function HexToDec(const Hex: String): word;
-var
-  HexLen: byte;
-  ErrPos, i: byte;
-  Posit, Tmp, Radix, Res, Value: double;
-begin
-  HexLen := Length(Hex);
-  Radix := 16;
-  Res := 0;
-
-  for i := HexLen downto 1 do
-  begin
-    Posit := HexLen - i + 1;
-    Val(Hex[i], Tmp, ErrPos);
-    Value := Tmp * (Power(Radix, Posit) / Radix);
-    Res := Res + Value;
-  end;
-
-  if ErrPos = 0 then
-  begin
-    HexToDec := Trunc(Res);
-  end
-  else
-  begin
-    HexToDec := 0;
-  end;
-end;
-
 begin
   ShouldShow := true;
-  GetAbstractFeed(FeedType);
+  SetAbstractFeed(FeedType);
 
   if FAbstractFeed = nil then
   begin
@@ -214,19 +185,18 @@ begin
 
       if FUseChunked then
       begin
+        Tmp := Trim(Line);
         if FChunkedLength > 0 then
         begin
           Dec(FChunkedLength, Length(Line) + 2);
         end
-        else if Trim(Line) <> '' then
+        else if Tmp <> '' then
         begin
-          Tmp := {$IFNDEF __GPC__}TrimRight(Line){$ELSE}Trim(Line){$ENDIF};
-          Delete(Tmp, Pos('$', Tmp), 1);
-          Len := HexToDec(Tmp);
+          Val('$' + Tmp, Len, ErrPos);
 
-          if Len <> 0 then
+          if ErrPos = 0 then
           begin
-            FChunkedLength := Len;
+            FChunkedLength := Len + 1;
             Continue;
           end;
         end;

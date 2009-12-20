@@ -4,7 +4,7 @@ unit SockWrap;
 
 interface
 {$IFDEF WIN32}
-{$LINKLIB winsock}
+{$LINKLIB wsock32}
 {$ELSE}
 {$LINKLIB c}
 {$ENDIF}
@@ -16,7 +16,7 @@ uses
 
 {$CALLING cdecl}
 
-function socket_init(hostname: PChar; port: integer): integer; external;
+function socket_init(hostname, port: PChar): integer; external;
 procedure socket_done(sock: integer); external;
 procedure socket_connect(sock: integer); external;
 procedure socket_send(sock: integer; data: PChar); external;
@@ -48,7 +48,7 @@ function ParseURL(URL: String; var Protocol, USer, Password, Host, Port, Path, S
 implementation
 
 uses
-  RStrings;
+  RStrings, SysUtils;
 
 constructor TSockWrap.Create;
 begin
@@ -61,13 +61,8 @@ begin
 end;
 
 procedure TSockWrap.Connect(const Host, Port: String);
-var
-  ErrPos: byte;
-  PHost: PChar;
-  PortNum: integer;
 begin
-  Val(Port, PortNum, ErrPos);
-  FSocket := socket_init(StrToPChar(Host), PortNum);
+  FSocket := socket_init(StrToPChar(Host), StrToPChar(Port));
   socket_connect(FSocket);
 end;
 
@@ -80,25 +75,37 @@ end;
 function TSockWrap.RecvString(Len: word): String;
 var
   Buf: array [1..255] of char;
-  CurStr, LastStr: String;
+  CR, i, LF: word;
+  CurStr, LastStr, Sub, Tmp: String;
+  LastReceived: integer;
 begin
   LastStr := '';
+  LastReceived := FReceived;
 
   if (FStrings.Length = 0) or (FStrings.Length = FStringIndex + 1) or
     (FStringIndex >= 255) then
   begin
+    InitStringsList(FStrings);
     FReceived := socket_receive(FSocket, PChar(@Buf), 255);
     LastStr := FStrings.Strings[FStringIndex];
-
-    FStrings := Split(Copy(Buf, 1, FReceived), #10#13);
+    FStrings := Split(Copy(Buf, 1, FReceived + 2), #10#13);
     FStringIndex := 0;
   end;
   
-  if FReceived <> 0 then
+  if FReceived > 0 then
   begin
-    WriteLn(FStringIndex, ':', FStrings.Length);
     CurStr := FStrings.Strings[FStringIndex];
-    RecvString := LastStr + CurStr;
+    Dec(FReceived, Length(CurStr));
+
+    { Compensate for lost line breaks from Split }
+    if (FReceived = LastReceived - 1) then
+    begin
+      RecvString := #13#10;
+    end
+    else
+    begin
+      RecvString := LastStr + CurStr;
+    end;
   end
   else
   begin

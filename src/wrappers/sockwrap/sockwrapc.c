@@ -16,45 +16,34 @@
 typedef struct
 {
   long int socket;
-  struct sockaddr_in addr;
-  int addrtype;
+  struct addrinfo * info;
 } SocketInfo;
 
 void socket_init_win32()
 {
 #ifdef WIN32
   WSADATA data;
-
-  if (WSAStartup(MAKEWORD(1, 1), &data) != 0)
-  {
-    WSACleanup();
-  }
+  WSAStartup(MAKEWORD(2, 2), &data);
 #endif
 }
 
-int socket_init(char * hostname, int port)
+int socket_init(char * hostname, char * port)
 {
-  struct hostent * host;
-  struct sockaddr_in addr;
-
+  int err;
+  struct addrinfo * ainfo;
   SocketInfo * info = (SocketInfo *) malloc(sizeof(SocketInfo));
 
   socket_init_win32();
-
-  if ((host = gethostbyname(hostname)) == NULL)
+  
+  err = getaddrinfo(hostname, port, NULL, &ainfo);
+  if (err != 0)
   {
+    printf("%s\n", gai_strerror(err));
     return SOCKET_ERROR;
   }
 
-  memset(&addr, 0, sizeof(addr));
-  memcpy((char *) &addr.sin_addr, host->h_addr, host->h_length);
-  
-  addr.sin_family = host->h_addrtype;
-  addr.sin_port = htons((u_short) port);
-  info->addr = addr;
-
-  info->socket = INVALID_SOCKET;
-  info->addrtype = host->h_addrtype;
+  info->info = ainfo;
+  info->socket = socket(ainfo->ai_family, ainfo->ai_socktype, ainfo->ai_protocol);
   return (int) info;
 }
 
@@ -62,24 +51,21 @@ void socket_done(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
 
-  if (info->socket != INVALID_SOCKET)
-  {
 #ifdef WIN32
-    closesocket(info->socket);
-    WSACleanup();
+  closesocket(info->socket);
+  WSACleanup();
 #else
-    close(info->socket);
+  close(info->socket);
 #endif
-  }
 
+  freeaddrinfo(info->info);
   free(info);
 }
 
 void socket_connect(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
-  info->socket = socket(info->addrtype, SOCK_STREAM, 0);
-  connect(info->socket, (struct sockaddr *) &info->addr, sizeof(info->addr));
+  connect(info->socket, info->info->ai_addr, info->info->ai_addrlen);
 }
 
 int socket_send(int sock, char * data)
