@@ -10,7 +10,7 @@ type
 
   TFeed = class
   protected
-    function GetFormat: TFeedType; virtual;
+    function GetFormat: TFeedType; virtual; abstract;
   public
     ShouldShow: Boolean;
     constructor Create;
@@ -75,11 +75,6 @@ begin
       end;
     end;
   end;
-end;
-
-function TFeed.GetFormat: TFeedType;
-begin
-  GetFormat := ftUnknown;
 end;
 
 end.

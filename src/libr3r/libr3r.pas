@@ -114,7 +114,7 @@ begin
   Parse := ParseFeed(TObject(Self), FSock);
 end;
 
-{ Implement as empty so if the UI doens't implement them,
+{ Implement as empty so if the UI doesn't implement them,
   there won't be crashes. }
 procedure TLibR3R.DisplayItem(const Item: TFeedItem);
 begin

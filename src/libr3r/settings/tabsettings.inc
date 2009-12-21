@@ -17,12 +17,10 @@ begin
   Dispose(TabFile, Done);
 end;
 
-function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
 var
   ASetting: PRSetting;
 begin
-  CheckBoolean := TabFile^.ValueExists(ASection, Setting);
-
   New(ASetting);
   with ASetting^ do
   begin
@@ -34,12 +32,10 @@ begin
   FSettings^.Add(ASetting);
 end;
 
-function TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer): Boolean;
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer);
 var
   ASetting: PRSetting;
 begin
-  CheckInteger := TabFile^.ValueExists(ASection, Setting);
-
   New(ASetting);
   with ASetting^ do
   begin
@@ -51,12 +47,10 @@ begin
   FSettings^.Add(ASetting);
 end;
 
-function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean;
+procedure TRSettings.CheckString(const Setting, ASection, Value: String);
 var
   ASetting: PRSetting;
 begin
-  CheckString := TabFile^.ValueExists(ASection, Setting);
-
   New(ASetting);
   with ASetting^ do
   begin

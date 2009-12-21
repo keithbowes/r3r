@@ -18,7 +18,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
   panel->SetSizer(hbox);
 
-  wxListBox * box = new wxListBox(panel, -1);
+  wxListBox * box = new wxListBox(panel, -1, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB | wxLB_HSCROLL);
   data->box = box;
   hbox->Add(box, 2, wxEXPAND | wxALL);
 

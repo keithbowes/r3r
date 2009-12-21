@@ -2,7 +2,6 @@
 
 typedef struct
 {
-  long index;
   bool isTopLevel;
 
   char * contact;

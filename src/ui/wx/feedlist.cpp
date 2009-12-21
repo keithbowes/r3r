@@ -13,18 +13,6 @@ FeedListView * feedList;
 bool topItem = FALSE;
 bool readyNextThread = TRUE;
 
-int wxCALLBACK sort_items(long item1, long item2, long WXUNUSED(sortData))
-{
-  item1 = ((ItemInfo *) item1)->index;
-  item2 = ((ItemInfo *) item2)->index;
-  if (item1 < item2)
-    return -1;
-  if (item1 > item2)
-    return 1;
-
-  return 0;
-}
-
 void normalize_field_value(char ** field_value)
 {
   char * s = *field_value;
@@ -39,9 +27,7 @@ void normalize_field_value(char ** field_value)
 
 void item_parsed(void * item)
 {
-  static long itemIndex;
-  itemIndex++;
-
+  static long itemIndex = 0;
   char * created = (char *) libr3r_get_item_field(item, (char *) "created");
   char * desc = (char *) libr3r_get_item_field(item, (char *) "description");
   char * subject = (char *) libr3r_get_item_field(item, (char *) "subject");
@@ -51,7 +37,6 @@ void item_parsed(void * item)
 
   ItemInfo * info = (ItemInfo *) malloc(sizeof(ItemInfo));
   info->isTopLevel = topItem;
-  info->index = itemIndex;
   info->desc = desc;
   info->link = (char *) libr3r_get_item_field(item, (char *) "main-link");
   info->title = title;
@@ -61,6 +46,7 @@ void item_parsed(void * item)
   wxListItem listItem;
   listItem.SetColumn(0);
   listItem.SetData(info);
+  listItem.SetId(itemIndex);
   listItem.SetText(title);
 
   if (topItem)
@@ -94,9 +80,8 @@ void item_parsed(void * item)
   listItem.SetText(created);
   feedList->SetItem(listItem);
 
-  feedList->SortItems(&sort_items, 0);
-
   topItem = FALSE;
+  itemIndex++;
 }
 
 void message_received(unsigned short int is_error, char * message_name, char * extra)
@@ -161,30 +146,22 @@ void * ParseFeedThread(void * resource)
 
   readyNextThread = false;
   topItem = true;
+
   libr3r_retrieve_feed(res->lib, res->res);
   readyNextThread = true;
-
-#ifdef HAS_PTHREAD
-#ifndef WIN32
-  pthread_exit(NULL);
-#endif
-#endif
 
   return NULL;
 }
 
 void ParseFeed(char * res)
 {
-#ifdef HAS_PTHREAD
-  pthread_t thread;
-#endif
-  
   FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
   resource->lib = rlib;  
   resource->res = res;  
-  
+
 #ifdef HAS_PTHREAD
-  pthread_create(&thread, NULL, &ParseFeedThread, resource);
+  pthread_t thread;
+  pthread_create(&thread, NULL, &ParseFeedThread, (void *) resource);
 #else
   ParseFeedThread(resource);
 #endif

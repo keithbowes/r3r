@@ -118,10 +118,13 @@ begin
         if Attributes[Idx].Name = 'href' then
         begin
           Link := GetAbsoluteURL(Attributes[Idx].Value);
-          PLink := StrToPChar(Link);
-          Links^.Add(PLink);
 
-          if FHasSelf then
+          if not FHasSelf then
+          begin 
+            PLink := StrToPChar(Link);
+            Links^.Add(PLink);
+          end
+          else
           begin
             Myself := Link;
             FHasSelf := false;
@@ -206,7 +209,7 @@ begin
       Id := Id + Content;
       Uri := Id;
 
-      if GetPreviousElement.Name <> 'entry' then
+      if FLeftFeed then
       begin
         Id := '';
       end;
@@ -251,15 +254,12 @@ end;
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
 var
   AFeed: TFeed;
-  Elem: TXmlElement;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
 
   if Pos(DCNS, GetCurrentElement.Name) <> 0 then
   begin
     AFeed := TDCFeed.Create;
-    Elem := GetCurrentElement;
-    StripNS(Elem.Name, DCNS);
     (AFeed as TXmlFeed).Clone(FElemList);
     ParseLine(Line, Item, ItemFinished);
     (AFeed as TDCFeed).Free;

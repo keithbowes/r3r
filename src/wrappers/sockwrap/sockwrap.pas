@@ -21,7 +21,7 @@ procedure socket_done(sock: integer); external;
 procedure socket_connect(sock: integer); external;
 procedure socket_send(sock: integer; data: PChar); external;
 function socket_receive(sock: integer; buf: PChar; len: integer): integer; external;
-function socket_get_error: integer; external;
+function socket_get_error(sock: integer): integer; external;
 
 {$CALLING register}
 
@@ -68,7 +68,7 @@ end;
 
 function TSockWrap.LastError: integer;
 begin
-  LastError := socket_get_error;
+  LastError := socket_get_error(FSocket);
 end;
 
 { Len is ignored; it's just for compatability with the Synapse API }

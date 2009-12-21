@@ -124,12 +124,10 @@ begin
     case TCacheType(CacheType) of
       ctEtag:
       begin
-        WriteLn('etag');
         CacheHeader := 'If-None-Match';
       end;
       ctLastModified:
       begin
-        WriteLn('last-modified');
         CacheHeader := 'If-Modified-Since';
       end;
       otherwise

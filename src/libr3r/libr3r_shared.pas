@@ -7,6 +7,7 @@ const
   SubscriptionAdd = 1;
   SubscriptionDelete = 2;
   SubscriptionGet = 3;
+  SubScriptionGetCount = 4;
 
 type
   TMessageProc = procedure(IsError: byte; MessageName, Extra: PChar); cdecl;
@@ -107,7 +108,7 @@ begin
     end
     else if FieldName = 'main-link' then
     begin
-      Result := StrToPChar(MainLink)
+      Result := StrToPChar(GetMainLink)
     end
     else if FieldName = 'description' then
     begin
@@ -203,7 +204,6 @@ begin
   else if Mode = SubscriptionGet then
   begin
     Subscription := StrToPChar(Subscriptions^.GetNth(Index));
-    Subscription := 'foo';
   end;
 end;
 

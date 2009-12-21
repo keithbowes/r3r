@@ -266,11 +266,13 @@ PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(F
 CXX ?= g++
 CXXFLAGS += $(shell wx-config --cxxflags) \
 						-DICONFILE=\"$(icondir)/r3r.png\" \
-						-DLOCALEDIR=\"$(localedir)\" -DHAS_PTHREAD \
-						-Wall
-LDFLAGS += $(shell wx-config --libs) -llibr3r_shared -lpthread \
-					 -L../../libr3r
-LIBS += -llibr3r_shared -lpthread
+						-DLOCALEDIR=\"$(localedir)\" -Wall
+LDFLAGS += $(shell wx-config --libs) -L../../libr3r
+LIBS += -llibr3r_shared
+ifdef HAS_PTHREAD
+	CXXFLAGS += -DHAS_PTHREAD
+	LIBS += -lpthread
+endif
 ifndef RELEASE
 	CXXFLAGS += -g
 endif

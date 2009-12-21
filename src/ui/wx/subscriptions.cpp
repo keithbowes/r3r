@@ -50,13 +50,16 @@ int Subscriptions::IndexOf(char * sub)
   }
 }
 
-#include <stdio.h>
-
 char * Subscriptions::GetNext()
 {
   char * ret;
   unsigned int count = 0;
-  libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
+  libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GETCOUNT, &ret, &count);
+
+  if (count > 0)
+  {
+    libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
+  }
 
   if (m_current >= count)
   {

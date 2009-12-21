@@ -50,9 +50,12 @@ begin
 
   if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
   begin
-    for FeedIndex := 0 to Subscriptions^.Count - 1 do
+    if Subscriptions^.Count > 0 then
     begin
-      RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
+      for FeedIndex := 0 to Subscriptions^.Count - 1 do
+      begin
+        RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
+      end;
     end;
   end;
 

@@ -104,8 +104,7 @@ begin
   Id := '';
   Uri := '';
   Myself := '';
-  //if Links^.Count > 0 then
-  //Links^.Clear;
+
   Links^.Add(nil);
 end;
 

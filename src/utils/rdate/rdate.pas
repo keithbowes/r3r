@@ -88,7 +88,7 @@ begin
   List := Split(Time, WhitespaceChars);
 
   Tm.Day := List.Strings[1];
-  Tm.MonthAbbrev := List.Strings[2];
+  Tm.MonthAbbrev := _(PChar(List.Strings[2]));
   Tm.Year := List.Strings[3];
   Tm.ZoneOffset := List.Strings[5];
 

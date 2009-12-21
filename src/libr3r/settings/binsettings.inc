@@ -1,17 +1,19 @@
 function IsValidSetting(Setting: String): Boolean;
 begin
   IsValidSetting := (Setting = 'accept-langs') or
-    (Setting = 'accept-types') or (Setting = 'browser') or
+    (Setting = 'accept-types') or
     (Setting = 'check-for-updates') or
-    (Setting = 'display-feed-title-only') or (Setting = 'editor') or
+    (Setting = 'display-feed-title-only') or
     (Setting = 'enable-mime-guess') or
+    (Setting = 'for:http') or (Setting = 'for:mailto') or
     (Setting = 'hide-cached-feed-items') or
     (Setting = 'hide-cached-feeds') or
     (Setting = 'load-subscriptions-on-startup') or
-    (Setting = 'mail-client') or (Setting = 'proxy-address') or
-    (Setting = 'proxy-port') or (Setting = 'show-messages') or
-    (Setting = 'use-custom-accept-langs') or
-    (Setting = 'use-custom-accept-types') or (Setting = 'use-proxy');
+    (Setting = 'proxy-address') or (Setting = 'proxy-port') or
+    (Setting = 'show-messages') or 
+    Setting = 'use-custom-accept-langs') or
+    (Setting = 'use-custom-accept-types') or
+    (Setting = 'use-proxy');
 end;
 
 constructor TRSettings.Create;
@@ -42,15 +44,14 @@ begin
 {$ENDIF}
 end;
 
-function TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
 var
   ASetting: PRSetting;
-  Ret: Boolean;
+  Exists: Boolean;
 begin
-  Ret := IndexOf(Setting) <> -1;
-  CheckBoolean := Ret;
+  Exists := IndexOf(Setting) <> -1;
 
-  if not Ret then
+  if not Exists then
   begin
     New(ASetting);
     with ASetting^ do
@@ -64,15 +65,14 @@ begin
   end;
 end;
 
-function TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer): Boolean;
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer);
 var
   ASetting: PRSetting;
-  Ret: Boolean;
+  Exists: Boolean;
 begin
-  Ret := IndexOf(Setting) <> -1;
-  CheckInteger := Ret;
+  Exists := IndexOf(Setting) <> -1;
 
-  if not Ret then
+  if not Exists then
   begin
     New(ASetting);
     with ASetting^ do
@@ -86,15 +86,14 @@ begin
   end;
 end;
 
-function TRSettings.CheckString(const Setting, ASection, Value: String): Boolean;
+procedure TRSettings.CheckString(const Setting, ASection, Value: String);
 var
   ASetting: PRSetting;
-  Ret: Boolean;
+  Exists: Boolean;
 begin
-  Ret := IndexOf(Setting) <> -1;
-  CheckString := Ret;
+  Exists := IndexOf(Setting) <> -1;
 
-  if not Ret then
+  if not Exists then
   begin
     New(ASetting);
     with ASetting^ do

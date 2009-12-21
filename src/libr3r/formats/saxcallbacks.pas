@@ -23,10 +23,9 @@ procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
   attr: String;
   Elem: PXmlElement;
-  i, j: word;
+  i: word;
 begin
   i := 0;
-  j := 0;
 
   with TXmlFeed(user_data) do
   begin
@@ -50,15 +49,14 @@ begin
         begin
           Elem^.Lang := StrPas((attrs + 1)^);
         end
-        else if j < 11 then
+        else if i < 11 then
         begin
-          Elem^.Attributes[j].Name := attr;
-          Elem^.Attributes[j].Value := StrPas((attrs + 1)^);
-          Inc(j);
+          Elem^.Attributes[i].Name := attr;
+          Elem^.Attributes[i].Value := StrPas((attrs + 1)^);
+          Inc(i);
         end;
 
         Inc(attrs, 2);
-        Inc(i, 2);
       end;
     end;
 

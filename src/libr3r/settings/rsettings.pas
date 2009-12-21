@@ -35,9 +35,9 @@ type
     FSettings: PRList;
     FSettingsFile: String;
     procedure InitRec;
-    function CheckBoolean(const Setting, ASection: String; const Value: Boolean): Boolean;
-    function CheckInteger(const Setting, ASection: String; const Value: integer): Boolean;
-    function CheckString(const Setting, ASection, Value: String): Boolean;
+    procedure CheckBoolean(const Setting, ASection: String; const Value: Boolean);
+    procedure CheckInteger(const Setting, ASection: String; const Value: integer);
+    procedure CheckString(const Setting, ASection, Value: String);
     procedure ReadRec;
     procedure WriteRec;
   public
@@ -138,6 +138,8 @@ begin
 end;
 
 function TRSettings.GetString(const Index: TRSetIndex): String;
+var
+  Setting: TRSetIndex;
 begin
   if Index <> -1 then
   begin
@@ -251,9 +253,8 @@ begin
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false);
   CheckString('accept-langs', 'HTTP Headers', '');
 
-  CheckString('browser', 'Programs', 'lynx');
-  CheckString('mail-client', 'Programs', 'sendmail');
-  CheckString('editor', 'Programs', 'vim');
+  CheckString('for:http', 'Programs', 'lynx');
+  CheckString('for:mailto', 'Programs', 'sendmail');
 end;
 
 initialization

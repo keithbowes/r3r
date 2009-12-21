@@ -16,6 +16,7 @@
 typedef struct
 {
   long int socket;
+  int error;
   struct addrinfo * info;
 } SocketInfo;
 
@@ -26,6 +27,16 @@ void socket_init_win32()
   WSAStartup(MAKEWORD(2, 2), &data);
 #endif
 }
+
+int socket_get_last_error()
+{
+#ifdef WIN32
+    return WSAGetLastError();
+#else
+      return errno;
+#endif
+}
+
 
 int socket_init(char * hostname, char * port)
 {
@@ -44,6 +55,8 @@ int socket_init(char * hostname, char * port)
 
   info->info = ainfo;
   info->socket = socket(ainfo->ai_family, ainfo->ai_socktype, ainfo->ai_protocol);
+
+  info->error = socket_get_last_error();
   return (int) info;
 }
 
@@ -58,7 +71,6 @@ void socket_done(int sock)
   close(info->socket);
 #endif
 
-  freeaddrinfo(info->info);
   free(info);
 }
 
@@ -66,6 +78,9 @@ void socket_connect(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
   connect(info->socket, info->info->ai_addr, info->info->ai_addrlen);
+  info->error = socket_get_last_error();
+
+  freeaddrinfo(info->info);
 }
 
 int socket_send(int sock, char * data)
@@ -74,6 +89,8 @@ int socket_send(int sock, char * data)
   SocketInfo * info = (SocketInfo *) sock;
 
   ret = send(info->socket, data, strlen(data), 0);
+  info->error = socket_get_last_error();
+
   return ret;
 }
 
@@ -103,14 +120,12 @@ int socket_receive(int sock, char * buf, int len)
     }
   }
 
+  info->error = socket_get_last_error();
   return total;
 }
 
-int socket_get_error()
+int socket_get_error(int sock)
 {
-#ifdef WIN32
-  return WSAGetLastError();
-#else
-  return errno;
-#endif
+  SocketInfo * info = (SocketInfo *) sock;
+  return info->error;
 }

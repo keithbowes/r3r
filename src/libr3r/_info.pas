@@ -2,27 +2,24 @@ unit Info;
 
 interface
 
-const
-  Version = '@VERSION@';
-
 function UserAgent: String;
 
 implementation
 
 uses
-{$IFDEF UNIX}
-  BaseUnix
+{$IFDEF __GPC__}
+  GPC
 {$ELSE}
-  {$IFDEF WIN32}
-    Windows
+  {$IF DEFINED(FPC) and DEFINED(UNIX)}
+    BaseUnix
   {$ELSE}
-    Dos
+    {$IFDEF MSWINDOWS}
+      Windows
+    {$ELSE}
+      Dos
+    {$ENDIF}
   {$ENDIF}
 {$ENDIF},
-
-{$IFDEF __GPC__}
-  GPC,
-{$ENDIF}
 
 {$IFDEF SOCKETS_SYNAPSE}
   BlckSock,
@@ -34,40 +31,40 @@ var
   Name, Version: String;
   Data: Pointer;
 begin
-{$IFDEF UNIX}
-  Data := GetMem(SizeOf(UtsName));
-  FpUname(UtsName(Data^));
-  Name := UtsName(Data^).SysName;
-  Version := UtsName(Data^).Release;
-  FreeMem(Data);
+{$IFDEF __GPC__}
+  Name := SystemInfo.OSName;
+  Version := SystemInfo.OSRelease;
 {$ELSE}
-  {$IFDEF WIN32}
-    New(LPOSVERSIONINFO(Data));
-    with OSVERSIONINFO(Data^) do
-    begin
-      dwOSVersionInfoSize := SizeOf(OSVERSIONINFO);
-      GetVersionEx(Data);
-      case dwPlatformId of
-        VER_PLATFORM_WIN32_NT:
-        begin
-          Name := 'Windows NT';
-        end;
-        VER_PLATFORM_WIN32_WINDOWS:
-        begin
-          Name := 'Windows';
-        end;
-        VER_PLATFORM_WIN32s:
-        begin
-          Name := 'Win32s';
-        end;
-      end;
-      Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMinorVersion);
-    end;
-    Dispose(LPOSVERSIONINFO(Data));
+  {$IF DEFINED(FPC) and DEFINED(UNIX)}
+    GetMem(Data, SizeOf(UtsName));
+    FpUname(PUtsName(Data)^);
+    Name := PUtsName(Data)^.SysName;
+    Version := PUtsName(Data)^.Release;
+    FreeMem(Data);
   {$ELSE}
-    {$IFDEF __GPC__}
-      Name := SystemInfo.OSName;
-      Version := SystemInfo.OSRelease;
+    {$IFDEF MSWINDOWS}
+      New(LPOSVERSIONINFO(Data));
+      with OSVERSIONINFO(Data^) do
+      begin
+        dwOSVersionInfoSize := SizeOf(OSVERSIONINFO);
+        GetVersionEx(Data);
+        case dwPlatformId of
+          VER_PLATFORM_WIN32_NT:
+          begin
+            Name := 'Windows NT';
+          end;
+          VER_PLATFORM_WIN32_WINDOWS:
+          begin
+            Name := 'Windows';
+          end;
+          VER_PLATFORM_WIN32s:
+          begin
+            Name := 'Win32s';
+          end;
+        end;
+        Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMinorVersion);
+      end;
+      Dispose(LPOSVERSIONINFO(Data));
     {$ELSE}
       Name := 'DOS';
       Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));

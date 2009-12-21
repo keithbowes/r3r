@@ -39,6 +39,8 @@ var
   IsRDF: Boolean;
 begin
   inherited ParseLine(Line, Item, ItemFinished);
+  Elem := GetCurrentElement;
+  Prev := GetPreviousElement;
 
   if Pos(DCNS, GetCurrentElement.Name) = 1 then
   begin
@@ -66,10 +68,7 @@ begin
 
   FillItem(Item);
 
-  Elem := GetCurrentElement;
   StripNS(Elem.Name, RSS1NS);
-
-  Prev := GetPreviousElement;
   StripNS(Prev.Name, RSS1NS);
 
   ItemFinished := ((Elem.Name = 'item') and ((Prev.Name = 'item') or FLeftChannel)) or (Line = SockEof);
@@ -94,6 +93,7 @@ begin
   with GetCurrentElement do
   begin
     StripNS(Name, RSS1NS);
+
     if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
     begin
       Item.Title := Item.Title + Content;
