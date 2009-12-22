@@ -7,7 +7,6 @@ const
   SubscriptionAdd = 1;
   SubscriptionDelete = 2;
   SubscriptionGet = 3;
-  SubScriptionGetCount = 4;
 
 type
   TMessageProc = procedure(IsError: byte; MessageName, Extra: PChar); cdecl;

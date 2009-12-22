@@ -227,7 +227,7 @@ begin
   Connect(Host, Port, Path, Search);
 
   FullPath := FIndirectHost + FPath;
-  FullPath := StringReplace(FullPath, PathDelim, '_', [rfReplaceAll]);
+  FullPath := StringReplace(FullPath, '/', '_', [rfReplaceAll]);
   FullPath := StringReplace(FullPath, '?', '__', [rfReplaceAll]);
 
   Cache := CreateCache(FullPath);

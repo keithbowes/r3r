@@ -58,6 +58,7 @@ char * Subscriptions::GetNext()
 
   if (count > 0)
   {
+    count = 0;
     libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
   }
 

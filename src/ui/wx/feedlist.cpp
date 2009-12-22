@@ -70,8 +70,6 @@ void item_parsed(void * item)
     normalize_field_value(&subject);
   }
 
-  listItem.SetData(item);
-
   listItem.SetColumn(2);
   listItem.SetText(subject);
   feedList->SetItem(listItem);
@@ -202,7 +200,7 @@ void GoBrowser(char * url)
   wxString browser, command, URL;
 
   index = 0;
-  name = (char *) "browser";
+  name = (char *) "for:http";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   browser = wxString((char *) value);

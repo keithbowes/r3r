@@ -23,7 +23,7 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
   char * whom = (char *) contact->GetClientData();
 
   index = 0;
-  name = (char *) "mail-client";
+  name = (char *) "for:mailto";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   mclient = wxString((char *) value);
@@ -165,15 +165,28 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 {
   char *s;
   Subscriptions * subs = GetSubscriptionsObject();
-  wxMenu * menu = (wxMenu *) event.GetEventObject();
-  wxMenuItem * item = menu->FindItem(wxID_LOAD_SUBSCRIPTIONS);
+  wxWindow * obj = (wxWindow *) event.GetEventObject();
+  wxClassInfo * info = obj->GetClassInfo();
+  wxMenuItem * item;
+  
+  if (strcmp(info->GetClassName(), "wxMenu") == 0)
+  {
+    // Linux
+    item = ((wxMenu *) obj)->FindItem(wxID_LOAD_SUBSCRIPTIONS);
+  }
+  else if (strcmp(info->GetClassName(), "wxFrame") == 0)
+  {
+    // Windows
+    wxMenuBar * mb = ((wxFrame *) obj)->GetMenuBar();
+    item = mb->FindItem(wxID_LOAD_SUBSCRIPTIONS);
+  }
 
   if (item)
   {
     item->Enable(FALSE);
   }
 
-  while((s = subs->GetNext()))
+  while((s = subs->GetNext()) != NULL)
   {
     ParseFeed(s);
   }

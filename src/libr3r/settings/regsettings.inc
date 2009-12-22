@@ -8,16 +8,21 @@ const
 function ReadAssocString(const Name: String): String;
 var
   OldKey: HKEY;
+  OldPath: String;
 begin
   with Reg do
   begin
     OldKey := RootKey;
+    OldPath := CurrentPath;
+    CloseKey;
 
     RootKey := HKEY_CLASSES_ROOT;
     OpenKey(Name + '\shell\open\command', true);
     ReadAssocString := ReadString('');
     CloseKey;
+
     RootKey := OldKey;
+    OpenKey(OldPath, true);
   end;
 end;
 
