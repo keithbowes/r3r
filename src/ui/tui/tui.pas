@@ -15,7 +15,7 @@ type
     procedure GoURI;
     procedure GoItem;
     procedure GoLink;
-    procedure OpenBrowser(const Link: String);
+    procedure OpenBrowser(Link: String);
     procedure SetOptions;
     procedure GoDonate;
   public
@@ -277,11 +277,31 @@ begin
   ShowHelp;
 end;
 
-procedure TTui.OpenBrowser(const Link: String);
+procedure TTui.OpenBrowser(Link: String);
 var
-  Browser: String;
+  Browser, Tmp: String;
+  Index: byte;
 begin
-  Browser := Settings.GetString(Settings.IndexOf('browser'));
+  Browser := Settings.GetString(Settings.IndexOf('for:http'));
+  { Check for the default registry association }
+  if Pos('%1', Browser) <> 0 then
+  begin
+    Index := Pos('-', Browser);
+    if Index = 0 then
+    begin
+      Index := Pos('/', Browser);
+    end;
+
+    if Index = 0 then
+    begin
+      Index := Pos('%1', Browser);
+    end;
+
+    Tmp := Copy(Browser, Index, Length(Browser) - Index + 1);
+    Browser := Copy(Browser, 1, Index - 2);
+
+    Link := StringReplace(Tmp, '%1', Link, [rfReplaceAll]);
+  end;
 
   SwapVectors;
   Exec(Browser, Link);

@@ -6,8 +6,6 @@ version=$(VERSION)
 nortl=y
 
 [prerules]
-include scripts/common.make
-
 UPX ?= upx
 
 USE_PAX ?= 1
@@ -21,6 +19,7 @@ else
 endif
 
 [rules]
+include scripts/common.make
 all:
 	cd icons && $(MAKE)
 	cd src && $(MAKE)
@@ -51,10 +50,18 @@ uninstall:
 
 # Distribution rules
 dist:
-	$(PAX) $(PAXFLAGS) r3r$(EXEEXT) \
-		icons/r3r.png src/libr3r/po/*.mo src/ui/$(R3R_UI)/po/*.mo | \
-		gzip -f > r3r-$(VERSION).tar.gz
-	$(MOVE) r3r-$(VERSION).tar.gz ..
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
+	$(COPY) r3r$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
+	$(COPY) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
+	$(COPY) icons/r3r.png  ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/libr3r/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/libr3r/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$(l)/libr3r.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/ui/$(R3R_UI)/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/ui/$(R3R_UI)/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l/r3r_$(R3R_UI).mo;)
+	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
+		gzip -f > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
+	$(DELTREE) ../r3r-$(VERSION)-$(PLATFORM)
 
 dist-src: clean
 	-$(MKDIR) ../r3r-$(VERSION)

@@ -4,7 +4,6 @@ programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCH
 
 PROGNAME = r3r
 VERSION = 2.0-beta3
-TIMESTAMP=$(shell date +%s)
 
 PREFIX ?= $(DESTDIR)
 
@@ -14,8 +13,14 @@ PREFIX = /usr/local
 else
 ifneq ($(OS),)
 PREFIX = /
-endif
-endif
+endif # inUnix
+endif # OS
+endif # PREFIX
+
+ifeq ($(SHAREDLIBEXT),.so)
+	SHAREDLIBPREFIX = lib
+else
+	SHAREDLIBPREFIX =
 endif
 
 prefix = $(PREFIX)
@@ -81,6 +86,7 @@ endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
 override COMPILER=FPC $(shell $(PC) -iW)
+PLATFORM=$(shell $(PC) -iTO)-$(shell $(PC) -iTP)
 DELP=delp -eq .
 
 DEFFLAG=-d
@@ -108,11 +114,12 @@ else
 R3R_UI ?= wx
 endif #RELEASE
 
-BUILD_SHARED=1
+BUILD_SHARED ?= 1
 
 else
 ifdef USE_GPC
-override COMPILER=$(shell $(call programpath,gpc) --version | head -n 1)
+override COMPILER=GPC $(shell $(PC) -dumpversion)
+PLATFORM=$(shell $(PC) -dumpmachine)
 DELP=$(DEL) $(wildcard *.gpd)
 
 PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \

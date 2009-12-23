@@ -205,7 +205,17 @@ void GoBrowser(char * url)
 
   browser = wxString((char *) value);
   URL = wxString(url);
-  command = browser + " " + URL;
+
+  if (wxNOT_FOUND == browser.Find("%1"))
+  {
+    command = browser + " " + URL;
+  }
+  else
+  {
+    browser.Replace("%1", URL);
+    URL.Clear();
+    command = browser;
+  }
 
   wxExecute(command);
 }

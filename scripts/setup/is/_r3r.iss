@@ -2,7 +2,7 @@
 AllowNoIcons=yes
 AppName=R3R
 AppPublisher=Keith Bowes
-AppPublisherURL=http://sourceforge.net/projects/r3r/
+AppPublisherURL=http://sourceforge.net/users/zooplah
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
 AppUpdatesURL=http://sourceforge.net/projects/r3r/
 AppVerName=R3R @VERSION@ 

@@ -21,6 +21,7 @@ type
   protected
     Cache: THttpCache;
     Headers: THeaders;
+    Method: String;
     procedure Connect(Host, Port, Path, Search: String);
     procedure SendHeader(Name: String);
     procedure SendHeaders;
@@ -230,6 +231,8 @@ begin
   inherited Create(Host, Port);
   Connect(Host, Port, Path, Search);
   InitCache;
+
+  Method := 'GET';
   FChunkedLength := 0;
 end;
 
@@ -296,7 +299,7 @@ var
 begin
   CacheHeader := Cache.GetCacheHeader;
 
-  SendHeader('GET ' + FPath + ' HTTP/1.1');
+  SendHeader(Method + ' ' + FPath + ' HTTP/1.1');
   SendHeader('Host: ' + FIndirectHost);
   SendHeader('User-Agent: ' + UserAgent);
 

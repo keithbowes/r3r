@@ -28,7 +28,16 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
 
   mclient = wxString((char *) value);
   recep = wxString((char *) whom);
-  cl = mclient + " " + recep;
+  mclient.Replace("%1", recep);
+
+  if (wxNOT_FOUND == mclient.Find(recep))
+  {
+    cl = mclient + " " + recep;
+  }
+  else
+  {
+    cl = mclient;
+  }
   
   wxExecute(cl);
 }

@@ -1385,11 +1385,6 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../scripts/common.make
-ifeq ($(SHAREDLIBEXT),.so)
-	SHAREDLIBPREFIX = lib
-else
-	SHAREDLIBPREFIX =
-endif
 all: info.pas rupdate.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
 	$(RM) protocols/rmessage$(OEXT) protocols/rmessage$(PPUEXT)
@@ -1413,6 +1408,6 @@ info.pas: _info.pas ../../scripts/common.make
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
 		-e 's/@COMPILER@/$(COMPILER)/g' _info.pas > info.pas
 	$(MAKE) info$(PPUEXT)
-rupdate.pas: _rupdate.pas
-	$(SED) -e 's/@TIMESTAMP@/$(TIMESTAMP)/g' $< > $@
+rupdate.pas: _rupdate.pas ../../scripts/common.make
+	$(SED) -e 's/@VERSION@/$(VERSION)/g' $< > $@
 	$(MAKE) rupdate$(PPUEXT)
