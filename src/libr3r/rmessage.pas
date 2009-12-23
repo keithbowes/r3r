@@ -2,41 +2,35 @@ unit RMessage;
 
 interface
 
-{$IFDEF __GPC__}
-type
-  TObject = class
-  end;
-{$ENDIF}
-
-procedure SetMessageObject(const Sender: TObject);
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
-
-implementation
-
 uses
   LibR3R, RSock;
+
+procedure SetMessageObject(const Sender: TLibR3R);
+procedure CallMessageEvent(Sender: TRSock; IsError: Boolean; MessageName: String);
+procedure CallMessageEventEx(Sender: TRSock; IsError: Boolean; MessageName: String; Extra: String);
+
+implementation
 
 var
   MessageObject: TLibR3R;
 
-procedure SetMessageObject(const Sender: TObject);
+procedure SetMessageObject(const Sender: TLibR3R);
 begin
-  MessageObject := TLibR3R(Sender);
+  MessageObject := Sender;
 end;
 
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
+procedure CallMessageEvent(Sender: TRSock; IsError: Boolean; MessageName: String);
 begin
   CallMessageEventEx(Sender, IsError, MessageName, '');
 end;
 
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
+procedure CallMessageEventEx(Sender: TRSock; IsError: Boolean; MessageName: String; Extra: String);
 begin
   if Assigned(MessageObject) and
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then
   begin
-    MessageObject.HandleMessage(Sender, IsError, MessageName, Extra);
-    TRSock(Sender).ShouldShow := false;
+    MessageObject.HandleMessage(IsError, MessageName, Extra);
+    Sender.ShouldShow := false;
   end;
 end;
 

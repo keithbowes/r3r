@@ -3,7 +3,7 @@ unit RGetFeed;
 interface
 
 uses
-  FeedItem, RSock, RMessage,
+  FeedItem, LibR3R, RSock, RMessage,
 {$IFDEF SOCKETS_SYNAPSE}
   SynaUtil
 {$ENDIF}
@@ -13,17 +13,19 @@ uses
 {$ENDIF};
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
-function ParseFeed(const Sender: TObject; const Sock: TRSock): Boolean;
+procedure ParseFeed(const Sock: TRSock);
+procedure SetFeedObject(const Lib: TLibR3R);
 
 implementation
 
 uses
-  LibR3R, LibR3RStrings, SysUtils
+  LibR3RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
 {$ENDIF};
 
 var
+  FeedObj: TLibR3R;
   Item: TFeedItem;
   ItemCreated: Boolean;
 
@@ -50,19 +52,17 @@ begin
   end;
 end;
 
-function ParseFeed(const Sender: TObject; const Sock: TRSock): Boolean;
+procedure ParseFeed(const Sock: TRSock);
 var
   Finished: Boolean;
-  Iter: cardinal;
 begin
   Finished := false;
-  Iter := 0;
 
   while not Finished do
   begin
     if Assigned(Sock.Sock) and Sock.Error then
     begin
-      CallMessageEvent(Sender, true, ErrorGetting);
+      CallMessageEvent(Sock, true, ErrorGetting);
       Break;
     end;
 
@@ -70,13 +70,14 @@ begin
 
     if Sock.ShouldShow then
     begin
-      TLibR3R(Sender).DisplayItem(Item);
+      FeedObj.DisplayItem(Item);
     end;
-
-    Inc(Iter);
   end;
+end;
 
-  ParseFeed := Iter > 1;
+procedure SetFeedObject(const Lib: TLibR3R);
+begin
+  FeedObj := Lib;
 end;
 
 initialization

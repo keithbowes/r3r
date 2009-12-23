@@ -41,6 +41,7 @@ type
     function LastError: integer;
     function RecvString(Len: word): String;
     procedure SendString(Data: String);
+    procedure CloseSocket;
   end;
 
 function ParseURL(URL: String; var Protocol, USer, Password, Host, Port, Path, Search: String): String;
@@ -57,7 +58,7 @@ end;
 
 destructor TSockWrap.Destroy;
 begin
-  socket_done(FSocket);
+  CloseSocket;
 end;
 
 procedure TSockWrap.Connect(const Host, Port: String);
@@ -118,6 +119,11 @@ end;
 procedure TSockWrap.SendString(Data: String);
 begin
   socket_send(FSocket, StrToPChar(Data));
+end;
+
+procedure TSockWrap.CloseSocket;
+begin
+  socket_done(FSocket);
 end;
 
 function ParseURL(URL: String; var Protocol, User, Password, Host, Port, Path, Search: String): String;

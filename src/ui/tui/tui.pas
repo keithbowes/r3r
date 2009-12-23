@@ -22,7 +22,7 @@ type
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
     procedure DisplayItem(const Item: TFeedItem); override;
-    procedure HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String); reintroduce;
+    procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
   end;
 
 implementation
@@ -140,9 +140,9 @@ begin
   WriteLn;
 end;
 
-procedure TTui.HandleMessage(Sender: TObject; Error: Boolean; MessageName, Extra: String);
+procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
-  if Error then
+  if IsError then
   begin
     Write(ErrorError)
   end

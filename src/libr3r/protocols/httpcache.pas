@@ -63,6 +63,7 @@ var
   IdsFile: text;
 begin
   New(FIdsList, Init);
+  New(Info);
 
   FCacheDir := SettingsDir + PathDelim + 'cache';
   CheckDir(FCacheDir);
@@ -84,7 +85,6 @@ begin
     Close(IdsFile);
   end;
 
-  New(Info);
   CurrentCache := Self;
 end;
 
@@ -119,6 +119,7 @@ begin
 
   InfoList := Split(InfoText, Tab);
 
+  Val(InfoList.Strings[0], CacheType, ErrPos);
   if ErrPos = 0 then
   begin
     case TCacheType(CacheType) of

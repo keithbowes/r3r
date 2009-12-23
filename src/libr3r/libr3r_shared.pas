@@ -20,7 +20,7 @@ type
     FUpdateProc: TUpdateProc;
   public
     procedure DisplayItem(const Item: TFeedItem); override;
-    procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); override;
+    procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
     procedure NotifyUpdate; override;
 
     property MessageProc: TMessageProc write FMessageProc;
@@ -37,7 +37,7 @@ begin
   end;
 end;
 
-procedure TLibR3R_Shared.HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+procedure TLibR3R_Shared.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(FMessageProc) then
   begin

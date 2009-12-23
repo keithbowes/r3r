@@ -3,7 +3,7 @@ unit LibR3R;
 interface
 
 uses
-  FeedItem, RMessage, RSettings, RSock, RSubscriptions;
+  FeedItem, RSettings, RSock, RSubscriptions;
 
 const
   SettingsRead = RSettings.SettingsRead;
@@ -25,13 +25,13 @@ type
     procedure NotifyUpdate; virtual;
     procedure DoParseItem(Item: TFeedItem);
     procedure DoUpdate;
-    function Parse: Boolean;
+    procedure Parse;
   public
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure RetrieveFeed(Resource: String);
     procedure DisplayItem(const Item: TFeedItem); virtual;
-    procedure HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String); virtual;
+    procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
   end;
 
 var
@@ -41,7 +41,7 @@ var
 implementation
 
 uses
-  Http, LibR3RStrings, LocalFile, RGetFeed, RUpdate
+  Http, LibR3RStrings, LocalFile, RGetFeed, RMessage, RUpdate
 {$IFDEF SOCKETS_BSD}
   , SockWrap
 {$ENDIF};
@@ -99,19 +99,25 @@ begin
   end;
 
   FSock.Execute;
+  Parse;
 
-  if Assigned(FSock) and Parse then
+  if Assigned(FSock) then
   begin
+{$IFDEF __GPC__}
+    FSock.Sock.CloseSocket;
+{$ELSE}
     FSock.Free;
+{$ENDIF}
   end;
 end;
 
-function TLibR3R.Parse: Boolean;
+procedure TLibR3R.Parse;
 var
   Item: TFeedItem;
 begin
-  SetMessageObject(TObject(Self));
-  Parse := ParseFeed(TObject(Self), FSock);
+  SetFeedObject(Self);
+  SetMessageObject(Self);
+  ParseFeed(FSock);
 end;
 
 { Implement as empty so if the UI doesn't implement them,
@@ -120,7 +126,7 @@ procedure TLibR3R.DisplayItem(const Item: TFeedItem);
 begin
 end;
 
-procedure TLibR3R.HandleMessage(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+procedure TLibR3R.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
 end;
 

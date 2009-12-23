@@ -67,11 +67,11 @@ endif # USE_GPC
 endif # USE_FPC
 else
 PC=$(call programpath,fpc)
-ifndef ($(findstring fpc,$(PC)))
+ifneq ($(findstring fpc,$(PC)),)
 USE_FPC=1
 else
 PC=$(call programpath,gp)
-ifneq ($(findstring gp,$(PC)))
+ifneq ($(findstring gp,$(PC)),)
 USE_GPC=1
 else
 $(error No Pascal compiler detected)

@@ -33,7 +33,7 @@ type
 {$ENDIF}
 
     ShouldShow: Boolean;
-    constructor Create(Protocol, Host, Port: String);
+    constructor Create(Host, Port: String);
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure DomainSet(Host, Port: String);
     procedure Execute; virtual;
@@ -107,7 +107,7 @@ begin
   end;
 end;
 
-constructor TRSock.Create(Protocol, Host, Port: String);
+constructor TRSock.Create(Host, Port: String);
 begin
 {$IFNDEF __GPC__}
   inherited Create;

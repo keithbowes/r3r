@@ -24,6 +24,7 @@ type
     procedure Connect(Host, Port, Path, Search: String);
     procedure SendHeader(Name: String);
     procedure SendHeaders;
+    procedure InitCache;
   public
     constructor Create(Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
     procedure Execute; override;
@@ -98,7 +99,7 @@ begin
       Val(Copy(RespList.Strings[0], 6, 3), FHttpVersion, ErrPos);
       if ErrPos <> 0 then
       begin
-        CallMessageEventEx(TObject(Self), true, InvalidHeaders, FURL);
+        CallMessageEventEx(Self, true, InvalidHeaders, FURL);
         Break;
       end;
 
@@ -114,6 +115,12 @@ begin
       ColonIndex := Pos(':', Line);
       HeaderName := LowerCase(Copy(Line, 1, ColonIndex - 1));
       HeaderValue := Trim(Copy(Line, ColonIndex + 1, Length(Line) - ColonIndex));
+
+      if Line = '' then
+      begin
+        CallMessageEventEx(Self, true, InvalidHeaders, FURL);
+        HeaderState := hsStarted;
+      end;
 
       if HeaderName = 'date' then
       begin
@@ -153,13 +160,12 @@ begin
       else if HeaderName = 'location' then
       begin
         Headers.Status := 200;
-
-        Sock.Free;
+        Sock.CloseSocket;
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
         Connect(Host, Port, Path, Para);
         Execute;
-        ParseFeed(TObject(Self), Self);
+        ParseFeed(Self);
       end
       else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
       begin
@@ -220,19 +226,10 @@ begin
 end;
 
 constructor THttpSock.Create(Host, Port, Path, Search: String);
-var
-  FullPath: String;
 begin
-  inherited Create('http', Host, Port);
+  inherited Create(Host, Port);
   Connect(Host, Port, Path, Search);
-
-  FullPath := FIndirectHost + FPath;
-  FullPath := StringReplace(FullPath, '/', '_', [rfReplaceAll]);
-  FullPath := StringReplace(FullPath, '?', '__', [rfReplaceAll]);
-
-  Cache := CreateCache(FullPath);
-  Cache.Info^.CacheParam := '';
-
+  InitCache;
   FChunkedLength := 0;
 end;
 
@@ -325,6 +322,18 @@ begin
   SendHeader('Accept-Encoding: ');
   SendHeader('Connection: close');
   SendHeader('');
+end;
+
+procedure THttpSock.InitCache;
+var
+  FullPath: String;
+begin
+  FullPath := FIndirectHost + FPath;
+  FullPath := StringReplace(FullPath, '/', '_', [rfReplaceAll]);
+  FullPath := StringReplace(FullPath, '?', '__', [rfReplaceAll]);
+
+  Cache := CreateCache(FullPath);
+  Cache.Info^.CacheParam := '';
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;

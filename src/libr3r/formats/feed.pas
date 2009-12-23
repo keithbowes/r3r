@@ -70,8 +70,6 @@ begin
           Item.Clear;
           ShouldShow := false;
         end;
-
-        Item.Id := '';
       end;
     end;
   end;

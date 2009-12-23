@@ -4,6 +4,7 @@ AppName=R3R
 AppPublisher=Keith Bowes
 AppPublisherURL=http://sourceforge.net/projects/r3r/
 AppSupportURL=http://sourceforge.net/forum/forum.php?forum_id=313224
+AppUpdatesURL=http://sourceforge.net/projects/r3r/
 AppVerName=R3R @VERSION@ 
 DefaultDirName={pf}\R3R 2.0
 DefaultGroupName=R3R 2.0

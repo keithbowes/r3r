@@ -78,7 +78,7 @@ begin
     FLeftChannel :=  false;
   end;
 
-  ShouldShow := Elem.Name <> 'RDF';
+  ShouldShow := ShouldShow and (Elem.Name <> 'RDF');
 end;
 
 function TRssFeed.GetFormat: TFeedType;
