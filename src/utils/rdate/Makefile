@@ -263,7 +263,8 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-UNIT_DIRS=../* ../../libr3r/po ../../third-party/*
+UNIT_DIRS=../* ../../libr3r ../../libr3r/* ../../third-party/* \
+					../../utils/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1386,4 +1387,5 @@ endif
 include ../../../scripts/common.make
 all: libr3rstrings rdate$(PPUEXT)
 libr3rstrings:
+	cd ../../libr3r && $(MAKE) info.pas rupdate.pas
 	cd ../../libr3r/po && $(MAKE)

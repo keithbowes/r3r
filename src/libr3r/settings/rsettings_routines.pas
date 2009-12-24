@@ -2,6 +2,14 @@ unit RSettings_Routines;
 
 interface
 
+{$IFDEF __GPC__}
+uses
+  GPC;
+
+const
+  PathDelim = DirSeparator;
+{$ENDIF}
+
 procedure CheckDir(const Dir: String);
 function SettingsDir: String;
 
@@ -10,10 +18,6 @@ implementation
 uses
 {$IFNDEF FPC}
   Dos,
-{$ENDIF}
-
-{$IFDEF __GPC__}
-  GPC,
 {$ENDIF}
   SysUtils;
 
@@ -26,11 +30,6 @@ begin
 end;
 
 function SettingsDir: String;
-{$IFDEF __GPC__}
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
-
 var
   Ret: String;
 begin

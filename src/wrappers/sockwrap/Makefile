@@ -1391,6 +1391,6 @@ clean:
 sockwrap.pas: sockwrapc.c
 	$(TOUCH) $@
 %$(COBJEXT): %.c
-	$(CC) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 %.c: %.h
 	$(TOUCH) $@

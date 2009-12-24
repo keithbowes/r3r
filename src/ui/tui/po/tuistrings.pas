@@ -5,9 +5,6 @@ unit TuiStrings;
 
 interface
 
-uses
-  LibIntl;
-
 var
   Feed: String;
   GoUrl: String;
@@ -48,6 +45,9 @@ var
   UpdateAvailable: String;
 
 implementation
+
+uses
+  LibIntl, LibR3R, RStrings;
 
 procedure InitStrings;
 begin
@@ -94,7 +94,7 @@ initialization
 
 setlocale(LC_ALL, '');
 textdomain('r3r_tui');
-bindtextdomain('r3r_tui', '@localedir@');
+bindtextdomain('r3r_tui', StrToPChar(Settings.GetString(Settings.IndexOf('installed-prefix')) + '/share/locale'));
 
 InitStrings;
 

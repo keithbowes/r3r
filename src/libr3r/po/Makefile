@@ -265,7 +265,7 @@ endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
 .SUFFIXES:
 .SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
-UNIT_DIRS = ../../third-party/*
+UNIT_DIRS = .. ../* ../../third-party/* ../../utils/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1384,9 +1384,9 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: libr3rstrings.pas $(subst .po,.mo, $(wildcard *.po))
+all: libr3rstrings$(PPUEXT) $(subst .po,.mo, $(wildcard *.po))
 clean:
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~) libr3rstrings.pas
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
 install:
 	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
 uninstall:
@@ -1394,6 +1394,3 @@ uninstall:
 %.mo: %.po libr3rstrings.pot
 	-msgmerge -Uq $< libr3rstrings.pot
 	-msgfmt -o $@ $<
-libr3rstrings.pas: _libr3rstrings.pas
-	$(SED) -e 's/@localedir@/$(subst /,\/,$(localedir))/g' $< > $@
-	$(MAKE) libr3rstrings$(PPUEXT)

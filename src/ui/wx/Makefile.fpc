@@ -1,8 +1,7 @@
 [prerules]
 CXX ?= g++
-CXXFLAGS += $(shell wx-config --cxxflags) \
-						-DICONFILE=\"$(icondir)/r3r.png\" \
-						-DLOCALEDIR=\"$(localedir)\" -Wall
+CXXFLAGS += $(shell wx-config --cxxflags) -Wall \
+						-DVERSION=\"$(VERSION)\"
 LDFLAGS += $(shell wx-config --libs) -L../../libr3r
 LIBS += -llibr3r_shared
 
@@ -55,13 +54,14 @@ r3r$(EXEEXT): $(addsuffix $(OEXT),$(objects))
 %$(CXXEXT): %$(HEXT) wx.h
 	$(TOUCH) $@
 
-desc.cpp location.cpp settings-subscriptions.cpp: widgetids.h
+desc.cpp location.cpp settings-programs.cpp \
+	settings-subscriptions.cpp: widgetids.h
 	$(TOUCH) $@
 
 events.cpp: eventtables.h libr3r.h widgetids.h
 	$(TOUCH) $@
 
-feedlist.h settingscheckbox.h subscriptions.h: libr3r.h
+feedlist.h frame.h settingscheckbox.h subscriptions.h: libr3r.h
 	$(TOUCH) $@
 
 menu.cpp settingsentry.cpp: libr3r.h widgetids.h

@@ -41,20 +41,20 @@ int socket_get_last_error()
 int socket_init(char * hostname, char * port)
 {
   int err;
-  struct addrinfo * ainfo;
+  struct addrinfo * ai;
   SocketInfo * info = (SocketInfo *) malloc(sizeof(SocketInfo));
 
   socket_init_win32();
   
-  err = getaddrinfo(hostname, port, NULL, &ainfo);
+  err = getaddrinfo(hostname, port, NULL, &ai);
   if (err != 0)
   {
     printf("%s\n", gai_strerror(err));
     return SOCKET_ERROR;
   }
 
-  info->info = ainfo;
-  info->socket = socket(ainfo->ai_family, ainfo->ai_socktype, ainfo->ai_protocol);
+  info->info = ai;
+  info->socket = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
 
   info->error = socket_get_last_error();
   return (int) info;
@@ -77,8 +77,12 @@ void socket_done(int sock)
 void socket_connect(int sock)
 {
   SocketInfo * info = (SocketInfo *) sock;
-  connect(info->socket, info->info->ai_addr, info->info->ai_addrlen);
-  info->error = socket_get_last_error();
+
+  if (info->socket != INVALID_SOCKET)
+  {
+    connect(info->socket, info->info->ai_addr, info->info->ai_addrlen);
+    info->error = socket_get_last_error();
+  }
 
   freeaddrinfo(info->info);
 }

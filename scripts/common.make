@@ -3,7 +3,7 @@
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
 PROGNAME = r3r
-VERSION = 2.0-beta3
+VERSION = 2.0-beta4
 
 PREFIX ?= $(DESTDIR)
 
@@ -11,7 +11,7 @@ ifeq ($(PREFIX),)
 ifdef inUnix
 PREFIX = /usr/local
 else
-ifneq ($(OS),)
+ifdef OS
 PREFIX = /
 endif # inUnix
 endif # OS
@@ -51,7 +51,7 @@ inWindows = 1
 else
 ifdef inCygwin
 inWindows = 1
-endif #inCygwin
+endif # inCygwin
 endif # inWinNT
 
 ifdef inUnix
@@ -62,11 +62,11 @@ ifneq ($(or $(USE_GPC),$(USE_FPC)),)
 COMPILER_OVERRIDE=1
 endif
 
-ifneq ($(COMPILER_OVERRIDE),)
-ifneq ($(USE_FPC),)
+ifdef COMPILER_OVERRIDE
+ifdef USE_FPC
 PC=$(call programpath,fpc)
 else
-ifneq ($(USE_GPC),)
+ifdef USE_GPC
 PC=$(call programpath,gp)
 endif # USE_GPC
 endif # USE_FPC
@@ -102,7 +102,7 @@ endif # RELEASE
 
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
-ifneq ($(inWindows),)
+ifdef inWindows
 DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_INI
@@ -118,8 +118,9 @@ BUILD_SHARED ?= 1
 
 else
 ifdef USE_GPC
-override COMPILER=GPC $(shell $(PC) -dumpversion)
-PLATFORM=$(shell $(PC) -dumpmachine)
+GPC=$(call programpath,gpc)
+override COMPILER=GPC $(shell $(GPC) -dumpversion)
+PLATFORM=$(shell $(GPC) -dumpmachine)
 DELP=$(DEL) $(wildcard *.gpd)
 
 PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
@@ -129,7 +130,6 @@ DEFS_SETTINGS ?= SETTINGS_TAB
 DEFS_SOCKETS ?= SOCKETS_BSD
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
-EXTRACLEANFILES=.gpd
 
 ifndef RELEASE
 PCFLAGS_DEBUG=--pointer-checking --progress-messages \

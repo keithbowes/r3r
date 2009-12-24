@@ -21,11 +21,7 @@ type
 implementation
 
 uses
-  Atom, DC, RDate, RStrings, SockConsts
-
-{$IFDEF __GPC__}
-  , SysUtils
-{$ENDIF};
+  Atom, DC, RDate, RStrings, SockConsts, SysUtils;
 
 function GetAtomFeed: TAtomFeed;
 begin
@@ -90,67 +86,67 @@ procedure TRssFeed.FillItem(var Item: TFeedItem);
 var
   PLink: PChar;
 begin
-  with GetCurrentElement do
+  with GetCurrentElement, Item do
   begin
     StripNS(Name, RSS1NS);
 
     if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
     begin
-      Item.Title := Item.Title + Content;
+      Title := Title + Content;
     end
     else if Name = 'description' then
     begin
-      Item.Description := Item.Description + Content;
+      Description := Description + Content;
     end
     else if Name = 'link' then
     begin
       PLink := StrToPChar(Content);
-      Item.Links^.Add(PLink);
+      Links^.Add(PLink);
     end
     else if Name = 'category' then
     begin
       if FLastCat <> Content then
       begin
-        if Item.Subject <> '' then
+        if Subject <> '' then
         begin
-          Item.Subject := Item.Subject + ', ';
+          Subject := Subject + ', ';
         end;
  
-        Item.Subject := Item.Subject + Content;
+        Subject := Subject + Content;
         FLastCat := Content
       end;
     end
     else if Name = 'pubdate' then
     begin
-      Item.Created := Item.Created + Content;
-      Item.Created := TimeToString(LongDateToTime(Item.Created));
+      Created := Created + Content;
+      Created := TimeToString(LongDateToTime(Created));
     end
     else if Name = 'managingeditor' then
     begin
-      Item.Contact^ := CreateEmailRecord(Content, '(', 1);
+      Contact^ := CreateEmailRecord(Content, '(', 1);
     end
     else if Name = 'generator' then
     begin
-      Item.Generator := Item.Generator + Content;
+      Generator := Generator + Content;
     end
     else if Name = 'lastpubdate' then
     begin
-      Item.LastModified := Item.LastModified + Content;
-      Item.LastModified := TimeToString(LongDateToTime(Item.LastModified));
+      LastModified := LastModified + Content;
+      LastModified := TimeToString(LongDateToTime(LastModified));
     end
     else if Name = 'language' then
     begin
-      Item.Language := Item.Language + Content;
-      Lang := Item.Language;
+      Language := Language + Content;
+      Lang := Language;
     end
     else if Name = 'copyright' then
     begin
-      Item.Copyright := Item.Copyright + Content;
+      Copyright := Copyright + Content;
     end
     else if Name = 'guid' then
     begin
-      Item.Id := Item.Id + Content;
-      Item.Uri := Item.Id;
+      Id := Id + Content;
+      Uri := Id;
     end
     else if Name = 'channel' then
     begin

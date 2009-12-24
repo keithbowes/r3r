@@ -37,6 +37,7 @@ class MenuEvents : public wxWindow
 {
   public:
     void OnAbout(wxCommandEvent & event);
+    void OnCheckUpdates(wxCommandEvent & event);
     void OnDonate(wxCommandEvent & event);
     void OnLoadSubscriptions(wxCommandEvent & event);
     void OnOpen(wxCommandEvent & event);
@@ -67,5 +68,6 @@ class SubscriptionsEvents: public wxWindow
 {
   public:
     void OnAdd(wxCommandEvent & event);
+    void OnBrowse(wxCommandEvent & event);
     void OnDelete(wxCommandEvent & event);
 };

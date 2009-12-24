@@ -255,6 +255,8 @@ begin
 
   CheckString('for:http', 'Programs', 'lynx');
   CheckString('for:mailto', 'Programs', 'sendmail');
+
+  CheckString('installed-prefix', 'System', ExtractFileDir(ParamStr(0)) + PathDelim + '..' + PathDelim);
 end;
 
 initialization

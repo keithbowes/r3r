@@ -8,10 +8,11 @@ begin
     (Setting = 'for:http') or (Setting = 'for:mailto') or
     (Setting = 'hide-cached-feed-items') or
     (Setting = 'hide-cached-feeds') or
+    (Setting = 'installed-prefix') or
     (Setting = 'load-subscriptions-on-startup') or
     (Setting = 'proxy-address') or (Setting = 'proxy-port') or
     (Setting = 'show-messages') or 
-    Setting = 'use-custom-accept-langs') or
+    (Setting = 'use-custom-accept-langs') or
     (Setting = 'use-custom-accept-types') or
     (Setting = 'use-proxy');
 end;

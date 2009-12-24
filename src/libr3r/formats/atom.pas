@@ -10,7 +10,9 @@ type
   private
     { Category Type }
     FCatType: String;
+    FHasLongDesc: Boolean;
     FHasSelf: Boolean;
+    FHasShortDesc: Boolean;
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
@@ -107,9 +109,24 @@ begin
     begin
       Title := Title + Content;
     end
-    else if (Name = 'summary') or (Name = 'subtitle') then
+    else if (Name = 'subtitle') or (Name = 'summary') then
     begin
+      if not FHasLongDesc then
+      begin
+        Description := Description + Content;
+        FHasShortDesc := true;
+      end;
+    end
+    else if Name = 'content' then
+    begin
+      if FHasShortDesc then
+      begin
+        FHasShortDesc := true;
+        Description := '';
+      end;
+
       Description := Description + Content;
+      FHasLongDesc := true;
     end
     else if Name = 'link' then
     begin
@@ -247,7 +264,9 @@ constructor TAtomFeed.Create;
 begin
   inherited Create;
   FCatType := '';
+  FHasLongDesc := false;
   FHasSelf := false;
+  FHasShortDesc := false;
   FLeftFeed := false;
 end;
 

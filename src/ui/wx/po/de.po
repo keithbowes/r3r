@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-10 20:43-0500\n"
+"POT-Creation-Date: 2009-12-24 15:43-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
@@ -28,31 +28,31 @@ msgstr "&Kontaktieren"
 msgid "&Subscribe"
 msgstr "&Abonnieren"
 
-#: ../events.cpp:154
+#: ../events.cpp:165
 msgid "About R3R"
 msgstr "Über R3R"
 
-#: ../feedlist.cpp:29
+#: ../feedlist.cpp:22
 msgid "[None]"
-msgstr "Keine"
+msgstr "[Keine]"
 
-#: ../feedlist.cpp:106
+#: ../feedlist.cpp:94
 msgid "An update is available."
-msgstr ""
+msgstr "Ein Aktual ist vefügbar."
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:109
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:124
+#: ../feedlist.cpp:112
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:127
+#: ../feedlist.cpp:115
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:130
+#: ../feedlist.cpp:118
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
@@ -60,39 +60,43 @@ msgstr "Datum der es erstellt wurde"
 msgid "Go"
 msgstr "Gehen"
 
-#: ../menu.cpp:25
+#: ../menu.cpp:26
 msgid "&Open..."
 msgstr "&Öffnen..."
 
-#: ../menu.cpp:27
+#: ../menu.cpp:28
 msgid "E&xit"
 msgstr "&Beenden"
 
-#: ../menu.cpp:31
+#: ../menu.cpp:32
 msgid "&Load Subscriptions"
 msgstr "&Laden Abbonements"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:34
 msgid "&Settings..."
 msgstr "&Einstellungen..."
 
-#: ../menu.cpp:39
+#: ../menu.cpp:40
 msgid "&Donate"
 msgstr "&Spenden"
 
-#: ../menu.cpp:41
+#: ../menu.cpp:42
+msgid "&Check for updates"
+msgstr "&Suchen nach Aktuelles"
+
+#: ../menu.cpp:43
 msgid "&About"
 msgstr "&Über"
 
-#: ../menu.cpp:45
+#: ../menu.cpp:47
 msgid "&File"
 msgstr "&Seit"
 
-#: ../menu.cpp:46
+#: ../menu.cpp:48
 msgid "&Tools"
 msgstr "&Zeuge"
 
-#: ../menu.cpp:47
+#: ../menu.cpp:49
 msgid "&Help"
 msgstr "&Hilfe"
 
@@ -150,21 +154,21 @@ msgstr "&Proxy-Port: "
 
 #: ../settings-http.cpp:26
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
-#: ../settings-programs.cpp:14
+#: ../settings-programs.cpp:15
 msgid "&Browser"
-msgstr ""
+msgstr "&Browser"
 
-#: ../settings-programs.cpp:20
+#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+msgid "&Browse..."
+msgstr "&Blättern..."
+
+#: ../settings-programs.cpp:25
 msgid "&Mail Client"
 msgstr "Mail-Client"
 
-#: ../settings-programs.cpp:26
-msgid "&Editor"
-msgstr ""
-
-#: ../settings-programs.cpp:32
+#: ../settings-programs.cpp:35
 msgid "Programs"
 msgstr "Programms"
 

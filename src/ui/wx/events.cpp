@@ -165,6 +165,16 @@ void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
   wxMessageBox(user_agent, _("About R3R"), wxOK | wxICON_INFORMATION);
 }
 
+void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
+{
+  wxString command, url, version;
+  url = wxString("http://r3r.sourceforge.net/check.php?v=");
+  version = wxString(VERSION);
+  command = url + version;
+
+  GoBrowser((char *) command.c_str());
+}
+
 void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
 {
   GoBrowser((char *) "http://sourceforge.net/donate/index.php?group_id=90897");
@@ -309,6 +319,19 @@ void SubscriptionsEvents::OnAdd(wxCommandEvent & event)
     subs->Add((char *) value->c_str());
 
     entry->SetFocus();
+  }
+}
+
+void SubscriptionsEvents::OnBrowse(wxCommandEvent & event)
+{
+  wxButton * button = (wxButton *) event.GetEventObject();
+  wxTextCtrl * entry = (wxTextCtrl *) button->GetClientObject();
+
+  wxFileDialog * openFileDialog = new wxFileDialog(this);
+  if (openFileDialog->ShowModal() == wxID_OK)
+  {
+    wxString fileName = openFileDialog->GetPath();
+    entry->SetValue(fileName);
   }
 }
 

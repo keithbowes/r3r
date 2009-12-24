@@ -28,8 +28,10 @@ type
   THttpCache = class
   private
     FIdsList: PRStringList;
+    FRootCacheDir: String;
     procedure InvalidateFile(CFile: String);
     procedure WriteRawData(Data, CacheFile: String);
+    procedure Clean;
   public
     Info: PCacheInfo;
     constructor Create(const Url: String);
@@ -65,10 +67,10 @@ begin
   New(FIdsList, Init);
   New(Info);
 
-  FCacheDir := SettingsDir + PathDelim + 'cache';
-  CheckDir(FCacheDir);
+  FRootCacheDir := SettingsDir + PathDelim + 'cache';
+  CheckDir(FRootCacheDir);
 
-  FCacheDir := FCacheDir + PathDelim  + Url;
+  FCacheDir := FRootCacheDir + PathDelim  + Url;
   CheckDir(FCacheDir);
 
   ChDir(FCacheDir);
@@ -90,6 +92,7 @@ end;
 
 destructor THttpCache.Destroy;
 begin
+  Clean;
   Dispose(FIdsList, Done);
   Dispose(Info);
 
@@ -248,6 +251,56 @@ begin
 
   WriteLn(RawFile, Data);
   Close(RawFile);
+end;
+
+procedure THttpCache.Clean;
+const
+  MonthSecs = 60 * 60 * 24 * 30;
+var
+  Age, Cur: LongInt;
+  Rec: TSearchRec;
+
+function IsEmpty(const Path: String): Boolean;
+var
+  Rec: TSearchRec;
+begin
+  FindFirst(Path, faSysFile, Rec);
+  IsEmpty := Rec.Name = '';
+  FindClose(Rec);
+end;
+
+procedure Empty(const Dir: String);
+var
+  Rec: TSearchRec;
+begin
+  FindFirst(Dir + PathDelim + '*', faSysFile, Rec);
+  repeat
+    DeleteFile(Dir + PathDelim + Rec.Name);
+  until FindNext(Rec) <> 0;
+  FindClose(Rec);
+end;
+
+begin
+  Cur := DateTimeToFileDate(Now);
+
+  ChDir(FRootCacheDir);
+  FindFirst('*', faDirectory, Rec);
+  repeat
+    if not IsEmpty(Rec.Name + PathDelim + '*') then
+    begin
+      Age := FileAge(Rec.Name);
+      if Age < Cur - MonthSecs then
+      begin
+        Empty(Rec.Name);
+        RemoveDir(Rec.Name);
+      end;
+    end
+    else
+    begin
+      RemoveDir(Rec.Name);
+    end;
+  until FindNext(Rec) <> 0;
+  FindClose(Rec);
 end;
 
 end.

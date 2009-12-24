@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-10 20:43-0500\n"
+"POT-Creation-Date: 2009-12-24 15:43-0500\n"
 "PO-Revision-Date: 2009-11-30 14:49-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
@@ -28,31 +28,31 @@ msgstr "&Contact"
 msgid "&Subscribe"
 msgstr "&Subscribe"
 
-#: ../events.cpp:154
+#: ../events.cpp:165
 msgid "About R3R"
 msgstr "About R3R"
 
-#: ../feedlist.cpp:29
+#: ../feedlist.cpp:22
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:106
+#: ../feedlist.cpp:94
 msgid "An update is available."
-msgstr ""
+msgstr "An update is available."
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:109
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:124
+#: ../feedlist.cpp:112
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:127
+#: ../feedlist.cpp:115
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:130
+#: ../feedlist.cpp:118
 msgid "Date Created"
 msgstr "Date Created"
 
@@ -60,39 +60,43 @@ msgstr "Date Created"
 msgid "Go"
 msgstr "Go"
 
-#: ../menu.cpp:25
+#: ../menu.cpp:26
 msgid "&Open..."
 msgstr "&Open..."
 
-#: ../menu.cpp:27
+#: ../menu.cpp:28
 msgid "E&xit"
 msgstr "E&xit"
 
-#: ../menu.cpp:31
+#: ../menu.cpp:32
 msgid "&Load Subscriptions"
 msgstr "&Load Subscriptions"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:34
 msgid "&Settings..."
 msgstr "&Settings..."
 
-#: ../menu.cpp:39
+#: ../menu.cpp:40
 msgid "&Donate"
 msgstr "&Donate"
 
-#: ../menu.cpp:41
+#: ../menu.cpp:42
+msgid "&Check for updates"
+msgstr "&Check for updates"
+
+#: ../menu.cpp:43
 msgid "&About"
 msgstr "&About"
 
-#: ../menu.cpp:45
+#: ../menu.cpp:47
 msgid "&File"
 msgstr "&File"
 
-#: ../menu.cpp:46
+#: ../menu.cpp:48
 msgid "&Tools"
 msgstr "&Tools"
 
-#: ../menu.cpp:47
+#: ../menu.cpp:49
 msgid "&Help"
 msgstr "&Help"
 
@@ -118,7 +122,7 @@ msgstr "&Guess the file types of feeds"
 
 #: ../settings-display.cpp:31
 msgid "&Notify of updates"
-msgstr ""
+msgstr "&Notify of updates"
 
 #: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
@@ -152,29 +156,29 @@ msgstr "&Proxy Port: "
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../settings-programs.cpp:14
+#: ../settings-programs.cpp:15
 msgid "&Browser"
 msgstr "&Browser"
 
-#: ../settings-programs.cpp:20
+#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+msgid "&Browse..."
+msgstr "&Browse..."
+
+#: ../settings-programs.cpp:25
 msgid "&Mail Client"
 msgstr "&Mail Client"
 
-#: ../settings-programs.cpp:26
-msgid "&Editor"
-msgstr "&Editor"
-
-#: ../settings-programs.cpp:32
+#: ../settings-programs.cpp:35
 msgid "Programs"
 msgstr "Programs"
 
 #: ../settings-subscriptions.cpp:37
 msgid "&Delete"
-msgstr ""
+msgstr "&Delete"
 
 #: ../settings-subscriptions.cpp:41
 msgid "&Add"
-msgstr ""
+msgstr "&Add"
 
 #: ../settings-subscriptions.cpp:49
 msgid "Subscriptions"
