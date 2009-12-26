@@ -3,7 +3,7 @@
 
 #include "i18n.h"
 
-wxButton * contact, * subscribe;
+wxButton * contact, * podcast, * subscribe;
 wxStaticBox * descBox;
 
 void CreateDescriptionBox(wxPanel * parent)
@@ -30,6 +30,10 @@ void CreateDescriptionBox(wxPanel * parent)
   subscribe->Disable();
   hbox->Add(subscribe, 1, wxALL | wxALIGN_RIGHT, 5);
 
+  podcast = new wxButton(parent, wxID_PODCAST_BUTTON, _("&Play Podcast..."));
+  podcast->Disable();
+  hbox->Add(podcast, 1, wxALL | wxALIGN_RIGHT, 5);
+
   sizer->Add(bsizer, 2, wxEXPAND | wxALL, 5);
 }
 
@@ -41,6 +45,11 @@ wxStaticBox * GetDescriptionBox()
 wxButton * GetContactButton()
 {
   return contact;
+}
+
+wxButton * GetPodcastButton()
+{
+  return podcast;
 }
 
 wxButton * GetSubscribeButton()

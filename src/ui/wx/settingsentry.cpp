@@ -1,15 +1,13 @@
 #include "settingsentry.h"
 #include "widgetids.h"
 
-SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name, char * toggle) :
+SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
   wxTextCtrl(parent, -1)
 {
   char * name, * text;
   int count, index;
   unsigned char type;
   void * value;
-
-  m_toggle = NULL;
 
   index = 0;
   libr3r_access_settings(&index, &setting_name, &value, &type, &count, SETTINGS_READ);
@@ -45,30 +43,4 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name, char * togg
 
   list->Append(elem);
   SetClientData(elem);
-
-  if (toggle)
-  {
-    index = 0;
-    libr3r_access_settings(&index, &toggle, &value, &type, &count, SETTINGS_READ);
-
-    char * togName = (char *) malloc(257);
-    strcpy(togName, toggle);
-
-    SettingsListElement * togElem = new SettingsListElement();
-    togElem->SetName(togName);
-    togElem->SetValue(value);
-    list->Append(togElem);
-
-    SetToggle(togElem);
-  }
-}
-
-SettingsListElement * SettingsEntry::GetToggle()
-{
-  return m_toggle;
-}
-
-void SettingsEntry::SetToggle(SettingsListElement * toggle)
-{
-  m_toggle = toggle;
 }

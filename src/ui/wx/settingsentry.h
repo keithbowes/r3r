@@ -4,13 +4,8 @@
 
 class SettingsEntry : public wxTextCtrl
 {
-  private:
-    SettingsListElement * m_toggle;
   public:
-    SettingsEntry(wxWindow * parent, char * setting_name, char * toggle = NULL);
-
-    SettingsListElement * GetToggle();
-    void SetToggle(SettingsListElement * toggle);
+    SettingsEntry(wxWindow * parent, char * setting_name);
 
   DECLARE_EVENT_TABLE()
 };

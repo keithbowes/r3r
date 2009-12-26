@@ -11,8 +11,6 @@
 #define TYPE_INTEGER 2
 #define TYPE_BOOLEAN 3
 
-#define SEPARATOR_CHAR "\x93"
-
 typedef void (TMessageProc) (unsigned short int is_error, char * message_name, char * extra);
 typedef void (TParsedProc) (void * item);
 typedef void (TUpdateProc) ();

@@ -5,7 +5,8 @@ begin
     (Setting = 'check-for-updates') or
     (Setting = 'display-feed-title-only') or
     (Setting = 'enable-mime-guess') or
-    (Setting = 'for:http') or (Setting = 'for:mailto') or
+    (Setting = 'for:.ogg') or (Setting = 'for:http') or
+    (Setting = 'for:mailto') or
     (Setting = 'hide-cached-feed-items') or
     (Setting = 'hide-cached-feeds') or
     (Setting = 'installed-prefix') or

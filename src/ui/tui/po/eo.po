@@ -82,9 +82,8 @@ msgid "Description: "
 msgstr "Priskribo: "
 
 #: tuistrings:itemlink
-#, fuzzy
-msgid "Link %d: %s"
-msgstr "Ligilo: "
+msgid "Link %i: "
+msgstr "Ligilo %i: "
 
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
@@ -120,3 +119,6 @@ msgstr "Nova valoro: "
 
 msgid "A new version is available from http://sourceforge.net/projects/r3r"
 msgstr "Nova eldono el http://sourceforge.net/projects/r3r haveblas"
+
+msgid "Enclosure: "
+msgstr "Enmetaĵo: "

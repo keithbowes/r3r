@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-24 15:43-0500\n"
+"POT-Creation-Date: 2009-12-26 13:42-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
@@ -28,7 +28,11 @@ msgstr "&Kontaktieren"
 msgid "&Subscribe"
 msgstr "&Abonnieren"
 
-#: ../events.cpp:165
+#: ../desc.cpp:33
+msgid "&Play Podcast..."
+msgstr "&Spielen Podcast..."
+
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Über R3R"
 
@@ -36,23 +40,23 @@ msgstr "Über R3R"
 msgid "[None]"
 msgstr "[Keine]"
 
-#: ../feedlist.cpp:94
+#: ../feedlist.cpp:95
 msgid "An update is available."
 msgstr "Ein Aktual ist vefügbar."
 
-#: ../feedlist.cpp:109
+#: ../feedlist.cpp:110
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:113
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:116
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:119
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
@@ -132,27 +136,35 @@ msgstr "&Laden abbonements an ausführen"
 msgid "Display"
 msgstr "Anzeige"
 
-#: ../settings-headers.cpp:14
+#: ../settings-headers.cpp:15
 msgid "Custom Accept &Types: "
 msgstr "Benutzerdefinierte &Typen akzeptieren"
 
-#: ../settings-headers.cpp:20
+#: ../settings-headers.cpp:22 ../settings-headers.cpp:32
+msgid "Enable"
+msgstr "Ermöglichen"
+
+#: ../settings-headers.cpp:25
 msgid "Custom Accept &Languages: "
 msgstr "Benutzerdefinierte akzeptieren &Sprachen"
 
-#: ../settings-headers.cpp:26
+#: ../settings-headers.cpp:35
 msgid "HTTP Headers"
 msgstr "HTTP-Köpfe"
 
-#: ../settings-http.cpp:14
+#: ../settings-http.cpp:18
 msgid "Proxy &Address: "
 msgstr "Proxy-Adresse: "
 
-#: ../settings-http.cpp:20
+#: ../settings-http.cpp:24
 msgid "&Proxy Port: "
 msgstr "&Proxy-Port: "
 
-#: ../settings-http.cpp:26
+#: ../settings-http.cpp:30
+msgid "&Enable Proxy"
+msgstr "&Ermöglichen Prokura"
+
+#: ../settings-http.cpp:33
 msgid "HTTP"
 msgstr "HTTP"
 
@@ -161,6 +173,7 @@ msgid "&Browser"
 msgstr "&Browser"
 
 #: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+#: ../settings-programs.cpp:41
 msgid "&Browse..."
 msgstr "&Blättern..."
 
@@ -169,6 +182,10 @@ msgid "&Mail Client"
 msgstr "Mail-Client"
 
 #: ../settings-programs.cpp:35
+msgid "Media &Player"
+msgstr "Media-&Player"
+
+#: ../settings-programs.cpp:45
 msgid "Programs"
 msgstr "Programms"
 

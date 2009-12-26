@@ -32,11 +32,13 @@ type
     Copyright: String;
     Uri: String;
     Myself: String;
+    Enclosure: String;
 
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function LinksCount: cardinal;
     function GetMainLink: String;
+    function GetPodcast: String;
     procedure Clear;
   end;
 
@@ -137,6 +139,18 @@ begin
   end;
 
   GetMainLink := MainLink;
+end;
+
+function TFeedItem.GetPodcast: String;
+begin
+  if (Pos('mp3', Enclosure) <> 0) or (Pos('ogg', Enclosure) <> 0) then
+  begin
+    GetPodcast := Enclosure;
+  end
+  else
+  begin
+    GetPodcast := '';
+  end;
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;

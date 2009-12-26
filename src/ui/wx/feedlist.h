@@ -9,6 +9,7 @@ typedef struct
   char * link;
   char * title;
   char * self;
+  char * podcast;
 } ItemInfo;
 
 typedef struct

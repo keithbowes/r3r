@@ -27,6 +27,7 @@ var
   ItemSubject: String;
   ItemCreated: String;
   ItemDesc: String;
+  ItemEncl: String;
   ItemLink: String;
 
   InvalidNumber: String;
@@ -72,6 +73,7 @@ begin
   ItemSubject := _('Subject: ');
   ItemCreated := _('Created: ');
   ItemDesc := _('Description: ');
+  ItemEncl := _('Enclosure: ');
   ItemLink := _('Link %i: ');
 
   InvalidNumber := _('Invalid Number!');

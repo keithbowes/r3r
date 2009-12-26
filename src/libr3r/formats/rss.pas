@@ -84,6 +84,7 @@ end;
 
 procedure TRssFeed.FillItem(var Item: TFeedItem);
 var
+  Idx: byte;
   PLink: PChar;
 begin
   with GetCurrentElement, Item do
@@ -102,6 +103,16 @@ begin
     begin
       PLink := StrToPChar(Content);
       Links^.Add(PLink);
+    end
+    else if Name = 'enclosure' then
+    begin
+      for Idx := Low(Attributes) to High(Attributes) do
+      begin
+        if Attributes[Idx].Name = 'url' then
+        begin
+          Enclosure := Attributes[Idx].Value;
+        end;
+      end;
     end
     else if Name = 'category' then
     begin

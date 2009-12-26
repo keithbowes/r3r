@@ -42,6 +42,36 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
   wxExecute(cl);
 }
 
+void DescriptionBoxEvents::OnPodcast(wxCommandEvent & event)
+{
+  char * name;
+  int count, index;
+  unsigned char type;
+  void * value;
+  wxString cl, enclosure, mp;
+
+  wxButton * podcast = (wxButton *) event.GetEventObject();
+  enclosure = wxString((char *) podcast->GetClientData());
+
+  index = 0;
+  name = (char *) "for:.ogg";
+  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+
+  mp = wxString((char *) value);
+  mp.Replace("%1", enclosure);
+
+  if (wxNOT_FOUND == mp.Find(enclosure))
+  {
+    cl = mp + " " + enclosure;
+  }
+  else
+  {
+    cl = mp;
+  }
+  
+  wxExecute(cl);
+}
+
 void DescriptionBoxEvents::OnSubscribe(wxCommandEvent & event)
 {
   char * link;
@@ -116,6 +146,17 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   else
   {
     subscribe->Disable();
+  }
+
+  wxButton * podcast = GetPodcastButton();
+  if (strlen(info->podcast) > 0)
+  {
+    podcast->SetClientData(info->podcast);
+    podcast->Enable();
+  }
+  else
+  {
+    podcast->Disable();
   }
 }
 
@@ -275,7 +316,6 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
   SettingsEntry * entry = (SettingsEntry *) event.GetEventObject();
 
   SettingsListElement * elem = (SettingsListElement *) entry->GetClientData();
-  SettingsListElement * tog = entry->GetToggle();
 
   if (elem)
   {
@@ -292,12 +332,6 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
         strcpy(val, text);
         elem->SetValue((void *) val);
         break;
-    }
-
-    if (tog)
-    {
-      bool has_changed = true;
-      tog->SetValue((void *) has_changed);
     }
   }
 }
@@ -325,7 +359,7 @@ void SubscriptionsEvents::OnAdd(wxCommandEvent & event)
 void SubscriptionsEvents::OnBrowse(wxCommandEvent & event)
 {
   wxButton * button = (wxButton *) event.GetEventObject();
-  wxTextCtrl * entry = (wxTextCtrl *) button->GetClientObject();
+  wxTextCtrl * entry = (wxTextCtrl *) button->GetClientData();
 
   wxFileDialog * openFileDialog = new wxFileDialog(this);
   if (openFileDialog->ShowModal() == wxID_OK)

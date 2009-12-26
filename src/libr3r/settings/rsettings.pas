@@ -203,8 +203,9 @@ begin
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false);
   CheckString('accept-langs', 'HTTP Headers', '');
 
-  CheckString('for:http', 'Programs', 'lynx');
-  CheckString('for:mailto', 'Programs', 'sendmail');
+  CheckString('for:http', 'Programs', '');
+  CheckString('for:mailto', 'Programs', '');
+  CheckString('for:.ogg', 'Programs', '');
 
   CheckString('installed-prefix', 'System', ExtractFileDir(ParamStr(0)) + PathDelim + '..' + PathDelim);
 end;

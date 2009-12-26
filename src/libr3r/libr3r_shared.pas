@@ -109,6 +109,10 @@ begin
     begin
       Result := StrToPChar(GetMainLink)
     end
+    else if FieldName = 'podcast' then
+    begin
+      Result := StrToPChar(GetPodcast);
+    end
     else if FieldName = 'description' then
     begin
       Result := StrToPChar(Description)

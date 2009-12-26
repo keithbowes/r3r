@@ -122,6 +122,7 @@ begin
   AItem.Description := Item.Description;
   AItem.Links := Item.Links;
   AItem.MainLink := Item.GetMainLink;
+  AItem.Enclosure := Item.Enclosure;
   FItems^.Add(AItem);
   Items := FItems^.Count;
 
@@ -225,6 +226,7 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Desc);
+      WriteLn(ItemEncl, Enclosure);
 
       j := 0;
       k := 0;

@@ -13,6 +13,7 @@ type
     FHasLongDesc: Boolean;
     FHasSelf: Boolean;
     FHasShortDesc: Boolean;
+    FIsEnclosure: Boolean;
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
@@ -121,7 +122,7 @@ begin
     begin
       if FHasShortDesc then
       begin
-        FHasShortDesc := true;
+        FHasShortDesc := false;
         Description := '';
       end;
 
@@ -136,10 +137,15 @@ begin
         begin
           Link := GetAbsoluteURL(Attributes[Idx].Value);
 
-          if not FHasSelf then
+          if (not FHasSelf) and (not FIsEnclosure) then
           begin 
             PLink := StrToPChar(Link);
             Links^.Add(PLink);
+          end
+          else if FIsEnclosure then
+          begin
+            Enclosure := Link;
+            FIsEnclosure := false;
           end
           else
           begin
@@ -151,6 +157,10 @@ begin
         begin
           FHasSelf := true;
           Myself := GetMainLink;
+        end
+        else if (Attributes[Idx].Name = 'rel') and (Attributes[Idx].Value = 'enclosure') then
+        begin
+          FIsEnclosure := true;
         end;
       end;
     end
@@ -267,6 +277,7 @@ begin
   FHasLongDesc := false;
   FHasSelf := false;
   FHasShortDesc := false;
+  FIsEnclosure := false;
   FLeftFeed := false;
 end;
 

@@ -4,6 +4,7 @@ class DescriptionBoxEvents: public wxWindow
 {
   public:
     void OnContact(wxCommandEvent & event);
+    void OnPodcast(wxCommandEvent & event);
     void OnSubscribe(wxCommandEvent & event);
 };
 

@@ -9,7 +9,7 @@ void CreateProgramsPage(wxTreebook * parent)
   InitGettext();
   wxPanel * panel = new wxPanel(parent);
 
-  wxFlexGridSizer * table = new wxFlexGridSizer(2, 3, 0, 0);
+  wxFlexGridSizer * table = new wxFlexGridSizer(3, 3, 0, 0);
   panel->SetSizer(table);
 
   wxStaticText * browText = new wxStaticText(panel, -1, _("&Browser"));
@@ -31,6 +31,16 @@ void CreateProgramsPage(wxTreebook * parent)
   wxButton * mailButton = new wxButton(panel, wxID_BROWSE, _("&Browse..."));
   mailButton->SetClientData(mailEntry);
   table->Add(mailButton, 1, wxEXPAND | wxALL, 5);
+
+  wxStaticText * medText = new wxStaticText(panel, -1, _("Media &Player"));
+  table->Add(medText, 1, wxEXPAND | wxALL, 5);
+
+  SettingsEntry * medEntry = new SettingsEntry(panel, (char *) "for:.ogg");
+  table->Add(medEntry, 1, wxEXPAND | wxALL, 5);
+
+  wxButton * medButton = new wxButton(panel, wxID_BROWSE, _("&Browse..."));
+  medButton->SetClientData(medEntry);
+  table->Add(medButton, 1, wxEXPAND | wxALL, 5);
 
   parent->AddPage(panel, _("Programs"));
 }
