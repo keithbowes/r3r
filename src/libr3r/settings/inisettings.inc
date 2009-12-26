@@ -17,6 +17,72 @@ begin
   IniFile.Free;
 end;
 
+function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    GetBoolean := IniFile.ReadBool(Sett.Section, Sett.Name, Sett.ValueBoolean);
+  end;
+end;
+
+function TRSettings.GetInteger(const Index: TRSetIndex): integer;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    GetInteger := IniFile.ReadInteger(Sett.Section, Sett.Name, Sett.ValueInteger);
+  end;
+end;
+
+function TRSettings.GetString(const Index: TRSetIndex): String;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    GetString := IniFile.ReadString(Sett.Section, Sett.Name, Sett.ValueString);
+  end;
+end;
+
+procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      IniFile.WriteBool(Section, Name, Setting);
+    end;
+  end;
+end;
+
+procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      IniFile.WriteInteger(Section, Name, Setting);
+    end;
+  end;
+end;
+
+procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      IniFile.WriteString(Section, Name, Setting);
+    end;
+  end;
+end;
+
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
 var
   ASetting: PRSetting;
@@ -74,25 +140,6 @@ begin
   for i := 0 to FSettings^.Count - 1 do
   begin
     ASetting := PRSetting(FSettings^.GetNth(i));
-
-    with ASetting^, IniFile do
-    begin
-      case ValueType of
-        TypeBoolean:
-        begin
-          WriteBool(Section, Name, ValueBoolean);
-        end;
-        TypeInteger:
-        begin
-          WriteInteger(Section, Name, ValueInteger);
-        end;
-        TypeString:
-        begin
-          WriteString(Section, Name, ValueString);
-        end;
-      end;
-    end;
-
     Dispose(ASetting);
   end;
 end;

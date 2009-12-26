@@ -64,6 +64,84 @@ begin
   Reg.Free;
 end;
 
+function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    Reg.OpenKey(SectionPrefix + Sett.Section, true);
+    GetBoolean := Reg.ReadBool(Sett.Name);
+    Reg.CloseKey;
+  end;
+end;
+
+function TRSettings.GetInteger(const Index: TRSetIndex): integer;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    Reg.OpenKey(SectionPrefix + Sett.Section, true);
+    GetInteger := Reg.ReadInteger(Sett.Name);
+    Reg.CloseKey;
+  end;
+end;
+
+function TRSettings.GetString(const Index: TRSetIndex): String;
+var
+  Sett: TRSetting;
+begin
+  if Index <> -1 then
+  begin
+    Sett := PRSetting(FSettings^.GetNth(Index))^;
+    Reg.OpenKey(SectionPrefix + Sett.Section, true);
+    GetString := Reg.ReadString(Sett.Name);
+    Reg.CloseKey;
+  end;
+end;
+
+procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      Reg.OpenKey(SectionPrefix + Section, true);
+      Reg.WriteBool(Name, Setting);
+      Reg.CloseKey;
+    end;
+  end;
+end;
+
+procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      Reg.OpenKey(SectionPrefix + Section, true);
+      Reg.WriteInteger(Name, Setting);
+      Reg.CloseKey;
+    end;
+  end;
+end;
+
+procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+begin
+  if Index <> -1 then
+  begin
+    with PRSetting(FSettings^.GetNth(Index))^ do
+    begin
+      Reg.OpenKey(SectionPrefix + Section, true);
+      Reg.WriteString(Name, Setting);
+      Reg.CloseKey;
+    end;
+  end;
+end;
+
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
 var
   ASetting: PRSetting;
@@ -138,7 +216,6 @@ begin
 
     Name := Setting;
     Section := ASection;
-    ValueString := Reg.ReadString(Setting);
     ValueType := TypeString;
 
     if Exists then
@@ -176,41 +253,6 @@ begin
   for i := 0 to FSettings^.Count - 1 do
   begin
     ASetting := PRSetting(FSettings^.GetNth(i));
-
-    with ASetting^, Reg do
-    begin
-      OpenKey(SectionPrefix + Section, true);
-
-      case ValueType of
-        TypeBoolean:
-        begin
-          WriteBool(Name, ValueBoolean);
-        end;
-        TypeInteger:
-        begin
-          WriteInteger(Name, ValueInteger);
-        end;
-        TypeString:
-        begin
-          Index := Pos(AssocPrefix, Name);
-          if Index <> 1 then
-          begin
-            if ValueString <> '' then
-            begin
-              WriteString(Name, ValueString);
-            end;
-          end
-          else
-          begin
-            Delete(Name, Index, Length(AssocPrefix));
-            WriteAssocString(Name, ValueString);
-          end;
-        end;
-      end;
-
-      CloseKey;
-    end;
-
     Dispose(ASetting);
   end;
 end;

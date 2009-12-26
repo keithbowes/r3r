@@ -19,7 +19,7 @@ procedure SetFeedObject(const Lib: TLibR3R);
 implementation
 
 uses
-  LibR3RStrings, SysUtils
+  LibIdn, LibR3RStrings, RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
 {$ENDIF};
@@ -36,6 +36,7 @@ const
 {$ENDIF}
 var
   Pass, User: String;
+  PHost: PChar;
 begin
   if FileExists(Resource) then
   begin
@@ -49,6 +50,8 @@ begin
   else
   begin
     ParseURL(Resource, Prot, User, Pass, Host, Port, Path, Para);
+    idna_to_ascii_8z(StrToPChar(Host), @PHost, 0);
+    Host := StrPas(PHost);
   end;
 end;
 

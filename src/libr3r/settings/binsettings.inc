@@ -45,6 +45,56 @@ begin
 {$ENDIF}
 end;
 
+function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
+begin
+  if Index <> -1 then
+  begin
+    GetBoolean := PRSetting(FSettings^.GetNth(Index))^.ValueBoolean;
+  end;
+end;
+
+function TRSettings.GetInteger(const Index: TRSetIndex): integer;
+begin
+  if Index <> -1 then
+  begin
+    GetInteger := PRSetting(FSettings^.GetNth(Index))^.ValueInteger;
+  end;
+end;
+
+function TRSettings.GetString(const Index: TRSetIndex): String;
+var
+  Setting: TRSetIndex;
+begin
+  if Index <> -1 then
+  begin
+    GetString := PRSetting(FSettings^.GetNth(Index))^.ValueString;
+  end;
+end;
+
+procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
+begin
+  if Index <> -1 then
+  begin
+    PRSetting(FSettings^.GetNth(Index))^.ValueBoolean := Setting;
+  end;
+end;
+
+procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer);
+begin
+  if Index <> -1 then
+  begin
+    PRSetting(FSettings^.GetNth(Index))^.ValueInteger := Setting;
+  end;
+end;
+
+procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+begin
+  if Index <> -1 then
+  begin
+    PRSetting(FSettings^.GetNth(Index))^.ValueString := Setting;
+  end;
+end;
+
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
 var
   ASetting: PRSetting;
