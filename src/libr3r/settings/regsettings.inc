@@ -92,14 +92,24 @@ end;
 
 function TRSettings.GetString(const Index: TRSetIndex): String;
 var
+  Name: String;
   Sett: TRSetting;
 begin
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
-    Reg.OpenKey(SectionPrefix + Sett.Section, true);
-    GetString := Reg.ReadString(Sett.Name);
-    Reg.CloseKey;
+    if Pos(AssocPrefix, Sett.Name) = 0 then
+    begin
+      Reg.OpenKey(SectionPrefix + Sett.Section, true);
+      GetString := Reg.ReadString(Sett.Name);
+      Reg.CloseKey;
+    end
+    else
+    begin
+      Name := Sett.Name;
+      Delete(Name, 1, Length(AssocPrefix));
+      GetString := ReadAssocString(Name);
+    end;
   end;
 end;
 
@@ -130,14 +140,25 @@ begin
 end;
 
 procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+var
+  AName: String;
 begin
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
-      Reg.OpenKey(SectionPrefix + Section, true);
-      Reg.WriteString(Name, Setting);
-      Reg.CloseKey;
+      if Pos(AssocPrefix, Name) = 0 then
+      begin
+        Reg.OpenKey(SectionPrefix + Section, true);
+        Reg.WriteString(Name, Setting);
+        Reg.CloseKey;
+      end
+      else
+      begin
+        AName := Name;
+        Delete(AName, 1, Length(AssocPrefix));
+        WriteAssocString(AName, Setting);
+      end;
     end;
   end;
 end;

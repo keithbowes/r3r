@@ -1,10 +1,9 @@
 #include "i18n.h"
 #include "libr3r.h"
+  #include "wx.h"
 
 #ifdef USE_SYSTEM_GETTEXT
   #include <locale.h>
-#else
-  #include "wx.h"
 #endif
 
 void InitGettext()
@@ -26,7 +25,7 @@ void InitGettext()
   #ifdef USE_SYSTEM_GETTEXT
     setlocale(LC_ALL, "");
     textdomain("r3r_wx");
-    bindtextdomain("r3r_wx", localeDir);
+    bindtextdomain("r3r_wx", localeDir->c_str());
   #else
     wxLocale * locale = new wxLocale();
     locale->Init();

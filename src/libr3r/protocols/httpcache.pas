@@ -244,8 +244,11 @@ var
 begin
   ChDir(FCacheDir);
   Assign(RawFile, CacheFile);
+
   if not FileExists(CacheFile) then
+  begin
     Rewrite(RawFile);
+  end;
 
   Append(RawFile);
 
@@ -289,7 +292,7 @@ begin
     if not IsEmpty(Rec.Name + PathDelim + '*') then
     begin
       Age := FileAge(Rec.Name);
-      if Age < Cur - MonthSecs then
+      if (Age < Cur - MonthSecs) and (Age > 0) then
       begin
         Empty(Rec.Name);
         RemoveDir(Rec.Name);

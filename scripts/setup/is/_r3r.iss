@@ -15,22 +15,21 @@ SourceDir=..\..\..
 
 [Tasks]
 Name: desktopicon; Description: "&Create a desktop icon"
-Name: runnow; Description: "&Run the program now"
 
 [Files]
 Source: "r3r.exe"; DestDir: "{app}\bin";
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
 Source: "*.dll"; DestDir: "{app}\bin"
 
-Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de\libr3r.mo"
-Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en\libr3r.mo"
-Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo\libr3r.mo"
-Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es\libr3r.mo"
+Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es"; DestName: "libr3r.mo"
 
-Source: "src/ui/@UI@/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de\r3r_@UI@.mo"
-Source: "src/ui/@UI@/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en\r3r_@UI@.mo"
-Source: "src/ui/@UI@/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo\r3r_@UI@.mo"
-Source: "src/ui/@UI@/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es\r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo"; DestName: "r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es"; DestName: "r3r_@UI@.mo"
 
 [Icons]
 Name: "{userdesktop}\R3R"; FileName: "{app}\bin\r3r.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
@@ -46,5 +45,6 @@ Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
 
-[Run]
-FileName: "{app}\bin\r3r.exe"; WorkingDir: "{app}"; Tasks: runnow
+
+
+

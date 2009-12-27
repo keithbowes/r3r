@@ -1365,5 +1365,4 @@ setup.exe: r3r.iss
 	$(MOVE) $@  ../../../../r3r-$(VERSION).exe
 r3r.iss: _r3r.iss
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
-	 -e	's/@UI@/$(R3R_UI)/g' \
-	 -e 's/;insert_next_lang/$(foreach file,$(mos_lib),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "libr3r.mo";)\r\n$(foreach file,$(mos_ui),\r\nSource: "$(subst /,\/,$(subst $(rootdir)/,,$(file)))"; DestDir: "{app}\/share\/locale\/$(basename $(notdir $(file)))\/LC_MESSAGES"; DestName: "r3r_$(R3R_UI).mo";)\r\n;insert_next_lang/g' _r3r.iss > r3r.iss
+	 -e	's/@UI@/$(R3R_UI)/g'  _r3r.iss > r3r.iss

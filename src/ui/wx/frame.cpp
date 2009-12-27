@@ -14,11 +14,12 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   unsigned char type;
   void * value;
   index = 0;
-  name = (char *) "installed-path";
+  name = (char *) "installed-prefix";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-  wxString prefix = wxString((char *) value);
-  wxString path = wxString("/share/icon/r3r.png");
+  wxString path, prefix;
+  prefix = wxString((char *) value);
+  path = wxString("/share/icon/r3r.png");
 
   wxPanel * panel = new wxPanel(this, wxID_ANY);
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
