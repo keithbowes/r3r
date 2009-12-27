@@ -19,12 +19,15 @@ uses
 constructor TRUpdate.Create;
 begin
   inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=@VERSION@');
+  Method := 'HEAD';
+
   Execute;
+  GetHeaders;
 end;
 
 function TRUpdate.Available: Boolean;
 begin
-  Available := Headers.Status = 304;
+  Available := Headers.Status <> 304;
 end;
 
 end.
