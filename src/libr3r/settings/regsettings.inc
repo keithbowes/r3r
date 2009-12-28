@@ -184,6 +184,7 @@ begin
     end
     else
     begin
+      Reg.WriteBool(Setting, Value);
       ValueBoolean := Value;
     end;
   end;
@@ -213,6 +214,7 @@ begin
     end
     else
     begin
+      Reg.WriteInteger(Setting, Value);
       ValueInteger := Value;
     end;
   end;
@@ -253,6 +255,7 @@ begin
 
     if not Exists then
     begin
+      Reg.WriteString(Setting, Value);
       ValueString := Value;
     end;
   end;

@@ -257,18 +257,19 @@ begin
 end;
 
 procedure THttpCache.Clean;
-const
-  MonthSecs = 60 * 60 * 24 * 30;
 var
-  Age, Cur: LongInt;
+  Age, Cur: TTimeStamp;
+  CacheFile: String;
   Rec: TSearchRec;
 
 function IsEmpty(const Path: String): Boolean;
 var
   Rec: TSearchRec;
+  Search: String;
 begin
-  FindFirst(Path, faSysFile, Rec);
-  IsEmpty := Rec.Name = '';
+  Search := Path + PathDelim + '*';
+  FindFirst(Search, faSysFile, Rec);
+  IsEmpty := (Rec.Name = '') or (Rec.Name = Search);
   FindClose(Rec);
 end;
 
@@ -284,18 +285,22 @@ begin
 end;
 
 begin
-  Cur := DateTimeToFileDate(Now);
+  Cur := DateTimeToTimeStamp(Now);
 
   ChDir(FRootCacheDir);
   FindFirst('*', faDirectory, Rec);
   repeat
-    if not IsEmpty(Rec.Name + PathDelim + '*') then
+    if not IsEmpty(Rec.Name) then
     begin
-      Age := FileAge(Rec.Name);
-      if (Age < Cur - MonthSecs) and (Age > 0) then
+      CacheFile := Rec.Name + PathDelim + CacheInfoFile;
+      if FileExists(CacheFile) then
       begin
-        Empty(Rec.Name);
-        RemoveDir(Rec.Name);
+        Age := DateTimeToTimeStamp(FileDateToDateTime(FileAge(CacheFile)));
+        if Age.Date < Cur.Date - 30 then
+        begin
+          Empty(Rec.Name);
+          RemoveDir(Rec.Name);
+        end;
       end;
     end
     else

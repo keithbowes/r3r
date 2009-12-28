@@ -94,16 +94,19 @@ var
   i: cardinal;
   p: TFeedItem;
 begin
-  if FItems^.Count > 0 then
+  if Assigned(FItems) then
   begin
-    for i := 0 to FItems^.Count - 1 do
+    if FItems^.Count > 0 then
     begin
-      p := FItems^.GetNth(i);
-      p.Free;
+      for i := 0 to FItems^.Count - 1 do
+      begin
+        p := FItems^.GetNth(i);
+        p.Free;
+      end;
     end;
-  end;
 
-  Dispose(FItems, Done);
+    Dispose(FItems, Done);
+  end;
 
 {$IFNDEF __GPC__}
   inherited Destroy;
