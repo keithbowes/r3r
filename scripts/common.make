@@ -3,7 +3,7 @@
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
 PROGNAME = r3r
-VERSION = 2.0-beta4
+VERSION = 2.0-rc1
 
 PREFIX ?= $(DESTDIR)
 
@@ -92,13 +92,13 @@ DELP=delp -eq .
 DEFFLAG=-d
 PCFLAGS_BASE=-FU. -Mdelphi -Sh -WR
 DIRFLAG=-Fu
-ifndef RELEASE
+ifdef DEBUG
 PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
 
 ifneq ($(R3R_UI),wx)
 PCFLAGS_DEBUG += -Ct
 endif # R3R_UI
-endif # RELEASE
+endif # DEBUG
 
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
@@ -108,11 +108,11 @@ else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
-ifndef RELEASE
+ifdef DEBUG
 R3R_UI ?= tui
 else
 R3R_UI ?= wx
-endif #RELEASE
+endif # DEBUG
 
 BUILD_SHARED ?= 1
 
@@ -131,12 +131,12 @@ DEFS_SOCKETS ?= SOCKETS_BSD
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
-ifndef RELEASE
+ifdef DEBUG
 PCFLAGS_DEBUG=--pointer-checking --progress-messages \
 	--stack-checking -ggdb3
 else
 PCFLAGS_DEBUG=--no-io-checking --no-range-checking --no-warning
-endif # RELEASE
+endif # DEBUG
 
 R3R_UI ?= tui
 endif # USE_GPC

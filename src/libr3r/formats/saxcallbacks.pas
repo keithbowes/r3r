@@ -67,7 +67,6 @@ end;
 procedure ElementEnded(user_data: Pointer; name: PChar);
 var
   ELem: PXmlElement;
-  i: word;
 begin
   with TXmlFeed(user_data) do
   begin

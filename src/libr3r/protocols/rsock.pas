@@ -45,21 +45,10 @@ type
 implementation
 
 uses
-  Atom, Esf, Rss, Rss3, SockConsts, SysUtils
-  
-{$IFNDEF __GPC__}
-  , Math
-{$ENDIF};
+  Atom, Esf, Rss, Rss3, SockConsts, SysUtils;
 
 var
   FAbstractFeed: TFeed;
-
-{$IFDEF __GPC__}
-function Power(const Base, Exp: real): real;
-begin
-  Power := Base ** Exp;
-end;
-{$ENDIF}
 
 function CreateSocket:
 {$IFDEF SOCKETS_SYNAPSE}

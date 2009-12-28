@@ -6,8 +6,6 @@ version=$(VERSION)
 nortl=y
 
 [prerules]
-UPX ?= upx
-
 USE_PAX ?= 1
 
 ifeq ($(USE_PAX),1)
@@ -30,9 +28,6 @@ install:
 	cd icons && $(MAKE) install
 	cd src && $(MAKE) install
 	$(INSTALLEXE) r3r$(EXEEXT) $(bindir)
-ifdef RELEASE
-	$(UPX) $(bindir)/r3r$(EXEEXT)
-endif
 
 docs:
 	cd doc/api && $(MAKE)

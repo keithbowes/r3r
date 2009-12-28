@@ -14,8 +14,6 @@ type
 
 implementation
 
-uses
-  SockConsts;
 constructor TRUpdate.Create;
 begin
   inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=@VERSION@');

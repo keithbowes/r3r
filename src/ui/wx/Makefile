@@ -272,7 +272,7 @@ ifdef HAS_PTHREAD
 	CXXFLAGS += -DHAS_PTHREAD
 	LIBS += -lpthread
 endif
-ifndef RELEASE
+ifdef DEBUG
 	CXXFLAGS += -g
 endif
 CXXEXT = .cpp

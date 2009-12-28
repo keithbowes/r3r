@@ -65,11 +65,15 @@ begin
           WriteData(Item.Id, cdtIds);
         end;
 
-        if (GetIdsList^.IndexOf(Item.Id) <> -1) and HideItems then
+        if (GetIdsList^.Count > 0) and
+          (GetIdsList^.IndexOf(Item.Id) <> -1) and HideItems then
         begin
           Item.Clear;
           ShouldShow := false;
         end;
+
+        { Needed so that feed items will get displayed before they're cached }
+        Item.Id := '';
       end;
     end;
   end;

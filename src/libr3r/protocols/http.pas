@@ -295,7 +295,6 @@ end;
 procedure THttpSock.SendHeaders;
 var
   CacheHeader: String;
-  InitLine: String;
 begin
   CacheHeader := Cache.GetCacheHeader;
 

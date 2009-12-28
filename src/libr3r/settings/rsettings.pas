@@ -33,7 +33,6 @@ type
   TRSettings = class
   private
     FSettings: PRList;
-    FSettingsFile: String;
     procedure InitRec;
     procedure CheckBoolean(const Setting, ASection: String; const Value: Boolean);
     procedure CheckInteger(const Setting, ASection: String; const Value: integer);

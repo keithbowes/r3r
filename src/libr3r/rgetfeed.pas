@@ -3,7 +3,7 @@ unit RGetFeed;
 interface
 
 uses
-  FeedItem, LibR3R, RSock, RMessage,
+  LibR3R, RSock, RMessage,
 {$IFDEF SOCKETS_SYNAPSE}
   SynaUtil
 {$ENDIF}
@@ -27,7 +27,6 @@ uses
 var
   FeedObj: TLibR3R;
   Item: TFeedItem;
-  ItemCreated: Boolean;
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
 {$IFDEF __GPC__}
