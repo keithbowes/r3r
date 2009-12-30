@@ -6,6 +6,9 @@ uses
   App, Editors, Dialogs, Drivers, LibR3R, SysUtils, Objects;
 
 type
+  TTVLib = class;
+
+  PTVApp = ^TTVApp;
   TTVApp = object(TApplication)
   private
     FColl: PStrCollection;
@@ -16,12 +19,10 @@ type
     FGoButton: PButton;
     FGoLine: PInputLine;
     FItems: array of TFeedItem;
-    FLib: TLibR3R;
+    FLib: TTVLib;
     FLinkButton: PButton;
     FList: PListBox;
     FRect: TRect;
-  protected
-    procedure ItemParsed(Item: TFeedItem);
   public
     constructor Init;
     destructor Done; virtual;
@@ -30,7 +31,13 @@ type
     procedure InitMenuBar; virtual;
     procedure InitStatusLine; virtual;
   end;
-  PTVApp = ^TTVApp;
+
+  TTVLib = class(TLibR3R)
+  public
+    AApp: TTVApp;
+    ATitle: String;
+    procedure DisplayItem(const Item: TFeedItem); override;
+  end;
 
 implementation
 
@@ -45,6 +52,29 @@ const
   cmProgramSettings = 1004;
 
   sfEnabled = sfVisible or sfActive;
+
+procedure TTVLib.DisplayItem(const Item: TFeedItem);
+var
+  Items: cardinal;
+  Pad: String;
+begin
+  with AApp do
+  begin
+    Items := Length(FItems);
+    SetLength(FItems, Items + 1);
+    FItems[Items] := Item;
+  
+    if not FFirstItem then
+    begin
+      Pad := '    '
+    end;
+
+    FList^.Insert(NewStr(Pad + Item.Title));
+    FList^.DrawView;
+
+    FFirstItem := false;
+  end;
+end;
 
 constructor TTVApp.Init;
 var
@@ -105,8 +135,8 @@ begin
   FGoButton^.Title := NewStr(Go);
   Insert(FGoButton);
 
-  FLib := TLibR3R.Create;
-  FLib.OnItemParsed := @ItemParsed;
+  FLib := TTVLib.Create;
+  FLib.AApp := Self;
 
   for Idx := 1 to ParamCount do
   begin
@@ -273,26 +303,6 @@ begin
     FFirstItem := true;
     FLib.RetrieveFeed(FileName)
   end
-end;
-
-procedure TTVApp.ItemParsed(Item: TFeedItem);
-var
-  Items: cardinal;
-  Pad: String;
-begin
-  Items := Length(FItems);
-  SetLength(FItems, Items + 1);
-  FItems[Items] := Item;
-  
-  if not FFirstItem then
-  begin
-    Pad := '    '
-  end;
-
-  FList^.Insert(NewStr(Pad + Item.Title));
-  FList^.DrawView;
-
-  FFirstItem := false;
 end;
 
 end.

@@ -1389,7 +1389,6 @@ all:
 clean:
 	cd po && $(MAKE) clean
 	$(DEL) $(wildcard *.or) $(wildcard *.res)
-	-delp -q .
 install:
 	cd po && $(MAKE) intall
 uninstall:

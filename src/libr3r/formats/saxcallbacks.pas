@@ -32,6 +32,8 @@ begin
     New(Elem);
     Elem^.Name := StrPas(name);
     Elem^.Content := '';
+    Elem^.Depth := Depth;
+    Inc(Depth);
 
     if Assigned(attrs) then
     begin
@@ -75,6 +77,8 @@ begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
       Elem^.Name := LowerCase(StrPas(name));
     end;
+
+    Dec(Depth);
   end;
 end;
 

@@ -26,6 +26,7 @@ type
     Content: String;
     Base: String;
     Lang: String;
+    Depth: cardinal;
   end;
 
   TXmlFeed = class(TFeed)
@@ -35,6 +36,7 @@ type
     FLastLang: String;
     FParser: XML_PARSER;
   public
+    Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
@@ -57,6 +59,7 @@ begin
   inherited Create;
 {$ENDIF}
   New(FElemList, Init);
+  Depth := 0;
   FCloned := false;
 
   FParser := XML_ParserCreateNS('UTF-8', #0);
@@ -147,11 +150,20 @@ begin
 end;
 
 function TXmlFeed.GetPreviousElement: TXmlElement;
+var
+  i: cardinal;
+  Res: TXmlElement;
 begin
-  if FElemList^.Count > 1 then
+  if FElemList^.Count > 0 then
   begin
-    GetPreviousElement := PXmlElement(FElemList^.GetNth(FElemList^.Count - 2))^;
+    i := 0;
+    repeat
+      Res := PXmlElement(FElemList^.GetNth(FElemList^.Count - i))^;
+      Inc(i);
+    until (Res.Depth = Depth - 1) or (i = FElemList^.Count + 1);
   end;
+
+  GetPreviousElement := Res;
 end;
 
 procedure TXmlFeed.StripNS(var Element: String; const NS: String);
