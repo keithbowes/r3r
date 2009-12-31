@@ -273,10 +273,10 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo - 1)).GetMainLink <> '') and
+  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo - 1)).MainLink <> '') and
     (FItems^.Count > 0) then
   begin
-    OpenBrowser(TFeedItem(FItems^.GetNth(iNo - 1)).GetMainLink);
+    OpenBrowser(TFeedItem(FItems^.GetNth(iNo - 1)).MainLink);
   end;
 
   ShowHelp;

@@ -149,6 +149,12 @@ void * ParseFeedThread(void * resource)
   libr3r_retrieve_feed(res->lib, res->res);
   readyNextThread = true;
 
+#ifdef HAS_PTHREAD
+#ifndef WIN32
+  pthread_exit(NULL);
+#endif
+#endif
+
   return NULL;
 }
 
@@ -219,4 +225,23 @@ void GoBrowser(char * url)
   }
 
   wxExecute(command);
+}
+
+void SendMessage(unsigned char is_error, char * message, char * extra)
+{
+  bool show_messages;
+  int count, index;
+  char * name;
+  unsigned char type;
+  void * value;
+
+  index = 0;
+  name = (char *) "show-messages";
+  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  show_messages = (bool) value;
+
+  if (show_messages)
+  {
+    message_received(is_error, message, extra);
+  }
 }

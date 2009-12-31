@@ -17,9 +17,10 @@ SourceDir=..\..\..
 Name: desktopicon; Description: "&Create a desktop icon"
 
 [Files]
+Source: "*.dll"; DestDir: "{app}\bin"
 Source: "r3r.exe"; DestDir: "{app}\bin";
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
-Source: "*.dll"; DestDir: "{app}\bin"
+Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
 
 Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "libr3r.mo"
 Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "libr3r.mo"

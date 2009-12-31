@@ -226,15 +226,14 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
   char *s;
   Subscriptions * subs = GetSubscriptionsObject();
   wxWindow * obj = (wxWindow *) event.GetEventObject();
-  wxClassInfo * info = obj->GetClassInfo();
   wxMenuItem * item;
   
-  if (strcmp(info->GetClassName(), "wxMenu") == 0)
+  if (obj->IsKindOf(CLASSINFO(wxMenu)))
   {
     // Linux
     item = ((wxMenu *) obj)->FindItem(wxID_LOAD_SUBSCRIPTIONS);
   }
-  else if (strcmp(info->GetClassName(), "wxFrame") == 0)
+  else if (obj->IsKindOf(CLASSINFO(wxFrame)))
   {
     // Windows
     wxMenuBar * mb = ((wxFrame *) obj)->GetMenuBar();

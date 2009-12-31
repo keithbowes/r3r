@@ -30,7 +30,7 @@ type
 implementation
 
 uses
-  SockConsts, RStrings, SysUtils;
+  RDate, RStrings, SockConsts, SysUtils;
 
 constructor TEsfFeed.Create;
 begin
@@ -53,7 +53,8 @@ begin
   begin
     Res := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
     DT := StrToDateTime(Res);
-    Res := FormatDateTime('dddd DD MMMM YYYY hh:nn', DT);
+    Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
+    Res := TimeToString(ShortDateToTime(Res));
   end
   else
   begin

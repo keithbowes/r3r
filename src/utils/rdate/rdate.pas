@@ -17,7 +17,7 @@ function TimeToString(Time: TTime): String;
 implementation
 
 uses
-  LibR3RStrings, LibIntl, StrTok;
+  LibIntl, LibR3RStrings, StrTok;
 
 function GetMonthAbbrev(const Month: String): String;
 var
@@ -85,6 +85,7 @@ var
   Tm: TTime;
   TP: String;
 begin
+  textdomain('libr3r');
   List := Split(Time, WhitespaceChars);
 
   Tm.Day := List.Strings[1];
@@ -100,8 +101,7 @@ begin
   Delete(TP, 1, 3);
 
   Tm.Second := Copy(TP, 1, 2);
-
-  LongDateToTime := tm;
+  LongDateToTime := Tm;
 end;
 
 function ShortDateToTime(Time: String): TTime;
@@ -109,6 +109,8 @@ var
   Sep: byte;
   Tm: TTime;
 begin
+  textdomain('libr3r');
+
   Sep := Pos('-', Time);
   Tm.Year := Copy(Time, 1, Sep - 1);
   Delete(Time, 1, Sep);

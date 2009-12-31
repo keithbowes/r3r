@@ -143,7 +143,11 @@ begin
       l := GetNode(p);
       m := l^.Next;
     
-      l^.Next := l^.Next^.Next;
+      if (l <> nil) and (l^.Next <> nil) then
+      begin
+        l^.Next := l^.Next^.Next;
+      end;
+
       Dispose(m);
     end
     else

@@ -94,6 +94,7 @@ end;
 
 initialization
 
+setlocale(LC_ALL, '');
 textdomain('r3r_tui');
 bindtextdomain('r3r_tui', StrToPChar(Settings.GetString(Settings.IndexOf('installed-prefix')) + '/share/locale'));
 

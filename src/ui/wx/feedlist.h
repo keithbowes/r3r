@@ -26,3 +26,5 @@ void ParseFeed(char * res);
 void GetAllFeeds(int argc, char ** argv);
 
 void GoBrowser(char * link);
+
+void SendMessage(unsigned char is_error, char * message, char * extra);
