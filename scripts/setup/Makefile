@@ -59,7 +59,8 @@ distclean:
 
 r3r-$(VERSION).x86.package: autopackage/default.apspec
 	makepackage
-	mv -f r3r-$(VERSION).x86.package ../../..
+	mv -f r3r-$(VERSION).x86.package \
+		../../../r3r-$(VERSION)_$(R3R_UI).x86.package
 
 autopackage/default.apspec: autopackage/_default.apspec
 	sed \

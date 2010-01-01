@@ -160,7 +160,7 @@ begin
       end
       else if HeaderName = 'location' then
       begin
-        Headers.Status := 200;
+        Headers.Status := 0;
         Sock.CloseSocket;
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
@@ -211,6 +211,10 @@ begin
     begin
       Cache.WriteData(Line, cdtResponse);
     end
+    else if FileExists(CacheResponseFile) then
+    begin
+      FileSetDate(CacheResponseFile, DateTimeToFileDate(Now));
+    end;
   end;
 
   if Settings.GetBoolean(Settings.IndexOf('enable-mime-guess')) or (Headers.ContentType = ftXml) then

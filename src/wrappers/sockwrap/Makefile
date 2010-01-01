@@ -1385,7 +1385,9 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: sockwrapc$(COBJEXT) sockwrap$(PPUEXT)
+all: wrapper unit
+wrapper: sockwrapc$(COBJEXT)
+unit: sockwrap$(PPUEXT)
 clean:
 	$(DEL) $(wildcard *$(COBJEXT))
 sockwrap.pas: sockwrapc.c

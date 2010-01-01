@@ -1388,13 +1388,13 @@ all:
 	cd ../../libr3r && $(MAKE) info.pas
 	cd po && $(MAKE)
 	$(MAKE) classic$(PPUEXT)
-	$(PC) $(PCFLAGS) $(LDFLAGS) r3r.lpr
+	$(PC) $(PCFLAGS) r3r.lpr
 clean:
 	cd po && $(MAKE) clean
 	$(DEL) $(wildcard *.or) $(wildcard *.res)
 all:
 	cd po && $(MAKE)
-	$(COMPILER) r3r.lpr
+	$(PC) r3r.lpr
 uninstall:
 	cd po && $(MAKE) uninstall
 	rm -f $(INSTALL_BINDIR)/r3r$(EXEEXT)

@@ -30,7 +30,7 @@ type
     FIdsList: PRStringList;
     FRootCacheDir: String;
     procedure InvalidateFile(CFile: String);
-    procedure WriteRawData(Data, CacheFile: String);
+    procedure WriteRawData(Data, CacheFile: String; const Overwrite: Boolean);
     procedure Clean;
   public
     Info: PCacheInfo;
@@ -177,20 +177,20 @@ begin
       Ext := GetFeedExtension(Info^.HeaderRec.ContentType);
       if Ext <> 'unknown' then
       begin
-        WriteRawData(Data, CacheFeedFile + '.' + Ext);
+        WriteRawData(Data, CacheFeedFile + '.' + Ext, false);
       end;
     end;
     cdtIds:
     begin
-      WriteRawData(Data, CacheIdsFile)
+      WriteRawData(Data, CacheIdsFile, false)
     end;
     cdtInfo:
     begin
-      WriteRawData(Data, CacheInfoFile)
+      WriteRawData(Data, CacheInfoFile, true)
     end;
     cdtResponse:
     begin
-      WriteRawData(Data, CacheResponseFile);
+      WriteRawData(Data, CacheResponseFile, false);
     end;
   end;
 end;
@@ -238,19 +238,22 @@ begin
   end
 end;
 
-procedure THttpCache.WriteRawData(Data, CacheFile: String);
+procedure THttpCache.WriteRawData(Data, CacheFile: String; const Overwrite: Boolean);
 var
   RawFile: text;
 begin
   ChDir(FCacheDir);
   Assign(RawFile, CacheFile);
 
-  if not FileExists(CacheFile) then
+  if not FileExists(CacheFile) or Overwrite then
   begin
     Rewrite(RawFile);
   end;
 
-  Append(RawFile);
+  if not Overwrite then
+  begin
+    Append(RawFile);
+  end;
 
   WriteLn(RawFile, Data);
   Close(RawFile);
@@ -292,7 +295,7 @@ begin
   repeat
     if not IsEmpty(Rec.Name) then
     begin
-      CacheFile := Rec.Name + PathDelim + CacheInfoFile;
+      CacheFile := Rec.Name + PathDelim + CacheResponseFile;
       if FileExists(CacheFile) then
       begin
         Age := DateTimeToTimeStamp(FileDateToDateTime(FileAge(CacheFile)));

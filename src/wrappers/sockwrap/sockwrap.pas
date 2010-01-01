@@ -33,13 +33,13 @@ type
     FStringIndex: byte;
     FStrings: TStringsList;
   public
-    { Does nothing.  Just for Synapse compatibility }
+    { Does nothing.  Just for Synapse compatibility. }
     ConvertLineEnd: Boolean;
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure Connect(const Host, Port: String);
     function LastError: integer;
-    function RecvString(Len: word): String;
+    function RecvString(Timeout: word): String;
     procedure SendString(Data: String);
     procedure CloseSocket;
   end;
@@ -72,8 +72,8 @@ begin
   LastError := socket_get_error(FSocket);
 end;
 
-{ Len is ignored; it's just for compatability with the Synapse API }
-function TSockWrap.RecvString(Len: word): String;
+{ Timeout is ignored; it's just for compatability with the Synapse API }
+function TSockWrap.RecvString(Timeout: word): String;
 var
   Buf: array [1..255] of char;
   CR, i, LF: word;

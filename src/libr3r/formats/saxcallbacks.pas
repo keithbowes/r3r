@@ -94,7 +94,7 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.Content := enh;
+      Elem^.Content := Elem^.Content + enh;
     end;
   end;
 end;

@@ -5,7 +5,8 @@ http://sourceforge.net/projects/r3r and sites linked therein for full details.
 
 1. LICENSE
 
-R3R is licensed under the BSD License.  See the file LICENSE for the full text.
+R3R is licensed under the BSD License.  See the file LICENSE for
+the full text.
 
 2. BUILDING
 
@@ -17,8 +18,6 @@ See the file INSTALLING.
 
 4. REPORTING BUGS, SUBMITTING PATCHES, etc.
 
-SourceForge provides excellent facilities for this.  Read Site Docs for info.
+SourceForge provides excellent facilities for this.
+Read Site Docs for info.
 The specifics can be found on the project home page.
-NOTE: It's probably best to only report bugs in 1.2.x until 2.x reaches a
-certain stability point.  Right now, 2.x has too many obvious things, that
-will be fixed in the future.

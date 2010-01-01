@@ -1,4 +1,7 @@
 all:
+ifeq ($(DEFS_SOCKETS), SOCKETS_BSD)
+	cd wrappers/sockwrap && $(MAKE) wrapper
+endif
 	cd third-party && $(MAKE)
 	cd utils && $(MAKE)
 	cd wrappers && $(MAKE)
