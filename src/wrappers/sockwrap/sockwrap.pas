@@ -3,9 +3,7 @@ unit SockWrap;
 {$H+}
 
 interface
-{$IFDEF WIN32}
-{$LINKLIB wsock32}
-{$ELSE}
+{$IFDEF UNIX}
 {$LINKLIB c}
 {$ENDIF}
 

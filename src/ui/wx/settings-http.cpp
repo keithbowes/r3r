@@ -19,13 +19,13 @@ void CreateHTTPPage(wxTreebook * parent)
   table->Add(addrText, 1, wxEXPAND | wxALL, 5);
 
   SettingsEntry * addrEntry = new SettingsEntry(panel, (char *) "proxy-address");
-  table->Add(addrEntry, 2, wxEXPAND | wxALL, 5);
+  table->Add(addrEntry, 1, wxEXPAND | wxALL, 5);
 
   wxStaticText * portText = new wxStaticText(panel, -1, _("&Proxy Port: "));
   table->Add(portText, 1, wxEXPAND | wxALL, 5);
 
   SettingsEntry * portEntry = new SettingsEntry(panel, (char *) "proxy-port");
-  table->Add(portEntry, 2, wxEXPAND | wxALL, 5);
+  table->Add(portEntry, 1, wxEXPAND | wxALL, 5);
 
   SettingsCheckBox * proxyCheck = new SettingsCheckBox(panel, _("&Enable Proxy"), (char *) "use-proxy");
   vbox->Add(proxyCheck);

@@ -27,7 +27,7 @@ install:
 
 uninstall:
 	cd po && $(MAKE) uninstall
-	$(DEL) $(libdir)/*libr3r_shared$(SHAREDLIBEXT)
+	$(DEL) $(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 
 info.pas: _info.pas ../../scripts/common.make
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \

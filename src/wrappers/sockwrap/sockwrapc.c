@@ -1,6 +1,6 @@
 #ifdef WIN32
 #include <windef.h>
-#include <winsock.h>
+#include <ws2tcpip.h>
 #else
 #include <errno.h>
 #include <netdb.h>
