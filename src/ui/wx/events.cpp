@@ -211,7 +211,7 @@ void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
   wxString command, url, version;
   url = wxString("http://r3r.sourceforge.net/check.php?v=");
   version = wxString(VERSION);
-  command = url + version;
+  command = url + version + wxString("&display=1");
 
   GoBrowser((char *) command.c_str());
 }

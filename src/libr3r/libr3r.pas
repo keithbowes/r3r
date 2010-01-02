@@ -41,10 +41,7 @@ var
 implementation
 
 uses
-  Http, LibR3RStrings, LocalFile, RGetFeed, RMessage, RUpdate
-{$IFDEF SOCKETS_BSD}
-  , SockWrap
-{$ENDIF};
+  Http, LibR3RStrings, LocalFile, RGetFeed, RMessage, RUpdate;
 
 function GetSockType(const Resource, Prot, Host, Port, Path, Para: String): TRSock;
 begin
@@ -88,7 +85,7 @@ end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
 var
-  Prot, Pass, Host, Port, Path, Para: String;
+  Prot, Host, Port, Path, Para: String;
 begin
   GetFeed(Resource, Prot, Host, Port, Path, Para);
   FSock := GetSockType(Resource, Prot, Host, Port, Path, Para);
@@ -112,8 +109,6 @@ begin
 end;
 
 procedure TLibR3R.Parse;
-var
-  Item: TFeedItem;
 begin
   SetFeedObject(Self);
   SetMessageObject(Self);

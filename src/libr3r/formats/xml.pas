@@ -79,7 +79,7 @@ end;
 { Clones an element.  This is necessary for namespace support. }
 procedure TXmlFeed.Clone(const List: PRList);
 begin
-  Dispose(FElemList);
+  Dispose(FElemList, Done);
   Move(List, FElemList, SizeOf(List));
   FCloned := true;
 end;
@@ -160,7 +160,7 @@ begin
     repeat
       Res := PXmlElement(FElemList^.GetNth(FElemList^.Count - i))^;
       Inc(i);
-    until (Res.Depth = Depth - 1) or (i = FElemList^.Count + 1);
+    until (Res.Depth = Depth - 1) or (i - 1 = FElemList^.Count);
   end;
 
   GetPreviousElement := Res;

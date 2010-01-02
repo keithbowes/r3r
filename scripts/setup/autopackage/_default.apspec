@@ -66,6 +66,10 @@ fi
 
 require @libexpat.org/expat 1.2
 
+[Test]
+testForLib -i libidn.so
+testForLib -i libintl.so
+
 [Install]
 # Put your installation script here
 installExe r3r

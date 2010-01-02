@@ -3,10 +3,7 @@ unit Http;
 interface
 
 uses
-  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock
-{$IFDEF SOCKETS_BSD}
-  , SockWrap
-{$ENDIF};
+  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock;
 
 type
   THttpSock = class(TRSock)

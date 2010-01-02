@@ -3,7 +3,7 @@ unit Tui;
 interface
 
 uses
-  LibR3R, RMessage, RList;
+  LibR3R, RList;
 
 type
   TTui = class(TLibR3R)
@@ -177,7 +177,7 @@ begin
   Write(GoURL);
   Write(Options:25 - Length(GoUrl) + Length(Options));
   WriteLn;
-  if FItems^.Count > 1 then
+  if FItems^.Count > 0 then
   begin
     Write(AboutItem);
     Write(OpenLink:25 - Length(AboutItem) + Length(OpenLink));
@@ -369,7 +369,7 @@ begin
       Index := IndexOf(SetName);
       Len := Length(SetName);
 
-      if (Len > 1) and (Index <> -1) then
+      if Index <> -1 then
       begin
         Write(NewValue);
         ReadLn(SetVal);

@@ -74,8 +74,7 @@ end;
 function TSockWrap.RecvString(Timeout: word): String;
 var
   Buf: array [1..255] of char;
-  CR, i, LF: word;
-  CurStr, LastStr, Sub, Tmp: String;
+  CurStr, LastStr: String;
   LastReceived: integer;
 begin
   LastStr := '';
