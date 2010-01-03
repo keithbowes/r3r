@@ -198,7 +198,14 @@ begin
 
   for i := 1 to N do
   begin
-    Tmp := Tmp^.Next;
+    if (Tmp <> nil) and (Tmp^.Next <> nil) then
+    begin
+      Tmp := Tmp^.Next;
+    end
+    else
+    begin
+      Break;
+    end;
   end;
 
   GetNth := Tmp^.Data;
@@ -335,12 +342,6 @@ begin
   else
   begin
     IndexOf := -1;
-
-    if Count > 0 then
-    begin
-      FStrings^.Delete(i);
-      FreeMem(p);
-    end;
   end;
 end;
 

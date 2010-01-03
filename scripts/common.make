@@ -2,8 +2,7 @@
 
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
-PROGNAME = r3r
-VERSION = 2.0-rc1
+VERSION = 2.0-rc2
 
 PREFIX ?= $(DESTDIR)
 

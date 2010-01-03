@@ -33,7 +33,6 @@ begin
     Elem^.Name := StrPas(name);
     Elem^.Content := '';
     Elem^.Depth := Depth;
-    Inc(Depth);
 
     if Assigned(attrs) then
     begin
@@ -62,7 +61,11 @@ begin
       end;
     end;
 
-    FElemList^.Add(Elem);
+      Inc(Depth);
+    if Elem^.Name <> '' then
+    begin
+      FElemList^.Add(Elem);
+    end;
   end;
 end;
 
@@ -75,10 +78,13 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.Name := LowerCase(StrPas(name));
+      Elem^.Name := LowerCase(name);
     end;
 
-    Dec(Depth);
+    if Elem^.Name <> '' then
+    begin
+      Dec(Depth);
+    end;
   end;
 end;
 

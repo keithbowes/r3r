@@ -21,7 +21,8 @@ uses
   Info, SysUtils;
 
 const
-  HTMLHeader = '<!DOCTYPE html PUBLIC "-//W3C//DTD//HTML 4.01//EN"'#13#10'    "http://www.w3.org/TR/html4/strict.dtd">'#13#10'<html>'#13#10#9'<head>'#13#10#9#9'<title>R3R</title>'#13#10#9#9'<meta http-equiv="Content-Type" content="text/html; charset=utf-8">'#13#10#9#9'<meta name="generator" content="%ua">'#13#10#9'</head>'#13#10#9'<body>'#13#10#9#9'<ul>';
+  HTMLProlog = '<!DOCTYPE html PUBLIC "-//W3C//DTD//HTML 4.01//EN"'#13#10'    "http://www.w3.org/TR/html4/strict.dtd">';
+  HTMLHeader = #13#10'<html>'#13#10#9'<head>'#13#10#9#9'<title>R3R</title>'#13#10#9#9'<meta http-equiv="Content-Type" content="text/html; charset=utf-8">'#13#10#9#9'<meta name="generator" content="%ua">'#13#10#9'</head>'#13#10#9'<body>'#13#10#9#9'<ul>';
   HTMLFooter = #13#10#9#9'</ul>'#13#10#9'</body>'#13#10'</html>'#10;
   PreElement = #13#10#9#9#9'<li>';
   PostElement = '</li>';
@@ -37,6 +38,7 @@ begin
   Assign(FFile, 'r3r.html');
   Rewrite(FFile);
 
+  WriteLn(FFile, HTMLProlog);
   WriteLn(FFile, StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
 
   for i := 0 to Subscriptions^.Count - 1 do

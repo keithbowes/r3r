@@ -42,7 +42,7 @@ msgstr "[Keine]"
 
 #: ../feedlist.cpp:95
 msgid "An update is available."
-msgstr "Ein Aktual ist vefügbar."
+msgstr "Ein Aktual ist verfügbar."
 
 #: ../feedlist.cpp:110
 msgid "Feed Title"
