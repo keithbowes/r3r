@@ -29,7 +29,7 @@ type
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts, 
+  DC, RDate, RStrings, SockConsts,
 
 {$IFDEF __GPC__}
   SysUtils,
@@ -137,8 +137,8 @@ begin
         begin
           Link := GetAbsoluteURL(Attributes[Idx].Value);
 
-          if (not FHasSelf) and (not FIsEnclosure) then
-          begin 
+          if not FHasSelf and not FIsEnclosure then
+          begin
             PLink := StrToPChar(Link);
             Links^.Add(PLink);
           end
@@ -291,7 +291,7 @@ begin
   begin
     AFeed := TDCFeed.Create;
     (AFeed as TXmlFeed).Clone(FElemList);
-    ParseLine(Line, Item, ItemFinished);
+    AFeed.ParseLine(Line, Item, ItemFinished);
     (AFeed as TDCFeed).Free;
   end;
 
