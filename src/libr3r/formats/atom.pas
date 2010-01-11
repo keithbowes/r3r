@@ -6,14 +6,17 @@ uses
   Feed, FeedItem, Xml;
 
 type
+  TAtomLink = record
+    Href, MimeType, Rel: String;
+  end;
+
   TAtomFeed = class(TXmlFeed)
   private
+    FAtomLink: TAtomLink;
     { Category Type }
     FCatType: String;
     FHasLongDesc: Boolean;
-    FHasSelf: Boolean;
     FHasShortDesc: Boolean;
-    FIsEnclosure: Boolean;
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
@@ -99,7 +102,6 @@ end;
 procedure TAtomFeed.FillItem(var Item: TFeedItem);
 var
   Idx: integer;
-  Link: String;
   PLink: PChar;
 begin
   with Item, GetCurrentElement do
@@ -135,32 +137,33 @@ begin
       begin
         if Attributes[Idx].Name = 'href' then
         begin
-          Link := GetAbsoluteURL(Attributes[Idx].Value);
+          FAtomLink.Href := GetAbsoluteURL(Attributes[Idx].Value);
+        end
+        else if Attributes[Idx].Name = 'rel' then
+        begin
+          FAtomLink.Rel := Attributes[Idx].Value;
+        end
+        else if Attributes[Idx].Name = 'type' then
+        begin
+          FAtomLink.MimeType := Attributes[Idx].Value;
+        end;
+      end;
 
-          if not FHasSelf and not FIsEnclosure then
-          begin
-            PLink := StrToPChar(Link);
-            Links^.Add(PLink);
-          end
-          else if FIsEnclosure then
-          begin
-            Enclosure := Link;
-            FIsEnclosure := false;
-          end
-          else
-          begin
-            Myself := Link;
-            FHasSelf := false;
-          end;
-        end
-        else if (Attributes[Idx].Name = 'rel') and (Attributes[Idx].Value = 'self') then
+      with FAtomLink do
+      begin
+        if Rel = 'alternate' then
         begin
-          FHasSelf := true;
-          Myself := GetMainLink;
+          PLink := StrToPChar(Href);
+          Links^.Add(PLink);
         end
-        else if (Attributes[Idx].Name = 'rel') and (Attributes[Idx].Value = 'enclosure') then
+        else if Rel = 'self' then
         begin
-          FIsEnclosure := true;
+          MySelf := Href;
+        end
+        else if Rel = 'enclosure' then
+        begin
+          Enclosure.MimeType := MimeType;
+          Enclosure.URL := Href;
         end;
       end;
     end
@@ -275,9 +278,7 @@ begin
   inherited Create;
   FCatType := '';
   FHasLongDesc := false;
-  FHasSelf := false;
   FHasShortDesc := false;
-  FIsEnclosure := false;
   FLeftFeed := false;
 end;
 

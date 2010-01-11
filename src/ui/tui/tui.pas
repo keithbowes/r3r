@@ -229,7 +229,7 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Desc);
-      WriteLn(ItemEncl, Enclosure);
+      WriteLn(ItemEncl, Enclosure.URL);
 
       j := 0;
       k := 0;

@@ -8,6 +8,7 @@ uses
 const
   AtomNS = 'http://www.w3.org/2005/Atom';
   DCNS = 'http://purl.org/dc/elements/1.1/';
+  Mod_EnclosureNS = 'http://purl.oclc.org/net/rss_2.0/enc#';
   RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
   RSS1NS = 'http://purl.org/rss/1.0/';
   XMLNSNS = 'http://www.w3.org/XML/1998/namespace';

@@ -26,13 +26,13 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
   name = (char *) "for:mailto";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-  mclient = wxString((char *) value);
-  recep = wxString((char *) whom);
-  mclient.Replace("%1", recep);
+  mclient = wxString((char *) value, wxConvUTF8);
+  recep = wxString(whom, wxConvUTF8);
+  mclient.Replace(wxT("%1"), recep);
 
   if (wxNOT_FOUND == mclient.Find(recep))
   {
-    cl = mclient + " " + recep;
+    cl = mclient + wxT(" ") + recep;
   }
   else
   {
@@ -51,18 +51,18 @@ void DescriptionBoxEvents::OnPodcast(wxCommandEvent & event)
   wxString cl, enclosure, mp;
 
   wxButton * podcast = (wxButton *) event.GetEventObject();
-  enclosure = wxString((char *) podcast->GetClientData());
+  enclosure = wxString((wxChar *) podcast->GetClientData());
 
   index = 0;
   name = (char *) "for:.ogg";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-  mp = wxString((char *) value);
-  mp.Replace("%1", enclosure);
+  mp = wxString((wxChar *) value);
+  mp.Replace(wxT("%1"), enclosure);
 
   if (wxNOT_FOUND == mp.Find(enclosure))
   {
-    cl = mp + " " + enclosure;
+    cl = mp + wxString(wxT(" ")) + enclosure;
   }
   else
   {
@@ -105,13 +105,13 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   ItemInfo * info = (ItemInfo *) event.GetData();
 
   wxStaticBox * box = GetDescriptionBox();
-  box->SetLabel(info->title);
+  box->SetLabel(wxString(info->title, wxConvUTF8));
 
   wxTextCtrl * memo = (wxTextCtrl *) box->GetClientData();
-  memo->SetValue(info->desc);
+  memo->SetValue(wxString(info->desc, wxConvUTF8));
 
   wxFrame * win = (wxFrame *) GetFeedList()->GetParent()->GetParent();
-  win->SetStatusText(info->link, 0);
+  win->SetStatusText(wxString(info->link, wxConvUTF8), 0);
 
   wxButton * contact = GetContactButton();
 
@@ -180,8 +180,8 @@ void GoButtonEvents::OnClick(wxCommandEvent & event)
 {
   wxButton * button = (wxButton * ) event.GetEventObject();
   wxTextCtrl * entry = (wxTextCtrl *) button->GetClientData();
-  const char * feed = entry->GetValue();
-  ParseFeed((char *) feed);
+  wxString feed = entry->GetValue();
+  ParseFeed((char *) (const char *) feed.mb_str());
 }
 
 void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
@@ -193,8 +193,8 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
   else
   {
     wxTextCtrl * entry = (wxTextCtrl *) event.GetEventObject();
-    const char * feed = entry->GetValue();
-    ParseFeed((char *) feed);
+    wxString feed = entry->GetValue();
+    ParseFeed((char *) (const char *) feed.mb_str());
   }
 }
 
@@ -203,15 +203,15 @@ void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
   InitGettext();
 
   char * user_agent = libr3r_get_user_agent();
-  wxMessageBox(user_agent, _("About R3R"), wxOK | wxICON_INFORMATION);
+  wxMessageBox((wxChar *) user_agent, wxT("About R3R"), wxOK | wxICON_INFORMATION);
 }
 
 void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
 {
   wxString command, url, version;
-  url = wxString("http://r3r.sourceforge.net/check.php?v=");
-  version = wxString(VERSION);
-  command = url + version + wxString("&display=1");
+  url = wxString(wxT("http://r3r.sourceforge.net/check.php?v="));
+  version = wxString((wxChar *) VERSION);
+  command = url + version + wxString(wxT("&display=1"));
 
   GoBrowser((char *) command.c_str());
 }
@@ -258,7 +258,7 @@ void MenuEvents::OnOpen(wxCommandEvent & event)
   if (openFileDialog->ShowModal() == wxID_OK)
   {
     wxString fileName = openFileDialog->GetPath();
-    ParseFeed((char *) fileName.c_str());
+    ParseFeed((char *) (const char *) fileName.mb_str());
   }
 }
 
@@ -318,17 +318,17 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
 
   if (elem)
   {
-    const char * text = entry->GetValue();
+    const wxString text = entry->GetValue();
     entry->SetToolTip(text);
 
     switch (elem->GetType())
     {
       case TYPE_INTEGER:
-        elem->SetValue((void *) atoi(text));
+        elem->SetValue((void *) atoi(text.mb_str()));
         break;
       case TYPE_STRING:
         char * val = (char *) malloc(257);
-        strcpy(val, text);
+        strcpy(val, text.mb_str());
         elem->SetValue((void *) val);
         break;
     }
@@ -342,14 +342,14 @@ void SubscriptionsEvents::OnAdd(wxCommandEvent & event)
   wxListBox * box = data->box;
   wxTextCtrl * entry = data->entry;
 
-  if (strlen(entry->GetValue()) > 0)
+  if (strlen((const char *) entry->GetValue().mb_str()) > 0)
   {
     wxString * value = new wxString();
     *value = entry->GetValue();
     box->InsertItems(1, value, box->GetCount());
 
     Subscriptions * subs = GetSubscriptionsObject();
-    subs->Add((char *) value->c_str());
+    subs->Add((char *) (const char *) value->mb_str());
 
     entry->SetFocus();
   }

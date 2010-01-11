@@ -3,7 +3,7 @@
 #include "frame.h"
 #include "i18n.h"
 
-IMPLEMENT_APP(R3R);
+IMPLEMENT_APP(R3R)
 
 bool R3R::OnInit()
 {

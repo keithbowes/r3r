@@ -4,10 +4,6 @@
 
 #include "i18n.h"
 
-#ifdef USE_SYSTEM_GETTEXT
-  #include <locale.h>
-#endif
-
 bool i18n_inited = false;
 
 void InitGettext()
@@ -22,25 +18,19 @@ void InitGettext()
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   wxString localeDir, path, prefix;
-  path = wxString("/share/locale");
-  prefix = wxString((char *) value);
+  path = wxString(wxT("/share/locale"));
+  prefix = wxString((wxChar *) value);
   localeDir = prefix + path;
 
-  #ifdef USE_SYSTEM_GETTEXT
-    setlocale(LC_ALL, "");
-    textdomain("r3r_wx");
-    bindtextdomain("r3r_wx", localeDir.c_str());
-  #else
-    wxLocale * locale = new wxLocale();
-    locale->Init();
-    locale->AddCatalogLookupPathPrefix(localeDir);
-    locale->AddCatalog("r3r_wx");
+  wxLocale * locale = new wxLocale();
+  locale->Init();
+  locale->AddCatalogLookupPathPrefix(localeDir);
+  locale->AddCatalog(wxT("r3r_wx"));
 
-    if (!i18n_inited && !locale->IsOk())
-    {
-      SendMessage(0, (char *) "Locale support is not available in your computer's current configuration.", NULL);
-    }
-  #endif
+  if (!i18n_inited && !locale->IsOk())
+  {
+    SendMessage(0, (char *) "Locale support is not available in your computer's current configuration.", NULL);
+  }
 
   i18n_inited = true;
 }

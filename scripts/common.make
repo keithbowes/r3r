@@ -2,7 +2,7 @@
 
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
-VERSION = 2.0
+VERSION = 2.1
 
 PREFIX ?= $(DESTDIR)
 
@@ -97,6 +97,8 @@ PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
 ifneq ($(R3R_UI),wx)
 PCFLAGS_DEBUG += -Ct
 endif # R3R_UI
+else
+PCFLAGS_DEBUG=-CX -Xs -XX
 endif # DEBUG
 
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE

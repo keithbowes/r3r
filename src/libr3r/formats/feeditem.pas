@@ -14,6 +14,11 @@ type
     Address: String;
   end;
 
+  TEnclosure = record
+    MimeType: String;
+    URL: String;
+  end;
+
   TFeedItem = class
   protected
     procedure Cleanup;
@@ -32,7 +37,7 @@ type
     Copyright: String;
     Uri: String;
     Myself: String;
-    Enclosure: String;
+    Enclosure: TEnclosure;
 
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
@@ -143,9 +148,10 @@ end;
 
 function TFeedItem.GetPodcast: String;
 begin
-  if (Pos('mp3', Enclosure) <> 0) or (Pos('ogg', Enclosure) <> 0) then
+  if (Pos('audio', Enclosure.MimeType) = 1) or
+    (Pos('video', Enclosure.MimeType) = 1) then
   begin
-    GetPodcast := Enclosure;
+    GetPodcast := Enclosure.URL;
   end
   else
   begin

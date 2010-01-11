@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  Atom, DC, RDate, RStrings, SockConsts, SysUtils;
+  Atom, DC, Mod_Enclosure, RDate, RStrings, SockConsts, SysUtils;
 
 function GetAtomFeed: TAtomFeed;
 begin
@@ -52,9 +52,15 @@ begin
     AFeed.ParseLine(Line, Item, ItemFinished);
     (AFeed as TXmlFeed).Free;
   end
+  else if Pos(Mod_EnclosureNS, GetCurrentElement.Name) = 1 then
+  begin
+    AFeed := TModEnclosure.Create;
+    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.ParseLine(Line, Item, ItemFinished);
+    (AFeed as TXmlFeed).Free;
+  end
   else
   begin
-    Elem := GetCurrentElement;
     IsRDF := Pos(RSS1NS, Elem.Name) <> 0;
     if IsRDF then
     begin
@@ -67,7 +73,8 @@ begin
   StripNS(Elem.Name, RSS1NS);
   StripNS(Prev.Name, RSS1NS);
 
-  ItemFinished := ((Elem.Name = 'item') and ((Prev.Name = 'item') or FLeftChannel)) or (Line = SockEof);
+  ItemFinished := ((Elem.Name = 'item') and
+    ((Prev.Name = 'item') or FLeftChannel)) or (Line = SockEof);
 
   if ItemFinished and FLeftChannel then
   begin
@@ -110,7 +117,12 @@ begin
       begin
         if Attributes[Idx].Name = 'url' then
         begin
-          Enclosure := Attributes[Idx].Value;
+          Enclosure.URL := Attributes[Idx].Value;
+        end;
+
+        if Attributes[Idx].Name = 'type' then
+        begin
+          Enclosure.MimeType := Attributes[Idx].Value;
         end;
       end;
     end

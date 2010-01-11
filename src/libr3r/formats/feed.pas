@@ -6,7 +6,7 @@ uses
   FeedItem;
 
 type
-  TFeedType = (ftUnset, ftXml, ftAtom, ftDc, ftEsf, ftRss, ftRss3, ftUnknown);
+  TFeedType = (ftUnset, ftXml, ftAtom, ftEsf, ftRss, ftRss3, ftUnknown);
 
   TFeed = class
   protected

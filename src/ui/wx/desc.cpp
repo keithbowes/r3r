@@ -11,9 +11,9 @@ void CreateDescriptionBox(wxPanel * parent)
   InitGettext();
   wxSizer * sizer = parent->GetSizer();
 
-  descBox = new wxStaticBox(parent, -1, "");
+  descBox = new wxStaticBox(parent, -1, (wxChar *) NULL);
 
-  wxTextCtrl * memo = new wxTextCtrl(parent, -1, "", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
+  wxTextCtrl * memo = new wxTextCtrl(parent, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
   descBox->SetClientData(memo);
 
   wxStaticBoxSizer * bsizer = new wxStaticBoxSizer(descBox, wxVERTICAL);

@@ -18,7 +18,7 @@ void CreateHeadersPage(wxTreebook * parent)
   SettingsEntry * typeEntry = new SettingsEntry(panel, (char *) "accept-types");
   table->Add(typeEntry, 1, wxEXPAND | wxALL, 5);
 
-  SettingsCheckBox * typeCheck = new SettingsCheckBox(panel, (char *) NULL, (char *) "use-custom-accept-types");
+  SettingsCheckBox * typeCheck = new SettingsCheckBox(panel, (wxChar *) NULL, (char *) "use-custom-accept-types");
   typeCheck->SetToolTip(_("Enable"));
   table->Add(typeCheck, 1, wxEXPAND | wxALL, 5);
 
@@ -28,7 +28,7 @@ void CreateHeadersPage(wxTreebook * parent)
   SettingsEntry * langEntry = new SettingsEntry(panel, (char *) "accept-langs");
   table->Add(langEntry, 1, wxEXPAND | wxALL, 5);
 
-  SettingsCheckBox * langCheck = new SettingsCheckBox(panel, (char *) NULL, (char *) "use-custom-accept-langs");
+  SettingsCheckBox * langCheck = new SettingsCheckBox(panel, (wxChar *) NULL, (char *) "use-custom-accept-langs");
   langCheck->SetToolTip(_("Enable"));
   table->Add(langCheck, 1, wxEXPAND | wxALL, 5);
 

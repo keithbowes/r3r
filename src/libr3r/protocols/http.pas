@@ -65,12 +65,13 @@ procedure THttpSock.GetHeaders;
 var
   ColonIndex: integer;
   ErrPos: word;
+  FH: PtrInt;
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
+  Host, Para, Path, Port, Prot: String;
   Line: String;
   NullLines: 0..20;
   RespList: TStringsList;
-  Prot, Host, Port, Path, Para: String;
 begin
   HeaderState := hsUnstarted;
   NullLines := 0;
@@ -210,7 +211,9 @@ begin
     end
     else if FileExists(CacheResponseFile) then
     begin
-      FileSetDate(CacheResponseFile, DateTimeToFileDate(Now));
+      FH := FileOpen(CacheResponseFile, fmOpenRead);
+      FileSetDate(FH, DateTimeToFileDate(Now));
+      FileClose(FH);
     end;
   end;
 

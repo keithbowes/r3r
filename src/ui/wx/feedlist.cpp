@@ -48,23 +48,23 @@ void item_parsed(void * item)
   listItem.SetColumn(0);
   listItem.SetData(info);
   listItem.SetId(itemIndex);
-  listItem.SetText(title);
+  listItem.SetText(wxString(title, wxConvUTF8));
 
   if (topItem)
   {
     feedList->InsertItem(listItem);
 
     listItem.SetColumn(1);
-    listItem.SetText("");
+    listItem.SetText(wxT(""));
     feedList->SetItem(listItem);
   }
   else
   {
-    listItem.SetText("");
+    listItem.SetText(wxT(""));
     feedList->InsertItem(listItem);
 
     listItem.SetColumn(1);
-    listItem.SetText(title);
+    listItem.SetText(wxString(title, wxConvUTF8));
     feedList->SetItem(listItem);
 
     normalize_field_value(&created);
@@ -72,11 +72,11 @@ void item_parsed(void * item)
   }
 
   listItem.SetColumn(2);
-  listItem.SetText(subject);
+  listItem.SetText(wxString(subject, wxConvUTF8));
   feedList->SetItem(listItem);
 
   listItem.SetColumn(3);
-  listItem.SetText(created);
+  listItem.SetText(wxString(created, wxConvUTF8));
   feedList->SetItem(listItem);
 
   topItem = FALSE;
@@ -87,12 +87,12 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 {
   int error_type = is_error ? wxICON_ERROR : wxICON_WARNING;
 
-  wxMessageBox(message_name, extra, wxOK | error_type);
+  wxMessageBox((wxChar *) message_name, (wxChar *) extra, wxOK | error_type);
 }
 
 void update_available()
 {
-  if (wxMessageBox(_("An update is available."), "", wxOK | wxCANCEL) == wxOK)
+  if (wxMessageBox(_("An update is available."), wxT(""), wxOK | wxCANCEL) == wxOK)
   {
     GoBrowser((char *) "http://sourceforge.net/projects/r3r");
   }
@@ -149,12 +149,6 @@ void * ParseFeedThread(void * resource)
   libr3r_retrieve_feed(res->lib, res->res);
   readyNextThread = true;
 
-#ifdef HAS_PTHREAD
-#ifndef WIN32
-  pthread_exit(NULL);
-#endif
-#endif
-
   return NULL;
 }
 
@@ -172,7 +166,7 @@ void ParseFeed(char * res)
 #endif
 }
 
-void GetAllFeeds(int argc, char ** argv)
+void GetAllFeeds(int argc, wxChar ** argv)
 {
   char * name, * s;
   int count, i, index;
@@ -181,7 +175,7 @@ void GetAllFeeds(int argc, char ** argv)
 
   for (i = 1; i < argc; i++)
   {
-    ParseFeed(argv[i]);
+    ParseFeed((char *) (const char *) wxString(argv[i], wxConvUTF8).mb_str());
   }
 
   index = 0;
@@ -191,7 +185,7 @@ void GetAllFeeds(int argc, char ** argv)
   if ((bool) value)
   {
     Subscriptions * subs = GetSubscriptionsObject();
-    while ((s = subs->GetNext()))
+    while ((s = subs->GetNext()) != NULL)
     {
       ParseFeed(s);
     }
@@ -210,16 +204,16 @@ void GoBrowser(char * url)
   name = (char *) "for:http";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-  browser = wxString((char *) value);
-  URL = wxString(url);
+  browser = wxString((char *) value, wxConvUTF8);
+  URL = wxString(url, wxConvUTF8);
 
-  if (wxNOT_FOUND == browser.Find("%1"))
+  if (wxNOT_FOUND == browser.Find(wxT("%1")))
   {
-    command = browser + " " + URL;
+    command = browser + wxT(" ") + URL;
   }
   else
   {
-    browser.Replace("%1", URL);
+    browser.Replace(wxT("%1"), URL);
     URL.Clear();
     command = browser;
   }

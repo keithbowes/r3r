@@ -62,7 +62,7 @@ end;
 
 function TDCFeed.GetFormat: TFeedType;
 begin
-  GetFormat := ftDC;
+  GetFormat := ftRss;
 end;
 
 end.

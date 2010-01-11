@@ -78,7 +78,7 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.Name := LowerCase(name);
+      Elem^.Name := LowerCase(StrPas(name));
     end;
 
     if Elem^.Name <> '' then

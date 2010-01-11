@@ -26,7 +26,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
   
   while ((s = subs->GetNext()))
   {
-    str = new wxString(s);
+    str = new wxString(s, wxConvUTF8);
     box->InsertItems(1, str, i);
     i++;
   }

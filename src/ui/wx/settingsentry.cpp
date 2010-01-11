@@ -26,8 +26,8 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
   name = (char *) malloc(257);
   strcpy(name, setting_name);
 
-  SetValue(text);
-  SetToolTip(text);
+  SetValue(wxString(text, wxConvUTF8));
+  SetToolTip(wxString(text, wxConvUTF8));
 
   if (TYPE_INTEGER == type)
   {
