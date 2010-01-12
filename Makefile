@@ -1538,10 +1538,11 @@ zipinstall: fpc_zipinstall
 zipsourceinstall: fpc_zipsourceinstall
 zipexampleinstall: fpc_zipexampleinstall
 zipdistinstall: fpc_zipdistinstall
+distclean:
 cleanall:
 info: fpc_info
 makefiles: fpc_makefiles
-.PHONY: debug smart release units examples shared sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall cleanall info makefiles
+.PHONY: debug smart release units examples shared sourceinstall exampleinstall distinstall zipinstall zipsourceinstall zipexampleinstall zipdistinstall distclean cleanall info makefiles
 ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
@@ -1603,13 +1604,13 @@ fpc-release:
 fpc-debug:
 	$(MAKE) PCFLAGS_DEBUG="-Xs- -gh -gl -gv -CX- -XX-" fpc-release
 gpc:
-	-$(MAKE) COMPILER_OVERRIDE=1 USE_GPC=1 $(DEFAULT_RULE)
+	-$(MAKE) USE_GPC=1 $(DEFAULT_RULE)
 	@$(ECHO) "Unless you really know what you're doing, the build" \
 		"has failed.  Hopefully, it will work in the future."
 for-borland-compilers:
 	-$(MAKE) \
 	PCFLAGS_BASE="-B -CC -E. -M -O$(R3R_UI) -Upo -Ulibr3r -V" \
-	DEFS=-DNO_GETTEXT OBJEXT=.obj UNITEXT=.dcu all
+	OEXT=.obj PPUEXT=.dcu all
 	@$(ECHO) "Compiling with Delphi/Kylix is currently unsupported.  If that" \
 	"concerns you, send patches."
 delphi:
@@ -1623,4 +1624,3 @@ clean:
 	cd src && $(MAKE) clean
 	$(DEL) description-pak
 	$(DEL) r3r$(EXEEXT) r3r-$(R3R_UI)$(EXEEXT)
-distclean: clean

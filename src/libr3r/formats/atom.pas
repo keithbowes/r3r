@@ -151,7 +151,7 @@ begin
 
       with FAtomLink do
       begin
-        if Rel = 'alternate' then
+        if (Rel = 'alternate') or (Rel = '') then
         begin
           PLink := StrToPChar(Href);
           Links^.Add(PLink);
@@ -165,6 +165,10 @@ begin
           Enclosure.MimeType := MimeType;
           Enclosure.URL := Href;
         end;
+
+        Href := '';
+        MimeType := '';
+        Rel := '';
       end;
     end
     else if Name = 'category' then

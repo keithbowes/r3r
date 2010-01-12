@@ -111,6 +111,8 @@ begin
   Id := '';
   Uri := '';
   Myself := '';
+  Enclosure.MimeType := '';
+  Enclosure.URL := '';
 
   Links^.Add(nil);
 end;

@@ -159,6 +159,8 @@ _clean:
 
 clean: _clean
 
+distclean: clean
+
 %$(PPUEXT): %.pas
 	$(PC) $(PCFLAGS) $<
 
