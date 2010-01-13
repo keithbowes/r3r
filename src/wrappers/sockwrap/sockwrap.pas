@@ -73,7 +73,7 @@ end;
 { Timeout is ignored; it's just for compatability with the Synapse API }
 function TSockWrap.RecvString(Timeout: word): String;
 var
-  Buf: array [1..255] of char;
+  Buf: PChar{array [1..255] of char};
   CurStr, LastStr: String;
   LastReceived: integer;
 begin
@@ -83,10 +83,10 @@ begin
   if (FStrings.Length = 0) or (FStrings.Length = FStringIndex + 1) or
     (FStringIndex >= 255) then
   begin
-    InitStringsList(FStrings);
-    FReceived := socket_receive(FSocket, PChar(@Buf), 255);
+    GetMem(Buf, 255 * SizeOf(Buf));
+    FReceived := socket_receive(FSocket, Buf, 255);
     LastStr := FStrings.Strings[FStringIndex];
-    FStrings := Split(Copy(Buf, 1, FReceived + 2), #10#13);
+    FStrings := Split(Copy(StrPas(Buf), 1, FReceived + 2), #10#13);
     FStringIndex := 0;
   end;
   

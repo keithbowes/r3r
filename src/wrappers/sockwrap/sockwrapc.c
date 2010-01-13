@@ -31,9 +31,9 @@ void socket_init_win32()
 int socket_get_last_error()
 {
 #ifdef WIN32
-    return WSAGetLastError();
+  return WSAGetLastError();
 #else
-      return errno;
+  return errno;
 #endif
 }
 

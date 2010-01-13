@@ -136,7 +136,11 @@ end;
 function TRSock.GetLine: String;
 begin
   GetLine := Sock.RecvString(5000);
+{$IFDEF __GPC__}
+  FError := (Sock.LastError < 0) or (Sock.LastError > 2);
+{$ELSE}
   FError := Sock.LastError <> 0;
+{$ENDIF}
 
   if FError then
   begin
