@@ -136,7 +136,7 @@ begin
       end;
       otherwise
       begin
-        { TODO }
+        CacheHeader := '';
       end;
     end;
 

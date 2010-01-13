@@ -43,6 +43,7 @@ class MenuEvents : public wxWindow
     void OnLoadSubscriptions(wxCommandEvent & event);
     void OnOpen(wxCommandEvent & event);
     void OnQuit(wxCommandEvent & event);
+    void OnRefresh(wxCommandEvent & event);
     void OnSettings(wxCommandEvent & event);
 };
 

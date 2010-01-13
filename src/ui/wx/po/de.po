@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-26 13:42-0500\n"
+"POT-Creation-Date: 2010-01-12 18:44-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
@@ -31,10 +31,6 @@ msgstr "&Abonnieren"
 #: ../desc.cpp:33
 msgid "&Play Podcast..."
 msgstr "&Spielen Podcast..."
-
-#: ../events.cpp:206
-msgid "About R3R"
-msgstr "Über R3R"
 
 #: ../feedlist.cpp:22
 msgid "[None]"
@@ -76,31 +72,35 @@ msgstr "&Beenden"
 msgid "&Load Subscriptions"
 msgstr "&Laden Abbonements"
 
-#: ../menu.cpp:34
+#: ../menu.cpp:33
+msgid "&Refresh"
+msgstr "&Wiederfrischen"
+
+#: ../menu.cpp:35
 msgid "&Settings..."
 msgstr "&Einstellungen..."
 
-#: ../menu.cpp:40
+#: ../menu.cpp:41
 msgid "&Donate"
 msgstr "&Spenden"
 
-#: ../menu.cpp:42
+#: ../menu.cpp:43
 msgid "&Check for updates"
 msgstr "&Suchen nach Aktuelles"
 
-#: ../menu.cpp:43
+#: ../menu.cpp:44
 msgid "&About"
 msgstr "&Über"
 
-#: ../menu.cpp:47
+#: ../menu.cpp:48
 msgid "&File"
 msgstr "&Seit"
 
-#: ../menu.cpp:48
+#: ../menu.cpp:49
 msgid "&Tools"
 msgstr "&Zeuge"
 
-#: ../menu.cpp:49
+#: ../menu.cpp:50
 msgid "&Help"
 msgstr "&Hilfe"
 
@@ -201,6 +201,9 @@ msgstr "&Hinzufügen"
 msgid "Subscriptions"
 msgstr "Abbonements"
 
-#: ../settingsdialog.cpp:6
+#: ../settingsdialog.cpp:12
 msgid "Settings"
 msgstr "Einstellungen"
+
+#~ msgid "About R3R"
+#~ msgstr "Über R3R"

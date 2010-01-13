@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-12-26 13:42-0500\n"
+"POT-Creation-Date: 2010-01-12 18:44-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,10 +30,6 @@ msgstr ""
 
 #: ../desc.cpp:33
 msgid "&Play Podcast..."
-msgstr ""
-
-#: ../events.cpp:206
-msgid "About R3R"
 msgstr ""
 
 #: ../feedlist.cpp:22
@@ -76,31 +72,35 @@ msgstr ""
 msgid "&Load Subscriptions"
 msgstr ""
 
-#: ../menu.cpp:34
+#: ../menu.cpp:33
+msgid "&Refresh"
+msgstr ""
+
+#: ../menu.cpp:35
 msgid "&Settings..."
 msgstr ""
 
-#: ../menu.cpp:40
+#: ../menu.cpp:41
 msgid "&Donate"
 msgstr ""
 
-#: ../menu.cpp:42
+#: ../menu.cpp:43
 msgid "&Check for updates"
 msgstr ""
 
-#: ../menu.cpp:43
+#: ../menu.cpp:44
 msgid "&About"
 msgstr ""
 
-#: ../menu.cpp:47
+#: ../menu.cpp:48
 msgid "&File"
 msgstr ""
 
-#: ../menu.cpp:48
+#: ../menu.cpp:49
 msgid "&Tools"
 msgstr ""
 
-#: ../menu.cpp:49
+#: ../menu.cpp:50
 msgid "&Help"
 msgstr ""
 
@@ -201,6 +201,6 @@ msgstr ""
 msgid "Subscriptions"
 msgstr ""
 
-#: ../settingsdialog.cpp:6
+#: ../settingsdialog.cpp:12
 msgid "Settings"
 msgstr ""

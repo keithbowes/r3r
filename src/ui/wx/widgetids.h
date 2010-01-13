@@ -2,7 +2,8 @@
 
 enum
 {
-  wxID_1 = wxID_HIGHEST,
+  wxID_1 = wxID_HIGHEST, /* Because I'm anal about keeping
+                            everything alphabetical. */
   wxID_ADD_SUBSCRIPTION,
   wxID_BROWSE,
   wxID_CHECK_UPDATES,

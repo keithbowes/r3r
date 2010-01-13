@@ -13,6 +13,9 @@ FeedListView * feedList;
 bool topItem = FALSE;
 bool readyNextThread = TRUE;
 
+int _argc;
+wxChar ** _argv;
+
 void normalize_field_value(char ** field_value)
 {
   char * s = *field_value;
@@ -147,8 +150,9 @@ void * ParseFeedThread(void * resource)
   topItem = true;
 
   libr3r_retrieve_feed(res->lib, res->res);
-  readyNextThread = true;
+  free(res);
 
+  readyNextThread = true;
   return NULL;
 }
 
@@ -173,9 +177,15 @@ void GetAllFeeds(int argc, wxChar ** argv)
   unsigned char type;
   void * value;
 
-  for (i = 1; i < argc; i++)
+  if (argv)
   {
-    ParseFeed((char *) (const char *) wxString(argv[i], wxConvUTF8).mb_str());
+    _argc = argc;
+    _argv = argv;
+  }
+
+  for (i = 1; i < _argc; i++)
+  {
+    ParseFeed((char *) (const char *) wxString(_argv[i], wxConvUTF8).mb_str());
   }
 
   index = 0;

@@ -30,6 +30,7 @@ void CreateMenus(wxFrame * parent)
   /* The Tools Menu */
   wxMenu * menuTools = new wxMenu;
   load = menuTools->Append(wxID_LOAD_SUBSCRIPTIONS, _("&Load Subscriptions"));
+  menuTools->Append(wxID_REFRESH, _("&Refresh"));
   menuTools->AppendSeparator();
   menuTools->Append(wxID_SETTINGS, _("&Settings..."));
 

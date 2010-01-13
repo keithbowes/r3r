@@ -203,17 +203,17 @@ void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
   InitGettext();
 
   char * user_agent = libr3r_get_user_agent();
-  wxMessageBox((wxChar *) user_agent, wxT("About R3R"), wxOK | wxICON_INFORMATION);
+  wxMessageBox(wxString(user_agent, wxConvUTF8), wxT("About R3R"), wxOK | wxICON_INFORMATION);
 }
 
 void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
 {
   wxString command, url, version;
-  url = wxString(wxT("http://r3r.sourceforge.net/check.php?v="));
-  version = wxString((wxChar *) VERSION);
-  command = url + version + wxString(wxT("&display=1"));
+  url = wxString("http://r3r.sourceforge.net/check.php?v=", wxConvUTF8);
+  version = wxString(wxString(VERSION, wxConvUTF8));
+  command = url + version + wxString("&display=1", wxConvUTF8);
 
-  GoBrowser((char *) command.c_str());
+  GoBrowser((char *) (const char *) command.mb_str());
 }
 
 void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
@@ -265,6 +265,13 @@ void MenuEvents::OnOpen(wxCommandEvent & event)
 void MenuEvents::OnQuit(wxCommandEvent & WXUNUSED(event))
 {
   Close(TRUE);
+}
+
+void MenuEvents::OnRefresh(wxCommandEvent & WXUNUSED(event))
+{
+  FeedListView * view = GetFeedList();
+  view->DeleteAllItems();
+  GetAllFeeds(0, NULL);
 }
 
 void MenuEvents::OnSettings(wxCommandEvent & WXUNUSED(event))

@@ -133,7 +133,7 @@ begin
     repeat
       Link := StrPas(Links^.GetNth(CurrentLink));
       Dec(CurrentLink);
-    until (Link <> '') or (CurrentLink = LinksCount);
+    until (Link <> '') or (CurrentLink <= LinksCount);
   end
   else
   begin

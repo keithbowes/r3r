@@ -101,7 +101,10 @@ begin
   if Assigned(FSock) then
   begin
 {$IFDEF __GPC__}
-    FSock.Sock.CloseSocket;
+    if Prot <> 'file' then
+    begin
+      FSock.Sock.CloseSocket;
+    end;
 {$ELSE}
     FSock.Free;
 {$ENDIF}
