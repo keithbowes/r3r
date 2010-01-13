@@ -29,7 +29,7 @@ void InitGettext()
 
   if (!i18n_inited && !locale->IsOk())
   {
-    SendMessage(0, (char *) "Locale support is not available in your computer's current configuration.", NULL);
+    SendOwnMessage(0, (char *) "Locale support is not available in your computer's current configuration.", NULL);
   }
 
   i18n_inited = true;

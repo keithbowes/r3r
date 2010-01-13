@@ -13,8 +13,8 @@ FeedListView * feedList;
 bool topItem = FALSE;
 bool readyNextThread = TRUE;
 
-int _argc;
-wxChar ** _argv;
+int rargc;
+wxChar ** rargv;
 
 void normalize_field_value(char ** field_value)
 {
@@ -90,7 +90,7 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 {
   int error_type = is_error ? wxICON_ERROR : wxICON_WARNING;
 
-  wxMessageBox((wxChar *) message_name, (wxChar *) extra, wxOK | error_type);
+  wxMessageBox(wxString(message_name, wxConvUTF8), wxString(extra,wxConvUTF8), wxOK | error_type);
 }
 
 void update_available()
@@ -179,13 +179,13 @@ void GetAllFeeds(int argc, wxChar ** argv)
 
   if (argv)
   {
-    _argc = argc;
-    _argv = argv;
+    rargc = argc;
+    rargv = argv;
   }
 
-  for (i = 1; i < _argc; i++)
+  for (i = 1; i < rargc; i++)
   {
-    ParseFeed((char *) (const char *) wxString(_argv[i], wxConvUTF8).mb_str());
+    ParseFeed((char *) (const char *) wxString(rargv[i], wxConvUTF8).mb_str());
   }
 
   index = 0;
@@ -231,7 +231,7 @@ void GoBrowser(char * url)
   wxExecute(command);
 }
 
-void SendMessage(unsigned char is_error, char * message, char * extra)
+void SendOwnMessage(unsigned char is_error, char * message, char * extra)
 {
   bool show_messages;
   int count, index;

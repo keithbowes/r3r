@@ -18,7 +18,7 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   wxString path, prefix;
-  prefix = wxString((wxChar *) value);
+  prefix = wxString((char *) value, wxConvUTF8);
   path = wxString(wxT("/share/icon/r3r.png"));
 
   wxPanel * panel = new wxPanel(this, wxID_ANY);

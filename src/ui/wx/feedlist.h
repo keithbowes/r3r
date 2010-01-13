@@ -27,4 +27,4 @@ void GetAllFeeds(int argc, wxChar ** argv);
 
 void GoBrowser(char * link);
 
-void SendMessage(unsigned char is_error, char * message, char * extra);
+void SendOwnMessage(unsigned char is_error, char * message, char * extra);
