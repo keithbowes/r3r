@@ -89,7 +89,8 @@ PCFLAGS_EXTRA
   Extra options to send to the compiler.
 R3R_UI
   The user interface to use.  Look in the ./src/ui directory for
-  available user interfaces.  Defaults to "tui."
+  available user interfaces.  The default varies, depending on
+  multiple factors.
 USE_FPC
   Use Free Pascal to compile (recommended).
 USE_GPC

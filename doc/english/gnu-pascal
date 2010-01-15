@@ -7,12 +7,13 @@ Requirements:
 * The SysUtils unit <http://www.gnu-pascal.de/contrib/chief/sysutils/>.
 
 Notes:
-* You'll need to link to Expat and perhaps some other libraries.
-  Be sure to set your LDFLAGS environment variable accordingly.
+* You'll need to link to Expat, libidn and perhaps some other
+  libraries.  Be sure to set your LDFLAGS environment variable
+  accordingly.
 * GNU Pascal limits its strings to 255 chars when no length is
   specified (unlike Free Pascal, where you can use long strings,
   which are dynamic and can be up to the size of a machine word
-  (generally, that means 65534 or so characters).  This means a
+  (generally, that means 65534 or so characters)).  This means a
   lot of feeds won't be displayed properly (Expat will quit on
   the first truncated line).
 * UTF-8 seems not to work in the TUI.  Foreign feeds and
