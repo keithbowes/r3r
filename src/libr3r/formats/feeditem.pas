@@ -8,10 +8,11 @@ uses
   RList, StrTok;
 
 type
-  PEmail = ^TEmail;
-  TEmail = record
-    Toee: String;
-    Address: String;
+  PAuthor = ^TAuthor;
+  TAuthor = record
+    Email: String;
+    Name: String;
+    URI: String;
   end;
 
   TEnclosure = record
@@ -29,7 +30,7 @@ type
     Description: String;
     Subject: String;
     Created: String;
-    Contact: PEmail;
+    Contact: PAuthor;
     Generator: String;
     LastModified: String;
     Language: String;
@@ -47,7 +48,7 @@ type
     procedure Clear;
   end;
 
-function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;
+function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
 
 implementation
 
@@ -102,8 +103,9 @@ begin
   MainLink := '';
   Subject := '';
   Created := '';
-  Contact^.Toee := '';
-  Contact^.Address := '';
+  Contact^.Email := '';
+  Contact^.Name := '';
+  Contact^.URI := '';
   Generator := '';
   LastModified := '';
   Language := '';
@@ -161,10 +163,10 @@ begin
   end;
 end;
 
-function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TEmail;
+function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
 var
   BegName: cardinal;
-  Rec: TEmail;
+  Rec: TAuthor;
 begin
   EmailStr := Trim(EmailStr);
 
@@ -173,12 +175,12 @@ begin
   begin
     if BegName <> 0 then
     begin
-      Address := Copy(EmailStr, 1, BegName - OffsetEnd - 1);
-      Toee := Copy(EmailStr, BegName + 1, Length(EmailStr) - BegName - OffsetEnd);
+      Email := Copy(EmailStr, 1, BegName - OffsetEnd - 1);
+      Name := Copy(EmailStr, BegName + 1, Length(EmailStr) - BegName - OffsetEnd);
     end
     else
     begin
-      Address := EmailStr;
+      Email := EmailStr;
     end;
   end;
 

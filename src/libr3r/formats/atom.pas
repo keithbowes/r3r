@@ -211,18 +211,25 @@ begin
       Created := Created + Content;
       Created := TimeToString(ShortDateToTime(Created));
     end
+    else if Name = 'email' then
+    begin
+      if GetPreviousElement.Name = 'author' then
+      begin
+        Contact^.Email := Contact^.Email + Content;
+      end;
+    end
     else if Name = 'name' then
     begin
-      if GetPreviousElement.Name = 'email' then
+      if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Toee := Contact^.Toee + Content;
+        Contact^.Name := Contact^.Name + Content;
       end;
     end
     else if Name = 'uri' then
     begin
-      if GetPreviousElement.Name = 'email' then
+      if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Address := Contact^.Address + Content;
+        Contact^.URI := Contact^.URI + Content;
       end;
     end
     else if Name = 'generator' then

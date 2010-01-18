@@ -127,11 +127,15 @@ begin
     end
     else if FieldName = 'contact-name' then
     begin
-      Result := StrToPChar(Contact^.Toee);
+      Result := StrToPChar(Contact^.Name);
     end
     else if FieldName = 'contact-email' then
     begin
-      Result := StrToPChar(Contact^.Address);
+      Result := StrToPChar(Contact^.Email);
+    end
+    else if FieldName = 'contact-uri' then
+    begin
+      Result := StrToPChar(Contact^.URI);
     end
     else if FieldName = 'generator' then
     begin

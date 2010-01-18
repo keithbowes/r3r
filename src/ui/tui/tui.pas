@@ -136,9 +136,9 @@ begin
     Write(' <', Item.GetMainLink, '>');
   end;
 
-  if Item.Contact^.Address <> '' then
+  if Item.Contact^.Email <> '' then
   begin
-    Write(' (', Item.Contact^.Address, ')');
+    Write(' (', Item.Contact^.Email, ')');
   end;
 
   WriteLn;

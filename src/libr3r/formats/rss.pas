@@ -144,7 +144,7 @@ begin
       Created := Created + Content;
       Created := TimeToString(LongDateToTime(Created));
     end
-    else if Name = 'managingeditor' then
+    else if (Name = 'author') or (Name = 'managingeditor') then
     begin
       Contact^ := CreateEmailRecord(Content, '(', 1);
     end

@@ -81,20 +81,20 @@ dist-inno_setup:
 	cd scripts/setup && $(MAKE) dist-inno_setup
 
 # Compilation rules
-ifdef RELEASE
+ifndef DEBUG
 fpc: fpc-release
 else
 fpc: fpc-debug
 endif
 
 fpc-release:
-	$(MAKE) COMPILER_OVERRIDE=1 USE_FPC=1 all
+	$(MAKE) USE_FPC=1 all
 
 fpc-debug:
 	$(MAKE) PCFLAGS_DEBUG="-Xs- -gh -gl -gv -CX- -XX-" fpc-release
 
 gpc:
-	-$(MAKE) USE_GPC=1 $(DEFAULT_RULE)
+	-$(MAKE) USE_GPC=1
 	@$(ECHO) "Unless you really know what you're doing, the build" \
 		"has failed.  Hopefully, it will work in the future."
 

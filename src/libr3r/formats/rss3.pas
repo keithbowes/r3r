@@ -85,7 +85,7 @@ begin
   end
   else if FCurrentField = 'creator' then
   begin
-    Data := Item.Contact^.Address + ' ' + Item.Contact^.Toee + Data;
+    Data := Item.Contact^.Email + ' ' + Item.Contact^.Name + Data;
     Item.Contact^ := CreateEmailRecord(Data, ' ', 0);
   end
   else if FCurrentField = 'generator' then

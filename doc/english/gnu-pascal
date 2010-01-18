@@ -3,7 +3,8 @@ Basically, it's just a case of make.
 
 Requirements:
 * The things listed in BUILDING.
-* GP <http://fjf.gnu.de/>
+* GNU Pascal, 20070904 or newer <http://www.gnu-pascal.de/>.
+* GP <http://fjf.gnu.de/>.
 * The SysUtils unit <http://www.gnu-pascal.de/contrib/chief/sysutils/>.
 
 Notes:
