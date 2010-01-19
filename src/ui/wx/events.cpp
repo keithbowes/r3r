@@ -203,7 +203,7 @@ void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
   InitGettext();
 
   char * user_agent = libr3r_get_user_agent();
-  wxMessageBox(wxString(user_agent, wxConvUTF8), wxT("About R3R"), wxOK | wxICON_INFORMATION);
+  wxMessageBox(wxString(user_agent, wxConvUTF8), _("About R3R"), wxOK | wxICON_INFORMATION);
 }
 
 void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
