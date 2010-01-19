@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 18:44-0500\n"
+"POT-Creation-Date: 2010-01-18 18:17-0500\n"
 "PO-Revision-Date: 2009-11-30 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
@@ -32,27 +32,31 @@ msgstr "&Aboni"
 msgid "&Play Podcast..."
 msgstr "&Legi podkaston..."
 
-#: ../feedlist.cpp:22
+#: ../events.cpp:206
+msgid "About R3R"
+msgstr "Pri R3R"
+
+#: ../feedlist.cpp:25
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:95
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "Promocio haveblas."
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -130,7 +134,7 @@ msgstr "&Sciigi pri promocioj min"
 
 #: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
-msgstr "&Ŝargi abonojn je programplenumo"
+msgstr "&Ŝargi abonojn je lanĉo"
 
 #: ../settings-display.cpp:37
 msgid "Display"
@@ -138,7 +142,7 @@ msgstr "Montro"
 
 #: ../settings-headers.cpp:15
 msgid "Custom Accept &Types: "
-msgstr "Kutimaj akceptaj &tipoj: "
+msgstr "Kutimaj akceptataj &tipoj: "
 
 #: ../settings-headers.cpp:22 ../settings-headers.cpp:32
 msgid "Enable"
@@ -146,7 +150,7 @@ msgstr "Ebligi"
 
 #: ../settings-headers.cpp:25
 msgid "Custom Accept &Languages: "
-msgstr "Kutimaj akceptaj &lingvoj: "
+msgstr "Kutimaj akceptataj &lingvoj: "
 
 #: ../settings-headers.cpp:35
 msgid "HTTP Headers"
@@ -183,7 +187,7 @@ msgstr "&Retpoŝtilo"
 
 #: ../settings-programs.cpp:35
 msgid "Media &Player"
-msgstr "&Sona/videa legilo"
+msgstr "&Plurmedia legilo"
 
 #: ../settings-programs.cpp:45
 msgid "Programs"
@@ -204,9 +208,3 @@ msgstr "Abonoj"
 #: ../settingsdialog.cpp:12
 msgid "Settings"
 msgstr "Agordo"
-
-#~ msgid "About R3R"
-#~ msgstr "Pri R3R"
-
-#~ msgid "&Editor"
-#~ msgstr "&Tekstoredaktilo"

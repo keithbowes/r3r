@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 18:44-0500\n"
+"POT-Creation-Date: 2010-01-18 18:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,27 +32,31 @@ msgstr ""
 msgid "&Play Podcast..."
 msgstr ""
 
-#: ../feedlist.cpp:22
+#: ../events.cpp:206
+msgid "About R3R"
+msgstr ""
+
+#: ../feedlist.cpp:25
 msgid "[None]"
 msgstr ""
 
-#: ../feedlist.cpp:95
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr ""
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr ""
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr ""
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr ""
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr ""
 

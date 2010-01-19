@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 18:44-0500\n"
+"POT-Creation-Date: 2010-01-18 18:17-0500\n"
 "PO-Revision-Date: 2009-11-30 14:49-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
@@ -32,27 +32,31 @@ msgstr "&Subscribe"
 msgid "&Play Podcast..."
 msgstr "&Play Podcast..."
 
-#: ../feedlist.cpp:22
+#: ../events.cpp:206
+msgid "About R3R"
+msgstr "About R3R"
+
+#: ../feedlist.cpp:25
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:95
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "An update is available."
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Date Created"
 
@@ -204,6 +208,3 @@ msgstr "Subscriptions"
 #: ../settingsdialog.cpp:12
 msgid "Settings"
 msgstr "Settings"
-
-#~ msgid "About R3R"
-#~ msgstr "About R3R"
