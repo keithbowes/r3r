@@ -274,9 +274,13 @@ begin
   Val(No, iNo, ErrPos);
 
   if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo - 1)).MainLink <> '') and
-    (FItems^.Count > 0) then
+    (FItems^.Count > 0) and (iNo <= FItems^.Count) then
   begin
     OpenBrowser(TFeedItem(FItems^.GetNth(iNo - 1)).MainLink);
+  end
+  else
+  begin
+    WriteLn(InvalidNumber);
   end;
 
   ShowHelp;

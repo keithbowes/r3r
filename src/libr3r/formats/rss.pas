@@ -128,6 +128,8 @@ begin
     end
     else if Name = 'category' then
     begin
+      Content := StringReplace(Content, '/', ', ', [rfReplaceAll]);
+
       if FLastCat <> Content then
       begin
         if Subject <> '' then
