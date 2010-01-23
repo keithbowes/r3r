@@ -219,7 +219,7 @@ void GoBrowser(char * url)
 
   if (wxNOT_FOUND == browser.Find(wxT("%1")))
   {
-    command = browser + wxT(" ") + URL;
+    command = browser + wxT(" ") + wxT("\"") + URL + wxT("\"");
   }
   else
   {

@@ -313,7 +313,8 @@ begin
   end;
 
   SwapVectors;
-  Exec(Browser, Link);
+  WriteLn(Link);
+  Exec(Browser, '"' + Link + '"');
   SwapVectors;
 end;
 

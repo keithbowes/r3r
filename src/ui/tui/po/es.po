@@ -19,7 +19,7 @@ msgstr "i)r a un URL"
 
 #: tuistrings:aboutitem
 msgid "a)bout item number"
-msgstr "a)cerca de la entrada"
+msgstr "s)obre la entrada"
 
 #: tuistrings:openlink
 msgid "open l)ink"
@@ -39,7 +39,7 @@ msgstr "c)esar el programa"
 
 #: tuistrings:aboutkey
 msgid "a"
-msgstr ""
+msgstr "s"
 
 #: tuistrings:openkey
 msgid "l"
