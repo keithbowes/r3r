@@ -81,7 +81,7 @@ begin
     begin
       FAbstractFeed := TRss3Feed.Create;
     end
-    else if FeedType = ftRss then
+    else if (FeedType = ftRss) or (FeedType = ftXml) then
     begin
       FAbstractFeed := TRssFeed.Create;
     end

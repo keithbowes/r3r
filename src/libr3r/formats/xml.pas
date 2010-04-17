@@ -35,11 +35,11 @@ type
     FCloned: Boolean;
     FLastBase: String;
     FLastLang: String;
-    FParser: XML_PARSER;
   public
     Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
+    FParser: XML_PARSER;
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
     destructor Destroy; override;
@@ -63,7 +63,7 @@ begin
   Depth := 0;
   FCloned := false;
 
-  FParser := XML_ParserCreateNS('UTF-8', #0);
+  FParser := XML_ParserCreateNS(nil, #0);
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
   XML_SetUserData(FParser, Self);

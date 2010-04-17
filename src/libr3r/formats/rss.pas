@@ -110,6 +110,11 @@ begin
     begin
       PLink := StrToPChar(Content);
       Links^.Add(PLink);
+
+      if Uri = '' then
+      begin
+        Uri := Content;
+      end;
     end
     else if Name = 'enclosure' then
     begin
@@ -170,13 +175,14 @@ begin
     end
     else if Name = 'guid' then
     begin
-      Id := Id + Content;
-      Uri := Id;
+      Uri := Content;
     end
     else if Name = 'channel' then
     begin
       FLeftChannel := true;
     end;
+
+    Id := Uri;
   end;
 end;
 

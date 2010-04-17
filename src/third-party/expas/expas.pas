@@ -429,7 +429,6 @@ Type
 
   function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external 'expat' name 'XML_SetParamEntityParsing';
 
-
   type
      XML_Error = (XML_ERROR_NONE,XML_ERROR_NO_MEMORY,XML_ERROR_SYNTAX,
        XML_ERROR_NO_ELEMENTS,XML_ERROR_INVALID_TOKEN,
