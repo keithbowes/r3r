@@ -67,6 +67,8 @@ PC=$(call programpath,fpc)
 else
 ifdef USE_GPC
 PC=$(call programpath,gp)
+CC=$(call programpath,gpc)
+export CC
 endif # USE_GPC
 endif # USE_FPC
 else
@@ -75,6 +77,8 @@ ifeq ($(findstring fpc,$(PC)),fpc)
 USE_FPC=1
 else
 PC=$(call programpath,gp)
+CC=$(call programpath,gpc)
+export CC
 ifeq ($(findstring gp,$(PC)),gp)
 USE_GPC=1
 else
