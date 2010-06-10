@@ -160,6 +160,7 @@ begin
       begin
         Headers.Status := 0;
         Sock.CloseSocket;
+        ShouldShow := true;
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
         Connect(Host, Port, Path, Para);
