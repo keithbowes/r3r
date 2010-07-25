@@ -8,6 +8,7 @@ interface
 var
   ErrorGetting: String;
   InvalidHeaders: String;
+  MissingData: String;
 
   Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec: String;
 
@@ -20,6 +21,7 @@ procedure InitStrings;
 begin
   ErrorGetting := _('Couldn''t retrieve the feed.');
   InvalidHeaders := _('The web server doesn''t exist or sent invalid information.');
+  MissingData := _('There is missing data in this feed.  Some of it was recovered.');
 
   Jan := _('Jan');
   Feb := _('Feb');

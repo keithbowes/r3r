@@ -6,8 +6,8 @@ uses
   LibR3R, RSock;
 
 procedure SetMessageObject(const Sender: TLibR3R);
-procedure CallMessageEvent(Sender: TRSock; IsError: Boolean; MessageName: String);
-procedure CallMessageEventEx(Sender: TRSock; IsError: Boolean; MessageName: String; Extra: String);
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 
 implementation
 
@@ -19,18 +19,22 @@ begin
   MessageObject := Sender;
 end;
 
-procedure CallMessageEvent(Sender: TRSock; IsError: Boolean; MessageName: String);
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
 begin
   CallMessageEventEx(Sender, IsError, MessageName, '');
 end;
 
-procedure CallMessageEventEx(Sender: TRSock; IsError: Boolean; MessageName: String; Extra: String);
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
 begin
   if Assigned(MessageObject) and
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then
   begin
     MessageObject.HandleMessage(IsError, MessageName, Extra);
-    Sender.ShouldShow := false;
+
+    if Sender is TRSock then
+    begin
+      (Sender as TRSock).ShouldShow := false;
+    end;
   end;
 end;
 

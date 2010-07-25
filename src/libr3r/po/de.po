@@ -17,6 +17,9 @@ msgstr "Ich könnte nicht das Feed erlangen."
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "Der Web-server existiert nich oder gesendet ungültigen Informationen."
 
+msgid "There is missing data in this feed.  Some of it was recovered."
+msgstr "Es gibt fehlenden Daten in der Feed. Etwas aus es währe gefunden."
+
 msgid "Jan"
 msgstr ""
 

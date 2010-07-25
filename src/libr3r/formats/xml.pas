@@ -33,6 +33,7 @@ type
   TXmlFeed = class(TFeed)
   private
     FCloned: Boolean;
+    FNthElem: cardinal;
     FLastBase: String;
     FLastLang: String;
   public
@@ -52,7 +53,7 @@ type
 implementation
 
 uses
-  RStrings, SaxCallbacks;
+  LibR3RStrings, RMessage, RStrings, SaxCallbacks, SysUtils;
 
 constructor TXmlFeed.Create;
 begin
@@ -62,6 +63,7 @@ begin
   New(FElemList, Init);
   Depth := 0;
   FCloned := false;
+  FNthElem := 0;
 
   FParser := XML_ParserCreateNS(nil, #0);
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
@@ -114,10 +116,33 @@ end;
 function TXmlFeed.GetCurrentElement: TXmlElement;
 var
   Elem: TXmlElement;
+  i: cardinal;
+  s: String;
+const
+  LastElemNum: cardinal = 0;
 begin
   if FElemList^.Count > 0 then
   begin
-    Elem := PXmlElement(FElemList^.GetNth(FElemList^.Count - 1))^;
+    FNthElem := FElemList^.Count;
+  end;
+
+  if FNthElem > 0 then
+  begin
+    if FNthElem > LastElemNum + 1 then
+    begin
+      for i := LastElemNum to FNthElem - 1 do
+      begin
+        s := s + PXmlElement(FElemList^.GetNth(i))^.Content + #13#10;
+      end;
+
+      s := Trim(s);
+      if Length(s) > 0 then
+      begin
+        CallMessageEventEx(Self, true, MissingData, s);
+      end;
+    end;
+
+    Elem := PXmlElement(FElemList^.GetNth(FNthElem))^;
     if Elem.Base <> '' then
     begin
       FLastBase := Elem.Base;
@@ -148,6 +173,8 @@ begin
   end;
 
   GetCurrentElement := Elem;
+
+  LastElemNum := FNthElem;
 end;
 
 function TXmlFeed.GetPreviousElement: TXmlElement;

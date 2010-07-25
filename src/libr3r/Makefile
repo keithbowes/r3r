@@ -1390,7 +1390,9 @@ all:
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)
 ifdef BUILD_SHARED
+ifneq ($(BUILD_SHARED),0)
 	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
+endif
 endif
 clean: _clean
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)
