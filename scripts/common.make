@@ -48,13 +48,13 @@ override COMPILER_OPTIONS += $(PCFLAGS)
 ifdef inWinNT
 inWindows = 1
 else
-ifdef inCygwin
+ifdef inCygWin
 inWindows = 1
-endif # inCygwin
+endif # inCygWin
 endif # inWinNT
 
 ifdef inUnix
-EXEEXT = 
+EXEEXT =
 endif
 
 ifneq ($(or $(USE_GPC),$(USE_FPC)),)

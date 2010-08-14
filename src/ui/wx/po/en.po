@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-18 18:17-0500\n"
+"POT-Creation-Date: 2010-08-12 21:55-0400\n"
 "PO-Revision-Date: 2009-11-30 14:49-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
@@ -137,6 +137,10 @@ msgid "&Load subscriptions on startup"
 msgstr "&Load subscriptions on startup"
 
 #: ../settings-display.cpp:37
+msgid "&Warn about missing data in feeds"
+msgstr ""
+
+#: ../settings-display.cpp:39
 msgid "Display"
 msgstr "Display"
 

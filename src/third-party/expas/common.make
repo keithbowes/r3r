@@ -1,8 +1,8 @@
-programpath = $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH))))
+# vim:filetype=make
 
-PROGNAME = r3r
-VERSION = 2.0-beta3
-TIMESTAMP=$(shell date +%s)
+programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
+
+VERSION = 2.1
 
 PREFIX ?= $(DESTDIR)
 
@@ -10,10 +10,16 @@ ifeq ($(PREFIX),)
 ifdef inUnix
 PREFIX = /usr/local
 else
-ifneq ($(OS),)
+ifdef OS
 PREFIX = /
-endif
-endif
+endif # inUnix
+endif # OS
+endif # PREFIX
+
+ifeq ($(SHAREDLIBEXT),.so)
+	SHAREDLIBPREFIX = lib
+else
+	SHAREDLIBPREFIX =
 endif
 
 prefix = $(PREFIX)
@@ -35,79 +41,111 @@ PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 # Defines, for enabling different features/dialect syntax
 DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS) $(DEFS_SOCKETS), $(DEFFLAG)$(opt))
 
-UNITDIRS=$(foreach dir,$(wildcard $(UNIT_DIRS)),$(DIRFLAG)$(dir))
+UNITDIRS=$(sort $(foreach d,$(wildcard $(addsuffix /*,$(UNIT_DIRS))),$(DIRFLAG)$(dir $(d))))
 
 override COMPILER_OPTIONS += $(PCFLAGS)
 
 ifdef inWinNT
 inWindows = 1
 else
-ifdef inCygwin
+ifdef inCygWin
 inWindows = 1
-endif #inCygwin
+endif # inCygWin
 endif # inWinNT
 
 ifdef inUnix
-EXEEXT = 
+EXEEXT =
 endif
 
-ifndef COMPILER_OVERRIDE
-ifneq ($(call programpath,fpc),)
+ifneq ($(or $(USE_GPC),$(USE_FPC)),)
+COMPILER_OVERRIDE=1
+endif
+
+ifdef COMPILER_OVERRIDE
+ifdef USE_FPC
+PC=$(call programpath,fpc)
+else
+ifdef USE_GPC
+PC=$(call programpath,gp)
+CC=$(call programpath,gpc)
+export CC
+endif # USE_GPC
+endif # USE_FPC
+else
+PC=$(call programpath,fpc)
+ifeq ($(findstring fpc,$(PC)),fpc)
 USE_FPC=1
 else
-ifneq ($(call programpath,gpc)),)
+PC=$(call programpath,gp)
+CC=$(call programpath,gpc)
+export CC
+ifeq ($(findstring gp,$(PC)),gp)
 USE_GPC=1
+else
+$(error No Pascal compiler detected)
 endif # USE_GPC
 endif # USE_FPC
 endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
+override COMPILER=FPC $(shell $(PC) -iW)
+PLATFORM=$(shell $(PC) -iTO)-$(shell $(PC) -iTP)
+DELP=delp -eq .
+
 DEFFLAG=-d
-PC=fpc
 PCFLAGS_BASE=-FU. -Mdelphi -Sh -WR
 DIRFLAG=-Fu
-ifndef RELEASE
+ifdef DEBUG
 PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
 
 ifneq ($(R3R_UI),wx)
 PCFLAGS_DEBUG += -Ct
 endif # R3R_UI
-endif # RELEASE
+else
+PCFLAGS_DEBUG=-CX -Xs -XX
+endif # DEBUG
 
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
-ifneq ($(inWindows),)
+ifdef inWindows
 DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
-BUILD_SHARED=1
+ifdef DEBUG
+R3R_UI ?= tui
+else
+R3R_UI ?= wx
+endif # DEBUG
+
+BUILD_SHARED ?= 1
 
 else
 ifdef USE_GPC
-PC=gpc
-PCFLAGS_BASE=--automake --extended-syntax --no-warning
-UNITFLAGS=-c
-PROGFLAGS=-o $(PROGNAME)$(EXEEXT) $(LDFLAGS)
+GPC=$(call programpath,gpc)
+override COMPILER=GPC $(shell $(GPC) -dumpversion)
+PLATFORM=$(shell $(GPC) -dumpmachine)
+DELP=$(DEL) $(wildcard *.gpd)
 
+PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
+						 -DFree=Destroy -DPtrUInt=PtrWord $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_TAB
 DEFS_SOCKETS ?= SOCKETS_BSD
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
-ifndef RELEASE
-PCFLAGS_DEBUG=-ggdb3
-endif # RELEASE
+ifdef DEBUG
+PCFLAGS_DEBUG=--pointer-checking --progress-messages \
+	--stack-checking -ggdb3
+else
+PCFLAGS_DEBUG=--no-io-checking --no-range-checking --no-warning
+endif # DEBUG
+
+R3R_UI ?= tui
 endif # USE_GPC
 endif # USE_FPC
-
-ifndef RELEASE
-R3R_UI ?= tui
-else
-R3R_UI ?= wx
-endif #RELEASE
 
 export DEFS DEFS_SOCKETS R3R_UI VERSION \
 	bindir datadir prefix rootdir
@@ -121,11 +159,14 @@ _clean:
 	$(DEL) $(wildcard *$(PPUEXT))
 	$(DEL) $(wildcard *$(RSTEXT))
 	$(DEL) $(wildcard *$(STATICLIBEXT))
+	$(DELP)
 
 clean: _clean
 
+distclean: clean
+
 %$(PPUEXT): %.pas
-	$(PC) $(UNITFLAGS) $(PCFLAGS) $<
+	$(PC) $(PCFLAGS) $<
 
 Makefile: Makefile.fpc
 	-fpcmake -Tall

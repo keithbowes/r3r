@@ -53,7 +53,7 @@ type
 implementation
 
 uses
-  LibR3RStrings, RMessage, RStrings, SaxCallbacks, SysUtils;
+  LibR3RStrings, RMessage, RSettings, RStrings, SaxCallbacks, SysUtils;
 
 constructor TXmlFeed.Create;
 begin
@@ -128,8 +128,10 @@ begin
 
   if FNthElem > 0 then
   begin
-    if FNthElem > LastElemNum + 1 then
+    if Settings.GetBoolean(Settings.IndexOf('warn-missing-data')) and
+      (FNthElem > LastElemNum + 1) then
     begin
+      s := '';
       for i := LastElemNum to FNthElem - 1 do
       begin
         s := s + PXmlElement(FElemList^.GetNth(i))^.Content + #13#10;

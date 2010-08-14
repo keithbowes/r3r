@@ -192,6 +192,7 @@ begin
   CheckBoolean('enable-mime-guess', 'Display', false);
   CheckBoolean('check-for-updates', 'Display', true);
   CheckBoolean('load-subscriptions-on-startup', 'Display', false);
+  CheckBoolean('warn-missing-data', 'Display', false);
 
   CheckBoolean('use-proxy', 'HTTP', false);
   CheckString('proxy-address', 'HTTP', '127.0.0.1');

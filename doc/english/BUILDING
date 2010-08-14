@@ -1,8 +1,8 @@
 Minimal dependencies:
-* A Pascal Compiler (currently, only Free Pascal
-  <http://www.freepascal.org/> and GNU Pascal
-  <http://gnu-pascal.de/> work; I hope others also
-  will in the future).
+* A Pascal Compiler (Free Pascal
+  <http://www.freepascal.org/> is recommended. GNU Pascal
+  <http://gnu-pascal.de/> will compile it, but the binary is much
+  more crash-prone.  Patches for other compilers are welcome).
 * Unix tools (preferably, the GNU versions):
   * Those included with Free Pascal plus:
     * gettext: For translating the program into different
@@ -81,6 +81,10 @@ DEFS_SOCKETS
    SOCKETS_SYNAPSE with Free Pascal.)
 DESTDIR
   Where to install the software.
+EXEEXT
+  The file extension for executables.  Operating systems that have
+  such extensions may need to have this defined in order for
+  compilation to succeed.
 PC
   The Pascal compiler to use.
 PCFLAGS_DEBUG
