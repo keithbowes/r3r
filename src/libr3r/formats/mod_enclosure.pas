@@ -10,17 +10,17 @@ type
   protected
     function GetFormat: TFeedType; override;
   public
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 
 implementation
 
-procedure TModEnclosure.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TModEnclosure.ParseLine(Line: String; var Item: TFeedItem);
 var
   Elem: TXmlElement;
   i: byte;
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
   StripNS(Elem.Name, Mod_EnclosureNS);
 

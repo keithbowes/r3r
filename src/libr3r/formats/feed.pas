@@ -15,7 +15,7 @@ type
     ShouldShow: Boolean;
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override{$ELSE}virtual{$ENDIF};
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); virtual;
+    procedure ParseLine(Line: String; var Item: TFeedItem); virtual;
   end; 
 
 implementation
@@ -39,7 +39,7 @@ begin
 {$ENDIF}
 end;
 
-procedure TFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
   HideItems: Boolean;
 begin

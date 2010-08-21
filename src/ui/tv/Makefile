@@ -1393,4 +1393,3 @@ install:
 	cd po && $(MAKE) intall
 uninstall:
 	cd po && $(MAKE) uninstall
-	rm -f $(bindir)/r3r$(EXEEXT)

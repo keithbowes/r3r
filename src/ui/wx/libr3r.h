@@ -30,6 +30,7 @@ extern void libr3r_on_update(void * lib, TUpdateProc proc);
 extern void * libr3r_get_item_field(void * item, char * field_name);
 extern char * libr3r_get_user_agent(void);
 
+extern void libr3r_register_setting(char * setting_name, char * setting_section, void * setting_value, unsigned int settings_type);
 extern void libr3r_access_settings(int * index, char ** setting_name, void ** setting_value, unsigned char * setting_type, int * settings_count, unsigned char settings_mode);
 
 extern void libr3r_access_subscriptions(unsigned char index, unsigned char mode, char ** sub, unsigned int * count);

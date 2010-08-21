@@ -11,11 +11,11 @@ type
     FLastCat: String;
     FLeftChannel: Boolean;
   protected
-    procedure FillItem(var Item: TFeedItem);
     function GetFormat: TFeedType; override;
   public
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
     function GetCurrentElement: TXmlElement; override;
+    procedure SendItem(const Name, Content: String); override;
   end;
 
 implementation
@@ -28,35 +28,35 @@ begin
   GetAtomFeed := TAtomFeed.Create;
 end;
 
-procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
   AFeed: TFeed;
   Elem, Prev: TXmlElement;
   IsRDF: Boolean;
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
   Prev := GetPreviousElement;
 
-  if Pos(DCNS, GetCurrentElement.Name) = 1 then
+  if Pos(DCNS, Elem.Name) = 1 then
   begin
     AFeed := TDCFeed.Create;
     (AFeed as TXmlFeed).Clone(FElemList);
-    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.ParseLine(Line, Item);
     (AFeed as TXmlFeed).Free;
   end
-  else if Pos(LowerCase(AtomNS), GetCurrentElement.Name) = 1 then
+  else if Pos(LowerCase(AtomNS), Elem.Name) = 1 then
   begin
     AFeed := GetAtomFeed;
     (AFeed as TXmlFeed).Clone(FElemList);
-    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.ParseLine(Line, Item);
     (AFeed as TXmlFeed).Free;
   end
-  else if Pos(Mod_EnclosureNS, GetCurrentElement.Name) = 1 then
+  else if Pos(Mod_EnclosureNS, Elem.Name) = 1 then
   begin
     AFeed := TModEnclosure.Create;
     (AFeed as TXmlFeed).Clone(FElemList);
-    AFeed.ParseLine(Line, Item, ItemFinished);
+    AFeed.ParseLine(Line, Item);
     (AFeed as TXmlFeed).Free;
   end
   else
@@ -68,17 +68,12 @@ begin
     end;
   end;
 
-  FillItem(Item);
+  Item.Finished := ((Elem.Name = 'item') and ((Prev.Name = 'item')
+    or FLeftChannel)) or (Line = SockEOF);
 
-  StripNS(Elem.Name, RSS1NS);
-  StripNS(Prev.Name, RSS1NS);
-
-  ItemFinished := ((Elem.Name = 'item') and
-    ((Prev.Name = 'item') or FLeftChannel)) or (Line = SockEof);
-
-  if ItemFinished and FLeftChannel then
+  if Item.Finished and FLeftChannel then
   begin
-    FLeftChannel :=  false;
+    FLeftChannel := false;
   end;
 end;
 
@@ -87,22 +82,23 @@ begin
   GetFormat := ftRss;
 end;
 
-procedure TRssFeed.FillItem(var Item: TFeedItem);
+procedure TRssFeed.SendItem(const Name, Content: String);
 var
   Idx: byte;
   PLink: PChar;
 begin
-  with GetCurrentElement, Item do
-  begin
+  with GetCurrentElement, CurrentItem do
+  begin 
+    StripNS(Name, RDFNS);
     StripNS(Name, RSS1NS);
 
     if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
     begin
-      Title := Title + Content;
+      Title := Content;
     end
     else if Name = 'description' then
     begin
-      Description := Description + Content;
+      Description := Content;
     end
     else if Name = 'link' then
     begin
@@ -141,7 +137,7 @@ begin
     end
     else if Name = 'pubdate' then
     begin
-      Created := Created + Content;
+      Created := Content;
       Created := TimeToString(LongDateToTime(Created));
     end
     else if (Name = 'author') or (Name = 'managingeditor') then
@@ -150,21 +146,21 @@ begin
     end
     else if Name = 'generator' then
     begin
-      Generator := Generator + Content;
+      Generator := Content;
     end
     else if Name = 'lastpubdate' then
     begin
-      LastModified := LastModified + Content;
+      LastModified := Content;
       LastModified := TimeToString(LongDateToTime(LastModified));
     end
     else if Name = 'language' then
     begin
-      Language := Language + Content;
+      Language := Content;
       Lang := Language;
     end
     else if Name = 'copyright' then
     begin
-      Copyright := Copyright + Content;
+      Copyright := Content;
     end
     else if Name = 'guid' then
     begin

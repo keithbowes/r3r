@@ -18,6 +18,9 @@ begin
     (Setting = 'use-proxy');
 end;
 
+var
+	SettingsFile: String;
+
 constructor TRSettings.Create;
 begin
 {$IFNDEF __GPC__}
@@ -25,9 +28,9 @@ begin
 {$ENDIF}
   New(FSettings, Init);
 
-  FSettingsFile := SettingsDir + 'r3rrc';
+  SettingsFile := SettingsDir + 'r3r.dat';
 
-  if FileExists(FSettingsFile) then
+  if FileExists(SettingsFile) then
   begin
     ReadRec;
   end;
@@ -166,7 +169,7 @@ var
   Last: String;
   NumRead: integer;
 begin
-  Assign(f, FSettingsFile);
+  Assign(f, SettingsFile);
   Reset(f, 1);
 
   repeat
@@ -196,7 +199,7 @@ var
 begin
   i := 0;
 
-  Assign(f, FSettingsFile);
+  Assign(f, SettingsFile);
   Rewrite(f, 1);
 
   if FSettings^.Count > 0 then

@@ -195,8 +195,8 @@ begin
         end;
       end;
 
-      ParseLine(Line, Item, ItemFinished);
-    until ItemFinished;
+      ParseLine(Line, Item);
+    until Item.Finished;
   end;
 
   ShouldShow := ShouldShow and FAbstractFeed.ShouldShow;

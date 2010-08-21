@@ -56,7 +56,7 @@ end;
 { Public exported functions }
 function libr3r_create: Pointer; cdecl;
 begin
-  Result := TLibR3R_Shared.Create;
+  libr3r_create := TLibR3R_Shared.Create;
 end;
 
 procedure libr3r_free(Lib: Pointer); cdecl;
@@ -92,89 +92,107 @@ begin
   begin
     if FieldName = 'title' then
     begin
-      Result := StrToPChar(Title);
+      libr3r_get_item_field := StrToPChar(Title);
     end
     else if FieldName = 'links' then
     begin
       for i := 0 to LinksCount do
       begin
-        Result := StrCat(Links^.GetNth(i), #147);
+        libr3r_get_item_field := StrCat(Links^.GetNth(i), #147);
       end;
     end
     else if FieldName = 'link-count' then
     begin
-      Result := Pointer(PtrInt(LinksCount));
+      libr3r_get_item_field := Pointer(PtrInt(LinksCount));
     end
     else if FieldName = 'main-link' then
     begin
-      Result := StrToPChar(GetMainLink)
+      libr3r_get_item_field := StrToPChar(GetMainLink)
     end
     else if FieldName = 'podcast' then
     begin
-      Result := StrToPChar(GetPodcast);
+      libr3r_get_item_field := StrToPChar(GetPodcast);
     end
     else if FieldName = 'description' then
     begin
-      Result := StrToPChar(Description)
+      libr3r_get_item_field := StrToPChar(Description)
     end
     else if FieldName = 'subject' then
     begin
-      Result := StrToPChar(Subject);
+      libr3r_get_item_field := StrToPChar(Subject);
     end
     else if FieldName = 'created' then
     begin
-      Result := StrToPChar(Created);
+      libr3r_get_item_field := StrToPChar(Created);
     end
     else if FieldName = 'contact-name' then
     begin
-      Result := StrToPChar(Contact^.Name);
+      libr3r_get_item_field := StrToPChar(Contact^.Name);
     end
     else if FieldName = 'contact-email' then
     begin
-      Result := StrToPChar(Contact^.Email);
+      libr3r_get_item_field := StrToPChar(Contact^.Email);
     end
     else if FieldName = 'contact-uri' then
     begin
-      Result := StrToPChar(Contact^.URI);
+      libr3r_get_item_field := StrToPChar(Contact^.URI);
     end
     else if FieldName = 'generator' then
     begin
-      Result := StrToPChar(Generator);
+      libr3r_get_item_field := StrToPChar(Generator);
     end
     else if FieldName = 'last-modified' then
     begin
-      Result := StrToPChar(LastModified);
+      libr3r_get_item_field := StrToPChar(LastModified);
     end
     else if FieldName = 'language' then
     begin
-      Result := StrToPChar(Language);
+      libr3r_get_item_field := StrToPChar(Language);
     end
     else if FieldName = 'id' then
     begin
-      Result := StrToPChar(Id);
+      libr3r_get_item_field := StrToPChar(Id);
     end
     else if FieldName = 'copyright' then
     begin
-      Result := StrToPChar(Copyright);
+      libr3r_get_item_field := StrToPChar(Copyright);
     end
     else if FieldName = 'uri' then
     begin
-      Result := StrToPChar(Uri);
+      libr3r_get_item_field := StrToPChar(Uri);
     end
     else if FieldName = 'myself' then
     begin
-      Result := StrToPChar(Myself);
+      libr3r_get_item_field := StrToPChar(Myself);
     end
     else
     begin
-      Result := nil;
+      libr3r_get_item_field := nil;
     end;
   end;
 end;
 
 function libr3r_get_user_agent: PChar; cdecl;
 begin
-  Result := StrToPChar(UserAgent);
+  libr3r_get_user_agent := StrToPChar(UserAgent);
+end;
+
+procedure libr3r_register_setting(setting_name, setting_section: PChar; setting_value: Pointer; setting_type: word); cdecl;
+begin
+  case setting_type of
+    TypeBoolean:
+    begin
+      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_name), PtrInt(setting_value) <> 0);
+    end;
+    TypeInteger:
+    begin
+      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_name), PtrInt(setting_value));
+    end;
+    TypeString:
+    begin
+      Settings.RegisterString(StrPas(setting_name), StrPas(setting_name), StrPas(setting_value));
+    end;
+  end;
 end;
 
 procedure libr3r_access_settings(var Index: integer; var setting_name: PChar; var SettingValue: Pointer; var SettingType: byte; var Count: integer; const SettingsMode: byte); cdecl;
@@ -219,7 +237,7 @@ exports
   libr3r_on_item_parsed, libr3r_on_message_received, libr3r_on_update,
   libr3r_get_item_field,
   libr3r_get_user_agent,
-  libr3r_access_settings,
+  libr3r_register_setting, libr3r_access_settings,
   libr3r_access_subscriptions;
 
 end.

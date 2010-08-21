@@ -8,7 +8,7 @@ uses
 type
   TNonXmlFeed = class(TFeed)
   public
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end; 
 
 implementation
@@ -16,11 +16,11 @@ implementation
 uses
   SockConsts;
 
-procedure TNonXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TNonXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
 const
   LastLine: String = '';
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
 
   ShouldShow := (not ((Line = '') and (Line = LastLine))) and (Line <> SockEof);
   LastLine := Line;

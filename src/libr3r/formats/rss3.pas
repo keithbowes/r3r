@@ -16,7 +16,7 @@ type
     function GetFormat: TFeedType; override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 
 implementation
@@ -115,14 +115,14 @@ begin
   end;
 end;
 
-procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem);
 var
   SepPos: word;
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
-  ItemFinished := (Line = '') or (Line = SockEof);
+  inherited ParseLine(Line, Item);
+  Item.Finished := (Line = '') or (Line = SockEof);
 
-  if not ItemFinished then
+  if not Item.Finished then
   begin
     if Line[1] in WhiteSpaceChars then
     begin

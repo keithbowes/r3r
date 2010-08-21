@@ -1397,4 +1397,3 @@ all:
 	$(PC) r3r.lpr
 uninstall:
 	cd po && $(MAKE) uninstall
-	rm -f $(INSTALL_BINDIR)/r3r$(EXEEXT)

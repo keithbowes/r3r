@@ -24,7 +24,7 @@ type
     procedure ParseMetaLine(var Item: TFeedItem);
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 
 implementation
@@ -115,13 +115,13 @@ begin
   end;
 end;
 
-procedure TEsfFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TEsfFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
   i: 1..2;
   len: byte;
   tmp: String;
 begin
-  ItemFinished := false;
+  Item.Finished := false;
   tmp := Line;
 
   if Pos('#', Line) <> 1 then
@@ -153,21 +153,21 @@ begin
     begin
       ParseDataLine(Item);
       FLineType := ltData;
-      ItemFinished := true;
+      Item.Finished := true;
     end
     else if FList.Count = 2 then
     begin
       ParseMetaLine(Item);
-      ItemFinished := false;
+      Item.Finished := false;
       FLineType := ltMeta;
     end
     else if (Line = SockEof) or ((FLineType = ltMeta) and (Trim(Line) = '')) then
     begin
-      ItemFinished := true;
+      Item.Finished := true;
     end;
   end;
 
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
 end;
 
 end.

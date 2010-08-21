@@ -9,7 +9,6 @@ AppVerName=R3R @VERSION@
 DefaultDirName={pf}\R3R 2.0
 DefaultGroupName=R3R 2.0
 DisableStartupPrompt=yes
-LicenseFile=doc\english\LICENSE
 OutputDir=scripts\setup\is
 SourceDir=..\..\..
 
@@ -38,7 +37,7 @@ Name: "{group}\R3R"; FileName: "{app}\bin\r3r.exe"; IconFilename: "{app}\share\i
 Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 
 [Languages]
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"; LicenseFile: "doc\deutsch\LIZENZ"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 

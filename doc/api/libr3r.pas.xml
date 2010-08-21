@@ -136,6 +136,21 @@
           Set a string value at the specified index.
         </descr>
       </element>
+      <element name="TRSettings.RegisterBoolean">
+        <descr>
+          Creates a new boolean setting if one doesn't already exist.
+        </descr>
+      </element>
+      <element name="TRSettings.RegisterInteger">
+        <descr>
+          Creates a new integer setting if one doesn't already exist.
+        </descr>
+      </element>
+      <element name="TRSettings.RegisterString">
+        <descr>
+          Creates a new string setting if one doesn't already exist.
+        </descr>
+      </element>
       <element name="TRSettings.Access">
         <descr>
           Access information about the settings.  This is the only method available to the shared library, but those coding in Object Pascal should use the othehr methods.  Index should be set to 0 to get the index of a setting name; if set to a value greater than 0, it will give you the setting name at the specified index.  The value should be cast to and from pointers (not referenced and dereferenced).  For SettingsMode, use SettingsRead and/or SettingsWrite depending on whether you want to get or set the values.

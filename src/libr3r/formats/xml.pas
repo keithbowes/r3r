@@ -37,17 +37,19 @@ type
     FLastBase: String;
     FLastLang: String;
   public
+    CurrentItem: TFeedItem;
     Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
     FParser: XML_PARSER;
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
     procedure StripNS(var Element: String; const NS: String);
     procedure Clone(const List: PRList);
     function GetCurrentElement: TXmlElement; virtual;
     function GetPreviousElement: TXmlElement; virtual;
+    procedure SendItem(const Name, Content: String); virtual;
   end;
 
 implementation
@@ -71,12 +73,14 @@ begin
   XML_SetUserData(FParser, Self);
 end;
 
-procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
 
+  CurrentItem := Item;
   XML_Parse(FParser, {$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, Length(Line), 0);
-  ItemFinished := true;
+
+  Item.Finished := true;
 end;
 
 { Clones an element.  This is necessary for namespace support. }
@@ -202,6 +206,10 @@ begin
   begin
     Delete(Element, 1, Length(NS));
   end;
+end;
+
+procedure TXmlFeed.SendItem(const Name, Content: String);
+begin
 end;
 
 end.

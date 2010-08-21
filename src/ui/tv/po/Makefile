@@ -265,6 +265,9 @@ endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
 .SUFFIXES:
 .SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+po_files = $(wildcard *.po)
+LINGUAS ?= $(subst .po,,$(po_files))
+mo_files= $(addsuffix .mo, $(LINGUAS)) 
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1383,13 +1386,13 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../../scripts/common.make
-all: tvstrings.pot $(subst .po,.mo, $(wildcard *.po))
+all: tvstrings.pot $(mo_files)
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~) tvstrings.pot
 install:
-	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tv.mo;)
+	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tv.mo;)
 uninstall:
-	$(DEL) -f $(localedir)/*/LC_MESSAGES/r3r_tv.mo
+	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_tv.mo)
 tvstrings.pot: tvstrings$(RSTEXT)
 	-rstconv -i $< -o $@
 	$(TOUCH) *.po

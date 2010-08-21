@@ -313,7 +313,7 @@ begin
   end;
 
   SwapVectors;
-  Exec(Browser, '"' + Link + '"');
+  Exec(FSearch(Browser, GetEnv('PATH')), '"' + Link + '"');
   SwapVectors;
 end;
 

@@ -40,6 +40,8 @@ type
     Myself: String;
     Enclosure: TEnclosure;
 
+    Finished: Boolean;
+
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function LinksCount: cardinal;
@@ -65,6 +67,7 @@ begin
 {$ENDIF}
 
   New(Contact);
+  Finished := false;
 
   if not AlreadyAllocated then
   begin
@@ -117,6 +120,8 @@ begin
   Enclosure.URL := '';
 
   Links^.Add(nil);
+
+  Finished := false;
 end;
 
 function TFeedItem.LinksCount: cardinal;

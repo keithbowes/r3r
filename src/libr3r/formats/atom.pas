@@ -20,11 +20,11 @@ type
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
-    procedure FillItem(var Item: TFeedItem);
     function GetFormat: TFeedType; override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
+    procedure SendItem(const Name, Content: String); override;
     function GetCurrentElement: TXmlElement; override;
     function GetPreviousElement: TXmlElement; override;
   end;
@@ -46,77 +46,57 @@ uses
 SockWrap
 {$ENDIF};
 
-function TAtomFeed.GetAbsoluteURL(const URL: String): String;
-var
-  Prot, User, Pass, Host, Port, Path, Para: String;
-  BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara: String;
-  Res: String;
+constructor TAtomFeed.Create;
 begin
-  ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
+  inherited Create;
+  FCatType := '';
+  FHasLongDesc := false;
+  FHasShortDesc := false;
+  FLeftFeed := false;
+end;
 
-  { URL is absolute if it contains the host name;
-    it isn't if it doesn't }
-  if Pos(Host, URL) <> 0 then
+procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem);
+var
+  AFeed: TFeed;
+begin
+  inherited ParseLine(Line, Item);
+
+  if Pos(DCNS, GetCurrentElement.Name) <> 0 then
   begin
-    Res := URL;
-  end
-  else
-  begin
-    ParseURL(GetCurrentElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
-    Res := BaseProt + '://';
-
-    if BaseUser <> '' then
-    begin
-      Res := Res + BaseUser;
-      if BasePass <> '' then
-      begin
-        Res := Res + ':' + BasePass;
-      end;
-
-      Res := Res + '@';
-    end;
-
-    Res := Res + BaseHost;
-    
-    if Port <> BasePort then
-    begin
-      Res := Res + ':' + BasePort;
-    end;
-
-    Res := Res + Path;
-
-    if Para <> '' then
-    begin
-      Res := Res + '?' + Para;
-    end;
+    AFeed := TDCFeed.Create;
+    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.ParseLine(Line, Item);
+    (AFeed as TDCFeed).Free;
   end;
 
-  GetAbsoluteURL := Res;
+  Item.Finished := ((GetCurrentElement.Name = 'entry') and ((GetPreviousElement.Name = 'entry') or (FLeftFeed))) or (Line = SockEof);
+  
+  if Item.Finished and FLeftFeed then
+  begin
+    FLeftFeed := false;
+  end;
 end;
 
-function TAtomFeed.GetFormat: TFeedType;
-begin
-  GetFormat := ftAtom;
-end;
-
-procedure TAtomFeed.FillItem(var Item: TFeedItem);
+procedure TAtomFeed.SendItem(const Name, Content: String);
 var
   Idx: integer;
   PLink: PChar;
 begin
-  with Item, GetCurrentElement do
+  inherited SendItem(Name, Content);
+
+  with CurrentItem, GetCurrentElement do
   begin
     Language := Lang;
 
     if Name = 'title' then
     begin
-      Title := Title + Content;
+      Title := Content;
     end
     else if (Name = 'subtitle') or (Name = 'summary') then
     begin
       if not FHasLongDesc then
       begin
-        Description := Description + Content;
+        Description := Content;
         FHasShortDesc := true;
       end;
     end
@@ -128,7 +108,7 @@ begin
         Description := '';
       end;
 
-      Description := Description + Content;
+      Description := Content;
       FHasLongDesc := true;
     end
     else if Name = 'link' then
@@ -208,46 +188,46 @@ begin
     end
     else if Name = 'published' then
     begin
-      Created := Created + Content;
+      Created := Content;
       Created := TimeToString(ShortDateToTime(Created));
     end
     else if Name = 'email' then
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Email := Contact^.Email + Content;
+        Contact^.Email := Content;
       end;
     end
     else if Name = 'name' then
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Name := Contact^.Name + Content;
+        Contact^.Name := Content;
       end;
     end
     else if Name = 'uri' then
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.URI := Contact^.URI + Content;
+        Contact^.URI := Content;
       end;
     end
     else if Name = 'generator' then
     begin
-      Generator := Generator + Content;
+      Generator := Content;
     end
     else if Name = 'updated' then
     begin
-      LastModified := LastModified + Content;
+      LastModified := Content;
       LastModified := TimeToString(ShortDateToTime(LastModified));
     end
     else if Name = 'rights' then
     begin
-      Copyright := Copyright + Content;
+      Copyright := Content;
     end
     else if Name = 'id' then
     begin
-      Id := Id + Content;
+      Id := Content;
       Uri := Id;
 
       if FLeftFeed then
@@ -284,37 +264,57 @@ begin
   GetPreviousElement := Res;
 end;
 
-constructor TAtomFeed.Create;
+function TAtomFeed.GetFormat: TFeedType;
 begin
-  inherited Create;
-  FCatType := '';
-  FHasLongDesc := false;
-  FHasShortDesc := false;
-  FLeftFeed := false;
+  GetFormat := ftAtom;
 end;
 
-procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+function TAtomFeed.GetAbsoluteURL(const URL: String): String;
 var
-  AFeed: TFeed;
+  Prot, User, Pass, Host, Port, Path, Para: String;
+  BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara: String;
+  Res: String;
 begin
-  inherited ParseLine(Line, Item, ItemFinished);
+  ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
 
-  if Pos(DCNS, GetCurrentElement.Name) <> 0 then
+  { URL is absolute if it contains the host name;
+    it isn't if it doesn't }
+  if Pos(Host, URL) <> 0 then
   begin
-    AFeed := TDCFeed.Create;
-    (AFeed as TXmlFeed).Clone(FElemList);
-    AFeed.ParseLine(Line, Item, ItemFinished);
-    (AFeed as TDCFeed).Free;
+    Res := URL;
+  end
+  else
+  begin
+    ParseURL(GetCurrentElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
+    Res := BaseProt + '://';
+
+    if BaseUser <> '' then
+    begin
+      Res := Res + BaseUser;
+      if BasePass <> '' then
+      begin
+        Res := Res + ':' + BasePass;
+      end;
+
+      Res := Res + '@';
+    end;
+
+    Res := Res + BaseHost;
+    
+    if Port <> BasePort then
+    begin
+      Res := Res + ':' + BasePort;
+    end;
+
+    Res := Res + Path;
+
+    if Para <> '' then
+    begin
+      Res := Res + '?' + Para;
+    end;
   end;
 
-  FillItem(Item);
-
-  ItemFinished := ((GetCurrentElement.Name = 'entry') and ((GetPreviousElement.Name = 'entry') or (FLeftFeed))) or (Line = SockEof);
-  
-  if ItemFinished and FLeftFeed then
-  begin
-    FLeftFeed := false;
-  end;
+  GetAbsoluteURL := Res;
 end;
 
 end.

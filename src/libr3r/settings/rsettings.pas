@@ -50,6 +50,9 @@ type
     procedure SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
     procedure SetInteger(const Index: TRSetIndex; const Setting: integer);
     procedure SetString(const Index: TRSetIndex; const Setting: String);
+    procedure RegisterBoolean(const Setting, ASection: String; const Value: Boolean);
+    procedure RegisterInteger(const Setting, ASection: String; const Value: integer);
+    procedure RegisterString(const Setting, ASection, Value: String);
     procedure Access(var Index: TRSetIndex; var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
   end;
 
@@ -117,6 +120,30 @@ begin
   else
   begin
     IndexOf := -1;
+  end;
+end;
+
+procedure TRSettings.RegisterBoolean(const Setting, ASection: String; const Value: Boolean);
+begin
+  if IndexOf(Setting) = -1 then
+  begin
+    CheckBoolean(Setting, ASection, Value);
+  end;
+end;
+
+procedure TRSettings.RegisterInteger(const Setting, ASection: String; const Value: integer);
+begin
+  if IndexOf(Setting) = -1 then
+  begin
+    CheckInteger(Setting, ASection, Value);
+  end;
+end;
+
+procedure TRSettings.RegisterString(const Setting, ASection, Value: String);
+begin
+  if IndexOf(Setting) = -1 then
+  begin
+    CheckString(Setting, ASection, Value);
   end;
 end;
 
@@ -207,7 +234,7 @@ begin
   CheckString('for:mailto', 'Programs', '');
   CheckString('for:.ogg', 'Programs', '');
 
-  CheckString('installed-prefix', 'System', ExtractFileDir(ParamStr(0)) + PathDelim + '..' + PathDelim);
+  CheckString('installed-prefix', 'System', ExpandFileName('..'));
 end;
 
 initialization

@@ -266,6 +266,9 @@ PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(F
 .SUFFIXES:
 .SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
 UNIT_DIRS = .. ../* ../../third-party/* ../../utils/*
+po_files = $(wildcard *.po)
+LINGUAS ?= $(subst .po,,$(po_files))
+mo_files= $(addsuffix .mo, $(LINGUAS))
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1384,13 +1387,13 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: libr3rstrings$(PPUEXT) $(subst .po,.mo, $(wildcard *.po))
+all: libr3rstrings$(PPUEXT) $(mo_files)
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
 install:
-	-$(foreach l, $(subst .po,, $(wildcard *.po)), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
+	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
 uninstall:
-	$(DEL) -f $(localedir)/*/LC_MESSAGES/libr3r.mo
+	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/libr3r.mo)
 %.mo: %.po libr3rstrings.pot
 	-msgmerge -Uq $< libr3rstrings.pot
 	-msgfmt -o $@ $<

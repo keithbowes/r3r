@@ -27,7 +27,7 @@ Summary[eo]: R3R estas kanala legilo
 
 AutopackageTarget: 1.0
 CPUArchitectures: x86
-License: BSD
+License: Public Domain
 URL: http://sourceforge.net/projects/r3r/
 
 [Description]

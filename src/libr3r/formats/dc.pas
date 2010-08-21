@@ -13,7 +13,7 @@ type
   protected
     function GetFormat: TFeedType; override;
   public
-    procedure ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean); override;
+    procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 
 implementation
@@ -21,7 +21,7 @@ implementation
 uses
   RDate;
 
-procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem; var ItemFinished: Boolean);
+procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
   with Item, GetCurrentElement do
   begin
@@ -57,7 +57,7 @@ begin
     end;
   end;
   
-  inherited ParseLine(Line, Item, ItemFinished);
+  inherited ParseLine(Line, Item);
 end;
 
 function TDCFeed.GetFormat: TFeedType;
