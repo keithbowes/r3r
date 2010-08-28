@@ -29,7 +29,7 @@ type
   public
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
-    procedure RetrieveFeed(Resource: String);
+    procedure RetrieveFeed(Resource: String); virtual;
     procedure DisplayItem(const Item: TFeedItem); virtual;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
   end;

@@ -182,15 +182,15 @@ begin
   case setting_type of
     TypeBoolean:
     begin
-      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_name), PtrInt(setting_value) <> 0);
+      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_section), PtrUInt(setting_value) <> 0);
     end;
     TypeInteger:
     begin
-      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_name), PtrInt(setting_value));
+      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_section), integer(setting_value));
     end;
     TypeString:
     begin
-      Settings.RegisterString(StrPas(setting_name), StrPas(setting_name), StrPas(setting_value));
+      Settings.RegisterString(StrPas(setting_name), StrPas(setting_section), StrPas(setting_value));
     end;
   end;
 end;

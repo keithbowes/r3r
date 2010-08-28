@@ -110,15 +110,25 @@ msgid "Option Value"
 msgstr "Parametra valoro"
 
 #: tuistrings:settingtochange
-msgid "Option to Change: "
-msgstr "Ŝanĝota parametro: "
+msgid "Option to change (empty to exit): "
+msgstr "Ŝanĝota parametro (malplena por nuligado): "
 
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr "Nova valoro: "
 
+#: tuistrings:updateavailable
 msgid "A new version is available from http://sourceforge.net/projects/r3r"
 msgstr "Nova eldono el http://sourceforge.net/projects/r3r haveblas"
 
+#: tuistrings:itemencl
 msgid "Enclosure: "
 msgstr "Enmetaĵo: "
+
+#: tuistrings:activatelink
+msgid " (Press enter to open in your web browser)"
+msgstr " (Premu la enenklavon por malfermi en via TTT-legilo)"
+
+#: tuistrings:nextprevlink
+msgid " (Press j for the next item or k for the previous item)"
+msgstr " (Premu: j por la sekva aŭ k por la antaŭa)"

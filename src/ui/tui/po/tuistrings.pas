@@ -45,6 +45,9 @@ var
 
   UpdateAvailable: String;
 
+  ActivateLink: String;
+  NextPrevLink: String;
+
 implementation
 
 uses
@@ -86,10 +89,13 @@ begin
   OptionName := _('Option Name');
   OptionVal := _('Option Value');
 
-  SettingToChange := _('Option to Change: ');
+  SettingToChange := _('Option to change (empty to exit): ');
   NewValue := _('New Value: ');
 
   UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
+
+  ActivateLink := _(' (Press enter to open in your web browser)');
+  NextPrevLink := _(' (Press j for the next item or k for the previous item)');
 end;
 
 initialization

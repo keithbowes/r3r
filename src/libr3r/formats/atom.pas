@@ -17,6 +17,7 @@ type
     FCatType: String;
     FHasLongDesc: Boolean;
     FHasShortDesc: Boolean;
+    FLastCat: String;
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected
@@ -163,24 +164,32 @@ begin
             Subject := '';
           end;
 
-          if Subject <> '' then
+          if (Subject <> '') and (Content <> '') then
           begin
             Subject := Subject + ', ';
           end;
 
-          Subject := Subject + Attributes[Idx].Value;
+          if Content <> '' then
+          begin
+            Subject := Subject + Attributes[Idx].Value;
+          end;
+
           FCatType := 'label';
         end
         else if Attributes[Idx].Name = 'term' then
         begin
           if FCatType <> 'label' then
           begin
-            if Subject <> '' then
+            if (Subject <> '') and (Content <> '') then
             begin
               Subject := Subject + ', ';
             end;
 
-            Subject := Subject + Attributes[Idx].Value;
+            if '' <> Content then
+            begin
+              Subject := Subject + Attributes[Idx].Value;
+            end;
+
             FCatType := 'term';
           end;
         end;

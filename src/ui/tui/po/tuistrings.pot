@@ -99,15 +99,25 @@ msgid "Option Value"
 msgstr ""
 
 #: tuistrings:settingtochange
-msgid "Option to Change: "
+msgid "Option to change (empty to exit): "
 msgstr ""
 
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr ""
 
+#: tuistrings:updateavailable
 msgid "A new version is available from http://sourceforge.net/projects/r3r"
 msgstr ""
 
+#: tuistrings:itemencl
 msgid "Enclosure: "
+msgstr ""
+
+#: tuistrings:activatelink
+msgid " (Press enter to open in your web browser)"
+msgstr ""
+
+#: tuistrings:nextprevlink
+msgid " (Press j for the next item or k for the previous item)"
 msgstr ""

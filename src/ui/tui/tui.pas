@@ -8,16 +8,25 @@ uses
 type
   TTui = class(TLibR3R)
   private
+    FCurrentItem: cardinal;
     FItems: PRList;
+    procedure DrawFeedInfo;
+    procedure DrawFeedList;
+    procedure DrawInfoBar;
+    procedure DrawSeparator;
+    procedure DrawStatus;
+    procedure DrawUIString;
   protected
     procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
+    procedure QueryItemNumber;
     procedure GoItem;
     procedure GoLink;
     procedure OpenBrowser(Link: String);
     procedure SetOptions;
     procedure GoDonate;
+    procedure RetrieveFeed(Resource: String); override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -36,12 +45,28 @@ begin
 end;
 
 constructor TTui.Create;
+const
+  DownKey = 'j';
+  EnterKey = Chr(13);
+  UpKey = 'k';
 var
   FeedIndex: word;
   KeyChar: char;
 begin
   inherited Create;
   New(FItems, Init);
+  FCurrentItem := 0;
+
+  ClrScr;
+
+  DrawUIString;
+  DrawFeedInfo;
+  DrawInfoBar;
+  DrawStatus;
+  DrawSeparator;
+
+  DrawFeedList;
+  ClrScr;
 
   for FeedIndex := 1 to ParamCount do
   begin
@@ -64,7 +89,7 @@ begin
   repeat
     KeyChar := ReadKey;
 
-    case Pos(KeyChar, GoKey + OptionsKey + AboutKey + OpenKey + DonateKey) of
+    case Pos(KeyChar, GoKey + OptionsKey + AboutKey + OpenKey + DonateKey + DownKey + UpKey + EnterKey) of
       1:
       begin
         GoURI;
@@ -75,6 +100,7 @@ begin
       end;
       3:
       begin
+        QueryItemNumber;
         GoItem;
       end;
       4:
@@ -84,6 +110,29 @@ begin
       5:
       begin
         GoDonate;
+      end;
+      6:
+      begin
+        if FCurrentItem < FItems.Count then
+        begin
+          Inc(FCurrentItem);
+          GoItem;
+        end;
+      end;
+      7:
+      begin
+        if FCurrentItem > 1 then
+        begin
+          Dec(FCurrentItem);
+          GoItem;
+        end;
+      end;
+      8:
+      begin
+        if FCurrentItem > 0 then
+        begin
+          OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MainLink);
+        end;
       end;
     end;
   until KeyChar = QuitKey;
@@ -107,6 +156,10 @@ begin
 
     Dispose(FItems, Done);
   end;
+
+  Window(1, 1, ScreenWidth, ScreenHeight);
+  NormVideo;
+  ClrScr;
 
 {$IFNDEF __GPC__}
   inherited Destroy;
@@ -146,6 +199,8 @@ end;
 
 procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
+  DrawStatus;
+
   if IsError then
   begin
     Write(ErrorError)
@@ -161,37 +216,40 @@ begin
   begin
     Write(' (', Extra, ')');
   end;
-
-  WriteLn;
 end;
 
 procedure TTui.NotifyUpdate;
 begin
+  DrawStatus;
   WriteLn(UpdateAvailable);
 end;
 
 procedure TTui.ShowHelp;
 begin
-  WriteLn(UserAgent:75);
+  DrawInfoBar;
 
   Write(GoURL);
   Write(Options:25 - Length(GoUrl) + Length(Options));
   WriteLn;
+
   if FItems^.Count > 0 then
   begin
     Write(AboutItem);
     Write(OpenLink:25 - Length(AboutItem) + Length(OpenLink));
     WriteLn;
   end;
+
   Write(Donate);
   Write(Quit:25 - Length(Donate) + Length(Quit));
-  WriteLn;
 end;
 
 procedure TTui.GoURI;
 var
   URI: String;
 begin
+  DrawStatus;
+
+  WriteLn;
   Write(Feed);
   ReadLn(URI);
 
@@ -203,13 +261,15 @@ begin
   ShowHelp;
 end;
 
-procedure TTui.GoItem;
+procedure TTui.QueryItemNumber;
 var
-  Desc: String;
   ErrPos: word;
-  i, j, k,  iNo: cardinal;
+  iNo: cardinal;
   No: String;
 begin
+  DrawStatus;
+
+  WriteLn;
   Write(ItemNo);
   ReadLn(No);
 
@@ -217,14 +277,39 @@ begin
 
   if ErrPos = 0 then
   begin
-    with TFeedItem(FItems^.GetNth(iNo - 1)) do
+    FCurrentItem := iNo;
+  end
+  else
+  begin
+    WriteLn(InvalidNumber);
+  end;
+end;
+
+procedure TTui.GoItem;
+var
+  Desc: String;
+  i, j, k: cardinal;
+const
+  DescLen = 150;
+begin
+  if FItems^.Count > 0 then
+  begin
+    with TFeedItem(FItems^.GetNth(FCurrentItem - 1)) do
     begin
       Desc := Description;
-      if Length(Desc) > 75 then
+      if Length(Desc) > DescLen then
       begin
-        Desc := Copy(Desc, 1, 75) + '...';
+        Desc := Copy(Desc, 1, DescLen) + '...';
       end;
 
+      DrawStatus;
+      if MainLink <> '' then
+      begin
+        Write(MainLink, ActivateLink);
+      end;
+
+      DrawFeedInfo;
+      WriteLn(ItemNo, FCurrentItem, NextPrevLink);
       WriteLn(ItemTitle, Title);
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
@@ -241,22 +326,18 @@ begin
           Continue;
         end;
 
-        if j = iNo then
+        if j = FCurrentItem then
         begin
           Inc(k);
           WriteLn(StringReplace(ItemLink, '%i', IntToStr(k), [rfReplaceAll]),
             StrPas(Links^.GetNth(i)));
         end
-        else if j > iNo then
+        else if j > FCurrentItem then
         begin
           Break;
         end;
       end;
     end;
-  end
-  else
-  begin
-    WriteLn(InvalidNumber);
   end;
 
   ShowHelp;
@@ -268,6 +349,9 @@ var
   iNo: cardinal;
   No: String;
 begin
+  DrawStatus;
+
+  WriteLn;
   Write(LinkNo);
   ReadLn(No);
 
@@ -327,6 +411,8 @@ var
   SetName, SetVal: String;
   SRec: PRList;
 begin
+  DrawFeedInfo;
+
   WriteLn;
   WriteLn(OptionName, OptionVal:Width - Length(OptionName) div 2 + 3);
   WriteLn;
@@ -409,6 +495,8 @@ begin
       end;
     until (Len = 0) or (SetName = QuitKey);
 
+    DrawFeedInfo;
+    GoItem;
     ShowHelp;
   end;
 end;
@@ -417,6 +505,62 @@ procedure TTui.GoDonate;
 begin
   OpenBrowser('http://sourceforge.net/donate/index.php?group_id=90897');
   ShowHelp;
+end;
+
+procedure TTui.RetrieveFeed(Resource: String);
+begin
+  DrawFeedList;
+  FCurrentItem := FItems^.Count + 1;
+  inherited RetrieveFeed(Resource);
+  GoItem;
+end;
+
+procedure TTui.DrawFeedInfo;
+begin
+  Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 3);
+  TextBackground(Black);
+  TextColor(Green);
+  ClrScr;
+end;
+
+procedure TTui.DrawFeedList;
+begin
+  Window(1, 2, ScreenWidth div 2 - 1, ScreenHeight - 4);
+  TextBackground(Black);
+  TextColor(Green);
+  GotoXY(1, ScreenHeight - 6);
+end;
+
+procedure TTui.DrawInfoBar;
+begin
+  Window(1, ScreenHeight - 3, ScreenWidth, ScreenHeight - 1);
+  TextBackground(Blue);
+  TextColor(Yellow);
+  ClrScr;
+end;
+
+procedure TTui.DrawSeparator;
+begin
+  Window(ScreenWidth div 2, 2, ScreenWidth div 2, ScreenHeight - 4);
+  TextBackground(LightCyan);
+  ClrScr;
+end;
+
+procedure TTui.DrawStatus;
+begin
+  Window(1, ScreenHeight, ScreenWidth, ScreenHeight);
+  TextBackground(Black);
+  TextColor(Magenta);
+  ClrScr;
+end;
+
+procedure TTui.DrawUIString;
+begin
+  Window(1, 1, ScreenWidth, 2);
+  TextBackground(Blue);
+  TextColor(Yellow);
+  ClrScr;
+  Write(UserAgent:75);
 end;
 
 end.
