@@ -1,0 +1,28 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: r 3r\n"
+"PO-Revision-Date: 2010-08-31 20:53-0400\n"
+"Last-Translator: Keith Bowes <keith@localhost>\n"
+"Language-Team: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Feed List"
+msgstr "Feed List"
+
+msgid "Feed from "
+msgstr "Feed from "
+
+msgid "Usage: r3r_opml option [source [destination]]"
+msgstr "Usage: r3r_opml option [source [destination]]"
+
+msgid "Option is one of:"
+msgstr "Option is one of:"
+
+msgid "0: export subscriptions to an OPML file"
+msgstr "0: export subscriptions to an OPML file"
+
+msgid "1: import subscriptions from an OPML file"
+msgstr "1: import subscriptions from an OPML file"

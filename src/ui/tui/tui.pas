@@ -26,18 +26,24 @@ type
     procedure OpenBrowser(Link: String);
     procedure SetOptions;
     procedure GoDonate;
-    procedure RetrieveFeed(Resource: String); override;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
     procedure DisplayItem(const Item: TFeedItem); override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
+    procedure RetrieveFeed(Resource: String); override;
   end;
 
 implementation
 
 uses
   Crt, Dos, Info, SysUtils, TuiStrings;
+
+{$IFDEF __GPC__}
+var
+  ScreenHeight: word;
+  ScreenWidth: word;
+{$ENDIF}
 
 function CreateFeedItem: TFeedItem;
 begin
@@ -56,6 +62,11 @@ begin
   inherited Create;
   New(FItems, Init);
   FCurrentItem := 0;
+
+{$IFDEF __GPC__}
+  ScreenHeight := ScreenSize.Y;
+  ScreenWidth := ScreenSize.X;
+{$ENDIF}
 
   ClrScr;
 
@@ -89,50 +100,48 @@ begin
   repeat
     KeyChar := ReadKey;
 
-    case Pos(KeyChar, GoKey + OptionsKey + AboutKey + OpenKey + DonateKey + DownKey + UpKey + EnterKey) of
-      1:
+    if KeyChar = GoKey then
+    begin
+      GoURI;
+    end
+    else if KeyChar = OptionsKey then
+    begin
+      SetOptions;
+    end
+    else if KeyChar = AboutKey then
+    begin
+      QueryItemNumber;
+      GoItem;
+    end
+    else if KeyChar = OpenKey then
+    begin
+      GoLink;
+    end
+    else if KeyChar = DonateKey then
+    begin
+      GoDonate;
+    end
+    else if KeyChar = DownKey then
+    begin
+      if FCurrentItem < FItems^.Count then
       begin
-        GoURI;
-      end;
-      2:
-      begin
-        SetOptions;
-      end;
-      3:
-      begin
-        QueryItemNumber;
+        Inc(FCurrentItem);
         GoItem;
       end;
-      4:
+    end
+    else if KeyChar = UpKey then
+    begin
+      if FCurrentItem > 1 then
       begin
-        GoLink;
+        Dec(FCurrentItem);
+        GoItem;
       end;
-      5:
+    end
+    else if KeyChar = EnterKey then
+    begin
+      if FCurrentItem > 0 then
       begin
-        GoDonate;
-      end;
-      6:
-      begin
-        if FCurrentItem < FItems.Count then
-        begin
-          Inc(FCurrentItem);
-          GoItem;
-        end;
-      end;
-      7:
-      begin
-        if FCurrentItem > 1 then
-        begin
-          Dec(FCurrentItem);
-          GoItem;
-        end;
-      end;
-      8:
-      begin
-        if FCurrentItem > 0 then
-        begin
-          OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MainLink);
-        end;
+        OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MainLink);
       end;
     end;
   until KeyChar = QuitKey;
@@ -216,6 +225,14 @@ begin
   begin
     Write(' (', Extra, ')');
   end;
+end;
+
+procedure TTui.RetrieveFeed(Resource: String);
+begin
+  DrawFeedList;
+  FCurrentItem := FItems^.Count + 1;
+  inherited RetrieveFeed(Resource);
+  GoItem;
 end;
 
 procedure TTui.NotifyUpdate;
@@ -379,6 +396,7 @@ begin
   { Check for the default registry association }
   if Pos('%1', Browser) <> 0 then
   begin
+    { Check for the first command-line switch }
     Index := Pos('-', Browser);
     if Index = 0 then
     begin
@@ -507,14 +525,6 @@ begin
   ShowHelp;
 end;
 
-procedure TTui.RetrieveFeed(Resource: String);
-begin
-  DrawFeedList;
-  FCurrentItem := FItems^.Count + 1;
-  inherited RetrieveFeed(Resource);
-  GoItem;
-end;
-
 procedure TTui.DrawFeedInfo;
 begin
   Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 3);
@@ -528,7 +538,8 @@ begin
   Window(1, 2, ScreenWidth div 2 - 1, ScreenHeight - 4);
   TextBackground(Black);
   TextColor(Green);
-  GotoXY(1, ScreenHeight - 6);
+  GotoXY(1, ScreenHeight - 5);
+  InsLine;
 end;
 
 procedure TTui.DrawInfoBar;

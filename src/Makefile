@@ -18,6 +18,7 @@ clean:
 install:
 	cd libr3r && $(MAKE) install
 	cd ui && $(MAKE) install
+	cd utils && $(MAKE) install
 
 uninstall:
 	cd libr3r && $(MAKE) uninstall

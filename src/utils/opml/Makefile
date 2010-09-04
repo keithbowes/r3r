@@ -263,12 +263,7 @@ ifeq ($(UNITSDIR),)
 UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
-.SUFFIXES:
-.SUFFIXES: $(OEXT) .mo .pas .po .pot
-UNIT_DIRS = .. ../* ../../third-party/* ../../utils/*
-po_files = $(wildcard *.po)
-LINGUAS ?= $(subst .po,,$(po_files))
-mo_files= $(addsuffix .mo, $(LINGUAS))
+UNIT_DIRS = ../../third-party/*
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif
@@ -1387,13 +1382,11 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include ../../../scripts/common.make
-all: libr3rstrings$(PPUEXT) $(mo_files)
+all: r3r_opml$(PPUEXT)
+	cd po && $(MAKE) all
 clean:
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
+	cd po && $(MAKE) clean
+	$(DEL) r3r_opml$(EXEEXT)
 install:
-	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
-uninstall:
-	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/libr3r.mo)
-%.mo: %.po libr3rstrings.pot
-	-msgmerge -Uq $< libr3rstrings.pot
-	-msgfmt -o $@ $<
+	cd po && $(MAKE) install
+	$(INSTALLEXE) r3r_opml $(bindir)

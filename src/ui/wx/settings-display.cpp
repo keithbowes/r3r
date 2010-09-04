@@ -35,6 +35,7 @@ void CreateDisplayPage(wxTreebook * parent)
   vbox->Add(subCheck, 1);
 
 	SettingsCheckBox * missingCheck = new SettingsCheckBox(panel, _("&Warn about missing data in feeds"), (char *) "warn-missing-data");
+	vbox->Add(missingCheck);
 
   parent->AddPage(panel, _("Display"));
 }

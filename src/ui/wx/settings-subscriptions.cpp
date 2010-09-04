@@ -4,15 +4,26 @@
 
 #include "i18n.h"
 
+void FillSubscriptionsListBox(wxListBox * box)
+{
+	char * s;
+	int i = 0;
+	wxString * str;
+  Subscriptions * subs = new Subscriptions();
+  
+  while ((s = subs->GetNext()))
+  {
+    str = new wxString(s, wxConvUTF8);
+    box->InsertItems(1, str, i);
+    i++;
+  }
+}
+
 void CreateSubscriptionsPage(wxTreebook * parent)
 {
   InitGettext();
 
-  char * s;
-  int i = 0;
   SubscriptionData * data = (SubscriptionData *) malloc(sizeof(SubscriptionData));
-  wxString * str;
-
   wxPanel * panel = new wxPanel(parent);
 
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
@@ -22,14 +33,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
   data->box = box;
   hbox->Add(box, 2, wxEXPAND | wxALL);
 
-  Subscriptions * subs = new Subscriptions();
-  
-  while ((s = subs->GetNext()))
-  {
-    str = new wxString(s, wxConvUTF8);
-    box->InsertItems(1, str, i);
-    i++;
-  }
+	FillSubscriptionsListBox(box);
 
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   hbox->Add(vbox, 1);

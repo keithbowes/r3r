@@ -264,7 +264,7 @@ UNITSDIR:=$(wildcard $(FPCDIR)/units/$(OS_TARGET))
 endif
 PACKAGESDIR:=$(wildcard $(FPCDIR) $(FPCDIR)/packages $(FPCDIR)/packages/base $(FPCDIR)/packages/extra)
 .SUFFIXES:
-.SUFFIXES: $(OEXT) $(RSTEXT) .mo .pas .po .pot
+.SUFFIXES: $(OEXT) .mo .pas .po .pot
 UNIT_DIRS = ../../../libr3r ../../../libr3r/* \
 						../../../third-party/* ../../../utils/* \
 						../../../wrappers/*
