@@ -73,6 +73,7 @@ testForLib -i libintl.so
 [Install]
 # Put your installation script here
 installExe r3r
+installExe r3r_opml
 installIcon r3r.png
 installLib src/libr3r/liblibr3r_shared.so
 installDesktop "Network/Aggregators" r3r.desktop

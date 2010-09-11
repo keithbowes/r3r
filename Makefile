@@ -1569,6 +1569,7 @@ dist:
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(COPY) r3r$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
+	$(COPY) src/util/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
 	$(COPY) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons

@@ -17,14 +17,6 @@ msgstr "La dirección del fuente: "
 msgid "g)o to a URL"
 msgstr "i)r a un URL"
 
-#: tuistrings:aboutitem
-msgid "a)bout item number"
-msgstr "s)obre la entrada"
-
-#: tuistrings:openlink
-msgid "open l)ink"
-msgstr "a(b)rir vínculo"
-
 #: tuistrings:options
 msgid "o)ptions"
 msgstr "c(o)nfiguración"
@@ -36,14 +28,6 @@ msgstr "d)onar"
 #: tuistrings:quit
 msgid "q)uit the program"
 msgstr "c)esar el programa"
-
-#: tuistrings:aboutkey
-msgid "a"
-msgstr "s"
-
-#: tuistrings:openkey
-msgid "l"
-msgstr "b"
 
 #: tuistrings:gokey
 msgid "g"
@@ -132,3 +116,7 @@ msgstr " (Oprima la tecla Entrar para cerrar en su navegador web)"
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
 msgstr " (Oprima j por la entrada siguiente o k para la entrada anterior)"
+
+#: tuistrings:itememail
+msgid "Email address: "
+msgstr "La dirección del mensaje electrónico: "

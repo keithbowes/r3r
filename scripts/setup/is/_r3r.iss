@@ -19,6 +19,8 @@ Name: desktopicon; Description: "&Create a desktop icon"
 Source: "*.dll"; DestDir: "{app}\bin"
 Source: "r3r.exe"; DestDir: "{app}\bin";
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
+Source: "src\util\opml\*.bat"; DestDir: "{app}\bin"
+Source: "src\util\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
 
 Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "libr3r.mo"

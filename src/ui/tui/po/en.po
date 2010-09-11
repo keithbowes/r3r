@@ -20,14 +20,6 @@ msgstr ""
 msgid "g)o to a URL"
 msgstr ""
 
-#: tuistrings:aboutitem
-msgid "a)bout item number"
-msgstr ""
-
-#: tuistrings:openlink
-msgid "open l)ink"
-msgstr ""
-
 #: tuistrings:options
 msgid "o)ptions"
 msgstr ""
@@ -38,14 +30,6 @@ msgstr ""
 
 #: tuistrings:quit
 msgid "q)uit the program"
-msgstr ""
-
-#: tuistrings:aboutkey
-msgid "a"
-msgstr ""
-
-#: tuistrings:openkey
-msgid "l"
 msgstr ""
 
 #: tuistrings:gokey
@@ -134,4 +118,8 @@ msgstr ""
 
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
+msgstr ""
+
+#: tuistrings:itememail
+msgid "Email address: "
 msgstr ""

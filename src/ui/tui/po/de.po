@@ -17,14 +17,6 @@ msgstr "Die Feedadresse: "
 msgid "g)o to a URL"
 msgstr "g)ehen nach einem URL"
 
-#: tuistrings:aboutitem
-msgid "a)bout item number"
-msgstr "ü)ber Teilzahl"
-
-#: tuistrings:openlink
-msgid "open l)ink"
-msgstr "Öffnen l)ink"
-
 #: tuistrings:options
 msgid "o)ptions"
 msgstr "e)instellungen"
@@ -36,14 +28,6 @@ msgstr "s)penden"
 #: tuistrings:quit
 msgid "q)uit the program"
 msgstr "b)eenden dem Programm"
-
-#: tuistrings:aboutkey
-msgid "a"
-msgstr "ü"
-
-#: tuistrings:openkey
-msgid "l"
-msgstr ""
 
 #: tuistrings:gokey
 msgid "g"
@@ -132,3 +116,7 @@ msgstr " (Drücken Sie die Eingabetaste um in Ihrem Webbrowser zu öffnen)"
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
 msgstr " (Drücken Sie j für dem nächste Teil oder k für dem vorige)"
+
+#: tuistrings:itememail
+msgid "Email address: "
+msgstr "Email: "

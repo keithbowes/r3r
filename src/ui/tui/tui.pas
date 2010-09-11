@@ -6,10 +6,16 @@ uses
   LibR3R, RList;
 
 type
+  TViewport = record
+    FirstItem, LastItem: word;
+    PortHeight: word;
+  end;
+
   TTui = class(TLibR3R)
   private
     FCurrentItem: cardinal;
     FItems: PRList;
+    FViewPort: TViewport;
     procedure DrawFeedInfo;
     procedure DrawFeedList;
     procedure DrawInfoBar;
@@ -22,10 +28,12 @@ type
     procedure GoURI;
     procedure QueryItemNumber;
     procedure GoItem;
-    procedure GoLink;
     procedure OpenBrowser(Link: String);
     procedure SetOptions;
     procedure GoDonate;
+    procedure ScrollDown;
+    procedure ScrollUp;
+    procedure ScrollTo(n: word);
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -53,7 +61,16 @@ end;
 constructor TTui.Create;
 const
   DownKey = 'j';
+  EndKey = Chr(79);
   EnterKey = Chr(13);
+  HomeEndKey = '~'; // For some reason, FPC report both HOME and END as a tilde
+  HomeKey = Chr(71);
+  NullKey = Chr(0);
+  PageDownKey = Chr(81);
+  PageUpKey = Chr(73);
+  ScrollDownKey = Chr(32);
+  ScrollUpKey = Chr(8);
+  SearchKey = '/';
   UpKey = 'k';
 var
   FeedIndex: word;
@@ -61,9 +78,14 @@ var
 begin
   inherited Create;
   New(FItems, Init);
-  FCurrentItem := 0;
+  FCurrentItem := 1;
+
+  FViewPort.FirstItem := FCurrentItem;
+  FViewPort.LastItem := ScreenHeight - 5;
+  FViewPort.PortHeight := FViewPort.LastItem;
 
 {$IFDEF __GPC__}
+  InitCRT;
   ScreenHeight := ScreenSize.Y;
   ScreenWidth := ScreenSize.X;
 {$ENDIF}
@@ -100,6 +122,12 @@ begin
   repeat
     KeyChar := ReadKey;
 
+    { Read the scan code of control characters }
+    if KeyChar = NullKey then
+    begin
+      KeyChar := ReadKey;
+    end;
+
     if KeyChar = GoKey then
     begin
       GoURI;
@@ -108,14 +136,10 @@ begin
     begin
       SetOptions;
     end
-    else if KeyChar = AboutKey then
+    else if KeyChar = SearchKey then
     begin
       QueryItemNumber;
-      GoItem;
-    end
-    else if KeyChar = OpenKey then
-    begin
-      GoLink;
+      ScrollTo(FCurrentItem);
     end
     else if KeyChar = DonateKey then
     begin
@@ -126,15 +150,52 @@ begin
       if FCurrentItem < FItems^.Count then
       begin
         Inc(FCurrentItem);
-        GoItem;
+      end
+      else
+      begin
+        FCurrentItem := 1;
       end;
+
+      ScrollTo(FCurrentItem);
     end
     else if KeyChar = UpKey then
     begin
       if FCurrentItem > 1 then
       begin
         Dec(FCurrentItem);
-        GoItem;
+      end
+      else
+      begin
+        FCurrentItem := FItems^.Count;
+      end;
+
+      ScrollTo(FCurrentItem);
+    end
+    else if (KeyChar = ScrollDownKey) or (KeyChar = PageDownKey) then
+    begin
+      ScrollDown;
+    end
+    else if (KeyChar = ScrollUpKey) or (KeyChar = PageUpKey) then
+    begin
+      ScrollUp;
+    end
+    else if KeyChar = HomeKey then
+    begin
+      ScrollTo(1);
+    end
+    else if KeyChar = EndKey then
+    begin
+      ScrollTo(FItems.Count);
+    end
+    else if KeyChar = HomeEndKey then
+    begin
+      if FCurrentItem > 1 then
+      begin
+        ScrollTo(1);
+      end
+      else
+      begin
+        ScrollTo(FItems.Count);
       end;
     end
     else if KeyChar = EnterKey then
@@ -179,6 +240,7 @@ procedure TTui.DisplayItem(const Item: TFeedItem);
 var
   AItem: TFeedItem;
   Items: cardinal;
+  Title: String;
 begin
   AItem := CreateFeedItem;
   AItem.Title := Item.Title;
@@ -191,19 +253,16 @@ begin
   FItems^.Add(AItem);
   Items := FItems^.Count;
 
-  Write(Items, ': ', Item.Title);
-
-  if Item.LinksCount > 0 then
+  if Items < cardinal(ScreenHeight - 4) then
   begin
-    Write(' <', Item.GetMainLink, '>');
-  end;
+    Title := Item.Title;
+    if Length(Title) > (ScreenWidth div 2 - 3 - Length(IntToStr(Items))) then
+    begin
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 3) + '...';
+    end;
 
-  if Item.Contact^.Email <> '' then
-  begin
-    Write(' (', Item.Contact^.Email, ')');
+    WriteLn(Items, ': ', Title);
   end;
-
-  WriteLn;
 end;
 
 procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);
@@ -230,7 +289,6 @@ end;
 procedure TTui.RetrieveFeed(Resource: String);
 begin
   DrawFeedList;
-  FCurrentItem := FItems^.Count + 1;
   inherited RetrieveFeed(Resource);
   GoItem;
 end;
@@ -248,13 +306,6 @@ begin
   Write(GoURL);
   Write(Options:25 - Length(GoUrl) + Length(Options));
   WriteLn;
-
-  if FItems^.Count > 0 then
-  begin
-    Write(AboutItem);
-    Write(OpenLink:25 - Length(AboutItem) + Length(OpenLink));
-    WriteLn;
-  end;
 
   Write(Donate);
   Write(Quit:25 - Length(Donate) + Length(Quit));
@@ -306,6 +357,7 @@ procedure TTui.GoItem;
 var
   Desc: String;
   i, j, k: cardinal;
+  StatusText: String;
 const
   DescLen = 150;
 begin
@@ -322,7 +374,13 @@ begin
       DrawStatus;
       if MainLink <> '' then
       begin
-        Write(MainLink, ActivateLink);
+        StatusText := MainLink + ActivateLink;
+        if Length(StatusText) > ScreenWidth then
+        begin
+          StatusText := Copy(StatusText, 1, ScreenWidth - 5) + '...';
+        end;
+
+        Write(StatusText);
       end;
 
       DrawFeedInfo;
@@ -331,6 +389,7 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Desc);
+      WriteLn(ItemEmail, Contact.Email);
       WriteLn(ItemEncl, Enclosure.URL);
 
       j := 0;
@@ -355,33 +414,6 @@ begin
         end;
       end;
     end;
-  end;
-
-  ShowHelp;
-end;
-
-procedure TTui.GoLink;
-var
-  ErrPos: byte;
-  iNo: cardinal;
-  No: String;
-begin
-  DrawStatus;
-
-  WriteLn;
-  Write(LinkNo);
-  ReadLn(No);
-
-  Val(No, iNo, ErrPos);
-
-  if (ErrPos = 0) and (TFeedItem(FItems^.GetNth(iNo - 1)).MainLink <> '') and
-    (FItems^.Count > 0) and (iNo <= FItems^.Count) then
-  begin
-    OpenBrowser(TFeedItem(FItems^.GetNth(iNo - 1)).MainLink);
-  end
-  else
-  begin
-    WriteLn(InvalidNumber);
   end;
 
   ShowHelp;
@@ -525,9 +557,96 @@ begin
   ShowHelp;
 end;
 
+procedure TTui.ScrollDown;
+var
+  i: word;
+  Title: String;
+begin
+  FViewPort.FirstItem := FViewPort.LastItem;
+  FViewPort.LastItem := FViewPort.LastItem + FViewPort.PortHeight;
+  FCurrentItem := FViewPort.FirstItem;
+
+  if FViewPort.LastItem > FItems.Count then
+  begin
+    FViewPort.LastItem := FItems.Count;
+    FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
+    Dec(FCurrentItem);
+  end;
+
+  DrawFeedList;
+  ClrScr;
+
+  for i := FViewPort.FirstItem to FViewPort.LastItem do
+  begin
+    Title := TFeedItem(FItems.GetNth(i - 1)).Title;
+    if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
+    begin
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
+    end;
+
+    WriteLn(i, ': ', Title);
+  end;
+
+  GoItem;
+end;
+
+procedure TTui.ScrollUp;
+var
+  i: word;
+  Title: String;
+begin
+  if FViewPort.FirstItem > FViewPort.PortHeight then
+  begin
+    FViewPort.FirstItem := FViewPort.FirstItem - FViewPort.PortHeight;
+    FViewPort.LastItem := FViewPort.LastItem - FViewPort.PortHeight;
+    FCurrentItem := FViewPort.FirstItem;
+  end
+  else
+  begin
+    FViewPort.FirstItem := 1;
+    FViewPort.LastItem := FViewPort.PortHeight;
+    FCurrentItem := FViewPort.FirstItem;
+  end;
+
+  DrawFeedList;
+  ClrScr;
+
+  for i := FViewPort.FirstItem to FViewPort.LastItem do
+  begin
+    Title := TFeedItem(FItems.GetNth(i - 1)).Title;
+    if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
+    begin
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
+    end;
+
+    WriteLn(i, ': ', Title);
+  end;
+
+  GoItem;
+end;
+
+procedure TTui.ScrollTo(n: word);
+begin
+  if n <= FViewPort.FirstItem then
+  begin
+    repeat
+      ScrollUp;
+    until n >= FViewPort.FirstItem;
+  end
+  else if n > FViewPort.LastItem then
+  begin
+    repeat
+      ScrollDown;
+    until n <= FViewPort.LastItem;
+  end;
+
+  FCurrentItem := n;
+  GoItem;
+end;
+
 procedure TTui.DrawFeedInfo;
 begin
-  Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 3);
+  Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 2);
   TextBackground(Black);
   TextColor(Green);
   ClrScr;
@@ -535,16 +654,14 @@ end;
 
 procedure TTui.DrawFeedList;
 begin
-  Window(1, 2, ScreenWidth div 2 - 1, ScreenHeight - 4);
+  Window(1, 2, ScreenWidth div 2 - 1, ScreenHeight - 3);
   TextBackground(Black);
   TextColor(Green);
-  GotoXY(1, ScreenHeight - 5);
-  InsLine;
 end;
 
 procedure TTui.DrawInfoBar;
 begin
-  Window(1, ScreenHeight - 3, ScreenWidth, ScreenHeight - 1);
+  Window(1, ScreenHeight - 2, ScreenWidth, ScreenHeight - 1);
   TextBackground(Blue);
   TextColor(Yellow);
   ClrScr;
@@ -552,7 +669,7 @@ end;
 
 procedure TTui.DrawSeparator;
 begin
-  Window(ScreenWidth div 2, 2, ScreenWidth div 2, ScreenHeight - 4);
+  Window(ScreenWidth div 2, 2, ScreenWidth div 2, ScreenHeight - 3);
   TextBackground(LightCyan);
   ClrScr;
 end;

@@ -17,14 +17,6 @@ msgstr "Retadreso de fluo: "
 msgid "g)o to a URL"
 msgstr "i)ri al retadreso"
 
-#: tuistrings:aboutitem
-msgid "a)bout item number"
-msgstr "p)ri era numero"
-
-#: tuistrings:openlink
-msgid "open l)ink"
-msgstr "m)alfermi ligilon"
-
 #: tuistrings:options
 msgid "o)ptions"
 msgstr "a)gordo"
@@ -36,14 +28,6 @@ msgstr "d)onaci"
 #: tuistrings:quit
 msgid "q)uit the program"
 msgstr "e)liri el la programo"
-
-#: tuistrings:aboutkey
-msgid "a"
-msgstr "p"
-
-#: tuistrings:openkey
-msgid "l"
-msgstr "m"
 
 #: tuistrings:gokey
 msgid "g"
@@ -132,3 +116,7 @@ msgstr " (Premu la enenklavon por malfermi en via TTT-legilo)"
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
 msgstr " (Premu: j por la sekva aŭ k por la antaŭa)"
+
+#: tuistrings:itememail
+msgid "Email address: "
+msgstr "Retpoŝtadreso: "
