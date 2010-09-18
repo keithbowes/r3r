@@ -105,6 +105,12 @@ else
 PCFLAGS_DEBUG=-CX -Xs -XX
 endif # DEBUG
 
+ifeq ($(R3R_UI), tui)
+ifdef inUnix
+override DEFS_EXTRA += HAS_SCREENHEIGHTWIDTH
+endif # inUnix
+endif # R3R_UI
+
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
 ifdef inWindows

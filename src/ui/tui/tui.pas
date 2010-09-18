@@ -47,7 +47,7 @@ implementation
 uses
   Crt, Dos, Info, SysUtils, TuiStrings;
 
-{$IFDEF __GPC__}
+{$IFNDEF HAS_SCREENHEIGHTWIDTH}
 var
   ScreenHeight: word;
   ScreenWidth: word;
@@ -80,15 +80,20 @@ begin
   New(FItems, Init);
   FCurrentItem := 1;
 
-  FViewPort.FirstItem := FCurrentItem;
-  FViewPort.LastItem := ScreenHeight - 5;
-  FViewPort.PortHeight := FViewPort.LastItem;
-
+{$IFNDEF HAS_SCREENHEIGHTWIDTH}
 {$IFDEF __GPC__}
   InitCRT;
   ScreenHeight := ScreenSize.Y;
   ScreenWidth := ScreenSize.X;
-{$ENDIF}
+{$ELSE}
+  ScreenHeight := 25;
+  ScreenWidth := 80;
+{$ENDIF __GPC__}
+{$ENDIF HAS_SCREENHEIGHTWIDTH}
+
+  FViewPort.FirstItem := FCurrentItem;
+  FViewPort.LastItem := ScreenHeight - 5;
+  FViewPort.PortHeight := FViewPort.LastItem;
 
   ClrScr;
 
