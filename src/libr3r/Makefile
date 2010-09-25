@@ -1386,6 +1386,7 @@ include fpcmake.loc
 endif
 include ../../scripts/common.make
 all:
+	$(MAKE) rupdate.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)

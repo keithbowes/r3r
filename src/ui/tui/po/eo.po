@@ -95,7 +95,7 @@ msgstr "Parametra valoro"
 
 #: tuistrings:settingtochange
 msgid "Option to change (empty to exit): "
-msgstr "Ŝanĝota parametro (malplena por nuligado): "
+msgstr "Ŝanĝota parametro (vaka por nuligado): "
 
 #: tuistrings:newvalue
 msgid "New Value: "

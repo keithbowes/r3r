@@ -146,7 +146,9 @@ ifdef DEBUG
 PCFLAGS_DEBUG=--pointer-checking --progress-messages \
 	--stack-checking -ggdb3
 else
-PCFLAGS_DEBUG=--no-io-checking --no-range-checking --no-warning
+PCFLAGS_DEBUG=--no-io-checking --no-pointer-checking \
+							--no-range-checking --no-stack-checking \
+							--no-warning
 endif # DEBUG
 
 R3R_UI ?= tui

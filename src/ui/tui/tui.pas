@@ -82,7 +82,7 @@ begin
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
 {$IFDEF __GPC__}
-  InitCRT;
+  CRTInit;
   ScreenHeight := ScreenSize.Y;
   ScreenWidth := ScreenSize.X;
 {$ELSE}
@@ -190,7 +190,7 @@ begin
     end
     else if KeyChar = EndKey then
     begin
-      ScrollTo(FItems.Count);
+      ScrollTo(FItems^.Count);
     end
     else if KeyChar = HomeEndKey then
     begin
@@ -200,7 +200,7 @@ begin
       end
       else
       begin
-        ScrollTo(FItems.Count);
+        ScrollTo(FItems^.Count);
       end;
     end
     else if KeyChar = EnterKey then
@@ -394,7 +394,7 @@ begin
       WriteLn(ItemSubject, Subject);
       WriteLn(ItemCreated, Created);
       WriteLn(ItemDesc, Desc);
-      WriteLn(ItemEmail, Contact.Email);
+      WriteLn(ItemEmail, Contact^.Email);
       WriteLn(ItemEncl, Enclosure.URL);
 
       j := 0;
@@ -420,8 +420,6 @@ begin
       end;
     end;
   end;
-
-  ShowHelp;
 end;
 
 procedure TTui.OpenBrowser(Link: String);
@@ -571,9 +569,14 @@ begin
   FViewPort.LastItem := FViewPort.LastItem + FViewPort.PortHeight;
   FCurrentItem := FViewPort.FirstItem;
 
-  if FViewPort.LastItem > FItems.Count then
+  if FItems^.Count < FViewPort.PortHeight then
   begin
-    FViewPort.LastItem := FItems.Count;
+    FViewPort.FirstItem := 1;
+    FViewPort.LastItem := FItems^.Count;
+  end
+  else if FViewPort.LastItem > FItems^.Count then
+  begin
+    FViewPort.LastItem := FItems^.Count;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
     Dec(FCurrentItem);
   end;
@@ -583,7 +586,7 @@ begin
 
   for i := FViewPort.FirstItem to FViewPort.LastItem do
   begin
-    Title := TFeedItem(FItems.GetNth(i - 1)).Title;
+    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
     if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
     begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
@@ -604,21 +607,25 @@ begin
   begin
     FViewPort.FirstItem := FViewPort.FirstItem - FViewPort.PortHeight;
     FViewPort.LastItem := FViewPort.LastItem - FViewPort.PortHeight;
-    FCurrentItem := FViewPort.FirstItem;
+  end
+  else if FItems^.Count < FViewPort.PortHeight then
+  begin
+    FViewPort.FirstItem := 1;
+    FViewPort.LastItem := FItems^.Count;
   end
   else
   begin
     FViewPort.FirstItem := 1;
     FViewPort.LastItem := FViewPort.PortHeight;
-    FCurrentItem := FViewPort.FirstItem;
   end;
 
+  FCurrentItem := FViewPort.FirstItem;
   DrawFeedList;
   ClrScr;
 
   for i := FViewPort.FirstItem to FViewPort.LastItem do
   begin
-    Title := TFeedItem(FItems.GetNth(i - 1)).Title;
+    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
     if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
     begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
@@ -632,7 +639,7 @@ end;
 
 procedure TTui.ScrollTo(n: word);
 begin
-  if n <= FViewPort.FirstItem then
+  if (n <= FViewPort.FirstItem) and (n > 0) then
   begin
     repeat
       ScrollUp;
@@ -651,7 +658,7 @@ end;
 
 procedure TTui.DrawFeedInfo;
 begin
-  Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 2);
+  Window(ScreenWidth div 2 + 1, 2, ScreenWidth, ScreenHeight - 3);
   TextBackground(Black);
   TextColor(Green);
   ClrScr;
@@ -662,6 +669,9 @@ begin
   Window(1, 2, ScreenWidth div 2 - 1, ScreenHeight - 3);
   TextBackground(Black);
   TextColor(Green);
+
+  GotoXY(1, FItems^.Count + 1);
+  InsLine;
 end;
 
 procedure TTui.DrawInfoBar;
