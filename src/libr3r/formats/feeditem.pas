@@ -47,6 +47,7 @@ type
     function LinksCount: cardinal;
     function GetMainLink: String;
     function GetPodcast: String;
+    function DescriptionText: String;
     procedure Clear;
   end;
 
@@ -166,6 +167,49 @@ begin
   begin
     GetPodcast := '';
   end;
+end;
+
+{ Get the textual representation (without HTML) of the description. }
+function TFeedItem.DescriptionText: String;
+var
+  i: cardinal;
+  InEnt, InHTML: Boolean;
+  InStr, OutStr: String;
+begin
+  InEnt := false;
+  InHTML := false;
+
+  InStr := Description;
+  OutStr := '';
+
+  for i := 0 to Length(InStr) - 1 do
+  begin
+    if InStr[i] = '<' then
+    begin
+      InHTML := true;
+    end
+    else if InStr[i] = '&' then
+    begin
+      InEnt := true;
+    end
+    { This has to go here so that > and ; don't get counted
+      as part of the text. }
+    else if (not InEnt) and (not InHTML) then
+    begin
+      OutStr := OutStr + InStr[i];
+    end
+    else if InStr[i] = '>' then
+    begin
+      InHTML := false;
+    end
+    else if InEnt and (InStr[i] = ';') then { we don't want to convert all semicolons to random characters }
+    begin
+      InEnt := false;
+      OutStr :=  OutStr + #164; { random character for replacing numerical and named references }
+    end;
+  end;
+
+  DescriptionText := OutStr;
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;

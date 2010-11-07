@@ -251,7 +251,7 @@ begin
   AItem.Title := Item.Title;
   AItem.Subject := Item.Subject;
   AItem.Created := Item.Created;
-  AItem.Description := Item.Description;
+  AItem.Description := Item.DescriptionText;
   AItem.Links := Item.Links;
   AItem.MainLink := Item.GetMainLink;
   AItem.Enclosure := Item.Enclosure;
