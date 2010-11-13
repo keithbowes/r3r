@@ -25,7 +25,7 @@ clean: _clean
 	
 install:
 	cd po && $(MAKE) install
-	$(INSTALL) $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(libdir)
+	-$(INSTALLEXE) $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(libdir)
 	-ldconfig
 
 uninstall:

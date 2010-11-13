@@ -120,9 +120,9 @@ begin
   Enclosure.MimeType := '';
   Enclosure.URL := '';
 
-  Links^.Add(nil);
-
   Finished := false;
+
+  Links^.Add(nil);
 end;
 
 function TFeedItem.LinksCount: cardinal;
@@ -182,7 +182,7 @@ begin
   InStr := Description;
   OutStr := '';
 
-  for i := 0 to Length(InStr) - 1 do
+  for i := 1 to Length(InStr) do
   begin
     if InStr[i] = '<' then
     begin

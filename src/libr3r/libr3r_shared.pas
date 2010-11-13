@@ -117,6 +117,10 @@ begin
     begin
       libr3r_get_item_field := StrToPChar(Description)
     end
+    else if FieldName = 'description-text' then
+    begin
+      libr3r_get_item_field := StrToPChar(DescriptionText)
+    end
     else if FieldName = 'subject' then
     begin
       libr3r_get_item_field := StrToPChar(Subject);

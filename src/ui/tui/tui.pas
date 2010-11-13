@@ -260,7 +260,7 @@ begin
 
   if Items < cardinal(ScreenHeight - 4) then
   begin
-    Title := Item.Title;
+    Title := AItem.Title;
     if Length(Title) > (ScreenWidth div 2 - 3 - Length(IntToStr(Items))) then
     begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 3) + '...';
