@@ -19,13 +19,14 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
 
   wxString path, prefix;
   prefix = wxString((char *) value, wxConvUTF8);
-  path = wxString(wxT("/share/icon/r3r.png"));
+  path = wxString(wxT("/share/icons/r3r.png"));
 
   wxPanel * panel = new wxPanel(this, wxID_ANY);
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
   panel->SetSizer(vbox);
 
-  SetIcon(wxIcon(prefix + path));
+	wxInitAllImageHandlers();
+  SetIcon(wxIcon(prefix + path, wxBITMAP_TYPE_PNG));
   
   CreateMenus(this);
 

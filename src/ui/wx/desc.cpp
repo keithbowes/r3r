@@ -12,12 +12,22 @@ void CreateDescriptionBox(wxPanel * parent)
   wxSizer * sizer = parent->GetSizer();
 
   descBox = new wxStaticBox(parent, -1, (wxChar *) NULL);
-
-  wxTextCtrl * memo = new wxTextCtrl(parent, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
-  descBox->SetClientData(memo);
+	
+#ifdef USE_HTML_DESCRIPTION_BOX
+	wxHtmlWindow * html = new wxHtmlWindow(parent);
+  descBox->SetClientData(html);
+#else
+	wxTextCtrl * memo = new wxTextCtrl(parent, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
+	descBox->SetClientData(memo);
+#endif
 
   wxStaticBoxSizer * bsizer = new wxStaticBoxSizer(descBox, wxVERTICAL);
+
+#ifdef USE_HTML_DESCRIPTION_BOX
+  bsizer->Add(html, 1, wxEXPAND | wxALL, 5);
+#else
   bsizer->Add(memo, 1, wxEXPAND | wxALL, 5);
+#endif
 
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
   bsizer->Add(hbox, 1, wxALL, 5);

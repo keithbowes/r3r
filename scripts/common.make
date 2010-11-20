@@ -26,7 +26,7 @@ prefix = $(PREFIX)
 
 bindir = $(prefix)/bin
 datadir = $(prefix)/share
-icondir=$(datadir)/icons
+icondir = $(datadir)/icons
 libdir = $(prefix)/lib
 localedir = $(datadir)/locale
 

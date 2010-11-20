@@ -22,7 +22,7 @@ void normalize_field_value(char ** field_value)
 
   if (0 == strlen(s))
   {
-    s = (char *) _("[None]");
+    s = (char *) _("[None]").char_str();
   }
 
   *field_value = s;
@@ -33,6 +33,7 @@ void item_parsed(void * item)
   static long itemIndex = 0;
   char * created = (char *) libr3r_get_item_field(item, (char *) "created");
   char * desc = (char *) libr3r_get_item_field(item, (char *) "description");
+	char * desctext = (char *) libr3r_get_item_field(item, (char *) "description-text");
   char * subject = (char *) libr3r_get_item_field(item, (char *) "subject");
   char * title = (char *) libr3r_get_item_field(item, (char *) "title");
 
@@ -41,6 +42,7 @@ void item_parsed(void * item)
   ItemInfo * info = (ItemInfo *) malloc(sizeof(ItemInfo));
   info->isTopLevel = topItem;
   info->desc = desc;
+	info->desctext = desctext;
   info->link = (char *) libr3r_get_item_field(item, (char *) "main-link");
   info->title = title;
   info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");

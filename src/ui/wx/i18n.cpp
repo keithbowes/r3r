@@ -19,7 +19,7 @@ void InitGettext()
 
   wxString localeDir, path, prefix;
   path = wxString(wxT("/share/locale"));
-  prefix = wxString((wxChar *) value);
+  prefix = wxString((const char *) value);
   localeDir = prefix + path;
 
   wxLocale * locale = new wxLocale();

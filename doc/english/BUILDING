@@ -99,3 +99,11 @@ USE_FPC
   Use Free Pascal to compile (recommended).
 USE_GPC
   Use GNU Pascal to compile.
+
+Environment variables for the wxWidgets UI only:
+HAS_PTHREAD
+  Use the pthread library to be able to use other parts of the
+  program while feeds are downloading.
+USE_HTML_DESCRIPTION_BOX
+  Display the content of a feed's description in an HTML display
+  area instead of a read-only multiline text control.

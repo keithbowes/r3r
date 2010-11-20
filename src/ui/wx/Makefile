@@ -269,8 +269,11 @@ CXXFLAGS += $(shell wx-config --cxxflags) -Wall \
 LDFLAGS += $(shell wx-config --libs) -L../../libr3r
 LIBS += -llibr3r_shared
 ifdef HAS_PTHREAD
-	CXXFLAGS += -DHAS_PTHREAD
+  CXXFLAGS += -DHAS_PTHREAD
 	LIBS += -lpthread
+endif
+ifdef USE_HTML_DESCRIPTION_BOX
+	CXXFLAGS += -DUSE_HTML_DESCRIPTION_BOX
 endif
 ifdef DEBUG
 	CXXFLAGS += -g

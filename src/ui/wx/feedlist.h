@@ -6,6 +6,7 @@ typedef struct
 
   char * contact;
   char * desc;
+  char * desctext;
   char * link;
   char * title;
   char * self;
