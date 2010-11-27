@@ -48,13 +48,14 @@ dist:
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(COPY) r3r$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
-	$(COPY) src/util/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
+	$(COPY) src/utils/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
 	$(COPY) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
 	$(COPY) icons/r3r.png  ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/libr3r/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/libr3r/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$(l)/libr3r.mo;)
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/ui/$(R3R_UI)/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/ui/$(R3R_UI)/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l/r3r_$(R3R_UI).mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/utils/opml/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/utils/opml/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
 		gzip -f > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
 	$(DELTREE) ../r3r-$(VERSION)-$(PLATFORM)

@@ -1389,4 +1389,7 @@ clean:
 	$(DEL) r3r_opml$(EXEEXT)
 install:
 	cd po && $(MAKE) install
-	$(INSTALLEXE) r3r_opml $(bindir)
+	$(INSTALLEXE) r3r_opml$(EXEEXT) $(bindir)
+uninstall:
+	cd po && $(MAKE) uninstall
+	$(DEL) $(bindir)/r3r_opml$(EXEEXT)

@@ -10,8 +10,8 @@
 
 void * rlib;
 FeedListView * feedList;
-bool topItem = FALSE;
-bool readyNextThread = TRUE;
+bool topItem = false;
+bool readyNextThread = true;
 
 int rargc;
 wxChar ** rargv;
@@ -84,7 +84,7 @@ void item_parsed(void * item)
   listItem.SetText(wxString(created, wxConvUTF8));
   feedList->SetItem(listItem);
 
-  topItem = FALSE;
+  topItem = false;
   itemIndex++;
 }
 
@@ -143,11 +143,6 @@ void * ParseFeedThread(void * resource)
 {
   FeedResource * res = (FeedResource *) resource;
 
-  // Wait until the previous thread is through parsing first.
-  while (!readyNextThread)
-  {
-  }
-
   readyNextThread = false;
   topItem = true;
 
@@ -155,6 +150,11 @@ void * ParseFeedThread(void * resource)
   free(res);
 
   readyNextThread = true;
+
+#ifdef HAS_PTHREAD
+	pthread_exit(NULL);
+#endif
+
   return NULL;
 }
 
@@ -162,11 +162,17 @@ void ParseFeed(char * res)
 {
   FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
   resource->lib = rlib;  
-  resource->res = res;  
+  resource->res = res;
 
 #ifdef HAS_PTHREAD
+	pthread_attr_t attr;
   pthread_t thread;
+
+  pthread_attr_init(&attr);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
   pthread_create(&thread, NULL, &ParseFeedThread, (void *) resource);
+	pthread_attr_destroy(&attr);
 #else
   ParseFeedThread(resource);
 #endif

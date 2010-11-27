@@ -126,7 +126,7 @@ begin
   begin
     if Line[1] in WhiteSpaceChars then
     begin
-      while Line[1] in WhiteSpaceChars do
+      while (Length(Line) > 0) and (Line[1] in WhiteSpaceChars) do
       begin
         Delete(Line, 1, 1);
       end;

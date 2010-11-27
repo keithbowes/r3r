@@ -73,7 +73,7 @@ testForLib -i libintl.so
 [Install]
 # Put your installation script here
 installExe r3r
-installExe r3r_opml
+installExe src/utils/opml/r3r_opml
 installIcon r3r.png
 installLib src/libr3r/liblibr3r_shared.so
 installDesktop "Network/Aggregators" r3r.desktop
@@ -85,9 +85,9 @@ do
   copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/libr3r.mo"
 done
 
-cd ../../..
+cd ../..
 
-cd src/ui/@UI@/po
+cd ui/@UI@/po
 for lang in *.mo;
 do
   l=`echo $lang | sed 's/\.mo$//g'`
@@ -95,6 +95,15 @@ do
 done
 
 cd ../../..
+
+cd utils/opml/po
+for lang in *.mo;
+do
+  l=`echo $lang | sed 's/\.mo$//g'`
+  copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/r3r_opml.mo"
+done
+
+cd $source_dir/../..
 
 [Uninstall]
 # Usually just the following line is enough to uninstall everything

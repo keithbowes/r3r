@@ -49,6 +49,7 @@ ifdef inWinNT
 inWindows = 1
 else
 ifdef inCygWin
+inUnix =
 inWindows = 1
 endif # inCygWin
 endif # inWinNT
