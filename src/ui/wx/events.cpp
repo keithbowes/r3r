@@ -107,13 +107,8 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   wxStaticBox * box = GetDescriptionBox();
   box->SetLabel(wxString(info->title, wxConvUTF8));
 
-#ifdef USE_HTML_DESCRIPTION_BOX
   wxHtmlWindow * html = (wxHtmlWindow *) box->GetClientData();
   html->SetPage(wxString(info->desc));
-#else
-	wxTextCtrl * memo = (wxTextCtrl *) box->GetClientData();
-	memo->SetValue(wxString(info->desctext, wxConvUTF8));
-#endif
 
   wxFrame * win = (wxFrame *) GetFeedList()->GetParent()->GetParent();
   win->SetStatusText(wxString(info->link, wxConvUTF8), 0);

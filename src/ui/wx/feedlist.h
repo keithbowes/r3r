@@ -24,6 +24,7 @@ FeedListView * GetFeedList();
 void ResizeColumns(FeedListView * list);
 void CleanupFeedList();
 void ParseFeed(char * res);
+void * ParseFeedThread(void * resource);
 void GetAllFeeds(int argc, wxChar ** argv);
 
 void GoBrowser(char * link);

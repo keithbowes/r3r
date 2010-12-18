@@ -144,6 +144,7 @@ begin
   end
   else
   begin
+    ShouldShow := Item.Title <> '';
     FInHead := false;
   end;
 end;

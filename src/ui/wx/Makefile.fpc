@@ -5,15 +5,6 @@ CXXFLAGS += $(shell wx-config --cxxflags) -Wall \
 LDFLAGS += $(shell wx-config --libs) -L../../libr3r
 LIBS += -llibr3r_shared
 
-ifdef HAS_PTHREAD
-  CXXFLAGS += -DHAS_PTHREAD
-	LIBS += -lpthread
-endif
-
-ifdef USE_HTML_DESCRIPTION_BOX
-	CXXFLAGS += -DUSE_HTML_DESCRIPTION_BOX
-endif
-
 ifdef DEBUG
 	CXXFLAGS += -g
 endif
@@ -21,7 +12,7 @@ endif
 CXXEXT = .cpp
 HEXT = .h
 
-objects = app desc events feedlist feedlistview frame gofield \
+objects = app desc events feedlist feedlistthread feedlistview frame gofield \
 					i18n location menu settings-display settings-headers \
 					settings-http settings-main settings-programs \
 					settings-subscriptions settingscheckbox settingsdialog \

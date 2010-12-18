@@ -263,7 +263,7 @@ begin
     Title := AItem.Title;
     if Length(Title) > (ScreenWidth div 2 - 3 - Length(IntToStr(Items))) then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 3) + '...';
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 4) + '...';
     end;
 
     WriteLn(Items, ': ', Title);
@@ -589,7 +589,7 @@ begin
     Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
     if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
     end;
 
     WriteLn(i, ': ', Title);
@@ -628,7 +628,7 @@ begin
     Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
     if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 3) + '...';
+      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
     end;
 
     WriteLn(i, ': ', Title);

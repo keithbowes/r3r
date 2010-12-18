@@ -1,8 +1,5 @@
-#ifdef HAS_PTHREAD
-#include <pthread.h>
-#endif
-
 #include "feedlist.h"
+#include "feedlistthread.h"
 #include "libr3r.h"
 #include "subscriptions.h"
 
@@ -11,7 +8,6 @@
 void * rlib;
 FeedListView * feedList;
 bool topItem = false;
-bool readyNextThread = true;
 
 int rargc;
 wxChar ** rargv;
@@ -143,17 +139,10 @@ void * ParseFeedThread(void * resource)
 {
   FeedResource * res = (FeedResource *) resource;
 
-  readyNextThread = false;
   topItem = true;
 
   libr3r_retrieve_feed(res->lib, res->res);
   free(res);
-
-  readyNextThread = true;
-
-#ifdef HAS_PTHREAD
-	pthread_exit(NULL);
-#endif
 
   return NULL;
 }
@@ -161,21 +150,30 @@ void * ParseFeedThread(void * resource)
 void ParseFeed(char * res)
 {
   FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
-  resource->lib = rlib;  
+  resource->lib = rlib;
   resource->res = res;
 
-#ifdef HAS_PTHREAD
-	pthread_attr_t attr;
-  pthread_t thread;
+	FeedListThread * thread = new FeedListThread(wxTHREAD_JOINABLE);
+	thread->SetEntryData(resource);
 
-  pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	if (wxTHREAD_NO_ERROR == thread->Create())
+	{
+		thread->Run();
+	}
+	else
+	{
+		ParseFeedThread(resource);
+	}
 
-  pthread_create(&thread, NULL, &ParseFeedThread, (void *) resource);
-	pthread_attr_destroy(&attr);
-#else
-  ParseFeedThread(resource);
-#endif
+	if (thread->IsDetached())
+	{
+		thread->Delete();
+	}
+	else
+	{
+		thread->Wait();
+		delete thread;
+	}
 }
 
 void GetAllFeeds(int argc, wxChar ** argv)
