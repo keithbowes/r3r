@@ -63,17 +63,19 @@ const
   DownKey = 'j';
   EndKey = Chr(79);
   EnterKey = Chr(13);
-  HomeEndKey = '~'; // For some reason, FPC report both HOME and END as a tilde
+  HomeEndKey = '~'; // For some reason, FPC reports both HOME and END as a tilde
   HomeKey = Chr(71);
   NullKey = Chr(0);
   PageDownKey = Chr(81);
   PageUpKey = Chr(73);
+  RefreshKey = '-';
   ScrollDownKey = Chr(32);
   ScrollUpKey = Chr(8);
   SearchKey = '/';
   UpKey = 'k';
 var
   FeedIndex: word;
+  iTmp: cardinal;
   KeyChar: char;
 begin
   inherited Create;
@@ -175,6 +177,12 @@ begin
       end;
 
       ScrollTo(FCurrentItem);
+    end
+    else if KeyChar = RefreshKey then
+    begin
+      iTmp := FCurrentItem;
+      ScrollTo(FViewPort.FirstItem);
+      ScrollTo(iTmp);
     end
     else if (KeyChar = ScrollDownKey) or (KeyChar = PageDownKey) then
     begin
@@ -573,6 +581,7 @@ begin
   begin
     FViewPort.FirstItem := 1;
     FViewPort.LastItem := FItems^.Count;
+    FCurrentItem := FViewPort.LastItem;
   end
   else if FViewPort.LastItem > FItems^.Count then
   begin
@@ -671,7 +680,6 @@ begin
   TextColor(Green);
 
   GotoXY(1, FItems^.Count + 1);
-  InsLine;
 end;
 
 procedure TTui.DrawInfoBar;

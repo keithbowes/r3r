@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-08-12 21:55-0400\n"
-"PO-Revision-Date: 2009-11-30 14:50-0500\n"
+"PO-Revision-Date: 2010-12-26 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "MIME-Version: 1.0\n"
@@ -150,7 +150,7 @@ msgstr "Kutimaj akceptataj &tipoj: "
 
 #: ../settings-headers.cpp:22 ../settings-headers.cpp:32
 msgid "Enable"
-msgstr "Ebligi"
+msgstr "Aktivigi"
 
 #: ../settings-headers.cpp:25
 msgid "Custom Accept &Languages: "
@@ -170,7 +170,7 @@ msgstr "&Prokura pordo: "
 
 #: ../settings-http.cpp:30
 msgid "&Enable Proxy"
-msgstr "&Ebligi prokuron"
+msgstr "&Aktivigi prokuron"
 
 #: ../settings-http.cpp:33
 msgid "HTTP"

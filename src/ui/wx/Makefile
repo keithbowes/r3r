@@ -273,11 +273,12 @@ ifdef DEBUG
 endif
 CXXEXT = .cpp
 HEXT = .h
-objects = app desc events feedlist feedlistthread feedlistview frame gofield \
-					i18n location menu settings-display settings-headers \
-					settings-http settings-main settings-programs \
-					settings-subscriptions settingscheckbox settingsdialog \
-					settingsentry settingslist subscriptions
+objects = app desc events feedlist feedlistthread feedlistview \
+					frame gofield i18n location menu settings-display \
+					settings-headers settings-http settings-main \
+					settings-programs settings-subscriptions \
+					settingscheckbox settingsdialog settingsentry \
+					settingslist subscriptions
 ifdef REQUIRE_UNITSDIR
 override UNITSDIR+=$(REQUIRE_UNITSDIR)
 endif

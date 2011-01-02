@@ -23,9 +23,9 @@ void InitGettext()
   localeDir = prefix + path;
 
   wxLocale * locale = new wxLocale();
-  locale->Init();
   locale->AddCatalogLookupPathPrefix(localeDir);
   locale->AddCatalog(wxT("r3r_wx"));
+  locale->Init();
 
   if (!i18n_inited && !locale->IsOk())
   {
