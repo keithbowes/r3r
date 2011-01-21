@@ -2,6 +2,9 @@ unit Info;
 
 interface
 
+const
+  AppName = 'R3R';
+
 function UserAgent: String;
 
 implementation
@@ -77,7 +80,7 @@ end;
 
 function UserAgent: String;
 begin
-  UserAgent := 'R3R/@VERSION@ (' + OS + '; @COMPILER@)'
+  UserAgent := AppName + '/@VERSION@ (' + OS + '; @COMPILER@)'
 {$IFDEF SOCKETS_SYNAPSE}
     + ' Synapse/' + SynapseRelease
 {$ENDIF};

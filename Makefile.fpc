@@ -28,6 +28,9 @@ install:
 	cd icons && $(MAKE) install
 	cd src && $(MAKE) install
 	$(INSTALLEXE) r3r$(EXEEXT) $(bindir)
+ifdef inUnix
+	$(INSTALLEXE) r3r-settitle $(bindir)
+endif
 
 docs:
 	cd doc/api && $(MAKE)
@@ -42,12 +45,14 @@ uninstall:
 	cd icons && $(MAKE) uninstall
 	cd src && $(MAKE) uninstall
 	$(DEL) $(bindir)/r3r$(EXEEXT)
+	$(DEL) $(bindir)/r3r-settitle
 
 # Distribution rules
 dist:
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(COPY) r3r$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
+	$(COPY) r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(COPY) src/utils/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
 	$(COPY) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib

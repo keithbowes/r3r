@@ -27,6 +27,7 @@ type
 
   THttpCache = class
   private
+    FCurrentDir: String;
     FIdsList: PRStringList;
     FRootCacheDir: String;
     procedure InvalidateFile(CFile: String);
@@ -67,6 +68,7 @@ begin
   New(FIdsList, Init);
   New(Info);
 
+  FCurrentDir := GetCurrentDir;
   FRootCacheDir := SettingsDir + PathDelim + 'cache';
   CheckDir(FRootCacheDir);
 
@@ -88,6 +90,7 @@ begin
   end;
 
   CurrentCache := Self;
+  ChDir(FCurrentDir);
 end;
 
 destructor THttpCache.Destroy;
@@ -165,6 +168,8 @@ begin
   InvalidateFile(CacheIdsFile);
   InvalidateFile(CacheInfoFile);
   InvalidateFile(CacheResponseFile);
+
+  ChDir(FCurrentDir);
 end;
 
 procedure THttpCache.WriteData(const Data: String; DataType: TCacheDataType);
@@ -257,6 +262,8 @@ begin
 
   WriteLn(RawFile, Data);
   Close(RawFile);
+  
+  ChDir(FCurrentDir);
 end;
 
 procedure THttpCache.Clean;
@@ -312,6 +319,8 @@ begin
     end;
   until FindNext(Rec) <> 0;
   FindClose(Rec);
+
+  ChDir(FCurrentDir);
 end;
 
 end.

@@ -39,6 +39,9 @@ R3R ist ein Reader für RSS, ESF und Atom Feeds.
 [Description:eo]
 R3R estas legilo por fluoj RSS-aj, ESF-aj kaj Atom-aj.
 
+[Description:es]
+R3R estas legador para fuentes de RSS, ESF y Atom.
+
 [BuildPrepare]
 #prepareBuild
 
@@ -73,6 +76,7 @@ testForLib -i libintl.so
 [Install]
 # Put your installation script here
 installExe r3r
+installExe r3r-settitle
 installExe src/utils/opml/r3r_opml
 installIcon r3r.png
 installLib src/libr3r/liblibr3r_shared.so

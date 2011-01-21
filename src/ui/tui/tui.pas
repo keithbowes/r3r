@@ -15,6 +15,7 @@ type
   private
     FCurrentItem: cardinal;
     FItems: PRList;
+    FTitleOriginal: String;
     FViewPort: TViewport;
     procedure DrawFeedInfo;
     procedure DrawFeedList;
@@ -22,6 +23,8 @@ type
     procedure DrawSeparator;
     procedure DrawStatus;
     procedure DrawUIString;
+    function GetOriginalTitle: String;
+    procedure SetNewTitle(const NewTitle: String);
   protected
     procedure NotifyUpdate; override;
     procedure ShowHelp;
@@ -45,7 +48,10 @@ type
 implementation
 
 uses
-  Crt, Dos, Info, SysUtils, TuiStrings;
+  Crt, Dos, Info, SysUtils, TuiStrings
+{$IFDEF MSWINDOWS}
+  , Windows
+{$ENDIF};
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
 var
@@ -81,6 +87,7 @@ begin
   inherited Create;
   New(FItems, Init);
   FCurrentItem := 1;
+  FTitleOriginal := GetOriginalTitle;
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
 {$IFDEF __GPC__}
@@ -96,6 +103,7 @@ begin
   FViewPort.FirstItem := FCurrentItem;
   FViewPort.LastItem := ScreenHeight - 5;
   FViewPort.PortHeight := FViewPort.LastItem;
+  SetNewTitle(AppName);
 
   ClrScr;
 
@@ -240,6 +248,7 @@ begin
     Dispose(FItems, Done);
   end;
 
+  SetNewTitle(FTitleOriginal);
   Window(1, 1, ScreenWidth, ScreenHeight);
   NormVideo;
   ClrScr;
@@ -712,6 +721,42 @@ begin
   TextColor(Yellow);
   ClrScr;
   Write(UserAgent:75);
+end;
+
+function TTui.GetOriginalTitle: String;
+var
+  Data: Pointer;
+begin
+{$IFDEF MSWINDOWS}
+  GetMem(Data, ScreenWidth);
+  GetConsoleTitle(Data, ScreenWidth);
+  GetOriginalTitle := String(Data);
+  FreeMem(Data);
+{$ELSE}
+  Data := nil;
+
+{$IFDEF UNIX}
+  GetOriginalTitle := GetEnv('USER') + '@' + GetEnv('HOSTNAME') + ': ' + GetCurrentDir;
+{$ELSE}
+  GetOriginalTitle := String(Data);
+{$ENDIF UNIX}
+{$ENDIF MSWINDOWS}
+end;
+
+procedure TTui.SetNewTitle(const NewTitle: String);
+var
+  Data: Pointer;
+begin
+{$IFDEF MSWINDOWS}
+  Data := PChar(NewTitle);
+  SetConsoleTitle(Data);
+{$ELSE}
+{$IFDEF UNIX}
+  SwapVectors;
+  Exec(Settings.GetString(Settings.IndexOf('installed-prefix')) + '/bin/r3r-settitle', '"' + NewTitle + '"');
+  SwapVectors;
+{$ENDIF UNIX}
+{$ENDIF MSWINDOWS}
 end;
 
 end.

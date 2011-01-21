@@ -1,0 +1,6 @@
+#! /bin/sh
+
+if test "x$DISPLAY" != "x";
+then
+  printf \\033]0\;\%s\\007 "$1"
+fi
