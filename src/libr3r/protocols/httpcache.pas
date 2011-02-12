@@ -69,7 +69,7 @@ begin
   New(Info);
 
   FCurrentDir := GetCurrentDir;
-  FRootCacheDir := SettingsDir + PathDelim + 'cache';
+  FRootCacheDir := CacheDir;
   CheckDir(FRootCacheDir);
 
   FCacheDir := FRootCacheDir + PathDelim  + Url;

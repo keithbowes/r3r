@@ -1,6 +1,6 @@
 program R3R;
 
-{$ifdef win32}
+{$ifdef MSWINDOWS}
   {$r ../../../icons/r3r.res}
 {$endif}
 

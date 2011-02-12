@@ -20,8 +20,7 @@ installer: setup.exe
 
 setup.exe: r3r.iss
 	$(ISCC) $<
-	$(MOVE) $@  ../../../../r3r-$(VERSION)_$(R3R_UI)-$@
+	$(MOVE) $@  ../../../../r3r-$(VERSION)-$@
 
 r3r.iss: _r3r.iss
-	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
-	 -e	's/@UI@/$(R3R_UI)/g' $< > $@
+	$(SED) -e 's/@VERSION@/$(VERSION)/g' $< > $@

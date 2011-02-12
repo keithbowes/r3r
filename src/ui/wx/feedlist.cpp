@@ -18,10 +18,19 @@ void normalize_field_value(char ** field_value)
 
   if (0 == strlen(s))
   {
-    s = (char *) _("[None]").char_str();
-  }
+#if wxCHECK_VERSION(2,9,0)
+		wxString t = _("[None]");
+		s = (char *) malloc(t.Length() * sizeof(wxChar));
+    strcpy(s, (char *) t.char_str());
+#else
+		const wxChar * t = _("[None]");
+		s = (char *) malloc(wxStrlen(t) * sizeof(t));
+		strcpy(s, wxString(t, wxConvUTF8).char_str());
+#endif
 
-  *field_value = s;
+		strcpy(*field_value, s);
+		free(s);
+  }
 }
 
 void item_parsed(void * item)
@@ -29,16 +38,14 @@ void item_parsed(void * item)
   static long itemIndex = 0;
   char * created = (char *) libr3r_get_item_field(item, (char *) "created");
   char * desc = (char *) libr3r_get_item_field(item, (char *) "description");
-	char * desctext = (char *) libr3r_get_item_field(item, (char *) "description-text");
   char * subject = (char *) libr3r_get_item_field(item, (char *) "subject");
-  char * title = (char *) libr3r_get_item_field(item, (char *) "title");
+  char * title = (char *) libr3r_get_item_field(item, (char *) "title-text");
 
   normalize_field_value(&desc);
 
   ItemInfo * info = (ItemInfo *) malloc(sizeof(ItemInfo));
   info->isTopLevel = topItem;
   info->desc = desc;
-	info->desctext = desctext;
   info->link = (char *) libr3r_get_item_field(item, (char *) "main-link");
   info->title = title;
   info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");

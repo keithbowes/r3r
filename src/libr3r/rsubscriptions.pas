@@ -31,7 +31,7 @@ var
   Line: String;
 begin
   inherited Init;
-  FFile := SettingsDir + 'subscriptions.txt';
+  FFile := DataDir + 'subscriptions.txt';
 
   Assign(FText, FFile);
 

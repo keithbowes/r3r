@@ -15,7 +15,7 @@ var
 implementation
 
 uses
-  LibIntl, RSettings, RStrings;
+  LibIntl, RSettings_Routines, RStrings;
 
 procedure InitStrings;
 begin
@@ -41,7 +41,7 @@ initialization
 
 setlocale(LC_ALL, '');
 textdomain('libr3r');
-bindtextdomain('libr3r', StrToPChar(Settings.GetString(Settings.IndexOf('installed-prefix')) + '/share/locale'));
+bindtextdomain('libr3r', StrToPChar(GetInstalledPrefix + '/share/locale'));
 
 InitStrings;
 

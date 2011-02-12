@@ -35,11 +35,11 @@ msgstr "v"
 
 #: tuistrings:optionskey
 msgid "o"
-msgstr ""
+msgstr "o"
 
 #: tuistrings:donatekey
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: tuistrings:quitkey
 msgid "q"
@@ -94,8 +94,8 @@ msgid "Option Value"
 msgstr "Valor de opción "
 
 #: tuistrings:settingtochange
-msgid "Option to change (empty to exit): "
-msgstr "Opción de cambio (vacío para cesar): "
+msgid "Option to change (number or empty to exit): "
+msgstr "Opción de cambio (número o vacío para cesar): "
 
 #: tuistrings:newvalue
 msgid "New Value: "
@@ -120,3 +120,15 @@ msgstr " (Oprima j por la entrada siguiente o k para la entrada anterior)"
 #: tuistrings:itememail
 msgid "Email address: "
 msgstr "La dirección del mensaje electrónico: "
+
+#: tuistrings:numsym
+msgid "#"
+msgstr "N°"
+
+#: tuistrings:falsestring
+msgid "FALSE"
+msgstr "No"
+
+#: tuistrings:truestring
+msgid "TRUE"
+msgstr "Sí"

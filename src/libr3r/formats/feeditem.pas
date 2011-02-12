@@ -48,6 +48,7 @@ type
     function GetMainLink: String;
     function GetPodcast: String;
     function DescriptionText: String;
+    function TitleText: String;
     procedure Clear;
   end;
 
@@ -60,6 +61,88 @@ uses
 
 var
   AlreadyAllocated: Boolean = false;
+
+function StripHtml(const InStr: String): String;
+var
+  EntNum: integer;
+  EntStr: String;
+  ErrPos: byte;
+  i: cardinal;
+  InEnt, InHTML: Boolean;
+  OutStr: String;
+begin
+  EntStr := '';
+  OutStr := '';
+
+  InEnt := false;
+  InHTML := false;
+
+  for i := 1 to Length(InStr) do
+  begin
+    if InStr[i] = '<' then
+    begin
+      InHTML := true;
+    end
+    else if InStr[i] = '&' then
+    begin
+      InEnt := true;
+    end
+    { This has to go here so that > and ; don't get counted
+      as part of the text. }
+    else if (not InEnt) and (not InHTML) then
+    begin
+      OutStr := OutStr + InStr[i];
+    end
+    else if InStr[i] = '>' then
+    begin
+      InHTML := false;
+    end
+    else if InEnt then
+    begin
+      if InStr[i] <> ';' then
+      begin
+        EntStr := EntStr + InStr[i];
+      end
+      else
+      begin
+        if EntStr = 'amp' then
+        begin
+          EntSTr := '&';
+        end
+        else if EntStr = 'gt' then
+        begin
+          EntStr := '>';
+        end
+        else if EntStr = 'lt' then
+        begin
+          EntStr := '<';
+        end
+        else if EntStr = 'quot' then
+        begin
+          EntStr := '"';
+        end
+        else
+        begin
+          Val(EntStr, EntNum, ErrPos);
+          if ErrPos = 0 then
+          begin
+            EntStr := Chr(EntNum) { numerical entity }
+          end
+          else { undefined entity, per the XML spec }
+          begin
+            EntStr := #164; { random character for unknown named references }
+          end
+        end;
+
+        OutStr :=  OutStr + EntStr; { random character for replacing numerical and named references }
+        EntStr := '';
+        InEnt := false;
+      end;
+    end;
+  end;
+
+  StripHtml := OutStr;
+end;
 
 constructor TFeedItem.Create;
 begin
@@ -171,45 +254,14 @@ end;
 
 { Get the textual representation (without HTML) of the description. }
 function TFeedItem.DescriptionText: String;
-var
-  i: cardinal;
-  InEnt, InHTML: Boolean;
-  InStr, OutStr: String;
 begin
-  InEnt := false;
-  InHTML := false;
+  DescriptionText := StripHtml(Description);
+end;
 
-  InStr := Description;
-  OutStr := '';
-
-  for i := 1 to Length(InStr) do
-  begin
-    if InStr[i] = '<' then
-    begin
-      InHTML := true;
-    end
-    else if InStr[i] = '&' then
-    begin
-      InEnt := true;
-    end
-    { This has to go here so that > and ; don't get counted
-      as part of the text. }
-    else if (not InEnt) and (not InHTML) then
-    begin
-      OutStr := OutStr + InStr[i];
-    end
-    else if InStr[i] = '>' then
-    begin
-      InHTML := false;
-    end
-    else if InEnt and (InStr[i] = ';') then { we don't want to convert all semicolons to random characters }
-    begin
-      InEnt := false;
-      OutStr :=  OutStr + #164; { random character for replacing numerical and named references }
-    end;
-  end;
-
-  DescriptionText := OutStr;
+{ Get the textual representation (without HTML) of the title. }
+function TFeedItem.TitleText: String;
+begin
+  TitleText := StripHtml(Title);
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;

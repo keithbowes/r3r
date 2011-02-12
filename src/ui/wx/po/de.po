@@ -110,7 +110,7 @@ msgstr "&Hilfe"
 
 #: ../settings-display.cpp:16
 msgid "Show &messages from the back-end"
-msgstr "Show &Nachrichten aus dem Back-End"
+msgstr "Anzeigen &Nachrichten aus dem Back-End"
 
 #: ../settings-display.cpp:19
 msgid "Show &feed titles only"

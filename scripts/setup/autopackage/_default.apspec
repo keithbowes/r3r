@@ -17,13 +17,15 @@ SoftwareVersion: @VERSION@
 
 PackageVersion: 1
 
-Language: de eo
+Language: de eo es
 
 DisplayName[de]: R3R Feedreader
-DisplayName[eo]: R3R Flua legilo
+DisplayName[eo]: La flua legilo R3R
+DisplayName[es]: R3R
 
 Summary[de]: R3R ist ein Feedreader
 Summary[eo]: R3R estas kanala legilo
+Summary[es]: R3R es un legador de fuentes
 
 AutopackageTarget: 1.0
 CPUArchitectures: x86
@@ -76,6 +78,8 @@ testForLib -i libintl.so
 [Install]
 # Put your installation script here
 installExe r3r
+installExe r3r-tui
+installExe r3r-wx
 installExe r3r-settitle
 installExe src/utils/opml/r3r_opml
 installIcon r3r.png

@@ -14,112 +14,124 @@ msgstr ""
 
 #: tuistrings:feed
 msgid "Feed Address: "
-msgstr ""
+msgstr "Feed Address: "
 
 #: tuistrings:gourl
 msgid "g)o to a URL"
-msgstr ""
+msgstr "g)o to a URL"
 
 #: tuistrings:options
 msgid "o)ptions"
-msgstr ""
+msgstr "o)ptions"
 
 #: tuistrings:donate
 msgid "d)onate"
-msgstr ""
+msgstr "d)onate"
 
 #: tuistrings:quit
 msgid "q)uit the program"
-msgstr ""
+msgstr "q)uit the program"
 
 #: tuistrings:gokey
 msgid "g"
-msgstr ""
+msgstr "g"
 
 #: tuistrings:optionskey
 msgid "o"
-msgstr ""
+msgstr "o"
 
 #: tuistrings:donatekey
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: tuistrings:quitkey
 msgid "q"
-msgstr ""
+msgstr "q"
 
 #: tuistrings:itemno
 msgid "Item number: "
-msgstr ""
+msgstr "Item number: "
 
 #: tuistrings:itemtitle
 msgid "Title: "
-msgstr ""
+msgstr "Title: "
 
 #: tuistrings:itemsubject
 msgid "Subject: "
-msgstr ""
+msgstr "Subject: "
 
 #: tuistrings:itemcreated
 msgid "Created: "
-msgstr ""
+msgstr "Created: "
 
 #: tuistrings:itemdesc
 msgid "Description: "
-msgstr ""
+msgstr "Description: "
 
 #: tuistrings:itemlink
 msgid "Link %i: "
-msgstr ""
+msgstr "Link %i: "
 
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
-msgstr ""
+msgstr "Invalid Number!"
 
 #: tuistrings:linkno
 msgid "Link number: "
-msgstr ""
+msgstr "Link number: "
 
 #: tuistrings:errorerror
 msgid "Error"
-msgstr ""
+msgstr "Error"
 
 #: tuistrings:errorwarning
 msgid "Warning"
-msgstr ""
+msgstr "Warning"
 
 #: tuistrings:optionname
 msgid "Option Name"
-msgstr ""
+msgstr "Option Name"
 
 #: tuistrings:optionval
 msgid "Option Value"
-msgstr ""
+msgstr "Option Value"
 
 #: tuistrings:settingtochange
-msgid "Option to change (empty to exit): "
-msgstr ""
+msgid "Option to change (number or empty to exit): "
+msgstr "Option to change (number or empty to exit): "
 
 #: tuistrings:newvalue
 msgid "New Value: "
-msgstr ""
+msgstr "New Value: "
 
 #: tuistrings:updateavailable
 msgid "A new version is available from http://sourceforge.net/projects/r3r"
-msgstr ""
+msgstr "A new version is available from http://sourceforge.net/projects/r3r"
 
 #: tuistrings:itemencl
 msgid "Enclosure: "
-msgstr ""
+msgstr "Enclosure: "
 
 #: tuistrings:activatelink
 msgid " (Press enter to open in your web browser)"
-msgstr ""
+msgstr " (Press enter to open in your web browser)"
 
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
-msgstr ""
+msgstr " (Press j for the next item or k for the previous item)"
 
 #: tuistrings:itememail
 msgid "Email address: "
-msgstr ""
+msgstr "Email address: "
+
+#: tuistrings:numsym
+msgid "#"
+msgstr "#"
+
+#: tuistrings:falsestring
+msgid "FALSE"
+msgstr "FALSE"
+
+#: tuistrings:truestring
+msgid "TRUE"
+msgstr "TRUE"

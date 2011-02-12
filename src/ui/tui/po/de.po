@@ -31,7 +31,7 @@ msgstr "b)eenden dem Programm"
 
 #: tuistrings:gokey
 msgid "g"
-msgstr ""
+msgstr "g"
 
 #: tuistrings:optionskey
 msgid "o"
@@ -67,7 +67,7 @@ msgstr "Beschreibung: "
 
 #: tuistrings:itemlink
 msgid "Link %i: "
-msgstr ""
+msgstr "Link %i: "
 
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
@@ -94,8 +94,8 @@ msgid "Option Value"
 msgstr "Optionwert"
 
 #: tuistrings:settingtochange
-msgid "Option to change (empty to exit): "
-msgstr "Option zu ändern (leer um zu beenden): "
+msgid "Option to change (number or empty to exit): "
+msgstr "Option zu ändern (numerisch oder leer um zu beenden): "
 
 #: tuistrings:newvalue
 msgid "New Value: "
@@ -120,3 +120,15 @@ msgstr " (Drücken Sie j für dem nächste Teil oder k für dem vorige)"
 #: tuistrings:itememail
 msgid "Email address: "
 msgstr "Email: "
+
+#: tuistrings:numsym
+msgid "#"
+msgstr "#"
+
+#: tuistrings:falsestring
+msgid "FALSE"
+msgstr "Falsch"
+
+#: tuistrings:truestring
+msgid "TRUE"
+msgstr "Wahr"

@@ -18,14 +18,20 @@ void InitGettext()
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   wxString localeDir, path, prefix;
+
+#if wxCHECK_VERSION(2,9,0)
   path = wxString(wxT("/share/locale"));
   prefix = wxString((const char *) value);
+#else
+	path = wxT("/share/locale");
+	prefix = wxString((const char *) value, wxConvUTF8);
+#endif
   localeDir = prefix + path;
 
   wxLocale * locale = new wxLocale();
+  locale->Init();
   locale->AddCatalogLookupPathPrefix(localeDir);
   locale->AddCatalog(wxT("r3r_wx"));
-  locale->Init();
 
   if (!i18n_inited && !locale->IsOk())
   {

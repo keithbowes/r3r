@@ -108,7 +108,12 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   box->SetLabel(wxString(info->title, wxConvUTF8));
 
   wxHtmlWindow * html = (wxHtmlWindow *) box->GetClientData();
+
+#if wxCHECK_VERSION(2,9,0)
   html->SetPage(wxString(info->desc));
+#else
+	html->SetPage(wxString(info->desc, wxConvUTF8));
+#endif
 
   wxFrame * win = (wxFrame *) GetFeedList()->GetParent()->GetParent();
   win->SetStatusText(wxString(info->link, wxConvUTF8), 0);

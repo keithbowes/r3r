@@ -4,6 +4,7 @@ interface
 
 const
   AppName = 'R3R';
+  InstalledPrefix = '@PREFIX@';
 
 function UserAgent: String;
 

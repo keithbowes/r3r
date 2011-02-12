@@ -44,3 +44,57 @@ msgstr ""
 
 msgid "Dec"
 msgstr ""
+
+msgid "Show messages"
+msgstr ""
+
+msgid "Show feed titles only"
+msgstr ""
+
+msgid "Hide cached feeds"
+msgstr ""
+
+msgid "Hide cached feed items"
+msgstr ""
+
+msgid "Guess the type of feed"
+msgstr ""
+
+msgid "Check for updates"
+msgstr ""
+
+msgid "Warn about missing data"
+msgstr ""
+
+msgid "Use a proxy?"
+msgstr ""
+
+msgid "Proxy address"
+msgstr ""
+
+msgid "Proxy port"
+msgstr ""
+
+msgid "Use custom accept types?"
+msgstr ""
+
+msgid "Custom accept types"
+msgstr ""
+
+msgid "Use custom accept languages?"
+msgstr ""
+
+msgid "Custom accept languages"
+msgstr ""
+
+msgid "Browser"
+msgstr ""
+
+msgid "Email client"
+msgstr ""
+
+msgid "Media player"
+msgstr ""
+
+msgid "Where the program is installed"
+msgstr ""

@@ -32,8 +32,10 @@ localedir = $(datadir)/locale
 
 rootdir ?= $(BASEDIR)
 
-SED ?= sed
-TOUCH ?= touch
+uis = classic html tui tv wx
+
+SED ?= $(call programpath,sed)
+TOUCH ?= $(call programpath,touch)
 
 PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 	$(UNITDIRS)
@@ -136,7 +138,8 @@ PLATFORM=$(shell $(GPC) -dumpmachine)
 DELP=$(DEL) $(wildcard *.gpd)
 
 PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
-						 -DFree=Destroy -DPtrUInt=PtrWord $(LDFLAGS)
+						 -DFree=Destroy -DPtrUInt=PtrWord \
+						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_TAB
 DEFS_SOCKETS ?= SOCKETS_BSD

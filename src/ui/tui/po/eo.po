@@ -39,7 +39,7 @@ msgstr "a"
 
 #: tuistrings:donatekey
 msgid "d"
-msgstr ""
+msgstr "d"
 
 #: tuistrings:quitkey
 msgid "q"
@@ -94,8 +94,8 @@ msgid "Option Value"
 msgstr "Parametra valoro"
 
 #: tuistrings:settingtochange
-msgid "Option to change (empty to exit): "
-msgstr "Ŝanĝota parametro (vaka por nuligado): "
+msgid "Option to change (number or empty to exit): "
+msgstr "Ŝanĝota parametro (numero aŭ vaka por nuligi): "
 
 #: tuistrings:newvalue
 msgid "New Value: "
@@ -120,3 +120,15 @@ msgstr " (Premu: j por la sekva aŭ k por la antaŭa)"
 #: tuistrings:itememail
 msgid "Email address: "
 msgstr "Retpoŝtadreso: "
+
+#: tuistrings:numsym
+msgid "#"
+msgstr "n-ro"
+
+#: tuistrings:falsestring
+msgid "FALSE"
+msgstr "Ne"
+
+#: tuistrings:truestring
+msgid "TRUE"
+msgstr "Jes"

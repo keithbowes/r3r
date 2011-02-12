@@ -43,10 +43,15 @@ var
   ActivateLink: String;
   NextPrevLink: String;
 
+  NumSym: String;
+
+  FalseString: String;
+  TrueString: String;
+
 implementation
 
 uses
-  LibIntl, LibR3R, RStrings;
+  LibIntl, LibR3R, RSettings_Routines, RStrings;
 
 procedure InitStrings;
 begin
@@ -79,20 +84,25 @@ begin
   OptionName := _('Option Name');
   OptionVal := _('Option Value');
 
-  SettingToChange := _('Option to change (empty to exit): ');
+  SettingToChange := _('Option to change (number or empty to exit): ');
   NewValue := _('New Value: ');
 
   UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
 
   ActivateLink := _(' (Press enter to open in your web browser)');
   NextPrevLink := _(' (Press j for the next item or k for the previous item)');
+
+  NumSym := _('#');
+
+  FalseString := _('FALSE');
+  TrueString := _('TRUE');
 end;
 
 initialization
 
 setlocale(LC_ALL, '');
 textdomain('r3r_tui');
-bindtextdomain('r3r_tui', StrToPChar(Settings.GetString(Settings.IndexOf('installed-prefix')) + '/share/locale'));
+bindtextdomain('r3r_tui', StrToPChar(GetInstalledPrefix + '/share/locale'));
 
 InitStrings;
 

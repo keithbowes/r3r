@@ -15,9 +15,9 @@ uses
 type
   TRSock = class
   private
-    FError: Boolean;
   protected
     FChunkedLength: integer;
+    FError: Boolean;
     FFeedType: TFeedType;
     FHost: String;
     FPort: String;

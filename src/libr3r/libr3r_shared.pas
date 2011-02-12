@@ -94,6 +94,10 @@ begin
     begin
       libr3r_get_item_field := StrToPChar(Title);
     end
+    else if FieldName = 'title-text' then
+    begin
+      libr3r_get_item_field := StrToPChar(TitleText);
+    end
     else if FieldName = 'links' then
     begin
       for i := 0 to LinksCount do
@@ -181,20 +185,20 @@ begin
   libr3r_get_user_agent := StrToPChar(UserAgent);
 end;
 
-procedure libr3r_register_setting(setting_name, setting_section: PChar; setting_value: Pointer; setting_type: word); cdecl;
+procedure libr3r_register_setting(setting_name, setting_section: PChar; setting_value: Pointer; setting_type: word; descr: PChar); cdecl;
 begin
   case setting_type of
     TypeBoolean:
     begin
-      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_section), PtrUInt(setting_value) <> 0);
+      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_section), PtrUInt(setting_value) <> 0, StrPas(descr));
     end;
     TypeInteger:
     begin
-      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_section), integer(setting_value));
+      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_section), integer(setting_value), StrPas(descr));
     end;
     TypeString:
     begin
-      Settings.RegisterString(StrPas(setting_name), StrPas(setting_section), StrPas(setting_value));
+      Settings.RegisterString(StrPas(setting_name), StrPas(setting_section), StrPas(setting_value), StrPas(descr));
     end;
   end;
 end;

@@ -22,13 +22,13 @@ all:
 	cd icons && $(MAKE)
 	cd src && $(MAKE)
 	$(MOVE) src/ui/$(R3R_UI)/r3r$(EXEEXT) r3r-$(R3R_UI)$(EXEEXT)
-	$(COPY) r3r-$(R3R_UI)$(EXEEXT) r3r$(EXEEXT)
 
 install:
 	cd icons && $(MAKE) install
 	cd src && $(MAKE) install
-	$(INSTALLEXE) r3r$(EXEEXT) $(bindir)
+	$(INSTALLEXE) r3r-$(R3R_UI)$(EXEEXT) $(bindir)
 ifdef inUnix
+	$(INSTALLEXE) r3r $(bindir)
 	$(INSTALLEXE) r3r-settitle $(bindir)
 endif
 
@@ -44,23 +44,32 @@ uninstall:
 	cd doc && $(MAKE) uninstall
 	cd icons && $(MAKE) uninstall
 	cd src && $(MAKE) uninstall
-	$(DEL) $(bindir)/r3r$(EXEEXT)
+	$(DEL) $(bindir)/r3r
+	$(foreach ui,$(uis),$(DEL) $(bindir)/r3r-$(ui)$(EXEEXT); )
 	$(DEL) $(bindir)/r3r-settitle
 
 # Distribution rules
-dist:
+dist-build:
+	$(MAKE) R3R_UI=tui
+	$(MAKE) R3R_UI=wx
+
+dist: dist-build
 	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
-	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
-	$(COPY) r3r$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
-	$(COPY) r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
-	$(COPY) src/utils/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/bin
-	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
-	$(COPY) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/lib
-	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
-	$(COPY) icons/r3r.png  ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/icons
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/libr3r/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/libr3r/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$(l)/libr3r.mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/ui/$(R3R_UI)/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/ui/$(R3R_UI)/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l/r3r_$(R3R_UI).mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/utils/opml/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l; $(COPY) src/utils/opml/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/$(prefix)/share/locale/LC_MESSAGES/$l/r3r_opml.mo;)
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/bin
+ifdef inUnix
+	$(INSTALLEXE) r3r ../r3r-$(VERSION)-$(PLATFORM)/bin
+endif
+	$(INSTALLEXE) r3r-tui$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) r3r-wx$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) src/utils/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/lib
+	$(INSTALLEXE) src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/lib
+	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/icons
+	$(COPY) icons/r3r.png  ../r3r-$(VERSION)-$(PLATFORM)/share/icons
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/libr3r/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/libr3r/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$(l)/libr3r.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/ui/$(R3R_UI)/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/ui/$(R3R_UI)/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l/r3r_$(R3R_UI).mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/utils/opml/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/utils/opml/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
 		gzip -f > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
 	$(DELTREE) ../r3r-$(VERSION)-$(PLATFORM)
@@ -72,19 +81,19 @@ dist-src: clean
 	$(DELTREE) ../r3r-$(VERSION)
 	$(MOVE) r3r-$(VERSION)-src.tar.gz ..
 
-dist-autopackage:
+dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage
 
-dist-deb:
+dist-deb: dist-build
 	cd scripts/setup && $(MAKE) dist-deb
 
-dist-rpm:
+dist-rpm: dist-build
 	cd scripts/setup && $(MAKE) dist-rpm
 
-dist-slackware:
+dist-slackware: dist-build
 	cd scripts/setup && $(MAKE) dist-slackware
 
-dist-inno_setup:
+dist-inno_setup: dist-build
 	cd scripts/setup && $(MAKE) dist-inno_setup
 
 # Compilation rules
@@ -125,4 +134,4 @@ clean:
 	cd scripts/setup && $(MAKE) clean
 	cd src && $(MAKE) clean
 	$(DEL) description-pak
-	$(DEL) r3r$(EXEEXT) r3r-$(R3R_UI)$(EXEEXT)
+	$(foreach ui,$(uis),$(DEL) r3r-$(ui)$(EXEEXT); )

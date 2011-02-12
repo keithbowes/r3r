@@ -14,47 +14,101 @@ msgstr ""
 
 #: libr3rstrings:errorgetting
 msgid "Couldn't retrieve the feed."
-msgstr ""
+msgstr "Couldn't retrieve the feed."
 
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."
-msgstr ""
+msgstr "The web server doesn't exist or sent invalid information."
 
 msgid "There is missing data in this feed.  Some of it was recovered."
-msgstr ""
+msgstr "There is missing data in this feed.  Some of it was recovered."
 
 msgid "Jan"
-msgstr ""
+msgstr "Jan"
 
 msgid "Feb"
-msgstr ""
+msgstr "Feb"
 
 msgid "Mar"
-msgstr ""
+msgstr "Mar"
 
 msgid "Apr"
-msgstr ""
+msgstr "Apr"
 
 msgid "May"
-msgstr ""
+msgstr "May"
 
 msgid "Jun"
-msgstr ""
+msgstr "Jun"
 
 msgid "Jul"
-msgstr ""
+msgstr "Jul"
 
 msgid "Aug"
-msgstr ""
+msgstr "Aug"
 
 msgid "Sep"
-msgstr ""
+msgstr "Sep"
 
 msgid "Oct"
-msgstr ""
+msgstr "Oct"
 
 msgid "Nov"
-msgstr ""
+msgstr "Nov"
 
 msgid "Dec"
-msgstr ""
+msgstr "Dec"
+
+msgid "Show messages"
+msgstr "Show messages"
+
+msgid "Show feed titles only"
+msgstr "Show feed titles only"
+
+msgid "Hide cached feeds"
+msgstr "Hide cached feeds"
+
+msgid "Hide cached feed items"
+msgstr "Hide cached feed items"
+
+msgid "Guess the type of feed"
+msgstr "Guess the type of feed"
+
+msgid "Check for updates"
+msgstr "Check for updates"
+
+msgid "Warn about missing data"
+msgstr "Warn about missing data"
+
+msgid "Use a proxy?"
+msgstr "Use a proxy?"
+
+msgid "Proxy address"
+msgstr "Proxy address"
+
+msgid "Proxy port"
+msgstr "Proxy port"
+
+msgid "Use custom accept types?"
+msgstr "Use custom accept types?"
+
+msgid "Custom accept types"
+msgstr "Custom accept types"
+
+msgid "Use custom accept languages?"
+msgstr "Use custom accept languages?"
+
+msgid "Custom accept languages"
+msgstr "Custom accept languages"
+
+msgid "Browser"
+msgstr "Browser"
+
+msgid "Email client"
+msgstr "Email client"
+
+msgid "Media player"
+msgstr "Media player"
+
+msgid "Where the program is installed"
+msgstr "Where the program is installed"

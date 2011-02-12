@@ -9,13 +9,14 @@ begin
     (Setting = 'for:mailto') or
     (Setting = 'hide-cached-feed-items') or
     (Setting = 'hide-cached-feeds') or
-    (Setting = 'installed-prefix') or
+		(Setting = 'installed-prefix') or
     (Setting = 'load-subscriptions-on-startup') or
     (Setting = 'proxy-address') or (Setting = 'proxy-port') or
     (Setting = 'show-messages') or 
     (Setting = 'use-custom-accept-langs') or
     (Setting = 'use-custom-accept-types') or
-    (Setting = 'use-proxy');
+    (Setting = 'use-proxy') or
+		(Setting = 'warn-missing-data');
 end;
 
 var
@@ -99,67 +100,79 @@ begin
   end;
 end;
 
-procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
 begin
   Exists := IndexOf(Setting) <> -1;
+  New(ASetting);
 
-  if not Exists then
+  with ASetting^ do
   begin
-    New(ASetting);
-    with ASetting^ do
-    begin
+		if not Exists then
+		begin
       Name := Setting;
       Section := ASection;
       ValueBoolean := Value;
-      ValueType := TypeBoolean;
-      FSettings^.Add(ASetting);
-    end;
+			ValueType := TypeBoolean;
+			FSettings^.Add(ASetting);
+		end;
+
+		ASetting^.Description := ADescription;
   end;
+
+	Dispose(ASetting);
 end;
 
-procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer);
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer; const ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
 begin
   Exists := IndexOf(Setting) <> -1;
+  New(ASetting);
 
-  if not Exists then
+  with ASetting^ do
   begin
-    New(ASetting);
-    with ASetting^ do
-    begin
+		if not Exists then
+		begin
       Name := Setting;
       Section := ASection;
       ValueInteger := Value;
-      ValueType := TypeInteger;
-      FSettings^.Add(ASetting);
-    end;
+			ValueType := TypeInteger;
+			FSettings^.Add(ASetting);
+		end;
+
+		ASetting^.Description := ADescription;
   end;
+
+	Dispose(ASetting);
 end;
 
-procedure TRSettings.CheckString(const Setting, ASection, Value: String);
+procedure TRSettings.CheckString(const Setting, ASection, Value: String; const ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
 begin
   Exists := IndexOf(Setting) <> -1;
+  New(ASetting);
 
-  if not Exists then
+  with ASetting^ do
   begin
-    New(ASetting);
-    with ASetting^ do
-    begin
+		if not Exists then
+		begin
       Name := Setting;
       Section := ASection;
       ValueString := Value;
-      ValueType := TypeString;
-      FSettings^.Add(ASetting);
-    end;
+			ValueType := TypeString;
+			FSettings^.Add(ASetting);
+		end;
+
+		ASetting^.Description := ADescription;
   end;
+
+	Dispose(ASetting);
 end;
 
 procedure TRSettings.ReadRec;
@@ -178,13 +191,14 @@ begin
 
     if (ASetting^.Name <> Last) and IsValidSetting(ASetting^.Name) then
     begin
-      Last := ASetting^.Name;
       FSettings^.Add(ASetting);
     end
     else
     begin
       Dispose(ASetting);
     end;
+
+		Last := ASetting^.Name;
   until NumRead = 0;
 
   Close(f);
@@ -218,3 +232,7 @@ begin
 
   Close(f);
 end;
+
+{
+  vim:filetype=pascal
+}

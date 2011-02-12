@@ -23,6 +23,7 @@ type
   TRSetting = packed record
     Name: String;
     Section: String;
+    Description: String;
 
     case ValueType: byte of
       TypeString: (ValueString: String);
@@ -34,9 +35,9 @@ type
   private
     FSettings: PRList;
     procedure InitRec;
-    procedure CheckBoolean(const Setting, ASection: String; const Value: Boolean);
-    procedure CheckInteger(const Setting, ASection: String; const Value: integer);
-    procedure CheckString(const Setting, ASection, Value: String);
+    procedure CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
+    procedure CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
+    procedure CheckString(const Setting, ASection, Value, ADescription: String);
     procedure ReadRec;
     procedure WriteRec;
   public
@@ -50,9 +51,9 @@ type
     procedure SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
     procedure SetInteger(const Index: TRSetIndex; const Setting: integer);
     procedure SetString(const Index: TRSetIndex; const Setting: String);
-    procedure RegisterBoolean(const Setting, ASection: String; const Value: Boolean);
-    procedure RegisterInteger(const Setting, ASection: String; const Value: integer);
-    procedure RegisterString(const Setting, ASection, Value: String);
+    procedure RegisterBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
+    procedure RegisterInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
+    procedure RegisterString(const Setting, ASection, Value, ADescription: String);
     procedure Access(var Index: TRSetIndex; var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
   end;
 
@@ -62,7 +63,16 @@ var
 implementation
 
 uses
-  RSettings_Routines, RStrings, SysUtils
+  Info, RSettings_Routines, RSettings_Strings, RStrings
+
+{$IFDEF __GPC__}
+  ,SysUtils
+{$ELSE}
+{$IFDEF SETTINGS_BIN}
+	, SysUtils
+{$ENDIF SETTINGS_BIN}
+{$ENDIF __GPC__}
+
 {$IFDEF SETTINGS_INI}
   , IniFiles
 {$ENDIF}
@@ -123,27 +133,27 @@ begin
   end;
 end;
 
-procedure TRSettings.RegisterBoolean(const Setting, ASection: String; const Value: Boolean);
+procedure TRSettings.RegisterBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 begin
   if IndexOf(Setting) = -1 then
   begin
-    CheckBoolean(Setting, ASection, Value);
+    CheckBoolean(Setting, ASection, Value, ADescription);
   end;
 end;
 
-procedure TRSettings.RegisterInteger(const Setting, ASection: String; const Value: integer);
+procedure TRSettings.RegisterInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 begin
   if IndexOf(Setting) = -1 then
   begin
-    CheckInteger(Setting, ASection, Value);
+    CheckInteger(Setting, ASection, Value, ADescription);
   end;
 end;
 
-procedure TRSettings.RegisterString(const Setting, ASection, Value: String);
+procedure TRSettings.RegisterString(const Setting, ASection, Value, ADescription: String);
 begin
   if IndexOf(Setting) = -1 then
   begin
-    CheckString(Setting, ASection, Value);
+    CheckString(Setting, ASection, Value, ADescription);
   end;
 end;
 
@@ -212,29 +222,30 @@ end;
 
 procedure TRSettings.InitRec;
 begin
-  CheckBoolean('show-messages', 'Display', true);
-  CheckBoolean('display-feed-title-only', 'Display', false);
-  CheckBoolean('hide-cached-feeds', 'Display', true);
-  CheckBoolean('hide-cached-feed-items', 'Display', true);
-  CheckBoolean('enable-mime-guess', 'Display', false);
-  CheckBoolean('check-for-updates', 'Display', false);
-  CheckBoolean('load-subscriptions-on-startup', 'Display', false);
-  CheckBoolean('warn-missing-data', 'Display', false);
+  CheckBoolean('show-messages', 'Display', true, DescMsg);
+  CheckBoolean('display-feed-title-only', 'Display', false, DescDisplay);
+  CheckBoolean('hide-cached-feeds', 'Display', true, DescHide);
+  CheckBoolean('hide-cached-feed-items', 'Display', true, DescHideItems);
+  CheckBoolean('enable-mime-guess', 'Display', false, DescGuess);
+  CheckBoolean('check-for-updates', 'Display', false, DescCheck);
+  CheckBoolean('load-subscriptions-on-startup', 'Display', false, DescCheck);
+  CheckBoolean('warn-missing-data', 'Display', false, DescWarn);
 
-  CheckBoolean('use-proxy', 'HTTP', false);
-  CheckString('proxy-address', 'HTTP', '127.0.0.1');
-  CheckInteger('proxy-port', 'HTTP', 8118);
+  CheckBoolean('use-proxy', 'HTTP', false, DescProxy);
+  CheckString('proxy-address', 'HTTP', '127.0.0.1', DescProxyAddress);
+  CheckInteger('proxy-port', 'HTTP', 8118, DescProxyPort);
 
-  CheckBoolean('use-custom-accept-types', 'HTTP Headers', false);
-  CheckString('accept-types', 'HTTP Headers', '');
-  CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false);
-  CheckString('accept-langs', 'HTTP Headers', '');
+  CheckBoolean('use-custom-accept-types', 'HTTP Headers', false, DescUseTypes);
+  CheckString('accept-types', 'HTTP Headers', '', DescTypes);
+  CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false, DescUseLang);
+  CheckString('accept-langs', 'HTTP Headers', '', DescLang);
 
-  CheckString('for:http', 'Programs', '');
-  CheckString('for:mailto', 'Programs', '');
-  CheckString('for:.ogg', 'Programs', '');
+  CheckString('for:http', 'Programs', '', DescBrowser);
+  CheckString('for:mailto', 'Programs', '', DescMail);
+  CheckString('for:.ogg', 'Programs', '', DescMedia);
 
-  CheckString('installed-prefix', 'System', ExpandFileName('..'));
+  CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
+  SetInstalledPrefix(GetString(IndexOf('installed-prefix')));
 end;
 
 initialization

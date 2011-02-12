@@ -1,0 +1,29 @@
+#! /bin/sh
+
+# If there's an error
+err()
+{
+  if test -z "$DISPLAY";
+  then
+    # If there's no X display, just write the error to the screen
+    echo "$1"
+  else
+    # Under X, try the faster and more featured Zenity.
+    # If it fails, fall back on xmessage.
+    zenity --error --text="$1" || xmessage "$1"
+  fi
+}
+
+# Start up the preferred UI if defined
+if test -n "$R3R_UI";
+then
+  r3r-$R3R_UI "$@"
+else
+  false
+fi
+
+# There was an error or no preferred UI is defined
+if test $? -ne 0;
+then
+  r3r-wx "$@" || r3r-tui "$@" || r3r-html "$@" || err "Cannot start any UI"
+fi

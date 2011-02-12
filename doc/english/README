@@ -1,7 +1,8 @@
 README for R3R
 
 This document provides a quick overview.  See
-http://sourceforge.net/projects/r3r and sites linked therein for full details.
+http://sourceforge.net/projects/r3r and sites linked therein for
+full details.
 
 1. LICENSE
 
@@ -17,6 +18,5 @@ See the file INSTALLING.
 
 4. REPORTING BUGS, SUBMITTING PATCHES, etc.
 
-SourceForge provides excellent facilities for this.
-Read Site Docs for info.
-The specifics can be found on the project home page.
+To report bugs, submit patches, etc., use the Tracker:
+http://sourceforge.net/tracker/?group_id=90897

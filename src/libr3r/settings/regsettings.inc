@@ -163,7 +163,7 @@ begin
   end;
 end;
 
-procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
@@ -177,6 +177,7 @@ begin
     Name := Setting;
     Section := ASection;
     ValueType := TypeBoolean;
+    Description := ADescription;
 
     if Exists then
     begin
@@ -193,7 +194,7 @@ begin
   Reg.CloseKey;
 end;
 
-procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer);
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
@@ -207,6 +208,7 @@ begin
     Name := Setting;
     Section := ASection;
     ValueType := TypeInteger;
+    Description := ADescription;
 
     if Exists then
     begin
@@ -223,7 +225,7 @@ begin
   Reg.CloseKey;
 end;
 
-procedure TRSettings.CheckString(const Setting, ASection, Value: String);
+procedure TRSettings.CheckString(const Setting, ASection, Value, ADescription: String);
 var
   AName: String;
   ASetting: PRSetting;
@@ -239,6 +241,7 @@ begin
 
     Name := Setting;
     Section := ASection;
+    Description := ADescription;
     ValueType := TypeString;
 
     if Exists then
@@ -280,3 +283,7 @@ begin
     Dispose(ASetting);
   end;
 end;
+
+{
+  vim:filetype=pascal
+}

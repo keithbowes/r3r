@@ -65,7 +65,7 @@ begin
   end;
 end;
 
-procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -74,13 +74,14 @@ begin
   begin
     Name := Setting;
     Section := ASection;
+    Description := ADescription;
     ValueBoolean := TabFile^.ReadBool(ASection, Setting, Value);
     ValueType := TypeBoolean;
   end;
   FSettings^.Add(ASetting);
 end;
 
-procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer);
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -89,13 +90,14 @@ begin
   begin
     Name := Setting;
     Section := ASection;
+    Description := ADescription;
     ValueInteger := TabFile^.ReadInteger(ASection, Setting, Value);
     ValueType := TypeInteger;
   end;
   FSettings^.Add(ASetting);
 end;
 
-procedure TRSettings.CheckString(const Setting, ASection, Value: String);
+procedure TRSettings.CheckString(const Setting, ASection, Value, ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -104,6 +106,7 @@ begin
   begin
     Name := Setting;
     Section := ASection;
+    Description := ADescription;
     ValueString := TabFile^.ReadString(ASection, Setting, Value);
     ValueType := TypeString;
   end;
@@ -147,3 +150,7 @@ begin
 
   TabFile^.EndWrite;
 end;
+
+{
+  vim:filetype=pascal
+}

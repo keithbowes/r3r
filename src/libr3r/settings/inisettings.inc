@@ -83,7 +83,7 @@ begin
   end;
 end;
 
-procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean);
+procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -95,10 +95,12 @@ begin
     ValueBoolean := IniFile.ReadBool(ASection, Setting, Value);
     ValueType := TypeBoolean;
   end;
+
+  ASetting.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 
-procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer);
+procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -110,10 +112,12 @@ begin
     ValueInteger := IniFile.ReadInteger(ASection, Setting, Value);
     ValueType := TypeInteger;
   end;
+
+  ASetting.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 
-procedure TRSettings.CheckString(const Setting, ASection, Value: String);
+procedure TRSettings.CheckString(const Setting, ASection, Value, ADescription: String);
 var
   ASetting: PRSetting;
 begin
@@ -125,6 +129,8 @@ begin
     ValueString := IniFile.ReadString(ASection, Setting, Value);
     ValueType := TypeString;
   end;
+
+  ASetting.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 
@@ -143,3 +149,7 @@ begin
     Dispose(ASetting);
   end;
 end;
+
+{
+  vim:filetype=pascal
+}

@@ -7,7 +7,7 @@ include ../../../scripts/common.make
 all:
 	cd po && $(MAKE)
 	cd ../../libr3r && $(MAKE) info.pas
-	$(MAKE) tui$(PPUEXT) r3r$(PPUEXT)
+	$(MAKE) colortable$(PPUEXT) tui$(PPUEXT) r3r$(PPUEXT)
 
 clean:
 	cd po && $(MAKE) clean

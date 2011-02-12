@@ -1,7 +1,6 @@
 unit DC;
 
-{ Hackish Dublin Core support.  I'm plannig on refactoring the
-  XML code in beta 2, so I'm not going too far on this now. }
+{ Hackish Dublin Core support. }
 
 interface
 

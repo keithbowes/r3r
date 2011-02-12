@@ -83,7 +83,7 @@ msgid "Option Value"
 msgstr ""
 
 #: tuistrings:settingtochange
-msgid "Option to change (empty to exit): "
+msgid "Option to change (number or empty to exit): "
 msgstr ""
 
 #: tuistrings:newvalue
@@ -108,4 +108,16 @@ msgstr ""
 
 #: tuistrings:itememail
 msgid "Email address: "
+msgstr ""
+
+#: tuistrings:numsym
+msgid "#"
+msgstr ""
+
+#: tuistrings:falsestring
+msgid "FALSE"
+msgstr ""
+
+#: tuistrings:truestring
+msgid "TRUE"
 msgstr ""

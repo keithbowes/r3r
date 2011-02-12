@@ -1,6 +1,6 @@
 [prerules]
-UNIT_DIRS = ../../utils/*
-UNITS = rsettings_routines rsettings
+UNIT_DIRS = .. ../../utils/* ../../third-party/*
+UNITS = rsettings_routines rsettings_strings rsettings
 
 [rules]
 include ../../../scripts/common.make
