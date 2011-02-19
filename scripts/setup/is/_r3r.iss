@@ -16,28 +16,34 @@ SourceDir=..\..\..
 Name: desktopicon; Description: "&Create desktop icons"
 
 [Files]
-Source: "*.dll"; DestDir: "{app}\bin"
-Source: "r3r-tui.exe"; DestDir: "{app}\bin";
-Source: "r3r-wx.exe"; DestDir: "{app}\bin";
-Source: "icons\r3r.ico"; DestDir: "{app}\share\icons";
-Source: "src\util\opml\*.bat"; DestDir: "{app}\bin"
-Source: "src\util\opml\r3r_opml.exe"; DestDir: "{app}\bin"
+Source: "../*.dll"; DestDir: "{app}\bin"
+Source: "r3r-tui.exe"; DestDir: "{app}\bin"
+Source: "r3r-wx.exe"; DestDir: "{app}\bin"
+Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
+Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
+Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
+Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
 
-Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "libr3r.mo"
-Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "libr3r.mo"
-Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo"; DestName: "libr3r.mo"
-Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "libr3r.mo"
+Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "libr3r.mo"
 
-Source: "src/ui/tui/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es"; DestName: "r3r_tui.mo"
+Source: "src/ui/tui/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_tui.mo"
+Source: "src/ui/tui/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_tui.mo"
+Source: "src/ui/tui/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_tui.mo"
+Source: "src/ui/tui/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_tui.mo"
 
-Source: "src/ui/wx/po/de.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\de"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/en.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\en"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/eo.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\eo"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/es.mo"; DestDir: "{app}\share\locale\LC_MESSAGES\es"; DestName: "r3r_wx.mo"
+Source: "src/ui/wx/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_wx.mo"
+Source: "src/ui/wx/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_wx.mo"
+Source: "src/ui/wx/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_wx.mo"
+Source: "src/ui/wx/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_wx.mo"
+
+Source: "src/utils/opml/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_opml.mo"
+Source: "src/utils/opml/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_opml.mo"
+Source: "src/utils/opml/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_opml.mo"
+Source: "src/utils/opml/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_opml.mo"
 
 [Icons]
 Name: "{userdesktop}\R3R (TUI)"; FileName: "{app}\bin\r3r-tui.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon

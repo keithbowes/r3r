@@ -258,7 +258,7 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 
 void MenuEvents::OnOpen(wxCommandEvent & event)
 {
-  wxFileDialog * openFileDialog = new wxFileDialog(this);
+  wxFileDialog * openFileDialog = new wxFileDialog(this, _("Open a file"));
 
   if (openFileDialog->ShowModal() == wxID_OK)
   {

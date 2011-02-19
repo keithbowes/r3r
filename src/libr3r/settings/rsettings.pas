@@ -63,7 +63,7 @@ var
 implementation
 
 uses
-  Info, RSettings_Routines, RSettings_Strings, RStrings
+  RProp, RSettings_Routines, RSettings_Strings, RStrings
 
 {$IFDEF __GPC__}
   ,SysUtils
@@ -245,7 +245,7 @@ begin
   CheckString('for:.ogg', 'Programs', '', DescMedia);
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
-  SetInstalledPrefix(GetString(IndexOf('installed-prefix')));
+  SetProp('installed-prefix', StrToPChar(GetString(IndexOf('installed-prefix'))));
 end;
 
 initialization

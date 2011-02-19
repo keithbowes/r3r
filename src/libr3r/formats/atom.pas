@@ -17,7 +17,6 @@ type
     FCatType: String;
     FHasLongDesc: Boolean;
     FHasShortDesc: Boolean;
-    FLastCat: String;
     FLeftFeed: Boolean;
     function GetAbsoluteURL(const URL: String): String;
   protected

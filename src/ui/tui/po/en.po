@@ -17,36 +17,24 @@ msgid "Feed Address: "
 msgstr "Feed Address: "
 
 #: tuistrings:gourl
-msgid "g)o to a URL"
-msgstr "g)o to a URL"
+msgid "g:go to a URL"
+msgstr "g:go to a URL"
 
 #: tuistrings:options
-msgid "o)ptions"
-msgstr "o)ptions"
+msgid "o:options"
+msgstr "o:options"
 
 #: tuistrings:donate
-msgid "d)onate"
-msgstr "d)onate"
+msgid "d:donate"
+msgstr "d:donate"
+
+#: tuistrings:help
+msgid "?:help"
+msgstr "?:help"
 
 #: tuistrings:quit
-msgid "q)uit the program"
-msgstr "q)uit the program"
-
-#: tuistrings:gokey
-msgid "g"
-msgstr "g"
-
-#: tuistrings:optionskey
-msgid "o"
-msgstr "o"
-
-#: tuistrings:donatekey
-msgid "d"
-msgstr "d"
-
-#: tuistrings:quitkey
-msgid "q"
-msgstr "q"
+msgid "q:quit the program"
+msgstr "q:quit the program"
 
 #: tuistrings:itemno
 msgid "Item number: "

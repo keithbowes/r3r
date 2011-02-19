@@ -99,3 +99,6 @@ USE_FPC
   Use Free Pascal to compile (recommended).
 USE_GPC
   Use GNU Pascal to compile.
+USE_NCRT
+  Use the nCRT and ncurses units instead of CRT for the TUI in
+  Free Pascal.

@@ -83,7 +83,9 @@ begin
     begin
       InHTML := true;
     end
-    else if InStr[i] = '&' then
+    else if not InHTML and (InStr[i] = '&') and
+      { if the next character is whitespace, it's not an entity }
+      not (InStr[i + 1] in [#0, #8, #9, #10, #13, #32]) then
     begin
       InEnt := true;
     end
@@ -97,7 +99,7 @@ begin
     begin
       InHTML := false;
     end
-    else if InEnt then
+    else if InEnt  then
     begin
       if InStr[i] <> ';' then
       begin
@@ -107,7 +109,7 @@ begin
       begin
         if EntStr = 'amp' then
         begin
-          EntSTr := '&';
+          EntStr := '&';
         end
         else if EntStr = 'gt' then
         begin
@@ -121,24 +123,28 @@ begin
         begin
           EntStr := '"';
         end
-        else
+        else if Copy(EntStr, 1, 1) = '#' then { numerical entity }
         begin
-          Val(EntStr, EntNum, ErrPos);
+          Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
           if ErrPos = 0 then
           begin
-            EntStr := Chr(EntNum) { numerical entity }
+            EntStr := Chr(EntNum)
           end
-          else { undefined entity, per the XML spec }
+          else
           begin
-            EntStr := #164; { random character for unknown named references }
+            EntStr := #164 { random character for malformed numerical entity }
           end
+        end
+        else { undefined entity, per the XML spec }
+        begin
+          EntStr := #164; { random character for unknown named references }
         end;
 
         OutStr :=  OutStr + EntStr; { random character for replacing numerical and named references }
         EntStr := '';
         InEnt := false;
       end;
-    end;
+    end
   end;
 
   StripHtml := OutStr;

@@ -26,8 +26,10 @@ type
     FDimStatus: TWindowDim;
     FDimUI: TWindowDim;
     FItems: PRList;
+    FOnLastItem: Boolean;
     FScreenHeight: word;
     FScreenWidth: word;
+    FScrollingUp: Boolean;
     FTitleOriginal: String;
     FViewPort: TViewport;
     procedure Draw;
@@ -65,10 +67,19 @@ type
 implementation
 
 uses
-  ColorTable, Crt, Dos, Info, RSettings_Routines, SysUtils, TuiStrings
+  Dos, Info, RSettings_Routines, Skin, SysUtils, TuiStrings
+{$IFNDEF USE_NCRT}
+  , Crt
+{$ELSE}
+  , nCrt, nCurses
+{$ENDIF USE_NCRT}
+
 {$IFDEF MSWINDOWS}
   , Windows
 {$ENDIF};
+
+const
+  QuitKey = 'q';
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
 function ScreenHeight: word;
@@ -76,7 +87,12 @@ begin
 {$IFDEF __GPC__}
   ScreenHeight := ScreenSize.Y;
 {$ELSE}
+{$IFDEF USE_NCRT}
+  ScreenHeight := Lines;
+{$ELSE}
+{$DEFINE ASSUME8025}
   ScreenHeight := 25;
+{$ENDIF USE_NCRT}
 {$ENDIF __GPC__}
 end;
 
@@ -85,7 +101,12 @@ begin
 {$IFDEF __GPC__}
   ScreenWidth := ScreenSize.X;
 {$ELSE}
+{$IFDEF USE_NCRT}
+  ScreenWidth := Cols;
+{$ELSE}
+{$DEFINE ASSUME8025}
   ScreenWidth := 80;
+{$ENDIF USE_NCRT}
 {$ENDIF __GPC__}
 end;
 {$ENDIF HAS_SCREENHEIGHTWIDTH}
@@ -93,7 +114,18 @@ end;
 procedure FullScreen;
 begin
   Window(1, 1, ScreenWidth, ScreenHeight);
+  ClrScr
 end;
+
+{$IFNDEF USE_NCRT}
+function EndWin: integer;
+begin
+  FullScreen;
+  NormVideo;
+  ClrScr;
+  EndWin := 0;
+end;
+{$ENDIF}
 
 function CreateFeedItem: TFeedItem;
 begin
@@ -102,15 +134,21 @@ end;
 
 constructor TTui.Create;
 const
+  DonateKey = 'd';
   DownKey = 'j';
   EndKey = Chr(79);
   EnterKey = Chr(13);
+  GoKey = 'g';
+  HelpKey = 'h';
+  HelpSymKey = '?';
   HomeEndKey = '~'; // For some reason, FPC reports both HOME and END as a tilde
   HomeKey = Chr(71);
   NullKey = Chr(0);
+  OptionsKey = 'o';
   PageDownKey = Chr(81);
   PageUpKey = Chr(73);
-  RefreshKey = '-';
+  RefreshKey = 'l';
+  ResizeKey = Chr(27); // nCrt reports this when the window is resized
   ScrollDownKey = Chr(32);
   ScrollUpKey = Chr(8);
   SearchKey = '/';
@@ -123,20 +161,16 @@ begin
   inherited Create;
   New(FItems, Init);
   FCurrentItem := 1;
+  FOnLastItem := false;
   FTitleOriginal := GetOriginalTitle;
 
 {$IFDEF __GPC__}
   CRTInit;
 {$ENDIF __GPC__}
 
-  FViewPort.FirstItem := FCurrentItem;
-  FViewPort.LastItem := ScreenHeight - 5;
-  FViewPort.PortHeight := FViewPort.LastItem;
-  SetNewTitle(AppName);
   ColorTableInit;
-  InitWindowDims;
-
   Draw;
+  SetNewTitle(AppName);
 
   for FeedIndex := 1 to ParamCount do
   begin
@@ -206,7 +240,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if KeyChar = RefreshKey then
+    else if (KeyChar = RefreshKey) or (KeyChar = ResizeKey) then
     begin
       Redraw;
     end
@@ -237,6 +271,10 @@ begin
         ScrollTo(FItems^.Count);
       end;
     end
+    else if (KeyChar = HelpKey) or (KeyChar = HelpSymKey) then
+    begin
+      OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName) + PathDelim + 'docs' + PathDelim + 'keys.html');
+    end
     else if KeyChar = EnterKey then
     begin
       if FCurrentItem > 0 then
@@ -246,8 +284,7 @@ begin
     end
     else if KeyChar = ShellKey then
     begin
-      FullScreen;
-      ClrScr;
+      EndWin;
       SwapVectors;
       Exec(GetEnv('SHELL'), '');
       SwapVectors;
@@ -277,9 +314,8 @@ begin
   end;
 
   SetNewTitle(FTitleOriginal);
-  FullScreen;
-  NormVideo;
-  ClrScr;
+
+  EndWin;
 
 {$IFNDEF __GPC__}
   inherited Destroy;
@@ -303,7 +339,7 @@ begin
   FItems^.Add(AItem);
   Items := FItems^.Count;
 
-  if Items < cardinal(ScreenHeight - 4) then
+  if Items < FViewPort.PortHeight then
   begin
     Title := AItem.TitleText;
     if Length(Title) > (ScreenWidth div 2 - 3 - Length(IntToStr(Items))) then
@@ -311,12 +347,12 @@ begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 4) + '...';
     end;
 
-    TextBackground(AColorTable.FIndexBack);
-    TextColor(AColorTable.FIndexFore);
+    TextBackground(SkinColorTable.FIndexBack);
+    TextColor(SkinColorTable.FIndexFore);
     Write(Items, ': ');
 
-    TextBackground(AColorTable.FTitleBack);
-    TextColor(AColorTable.FTitleFore);
+    TextBackground(SkinColorTable.FTitleBack);
+    TextColor(SkinColorTable.FTitleFore);
     WriteLn(Title);
   end;
 end;
@@ -345,6 +381,7 @@ end;
 procedure TTui.RetrieveFeed(Resource: String);
 begin
   DrawFeedList;
+  ScrollTo(FCurrentItem);
   inherited RetrieveFeed(Resource);
   GoItem;
 end;
@@ -356,15 +393,36 @@ begin
 end;
 
 procedure TTui.ShowHelp;
+const
+  OptSep = '     ';
+var
+  Opts: String;
+
+procedure AddOption(opt: String);
 begin
+  if Length(Opts) + Length(OptSep) + Length(opt) < ScreenWidth then
+  begin
+    if Opts <> '' then
+    begin
+      Opts := Opts + OptSep;
+    end;
+
+    Opts := Opts + opt;
+  end;
+end;
+
+begin
+  Opts := '';
+
   DrawInfoBar;
 
-  Write(GoURL);
-  Write(Options:25 - Length(GoUrl) + Length(Options));
-  WriteLn;
+  AddOption(GoURL);
+  AddOption(Options);
+  AddOption(Donate);
+  AddOption(Quit);
+  AddOption(Help);
 
-  Write(Donate);
-  Write(Quit:25 - Length(Donate) + Length(Quit));
+  Write(Opts);
 end;
 
 procedure TTui.GoURI;
@@ -457,12 +515,12 @@ begin
       begin
         Write(ItemDesc);
 
-        TextBackground(AColorTable.FDescBack);
-        TextColor(AColorTable.FDescFore);
+        TextBackground(SkinColorTable.FDescBack);
+        TextColor(SkinColorTable.FDescFore);
         WriteLn(Desc);
 
-        TextBackground(AColorTable.FInfoBack);
-        TextColor(AColorTable.FInfoFore);
+        TextBackground(SkinColorTable.FInfoBack);
+        TextColor(SkinColorTable.FInfoFore);
       end;
 
       PrintField(ItemEmail, Contact^.Email);
@@ -523,18 +581,18 @@ begin
   SwapVectors;
   Exec(FSearch(Browser, GetEnv('PATH')), '"' + Link + '"');
   SwapVectors;
+  Redraw;
 end;
 
 procedure TTui.SetOptions;
 const
   NumLen = 2;
-  Width = 37;
 var
-  i, ErrPos, Len: byte;
+  ErrPos, Len: byte;
   HBound, Index, SetInt: integer;
-  SetBool: Boolean;
   SetName, SetVal: String;
   SRec: PRList;
+  Width: word;
 
 function BoolToString(i: Boolean): String;
 begin
@@ -555,17 +613,47 @@ begin
 end;
 {$ENDIF NO_SUPPORTS_UNICODE}
 
-begin
-  DrawFeedInfo;
+procedure DisplayOptions;
+var
+  i: byte;
 
-  WriteLn;
-  TextBackground(AColorTable.FIndexBack);
-  TextColor(AColorTable.FIndexFore);
+function TruncateString(const s: String): String;
+begin
+  if Length(s) >= Width then
+  begin
+    TruncateString := Copy(s, 1, Width - 1 - 3) + '...';
+  end
+  else
+  begin
+    TruncateString := s;
+  end;
+end;
+
+begin
+  DrawFeedList;
+
+  if SkinOptionFull then
+  begin
+    Window(1, FDimUI.TopStart + FDimUI.TopEnd, ScreenWidth, ScreenHeight - FDimUI.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
+    ClrScr;
+  end
+  else
+  begin
+    DrawFeedInfo;
+  end;
+  ClrScr;
+
+  TextBackground(SkinColorTable.FOptionIndexBack);
+  TextColor(SkinColorTable.FOptionIndexFore);
   Write(NumSym:NumLen);
 
-  TextBackground(AColorTable.FTitleBack);
-  TextColor(AColorTable.FTitleFore);
-  WriteLn(OptionName:NumLen + Length(OptionName), OptionVal:Width - Length(OptionName) div 2 + 3 + NumLen);
+  TextBackground(SkinColorTable.FOptionNameBack);
+  TextColor(SkinColorTable.FOptionNameFore);
+  Write(OptionName:NumLen + Length(OptionName));
+  
+  TextBackground(SkinColorTable.FOptionValueBack);
+  TextColor(SkinColorTable.FOptionValueFore);
+  WriteLn(OptionVal:Width - Length(OptionName) div 2 + 3 + NumLen);
   WriteLn;
 
   with Settings do
@@ -574,15 +662,18 @@ begin
 
     for i := 0 to HBound - 1 do
     begin
-      TextBackground(AColorTable.FIndexBack);
-      TextColor(AColorTable.FIndexFore);
+      TextBackground(SkinColorTable.FOptionIndexBack);
+      TextColor(SkinColorTable.FOptionIndexFore);
 
-      SetName := PRSetting(SRec^.GetNth(i))^.Description;
+      SetName := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
       Write((i + 1):NumLen, '.');
 
-      TextBackground(AColorTable.FTitleBack);
-      TextColor(AColorTable.FTitleFore);
+      TextBackground(SkinColorTable.FOptionNameBack);
+      TextColor(SkinColorTable.FOptionNameFore);
       Write(SetName:NumLen + Length(SetName));
+
+      TextBackground(SkinColorTable.FOptionValueBack);
+      TextColor(SkinColorTable.FOptionValueFore);
 
       case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
@@ -612,11 +703,27 @@ begin
 
       WriteLn;
     end;
+  end
+end;
 
+begin
+  Width := ScreenWidth div 2;
+  while Width >= 80 do
+  begin
+    Width := Width div 2;
+  end;
+
+  DisplayOptions;
+
+  with Settings do
+  begin
     repeat
+      DrawStatus;
+      TextBackground(SkinColorTable.FOptionPromptBack);
+      TextColor(SkinColorTable.FOptionPromptFore);
       Write(SettingToChange);
-      TextBackground(AColorTable.FIndexBack);
-      TextColor(AColorTable.FIndexFore);
+      TextBackground(SkinColorTable.FOptionIndexBack);
+      TextColor(SkinColorTable.FOptionIndexFore);
 
       ReadLn(SetName);
       Len := Length(SetName);
@@ -631,12 +738,15 @@ begin
         Index := 0
       end;
 
-      TextBackground(AColorTable.FTitleBack);
-      TextColor(AColorTable.FTitleFore);
+      TextBackground(SkinColorTable.FOptionPromptBack);
+      TextColor(SkinColorTable.FOptionPromptFore);
 
       if (Index >= 0) and (Index < HBound) and (Len <> 0) then
       begin
         Write(NewValue);
+
+        TextBackground(SkinColorTable.FOptionValueBack);
+        TextColor(SkinColorTable.FOptionValueFore);
         ReadLn(SetVal);
 
         case PRSetting(SRec^.GetNth(Index))^.ValueType of
@@ -665,10 +775,11 @@ begin
             end
           end;
         end;
+        DisplayOptions
       end;
     until (Len = 0) or (Index < 0) or (SetName = QuitKey);
 
-    DrawFeedInfo;
+    Redraw;
     GoItem;
   end;
 end;
@@ -683,9 +794,10 @@ var
   i: word;
   Title: String;
 begin
-  FViewPort.FirstItem := FViewPort.LastItem + 1;
-  FViewPort.LastItem := FViewPort.LastItem + FViewPort.PortHeight;
+  FViewPort.FirstItem := FViewPort.LastItem;
+  FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
   FCurrentItem := FViewPort.FirstItem;
+  FScrollingUp := false;
 
   if FItems^.Count < FViewPort.PortHeight then
   begin
@@ -696,12 +808,27 @@ begin
   else if FViewPort.LastItem > FItems^.Count then
   begin
     FViewPort.LastItem := FItems^.Count;
-    FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight + 1;
-    FCurrentItem := FViewPort.FirstItem;
+    
+    FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
+
+    if not FOnLastItem then
+    begin
+      FCurrentItem := FViewPort.FirstItem + 1;
+      FOnLastItem := true;
+    end
+    else
+    begin
+      FCurrentItem := FItems^.Count
+    end
+  end
+  else
+  begin
+    Inc(FViewPort.FirstItem);
+    Inc(FViewPort.LastItem);
+    Inc(FCurrentItem);
   end;
 
   DrawFeedList;
-  ClrScr;
 
   for i := FViewPort.FirstItem to FViewPort.LastItem do
   begin
@@ -711,12 +838,12 @@ begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
     end;
 
-    TextBackground(AColorTable.FIndexBack);
-    TextColor(AColorTable.FIndexFore);
+    TextBackground(SkinColorTable.FIndexBack);
+    TextColor(SkinColorTable.FIndexFore);
     Write(i, ': ');
 
-    TextBackground(AColorTable.FTitleBack);
-    TextColor(AColorTable.FTitleFore);
+    TextBackground(SkinColorTable.FTitleBack);
+    TextColor(SkinColorTable.FTitleFore);
     WriteLn(Title);
   end;
 
@@ -728,10 +855,27 @@ var
   i: word;
   Title: String;
 begin
+  FCurrentItem := 1;
+
   if FViewPort.FirstItem > FViewPort.PortHeight then
   begin
-    FViewPort.FirstItem := FViewPort.FirstItem - FViewPort.PortHeight;
-    FViewPort.LastItem := FViewPort.LastItem - FViewPort.PortHeight;
+    if not FOnLastItem then
+    begin
+      FViewPort.LastItem := FViewPort.FirstItem;
+      FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
+
+      if not FScrollingUp then
+      begin
+        Dec(FviewPort.FirstItem);
+        Dec(FViewPort.LastItem);
+      end;
+    end
+    else
+    begin
+      FOnLastItem := false;
+    end;
+
+    FCurrentItem := FViewPort.FirstItem + 1;
   end
   else if FItems^.Count < FViewPort.PortHeight then
   begin
@@ -744,9 +888,7 @@ begin
     FViewPort.LastItem := FViewPort.PortHeight;
   end;
 
-  FCurrentItem := FViewPort.FirstItem;
   DrawFeedList;
-  ClrScr;
 
   for i := FViewPort.FirstItem to FViewPort.LastItem do
   begin
@@ -756,15 +898,16 @@ begin
       Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
     end;
 
-    TextBackground(AColorTable.FIndexBack);
-    TextColor(AColorTable.FIndexFore);
+    TextBackground(SkinColorTable.FIndexBack);
+    TextColor(SkinColorTable.FIndexFore);
     Write(i, ': ');
 
-    TextBackground(AColorTable.FTitleBack);
-    TextColor(AColorTable.FTitleFore);
+    TextBackground(SkinColorTable.FTitleBack);
+    TextColor(SkinColorTable.FTitleFore);
     WriteLn(Title);
   end;
 
+  FScrollingUp := true;
   GoItem;
 end;
 
@@ -790,50 +933,50 @@ end;
 procedure TTui.DrawFeedInfo;
 begin
   Window(FDimInfo.LeftStart, FDimInfo.TopStart, FDimInfo.LeftEnd, FDimInfo.TopEnd);
-  TextBackground(AColorTable.FInfoBack);
-  TextColor(AColorTable.FInfoFore);
+  TextBackground(SkinColorTable.FInfoBack);
+  TextColor(SkinColorTable.FInfoFore);
   ClrScr;
 end;
 
 procedure TTui.DrawFeedList;
 begin
   Window(FDimList.LeftStart, FDimList.TopStart, FDimList.LeftEnd, FDimList.TopEnd);
-  TextBackground(AColorTable.FTitleBack);
-  TextColor(AColorTable.FTitleFore);
-
+  TextBackground(SkinColorTable.FTitleBack);
+  TextColor(SkinColorTable.FTitleFore);
+  ClrScr;
   GotoXY(1, FItems^.Count + 1);
 end;
 
 procedure TTui.DrawInfoBar;
 begin
   Window(FDimInfoBar.LeftStart, FDimInfoBar.TopStart, FDimInfoBar.LeftEnd, FDimInfoBar.TopEnd);
-  TextBackground(AColorTable.FInfoBarBack);
-  TextColor(AColorTable.FInfoBarFore);
+  TextBackground(SkinColorTable.FInfoBarBack);
+  TextColor(SkinColorTable.FInfoBarFore);
   ClrScr;
 end;
 
 procedure TTui.DrawSeparator;
 begin
   Window(FDimSep.LeftStart, FDimSep.TopStart, FDimSep.LeftEnd, FDimSep.TopEnd);
-  TextBackground(AColorTable.FSep);
+  TextBackground(SkinColorTable.FSep);
   ClrScr;
 end;
 
 procedure TTui.DrawStatus;
 begin
   Window(FDimStatus.LeftStart, FDimStatus.TopStart, FDimStatus.LeftEnd, FDimStatus.TopEnd);
-  TextBackground(AColorTable.FStatusBack);
-  TextColor(AColorTable.FStatusFore);
+  TextBackground(SkinColorTable.FStatusBack);
+  TextColor(SkinColorTable.FStatusFore);
   ClrScr;
 end;
 
 procedure TTui.DrawUIString;
 begin
   Window(FDimUI.LeftStart, FDimUI.TopStart, FDimUI.LeftEnd, FDimUI.TopEnd);
-  TextBackground(AColorTable.FUIBack);
-  TextColor(AColorTable.FUIFore);
+  TextBackground(SkinColorTable.FUIBack);
+  TextColor(SkinColorTable.FUIFore);
   ClrScr;
-  Write(UserAgent:75);
+  Write(UserAgent:(ScreenWidth - ((ScreenWidth - Length(UserAgent)) div 2)));
 end;
 
 procedure TTui.InitWindowDims;
@@ -841,7 +984,7 @@ const
   Origin = 1;
   SingleLine = 1;
 
-  InfoBarHeight = 2;
+  InfoBarHeight = 1;
   SepBarWidth = 1;
   StatusHeight = SingleLine;
   UIHeight = SingleLine;
@@ -859,7 +1002,7 @@ begin
   FDimInfoBar.LeftEnd := ScreenWidth;
   FDimInfoBar.TopEnd := ScreenHeight - StatusHeight;
   FDimInfoBar.LeftStart := Origin;
-  FDimInfoBar.TopStart := ScreenHeight - StatusHeight - SingleLine;
+  FDimInfoBar.TopStart := ScreenHeight - StatusHeight - (InfoBarHeight - SingleLine);
 
   FDimList.LeftEnd := Half(ScreenWidth) - SepBarWidth;
   FDimList.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
@@ -880,6 +1023,10 @@ begin
   FDimUI.TopEnd := UIHeight;
   FDimUI.LeftStart := Origin;
   FDimUI.TopStart := Origin;
+
+  FViewPort.FirstItem := FCurrentItem;
+  FViewPort.LastItem := FDimInfoBar.TopStart - FDimUI.TopEnd - 1;
+  FViewPort.PortHeight := FViewPort.LastItem - 1;
 end;
 
 function TTui.GetOriginalTitle: String;
@@ -923,7 +1070,7 @@ begin
   if GetEnv('DISPLAY') <> '' then
   begin
     SwapVectors;
-    Exec(GetInstalledPrefix + '/bin/r3r-settitle', '"' + NewTitle + '"');
+    Exec(GetInstalledPrefix + PathDelim + 'bin' + PathDelim + 'r3r-settitle', '"' + NewTitle + '"');
     SwapVectors;
   end;
 {$ENDIF MSWINDOWS}
@@ -931,7 +1078,14 @@ end;
 
 procedure TTui.Draw;
 begin
-  ClrScr;
+{$IFDEF ASSUME8025}
+  { if ScreeHeight and ScreenWidth have to use hard-coded values,
+    try to get an appropriate display. }
+  TextMode(C080);
+{$ENDIF}
+
+  FullScreen;
+  InitWindowDims;
 
   DrawUIString;
   DrawFeedInfo;

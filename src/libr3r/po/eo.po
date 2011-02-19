@@ -20,6 +20,9 @@ msgstr "La TTT-servilo ne ekzistas aŭ sendis nepravajn informojn."
 msgid "There is missing data in this feed.  Some of it was recovered."
 msgstr "Estas manka datumo en ĉi tiu fluo. Iu el ĝi estis trovita."
 
+msgid "Unsupported compression scheme."
+msgstr "Ne komprenata kunpremo-tipo."
+
 msgid "Jan"
 msgstr "jan"
 
@@ -87,7 +90,7 @@ msgid "Proxy port"
 msgstr "Prokurila pordo"
 
 msgid "Use custom accept types?"
-msgstr "Ĉu uzi proprajn ehnavtipojn?"
+msgstr "Ĉu uzi proprajn enhavtipojn?"
 
 msgid "Custom accept types"
 msgstr "Propraj enhavtipoj"

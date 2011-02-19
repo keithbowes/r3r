@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-12 21:55-0400\n"
+"POT-Creation-Date: 2011-02-18 02:19-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
@@ -20,43 +20,47 @@ msgstr ""
 msgid "R3R"
 msgstr "R3R"
 
-#: ../desc.cpp:25
+#: ../desc.cpp:26
 msgid "&Contact"
 msgstr "&Kontaktieren"
 
-#: ../desc.cpp:29
+#: ../desc.cpp:30
 msgid "&Subscribe"
 msgstr "&Abonnieren"
 
-#: ../desc.cpp:33
+#: ../desc.cpp:34
 msgid "&Play Podcast..."
 msgstr "&Spielen Podcast..."
 
-#: ../events.cpp:206
+#: ../events.cpp:211
 msgid "About R3R"
 msgstr "Über R3R"
 
-#: ../feedlist.cpp:25
+#: ../events.cpp:261
+msgid "Open a file"
+msgstr "Öffnen eine Datei"
+
+#: ../feedlist.cpp:22 ../feedlist.cpp:26
 msgid "[None]"
 msgstr "[Keine]"
 
-#: ../feedlist.cpp:98
+#: ../feedlist.cpp:103
 msgid "An update is available."
 msgstr "Ein Aktual ist verfügbar."
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:118
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:121
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:124
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:122
+#: ../feedlist.cpp:127
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
@@ -140,7 +144,7 @@ msgstr "&Laden abbonements an ausführen"
 msgid "&Warn about missing data in feeds"
 msgstr "&Warnen über fehlende Daten in Feeds"
 
-#: ../settings-display.cpp:39
+#: ../settings-display.cpp:40
 msgid "Display"
 msgstr "Anzeige"
 
@@ -197,15 +201,15 @@ msgstr "Media-&Player"
 msgid "Programs"
 msgstr "Programms"
 
-#: ../settings-subscriptions.cpp:37
+#: ../settings-subscriptions.cpp:41
 msgid "&Delete"
 msgstr "&Entfernen"
 
-#: ../settings-subscriptions.cpp:41
+#: ../settings-subscriptions.cpp:45
 msgid "&Add"
 msgstr "&Hinzufügen"
 
-#: ../settings-subscriptions.cpp:49
+#: ../settings-subscriptions.cpp:53
 msgid "Subscriptions"
 msgstr "Abbonements"
 

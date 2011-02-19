@@ -1,4 +1,5 @@
 # -*-shell-script-*-
+# vim:filetype=sh
 
 [Meta]
 RootName: @r3r.sourceforge.net/default:$SOFTWAREVERSION:$PACKAGEVERSION
@@ -53,7 +54,11 @@ R3R estas legador para fuentes de RSS, ESF y Atom.
 [Imports]
 cd $source_dir/../..
 
+echo 'r3r-tui' | import
+echo 'r3r-wx' | import
+
 echo 'r3r' | import
+echo 'r3r-settitle' | import
 
 echo 'src' | import
 
@@ -95,14 +100,20 @@ done
 
 cd ../..
 
-cd ui/@UI@/po
-for lang in *.mo;
+cd ui
+
+for ui in tui wx;
 do
-  l=`echo $lang | sed 's/\.mo$//g'`
-  copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/r3r_@UI@.mo"
+	cd $ui/po
+	for lang in *.mo;
+	do
+		l=`echo $lang | sed 's/\.mo$//g'`
+		copyFile $lang "$PREFIX/share/locale/$l/LC_MESSAGES/r3r_$ui.mo"
+	done
+	cd ../..
 done
 
-cd ../../..
+cd ..
 
 cd utils/opml/po
 for lang in *.mo;

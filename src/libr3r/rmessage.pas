@@ -12,7 +12,7 @@ type
 
 procedure SetMessageObject(const Sender: TLibR3R);
 procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 
 implementation
 
@@ -29,7 +29,7 @@ begin
   CallMessageEventEx(Sender, IsError, MessageName, '');
 end;
 
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName: String; Extra: String);
+procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(MessageObject) and
     Settings.GetBoolean(Settings.IndexOf('show-messages')) then

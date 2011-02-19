@@ -3,7 +3,7 @@ rule = installer
 
 [prerules]
 include ../../common.make
-ISCC ?= iscc
+ISCC ?= ISCC
 
 
 rootdir = $(BASDIR)/../../..

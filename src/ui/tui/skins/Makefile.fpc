@@ -1,0 +1,10 @@
+[prerules]
+include ../../../../scripts/common.make
+
+[rules]
+install:
+	$(MKDIR) $(skindir)
+	$(INSTALL) $(wildcard *.skin) $(skindir)
+
+uninstall:
+	$(DELTREE) $(skindir)

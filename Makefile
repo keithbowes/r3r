@@ -1553,11 +1553,13 @@ ifneq ($(wildcard fpcmake.loc),)
 include fpcmake.loc
 endif
 include scripts/common.make
-all:
+all: docs
 	cd icons && $(MAKE)
 	cd src && $(MAKE)
 	$(MOVE) src/ui/$(R3R_UI)/r3r$(EXEEXT) r3r-$(R3R_UI)$(EXEEXT)
 install:
+	$(MKDIR) $(bindir)
+	cd doc && $(MAKE) install
 	cd icons && $(MAKE) install
 	cd src && $(MAKE) install
 	$(INSTALLEXE) r3r-$(R3R_UI)$(EXEEXT) $(bindir)
@@ -1576,6 +1578,7 @@ uninstall:
 	$(DEL) $(bindir)/r3r
 	$(foreach ui,$(uis),$(DEL) $(bindir)/r3r-$(ui)$(EXEEXT); )
 	$(DEL) $(bindir)/r3r-settitle
+	$(DELTREE) $(rdatadir)
 dist-build:
 	$(MAKE) R3R_UI=tui
 	$(MAKE) R3R_UI=wx

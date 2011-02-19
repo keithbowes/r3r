@@ -1,0 +1,32 @@
+# This is an R3R skin file.
+# Lines starting with hashes are comments.
+# Lines starting with a colon are starts of screens.
+# Currently valid screens: m (main screen) and o (options)
+
+# Blank lines are ignored.
+# The format of each line is background/foreground, as described in the CRT unit.
+# The colors are separated by commas; color groups by semicolons.
+# No spaces are allowed in color definitions.
+
+# Main screen
+:m
+# UI Bar
+1,14
+# Feed list
+#Index;Title
+0,6;0,2
+# Separator
+11
+# Info
+0,2
+# Description
+0,4
+# Info bar
+1,14
+# Status bar
+0,5
+
+# Option screen (param: whether to draw full screen)
+:o1
+#Index;Name;Value;Prompt
+0,6;0,2;0,3;0,2

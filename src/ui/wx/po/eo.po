@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-12 21:55-0400\n"
+"POT-Creation-Date: 2011-02-18 02:19-0500\n"
 "PO-Revision-Date: 2010-12-26 14:50-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
@@ -20,43 +20,47 @@ msgstr ""
 msgid "R3R"
 msgstr "R3R"
 
-#: ../desc.cpp:25
+#: ../desc.cpp:26
 msgid "&Contact"
 msgstr "&Kontakti"
 
-#: ../desc.cpp:29
+#: ../desc.cpp:30
 msgid "&Subscribe"
 msgstr "&Aboni"
 
-#: ../desc.cpp:33
+#: ../desc.cpp:34
 msgid "&Play Podcast..."
 msgstr "&Legi podkaston..."
 
-#: ../events.cpp:206
+#: ../events.cpp:211
 msgid "About R3R"
 msgstr "Pri R3R"
 
-#: ../feedlist.cpp:25
+#: ../events.cpp:261
+msgid "Open a file"
+msgstr "Malfermi dosieron"
+
+#: ../feedlist.cpp:22 ../feedlist.cpp:26
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:98
+#: ../feedlist.cpp:103
 msgid "An update is available."
 msgstr "Promocio haveblas."
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:118
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:121
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:124
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:122
+#: ../feedlist.cpp:127
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -140,7 +144,7 @@ msgstr "&Ŝargi abonojn je lanĉo"
 msgid "&Warn about missing data in feeds"
 msgstr "&Averti pri mankaj fluaj datumoj"
 
-#: ../settings-display.cpp:39
+#: ../settings-display.cpp:40
 msgid "Display"
 msgstr "Montro"
 
@@ -197,15 +201,15 @@ msgstr "&Plurmedia legilo"
 msgid "Programs"
 msgstr "Programoj"
 
-#: ../settings-subscriptions.cpp:37
+#: ../settings-subscriptions.cpp:41
 msgid "&Delete"
 msgstr "&Forigi"
 
-#: ../settings-subscriptions.cpp:41
+#: ../settings-subscriptions.cpp:45
 msgid "&Add"
 msgstr "&Aldoni"
 
-#: ../settings-subscriptions.cpp:49
+#: ../settings-subscriptions.cpp:53
 msgid "Subscriptions"
 msgstr "Abonoj"
 

@@ -1407,6 +1407,7 @@ clean: _clean
 	$(DEL) $(wildcard $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT))
 install:
 	cd po && $(MAKE) install
+	$(MKDIR) $(libdir)
 	-$(INSTALLEXE) $(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(libdir)
 	-ldconfig
 uninstall:

@@ -14,36 +14,24 @@ msgid "Feed Address: "
 msgstr "Die Feedadresse: "
 
 #: tuistrings:gourl
-msgid "g)o to a URL"
-msgstr "g)ehen nach einem URL"
+msgid "g:go to a URL"
+msgstr "g:gehen nach einem URL"
 
 #: tuistrings:options
-msgid "o)ptions"
-msgstr "e)instellungen"
+msgid "o:options"
+msgstr "o:Einstellungen"
 
 #: tuistrings:donate
-msgid "d)onate"
-msgstr "s)penden"
+msgid "d:donate"
+msgstr "d:spenden"
+
+#: tuistrings:help
+msgid "?:help"
+msgstr "?:Hilfe"
 
 #: tuistrings:quit
-msgid "q)uit the program"
-msgstr "b)eenden dem Programm"
-
-#: tuistrings:gokey
-msgid "g"
-msgstr "g"
-
-#: tuistrings:optionskey
-msgid "o"
-msgstr "e"
-
-#: tuistrings:donatekey
-msgid "d"
-msgstr "s"
-
-#: tuistrings:quitkey
-msgid "q"
-msgstr "b"
+msgid "q:quit the program"
+msgstr "q:verlassen dem Programm"
 
 #: tuistrings:itemno
 msgid "Item number: "

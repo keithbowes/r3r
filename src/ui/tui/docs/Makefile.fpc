@@ -1,0 +1,10 @@
+[prerules]
+include ../../../../scripts/common.make
+
+[rules]
+install:
+	$(MKDIR) $(docdir)
+	$(INSTALL) $(wildcard *.html) $(docdir)
+
+uninstall:
+	$(DEL) $(addprefix $(docdir),$(wildcard *.html))

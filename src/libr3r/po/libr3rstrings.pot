@@ -9,6 +9,9 @@ msgstr ""
 msgid "There is missing data in this feed.  Some of it was recovered."
 msgstr ""
 
+msgid "Unsupported compression scheme."
+msgstr ""
+
 msgid "Jan"
 msgstr ""
 

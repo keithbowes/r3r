@@ -7,8 +7,6 @@ uses
 
 type
   TRHtml = class(TLibR3R)
-  private
-    FFile: text;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -35,22 +33,30 @@ var
   i: cardinal;
 begin
   inherited Create;
-  Assign(FFile, 'r3r.html');
-  Rewrite(FFile);
 
-  WriteLn(FFile, HTMLProlog);
-  WriteLn(FFile, StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
+  WriteLn(HTMLProlog);
+  WriteLn(StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
 
-  for i := 0 to Subscriptions^.Count - 1 do
+  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
   begin
-    RetrieveFeed(Subscriptions^.GetNth(i));
+    for i := 0 to Subscriptions^.Count - 1 do
+    begin
+      RetrieveFeed(Subscriptions^.GetNth(i));
+    end;
+  end;
+
+  if ParamCount > 0 then
+  begin
+    for i := 1 to ParamCount do
+    begin
+      RetrieveFeed(ParamStr(i));
+    end;
   end;
 end;
 
 destructor TRHtml.Destroy;
 begin
-  WriteLn(FFile, HTMLFooter);
-  Close(FFile);
+  WriteLn(HTMLFooter);
 
 {$IFNDEF __GPC__}
   inherited Destroy;
@@ -59,54 +65,54 @@ end;
 
 procedure TRHtml.DisplayItem(const Item: TFeedItem);
 begin
-  Write(FFile, PreElement);
+  Write(PreElement);
 
   with Item do
   begin
     if GetMainLink <> '' then
     begin
-      Write(FFile, '<a href="', GetMainLink, '">', Title, '</a>');
+      Write('<a href="', GetMainLink, '">', Title, '</a>');
     end
     else
     begin
-      Write(FFile, Title);
+      Write(Title);
     end;
 
-    Write(FFile, Sep);
+    Write(Sep);
 
     if Subject <> '' then
     begin
-      Write(FFile, '(', Subject, ')');
+      Write('(', Subject, ')');
     end;
 
-    Write(FFile, Sep);
+    Write(Sep);
 
     if Created <> '' then
     begin
-      Write(FFile, Created);
+      Write(Created);
     end;
 
     if LastModified <> '' then
     begin
-      Write(FFile, Sep2);
-      Write(FFile, LastModified);
+      Write(Sep2);
+      Write(LastModified);
     end;
 
     if Description <> '' then
     begin
-      Write(FFile, DescPre);
+      Write(DescPre);
 
       if Length(Description) < 80 then
       begin
-        Write(FFile, Description);
+        Write(Description);
       end
       else
       begin
-        Write(FFile, Copy(Description, 1, 77), '...');
+        Write(Copy(Description, 1, 77), '...');
       end;
     end;
 
-    WriteLn(FFile, PostElement);
+    WriteLn(PostElement);
   end;
 end;
 

@@ -16,16 +16,14 @@ function DataDir: String;
 function SettingsDir: String;
 
 function GetInstalledPrefix: String;
-procedure SetInstalledPrefix(const prefix: String);
 
 implementation
 
 uses
-  Dos, Info, SysUtils;
+  Dos, Info, RProp, SysUtils;
 
 var
   PrivName: String;
-  RPrefix: String;
 
 function GetApplicationName: String;
 begin
@@ -119,14 +117,13 @@ function GetInstalledPrefix: String;
 var
   Res: String;
 begin
-  if RPrefix <> '' then
+  if StrPas(GetProp('installed-prefix')) <> '' then
   begin
-    Res := RPrefix
+    Res := StrPas(GetProp('installed-prefix'))
   end
   else
   begin
     Res := GetEnv('R3R_INSTALLED_PREFIX');
-
     if Res = '' then
     begin
       Res := InstalledPrefix
@@ -136,14 +133,8 @@ begin
   GetInstalledPrefix := Res
 end;
 
-procedure SetInstalledPrefix(const prefix: String);
-begin
-  RPrefix := prefix
-end;
-
 initialization
 
 PrivName := LowerCase(AppName);
-RPrefix := '';
 
 end.

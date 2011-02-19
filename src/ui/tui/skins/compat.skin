@@ -1,0 +1,25 @@
+# This is designed to look like the skin from 2.1.
+# See default.skin for format comments.
+
+# Main screen
+:m
+# UI Bar
+1,14
+# Feed list
+#Index;Title
+0,6;0,2
+# Separator
+11
+# Info
+0,2
+# Description
+0,4
+# Info bar
+1,14
+# Status bar
+0,5
+
+# Option screen (param: whether to draw full screen)
+:o0
+#Index;Name;Value;Prompt
+0,6;0,2;0,2;0,2

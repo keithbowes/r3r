@@ -23,6 +23,9 @@ msgstr "The web server doesn't exist or sent invalid information."
 msgid "There is missing data in this feed.  Some of it was recovered."
 msgstr "There is missing data in this feed.  Some of it was recovered."
 
+msgid "Unsupported compression scheme."
+msgstr "Unsupported compression scheme."
+
 msgid "Jan"
 msgstr "Jan"
 

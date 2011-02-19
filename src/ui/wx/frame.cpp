@@ -18,8 +18,17 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
   wxString path, prefix;
+	wxChar sep = wxFileName::GetPathSeparator();
+	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 20);
+	wxStrcpy(spath, wxString(sep));
+	wxStrcat(spath, wxT("share"));
+	wxStrcat(spath, wxString(sep));
+	wxStrcat(spath, wxT("icons"));
+	wxStrcat(spath, wxString(sep));
+	wxStrcat(spath, wxT("r3r.png"));
   prefix = wxString((char *) value, wxConvUTF8);
-  path = wxString(wxT("/share/icons/r3r.png"));
+  path = wxString(spath, wxConvUTF8);
+	free(spath);
 
   wxPanel * panel = new wxPanel(this, wxID_ANY);
   wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);

@@ -19,17 +19,24 @@ void InitGettext()
 
   wxString localeDir, path, prefix;
 
-#if wxCHECK_VERSION(2,9,0)
-  path = wxString(wxT("/share/locale"));
-  prefix = wxString((const char *) value);
-#else
-	path = wxT("/share/locale");
+	wxChar sep = wxFileName::GetPathSeparator();
+	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 15);
+	wxStrcpy(spath, wxString(sep));
+	wxStrcat(spath, wxT("share"));
+	wxStrcat(spath, wxString(sep));
+	wxStrcat(spath, wxT("locale"));
+	path = wxString(spath, wxConvUTF8);
 	prefix = wxString((const char *) value, wxConvUTF8);
-#endif
+	free(spath);
+
   localeDir = prefix + path;
 
   wxLocale * locale = new wxLocale();
-  locale->Init();
+#if wxCHECK_VERSION(2,9,0)
+  locale->Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT);
+#else
+	locale->Init();
+#endif
   locale->AddCatalogLookupPathPrefix(localeDir);
   locale->AddCatalog(wxT("r3r_wx"));
 

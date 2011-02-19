@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-12 21:55-0400\n"
+"POT-Creation-Date: 2011-02-18 02:19-0500\n"
 "PO-Revision-Date: 2009-12-04 00:00-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
@@ -21,43 +21,47 @@ msgstr ""
 msgid "R3R"
 msgstr "R3R"
 
-#: ../desc.cpp:25
+#: ../desc.cpp:26
 msgid "&Contact"
 msgstr "&Contactar"
 
-#: ../desc.cpp:29
+#: ../desc.cpp:30
 msgid "&Subscribe"
 msgstr "&Abonarse"
 
-#: ../desc.cpp:33
+#: ../desc.cpp:34
 msgid "&Play Podcast..."
 msgstr "&Jugar Podcast..."
 
-#: ../events.cpp:206
+#: ../events.cpp:211
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../feedlist.cpp:25
+#: ../events.cpp:261
+msgid "Open a file"
+msgstr "Abrir un archivo"
+
+#: ../feedlist.cpp:22 ../feedlist.cpp:26
 msgid "[None]"
 msgstr "[Ningún]"
 
-#: ../feedlist.cpp:98
+#: ../feedlist.cpp:103
 msgid "An update is available."
 msgstr "Un nueve versión es disponible."
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:118
 msgid "Feed Title"
 msgstr "Título Fuente"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:121
 msgid "Item Title"
 msgstr "Título de Entrada"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:124
 msgid "Subject"
 msgstr "Tema"
 
-#: ../feedlist.cpp:122
+#: ../feedlist.cpp:127
 msgid "Date Created"
 msgstr "Fecha Creado"
 
@@ -141,7 +145,7 @@ msgstr "&Cargar subscripciones a rodando"
 msgid "&Warn about missing data in feeds"
 msgstr "&Avíseme sobre datos faltando en fuentes"
 
-#: ../settings-display.cpp:39
+#: ../settings-display.cpp:40
 msgid "Display"
 msgstr "Visualización"
 
@@ -198,15 +202,15 @@ msgstr "&Reproductor multimedia"
 msgid "Programs"
 msgstr "Programas"
 
-#: ../settings-subscriptions.cpp:37
+#: ../settings-subscriptions.cpp:41
 msgid "&Delete"
 msgstr "A&lejar"
 
-#: ../settings-subscriptions.cpp:41
+#: ../settings-subscriptions.cpp:45
 msgid "&Add"
 msgstr "&Agregar"
 
-#: ../settings-subscriptions.cpp:49
+#: ../settings-subscriptions.cpp:53
 msgid "Subscriptions"
 msgstr "Subscripciones"
 

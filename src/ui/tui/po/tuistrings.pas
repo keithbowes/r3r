@@ -11,11 +11,7 @@ var
   Options: String;
   Donate: String;
   Quit: String;
-
-  GoKey: String;
-  OptionsKey: String;
-  DonateKey: String;
-  QuitKey: String;
+  Help: String;
 
   ItemNo: String;
 
@@ -51,20 +47,16 @@ var
 implementation
 
 uses
-  LibIntl, LibR3R, RSettings_Routines, RStrings;
+  LibIntl, LibR3R, RSettings_Routines, RStrings, SysUtils;
 
 procedure InitStrings;
 begin
   Feed := _('Feed Address: ');
-  GoUrl :=_('g)o to a URL');
-  Options := _('o)ptions');
-  Donate := _('d)onate');
-  Quit :=_('q)uit the program');
-
-  GoKey := _('g');
-  OptionsKey := _('o');
-  DonateKey := _('d');
-  QuitKey := _('q');
+  GoUrl :=_('g:go to a URL');
+  Options := _('o:options');
+  Donate := _('d:donate');
+  Quit := _('q:quit the program');
+  Help := _('?:help');
 
   ItemNo := _('Item number: ');
 
@@ -102,7 +94,7 @@ initialization
 
 setlocale(LC_ALL, '');
 textdomain('r3r_tui');
-bindtextdomain('r3r_tui', StrToPChar(GetInstalledPrefix + '/share/locale'));
+bindtextdomain('r3r_tui', StrToPChar(GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'locale'));
 
 InitStrings;
 

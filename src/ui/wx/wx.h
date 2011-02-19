@@ -6,6 +6,7 @@
 
 #ifndef WX_PRECOMP
 #include <wx/wx.h>
+#include <wx/filename.h>
 #include <wx/listbase.h>
 #include <wx/listctrl.h>
 #include <wx/listimpl.cpp>

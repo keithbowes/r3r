@@ -1,0 +1,25 @@
+# This is designed to look like unskinned Lynx.
+# See default.skin for format comments.
+
+# Main screen
+:m
+# UI Bar
+7,0
+# Feed list
+#Index;Title
+7,0;7,0
+# Separator
+0
+# Info
+7,0
+# Description
+7,0
+# Info bar
+7,0
+# Status bar
+7,0
+
+# Option screen (param: whether to draw full screen)
+:o1
+#Index;Name;Value;Prompt
+7,0;7,0;7,0;7,0

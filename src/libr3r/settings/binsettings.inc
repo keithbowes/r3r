@@ -27,9 +27,8 @@ begin
 {$IFNDEF __GPC__}
   inherited Create;
 {$ENDIF}
-  New(FSettings, Init);
-
   SettingsFile := SettingsDir + 'r3r.dat';
+  New(FSettings, Init);
 
   if FileExists(SettingsFile) then
   begin
@@ -122,7 +121,10 @@ begin
 		ASetting^.Description := ADescription;
   end;
 
-	Dispose(ASetting);
+  if Exists then
+	begin
+    Dispose(ASetting);
+  end;
 end;
 
 procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: Integer; const ADescription: String);
@@ -147,10 +149,13 @@ begin
 		ASetting^.Description := ADescription;
   end;
 
-	Dispose(ASetting);
+  if Exists then
+	begin
+    Dispose(ASetting);
+  end;
 end;
 
-procedure TRSettings.CheckString(const Setting, ASection, Value: String; const ADescription: String);
+procedure TRSettings.CheckString(const Setting, ASection, Value, ADescription: String);
 var
   ASetting: PRSetting;
   Exists: Boolean;
@@ -172,7 +177,10 @@ begin
 		ASetting^.Description := ADescription;
   end;
 
-	Dispose(ASetting);
+  if Exists then
+	begin
+    Dispose(ASetting);
+  end;
 end;
 
 procedure TRSettings.ReadRec;
@@ -193,14 +201,13 @@ begin
     begin
       FSettings^.Add(ASetting);
     end
-    else
-    begin
-      Dispose(ASetting);
-    end;
-
-		Last := ASetting^.Name;
+		else
+		begin
+			Dispose(ASetting)
+		end
   until NumRead = 0;
 
+	Last := ASetting^.Name;
   Close(f);
 end;
 

@@ -1,0 +1,25 @@
+# This is designed to look like the unskinned Midnight Commander.
+# See default.skin for format comments.
+
+# Main screen
+:m
+# UI Bar
+1,14
+# Feed list
+#Index;Title
+1,15;1,7
+# Separator
+7
+# Info
+1,15
+# Description
+1,14
+# Info bar
+11,0
+# Status bar
+1,7
+
+# Option screen (param: whether to draw full screen)
+:o0
+#Index;Name;Value;Prompt
+7,0;7,0;7,0;11,0

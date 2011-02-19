@@ -14,36 +14,24 @@ msgid "Feed Address: "
 msgstr "Retadreso de fluo: "
 
 #: tuistrings:gourl
-msgid "g)o to a URL"
-msgstr "i)ri al retadreso"
+msgid "g:go to a URL"
+msgstr "g:iri al retadreso"
 
 #: tuistrings:options
-msgid "o)ptions"
-msgstr "a)gordo"
+msgid "o:options"
+msgstr "o:agordo"
 
 #: tuistrings:donate
-msgid "d)onate"
-msgstr "d)onaci"
+msgid "d:donate"
+msgstr "d:donaci"
+
+#: tuistrings:help
+msgid "?:help"
+msgstr "?:helpo"
 
 #: tuistrings:quit
-msgid "q)uit the program"
-msgstr "e)liri el la programo"
-
-#: tuistrings:gokey
-msgid "g"
-msgstr "i"
-
-#: tuistrings:optionskey
-msgid "o"
-msgstr "a"
-
-#: tuistrings:donatekey
-msgid "d"
-msgstr "d"
-
-#: tuistrings:quitkey
-msgid "q"
-msgstr "e"
+msgid "q:quit the program"
+msgstr "q:eliri el la programo"
 
 #: tuistrings:itemno
 msgid "Item number: "
@@ -111,7 +99,7 @@ msgstr "Enmetaĵo: "
 
 #: tuistrings:activatelink
 msgid " (Press enter to open in your web browser)"
-msgstr " (Premu la enenklavon por malfermi en via TTT-legilo)"
+msgstr " (Premu la enen-klavon por malfermi en via TTT-legilo)"
 
 #: tuistrings:nextprevlink
 msgid " (Press j for the next item or k for the previous item)"
@@ -132,3 +120,15 @@ msgstr "Ne"
 #: tuistrings:truestring
 msgid "TRUE"
 msgstr "Jes"
+
+#~ msgid "g"
+#~ msgstr "i"
+
+#~ msgid "o"
+#~ msgstr "a"
+
+#~ msgid "d"
+#~ msgstr "d"
+
+#~ msgid "q"
+#~ msgstr "e"

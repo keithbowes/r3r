@@ -1392,12 +1392,16 @@ include ../../../scripts/common.make
 all:
 	cd po && $(MAKE)
 	cd ../../libr3r && $(MAKE) info.pas
-	$(MAKE) colortable$(PPUEXT) tui$(PPUEXT) r3r$(PPUEXT)
+	$(MAKE) skin$(PPUEXT) tui$(PPUEXT) r3r$(PPUEXT)
 clean:
 	cd po && $(MAKE) clean
 	-delp -q .
 	$(DEL) $(wildcard *.or) $(wildcard *.res)
 install:
+	cd docs && $(MAKE) install
 	cd po && $(MAKE) install
+	cd skins && $(MAKE) install
 uninstall:
+	cd docs && $(MAKE) uninstall
 	cd po && $(MAKE) uninstall
+	cd skins && $(MAKE) uninstall

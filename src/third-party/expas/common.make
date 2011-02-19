@@ -2,7 +2,7 @@
 
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
-VERSION = 2.1
+VERSION = 2.1.1
 
 PREFIX ?= $(DESTDIR)
 
@@ -26,9 +26,12 @@ prefix = $(PREFIX)
 
 bindir = $(prefix)/bin
 datadir = $(prefix)/share
+docdir = $(rdatadir)/docs
 icondir = $(datadir)/icons
 libdir = $(prefix)/lib
 localedir = $(datadir)/locale
+rdatadir = $(datadir)/r3r
+skindir = $(rdatadir)/skins
 
 rootdir ?= $(BASEDIR)
 
@@ -110,7 +113,11 @@ endif # DEBUG
 
 ifeq ($(R3R_UI), tui)
 ifdef inUnix
+ifndef USE_NCRT
 override DEFS_EXTRA += HAS_SCREENHEIGHTWIDTH
+else
+override DEFS_EXTRA += USE_NCRT
+endif # USE_NCRT
 endif # inUnix
 endif # R3R_UI
 

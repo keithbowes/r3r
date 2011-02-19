@@ -73,6 +73,7 @@ var
   NullLines: 0..20;
   RespList: TStringsList;
 begin
+  Headers.ContentEncoding := ceNone;
   HeaderState := hsUnstarted;
   NullLines := 0;
 
@@ -127,7 +128,32 @@ begin
       end
       else if HeaderName = 'content-encoding' then
       begin
-        Headers.ContentEncoding := HeaderValue;
+        Headers.ContentEncoding := ceUnsupported;
+
+        if HeaderValue = 'bzip' then
+        begin
+          Headers.ContentEncoding := ceBz2;
+        end;
+
+        if Headervalue = 'deflate' then
+        begin
+          Headers.ContentEncoding := ceDeflate;
+        end;
+
+        if HeaderValue = 'gzip' then
+        begin
+          Headers.ContentEncoding := ceGzip;
+        end;
+
+        if HeaderValue = 'lzo' then
+        begin
+          Headers.ContentEncoding := ceLzo;
+        end;
+
+        if Headers.ContentEncoding = ceUnsupported then
+        begin
+          CallMessageEventEx(Self, true, UnsupportedCompression, HeaderValue);
+        end;
       end
       else if HeaderName = 'content-type' then
       begin

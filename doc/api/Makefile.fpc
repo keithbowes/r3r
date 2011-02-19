@@ -2,7 +2,6 @@
 include ../../scripts/common.make
 
 FPDOC ?= fpdoc
-docdir=$(datadir)/doc/r3r
 
 [rules]
 all: index.html
@@ -22,7 +21,8 @@ clean:
 
 install: all
 	-$(MKDIR) $(docdir)
-	$(foreach doc,$(wildcard *.html) $(wildcard */*.html), $(INSTALL) $(doc) $(docdir))
+	$(INSTALL) $(wildcard *.html) $(docdir)
+	$(foreach file, $(wildcard */*.html), $(MKDIR) $(docdir)/$(dir $(file)); $(INSTALL) $(file) $(docdir)/$(file);  )
 
 uninstall:
 	$(DELTREE) $(docdir)

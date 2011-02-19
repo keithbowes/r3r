@@ -14,36 +14,24 @@ msgid "Feed Address: "
 msgstr "La dirección del fuente: "
 
 #: tuistrings:gourl
-msgid "g)o to a URL"
-msgstr "i)r a un URL"
+msgid "g:go to a URL"
+msgstr "g:ir a un URL"
 
 #: tuistrings:options
-msgid "o)ptions"
-msgstr "c(o)nfiguración"
+msgid "o:options"
+msgstr "o:configuración"
 
 #: tuistrings:donate
-msgid "d)onate"
-msgstr "d)onar"
+msgid "d:donate"
+msgstr "d:donar"
+
+#: tuistrings:help
+msgid "?:help"
+msgstr "?:ayúdeme"
 
 #: tuistrings:quit
-msgid "q)uit the program"
-msgstr "c)esar el programa"
-
-#: tuistrings:gokey
-msgid "g"
-msgstr "v"
-
-#: tuistrings:optionskey
-msgid "o"
-msgstr "o"
-
-#: tuistrings:donatekey
-msgid "d"
-msgstr "d"
-
-#: tuistrings:quitkey
-msgid "q"
-msgstr "c"
+msgid "q:quit the program"
+msgstr "q:cesar el programa"
 
 #: tuistrings:itemno
 msgid "Item number: "
@@ -132,3 +120,15 @@ msgstr "No"
 #: tuistrings:truestring
 msgid "TRUE"
 msgstr "Sí"
+
+#~ msgid "g"
+#~ msgstr "v"
+
+#~ msgid "o"
+#~ msgstr "o"
+
+#~ msgid "d"
+#~ msgstr "d"
+
+#~ msgid "q"
+#~ msgstr "c"

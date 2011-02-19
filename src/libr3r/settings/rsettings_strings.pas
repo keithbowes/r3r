@@ -25,7 +25,7 @@ var
 implementation
 
 uses
-  LibIntl, RSettings_Routines, RStrings;
+  LibIntl, RSettings_Routines, RStrings, SysUtils;
 
 procedure InitStrings;
 begin
@@ -53,7 +53,7 @@ initialization
 
 setlocale(LC_ALL, '');
 textdomain('libr3r');
-bindtextdomain('libr3r', StrToPchar(GetInstalledPrefix + '/share/locale'));
+bindtextdomain('libr3r', StrToPchar(GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'locale'));
 
 InitStrings;
 
