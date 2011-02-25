@@ -19,7 +19,7 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
 
   wxString path, prefix;
 	wxChar sep = wxFileName::GetPathSeparator();
-	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 20);
+	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 256);
 	wxStrcpy(spath, wxString(sep));
 	wxStrcat(spath, wxT("share"));
 	wxStrcat(spath, wxString(sep));

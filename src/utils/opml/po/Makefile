@@ -19,5 +19,5 @@ uninstall:
 	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_opml.mo)
 
 %.mo: %.po r3r_opml.pot
-	-msgmerge -Uq $^
-	-msgfmt -o $@ $<
+	-$(MSGMERGE) -Uq $^
+	-$(MSGFMT) $(MSGFMTFLAGS) -o $@ $<

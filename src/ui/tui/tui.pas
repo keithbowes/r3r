@@ -956,12 +956,6 @@ end;
 
 procedure TTui.Draw;
 begin
-{$IFDEF ASSUME8025}
-  { if ScreeHeight and ScreenWidth have to use hard-coded values,
-    try to get an appropriate display. }
-  TextMode(C080);
-{$ENDIF}
-    
   InitWindowDims;
 
   FullScreen;

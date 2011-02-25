@@ -60,10 +60,6 @@ MSGMERGE ?= $(call programpath,msgmerge)
 
 MSGFMTFLAGS ?= --statistics
 
-ifeq ($(PWD),)
-$(error GNU file utils are required)
-endif
-
 ifndef inDOS
 COPY ?= $(call programpath,cp)
 ECHO ?= $(call programpath,echo)

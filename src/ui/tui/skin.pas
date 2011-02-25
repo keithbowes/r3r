@@ -101,6 +101,7 @@ begin
 end;
 
 begin
+  SkinOptionFull := true;
   Settings.RegisterString('skin', 'Display', 'default', SkinToUse);
   SkinFile := Settings.GetString(Settings.IndexOf('skin'));
 

@@ -7,7 +7,7 @@ procedure SetNewTitle(const NewTitle: String);
 implementation
 
 uses
-  Dos, 
+  Dos,
 {$IFDEF MSWINDOWS}
   Windows
 {$ELSE}
@@ -28,7 +28,7 @@ begin
 {$IFDEF MSWINDOWS}
     GetMem(Data, MAX_PATH);
     GetConsoleTitle(Data, MAX_PATH);
-    Res := String(Data);
+    Res := StrPas(Data);
     FreeMem(Data);
 {$ELSE}
     Data := nil;
@@ -54,10 +54,8 @@ var
 {$ENDIF}
 begin
 {$IFDEF MSWINDOWS}
-  GetMem(Data, MAX_PATH);
   Data := PChar(NewTitle);
   SetConsoleTitle(Data);
-  FreeMem(Data);
 {$ELSE}
   if GetEnv('DISPLAY') <> '' then
   begin
