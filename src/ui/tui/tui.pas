@@ -26,11 +26,9 @@ type
     FDimStatus: TWindowDim;
     FDimUI: TWindowDim;
     FItems: PRList;
-    FOnLastItem: Boolean;
     FScreenHeight: word;
     FScreenWidth: word;
     FScrollingUp: Boolean;
-    FTitleOriginal: String;
     FViewPort: TViewport;
     procedure Draw;
     procedure Redraw;
@@ -41,9 +39,7 @@ type
     procedure DrawSeparator;
     procedure DrawStatus;
     procedure DrawUIString;
-    function GetOriginalTitle: String;
     procedure InitWindowDims;
-    procedure SetNewTitle(const NewTitle: String);
   protected
     procedure NotifyUpdate; override;
     procedure ShowHelp;
@@ -67,65 +63,13 @@ type
 implementation
 
 uses
-  Dos, Info, RSettings_Routines, Skin, SysUtils, TuiStrings
+  Dos, Info, RKeys, RSettings_Routines, RTitle, Skin, SysUtils,
+  TuiFuncs, TuiStrings
 {$IFNDEF USE_NCRT}
   , Crt
 {$ELSE}
   , nCrt, nCurses
-{$ENDIF USE_NCRT}
-
-{$IFDEF MSWINDOWS}
-  , Windows
-{$ENDIF};
-
-const
-  QuitKey = 'q';
-
-{$IFNDEF HAS_SCREENHEIGHTWIDTH}
-function ScreenHeight: word;
-begin
-{$IFDEF __GPC__}
-  ScreenHeight := ScreenSize.Y;
-{$ELSE}
-{$IFDEF USE_NCRT}
-  ScreenHeight := Lines;
-{$ELSE}
-{$DEFINE ASSUME8025}
-  ScreenHeight := 25;
-{$ENDIF USE_NCRT}
-{$ENDIF __GPC__}
-end;
-
-function ScreenWidth: word;
-begin
-{$IFDEF __GPC__}
-  ScreenWidth := ScreenSize.X;
-{$ELSE}
-{$IFDEF USE_NCRT}
-  ScreenWidth := Cols;
-{$ELSE}
-{$DEFINE ASSUME8025}
-  ScreenWidth := 80;
-{$ENDIF USE_NCRT}
-{$ENDIF __GPC__}
-end;
-{$ENDIF HAS_SCREENHEIGHTWIDTH}
-
-procedure FullScreen;
-begin
-  Window(1, 1, ScreenWidth, ScreenHeight);
-  ClrScr
-end;
-
-{$IFNDEF USE_NCRT}
-function EndWin: integer;
-begin
-  FullScreen;
-  NormVideo;
-  ClrScr;
-  EndWin := 0;
-end;
-{$ENDIF}
+{$ENDIF USE_NCRT};
 
 function CreateFeedItem: TFeedItem;
 begin
@@ -133,27 +77,6 @@ begin
 end;
 
 constructor TTui.Create;
-const
-  DonateKey = 'd';
-  DownKey = 'j';
-  EndKey = Chr(79);
-  EnterKey = Chr(13);
-  GoKey = 'g';
-  HelpKey = 'h';
-  HelpSymKey = '?';
-  HomeEndKey = '~'; // For some reason, FPC reports both HOME and END as a tilde
-  HomeKey = Chr(71);
-  NullKey = Chr(0);
-  OptionsKey = 'o';
-  PageDownKey = Chr(81);
-  PageUpKey = Chr(73);
-  RefreshKey = 'l';
-  ResizeKey = Chr(27); // nCrt reports this when the window is resized
-  ScrollDownKey = Chr(32);
-  ScrollUpKey = Chr(8);
-  SearchKey = '/';
-  ShellKey = '!';
-  UpKey = 'k';
 var
   FeedIndex: word;
   KeyChar: char;
@@ -161,8 +84,7 @@ begin
   inherited Create;
   New(FItems, Init);
   FCurrentItem := 1;
-  FOnLastItem := false;
-  FTitleOriginal := GetOriginalTitle;
+  FScrollingUp := true;
 
 {$IFDEF __GPC__}
   CRTInit;
@@ -191,9 +113,14 @@ begin
   repeat
     KeyChar := ReadKey;
 
-    { Read the scan code of control characters }
-    if KeyChar = NullKey then
+    if KeyChar <> NullKey then
     begin
+      { Case insensitivity a la other programs}
+      KeyChar := LowerCase(KeyChar);
+    end
+    else
+    begin
+      { Read the scan code of control characters }
       KeyChar := ReadKey;
     end;
 
@@ -240,7 +167,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if (KeyChar = RefreshKey) or (KeyChar = ResizeKey) then
+    else if (TranslateControl(KeyChar) = RefreshKey) or (KeyChar = ResizeKey) then
     begin
       Redraw;
     end
@@ -277,7 +204,7 @@ begin
     end
     else if KeyChar = EnterKey then
     begin
-      if FCurrentItem > 0 then
+      if FItems^.Count > 0 then
       begin
         OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MainLink);
       end;
@@ -313,8 +240,6 @@ begin
     Dispose(FItems, Done);
   end;
 
-  SetNewTitle(FTitleOriginal);
-
   EndWin;
 
 {$IFNDEF __GPC__}
@@ -339,12 +264,12 @@ begin
   FItems^.Add(AItem);
   Items := FItems^.Count;
 
-  if Items < FViewPort.PortHeight then
+  if Items <= FViewPort.PortHeight then
   begin
     Title := AItem.TitleText;
-    if Length(Title) > (ScreenWidth div 2 - 3 - Length(IntToStr(Items))) then
+    if Length(Title) > (FDimList.LeftEnd - 3 - Length(IntToStr(Items))) then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(Items)) - 4) + '...';
+      Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(Items)) - 6) + '...';
     end;
 
     TextBackground(SkinColorTable.FIndexBack);
@@ -374,22 +299,23 @@ begin
 
   if Extra <> '' then
   begin
-    Write(' (', Extra, ')');
+    Write('(', Extra, ')');
   end;
 end;
 
 procedure TTui.RetrieveFeed(Resource: String);
 begin
-  DrawFeedList;
   ScrollTo(FCurrentItem);
+  DrawFeedList;
   inherited RetrieveFeed(Resource);
   GoItem;
+  ScrollTo(FCurrentItem);
 end;
 
 procedure TTui.NotifyUpdate;
 begin
   DrawStatus;
-  WriteLn(UpdateAvailable);
+  Write(UpdateAvailable);
 end;
 
 procedure TTui.ShowHelp;
@@ -481,8 +407,6 @@ begin
 end;
 
 begin
-  RedrawConditional;
-
   if FItems^.Count > 0 then
   begin
     with TFeedItem(FItems^.GetNth(FCurrentItem - 1)) do
@@ -635,25 +559,25 @@ begin
   if SkinOptionFull then
   begin
     Window(1, FDimUI.TopStart + FDimUI.TopEnd, ScreenWidth, ScreenHeight - FDimUI.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
-    ClrScr;
   end
   else
   begin
     DrawFeedInfo;
   end;
+
   ClrScr;
 
   TextBackground(SkinColorTable.FOptionIndexBack);
   TextColor(SkinColorTable.FOptionIndexFore);
   Write(NumSym:NumLen);
 
-  TextBackground(SkinColorTable.FOptionNameBack);
-  TextColor(SkinColorTable.FOptionNameFore);
-  Write(OptionName:NumLen + Length(OptionName));
+  TextBackground(SkinColorTable.FOptionDescBack);
+  TextColor(SkinColorTable.FOptionDescFore);
+  Write(OptionDesc:NumLen + Length(OptionDesc));
   
   TextBackground(SkinColorTable.FOptionValueBack);
   TextColor(SkinColorTable.FOptionValueFore);
-  WriteLn(OptionVal:Width - Length(OptionName) div 2 + 3 + NumLen);
+  WriteLn(OptionVal:Width - Length(OptionDesc) div 2 + 3 + NumLen);
   WriteLn;
 
   with Settings do
@@ -668,8 +592,8 @@ begin
       SetName := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
       Write((i + 1):NumLen, '.');
 
-      TextBackground(SkinColorTable.FOptionNameBack);
-      TextColor(SkinColorTable.FOptionNameFore);
+      TextBackground(SkinColorTable.FOptionDescBack);
+      TextColor(SkinColorTable.FOptionDescFore);
       Write(SetName:NumLen + Length(SetName));
 
       TextBackground(SkinColorTable.FOptionValueBack);
@@ -794,32 +718,33 @@ var
   i: word;
   Title: String;
 begin
-  FViewPort.FirstItem := FViewPort.LastItem;
-  FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
-  FCurrentItem := FViewPort.FirstItem;
+  if FViewPort.LastItem = 0 then
+  begin
+    FViewPort.FirstItem := 0;
+    FViewPort.LastItem := FViewPort.PortHeight - 1;
+    FCurrentItem := FViewPort.FirstItem;
+  end
+  else
+  begin
+    FViewPort.FirstItem := FViewPort.LastItem;
+    FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
+    FCurrentItem := FViewPort.FirstItem;
+  end;
+
   FScrollingUp := false;
 
   if FItems^.Count < FViewPort.PortHeight then
   begin
     FViewPort.FirstItem := 1;
     FViewPort.LastItem := FItems^.Count;
-    FCurrentItem := FViewPort.LastItem;
+    FCurrentItem := FViewPort.FirstItem;
   end
   else if FViewPort.LastItem > FItems^.Count then
   begin
     FViewPort.LastItem := FItems^.Count;
-    
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
-
-    if not FOnLastItem then
-    begin
-      FCurrentItem := FViewPort.FirstItem + 1;
-      FOnLastItem := true;
-    end
-    else
-    begin
-      FCurrentItem := FItems^.Count
-    end
+    FCurrentItem := FViewPort.FirstItem + 1;
+    FScrollingUp := true;
   end
   else
   begin
@@ -829,13 +754,15 @@ begin
   end;
 
   DrawFeedList;
+  ClrScr;
+  GotoXY(1, 1);
 
-  for i := FViewPort.FirstItem to FViewPort.LastItem do
+  for i := FViewPort.FirstItem to FViewPort.LastItem  do
   begin
     Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
-    if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
+    if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
+      Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
     end;
 
     TextBackground(SkinColorTable.FIndexBack);
@@ -859,43 +786,37 @@ begin
 
   if FViewPort.FirstItem > FViewPort.PortHeight then
   begin
-    if not FOnLastItem then
-    begin
-      FViewPort.LastItem := FViewPort.FirstItem;
-      FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
+    FViewPort.LastItem := FViewPort.FirstItem;
+    FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
 
-      if not FScrollingUp then
-      begin
-        Dec(FviewPort.FirstItem);
-        Dec(FViewPort.LastItem);
-      end;
-    end
-    else
+    if not FScrollingUp then
     begin
-      FOnLastItem := false;
+      Dec(FviewPort.FirstItem);
+      Dec(FViewPort.LastItem);
     end;
-
-    FCurrentItem := FViewPort.FirstItem + 1;
   end
   else if FItems^.Count < FViewPort.PortHeight then
   begin
-    FViewPort.FirstItem := 1;
+    FViewPort.FirstItem := 0;
     FViewPort.LastItem := FItems^.Count;
   end
   else
   begin
-    FViewPort.FirstItem := 1;
+    FViewPort.FirstItem := 0;
     FViewPort.LastItem := FViewPort.PortHeight;
   end;
+  FCurrentItem := FViewPort.FirstItem + 1;
 
   DrawFeedList;
+  ClrScr;
+  GotoXY(1, 1);
 
-  for i := FViewPort.FirstItem to FViewPort.LastItem do
+  for i := FViewPort.FirstItem + 1 to FViewPort.LastItem do
   begin
     Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
-    if Length(Title) > ScreenWidth div 2 - 3 - Length(IntToStr(i)) then
+    if Length(Title) > FDimList.LeftEnd - 3 - Length(IntToStr(i)) then
     begin
-      Title := Copy(Title, 1, ScreenWidth div 2 - 3 - Length(IntToStr(i)) - 4) + '...';
+      Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(i)) - 6) + '...';
     end;
 
     TextBackground(SkinColorTable.FIndexBack);
@@ -943,8 +864,12 @@ begin
   Window(FDimList.LeftStart, FDimList.TopStart, FDimList.LeftEnd, FDimList.TopEnd);
   TextBackground(SkinColorTable.FTitleBack);
   TextColor(SkinColorTable.FTitleFore);
-  ClrScr;
-  GotoXY(1, FItems^.Count + 1);
+  if FItems^.Count = 0 then
+  begin
+    ClrScr;
+  end;
+
+  GotoXY(1, FItems^.Count + FDimUI.TopEnd);
 end;
 
 procedure TTui.DrawInfoBar;
@@ -1024,56 +949,9 @@ begin
   FDimUI.LeftStart := Origin;
   FDimUI.TopStart := Origin;
 
-  FViewPort.FirstItem := FCurrentItem;
+  FViewPort.FirstItem := FCurrentItem + 1;
   FViewPort.LastItem := FDimInfoBar.TopStart - FDimUI.TopEnd - 1;
   FViewPort.PortHeight := FViewPort.LastItem - 1;
-end;
-
-function TTui.GetOriginalTitle: String;
-var
-  Data: Pointer;
-  Res: String;
-begin
-  Res := GetEnv('R3R_DEFAULT_TITLE');
-  if Res = '' then
-  begin
-{$IFDEF MSWINDOWS}
-    GetMem(Data, ScreenWidth);
-    GetConsoleTitle(Data, ScreenWidth);
-    Res := String(Data);
-    FreeMem(Data);
-{$ELSE}
-    Data := nil;
-
-    if GetEnv('DISPLAY') <> '' then
-    begin
-      Res := GetEnv('USER') + '@' + GetEnv('HOSTNAME') + ': ' + GetCurrentDir;
-    end
-    else
-    begin
-      Res := String(Data);
-    end;
-{$ENDIF MSWINDOWS}
-  end;
-
-  GetOriginalTitle := Res;
-end;
-
-procedure TTui.SetNewTitle(const NewTitle: String);
-var
-  Data: Pointer;
-begin
-{$IFDEF MSWINDOWS}
-  Data := PChar(NewTitle);
-  SetConsoleTitle(Data);
-{$ELSE}
-  if GetEnv('DISPLAY') <> '' then
-  begin
-    SwapVectors;
-    Exec(GetInstalledPrefix + PathDelim + 'bin' + PathDelim + 'r3r-settitle', '"' + NewTitle + '"');
-    SwapVectors;
-  end;
-{$ENDIF MSWINDOWS}
 end;
 
 procedure TTui.Draw;
@@ -1083,21 +961,23 @@ begin
     try to get an appropriate display. }
   TextMode(C080);
 {$ENDIF}
-
-  FullScreen;
+    
   InitWindowDims;
 
-  DrawUIString;
+  FullScreen;
+
   DrawFeedInfo;
+  DrawSeparator;
+  DrawFeedList;
+  ClrScr;
+
   DrawInfoBar;
   DrawStatus;
-  DrawSeparator;
-
-  DrawFeedList;
+  DrawUIString;
+  ShowHelp;
 
   FScreenHeight := ScreenHeight;
   FScreenWidth := ScreenWidth;
-  ShowHelp
 end;
 
 procedure TTui.Redraw;
@@ -1106,9 +986,12 @@ var
 begin
   Draw;
 
-  iTmp := FCurrentItem;
-  ScrollTo(FViewPort.FirstItem);
-  ScrollTo(iTmp)
+  if FItems^.Count > 0 then
+  begin
+    iTmp := FCurrentItem;
+    ScrollTo(FViewPort.FirstItem);
+    ScrollTo(iTmp);
+  end;
 end;
 
 {

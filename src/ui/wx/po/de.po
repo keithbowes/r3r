@@ -7,28 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-18 02:19-0500\n"
+"POT-Creation-Date: 2011-02-23 00:47-0500\n"
 "PO-Revision-Date: 2009-12-04 00:16-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../app.cpp:11
 msgid "R3R"
 msgstr "R3R"
 
-#: ../desc.cpp:26
+#: ../desc.cpp:27
 msgid "&Contact"
 msgstr "&Kontaktieren"
 
-#: ../desc.cpp:30
+#: ../desc.cpp:31
 msgid "&Subscribe"
 msgstr "&Abonnieren"
 
-#: ../desc.cpp:34
+#: ../desc.cpp:35
 msgid "&Play Podcast..."
 msgstr "&Spielen Podcast..."
 
@@ -64,6 +65,16 @@ msgstr "Themen"
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
+#: ../feedlist.cpp:250
+msgid ""
+"\n"
+"\n"
+"[Disable messages (in your settings) to not see this again.]"
+msgstr ""
+"\n"
+"\n"
+"[Abstellen Nachrichten (in der Einstellungen) om zu nicht wieder dieser sehen.]"
+
 #: ../location.cpp:18
 msgid "Go"
 msgstr "Gehen"
@@ -78,7 +89,7 @@ msgstr "&Beenden"
 
 #: ../menu.cpp:32
 msgid "&Load Subscriptions"
-msgstr "&Laden Abbonements"
+msgstr "&Laden Abonnements"
 
 #: ../menu.cpp:33
 msgid "&Refresh"
@@ -138,7 +149,7 @@ msgstr "&Benachrichtigen über Aktuelles"
 
 #: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
-msgstr "&Laden abbonements an ausführen"
+msgstr "&Laden Abonnements an ausführen"
 
 #: ../settings-display.cpp:37
 msgid "&Warn about missing data in feeds"
@@ -148,19 +159,35 @@ msgstr "&Warnen über fehlende Daten in Feeds"
 msgid "Display"
 msgstr "Anzeige"
 
-#: ../settings-headers.cpp:15
-msgid "Custom Accept &Types: "
-msgstr "Benutzerdefinierte &Typen akzeptieren"
+#: ../settings-headers.cpp:16
+msgid "&Types: "
+msgstr "&Typen: "
 
-#: ../settings-headers.cpp:22 ../settings-headers.cpp:32
+#: ../settings-headers.cpp:17
+msgid "Custom Accept Types"
+msgstr "Benutzerdefinierte Typen akzeptieren"
+
+#: ../settings-headers.cpp:19
+msgid "Custom Accept Types: "
+msgstr "Benutzerdefinierte Typen akzeptieren"
+
+#: ../settings-headers.cpp:27 ../settings-headers.cpp:42
 msgid "Enable"
 msgstr "Ermöglichen"
 
-#: ../settings-headers.cpp:25
-msgid "Custom Accept &Languages: "
-msgstr "Benutzerdefinierte akzeptieren &Sprachen"
+#: ../settings-headers.cpp:31
+msgid "&Languages: "
+msgstr "&Sprachen: "
 
-#: ../settings-headers.cpp:35
+#: ../settings-headers.cpp:32
+msgid "Custom Accept Languages"
+msgstr "Benutzerdefinierte akzeptieren Sprachen"
+
+#: ../settings-headers.cpp:34
+msgid "Custom Accept Languages: "
+msgstr "Benutzerdefinierte akzeptieren Sprachen"
+
+#: ../settings-headers.cpp:45
 msgid "HTTP Headers"
 msgstr "HTTP-Köpfe"
 
@@ -201,15 +228,15 @@ msgstr "Media-&Player"
 msgid "Programs"
 msgstr "Programms"
 
-#: ../settings-subscriptions.cpp:41
+#: ../settings-subscriptions.cpp:48
 msgid "&Delete"
 msgstr "&Entfernen"
 
-#: ../settings-subscriptions.cpp:45
+#: ../settings-subscriptions.cpp:52
 msgid "&Add"
 msgstr "&Hinzufügen"
 
-#: ../settings-subscriptions.cpp:53
+#: ../settings-subscriptions.cpp:60
 msgid "Subscriptions"
 msgstr "Abbonements"
 

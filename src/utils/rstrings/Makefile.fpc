@@ -1,6 +1,0 @@
-[prerules]
-UNIT_DIRS = $(wildcard ../*)
-
-[rules]
-include ../../../scripts/common.make
-all: rstrings$(PPUEXT)

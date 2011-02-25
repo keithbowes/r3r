@@ -33,7 +33,12 @@ void InitGettext()
 
   wxLocale * locale = new wxLocale();
 #if wxCHECK_VERSION(2,9,0)
-  locale->Init(wxLANGUAGE_DEFAULT, wxLOCALE_LOAD_DEFAULT);
+	int language;
+	if (locale->GetSystemLanguage() != wxLANGUAGE_UNKNOWN)
+		language = wxLANGUAGE_DEFAULT;
+	else
+		language = wxLANGUAGE_ENGLISH;
+  locale->Init(language, wxLOCALE_LOAD_DEFAULT);
 #else
 	locale->Init();
 #endif

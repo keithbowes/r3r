@@ -4,6 +4,7 @@ interface
 
 const
   AppName = 'R3R';
+  AppVersion = '@VERSION@';
   InstalledPrefix = '@PREFIX@';
 
 function UserAgent: String;
@@ -81,7 +82,7 @@ end;
 
 function UserAgent: String;
 begin
-  UserAgent := AppName + '/@VERSION@ (' + OS + '; @COMPILER@)'
+  UserAgent := AppName + '/' + AppVersion + ' (' + OS + '; @COMPILER@)'
 {$IFDEF SOCKETS_SYNAPSE}
     + ' Synapse/' + SynapseRelease
 {$ENDIF};

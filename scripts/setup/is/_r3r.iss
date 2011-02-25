@@ -1,5 +1,6 @@
 [Setup]
 AllowNoIcons=yes
+AlwaysRestart=yes
 AppName=R3R
 AppPublisher=Keith Bowes
 AppPublisherURL=http://sourceforge.net/users/zooplah

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-18 02:24-0500\n"
+"POT-Creation-Date: 2011-02-23 00:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,15 +20,15 @@ msgstr ""
 msgid "R3R"
 msgstr ""
 
-#: ../desc.cpp:26
+#: ../desc.cpp:27
 msgid "&Contact"
 msgstr ""
 
-#: ../desc.cpp:30
+#: ../desc.cpp:31
 msgid "&Subscribe"
 msgstr ""
 
-#: ../desc.cpp:34
+#: ../desc.cpp:35
 msgid "&Play Podcast..."
 msgstr ""
 
@@ -62,6 +62,13 @@ msgstr ""
 
 #: ../feedlist.cpp:127
 msgid "Date Created"
+msgstr ""
+
+#: ../feedlist.cpp:250
+msgid ""
+"\n"
+"\n"
+"[Disable messages (in your settings) to not see this again.]"
 msgstr ""
 
 #: ../location.cpp:18
@@ -148,19 +155,35 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: ../settings-headers.cpp:15
-msgid "Custom Accept &Types: "
+#: ../settings-headers.cpp:16
+msgid "&Types: "
 msgstr ""
 
-#: ../settings-headers.cpp:22 ../settings-headers.cpp:32
+#: ../settings-headers.cpp:17
+msgid "Custom Accept Types"
+msgstr ""
+
+#: ../settings-headers.cpp:19
+msgid "Custom Accept Types: "
+msgstr ""
+
+#: ../settings-headers.cpp:27 ../settings-headers.cpp:42
 msgid "Enable"
 msgstr ""
 
-#: ../settings-headers.cpp:25
-msgid "Custom Accept &Languages: "
+#: ../settings-headers.cpp:31
+msgid "&Languages: "
 msgstr ""
 
-#: ../settings-headers.cpp:35
+#: ../settings-headers.cpp:32
+msgid "Custom Accept Languages"
+msgstr ""
+
+#: ../settings-headers.cpp:34
+msgid "Custom Accept Languages: "
+msgstr ""
+
+#: ../settings-headers.cpp:45
 msgid "HTTP Headers"
 msgstr ""
 
@@ -201,15 +224,15 @@ msgstr ""
 msgid "Programs"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:41
+#: ../settings-subscriptions.cpp:48
 msgid "&Delete"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:45
+#: ../settings-subscriptions.cpp:52
 msgid "&Add"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:53
+#: ../settings-subscriptions.cpp:60
 msgid "Subscriptions"
 msgstr ""
 

@@ -228,7 +228,7 @@ begin
   CheckBoolean('hide-cached-feed-items', 'Display', true, DescHideItems);
   CheckBoolean('enable-mime-guess', 'Display', false, DescGuess);
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
-  CheckBoolean('load-subscriptions-on-startup', 'Display', false, DescCheck);
+  CheckBoolean('load-subscriptions-on-startup', 'Display', false, LoadSubscriptions);
   CheckBoolean('warn-missing-data', 'Display', false, DescWarn);
 
   CheckBoolean('use-proxy', 'HTTP', false, DescProxy);

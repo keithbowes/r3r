@@ -1,3 +1,4 @@
+#include "htmldescriptionbox.h"
 #include "wx.h"
 
 class DescriptionBoxEvents: public wxWindow
@@ -72,4 +73,10 @@ class SubscriptionsEvents: public wxWindow
     void OnAdd(wxCommandEvent & event);
     void OnBrowse(wxCommandEvent & event);
     void OnDelete(wxCommandEvent & event);
+};
+
+class HtmlBoxEvents : public wxEvtHandler
+{
+  public:
+    void OnLink(wxHtmlLinkEvent & event);
 };

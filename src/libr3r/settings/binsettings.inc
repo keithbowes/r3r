@@ -241,5 +241,5 @@ begin
 end;
 
 {
-  vim:filetype=pascal
+  vi:filetype=pascal
 }

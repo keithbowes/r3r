@@ -10,6 +10,7 @@ var
   DescGuess: String;
   DescCheck: String;
   DescWarn:String;
+  LoadSubscriptions: String;
   DescProxy: String;
   DescProxyAddress: String;
   DescProxyPort: String;
@@ -36,6 +37,7 @@ begin
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');
+  LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');
   DescProxyAddress := _('Proxy address');
   DescProxyPort := _('Proxy port');

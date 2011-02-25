@@ -1,5 +1,5 @@
 # -*-shell-script-*-
-# vim:filetype=sh
+# vi:filetype=sh
 
 [Meta]
 RootName: @r3r.sourceforge.net/default:$SOFTWAREVERSION:$PACKAGEVERSION

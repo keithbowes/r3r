@@ -1,4 +1,3 @@
-
 unit expas;
 interface
 
@@ -18,7 +17,6 @@ interface
 }
 
 Type
-  //Pchar  = ^char;
   PPChar = ^PChar;
   PPointer = ^pointer;
 {$IFDEF FPC}
@@ -30,7 +28,6 @@ Type
   Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd
   See the file copying.txt for copying permission.
    }
-{$ifndef XmlParse_INCLUDED}
 
   const
      XmlParse_INCLUDED = 1;
@@ -45,7 +42,6 @@ Type
 {$ifndef XML_UNICODE}
 {$define XML_UNICODE}  
 {$endif}
-{$include <stddef.h>}
 
   type
 
@@ -80,7 +76,6 @@ Type
   { not XML_UNICODE_WCHAR_T  }
   { Constructs a new parser; encoding is the encoding specified by the external
   protocol or null if there is none specified.  }
-(* Const before type ignored *)
 
   function XML_ParserCreate(const encoding:PChar):XML_Parser; external 'expat' name 'XML_ParserCreate';
 
@@ -93,31 +88,23 @@ Type
   the namespace URI and the local part will be concatenated without any
   separator.  When a namespace is not declared, the name and prefix will be
   passed through without expansion.  }
-(* Const before type ignored *)
   function XML_ParserCreateNS(encoding:PChar; namespaceSeparator:XML_Char):XML_Parser; external 'expat' name 'XML_ParserCreateNS';
 
   { atts is array of name/value pairs, terminated by 0;
      names and values are 0 terminated.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
 
   type
 
      XML_StartElementHandler = procedure (userData:pointer; name:PChar; atts:PPChar);
-(* Const before type ignored *)
 
      XML_EndElementHandler = procedure (userData:pointer; name:PChar);
   { s is not 0 terminated.  }
-(* Const before type ignored *)
 
      XML_CharacterDataHandler = procedure (userData:pointer; s:PChar; len:integer);
   { target and data are 0 terminated  }
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_ProcessingInstructionHandler = procedure (userData:pointer; target:PChar; data:PChar);
   { data is 0 terminated  }
-(* Const before type ignored *)
 
      XML_CommentHandler = procedure (userData:pointer; data:PChar);
 
@@ -136,12 +123,10 @@ Type
   There are no guarantees about how characters are divided between calls
   to the default handler: for example, a comment might be split between
   multiple calls.  }
-(* Const before type ignored *)
 
      XML_DefaultHandler = procedure (userData:pointer; s:PChar; len:integer);
   { This is called for the start of the DOCTYPE declaration when the
   name of the DOCTYPE is encountered.  }
-(* Const before type ignored *)
 
      XML_StartDoctypeDeclHandler = procedure (userData:pointer; doctypeName:PChar);
   { This is called for the start of the DOCTYPE declaration when the
@@ -152,31 +137,16 @@ Type
   entity.  The base argument is whatever was set by XML_SetBase.
   The entityName, systemId and notationName arguments will never be null.
   The other arguments may be.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_UnparsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; base:PChar; systemId:PChar; publicId:PChar; 
                    notationName:PChar);
   { This is called for a declaration of notation.
   The base argument is whatever was set by XML_SetBase.
   The notationName will never be null.  The other arguments can be.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_NotationDeclHandler = procedure (userData:pointer; notationName:PChar; base:PChar; systemId:PChar; publicId:PChar);
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_ExternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; base:PChar; systemId:PChar; publicId:PChar);
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_InternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; replacementText:PChar; replacementTextLength:integer);
   { When namespace processing is enabled, these are called once for
@@ -184,11 +154,8 @@ Type
   handlers occur between the calls to the start and end namespace
   declaration handlers. For an xmlns attribute, prefix will be null.
   For an xmlns="" attribute, uri will be null.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_StartNamespaceDeclHandler = procedure (userData:pointer; prefix:PChar; uri:PChar);
-(* Const before type ignored *)
 
      XML_EndNamespaceDeclHandler = procedure (userData:pointer; prefix:PChar);
   { This is called if the document is not standalone (it has an
@@ -221,10 +188,6 @@ Type
   In this case the calling parser will return an XML_ERROR_EXTERNAL_ENTITY_HANDLING
   error.
   Note that unlike other handlers the first argument is the parser, not userData.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
-(* Const before type ignored *)
 
      XML_ExternalEntityRefHandler = function (parser:XML_Parser; context:PChar; base:PChar; systemId:PChar; publicId:PChar):integer;
   { This structure is filled in by the XML_UnknownEncodingHandler
@@ -267,7 +230,6 @@ Type
   
   4. No Unicode character may be encoded by more than one distinct sequence
   of bytes.  }
-(* Const before type ignored *)
 
      XML_Encoding = record
           map : array[0..255] of integer;
@@ -285,7 +247,6 @@ Type
   Otherwise it must return 0.
   If info does not describe a suitable encoding,
   then the parser will return an XML_UNKNOWN_ENCODING error.  }
-(* Const before type ignored *)
 
      XML_UnknownEncodingHandler = function (var encodingHandlerData:pointer; name:PChar; var info:XML_Encoding):integer;
 
@@ -343,7 +304,6 @@ Type
   { This is equivalent to supplying an encoding argument
   to XML_ParserCreate. It must not be called after XML_Parse
   or XML_ParseBuffer.  }
-(* Const before type ignored *)
   function XML_SetEncoding(parser:XML_Parser; encoding:PChar):integer; external 'expat' name 'XML_SetEncoding';
 
   { If this function is called, then the parser will be passed
@@ -357,10 +317,8 @@ Type
   XML_ExternalEntityRefHandler, XML_NotationDeclHandler
   and XML_UnparsedEntityDeclHandler. The base argument will be copied.
   Returns zero if out of memory, non-zero otherwise.  }
-(* Const before type ignored *)
   function XML_SetBase(parser:XML_Parser; base:PChar):integer; external 'expat' name 'XML_SetBase';
 
-(* Const before type ignored *)
   function XML_GetBase(parser:XML_Parser):PChar; external 'expat' name 'XML_GetBase';
 
   { Returns the number of the attribute/value pairs passed in last call
@@ -379,7 +337,6 @@ Type
   { Parses some input. Returns 0 if a fatal error is detected.
   The last call to XML_Parse must have isFinal true;
   len may be zero for this call (or any other).  }
-(* Const before type ignored *)
   function XML_Parse(parser:XML_Parser; s:pchar; len:integer; isFinal:integer):integer; external 'expat' name 'XML_Parse';
 
   function XML_GetBuffer(parser:XML_Parser; len:integer):pointer; external 'expat' name 'XML_GetBuffer';
@@ -399,8 +356,6 @@ Type
   The new parser is completely independent and may safely be used in a separate thread.
   The handlers and userData are initialized from the parser argument.
   Returns 0 if out of memory.  Otherwise returns a new XML_Parser object.  }
-(* Const before type ignored *)
-(* Const before type ignored *)
   function XML_ExternalEntityParserCreate(parser:XML_Parser; context:PChar; encoding:PChar):XML_Parser; external 'expat' name 'XML_ExternalEntityParserCreate';
 
 
@@ -474,12 +429,7 @@ Type
   procedure XML_ParserFree(parser:XML_Parser); external 'expat' name 'XML_ParserFree';
 
   { Returns a string describing the error.  }
-(* Const before type ignored *)
   function XML_ErrorString(code:integer):PXML_LChar; external 'expat' name 'XML_ErrorString';
-
-{ C++ end of extern C conditionnal removed }
-{$endif}
-  { not XmlParse_INCLUDED  }
 
 implementation
 

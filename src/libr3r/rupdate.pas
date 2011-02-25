@@ -14,9 +14,12 @@ type
 
 implementation
 
+uses
+  Info;
+
 constructor TRUpdate.Create;
 begin
-  inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=@VERSION@');
+  inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=' + AppVersion);
   Method := 'HEAD';
 
   Execute;

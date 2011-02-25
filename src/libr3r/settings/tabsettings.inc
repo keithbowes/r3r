@@ -123,12 +123,16 @@ var
   i: byte;
 begin
   TabFile^.BeginWrite;
+	TabFile^.Clear;
+
   for i := 0 to FSettings^.Count - 1 do
   begin
     ASetting := PRSetting(FSettings^.GetNth(i));
 
     with ASetting^, TabFile^ do
     begin
+			AddComment(Name + ' (' + Description + ')');
+
       case ValueType of
         TypeBoolean:
         begin
@@ -152,5 +156,5 @@ begin
 end;
 
 {
-  vim:filetype=pascal
+  vi:filetype=pascal
 }

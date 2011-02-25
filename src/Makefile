@@ -23,3 +23,4 @@ install:
 uninstall:
 	cd libr3r && $(MAKE) uninstall
 	cd ui && $(MAKE) uninstall
+	cd utils && $(MAKE) uninstall

@@ -1,0 +1,90 @@
+#! /bin/sh
+
+prefix=/usr/local
+
+builddir=$(pwd)
+srcrel=`echo $0 | sed -e 's|/configure||g'`
+if test "$srcrel" != ".";
+then
+  srcdir=`echo $srcrel | sed -e "s|^\.\+|$builddir/$srcrel|g"`
+else
+  srcdir=$builddir
+fi
+
+opts="$@"
+
+echo "# vi: ft=make" > config.make
+
+for opt in $opts;
+do
+  val=`echo "$opt" | sed -e 's|^.*=||g'`
+  case $opt in
+    --prefix*)
+      prefix="$val";;
+    --with-settings*)
+      case $val in
+        binary)
+          st=SETTINGS_BIN;;
+        ini)
+          st=SETTINGS_INI;;
+        registry)
+          st=SETTINGS_REG;;
+        tab)
+          st=SETTINGS_TAB;;
+        *)
+          echo "$opt invalid"
+          exit;;
+      esac
+      echo "DEFS_SETTINGS=$st" >> config.make;;
+    --with-ui*)
+      case $val in
+        classic|html|tui|tv|wx)
+          echo "R3R_UI=$val" >> config.make;;
+        *)
+          echo "$opt invalid";
+          exit;;
+      esac;;
+    --with-sockets*)
+      case $val in
+        bsd)
+          st=SOCKETS_BSD;;
+        synapse)
+          st=SOCKETS_SYNAPSE;;
+        *)
+          echo "$opt invalid"
+          exit;;
+      esac
+      echo "DEFS_SOCKETS=$st" >> config.make;;
+    --enable-ncrt)
+      echo "USE_NCRT=1" >> config.make;;
+    --help)
+      echo "Available options:"
+      echo -e "\t--prefix=PFX Where to install it [/usr/local]"
+      echo -e "\t--with-settings=database Type of settings database to use (binary|ini|registry|tab)"
+      echo -e "\t--with-ui=ui Which UI to build it with (classic|html|tui|tv|wx)"
+      echo -e "\t--with-sockets=lib Sockets library to use (bsd|synapse)"
+      echo -e "\t--enable-ncrt Build --with-ui=tui with nCrt and ncurses"
+      echo -e "\t--help This help"
+      exit;;
+    *)
+      echo "Invalid option $opt. See $srcrel/configure --help for valid options."
+      exit;;
+  esac
+done
+
+echo "DESTDIR=$prefix" >> config.make
+
+if test $? -eq 0;
+then
+  if test "$builddir" != "$srcdir";
+  then
+    rm -fv Makefile
+    ln -s "$srcdir/Makefile"
+    install -d -m 755 "$builddir/scripts"
+    sed -e "s|BUILDDIR ?= \.|BUILDDIR=$builddir|g" \
+      -e "s|SRCDIR ?= \.|SRCDIR=$srcdir|g" \
+      $srcdir/scripts/common.make > $builddir/scripts/common.make
+  fi
+
+  make check
+fi

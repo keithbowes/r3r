@@ -107,7 +107,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
   wxStaticBox * box = GetDescriptionBox();
   box->SetLabel(wxString(info->title, wxConvUTF8));
 
-  wxHtmlWindow * html = (wxHtmlWindow *) box->GetClientData();
+  HtmlDescriptionBox * html = (HtmlDescriptionBox *) box->GetClientData();
 
 #if wxCHECK_VERSION(2,9,0)
   html->SetPage(wxString(info->desc));
@@ -402,6 +402,11 @@ void SubscriptionsEvents::OnDelete(wxCommandEvent & event)
       box->Select(sel);
     }
   }
+}
+
+void HtmlBoxEvents::OnLink(wxHtmlLinkEvent & event)
+{
+	GoBrowser(event.GetLinkInfo().GetHref().char_str());
 }
 
 #include "eventtables.h"

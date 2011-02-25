@@ -32,6 +32,8 @@ type
     function ValueExists(const Section, Ident: String): Boolean;
     procedure EraseSection(const Section: String);
     procedure DeleteKey(const Section, Ident: String);
+    procedure Clear;
+    procedure AddComment(const Comment: String);
     procedure UpdateFile;
     procedure BeginWrite;
     procedure EndWrite;
@@ -255,6 +257,22 @@ begin
   UpdateTabs(Section, Ident, KeepNeither);
 end;
 
+procedure TTabFile.Clear;
+begin
+  Rewrite(FFile);
+end;
+
+{ TODO: Better comment support.  Right now, any line not
+  containing a tab is ignored.}
+procedure TTabFile.AddComment(const Comment: String);
+begin
+  if Pos(TabChar, Comment) = 0 then
+  begin
+    Append(FFile);
+    WriteLn(FFile, '# ', Comment);
+  end;
+end;
+
 procedure TTabFile.UpdateFile;
 begin
   UpdateTabs('', '', KeepAll);
@@ -263,7 +281,6 @@ end;
 procedure TTabFile.BeginWrite;
 begin
   FInWrite := true;
-  Rewrite(FFile);
 end;
 
 procedure TTabFile.EndWrite;

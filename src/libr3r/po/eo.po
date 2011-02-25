@@ -7,6 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: eo\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: libr3rstrings:errorgetting
@@ -80,14 +81,17 @@ msgstr "Kontroli promociojn"
 msgid "Warn about missing data"
 msgstr "Averti mankajn datumojn"
 
+msgid "Load subscriptions on startup"
+msgstr "Ŝargi abonojn dum plenumiĝo"
+
 msgid "Use a proxy?"
-msgstr "Ĉu uzi prokurilon?"
+msgstr "Ĉu uzi prokuron?"
 
 msgid "Proxy address"
-msgstr "Prokurila adreso"
+msgstr "Prokura adreso"
 
 msgid "Proxy port"
-msgstr "Prokurila pordo"
+msgstr "Prokura pordo"
 
 msgid "Use custom accept types?"
 msgstr "Ĉu uzi proprajn enhavtipojn?"

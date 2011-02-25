@@ -62,8 +62,8 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: tuistrings:optionname
-msgid "Option Name"
+#: tuistrings:optiondesc
+msgid "Option Description"
 msgstr ""
 
 #: tuistrings:optionval
@@ -108,4 +108,8 @@ msgstr ""
 
 #: tuistrings:truestring
 msgid "TRUE"
+msgstr ""
+
+#: tuistrings:skintouse
+msgid "Skin to use"
 msgstr ""

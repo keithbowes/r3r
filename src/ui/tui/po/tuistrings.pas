@@ -28,7 +28,7 @@ var
   ErrorError: String;
   ErrorWarning: String;
 
-  OptionName: String;
+  OptionDesc: String;
   OptionVal: String;
 
   SettingToChange: String;
@@ -43,6 +43,8 @@ var
 
   FalseString: String;
   TrueString: String;
+
+  SkinToUse: String;
 
 implementation
 
@@ -73,7 +75,7 @@ begin
   ErrorError := _('Error');
   ErrorWarning := _('Warning');
 
-  OptionName := _('Option Name');
+  OptionDesc := _('Option Description');
   OptionVal := _('Option Value');
 
   SettingToChange := _('Option to change (number or empty to exit): ');
@@ -88,6 +90,8 @@ begin
 
   FalseString := _('FALSE');
   TrueString := _('TRUE');
+
+  SkinToUse := _('Skin to use');
 end;
 
 initialization

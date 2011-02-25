@@ -20,3 +20,6 @@ clean:
 
 install:
 	cd opml && $(MAKE) install
+
+uninstall:
+	cd opml && $(MAKE) uninstall

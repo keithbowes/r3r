@@ -1,5 +1,7 @@
 unit HttpCache;
 
+{$unitpath ../formats}
+
 interface
 
 uses
@@ -57,10 +59,6 @@ uses
   RSettings, RSettings_Routines, StrTok;
 
 constructor THttpCache.Create(const Url: String);
-{$IFDEF __GPC__}
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
 var
   Id: String;
   IdsFile: text;

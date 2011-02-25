@@ -1,4 +1,5 @@
 #include "desc.h"
+#include "htmldescriptionbox.h"
 #include "widgetids.h"
 
 #include "i18n.h"
@@ -13,7 +14,7 @@ void CreateDescriptionBox(wxPanel * parent)
 
   descBox = new wxStaticBox(parent, -1, (wxChar *) NULL);
 	
-	wxHtmlWindow * html = new wxHtmlWindow(parent);
+	HtmlDescriptionBox * html = new HtmlDescriptionBox(parent);
   descBox->SetClientData(html);
 
   wxStaticBoxSizer * bsizer = new wxStaticBoxSizer(descBox, wxVERTICAL);

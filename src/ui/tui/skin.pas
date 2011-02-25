@@ -14,8 +14,8 @@ type
     FInfoBarFore: byte;
     FOptionIndexBack: byte;
     FOptionIndexFore: byte;
-    FOptionNameBack: byte;
-    FOptionNameFore: byte;
+    FOptionDescBack: byte;
+    FOptionDescFore: byte;
     FOptionPromptBack: byte;
     FOptionPromptFore: byte;
     FOptionValueBack: byte;
@@ -29,6 +29,8 @@ type
     FUIFore: byte;
   end;
 
+  TPageType = (ptNone, ptMain, ptOptions);
+
 var
   SkinColorTable: TColorTable;
   SkinOptionFull: Boolean;
@@ -38,15 +40,14 @@ procedure ColorTableInit;
 implementation
 
 uses
-  DOS, StrTok, RSettings_Routines, SysUtils;
-
-type
-  TPageType = (ptNone, ptMain, ptOptions);
+  DOS, Info, RSettings, RSettings_Routines, StrTok, SysUtils,
+  TuiStrings;
 
 procedure ColorTableInit;
 var
   f: text;
   IsEmpty: Boolean;
+  IsValidSkinFile: Boolean;
   Line: String;
   LineNo: word;
   Screen: TPageType;
@@ -78,13 +79,40 @@ begin
   end;
 end;
 
+function GetSkinFrom(const From: String): Boolean;
+var
+  Orig: String;
+  Res: Boolean;
 begin
-  SkinFile := GetEnv('R3R_SKIN');
-  if SkinFile = '' then
+  Orig := SkinFile;
+  SkinFile := From + PathDelim + 'skins' + PathDelim + SkinFile;
+  if Pos('.skin', SkinFile) = 0 then
   begin
-    SkinFile := GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'r3r' + PathDelim + 'skins' + PathDelim + 'default.skin';
+    SkinFile := SkinFile + '.skin';
   end;
 
+  Res := FileExists(SkinFile);
+  GetSkinFrom := Res;
+
+  if not Res then
+  begin
+    SkinFile := Orig;
+  end;
+end;
+
+begin
+  Settings.RegisterString('skin', 'Display', 'default', SkinToUse);
+  SkinFile := Settings.GetString(Settings.IndexOf('skin'));
+
+  if not FileExists(SkinFile) then
+  begin
+    if not GetSkinFrom(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName)) then
+    begin
+      GetSkinFrom(DataDir);
+    end;
+  end;
+
+  IsValidSkinFile := false;
   LineNo := 0;
   Screen := ptNone;
 
@@ -103,10 +131,12 @@ begin
           case Copy(Line, 2, 1)[1] of
             'm':
             begin
+              IsValidSkinFile := true;
               Screen := ptMain;
             end;
             'o':
             begin
+              IsValidSkinFile := true;
               Screen := ptOptions;
               SkinOptionFull := Copy(Line, 3, 1) <> '0';
             end;
@@ -161,11 +191,32 @@ begin
         begin
           TableSubparts := Split(Line, ';');
           AddSkinColor(SkinColorTable.FOptionIndexBack, SkinColorTable.FOptionIndexFore, TableSubparts.Strings[0]);
-          AddSkinColor(SkinColorTable.FOptionNameBack, SkinColorTable.FOptionNameFore, TableSubparts.Strings[1]);
+          AddSkinColor(SkinColorTable.FOptionDescBack, SkinColorTable.FOptionDescFore, TableSubparts.Strings[1]);
           AddSkinColor(SkinColorTable.FOptionValueBack, SkinColorTable.FOptionValueFore, TableSubparts.Strings[2]);
           AddSkinColor(SkinColorTable.FOptionPromptBack, SkinColorTable.FOptionPromptFore, TableSubparts.Strings[3]);
         end;
       end;
+    end;
+  end;
+  
+  if (not FileExists(SkinFile)) or (not IsValidSkinFile) then
+  begin
+  { If we can't parse a skin file, make the foregrounds white;
+    so that we don't have black on black. }
+  { Needed because FPC doesn't support the value keyword for records }
+    with SkinColorTable do   
+    begin
+      FDescFore := 15;
+      FIndexFore := 15;
+      FInfoFore := 15;
+      FInfoBarFore := 15;
+      FOptionIndexFore := 15;
+      FOptionDescFore := 15;
+      FOptionPromptFore := 15;
+      FOptionValueFore := 15;
+      FStatusFore := 15;
+      FTitleFore := 15;
+      FUIFore := 15;
     end;
   end;
 end;

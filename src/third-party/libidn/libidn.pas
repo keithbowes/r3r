@@ -83,37 +83,23 @@ const
    IDNA_ALLOW_UNASSIGNED = $0001;
    IDNA_USE_STD3_ASCII_RULES = $0002;
 {$ifndef IDNA_ACE_PREFIX}
-
-const
-   IDNA_ACE_PREFIX = 'xn--';   
+{$define IDNA_ACE_PREFIX xn--}
 {$endif}
-(* Const before type ignored *)
 
 function idna_strerror(rc:longint):Pchar;external 'idn';
 { Core functions  }
-(* Const before type ignored *)
 function idna_to_ascii_4i(input:Puint32_t; inlen:size_t; output:Pchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_44i(input:Puint32_t; inlen:size_t; output:Puint32_t; outlen:Psize_t; flags:longint):longint;external 'idn';
 { Wrappers that handle several labels  }
-(* Const before type ignored *)
 function idna_to_ascii_4z(input:Puint32_t; output:PPchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_ascii_8z(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_ascii_lz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_4z4z(input:Puint32_t; output:PPuint32_t; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_8z4z(input:Pchar; output:PPuint32_t; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_8z8z(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_8zlz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-(* Const before type ignored *)
 function idna_to_unicode_lzlz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
 
 implementation
-
 
 end.

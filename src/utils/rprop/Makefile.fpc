@@ -1,6 +1,0 @@
-[prerules]
-UNIT_DIRS = ../*
-
-[rules]
-include ../../../scripts/common.make
-all: rprop$(PPUEXT)

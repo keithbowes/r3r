@@ -246,6 +246,10 @@ void GoBrowser(char * url)
 
 void SendOwnMessage(unsigned char is_error, char * message, char * extra)
 {
+#if wxCHECK_VERSION(2,9,0)
+	wxString hint = _("\n\n[Disable messages (in your settings) to not see this again.]");
+#endif
+
   bool show_messages;
   int count, index;
   char * name;
@@ -257,8 +261,20 @@ void SendOwnMessage(unsigned char is_error, char * message, char * extra)
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
   show_messages = (bool) value;
 
+	char * msg;
+#if wxCHECK_VERSION(2,9,0)
+	msg = (char *) malloc(sizeof(char) * (strlen(message) + strlen(hint.char_str())));
+#else
+	msg = (char *) malloc(sizeof(char) * strlen(message));
+#endif
+	strcpy(msg, message);
+	
+#if wxCHECK_VERSION(2,9,0)
+	strcat(msg,hint.char_str());
+#endif
+
   if (show_messages)
   {
-    message_received(is_error, message, extra);
+    message_received(is_error, msg, extra);
   }
 }

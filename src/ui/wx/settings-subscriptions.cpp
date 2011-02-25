@@ -23,15 +23,22 @@ void CreateSubscriptionsPage(wxTreebook * parent)
 {
   InitGettext();
 
+	wxSize mysize = wxDefaultSize;
+	int entryflag = wxALL;
+#if wxCHECK_VERSION(2,9,0)
+	mysize.x /= 2;
+	entryflag |= wxEXPAND;
+#endif
+
   SubscriptionData * data = (SubscriptionData *) malloc(sizeof(SubscriptionData));
   wxPanel * panel = new wxPanel(parent);
 
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
   panel->SetSizer(hbox);
 
-  wxListBox * box = new wxListBox(panel, -1, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_NEEDED_SB | wxLB_HSCROLL);
+  wxListBox * box = new wxListBox(panel, -1, wxDefaultPosition, mysize, 0, NULL, wxLB_NEEDED_SB | wxLB_HSCROLL);
   data->box = box;
-  hbox->Add(box, 2, wxEXPAND | wxALL);
+  hbox->Add(box, 2, wxALL);
 
 	FillSubscriptionsListBox(box);
 
@@ -46,7 +53,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
   vbox->Add(add, 1, wxEXPAND | wxALL, 5);
 
   wxTextCtrl * addEntry = new wxTextCtrl(panel, -1);
-  vbox->Add(addEntry, 1, wxALL, 5);
+  vbox->Add(addEntry, 1, entryflag, 5);
   data->entry = addEntry;
   add->SetClientData(data);
 
