@@ -90,7 +90,6 @@ begin
   CRTInit;
 {$ENDIF __GPC__}
 
-  ColorTableInit;
   Draw;
   SetNewTitle(AppName);
 
@@ -167,7 +166,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if (TranslateControl(KeyChar) = RefreshKey) or (KeyChar = ResizeKey) then
+    else if TranslateControl(KeyChar) = RefreshKey then
     begin
       Redraw;
     end
@@ -305,11 +304,19 @@ end;
 
 procedure TTui.RetrieveFeed(Resource: String);
 begin
-  ScrollTo(FCurrentItem);
+  if FItems^.Count > 0 then
+  begin
+    ScrollTo(FCurrentItem);
+  end;
+
   DrawFeedList;
   inherited RetrieveFeed(Resource);
   GoItem;
-  ScrollTo(FCurrentItem);
+
+  if FItems^.Count > 0 then
+  begin
+    ScrollTo(FCurrentItem);
+  end;
 end;
 
 procedure TTui.NotifyUpdate;
@@ -393,30 +400,44 @@ end;
 
 procedure TTui.GoItem;
 var
-  Desc: String;
+  Desc, DescLine: String;
+  FreeLines: word;
   i, j, k: cardinal;
+  Len: word;
   StatusText: String;
-const
-  DescLen = 150;
-procedure PrintField(const Name, Value: String);
+
+function GetPortLength: cardinal;
 begin
-  if Value <> '' then
+  GetPortLength := FDimInfo.LeftEnd - FDimInfo.LeftStart;
+end;
+
+procedure PrintField(Name, Value: String);
+var
+  Field: String;
+begin
+  if (Value <> '') and (FreeLines > 0) then
   begin
-    WriteLn(Name, Value)
+    Field := Name + Value;
+    Len := GetPortLength;
+
+    if Length(Field) > Len then
+    begin
+      Field := Copy(Field, 1, Len - 4) + '...';
+    end;
+
+    WriteLn(Field);
+    Dec(FreeLines);
   end;
 end;
 
 begin
+  FreeLines := FDimInfo.TopEnd - FDimInfo.TopStart;
+  Len := GetPortLength;
+
   if FItems^.Count > 0 then
   begin
     with TFeedItem(FItems^.GetNth(FCurrentItem - 1)) do
     begin
-      Desc := Description;
-      if Length(Desc) > DescLen then
-      begin
-        Desc := Copy(Desc, 1, DescLen) + '...';
-      end;
-
       DrawStatus;
       if MainLink <> '' then
       begin
@@ -430,46 +451,67 @@ begin
       end;
 
       DrawFeedInfo;
-      WriteLn(ItemNo, FCurrentItem, NextPrevLink);
+      PrintField(ItemNo, IntToStr(FCurrentItem) + NextPrevLink);
       PrintField(ItemTitle, Title);
       PrintField(ItemSubject, Subject);
       PrintField(ItemCreated, Created);
 
-      if Desc <> '' then
-      begin
-        Write(ItemDesc);
-
-        TextBackground(SkinColorTable.FDescBack);
-        TextColor(SkinColorTable.FDescFore);
-        WriteLn(Desc);
-
-        TextBackground(SkinColorTable.FInfoBack);
-        TextColor(SkinColorTable.FInfoFore);
-      end;
-
       PrintField(ItemEmail, Contact^.Email);
       PrintField(ItemEncl, Enclosure.URL);
 
-      j := 0;
-      k := 0;
-      for i := 0 to Links^.Count - 1 do
+      if Links^.Count > 0 then
       begin
-        if Links^.GetNth(i) = nil then
+        j := 0;
+        k := 0;
+        for i := 0 to Links^.Count - 1 do
         begin
-          Inc(j);
-          Continue;
+          if Links^.GetNth(i) = nil then
+          begin
+            Inc(j);
+            Continue;
+          end;
+
+          if j = FCurrentItem then
+          begin
+            Inc(k);
+            PrintField(StringReplace(ItemLink, '%i', IntToStr(k), [rfReplaceAll]),
+              StrPas(Links^.GetNth(i)));
+          end
+          else if j > FCurrentItem then
+          begin
+            Break;
+          end;
+        end;
+      end;
+
+      Desc := Description;
+      if (Desc <> '') and (FreeLines > 1) then
+      begin
+        TextBackground(SkinColorTable.FDescBack);
+        TextColor(SkinColorTable.FDescFore);
+
+        repeat
+          Len := GetPortLength - 1;
+          if Length(Desc) > Len then
+          begin
+            repeat
+              Dec(Len)
+            until (Len = 1) or (Desc[Len] in [#0, #8, #9, #10, #13, #32]);
+          end;
+
+          DescLine := Copy(Desc, 1, Len);
+          Delete(Desc, 1, Len);
+          Dec(FreeLines);
+          WriteLn(DescLine);
+        until (FreeLines = 1) or (Length(Desc) = 0);
+
+        if Length(Desc) > 0 then
+        begin
+          WriteLn('...');
         end;
 
-        if j = FCurrentItem then
-        begin
-          Inc(k);
-          WriteLn(StringReplace(ItemLink, '%i', IntToStr(k), [rfReplaceAll]),
-            StrPas(Links^.GetNth(i)));
-        end
-        else if j > FCurrentItem then
-        begin
-          Break;
-        end;
+        TextBackground(SkinColorTable.FInfoBack);
+        TextColor(SkinColorTable.FInfoFore);
       end;
     end;
   end;
@@ -834,6 +876,8 @@ end;
 
 procedure TTui.ScrollTo(n: word);
 begin
+  RedrawConditional;
+
   if (n <= FViewPort.FirstItem) and (n > 0) then
   begin
     repeat
@@ -918,6 +962,7 @@ function Half(const n: word): word;
 begin
   Half := n div 2;
 end;
+
 begin
   FDimInfo.LeftEnd := ScreenWidth;
   FDimInfo.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
@@ -956,6 +1001,7 @@ end;
 
 procedure TTui.Draw;
 begin
+  ColorTableInit;
   InitWindowDims;
 
   FullScreen;

@@ -60,10 +60,6 @@ MSGMERGE ?= $(call programpath,msgmerge)
 
 MSGFMTFLAGS ?= --statistics
 
-ifeq ($(PWD),)
-$(error GNU file utils are required)
-endif
-
 ifndef inDOS
 COPY ?= $(call programpath,cp)
 ECHO ?= $(call programpath,echo)
@@ -101,16 +97,14 @@ SHAREDLIBPREFIX=
 endif #inDOS
 endif #inUnix
 
-ifdef forUnix
-TARGETEXEEXT=
-TARGETSHAREDLIBEXT=.so
-TARGETSHAREDLIBPREFIX=lib
-else
 ifdef forDOS
 TARGETEXEEXT=.exe
 TARGETSHAREDLIBEXT=.dll
 TARGETSHAREDLIBPREFIX=
-endif
+else
+TARGETEXEEXT=
+TARGETSHAREDLIBEXT=.so
+TARGETSHAREDLIBPREFIX=lib
 endif
 
 TARGETEXEEXT ?= $(EXEEXT)
@@ -118,7 +112,7 @@ TARGETSHAREDLIBEXT ?= $(SHAREDLIBEXT)
 TARGETSHAREDLIBPREFIX ?= $(SHAREDLIBPREFIX)
 
 ifdef inDOS
-SEARCHPATH=$(subst :, ,$(subst ;,:,$(PATH)))
+SEARCHPATH=$(subst ;, ,$(subst \,/,$(PATH)))
 else
 SEARCHPATH=$(subst :, ,$(PATH))
 endif
@@ -127,9 +121,9 @@ endif
 programpath = $(firstword $(strip $(wildcard $(addsuffix /$(1)$(EXEEXT),$(SEARCHPATH)))))
 
 ifneq ($(call programpath,$(notdir $(SHELL))),)
-checklib=$(shell $(ECHO) "Checking for -l$(1)... "; $(ECHO) 'program Check; {$$linklib $(1)} begin end.' > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "export ok=1" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "export ok=0" > status.sh); fi;)
-checkprog=$(shell $(ECHO) "Checking for $(1)\'s path... "; if test -z $(shell $(ECHO) $(call programpath,$(1))); then ($(ECHO) "not found"; $(ECHO) "export ok=0" > status.sh); else $(ECHO) $(call programpath,$(1)); fi;)
-checkunit=$(shell $(ECHO) "Checking for unit $(1)... "; $(ECHO) "program Check; uses $(1); begin end." > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "export ok=1" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "export ok=0" > status.sh); fi;)
+checklib=$(shell $(ECHO) "Checking for -l$(1)... "; $(ECHO) 'program Check; {$$linklib $(1)} begin end.' > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "ok=1; export ok" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "ok=0; export ok" > status.sh); fi;)
+checkprog=$(shell $(ECHO) "Checking for $(1)\'s path... "; if test -z $(shell $(ECHO) $(call programpath,$(1))); then ($(ECHO) "not found"; $(ECHO) "ok=0; export ok" > status.sh); else $(ECHO) $(call programpath,$(1)); fi;)
+checkunit=$(shell $(ECHO) "Checking for unit $(1)... "; $(ECHO) "program Check; uses $(1); begin end." > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "ok=1; export ok" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "ok=0; export ok" > status.sh); fi;)
 success=$(shell source ./status.sh; if test $$ok -eq 1; then $(ECHO) "You can safely build now"; else $(ECHO) "You're missing some requirements; can't build"; fi; $(RM) status.sh)
 else
 checklib=$(shell $(ECHO) "Testing -l$(1)..."; $(ECHO) "program Check; {$$linklib} begin end." > check.pas" > check.pas; $(PC) $(PCFLAGS) check.pas)
@@ -175,6 +169,7 @@ bindir = $(prefix)/bin
 datadir = $(prefix)/share
 docdir = $(rdatadir)/docs
 icondir = $(datadir)/icons
+incdir = $(prefix)/include
 libdir = $(prefix)/lib
 localedir = $(datadir)/locale
 rdatadir = $(datadir)/r3r

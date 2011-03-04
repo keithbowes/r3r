@@ -89,7 +89,8 @@ installExe r3r-settitle
 installExe src/utils/opml/r3r_opml
 installIcon r3r.png
 installLib src/libr3r/liblibr3r_shared.so
-installDesktop "Network/Aggregators" r3r.desktop
+installMenuItem "Network/Aggregators" r3r.desktop
+installMimeDesktop r3r.desktop
 
 cd src/libr3r/po
 for lang in *.mo;
@@ -113,7 +114,16 @@ do
 	cd ../..
 done
 
-cd ..
+cd tui
+mkdirs $PREFIX/share/r3r/docs
+mkdirs $PRFEIX/share/r3r/skins
+copyFiles docs/*.html $PREFIX/share/r3r/docs
+copyFiles skins/*.skin $PREFIX/share/r3r/skins
+
+cd ../wx
+copyFiles libr3r.h $PREFIX/include
+
+cd ../..
 
 cd utils/opml/po
 for lang in *.mo;

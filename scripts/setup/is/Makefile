@@ -1,5 +1,5 @@
 include ../../common.make
-ISCC ?= ISCC
+ISCC ?= $(call programpath,iscc)
 
 mos_lib = $(wildcard $(rootdir)/src/libr3r/po/*.mo)
 mos_ui = $(wildcard $(rootdir)/src/ui/$(R3R_UI)/po/*.mo)

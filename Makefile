@@ -1,12 +1,15 @@
 USE_PAX ?= 1
 
-ifeq ($(USE_PAX),1)
-	PAX = pax
+ifneq ($(USE_PAX),0)
+	PAX = $(call programpath,pax)
 	PAXFLAGS = -w -x ustar
 else
-	PAX = tar
+	PAX = $(call programpath,tar)
 	PAXFLAGS = -cf -
 endif
+
+GZIP = $(call programpath,gzip)
+GZIPFLAGS ?= -cf
 
 .PHONY: check
 
@@ -106,7 +109,7 @@ docs:
 	cd $(srcdir)/doc && $(MAKE)
 
 dist-docs: docs
-	$(PAX) $(PAXFLAGS) doc/api | gzip -cf > ../r3r-$(VERSION)-api.tar.gz
+	$(PAX) $(PAXFLAGS) doc/api | $(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-api.tar.gz
 
 
 # Uninstallation rules
@@ -127,43 +130,47 @@ dist-build:
 	$(MAKE) R3R_UI=wx
 
 dist: dist-build
-	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)
-	$(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
+	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 ifdef inUnix
-	$(INSTALLEXE) r3r ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(srcdir)/r3r $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 endif
-	$(INSTALLEXE) $(builddir)/r3r-tui$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
-	$(INSTALLEXE) $(builddir)/r3r-wx$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
-	$(INSTALLEXE) $(srcdir)r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/bin
-	$(INSTALLEXE) $(srcdir)src/utils/opml/r3r_opml$(EXEEXT) ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(builddir)/r3r-tui$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(builddir)/r3r-wx$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(srcdir)/r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(srcdir)/src/utils/opml/r3r_opml$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib
-	$(INSTALLEXE) $(srcdir)/src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) ../r3r-$(VERSION)-$(PLATFORM)/lib
+	$(INSTALLEXE) $(srcdir)/src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib
+	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/include
+	$(COPY) $(srcdir)/src/ui/wx/libr3r.h $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/include
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/icons
-	$(COPY) $(srcdir)/icons/r3r.png  ../r3r-$(VERSION)-$(PLATFORM)/share/icons
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/libr3r/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/libr3r/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$(l)/libr3r.mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/ui/$(R3R_UI)/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/ui/$(R3R_UI)/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l/r3r_$(R3R_UI).mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard src/utils/opml/po/*.mo))), $(MKDIR) ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l; $(COPY) src/utils/opml/po/$l.mo ../r3r-$(VERSION)-$(PLATFORM)/share/locale/LC_MESSAGES/$l/r3r_opml.mo;)
+	$(COPY) $(srcdir)/icons/r3r.png  $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/icons
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/libr3r/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/libr3r/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/libr3r.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/tui/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/tui/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_tui.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/wx/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/wx/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_wx.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
-		gzip -f > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
+		$(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
 	$(DELTREE) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
 
 dist-src: clean
+	cd $(srcdir)
 	-$(MKDIR) ../r3r-$(VERSION)
 	-$(COPY) -rf * ../r3r-$(VERSION)
-	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION) | gzip -cf > r3r-$(VERSION)-src.tar.gz 
+	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
+		$(GZIP) $(GZIPFLAGS) > r3r-$(VERSION)-src.tar.gz 
 	$(DELTREE) ../r3r-$(VERSION)
-	$(MOVE) r3r-$(VERSION)-src.tar.gz ..
 
 dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage
 
-dist-deb: dist-build
+dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb
 
-dist-rpm: dist-build
+dist-rpm: all
 	cd scripts/setup && $(MAKE) dist-rpm
 
-dist-slackware: dist-build
+dist-slackware: all
 	cd scripts/setup && $(MAKE) dist-slackware
 
 dist-inno_setup: dist-build

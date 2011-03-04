@@ -143,8 +143,8 @@ begin
         OutStr :=  OutStr + EntStr; { random character for replacing numerical and named references }
         EntStr := '';
         InEnt := false;
-      end;
-    end
+      end
+    end;
   end;
 
   StripHtml := OutStr;

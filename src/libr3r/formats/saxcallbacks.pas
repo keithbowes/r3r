@@ -14,10 +14,7 @@ procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 implementation
 
 uses
-  RStrings, Xml
-{$IFNDEF FPC}
-  , SysUtils
-{$ENDIF};
+  SysUtils, Xml;
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var

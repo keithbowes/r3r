@@ -18,7 +18,6 @@ const
   PageUpKey = Chr(73);
   QuitKey = 'q';
   RefreshKey = 'l';
-  ResizeKey = Chr(27); // nCrt reports this when the window is resized
   ScrollDownKey = Chr(32);
   ScrollUpKey = Chr(8);
   SearchKey = '/';

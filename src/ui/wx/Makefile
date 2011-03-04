@@ -1,5 +1,5 @@
 WX_CONFIG ?= wx-config
-CXX ?= g++
+CXX ?= $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
 						-DVERSION=\"$(VERSION)\"
 override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r

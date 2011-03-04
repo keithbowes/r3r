@@ -50,10 +50,6 @@ msgstr "Tema: "
 msgid "Created: "
 msgstr "Creado: "
 
-#: tuistrings:itemdesc
-msgid "Description: "
-msgstr "Descripción: "
-
 #: tuistrings:itemlink
 msgid "Link %i: "
 msgstr "Vínculo %i: "

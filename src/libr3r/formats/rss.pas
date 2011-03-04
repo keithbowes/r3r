@@ -68,8 +68,15 @@ begin
     end;
   end;
 
-  Item.Finished := ((Elem.Name = 'item') and ((Prev.Name = 'item')
-    or FLeftChannel)) or (Line = SockEOF);
+  if not IsRDF then
+  begin
+    Item.Finished := ((Elem.Name = 'item') and ((Prev.Name = 'item')
+      or FLeftChannel)) or (Line = SockEOF);
+  end
+  else
+  begin
+    Item.Finished := (Elem.Name = 'item') or (Line = SockEOF);
+  end;
 
   if Item.Finished and FLeftChannel then
   begin
@@ -103,7 +110,18 @@ begin
     else if Name = 'link' then
     begin
       PLink := StrToPChar(Content);
-      Links^.Add(PLink);
+      for Idx := 0 to Links^.Count - 1 do
+      begin
+        if StrPas(Links^.GetNth(Idx)) = Trim(Content) then
+        begin
+          PLink := nil;
+        end;
+      end;
+
+      if PLink <> nil then
+      begin
+        Links^.Add(PLink);
+      end;
     end
     else if Name = 'enclosure' then
     begin

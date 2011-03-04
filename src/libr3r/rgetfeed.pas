@@ -70,7 +70,7 @@ begin
 
     Finished := Sock.ParseItem(Item);
 
-    if Sock.ShouldShow then
+    if (Sock.ShouldShow) and (Item.Title <> '') then
     begin
       FeedObj.DisplayItem(Item);
     end;

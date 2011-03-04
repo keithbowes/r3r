@@ -25,6 +25,7 @@ Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
+Source: "src\ui\wx\libr3r.h"; DestDir: "{app}\include"
 
 Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "libr3r.mo"
 Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "libr3r.mo"
@@ -65,7 +66,3 @@ Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 Root: HKCU; SubKey: "Environment"; ValueType: string; ValueName: "R3R_INSTALLED_PREFIX"; ValueData: "{app}"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"
-
-
-
-

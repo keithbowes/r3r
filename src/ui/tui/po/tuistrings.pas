@@ -18,7 +18,6 @@ var
   ItemTitle: String;
   ItemSubject: String;
   ItemCreated: String;
-  ItemDesc: String;
   ItemEmail: String;
   ItemEncl: String;
   ItemLink: String;
@@ -65,7 +64,6 @@ begin
   ItemTitle := _('Title: ');
   ItemSubject := _('Subject: ');
   ItemCreated := _('Created: ');
-  ItemDesc := _('Description: ');
   ItemEmail := _('Email address: ');
   ItemEncl := _('Enclosure: ');
   ItemLink := _('Link %i: ');

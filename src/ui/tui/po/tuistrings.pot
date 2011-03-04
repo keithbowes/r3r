@@ -38,10 +38,6 @@ msgstr ""
 msgid "Created: "
 msgstr ""
 
-#: tuistrings:itemdesc
-msgid "Description: "
-msgstr ""
-
 #: tuistrings:itemlink
 msgid "Link %i: "
 msgstr ""

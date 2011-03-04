@@ -112,6 +112,7 @@ var
   InfoFile: text;
 begin
   FileOpen := false;
+  ChDir(FCacheDir);
 
   Assign(InfoFile, CacheInfoFile);
   if FileExists(CacheInfoFile) then
@@ -153,6 +154,7 @@ begin
   begin
     Close(InfoFile);
   end;
+  ChDir(FCurrentDir);
 end;
 
 procedure THttpCache.Invalidate;
