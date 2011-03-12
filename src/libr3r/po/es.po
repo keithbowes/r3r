@@ -81,6 +81,9 @@ msgstr "Comprobar nueves versiones"
 msgid "Warn about missing data"
 msgstr "Advertir de datos faltos"
 
+msgid "Display character encoding"
+msgstr "Presentación de las letras"
+
 msgid "Load subscriptions on startup"
 msgstr "Muéstreme las subscripciones de ejecución"
 

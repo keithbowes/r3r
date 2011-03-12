@@ -203,7 +203,7 @@ begin
         TypeBoolean:
         begin
           BoolVal := GetBoolean(Index);
-          SettingValue := Pointer(PtrInt(BoolVal));
+          SettingValue := Pointer(PtrUInt(BoolVal));
         end;
         TypeInteger:
         begin
@@ -230,6 +230,7 @@ begin
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
   CheckBoolean('load-subscriptions-on-startup', 'Display', false, LoadSubscriptions);
   CheckBoolean('warn-missing-data', 'Display', false, DescWarn);
+  CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);
 
   CheckBoolean('use-proxy', 'HTTP', false, DescProxy);
   CheckString('proxy-address', 'HTTP', '127.0.0.1', DescProxyAddress);

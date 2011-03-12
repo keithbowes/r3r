@@ -40,6 +40,7 @@ type
     constructor Create(const Url: String);
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     function GetCacheHeader: String;
+    function GetEncoding: String;
     function GetFeedExtension(FeedType: TFeedType): String;
     procedure Invalidate;
     procedure WriteData(const Data: String; DataType: TCacheDataType);
@@ -198,6 +199,41 @@ begin
       WriteRawData(Data, CacheResponseFile, false);
     end;
   end;
+end;
+
+function THttpCache.GetEncoding: String;
+var
+  FileOpen: Boolean;
+  InfoList: TStringsList;
+  InfoText: String;
+  InfoFile: text;
+begin
+  FileOpen := false;
+  ChDir(FCacheDir);
+
+  Assign(InfoFile, CacheInfoFile);
+  if FileExists(CacheInfoFile) then
+  begin
+    Reset(InfoFile);
+    ReadLn(InfoFile, InfoText);
+    FileOpen := true;
+  end;
+
+  InfoList := Split(InfoText, Tab);
+  if InfoList.Length > 3 then
+  begin
+    GetEncoding := InfoList.Strings[3];
+  end
+  else
+  begin
+    GetEncoding := '';
+  end;
+
+  if FileOpen then
+  begin
+    Close(InfoFile);
+  end;
+  ChDir(FCurrentDir);
 end;
 
 function THttpCache.GetFeedExtension(FeedType: TFeedType): String;

@@ -84,6 +84,9 @@ msgstr "Check for updates"
 msgid "Warn about missing data"
 msgstr "Warn about missing data"
 
+msgid "Display character encoding"
+msgstr "Display character encoding"
+
 msgid "Load subscriptions on startup"
 msgstr ""
 

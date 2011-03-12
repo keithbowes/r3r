@@ -117,14 +117,15 @@ function GetInstalledPrefix: String;
 var
   Res: String;
 begin
-  if StrPas(GetProp('installed-prefix')) <> '' then
+  Res := GetEnv('R3R_INSTALLED_PREFIX');
+
+  if Res = '' then
   begin
-    Res := StrPas(GetProp('installed-prefix'))
-  end
-  else
-  begin
-    Res := GetEnv('R3R_INSTALLED_PREFIX');
-    if Res = '' then
+    if StrPas(GetProp('installed-prefix')) <> '' then
+    begin
+      Res := StrPas(GetProp('installed-prefix'))
+    end
+    else
     begin
       Res := InstalledPrefix
     end

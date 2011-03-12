@@ -107,7 +107,7 @@ begin
     end
     else if FieldName = 'link-count' then
     begin
-      libr3r_get_item_field := Pointer(PtrInt(LinksCount));
+      libr3r_get_item_field := Pointer(PtrUInt(LinksCount));
     end
     else if FieldName = 'main-link' then
     begin

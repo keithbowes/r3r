@@ -4,10 +4,8 @@ SHELL = /bin/sh
 
 # Let's try to figure out what OS we're using
 ifndef OS_TARGET
-ifneq ($(findstring :,$(PATH)),)
-inUnix=1
-else
-ifdef COMSPEC
+ifneq ($(findstring ;,$(PATH)),)
+ifdef ComSpec
 inDOS=1
 ifdef OS
 inWindows=1
@@ -15,6 +13,8 @@ endif #OS
 else
 inOtherOS=1
 endif #COMSPEC
+else
+inUnix=1
 endif #inUnix
 endif #OS_TARGET
 
@@ -133,7 +133,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.1.1
+VERSION = 2.1.2
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
@@ -231,20 +231,6 @@ else
 PCFLAGS_DEBUG=-CX -Xs -XX
 endif # DEBUG
 
-ifeq ($(R3R_UI), tui)
-ifdef inUnix
-ifndef USE_NCRT
-override DEFS_EXTRA += HAS_SCREENHEIGHTWIDTH
-else
-override DEFS_EXTRA += USE_NCRT
-endif # USE_NCRT
-else
-ifndef inWindows # as far as I can tell, only Windows' CRT unit doesn't have those constants
-override DEFS_EXTRA += HAS_SCREENHEIGHTWIDTH
-endif # inWindows
-endif # inUnix
-endif # R3R_UI
-
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
 ifdef inWindows
@@ -298,7 +284,7 @@ endif # USE_FPC
 export CC DEFS DEFS_SOCKETS DESTDIR R3R_UI VERSION \
 	bindir datadir prefix rootdir
 
-dofault: all
+default: all
 
 _all:
 	@$(MKDIR) $(builddir)

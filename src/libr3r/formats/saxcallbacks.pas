@@ -10,11 +10,12 @@ uses
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 procedure ElementEnded(user_data: Pointer; name: PChar);
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+procedure InstructionReceived(userData: Pointer; target, data: PChar);
 
 implementation
 
 uses
-  SysUtils, Xml;
+  RProp, RStrings, SysUtils, Xml;
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
@@ -100,6 +101,30 @@ begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
       Elem^.Content := Elem^.Content + enh;
       SendItem(Elem^.Name, Elem^.Content);
+    end;
+  end;
+end;
+
+procedure InstructionReceived(userData: Pointer; target, data: PChar);
+var
+  Priv: String;
+  PrivStart: word;
+begin
+  if target = 'xml' then
+  begin
+    if GetProp('charset') = nil then
+    begin
+      Priv := data;
+      PrivStart := Pos('encoding=', Priv);
+      if PrivStart <> 0 then
+      begin
+        Delete(Priv, 1, PrivStart + Length('encoding='));
+        PrivStart := Pos('''', Priv);
+        Delete(Priv, PrivStart, Length(Priv) - PrivStart + Length(''''));
+        PrivStart := Pos('"', Priv);
+        Delete(Priv, PrivStart, Length(Priv) - PrivStart + Length('"'));
+        SetProp('charset', StrToPChar(Priv));
+      end;
     end;
   end;
 end;

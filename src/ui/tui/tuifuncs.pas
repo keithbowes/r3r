@@ -2,6 +2,8 @@ unit TuiFuncs;
 
 interface
 
+{$INCLUDE "tuidefs.inc"}
+
 procedure FullScreen;
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
@@ -11,6 +13,10 @@ function ScreenWidth: word;
 
 {$IFNDEF USE_NCRT}
 function EndWin: integer;
+{$ENDIF}
+
+{$IFDEF NO_SUPPORTS_UNICODE}
+function UTF8Decode(const s: String): String;
 {$ENDIF}
 
 implementation
@@ -65,5 +71,12 @@ begin
   EndWin := 0;
 end;
 {$ENDIF}
+
+{$IFDEF NO_SUPPORTS_UNICODE}
+function UTF8Decode(const s: String): String;
+begin
+  UTF8Decode := s
+end;
+{$ENDIF NO_SUPPORTS_UNICODE}
 
 end.

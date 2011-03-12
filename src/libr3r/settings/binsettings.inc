@@ -3,6 +3,7 @@ begin
   IsValidSetting := (Setting = 'accept-langs') or
     (Setting = 'accept-types') or
     (Setting = 'check-for-updates') or
+		(Setting = 'display-encoding') or
     (Setting = 'display-feed-title-only') or
     (Setting = 'enable-mime-guess') or
     (Setting = 'for:.ogg') or (Setting = 'for:http') or
@@ -225,7 +226,7 @@ begin
 
   if FSettings^.Count > 0 then
   begin
-    for i := 0 to FSettings^.Count - 1 do
+    for i := 1 to FSettings^.Count do
     begin
       ASetting := FSettings^.GetNth(i);
       repeat

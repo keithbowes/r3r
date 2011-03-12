@@ -72,6 +72,7 @@ begin
 
     if (Sock.ShouldShow) and (Item.Title <> '') then
     begin
+      Item.Translate;
       FeedObj.DisplayItem(Item);
     end;
   end;

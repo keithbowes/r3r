@@ -81,6 +81,9 @@ msgstr "Kontroli promociojn"
 msgid "Warn about missing data"
 msgstr "Averti mankajn datumojn"
 
+msgid "Display character encoding"
+msgstr "Ekrana kodoprezento"
+
 msgid "Load subscriptions on startup"
 msgstr "Ŝargi abonojn dum plenumiĝo"
 

@@ -56,6 +56,5 @@ r3r-$(VERSION).x86.package: autopackage/default.apspec
 autopackage/default.apspec: autopackage/_default.apspec
 	$(SED) \
 	       	-e 's/@VERSION@/$(VERSION)/g' \
-		-e 's/@UI@/$(R3R_UI)/g' \
       		autopackage/_default.apspec > \
 		autopackage/default.apspec

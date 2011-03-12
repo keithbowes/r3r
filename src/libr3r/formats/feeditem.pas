@@ -49,6 +49,7 @@ type
     function GetPodcast: String;
     function DescriptionText: String;
     function TitleText: String;
+    procedure Translate;
     procedure Clear;
   end;
 
@@ -57,7 +58,7 @@ function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEn
 implementation
 
 uses
-  SysUtils;
+  iconv, RProp, RSettings, SysUtils;
 
 var
   AlreadyAllocated: Boolean = false;
@@ -187,6 +188,56 @@ begin
       AlreadyAllocated := false;
     end;
   end;
+end;
+
+procedure TFeedItem.Translate;
+var
+  cd: iconv_t;
+  incharset, outcharset: PChar;
+
+procedure TranslateField(var FieldValue: String);
+var
+  inbuf: PChar;
+  inbytesleft, outbytesleft: size_t;
+  outbuf, outstr: PChar;
+begin
+  inbuf := PChar(FieldValue);
+  inbytesleft := Length(FieldValue) + 1;
+  outbytesleft := inbytesleft div iconv_bytesperchar(StrPas(incharset)) * iconv_bytesperchar(StrPas(outcharset));
+  GetMem(outstr, outbytesleft);
+  if outstr <> nil then
+  begin
+    outbuf := outstr;
+    iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft);
+    FieldValue := String(outstr);
+    FreeMem(outstr);
+  end;
+end;
+
+begin
+  incharset := GetProp('charset');
+{$IFNDEF __GPC__}
+  outcharset := PChar(String((Settings.GetString(Settings.IndexOf('display-encoding')))));
+{$ELSE}
+  outcharset := Settings.GetString(Settings.IndexOf('display-encoding'));
+{$ENDIF}
+
+  if incharset = nil then
+  begin
+    incharset := outcharset;
+  end;
+
+  cd := iconv_open(outcharset, incharset);
+  if cd <> iconv_t(-1) then
+  begin
+    TranslateField(Copyright);
+    TranslateField(Created);
+    TranslateField(Description);
+    TranslateField(LastModified);
+    TranslateField(Subject);
+    TranslateField(Title);
+  end;
+  iconv_close(cd);
 end;
 
 procedure TFeedItem.Clear;

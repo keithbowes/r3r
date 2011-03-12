@@ -62,6 +62,8 @@ type
 
 implementation
 
+{$INCLUDE "tuidefs.inc"}
+
 uses
   Dos, Info, RKeys, RSettings_Routines, RTitle, Skin, SysUtils,
   TuiFuncs, TuiStrings
@@ -571,13 +573,6 @@ begin
     BoolToString := FalseString
   end
 end;
-
-{$IFDEF NO_SUPPORTS_UNICODE}
-function UTF8Decode(const s: String): String;
-begin
-  UTF8Decode := s
-end;
-{$ENDIF NO_SUPPORTS_UNICODE}
 
 procedure DisplayOptions;
 var

@@ -34,8 +34,8 @@ type
 implementation
 
 uses
-  Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
-  SockConsts, StrTok, SysUtils
+  Info, LibR3RStrings, RGetFeed, RMessage, RProp, RSettings,
+  RStrings, SockConsts, StrTok, SysUtils
   
 {$IFDEF __GPC__}
   ,GPC
@@ -69,6 +69,7 @@ var
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
   Host, Para, Path, Port, Prot: String;
+  i: byte;
   Line: String;
   NullLines: 0..20;
   RespList: TStringsList;
@@ -181,6 +182,18 @@ begin
         begin
           Headers.ContentType := ftUnknown;
         end;
+
+        RespList := Split(HeaderValue, ';');
+        for i := 0 to RespList.Length - 1 do
+        begin
+          if Pos('charset=', RespList.Strings[i]) <> 0 then
+          begin
+            RespList := Split(Trim(RespList.Strings[i]), '=');
+            Headers.Charset := Trim(RespList.Strings[1]);
+            SetProp('charset', StrToPChar(Headers.Charset));
+            Break;
+          end;
+        end;
       end
       else if HeaderName = 'location' then
       begin
@@ -253,7 +266,7 @@ begin
 
   if FCachable and (Headers.Status = 200) then
   begin
-    Cache.WriteData(IntToStr(Ord(Cache.Info^.CacheType)) + Tab + Cache.Info^.CacheParam + Tab + IntToStr(Ord(Cache.Info^.HeaderRec.ContentType)), cdtInfo);
+    Cache.WriteData(IntToStr(Ord(Cache.Info^.CacheType)) + Tab + Cache.Info^.CacheParam + Tab + IntToStr(Ord(Cache.Info^.HeaderRec.ContentType)) + Tab + Headers.Charset, cdtInfo);
   end;
 end;
 
@@ -397,6 +410,7 @@ begin
 
     if not Assigned(FLocal) then
     begin
+      SetProp('charset', {$IFNDEF __GPC__}PChar(Cache.GetEncoding){$ELSE}StrToPChar(Cache.GetEncoding){$ENDIF});
       FLocal := GetLocalFile(FCacheDir + PathDelim +
         CacheFeedFile + '.' + Cache.GetFeedExtension(Headers.ContentType));
       FLocal.Execute;

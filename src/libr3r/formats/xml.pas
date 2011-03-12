@@ -70,6 +70,7 @@ begin
   FParser := XML_ParserCreateNS(nil, #0);
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
+  XML_SetProcessingInstructionHandler(FParser, InstructionReceived);
   XML_SetUserData(FParser, Self);
 end;
 

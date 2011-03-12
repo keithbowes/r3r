@@ -65,4 +65,5 @@ Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 [Registry]
 Root: HKCU; SubKey: "Environment"; ValueType: string; ValueName: "R3R_INSTALLED_PREFIX"; ValueData: "{app}"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
+Root: HKCU; SubKey: "Software\R3R\Display"; ValueType: string; ValueName: "display-encoding"; ValueData: "ASCII//TRANSLIT"
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"

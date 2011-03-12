@@ -9,7 +9,8 @@ var
   DescHideItems: String;
   DescGuess: String;
   DescCheck: String;
-  DescWarn:String;
+  DescWarn: String;
+  DescEncoding: String;
   LoadSubscriptions: String;
   DescProxy: String;
   DescProxyAddress: String;
@@ -37,6 +38,7 @@ begin
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');
+  DescEncoding := _('Display character encoding');
   LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');
   DescProxyAddress := _('Proxy address');

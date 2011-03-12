@@ -198,6 +198,8 @@ begin
         end;
       end;
     end;
+
+    Close(f);
   end;
   
   if (not FileExists(SkinFile)) or (not IsValidSkinFile) then

@@ -3,16 +3,16 @@ unit RDate;
 interface
 
 type
-  TTime = record
+  TRDate = record
     Hour, Millisecond, Minute, Second: String;
     Day, Month, Year: String;
     MonthAbbrev: String;
     ZoneOffset: String;
   end;
 
-function LongDateToTime(Time: String): TTime;
-function ShortDateToTime(Time: String): TTime;
-function TimeToString(Time: TTime): String;
+function LongDateToTime(Time: String): TRDate;
+function ShortDateToTime(Time: String): TRDate;
+function TimeToString(Time: TRDate): String;
 
 implementation
 
@@ -77,12 +77,12 @@ begin
   end;
 end;
 
-function LongDateToTime(Time: String): TTime;
+function LongDateToTime(Time: String): TRDate;
 const
   WhitespaceChars = #0#8#9#10#13#32;
 var
   List: TStringsList;
-  Tm: TTime;
+  Tm: TRDate;
   TP: String;
 begin
   textdomain('libr3r');
@@ -104,10 +104,10 @@ begin
   LongDateToTime := Tm;
 end;
 
-function ShortDateToTime(Time: String): TTime;
+function ShortDateToTime(Time: String): TRDate;
 var
   Sep: byte;
-  Tm: TTime;
+  Tm: TRDate;
 begin
   textdomain('libr3r');
 
@@ -120,15 +120,24 @@ begin
   Delete(Time, 1, Sep);
 
   Sep := Pos('T', Time);
-  Tm.Day := Copy(Time, 1, Sep - 1);
-  Delete(Time, 1, Sep);
+
+  if Sep <> 0 then
+  begin
+    Tm.Day := Copy(Time, 1, Sep - 1);
+    Delete(Time, 1, Sep);
+  end
+  else
+  begin
+    Tm.Day := Copy(Time, 1, Length(Time) - 1);
+    Time := '';
+  end;
 
   if Length(Time) > 0 then
   begin
     Tm.Hour := Copy(Time, 1, 2);
     Delete(Time, 1, 3);
 
-    Tm.Minute := Copy(Time, 1,2);
+    Tm.Minute := Copy(Time, 1, 2);
     Delete(Time, 1, 3);
 
     Tm.Second := Copy(Time, 1, 2);
@@ -150,13 +159,26 @@ begin
   ShortDateToTime := Tm;
 end;
 
-function TimeToString(Time: TTime): String;
+function TimeToString(Time: TRDate): String;
 var
   Ret: String;
 begin
   with Time do
   begin
-    Ret := Day + ' ' + MonthAbbrev + ' ' + Year +  ' ' + Hour + ':' + Minute + ':' + Second;
+    Ret := Day + ' ' + MonthAbbrev + ' ' + Year;
+    
+    if Hour <> '' then
+    begin
+      Ret := Ret + ' ' + Hour;
+      if Minute <> '' then
+      begin
+        Ret := Ret + ':' + Minute;
+        if Second <> '' then
+        begin
+          Ret := Ret + ':' + Second;
+        end;
+      end;
+    end;
 
     if ZoneOffset <> '' then
     begin
