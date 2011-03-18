@@ -32,18 +32,18 @@ type
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts,
+  DC, RDate, RStrings, SockConsts
 
 {$IFDEF __GPC__}
-  SysUtils,
+  , SysUtils
 {$ENDIF}
 
 {$IFDEF SOCKETS_SYNAPSE}  
-  SynaUtil
+  , SynaUtil
 {$ENDIF}
 
 {$IFDEF SOCKETS_BSD}
-SockWrap
+, SockWrap
 {$ENDIF};
 
 constructor TAtomFeed.Create;
@@ -80,7 +80,6 @@ end;
 procedure TAtomFeed.SendItem(const Name, Content: String);
 var
   Idx: integer;
-  PLink: PChar;
 begin
   inherited SendItem(Name, Content);
 
@@ -133,8 +132,7 @@ begin
       begin
         if (Rel = 'alternate') or (Rel = '') then
         begin
-          PLink := StrToPChar(Href);
-          Links^.Add(PLink);
+          Link := Href;
         end
         else if Rel = 'self' then
         begin
@@ -203,21 +201,21 @@ begin
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Email := Content;
+        Contact.Email := Content;
       end;
     end
     else if Name = 'name' then
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.Name := Content;
+        Contact.Name := Content;
       end;
     end
     else if Name = 'uri' then
     begin
       if GetPreviousElement.Name = 'author' then
       begin
-        Contact^.URI := Content;
+        Contact.URI := Content;
       end;
     end
     else if Name = 'generator' then
@@ -283,7 +281,9 @@ var
   BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara: String;
   Res: String;
 begin
+{$IFNDEF SOCKETS_NONE}
   ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
+{$ENDIF}
 
   { URL is absolute if it contains the host name;
     it isn't if it doesn't }
@@ -293,7 +293,9 @@ begin
   end
   else
   begin
+{$IFNDEF SOCKETS_NONE}
     ParseURL(GetCurrentElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
+{$ENDIF}
     Res := BaseProt + '://';
 
     if BaseUser <> '' then

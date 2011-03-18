@@ -1,5 +1,10 @@
 UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
-UNITS = rsock localfile headers http
+
+ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
+REMOTE_PROTOCOLS=headers http
+endif
+
+UNITS = rsock localfile $(REMOTE_PROTOCOLS)
 
 include ../../../scripts/common.make
 

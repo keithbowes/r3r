@@ -8,6 +8,7 @@ bool i18n_inited = false;
 
 void InitGettext()
 {
+#ifdef USE_NLS
   int count, index;
   char * name;
   unsigned char type;
@@ -35,9 +36,14 @@ void InitGettext()
 #if wxCHECK_VERSION(2,9,0)
 	int language;
 	if (locale->GetSystemLanguage() != wxLANGUAGE_UNKNOWN)
+	{
 		language = wxLANGUAGE_DEFAULT;
+	}
 	else
+	{
 		language = wxLANGUAGE_ENGLISH;
+	}
+
   locale->Init(language, wxLOCALE_LOAD_DEFAULT);
 #else
 	locale->Init();
@@ -51,4 +57,5 @@ void InitGettext()
   }
 
   i18n_inited = true;
+#endif
 }

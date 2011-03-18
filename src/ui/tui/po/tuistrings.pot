@@ -38,10 +38,6 @@ msgstr ""
 msgid "Created: "
 msgstr ""
 
-#: tuistrings:itemlink
-msgid "Link %i: "
-msgstr ""
-
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
 msgstr ""

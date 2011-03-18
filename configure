@@ -21,6 +21,8 @@ do
   case $opt in
     --prefix*)
       prefix="$val";;
+    --with-libiconv)
+      echo "USE_LIBICONV=1" >> config.make;;
     --with-settings*)
       case $val in
         binary)
@@ -36,6 +38,19 @@ do
           exit;;
       esac
       echo "DEFS_SETTINGS=$st" >> config.make;;
+    --with-sockets*)
+      case $val in
+        bsd)
+          st=SOCKETS_BSD;;
+        none)
+          st=SOCKETS_NONE;;
+        synapse)
+          st=SOCKETS_SYNAPSE;;
+        *)
+          echo "$opt invalid"
+          exit;;
+      esac
+      echo "DEFS_SOCKETS=$st" >> config.make;;
     --with-ui*)
       case $val in
         classic|html|tui|tv|wx)
@@ -44,26 +59,28 @@ do
           echo "$opt invalid";
           exit;;
       esac;;
-    --with-sockets*)
-      case $val in
-        bsd)
-          st=SOCKETS_BSD;;
-        synapse)
-          st=SOCKETS_SYNAPSE;;
-        *)
-          echo "$opt invalid"
-          exit;;
-      esac
-      echo "DEFS_SOCKETS=$st" >> config.make;;
-    --enable-ncrt)
-      echo "USE_NCRT=1" >> config.make;;
+    --disable-iconv)
+      echo "USE_ICONV=0" >> config.make;;
+    --disable-libidn)
+      echo "USE_IDN=0" >> config.make;;
+    --disable-ncurses)
+      echo "NO_NCURSES=1" >> config.make;;
+    --disable-nls)
+      echo "USE_NLS=0" >> config.make;;
+    --disable-xml)
+      echo "USE_EXPAT=0" >> config.make;;
     --help)
       echo "Available options:"
       echo -e "\t--prefix=PFX Where to install it [/usr/local]"
+      echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS\n\t\tOnly works on Unix systems without the --disable-iconv option"
       echo -e "\t--with-settings=database Type of settings database to use (binary|ini|registry|tab)"
+      echo -e "\t--with-sockets=lib Sockets library to use (bsd|none|synapse)"
       echo -e "\t--with-ui=ui Which UI to build it with (classic|html|tui|tv|wx)"
-      echo -e "\t--with-sockets=lib Sockets library to use (bsd|synapse)"
-      echo -e "\t--enable-ncrt Build --with-ui=tui with nCrt and ncurses"
+      echo -e "\t--disable-iconv Build without iconv support"
+      echo -e "\t--disable-libidn Build without IDN support"
+      echo -e "\t--disable-ncurses Disable the use of ncurses where used (Unix/FPC TUI only)"
+      echo -e "\t--disable-nls Disable gettext support"
+      echo -e "\t--disable-xml Disable XML support"
       echo -e "\t--help This help"
       exit;;
     *)

@@ -207,8 +207,17 @@ begin
     begin
       if FItems^.Count > 0 then
       begin
-        OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MainLink);
+        OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
       end;
+    end
+    else if KeyChar = EnclosureKey then
+    begin
+      EndWin;
+      SwapVectors;
+      Exec(Settings.GetString(Settings.IndexOf('for:.ogg')), TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+      SwapVectors;
+      ClrScr;
+      Redraw;
     end
     else if KeyChar = ShellKey then
     begin
@@ -259,8 +268,8 @@ begin
   AItem.Subject := Item.Subject;
   AItem.Created := Item.Created;
   AItem.Description := Item.DescriptionText;
-  AItem.Links := Item.Links;
-  AItem.MainLink := Item.GetMainLink;
+  AItem.Link := Item.Link;
+  AItem.Contact.Email := Item.Contact.Email;
   AItem.Enclosure := Item.Enclosure;
   FItems^.Add(AItem);
   Items := FItems^.Count;
@@ -275,7 +284,7 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(Items, ': ');
+    Write(IntToStr(Items) + ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);
@@ -296,11 +305,11 @@ begin
     Write(ErrorWarning);
   end;
 
-  Write(': ', MessageName);
+  Write(': ' + MessageName);
 
   if Extra <> '' then
   begin
-    Write('(', Extra, ')');
+    Write('(' + Extra + ')');
   end;
 end;
 
@@ -404,7 +413,6 @@ procedure TTui.GoItem;
 var
   Desc, DescLine: String;
   FreeLines: word;
-  i, j, k: cardinal;
   Len: word;
   StatusText: String;
 
@@ -441,9 +449,9 @@ begin
     with TFeedItem(FItems^.GetNth(FCurrentItem - 1)) do
     begin
       DrawStatus;
-      if MainLink <> '' then
+      if Link <> '' then
       begin
-        StatusText := MainLink + ActivateLink;
+        StatusText := Link + ActivateLink;
         if Length(StatusText) > ScreenWidth then
         begin
           StatusText := Copy(StatusText, 1, ScreenWidth - 5) + '...';
@@ -458,33 +466,8 @@ begin
       PrintField(ItemSubject, Subject);
       PrintField(ItemCreated, Created);
 
-      PrintField(ItemEmail, Contact^.Email);
+      PrintField(ItemEmail, Contact.Email);
       PrintField(ItemEncl, Enclosure.URL);
-
-      if Links^.Count > 0 then
-      begin
-        j := 0;
-        k := 0;
-        for i := 0 to Links^.Count - 1 do
-        begin
-          if Links^.GetNth(i) = nil then
-          begin
-            Inc(j);
-            Continue;
-          end;
-
-          if j = FCurrentItem then
-          begin
-            Inc(k);
-            PrintField(StringReplace(ItemLink, '%i', IntToStr(k), [rfReplaceAll]),
-              StrPas(Links^.GetNth(i)));
-          end
-          else if j > FCurrentItem then
-          begin
-            Break;
-          end;
-        end;
-      end;
 
       Desc := Description;
       if (Desc <> '') and (FreeLines > 1) then
@@ -627,7 +610,8 @@ begin
       TextColor(SkinColorTable.FOptionIndexFore);
 
       SetName := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
-      Write((i + 1):NumLen, '.');
+      Write((i + 1):NumLen);
+      Write('.');
 
       TextBackground(SkinColorTable.FOptionDescBack);
       TextColor(SkinColorTable.FOptionDescFore);
@@ -804,7 +788,7 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(i, ': ');
+    Write(IntToStr(i) + ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);
@@ -858,7 +842,7 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(i, ': ');
+    Write(IntToStr(i) + ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);

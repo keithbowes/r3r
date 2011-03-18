@@ -20,7 +20,6 @@ var
   ItemCreated: String;
   ItemEmail: String;
   ItemEncl: String;
-  ItemLink: String;
 
   InvalidNumber: String;
 
@@ -45,10 +44,16 @@ var
 
   SkinToUse: String;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+{$ENDIF}
+
 implementation
 
+{$IFDEF USE_NLS}
 uses
   LibIntl, LibR3R, RSettings_Routines, RStrings, SysUtils;
+{$ENDIF}
 
 procedure InitStrings;
 begin
@@ -66,7 +71,6 @@ begin
   ItemCreated := _('Created: ');
   ItemEmail := _('Email address: ');
   ItemEncl := _('Enclosure: ');
-  ItemLink := _('Link %i: ');
 
   InvalidNumber := _('Invalid Number!');
 
@@ -92,11 +96,20 @@ begin
   SkinToUse := _('Skin to use');
 end;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+begin
+  _ := s;
+end;
+{$ENDIF}
+
 initialization
 
+{$IFDEF USE_NLS}
 setlocale(LC_ALL, '');
 textdomain('r3r_tui');
 bindtextdomain('r3r_tui', StrToPChar(GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'locale'));
+{$ENDIF}
 
 InitStrings;
 

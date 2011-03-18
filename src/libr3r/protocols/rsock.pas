@@ -3,13 +3,13 @@ unit RSock;
 interface
 
 uses
-  Feed, FeedItem,
+  Feed, FeedItem
 {$IFDEF SOCKETS_SYNAPSE}
-  BlckSock
+  , BlckSock
 {$ENDIF}
   
 {$IFDEF SOCKETS_BSD}
-  SockWrap
+  , SockWrap
 {$ENDIF};
 
 type
@@ -50,6 +50,8 @@ uses
 var
   FAbstractFeed: TFeed;
 
+
+{$IFNDEF SOCKETS_NONE}
 function CreateSocket:
 {$IFDEF SOCKETS_SYNAPSE}
 TTCPBlockSocket
@@ -68,6 +70,7 @@ begin
   CreateSocket := TSockWrap.Create;
 {$ENDIF}
 end;
+{$ENDIF}
 
 procedure SetAbstractFeed(const FeedType: TFeedType);
 begin
@@ -102,7 +105,9 @@ begin
   inherited Create;
 {$ENDIF}
 
+{$IFNDEF SOCKETS_NONE}
   Sock := CreateSocket;
+{$ENDIF}
   FError := false;
   DomainSet(Host, Port);
   FShouldShow := true;
@@ -110,10 +115,12 @@ end;
 
 destructor TRSock.Destroy;
 begin
+{$IFNDEF SOCKETS_NONE}
   if Assigned(Sock) then
   begin
     Sock.Free;
   end;
+{$ENDIF}
 
   FAbstractFeed.Free;
   FAbstractFeed := nil;
@@ -135,11 +142,13 @@ end;
 
 function TRSock.GetLine: String;
 begin
+{$IFNDEF SOCKETS_NONE}
   GetLine := Sock.RecvString(5000);
 {$IFDEF __GPC__}
   FError := (Sock.LastError < 0) or (Sock.LastError > 2);
 {$ELSE}
   FError := Sock.LastError <> 0;
+{$ENDIF}
 {$ENDIF}
 
   if FError then
@@ -150,8 +159,10 @@ end;
 
 procedure TRSock.Execute;
 begin
+{$IFNDEF SOCKETS_NONE}
   Sock.Connect(FHost, FPort);
   Sock.ConvertLineEnd := true;
+{$ENDIF}
 end;
 
 function TRSock.ParseItem(var Item: TFeedItem): Boolean;

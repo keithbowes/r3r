@@ -50,10 +50,6 @@ msgstr "Tema: "
 msgid "Created: "
 msgstr "Creado: "
 
-#: tuistrings:itemlink
-msgid "Link %i: "
-msgstr "Vínculo %i: "
-
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
 msgstr "¡Número inválido!"
@@ -92,7 +88,7 @@ msgstr "Un nueve versión es disponible en http://sourceforge.net/projects/r3r"
 
 #: tuistrings:itemencl
 msgid "Enclosure: "
-msgstr "Archivo inclusa: "
+msgstr "Archivo incluso: "
 
 #: tuistrings:activatelink
 msgid " (Press enter to open in your web browser)"
@@ -121,3 +117,6 @@ msgstr "Sí"
 #: tuistrings:skintouse
 msgid "Skin to use"
 msgstr "Aspecto para usar"
+
+#~ msgid "Link %i: "
+#~ msgstr "Vínculo %i: "

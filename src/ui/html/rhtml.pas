@@ -69,9 +69,9 @@ begin
 
   with Item do
   begin
-    if GetMainLink <> '' then
+    if Link <> '' then
     begin
-      Write('<a href="', GetMainLink, '">', Title, '</a>');
+      Write('<a href="', Link, '">', Title, '</a>');
     end
     else
     begin

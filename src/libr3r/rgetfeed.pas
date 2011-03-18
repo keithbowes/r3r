@@ -3,13 +3,13 @@ unit RGetFeed;
 interface
 
 uses
-  LibR3R, RSock, RMessage,
+  LibR3R, RSock, RMessage
 {$IFDEF SOCKETS_SYNAPSE}
-  SynaUtil
+  , SynaUtil
 {$ENDIF}
   
 {$IFDEF SOCKETS_BSD}
-  SockWrap
+  , SockWrap
 {$ENDIF};
 
 procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
@@ -19,7 +19,10 @@ procedure SetFeedObject(const Lib: TLibR3R);
 implementation
 
 uses
-  LibIdn, LibR3RStrings, RStrings, SysUtils
+{$IFDEF USE_IDN}
+  LibIdn, 
+{$ENDIF}
+  LibR3RStrings, RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
 {$ENDIF};
@@ -35,7 +38,9 @@ const
 {$ENDIF}
 var
   Pass, User: String;
+{$IFDEF USE_IDN}
   PHost: PChar;
+{$ENDIF}
 begin
   if FileExists(Resource) then
   begin
@@ -48,9 +53,13 @@ begin
   end
   else
   begin
+{$IFNDEF SOCKETS_NONE}
     ParseURL(Resource, Prot, User, Pass, Host, Port, Path, Para);
+{$IFDEF USE_IDN}
     idna_to_ascii_8z(StrToPChar(Host), @PHost, 0);
     Host := StrPas(PHost);
+{$ENDIF}
+{$ENDIF}
   end;
 end;
 
@@ -62,11 +71,15 @@ begin
 
   while not Finished do
   begin
+{$IFNDEF SOCKETS_NONE}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
       CallMessageEvent(Sock, true, ErrorGetting);
+{$IFNDEF __GPC__} { Hack: Sock.Error is always true in GPC }
       Break;
+{$ENDIF}
     end;
+{$ENDIF}
 
     Finished := Sock.ParseItem(Item);
 

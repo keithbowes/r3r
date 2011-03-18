@@ -9,6 +9,10 @@ ifdef DEBUG
 override CXXFLAGS += -g
 endif
 
+ifneq ($(USE_NLS),0)
+override CXXFLAGS += -DUSE_NLS
+endif
+
 CXXEXT = .cpp
 HEXT = .h
 
@@ -28,7 +32,9 @@ rcobjs =
 endif
 
 all: r3r$(TARGETEXEEXT)
+ifneq ($(USE_NLS),0)
 	cd po && $(MAKE) all
+endif
 
 clean:
 	cd po && $(MAKE) clean

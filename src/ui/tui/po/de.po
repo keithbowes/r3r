@@ -50,10 +50,6 @@ msgstr "Temen: "
 msgid "Created: "
 msgstr "Erstellt: "
 
-#: tuistrings:itemlink
-msgid "Link %i: "
-msgstr "Link %i: "
-
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
 msgstr "Ungültige Zahl!"
@@ -121,3 +117,6 @@ msgstr "Wahr"
 #: tuistrings:skintouse
 msgid "Skin to use"
 msgstr "Skin benutzen"
+
+#~ msgid "Link %i: "
+#~ msgstr "Link %i: "

@@ -21,5 +21,9 @@ uninstall:
 	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/libr3r.mo)
 
 %.mo: %.po libr3rstrings.pot
+ifneq ($(USE_NLS),0)
 	-$(MSGMERGE) -Uq $< libr3rstrings.pot
 	-$(MSGFMT) $(MSGFMTFLAGS) -o $@ $<
+else
+	-$(TOUCH) $<
+endif

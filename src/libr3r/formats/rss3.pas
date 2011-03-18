@@ -41,8 +41,6 @@ end;
 procedure TRss3Feed.FillItem(var Item: TFeedItem);
 var
   Data: String;
-  NumLinks: cardinal;
-  PData: PChar;
 begin
   Data := FData + ' ';
 
@@ -61,18 +59,7 @@ begin
 {$ELSE}
     Data := wTrimRight(Data);
 {$ENDIF}
-    NumLinks := Item.LinksCount;
-
-    if NumLinks > 0 then
-    begin
-      PData := StrToPChar(Data);
-      Item.Links^.Add(PData);
-    end
-    else
-    begin
-      PData := StrToPChar(Data);
-      Item.Links^.Add(PData);
-    end;
+    Item.Link := Data;
   end
   else if FCurrentField = 'subject' then
   begin
@@ -85,8 +72,8 @@ begin
   end
   else if FCurrentField = 'creator' then
   begin
-    Data := Item.Contact^.Email + ' ' + Item.Contact^.Name + Data;
-    Item.Contact^ := CreateEmailRecord(Data, ' ', 0);
+    Data := Item.Contact.Email + ' ' + Item.Contact.Name + Data;
+    Item.Contact := CreateEmailRecord(Data, ' ', 0);
   end
   else if FCurrentField = 'generator' then
   begin

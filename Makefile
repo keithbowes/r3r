@@ -44,15 +44,21 @@ ifdef inUnix
 endif
 endif
 else
+ifneq ($(DEFS_SOCKETS), SOCKETS_NONE)
 	$(error Unsupported sockets library)
 endif
 endif
+endif
 ifeq ($(R3R_UI),tui)
-ifndef USE_NCRT
-	@$(ECHO) $(call checkunit,CRT)
-else
+ifeq ($(NO_NCURSES),0)
+ifdef inUnix
 	@$(ECHO) $(call checkunit,nCRT)
 	@$(ECHO) $(call checkunit,nCurses)
+else
+	@$(ECHO) $(call checkunit,CRT)
+endif
+else
+	@$(ECHO) $(call checkunit,CRT)
 endif
 else
 ifeq ($(R3R_UI),wx)
@@ -81,9 +87,22 @@ ifeq ($(DEFS_SETTINGS),SETTINGS_REG)
 	@$(ECHO) $(call checkunit,Registry)
 endif
 endif
+ifneq ($(USE_EXPAT),0)
 	@$(ECHO) $(call checklib,expat)
+endif
+ifneq ($(USE_ICONV),0)
+ifdef inUnix
+	@$(ECHO) $(call checklib,iconv)
+else
+	@$(ECHO) $(call checklib,libiconv)
+endif
+endif
+ifneq ($(USE_IDN),0)
 	@$(ECHO) $(call checklib,idn)
+endif
+ifneq ($(USE_NLS),0)
 	@$(ECHO) $(call checklib,intl)
+endif
 ifdef inWindows
 	@$(ECHO) $(call checkprog,png2ico)
 endif

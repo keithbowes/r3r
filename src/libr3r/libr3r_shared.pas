@@ -85,8 +85,6 @@ begin
 end;
 
 function libr3r_get_item_field(Item: Pointer; FieldName: PChar): Pointer; cdecl;
-var
-  i: cardinal;
 begin
   with TFeedItem(Item) do
   begin
@@ -98,20 +96,9 @@ begin
     begin
       libr3r_get_item_field := StrToPChar(TitleText);
     end
-    else if FieldName = 'links' then
+    else if FieldName = 'link' then
     begin
-      for i := 0 to LinksCount do
-      begin
-        libr3r_get_item_field := StrCat(Links^.GetNth(i), #147);
-      end;
-    end
-    else if FieldName = 'link-count' then
-    begin
-      libr3r_get_item_field := Pointer(PtrUInt(LinksCount));
-    end
-    else if FieldName = 'main-link' then
-    begin
-      libr3r_get_item_field := StrToPChar(GetMainLink)
+      libr3r_get_item_field := StrToPChar(Link);
     end
     else if FieldName = 'podcast' then
     begin
@@ -135,15 +122,15 @@ begin
     end
     else if FieldName = 'contact-name' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact^.Name);
+      libr3r_get_item_field := StrToPChar(Contact.Name);
     end
     else if FieldName = 'contact-email' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact^.Email);
+      libr3r_get_item_field := StrToPChar(Contact.Email);
     end
     else if FieldName = 'contact-uri' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact^.URI);
+      libr3r_get_item_field := StrToPChar(Contact.URI);
     end
     else if FieldName = 'generator' then
     begin

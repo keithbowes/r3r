@@ -43,7 +43,7 @@ begin
   end
   else
   begin
-    Ret := SettingsDir + PathDelim + 'data';
+    Ret := SettingsDir;
   end;
 
   Ret := Ret + PathDelim;

@@ -40,7 +40,7 @@ begin
     end
     else if Name = 'creator' then
     begin
-      Contact^.Name := Content;
+      Contact.Name := Content;
     end
     else if Name = 'rights' then
     begin

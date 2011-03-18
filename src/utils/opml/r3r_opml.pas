@@ -3,7 +3,13 @@ program R3R_OPML;
 {$H+}
 
 uses
-  Expas, LibIntl, SysUtils;
+{$IFDEF USE_EXPAT}
+  Expas,
+{$ENDIF}
+{$IFDEF USE_NLS}
+  LibIntl,
+{$ENDIF}
+  SysUtils;
 
 const
   DefOPML = 'subscriptionList.opml';
@@ -12,8 +18,17 @@ const
 
 var
   InName, OutName: String;
+{$IFDEF USE_NLS}
   LocaleDir: String;
+{$ENDIF}
   Opt: String;
+
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+begin
+  _ := s;
+end;
+{$ENDIF}
 
 procedure DoExport;
 var
@@ -92,7 +107,9 @@ end;
 procedure DoImport;
 var
   fi, fo: text;
+{$IFDEF USE_EXPAT}
   Parser: XML_PARSER;
+{$ENDIF}
   s: String;
 begin
   if InName = '' then
@@ -105,9 +122,10 @@ begin
     OutName := DefText;
   end;
 
+{$IFDEF USE_EXPAT}
   Parser := XML_ParserCreate(nil);
-
   XML_SetElementHandler(Parser, ElementStarted, nil);
+{$ENDIF}
 
   Assign(fo, OutName);
   Rewrite(fo);
@@ -119,10 +137,14 @@ begin
   while not EOF(fi) do
   begin
     ReadLn(fi, s);
+{$IFDEF USE_EXPAT}
     XML_Parse(Parser, {$IFNDEF __GPC__}PChar(s){$ELSE}s{$ENDIF}, Length(s), 0);
+{$ENDIF}
   end;
 
+{$IFDEF USE_EXPAT}
   XML_ParserFree(Parser);
+{$ENDIF}
 
   Close(fi);
 end;
@@ -137,10 +159,12 @@ begin
 end;
 
 begin
+{$IFDEF USE_NLS}
   LocaleDir := ExpandFileName(ExtractFileDir(ParamStr(0)) + '/../share/locale');
   setlocale(LC_ALL, '');
   textdomain('r3r_opml');
   bindtextdomain('r3r_opml', {$IFNDEF __GPC__}PChar(LocaleDir){$ELSE}LocaleDir{$ENDIF});
+{$ENDIF}
 
   Opt := ParamStr(1);
   InName := ParamStr(2);

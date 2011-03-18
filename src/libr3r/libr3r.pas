@@ -41,7 +41,10 @@ var
 implementation
 
 uses
-  Http, LibR3RStrings, LocalFile, RGetFeed, RMessage, RUpdate;
+{$IFNDEF SOCKETS_NONE}
+  Http, RUpdate, 
+{$ENDIF}
+  LibR3RStrings, LocalFile, RGetFeed, RMessage;
 
 function GetSockType(const Resource, Prot, Host, Port, Path, Para: String): TRSock;
 begin
@@ -49,20 +52,24 @@ begin
   begin
     GetSockType := TLocalFile.Create(Resource);
   end
+{$IFNDEF SOCKETS_NONE}
   else if Prot = 'http' then
   begin
     GetSockType := THttpSock.Create(Host, Port, Path, Para);
   end
+{$ENDIF}
   else
   begin
     GetSockType := nil;
   end;
 end;
 
+{$IFNDEF SOCKETS_NONE}
 function GetUpdateObject: TRUpdate;
 begin
   GetUpdateObject := TRUpdate.Create;
 end;
+{$ENDIF}
 
 constructor TLibR3R.Create;
 begin
@@ -101,10 +108,12 @@ begin
   if Assigned(FSock) then
   begin
 {$IFDEF __GPC__}
+{$IFNDEF SOCKETS_NONE}
     if Prot <> 'file' then
     begin
       FSock.Sock.CloseSocket;
     end;
+{$ENDIF}
 {$ELSE}
     FSock.Free;
 {$ENDIF}
@@ -138,6 +147,7 @@ begin
 end;
 
 procedure TLibR3R.DoUpdate;
+{$IFNDEF SOCKETS_NONE}
 var
   Up: TRUpdate;
 begin
@@ -151,6 +161,9 @@ begin
 
     Free;
   end;
+{$ELSE}
+begin
+{$ENDIF}
 end;
 
 initialization

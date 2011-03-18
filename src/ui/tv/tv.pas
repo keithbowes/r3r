@@ -155,7 +155,7 @@ end;
 
 procedure TTVApp.HandleEvent(var Event: TEvent);
 var
-  Categories, CreateDate, Desc, Link: PString;
+  Categories, CreateDate, Desc, Lnk: PString;
 begin
   inherited HandleEvent(Event);
 
@@ -197,16 +197,9 @@ begin
       Categories := NewStr(Subject);
       CreateDate := NewStr(Created);
       Desc := NewStr(Description);
+      Lnk := NewStr(Link);
 
-      if LinksCount > 0 then
-      begin
-        Link := Links^.GetNth(0);
-        FLinkButton^.State := sfEnabled;
-      end
-      else
-      begin
-        FLinkButton^.SetState(sfDisabled, true);
-      end;
+      FLinkButton^.SetState(sfDisabled, Link = '');
     end;
 
     FCategories^.Data := Categories;
@@ -224,13 +217,13 @@ begin
 
     FDescriptionBox^.DrawView;
 
-    FLinkButton^.Title := Link;
+    FLinkButton^.Title := Lnk;
     FLinkButton^.DrawView;
 
     DisposeStr(Categories);
     DisposeStr(CreateDate);
     DisposeStr(Desc);
-    DisposeStr(Link);
+    DisposeStr(Lnk);
     DrawView;
   end;
 

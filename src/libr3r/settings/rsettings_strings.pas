@@ -10,7 +10,9 @@ var
   DescGuess: String;
   DescCheck: String;
   DescWarn: String;
+{$IFDEF USE_ICONV}
   DescEncoding: String;
+{$ENDIF}
   LoadSubscriptions: String;
   DescProxy: String;
   DescProxyAddress: String;
@@ -24,10 +26,16 @@ var
   DescMedia: String;
   DescPrefix: String;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+{$ENDIF}
+
 implementation
 
+{$IFDEF USE_NLS}
 uses
   LibIntl, RSettings_Routines, RStrings, SysUtils;
+{$ENDIF}
 
 procedure InitStrings;
 begin
@@ -38,7 +46,9 @@ begin
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');
+{$IFDEF USE_ICONV}
   DescEncoding := _('Display character encoding');
+{$ENDIF}
   LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');
   DescProxyAddress := _('Proxy address');
@@ -53,11 +63,20 @@ begin
   DescPrefix := _('Where the program is installed');
 end;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+begin
+  _ := s;
+end;
+{$ENDIF}
+
 initialization
 
+{$IFDEF USE_NLS}
 setlocale(LC_ALL, '');
 textdomain('libr3r');
 bindtextdomain('libr3r', StrToPchar(GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'locale'));
+{$ENDIF}
 
 InitStrings;
 

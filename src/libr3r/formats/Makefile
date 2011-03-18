@@ -1,5 +1,9 @@
+ifneq ($(USE_EXPAT),0)
+SAXCALLBACKS=saxcallbacks
+endif
+
 UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
-UNITS=feeditem feed nonxml esf rss3 saxcallbacks xml dc \
+UNITS=feeditem feed nonxml esf rss3 $(SAXCALLBACKS) xml dc \
 			mod_enclosure atom rss
 
 include ../../../scripts/common.make

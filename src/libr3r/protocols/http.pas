@@ -34,7 +34,10 @@ type
 implementation
 
 uses
-  Info, LibR3RStrings, RGetFeed, RMessage, RProp, RSettings,
+{$IFDEF USE_ICONV}
+  RProp,
+{$ENDIF}
+  Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
   RStrings, SockConsts, StrTok, SysUtils
   
 {$IFDEF __GPC__}
@@ -183,6 +186,7 @@ begin
           Headers.ContentType := ftUnknown;
         end;
 
+  {$IFDEF USE_ICONV}
         RespList := Split(HeaderValue, ';');
         for i := 0 to RespList.Length - 1 do
         begin
@@ -194,6 +198,7 @@ begin
             Break;
           end;
         end;
+{$ENDIF}
       end
       else if HeaderName = 'location' then
       begin
@@ -410,7 +415,9 @@ begin
 
     if not Assigned(FLocal) then
     begin
+{$IFDEF USE_ICONV}
       SetProp('charset', {$IFNDEF __GPC__}PChar(Cache.GetEncoding){$ELSE}StrToPChar(Cache.GetEncoding){$ENDIF});
+{$ENDIF}
       FLocal := GetLocalFile(FCacheDir + PathDelim +
         CacheFeedFile + '.' + Cache.GetFeedExtension(Headers.ContentType));
       FLocal.Execute;

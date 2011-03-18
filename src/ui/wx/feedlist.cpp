@@ -46,7 +46,7 @@ void item_parsed(void * item)
   ItemInfo * info = (ItemInfo *) malloc(sizeof(ItemInfo));
   info->isTopLevel = topItem;
   info->desc = desc;
-  info->link = (char *) libr3r_get_item_field(item, (char *) "main-link");
+  info->link = (char *) libr3r_get_item_field(item, (char *) "link");
   info->title = title;
   info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");
   info->self = (char *) libr3r_get_item_field(item, (char *) "myself");

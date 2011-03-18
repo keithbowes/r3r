@@ -92,7 +92,6 @@ end;
 procedure TRssFeed.SendItem(const Name, Content: String);
 var
   Idx: byte;
-  PLink: PChar;
 begin
   with GetCurrentElement, CurrentItem do
   begin 
@@ -109,19 +108,7 @@ begin
     end
     else if Name = 'link' then
     begin
-      PLink := StrToPChar(Content);
-      for Idx := 0 to Links^.Count - 1 do
-      begin
-        if StrPas(Links^.GetNth(Idx)) = Trim(Content) then
-        begin
-          PLink := nil;
-        end;
-      end;
-
-      if PLink <> nil then
-      begin
-        Links^.Add(PLink);
-      end;
+      Link := Trim(Content);
     end
     else if Name = 'enclosure' then
     begin
@@ -160,7 +147,7 @@ begin
     end
     else if (Name = 'author') or (Name = 'managingeditor') then
     begin
-      Contact^ := CreateEmailRecord(Content, '(', 1);
+      Contact := CreateEmailRecord(Content, '(', 1);
     end
     else if Name = 'generator' then
     begin

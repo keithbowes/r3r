@@ -9,7 +9,9 @@ all:
 	-$(TOUCH) _info.pas
 	$(MAKE) info.pas
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
+ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
 	$(MAKE) rupdate.pas
+endif
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	$(MAKE) libr3r$(PPUEXT)
 ifdef BUILD_SHARED

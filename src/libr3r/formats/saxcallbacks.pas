@@ -15,7 +15,10 @@ procedure InstructionReceived(userData: Pointer; target, data: PChar);
 implementation
 
 uses
-  RProp, RStrings, SysUtils, Xml;
+{$IFDEF USE_ICONV}
+  RProp, RStrings,
+{$ENDIF}
+  SysUtils, Xml;
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
@@ -106,15 +109,18 @@ begin
 end;
 
 procedure InstructionReceived(userData: Pointer; target, data: PChar);
+{$IFDEF USE_ICONV}
 var
   Priv: String;
   PrivStart: word;
+{$ENDIF}
 begin
-  if target = 'xml' then
+{$IFDEF USE_ICONV}
+  if StrComp(target, 'xml') <> 0 then
   begin
     if GetProp('charset') = nil then
     begin
-      Priv := data;
+      Priv := StrPas(data);
       PrivStart := Pos('encoding=', Priv);
       if PrivStart <> 0 then
       begin
@@ -127,6 +133,7 @@ begin
       end;
     end;
   end;
+{$ENDIF}
 end;
 
 end.

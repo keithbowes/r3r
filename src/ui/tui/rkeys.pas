@@ -5,6 +5,7 @@ interface
 const
   DonateKey = 'd';
   DownKey = 'j';
+  EnclosureKey = 'x';
   EndKey = Chr(79);
   EnterKey = Chr(13);
   GoKey = 'g';

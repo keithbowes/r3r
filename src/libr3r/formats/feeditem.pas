@@ -5,10 +5,9 @@ unit FeedItem;
 interface
 
 uses
-  RList, StrTok;
+  StrTok;
 
 type
-  PAuthor = ^TAuthor;
   TAuthor = record
     Email: String;
     Name: String;
@@ -21,16 +20,13 @@ type
   end;
 
   TFeedItem = class
-  protected
-    procedure Cleanup;
   public
     Title: String;
-    Links: PRList;
-    MainLink: String;
+    Link: String;
     Description: String;
     Subject: String;
     Created: String;
-    Contact: PAuthor;
+    Contact: TAuthor;
     Generator: String;
     LastModified: String;
     Language: String;
@@ -44,8 +40,6 @@ type
 
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
-    function LinksCount: cardinal;
-    function GetMainLink: String;
     function GetPodcast: String;
     function DescriptionText: String;
     function TitleText: String;
@@ -58,10 +52,10 @@ function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEn
 implementation
 
 uses
-  iconv, RProp, RSettings, SysUtils;
-
-var
-  AlreadyAllocated: Boolean = false;
+{$IFDEF USE_ICONV}
+  iconv, RProp, RSettings,
+{$ENDIF}
+  SysUtils;
 
 function StripHtml(const InStr: String): String;
 var
@@ -157,40 +151,18 @@ begin
   inherited Create;
 {$ENDIF}
 
-  New(Contact);
   Finished := false;
-
-  if not AlreadyAllocated then
-  begin
-    New(Links, Init);
-    AlreadyAllocated := true;
-  end;
 end;
 
 destructor TFeedItem.Destroy;
 begin
-  Dispose(Contact);
-  Cleanup;
-
 {$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
 end;
 
-procedure TFeedItem.Cleanup;
-begin
-  if AlreadyAllocated then
-  begin
-    if Links <> nil then
-    begin
-      Links^.Add(nil); // Hack: Have at least one node to destroy
-      Dispose(Links, Done);
-      AlreadyAllocated := false;
-    end;
-  end;
-end;
-
 procedure TFeedItem.Translate;
+{$IFDEF USE_ICONV}
 var
   cd: iconv_t;
   incharset, outcharset: PChar;
@@ -201,7 +173,11 @@ var
   inbytesleft, outbytesleft: size_t;
   outbuf, outstr: PChar;
 begin
+{$IFNDEF __GPC__}
   inbuf := PChar(FieldValue);
+{$ELSE}
+  inbuf := FieldValue;
+{$ENDIF}
   inbytesleft := Length(FieldValue) + 1;
   outbytesleft := inbytesleft div iconv_bytesperchar(StrPas(incharset)) * iconv_bytesperchar(StrPas(outcharset));
   GetMem(outstr, outbytesleft);
@@ -213,8 +189,10 @@ begin
     FreeMem(outstr);
   end;
 end;
+{$ENDIF}
 
 begin
+{$IFDEF USE_ICONV}
   incharset := GetProp('charset');
 {$IFNDEF __GPC__}
   outcharset := PChar(String((Settings.GetString(Settings.IndexOf('display-encoding')))));
@@ -238,18 +216,19 @@ begin
     TranslateField(Title);
   end;
   iconv_close(cd);
+{$ENDIF}
 end;
 
 procedure TFeedItem.Clear;
 begin
   Title := '';
   Description := '';
-  MainLink := '';
+  Link := '';
   Subject := '';
   Created := '';
-  Contact^.Email := '';
-  Contact^.Name := '';
-  Contact^.URI := '';
+  Contact.Email := '';
+  Contact.Name := '';
+  Contact.URI := '';
   Generator := '';
   LastModified := '';
   Language := '';
@@ -261,39 +240,6 @@ begin
   Enclosure.URL := '';
 
   Finished := false;
-
-  Links^.Add(nil);
-end;
-
-function TFeedItem.LinksCount: cardinal;
-begin
-  LinksCount := Links^.Count;
-end;
-
-function TFeedItem.GetMainLink: String;
-var
-  CurrentLink: cardinal;
-  Link: String;
-begin
-  CurrentLink := LinksCount;
-  if (Links <> nil) and (LinksCount > 0) then
-  begin
-    repeat
-      Link := StrPas(Links^.GetNth(CurrentLink));
-      Dec(CurrentLink);
-    until (Link <> '') or (CurrentLink <= LinksCount);
-  end
-  else
-  begin
-    Link := '';
-  end;
-
-  if Link <> '' then
-  begin
-    MainLink := Link;
-  end;
-
-  GetMainLink := MainLink;
 end;
 
 function TFeedItem.GetPodcast: String;
@@ -327,6 +273,7 @@ var
   Rec: TAuthor;
 begin
   EmailStr := Trim(EmailStr);
+  WriteLn('EmailStr: ', EmailStr);
 
   BegName := Pos(Delim, EmailStr);
   with Rec do

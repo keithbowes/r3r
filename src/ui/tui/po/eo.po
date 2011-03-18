@@ -50,10 +50,6 @@ msgstr "Temoj: "
 msgid "Created: "
 msgstr "Kreita: "
 
-#: tuistrings:itemlink
-msgid "Link %i: "
-msgstr "Ligilo %i: "
-
 #: tuistrings:invalidnumber
 msgid "Invalid Number!"
 msgstr "Nevalida numero!"
@@ -121,3 +117,6 @@ msgstr "Jes"
 #: tuistrings:skintouse
 msgid "Skin to use"
 msgstr "Etoso por uzi"
+
+#~ msgid "Link %i: "
+#~ msgstr "Ligilo %i: "

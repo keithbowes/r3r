@@ -133,7 +133,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.1.2
+VERSION = 2.1.3
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
@@ -186,9 +186,44 @@ DEFS = $(foreach opt, $(DEFS_EXTRA) $(DEFS_SETTINGS) $(DEFS_SOCKETS), $(DEFFLAG)
 UNITDIRS=$(sort $(foreach d,$(wildcard $(addsuffix /*,$(UNIT_DIRS))),$(DIRFLAG)$(dir $(d))))
 override COMPILER_OPTIONS += $(PCFLAGS)
 
+USE_EXPAT ?= 1
+USE_ICONV ?= 1
+USE_IDN ?= 1
+USE_NLS ?= 1
+
+NO_NCURSES ?= 0
+
+USE_LIBICONV ?= 0
+
+ifneq ($(USE_NLS),0)
+override DEFS_EXTRA+=USE_NLS
+endif
+
+ifneq ($(USE_IDN),0)
+override DEFS_EXTRA+=USE_IDN
+endif
+
+ifneq ($(USE_ICONV),0)
+override DEFS_EXTRA+=USE_ICONV
+endif
+
+ifneq ($(USE_EXPAT),0)
+override DEFS_EXTRA+=USE_EXPAT
+endif
+
+ifneq ($(NO_NCURSES),0)
+override DEFS_EXTRA+=NO_NCURSES
+endif
+
+ifneq ($(USE_LIBICONV),0)
+override DEFS_EXTRA+=USE_LIBICONV
+endif
+
 ifneq ($(or $(USE_GPC),$(USE_FPC)),)
 COMPILER_OVERRIDE=1
 endif
+
+R3R_UI ?= tui
 
 ifdef COMPILER_OVERRIDE
 ifdef USE_FPC
@@ -209,7 +244,7 @@ CC=$(call programpath,gpc)
 ifeq ($(findstring gp,$(PC)),gp)
 USE_GPC=1
 else
-$(warning No Pascal compiler detected)
+$(error No Pascal compiler detected)
 endif # USE_GPC
 endif # USE_FPC
 endif # COMPILER_OVERRIDE
@@ -239,12 +274,6 @@ else
 DEFS_SETTINGS ?= SETTINGS_TAB
 endif # inWindows
 
-ifdef DEBUG
-R3R_UI ?= tui
-else
-R3R_UI ?= wx
-endif # DEBUG
-
 ifdef OS_TARGET
 override PCFLAGS_BASE+=-T$(OS_TARGET)
 endif
@@ -264,6 +293,7 @@ PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_TAB
 DEFS_SOCKETS ?= SOCKETS_BSD
+USE_ICONV=0
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
@@ -276,7 +306,6 @@ PCFLAGS_DEBUG=--no-io-checking --no-pointer-checking \
 							--no-warning
 endif # DEBUG
 
-R3R_UI ?= tui
 export USE_GPC
 endif # USE_GPC
 endif # USE_FPC

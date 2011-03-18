@@ -230,7 +230,9 @@ begin
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
   CheckBoolean('load-subscriptions-on-startup', 'Display', false, LoadSubscriptions);
   CheckBoolean('warn-missing-data', 'Display', false, DescWarn);
+{$IFDEF USE_ICONV}
   CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);
+{$ENDIF}
 
   CheckBoolean('use-proxy', 'HTTP', false, DescProxy);
   CheckString('proxy-address', 'HTTP', '127.0.0.1', DescProxyAddress);

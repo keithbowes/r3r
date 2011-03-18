@@ -70,28 +70,17 @@ begin
 end;
 
 procedure TEsfFeed.ParseDataLine(var Item: TFeedItem);
-var
-  Link: String;
-  PLink: PChar;
 begin
   with Item do
   begin
     Created := UnixToDate(FList.List[1]);
     Title := Trim(FList.List[2]);
-
     Link := FList.List[3];
-    PLink := StrToPChar(Link);
-    Links^.Clear;
-    Links^.Add(PLink);
-
-    Id := StrPas(Links^.GetNth(0));
+    Id := Link;
   end;
 end;
 
 procedure TEsfFeed.ParseMetaLine(var Item: TFeedItem);
-var
-  Link: String;
-  PLink: PChar;
 begin
   FList.List[1] := LowerCase(FList.List[1]);
   FList.List[2] := Trim(FList.List[2]);
@@ -105,12 +94,10 @@ begin
     else if FList.List[1] = 'link' then
     begin
       Link := FList.List[2];
-      PLink := StrToPChar(Link);
-      Links^.Add(PLink);
     end
     else if FList.List[1] = 'contact' then
     begin
-      Contact^ := CreateEmailRecord(FList.List[2], '(', 1);
+      Contact := CreateEmailRecord(FList.List[2], '(', 1);
     end;
   end;
 end;

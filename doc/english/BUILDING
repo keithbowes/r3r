@@ -65,7 +65,8 @@ DEFS_SETTINGS
 DEFS_SOCKETS
   The sockets library to use:
   * SOCKETS_BSD: Use the low-level BSD sockets wrapper
-    (*nix and Windows). Requires a C compiler.
+    (*nix and Windows). Requires a C compiler. (Extremely buggy!)
+  * SOCKETS_NONE: Build without sockets support.
   * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal)
     <http://synapse.ararat.cz>.
   (Currently the default is SOCKETS_BSD with GNU Pascal and

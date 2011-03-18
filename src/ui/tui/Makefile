@@ -4,7 +4,9 @@ UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* \
 
 include ../../../scripts/common.make
 all:
+ifneq ($(USE_NLS),0)
 	cd po && $(MAKE)
+endif
 	cd ../../libr3r && $(MAKE) info.pas
 	$(MAKE) rkeys$(PPUEXT) rtitle$(PPUEXT) skin$(PPUEXT) \
 		tuifuncs$(PPUEXT) tui$(PPUEXT) r3r$(PPUEXT)

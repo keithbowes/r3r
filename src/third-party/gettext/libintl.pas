@@ -18,16 +18,6 @@ interface
     libintl.h
 }
 
-  { Pointers to basic pascal types, inserted by h2pas conversion program.}
-  Type
-    DWord     = Cardinal; // GPC doesn't have DWord defined
-    PLongint  = ^Longint;
-    PSmallInt = ^SmallInt;
-    PByte     = ^Byte;
-    PWord     = ^Word;
-    PDWord    = ^DWord;
-    PDouble   = ^Double;
-
 {$IFDEF FPC}
 {$PACKRECORDS C}
 {$ENDIF}
@@ -56,10 +46,7 @@ interface
 {$define __USE_GNU_GETTEXT}
   { Provide information about the supported file formats.  Returns the
      maximum minor revision number supported for a given major revision.   }
-  { was #define dname(params) para_def_expr }
-  { argument types are unknown }
-  { return type might be wrong }   
-  function __GNU_GETTEXT_SUPPORTED_REVISION(major : longint) : longint;  
+  function __GNU_GETTEXT_SUPPORTED_REVISION(major : longint) : Boolean;
 
   { Look up MSGID in the current default message catalog for the current
      LC_MESSAGES locale.  If not found, returns MSGID itself (the default
@@ -128,16 +115,10 @@ implementation
 uses
   Strings;
 
-  function __GNU_GETTEXT_SUPPORTED_REVISION(major : longint) : longint;
-    var
-       if_local1 : longint;
-        begin
-       if major = 0 then
-         if_local1:=1
-       else
-         if_local1:=-(1);
-       __GNU_GETTEXT_SUPPORTED_REVISION:=if_local1;
-    end;
+function __GNU_GETTEXT_SUPPORTED_REVISION(major : longint) : Boolean;
+begin
+  __GNU_GETTEXT_SUPPORTED_REVISION := major = 0;
+end;
 
 function _(msgid: PChar): String;
 begin

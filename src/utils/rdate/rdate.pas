@@ -14,10 +14,17 @@ function LongDateToTime(Time: String): TRDate;
 function ShortDateToTime(Time: String): TRDate;
 function TimeToString(Time: TRDate): String;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+{$ENDIF}
+
 implementation
 
 uses
-  LibIntl, LibR3RStrings, StrTok;
+{$IFDEF USE_NLS}
+  LibIntl,
+{$ENDIF}
+  LibR3RStrings, StrTok;
 
 function GetMonthAbbrev(const Month: String): String;
 var
@@ -85,7 +92,9 @@ var
   Tm: TRDate;
   TP: String;
 begin
+{$IFDEF USE_NLS}
   textdomain('libr3r');
+{$ENDIF}
   List := Split(Time, WhitespaceChars);
 
   Tm.Day := List.Strings[1];
@@ -109,7 +118,9 @@ var
   Sep: byte;
   Tm: TRDate;
 begin
+{$IFDEF USE_NLS}
   textdomain('libr3r');
+{$ENDIF}
 
   Sep := Pos('-', Time);
   Tm.Year := Copy(Time, 1, Sep - 1);
@@ -188,5 +199,12 @@ begin
 
   TimeToString := Ret;
 end;
+
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+begin
+  _ := s;
+end;
+{$ENDIF}
 
 end.

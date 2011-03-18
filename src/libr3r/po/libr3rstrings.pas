@@ -13,10 +13,16 @@ var
 
   Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec: String;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+{$ENDIF}
+
 implementation
 
+{$IFDEF USE_NLS}
 uses
   LibIntl, RSettings_Routines, RStrings, SysUtils;
+{$ENDIF}
 
 procedure InitStrings;
 begin
@@ -39,11 +45,20 @@ begin
   Dec := _('Dec');
 end;
 
+{$IFNDEF USE_NLS}
+function _(s: String): String;
+begin
+  _ := s;
+end;
+{$ENDIF}
+
 initialization
 
+{$IFDEF USE_NLS}
 setlocale(LC_ALL, '');
 textdomain('libr3r');
 bindtextdomain('libr3r', StrToPChar(GetInstalledPrefix + PathDelim + 'share' + PathDelim + 'locale'));
+{$ENDIF}
 
 InitStrings;
 

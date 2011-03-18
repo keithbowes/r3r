@@ -3,7 +3,10 @@ unit Xml;
 interface
 
 uses
-  Expas, Feed, FeedItem, RList;
+{$IFDEF USE_EXPAT}
+  Expas,
+{$ENDIF}
+  Feed, FeedItem, RList;
 
 const
   AtomNS = 'http://www.w3.org/2005/Atom';
@@ -41,7 +44,9 @@ type
     Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
+{$IFDEF USE_EXPAT}
     FParser: XML_PARSER;
+{$ENDIF}
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
@@ -55,7 +60,10 @@ type
 implementation
 
 uses
-  LibR3RStrings, RMessage, RSettings, RStrings, SaxCallbacks, SysUtils;
+{$IFDEF USE_EXPAT}
+  SaxCallbacks,
+{$ENDIF}
+  LibR3RStrings, RMessage, RSettings, RStrings, SysUtils;
 
 constructor TXmlFeed.Create;
 begin
@@ -67,11 +75,13 @@ begin
   FCloned := false;
   FNthElem := 0;
 
+{$IFDEF USE_EXPAT}
   FParser := XML_ParserCreateNS(nil, #0);
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
   XML_SetProcessingInstructionHandler(FParser, InstructionReceived);
   XML_SetUserData(FParser, Self);
+{$ENDIF}
 end;
 
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
@@ -79,7 +89,9 @@ begin
   inherited ParseLine(Line, Item);
 
   CurrentItem := Item;
+{$IFDEF USE_EXPAT}
   XML_Parse(FParser, {$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, Length(Line), 0);
+{$ENDIF}
 
   Item.Finished := true;
 end;
@@ -97,7 +109,9 @@ var
   i: cardinal;
   p: PXmlElement;
 begin
+{$IFDEF USE_EXPAT}
   Xml_ParserFree(FParser);
+{$ENDIF}
 
   if not FCloned then
   begin
