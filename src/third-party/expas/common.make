@@ -190,6 +190,7 @@ USE_EXPAT ?= 1
 USE_ICONV ?= 1
 USE_IDN ?= 1
 USE_NLS ?= 1
+USE_PCRE ?= 1
 
 NO_NCURSES ?= 0
 
@@ -217,6 +218,10 @@ endif
 
 ifneq ($(USE_LIBICONV),0)
 override DEFS_EXTRA+=USE_LIBICONV
+endif
+
+ifneq ($(USE_PCRE),0)
+override DEFS_EXTRA+=USE_PCRE
 endif
 
 ifneq ($(or $(USE_GPC),$(USE_FPC)),)
@@ -270,6 +275,7 @@ DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
 ifdef inWindows
 DEFS_SETTINGS ?= SETTINGS_REG
+override DEFS_EXTRA+=NO_SUPPORTS_UNICODE
 else
 DEFS_SETTINGS ?= SETTINGS_TAB
 endif # inWindows
@@ -286,7 +292,8 @@ GPC=$(call programpath,gpc)
 override COMPILER=GPC $(shell $(GPC) -dumpversion)
 PLATFORM=$(shell $(GPC) -dumpmachine)
 
-PCFLAGS_BASE=--extended-syntax --no-write-clip-strings \
+PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
+						 --extended-syntax \
 						 --unit-destination-path=$(builddir)\
 						 -DFree=Destroy -DPtrUInt=PtrWord \
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)

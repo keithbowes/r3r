@@ -7,3 +7,6 @@ all: unit prog
 prog: test$(PPUEXT)
 	
 unit: iconv$(PPUEXT)
+
+clean:
+	$(DEL) test$(TARGETEXEEXT)

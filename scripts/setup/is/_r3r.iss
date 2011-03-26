@@ -1,3 +1,4 @@
+; vim:nospell
 [Setup]
 AllowNoIcons=yes
 AlwaysRestart=yes
@@ -14,7 +15,7 @@ OutputDir=scripts\setup\is
 SourceDir=..\..\..
 
 [Tasks]
-Name: desktopicon; Description: "&Create desktop icons"
+Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
 
 [Files]
 Source: "../*.dll"; DestDir: "{app}\bin"
@@ -62,8 +63,14 @@ Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 
+[CustomMessages]
+de.CreateDesktopIcons=Erstellen Desktop-Ikonen
+en.CreateDesktopIcons=Create &desktop icons
+eo.CreateDesktopIcons= Krei &labortablajn piktogramojn
+es.CreateDesktopIcons=Crear pictogramas de &escritorio
+
 [Registry]
 Root: HKCU; SubKey: "Environment"; ValueType: string; ValueName: "R3R_INSTALLED_PREFIX"; ValueData: "{app}"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
-Root: HKCU; SubKey: "Software\R3R\Display"; ValueType: string; ValueName: "display-encoding"; ValueData: "ASCII//TRANSLIT"
+Root: HKCU; SubKey: "Software\R3R\Display"; ValueType: string; ValueName: "display-encoding"; ValueData: "ISO-8859-1"; Flags: createvalueifdoesntexist
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"

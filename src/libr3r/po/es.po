@@ -81,6 +81,9 @@ msgstr "Comprobar nueves versiones"
 msgid "Warn about missing data"
 msgstr "Advertir de datos faltos"
 
+msgid "Use item filters"
+msgstr "Usar filtras de entradas"
+
 msgid "Display character encoding"
 msgstr "Presentación de las letras"
 

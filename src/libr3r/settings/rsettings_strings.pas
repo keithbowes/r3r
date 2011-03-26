@@ -10,6 +10,7 @@ var
   DescGuess: String;
   DescCheck: String;
   DescWarn: String;
+  DescFilters: String;
 {$IFDEF USE_ICONV}
   DescEncoding: String;
 {$ENDIF}
@@ -46,6 +47,7 @@ begin
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');
+  DescFilters := _('Enable item filters');
 {$IFDEF USE_ICONV}
   DescEncoding := _('Display character encoding');
 {$ENDIF}

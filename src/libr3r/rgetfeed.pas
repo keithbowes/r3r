@@ -22,7 +22,7 @@ uses
 {$IFDEF USE_IDN}
   LibIdn, 
 {$ENDIF}
-  LibR3RStrings, RStrings, SysUtils
+  LibR3RStrings, RFilter, RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
 {$ENDIF};
@@ -66,8 +66,10 @@ end;
 procedure ParseFeed(const Sock: TRSock);
 var
   Finished: Boolean;
+  UseFilters: Boolean;
 begin
   Finished := false;
+  UseFilters := Settings.GetBoolean(Settings.IndexOf('use-filters'));
 
   while not Finished do
   begin
@@ -83,10 +85,19 @@ begin
 
     Finished := Sock.ParseItem(Item);
 
-    if (Sock.ShouldShow) and (Item.Title <> '') then
+    if Sock.ShouldShow then
     begin
       Item.Translate;
-      FeedObj.DisplayItem(Item);
+
+      if UseFilters then
+      begin
+        FilterItem(Item);
+      end;
+
+      if Item.Title <> '' then
+      begin
+        FeedObj.DisplayItem(Item);
+      end;
     end;
   end;
 end;

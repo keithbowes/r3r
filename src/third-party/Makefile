@@ -13,9 +13,13 @@ endif
 ifneq ($(USE_IDN),0)
 	cd libidn && $(MAKE) all
 endif
+ifneq ($(USE_PCRE),0)
+	cd pcre && $(MAKE) all
+endif
 
 clean:
 	cd expas && $(MAKE) clean
 	cd gettext && $(MAKE) clean
 	cd iconv && $(MAKE) clean
 	cd libidn && $(MAKE) clean
+	cd pcre && $(MAKE) clean

@@ -84,11 +84,14 @@ msgstr "Check for updates"
 msgid "Warn about missing data"
 msgstr "Warn about missing data"
 
+msgid "Use item filters"
+msgstr "Use item filters"
+
 msgid "Display character encoding"
 msgstr "Display character encoding"
 
 msgid "Load subscriptions on startup"
-msgstr ""
+msgstr "Load subscriptions on startup"
 
 msgid "Use a proxy?"
 msgstr "Use a proxy?"

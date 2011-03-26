@@ -165,6 +165,10 @@ procedure TFeedItem.Translate;
 {$IFDEF USE_ICONV}
 var
   cd: iconv_t;
+{$IFDEF USE_LIBICONV}
+  i: integer;
+{$ENDIF}
+
   incharset, outcharset: PChar;
 
 procedure TranslateField(var FieldValue: String);
@@ -185,7 +189,7 @@ begin
   begin
     outbuf := outstr;
     iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft);
-    FieldValue := String(outstr);
+    FieldValue := StrPas(outstr);
     FreeMem(outstr);
   end;
 end;
@@ -208,6 +212,10 @@ begin
   cd := iconv_open(outcharset, incharset);
   if cd <> iconv_t(-1) then
   begin
+{$IFDEF USE_LIBICONV}
+    i := 1;
+    iconvctl(cd, ICONV_SET_TRANSLITERATE, @i);
+{$ENDIF}
     TranslateField(Copyright);
     TranslateField(Created);
     TranslateField(Description);
@@ -273,7 +281,6 @@ var
   Rec: TAuthor;
 begin
   EmailStr := Trim(EmailStr);
-  WriteLn('EmailStr: ', EmailStr);
 
   BegName := Pos(Delim, EmailStr);
   with Rec do

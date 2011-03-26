@@ -270,7 +270,7 @@ begin
   AItem.Description := Item.DescriptionText;
   AItem.Link := Item.Link;
   AItem.Contact.Email := Item.Contact.Email;
-  AItem.Enclosure := Item.Enclosure;
+  AItem.Enclosure.URL := Item.GetPodcast;
   FItems^.Add(AItem);
   Items := FItems^.Count;
 
@@ -284,11 +284,11 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(IntToStr(Items) + ': ');
+    Write(Items, ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);
-    WriteLn(Title);
+    TuiWriteLn(Title);
   end;
 end;
 
@@ -298,18 +298,18 @@ begin
 
   if IsError then
   begin
-    Write(ErrorError)
+    TuiWrite(ErrorError)
   end
   else
   begin
-    Write(ErrorWarning);
+    TuiWrite(ErrorWarning);
   end;
 
-  Write(': ' + MessageName);
+  TuiWrite(': ' + MessageName);
 
   if Extra <> '' then
   begin
-    Write('(' + Extra + ')');
+    TuiWrite('(' + Extra + ')');
   end;
 end;
 
@@ -333,7 +333,7 @@ end;
 procedure TTui.NotifyUpdate;
 begin
   DrawStatus;
-  Write(UpdateAvailable);
+  TuiWrite(UpdateAvailable);
 end;
 
 procedure TTui.ShowHelp;
@@ -366,7 +366,7 @@ begin
   AddOption(Quit);
   AddOption(Help);
 
-  Write(Opts);
+  TuiWrite(Opts);
 end;
 
 procedure TTui.GoURI;
@@ -376,7 +376,7 @@ begin
   DrawStatus;
 
   WriteLn;
-  Write(Feed);
+  TuiWrite(Feed);
   ReadLn(URI);
 
   if URI <> '' then
@@ -394,7 +394,7 @@ begin
   DrawStatus;
 
   WriteLn;
-  Write(ItemNo);
+  TuiWrite(ItemNo);
   ReadLn(No);
 
   Val(No, iNo, ErrPos);
@@ -405,7 +405,7 @@ begin
   end
   else
   begin
-    WriteLn(InvalidNumber);
+    TuiWriteLn(InvalidNumber);
   end;
 end;
 
@@ -435,7 +435,7 @@ begin
       Field := Copy(Field, 1, Len - 4) + '...';
     end;
 
-    WriteLn(Field);
+    TuiWriteLn(Field);
     Dec(FreeLines);
   end;
 end;
@@ -457,7 +457,7 @@ begin
           StatusText := Copy(StatusText, 1, ScreenWidth - 5) + '...';
         end;
 
-        Write(StatusText);
+        TuiWrite(StatusText);
       end;
 
       DrawFeedInfo;
@@ -487,12 +487,12 @@ begin
           DescLine := Copy(Desc, 1, Len);
           Delete(Desc, 1, Len);
           Dec(FreeLines);
-          WriteLn(DescLine);
+          TuiWriteLn(DescLine);
         until (FreeLines = 1) or (Length(Desc) = 0);
 
         if Length(Desc) > 0 then
         begin
-          WriteLn('...');
+          TuiWriteLn('...');
         end;
 
         TextBackground(SkinColorTable.FInfoBack);
@@ -589,15 +589,15 @@ begin
 
   TextBackground(SkinColorTable.FOptionIndexBack);
   TextColor(SkinColorTable.FOptionIndexFore);
-  Write(NumSym:NumLen);
+  TuiEcho(NumSym, false, NumLen);
 
   TextBackground(SkinColorTable.FOptionDescBack);
   TextColor(SkinColorTable.FOptionDescFore);
-  Write(OptionDesc:NumLen + Length(OptionDesc));
+  TuiEcho(OptionDesc, false, NumLen + Length(OptionDesc));
   
   TextBackground(SkinColorTable.FOptionValueBack);
   TextColor(SkinColorTable.FOptionValueFore);
-  WriteLn(OptionVal:Width - Length(OptionDesc) div 2 + 3 + NumLen);
+  TuiEcho(OptionVal, true, Width - Length(OptionDesc) div 2 + 3 + NumLen);
   WriteLn;
 
   with Settings do
@@ -610,12 +610,14 @@ begin
       TextColor(SkinColorTable.FOptionIndexFore);
 
       SetName := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
-      Write((i + 1):NumLen);
-      Write('.');
+      TuiConvertCodeset(SetName);
+
+      TuiEcho(IntToStr(i + 1), false, NumLen);
+      TuiWrite('.');
 
       TextBackground(SkinColorTable.FOptionDescBack);
       TextColor(SkinColorTable.FOptionDescFore);
-      Write(SetName:NumLen + Length(SetName));
+      TuiEcho(SetName, false, NumLen + Length(SetName));
 
       TextBackground(SkinColorTable.FOptionValueBack);
       TextColor(SkinColorTable.FOptionValueFore);
@@ -623,7 +625,7 @@ begin
       case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
         begin
-          Write(PRSetting(SRec^.GetNth(i))^.ValueString:Width - Length(UTF8Decode(SetName)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
+          TuiEcho(PRSetting(SRec^.GetNth(i))^.ValueString, false, Width - Length(UTF8Decode(SetName)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
         end;
         TypeInteger:
         begin
@@ -636,13 +638,13 @@ begin
             Index := Index div 10;
           end;
 
-          Write(PRSetting(SRec^.GetNth(i))^.ValueInteger:Width - Length(UTF8Decode(SetName)) + Len);
+          TuiEcho(IntToStr(PRSetting(SRec^.GetNth(i))^.ValueInteger), false, Width - Length(UTF8Decode(SetName)) + Len);
         end;
         TypeBoolean:
         begin
           SetVal := BoolToString(PRSetting(SRec^.GetNth(i))^.ValueBoolean);
           Len := Length(SetVal);
-          Write(SetVal:Width - Length(UTF8Decode(SetName)) + Len);
+          TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetName)) + Len);
         end;
       end;
 
@@ -666,7 +668,7 @@ begin
       DrawStatus;
       TextBackground(SkinColorTable.FOptionPromptBack);
       TextColor(SkinColorTable.FOptionPromptFore);
-      Write(SettingToChange);
+      TuiWrite(SettingToChange);
       TextBackground(SkinColorTable.FOptionIndexBack);
       TextColor(SkinColorTable.FOptionIndexFore);
 
@@ -688,7 +690,7 @@ begin
 
       if (Index >= 0) and (Index < HBound) and (Len <> 0) then
       begin
-        Write(NewValue);
+        TuiWrite(NewValue);
 
         TextBackground(SkinColorTable.FOptionValueBack);
         TextColor(SkinColorTable.FOptionValueFore);
@@ -788,11 +790,11 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(IntToStr(i) + ': ');
+    Write(i, ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);
-    WriteLn(Title);
+    TuiWriteLn(Title);
   end;
 
   GoItem;
@@ -842,11 +844,11 @@ begin
 
     TextBackground(SkinColorTable.FIndexBack);
     TextColor(SkinColorTable.FIndexFore);
-    Write(IntToStr(i) + ': ');
+    Write(i, ': ');
 
     TextBackground(SkinColorTable.FTitleBack);
     TextColor(SkinColorTable.FTitleFore);
-    WriteLn(Title);
+    TuiWriteLn(Title);
   end;
 
   FScrollingUp := true;
@@ -924,7 +926,7 @@ begin
   TextBackground(SkinColorTable.FUIBack);
   TextColor(SkinColorTable.FUIFore);
   ClrScr;
-  Write(UserAgent:(ScreenWidth - ((ScreenWidth - Length(UserAgent)) div 2)));
+  TuiEcho(UserAgent, false, ScreenWidth - ((ScreenWidth - Length(UserAgent)) div 2));
 end;
 
 procedure TTui.InitWindowDims;

@@ -22,6 +22,11 @@ interface
 {$PACKRECORDS C}
 {$ENDIF}
 
+{$IFDEF __GPC__}
+type
+  DWord = cardinal; { GPC doesn't have a DWord type }
+{$ENDIF}
+
 
   { Message catalogs for internationalization.
      Copyright (C) 1995-2002, 2004, 2005 Free Software Foundation, Inc.

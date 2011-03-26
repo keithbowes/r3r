@@ -14,6 +14,7 @@ begin
     (Setting = 'load-subscriptions-on-startup') or
     (Setting = 'proxy-address') or (Setting = 'proxy-port') or
     (Setting = 'show-messages') or 
+		(Setting = 'use-filters') or
     (Setting = 'use-custom-accept-langs') or
     (Setting = 'use-custom-accept-types') or
     (Setting = 'use-proxy') or

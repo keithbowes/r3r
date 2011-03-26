@@ -3,16 +3,14 @@ unit SockWrap;
 {$H+}
 
 interface
+
+{$CALLING cdecl}
 {$IFDEF UNIX}
 {$LINKLIB c}
 {$ENDIF}
 
-{$L sockwrapc.o}
-
 uses
   StrTok;
-
-{$CALLING cdecl}
 
 function socket_init(hostname, port: PChar): integer; external;
 procedure socket_done(sock: integer); external;
@@ -20,6 +18,8 @@ procedure socket_connect(sock: integer); external;
 procedure socket_send(sock: integer; data: PChar); external;
 function socket_receive(sock: integer; buf: PChar; len: integer): integer; external;
 function socket_get_error(sock: integer): integer; external;
+
+{$L sockwrapc.o}
 
 {$CALLING register}
 

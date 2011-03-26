@@ -1,7 +1,7 @@
 library LibR3R_Shared;
 
 uses
-  Info, LibR3R, RSettings, RStrings, SysUtils;
+  Info, LibR3R, RSettings, RSettings_Routines, RStrings, SysUtils;
 
 const
   SubscriptionAdd = 1;
@@ -227,12 +227,28 @@ begin
   end;
 end;
 
+function libr3r_get_settings_dir: PChar; cdecl;
+begin
+  libr3r_get_settings_dir := StrToPChar(SettingsDir);
+end;
+
+function libr3r_get_data_dir: PChar; cdecl;
+begin
+  libr3r_get_data_dir := StrToPChar(DataDir);
+end;
+
+function libr3r_get_cache_dir: PChar; cdecl;
+begin
+  libr3r_get_cache_dir := StrToPChar(CacheDir);
+end;
+
 exports
   libr3r_create, libr3r_free, libr3r_retrieve_feed,
   libr3r_on_item_parsed, libr3r_on_message_received, libr3r_on_update,
   libr3r_get_item_field,
   libr3r_get_user_agent,
   libr3r_register_setting, libr3r_access_settings,
-  libr3r_access_subscriptions;
+  libr3r_access_subscriptions,
+  libr3r_get_settings_dir, libr3r_get_data_dir, libr3r_get_cache_dir;
 
 end.

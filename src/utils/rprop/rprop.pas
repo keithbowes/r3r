@@ -23,14 +23,33 @@ var
 
 procedure SetProp(const PropName: String; PropValue: Pointer);
 var
+  Found: Boolean;
+  i: cardinal;
   Prop: PRProp;
 begin
-  New(Prop);
-  Prop^.Name := PropName;
-  Prop^.Value := PropValue;
+  Found := false;
 
-  RemoveProp(PropName);
-  List^.Add(Prop);
+  if List^.Count > 0 then
+  begin
+    for i := 0 to List^.Count - 1 do
+    begin
+      Prop := List^.GetNth(i);
+      if (Prop <> nil) and (Prop^.Name = PropName) then
+      begin
+        Prop^.Value := PropValue;
+        Found := true;
+        Break;
+      end;
+    end;
+  end;
+
+  if not Found then
+  begin
+    New(Prop);
+    Prop^.Name := PropName;
+    Prop^.Value := PropValue;
+    List^.Add(Prop);
+  end;
 end;
 
 function GetProp(const PropName: String): Pointer;
@@ -68,7 +87,7 @@ begin
       p := PRProp(List^.GetNth(i));
       if p^.Name = PropName then
       begin
-        List^.DeleteObject(p);
+        List^.Delete(i);
       end;
     end;
   end;
@@ -77,12 +96,14 @@ end;
 procedure FreeProps;
 var
   i: cardinal;
+  p: PRProp;
 begin
   if List^.Count > 0 then
   begin
     for i := 0 to List^.Count - 1 do
     begin
-      Dispose(PRProp(List^.GetNth(i)));
+      p := List^.GetNth(i);
+      Dispose(p);
     end;
   end;
 end;

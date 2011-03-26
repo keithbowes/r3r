@@ -186,7 +186,7 @@ begin
           Headers.ContentType := ftUnknown;
         end;
 
-  {$IFDEF USE_ICONV}
+{$IFDEF USE_ICONV}
         RespList := Split(HeaderValue, ';');
         for i := 0 to RespList.Length - 1 do
         begin

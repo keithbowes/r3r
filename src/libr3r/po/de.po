@@ -81,6 +81,9 @@ msgstr "Benachrichtigen über Aktuelles"
 msgid "Warn about missing data"
 msgstr "Warnen über fehlende Daten"
 
+msgid "Use item filters"
+msgstr "Benutzen Eintrag-Filtere"
+
 msgid "Display character encoding"
 msgstr "Bildschirms Kodierung"
 
