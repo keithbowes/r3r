@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 00:47-0500\n"
-"PO-Revision-Date: 2009-11-30 14:49-0500\n"
+"POT-Creation-Date: 2011-03-29 02:32-0400\n"
+"PO-Revision-Date: 2011-03-31 22:21-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
@@ -33,39 +33,39 @@ msgstr "&Subscribe"
 msgid "&Play Podcast..."
 msgstr "&Play Podcast..."
 
-#: ../events.cpp:211
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "About R3R"
 
-#: ../events.cpp:261
+#: ../events.cpp:256
 msgid "Open a file"
 msgstr "Open a file"
 
-#: ../feedlist.cpp:22 ../feedlist.cpp:26
+#: ../feedlist.cpp:21
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:103
+#: ../feedlist.cpp:97
 msgid "An update is available."
 msgstr "An update is available."
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:112
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:115
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:124
+#: ../feedlist.cpp:118
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:127
+#: ../feedlist.cpp:121
 msgid "Date Created"
 msgstr "Date Created"
 
-#: ../feedlist.cpp:250
+#: ../feedlist.cpp:243
 msgid ""
 "\n"
 "\n"
@@ -159,35 +159,27 @@ msgstr "&Warn about missing data in feeds"
 msgid "Display"
 msgstr "Display"
 
-#: ../settings-headers.cpp:16
-msgid "&Types: "
-msgstr "&Types: "
+#: ../settings-headers.cpp:15
+msgid "Accept &Types: "
+msgstr "Accept &Types: "
 
-#: ../settings-headers.cpp:17
+#: ../settings-headers.cpp:16
 msgid "Custom Accept Types"
 msgstr "Custom Accept Types"
 
-#: ../settings-headers.cpp:19
-msgid "Custom Accept Types: "
-msgstr "Custom Accept Types: "
-
-#: ../settings-headers.cpp:27 ../settings-headers.cpp:42
+#: ../settings-headers.cpp:23 ../settings-headers.cpp:34
 msgid "Enable"
 msgstr "Enable"
 
-#: ../settings-headers.cpp:31
-msgid "&Languages: "
-msgstr "&Languages: "
+#: ../settings-headers.cpp:26
+msgid "Accept &Languages: "
+msgstr "Accept &Languages: "
 
-#: ../settings-headers.cpp:32
+#: ../settings-headers.cpp:27
 msgid "Custom Accept Languages"
 msgstr "Custom Accept Languages"
 
-#: ../settings-headers.cpp:34
-msgid "Custom Accept Languages: "
-msgstr "Custom Accept Languages: "
-
-#: ../settings-headers.cpp:45
+#: ../settings-headers.cpp:37
 msgid "HTTP Headers"
 msgstr "HTTP Headers"
 
@@ -228,18 +220,18 @@ msgstr "Media &Player"
 msgid "Programs"
 msgstr "Programs"
 
-#: ../settings-subscriptions.cpp:48
+#: ../settings-subscriptions.cpp:46
 msgid "&Delete"
 msgstr "&Delete"
 
-#: ../settings-subscriptions.cpp:52
+#: ../settings-subscriptions.cpp:50
 msgid "&Add"
 msgstr "&Add"
 
-#: ../settings-subscriptions.cpp:60
+#: ../settings-subscriptions.cpp:58
 msgid "Subscriptions"
 msgstr "Subscriptions"
 
-#: ../settingsdialog.cpp:12
+#: ../settingsdialog.cpp:8
 msgid "Settings"
 msgstr "Settings"

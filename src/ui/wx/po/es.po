@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 00:47-0500\n"
-"PO-Revision-Date: 2009-12-04 00:00-0500\n"
+"POT-Creation-Date: 2011-03-29 02:32-0400\n"
+"PO-Revision-Date: 2011-03-31 22:21-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
@@ -34,39 +34,39 @@ msgstr "&Abonarse"
 msgid "&Play Podcast..."
 msgstr "&Jugar Podcast..."
 
-#: ../events.cpp:211
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../events.cpp:261
+#: ../events.cpp:256
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
-#: ../feedlist.cpp:22 ../feedlist.cpp:26
+#: ../feedlist.cpp:21
 msgid "[None]"
 msgstr "[Ningún]"
 
-#: ../feedlist.cpp:103
+#: ../feedlist.cpp:97
 msgid "An update is available."
 msgstr "Un nueve versión es disponible."
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:112
 msgid "Feed Title"
 msgstr "Título Fuente"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:115
 msgid "Item Title"
 msgstr "Título de Entrada"
 
-#: ../feedlist.cpp:124
+#: ../feedlist.cpp:118
 msgid "Subject"
 msgstr "Tema"
 
-#: ../feedlist.cpp:127
+#: ../feedlist.cpp:121
 msgid "Date Created"
 msgstr "Fecha Creado"
 
-#: ../feedlist.cpp:250
+#: ../feedlist.cpp:243
 msgid ""
 "\n"
 "\n"
@@ -160,35 +160,27 @@ msgstr "&Avíseme sobre datos faltando en fuentes"
 msgid "Display"
 msgstr "Visualización"
 
-#: ../settings-headers.cpp:16
-msgid "&Types: "
-msgstr "&Tipos: "
+#: ../settings-headers.cpp:15
+msgid "Accept &Types: "
+msgstr "&Tipos aceptados: "
 
-#: ../settings-headers.cpp:17
+#: ../settings-headers.cpp:16
 msgid "Custom Accept Types"
 msgstr "Tipos aceptados"
 
-#: ../settings-headers.cpp:19
-msgid "Custom Accept Types: "
-msgstr "Tipos aceptados"
-
-#: ../settings-headers.cpp:27 ../settings-headers.cpp:42
+#: ../settings-headers.cpp:23 ../settings-headers.cpp:34
 msgid "Enable"
 msgstr "Activar"
 
-#: ../settings-headers.cpp:31
-msgid "&Languages: "
-msgstr "&Idiomas: "
+#: ../settings-headers.cpp:26
+msgid "Accept &Languages: "
+msgstr "&Idiomas aceptados: "
 
-#: ../settings-headers.cpp:32
+#: ../settings-headers.cpp:27
 msgid "Custom Accept Languages"
 msgstr "Idiomas aceptados"
 
-#: ../settings-headers.cpp:34
-msgid "Custom Accept Languages: "
-msgstr "Idiomas aceptados"
-
-#: ../settings-headers.cpp:45
+#: ../settings-headers.cpp:37
 msgid "HTTP Headers"
 msgstr "Cabezas de HTTP"
 
@@ -229,18 +221,18 @@ msgstr "&Reproductor multimedia"
 msgid "Programs"
 msgstr "Programas"
 
-#: ../settings-subscriptions.cpp:48
+#: ../settings-subscriptions.cpp:46
 msgid "&Delete"
 msgstr "A&lejar"
 
-#: ../settings-subscriptions.cpp:52
+#: ../settings-subscriptions.cpp:50
 msgid "&Add"
 msgstr "&Agregar"
 
-#: ../settings-subscriptions.cpp:60
+#: ../settings-subscriptions.cpp:58
 msgid "Subscriptions"
 msgstr "Subscripciones"
 
-#: ../settingsdialog.cpp:12
+#: ../settingsdialog.cpp:8
 msgid "Settings"
 msgstr "Configuración"

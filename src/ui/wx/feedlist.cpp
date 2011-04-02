@@ -18,15 +18,9 @@ void normalize_field_value(char ** field_value)
 
   if (0 == strlen(s))
   {
-#if wxCHECK_VERSION(2,9,0)
 		wxString t = _("[None]");
 		s = (char *) malloc(t.Length() * sizeof(wxChar));
     strcpy(s, (char *) t.char_str());
-#else
-		const wxChar * t = _("[None]");
-		s = (char *) malloc(wxStrlen(t) * sizeof(t));
-		strcpy(s, wxString(t, wxConvUTF8).char_str());
-#endif
 
 		strcpy(*field_value, s);
 		free(s);
@@ -246,9 +240,7 @@ void GoBrowser(char * url)
 
 void SendOwnMessage(unsigned char is_error, char * message, char * extra)
 {
-#if wxCHECK_VERSION(2,9,0)
 	wxString hint = _("\n\n[Disable messages (in your settings) to not see this again.]");
-#endif
 
   bool show_messages;
   int count, index;
@@ -262,19 +254,14 @@ void SendOwnMessage(unsigned char is_error, char * message, char * extra)
   show_messages = (bool) value;
 
 	char * msg;
-#if wxCHECK_VERSION(2,9,0)
 	msg = (char *) malloc(sizeof(char) * (strlen(message) + strlen(hint.char_str())));
-#else
-	msg = (char *) malloc(sizeof(char) * strlen(message));
-#endif
 	strcpy(msg, message);
-	
-#if wxCHECK_VERSION(2,9,0)
-	strcat(msg,hint.char_str());
-#endif
+	strcat(msg, hint.char_str());
 
   if (show_messages)
   {
     message_received(is_error, msg, extra);
   }
+
+	free(msg);
 }

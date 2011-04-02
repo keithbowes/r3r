@@ -72,7 +72,6 @@ echo $source_dir'/autopackage/r3r.desktop' | import
 require @libexpat.org/expat 1.2
 
 [Test]
-testForLib -i libiconv.so
 testForLib -i libidn.so
 testForLib -i libintl.so
 

@@ -1,13 +1,12 @@
 #! /bin/sh
 
 # Get the parent directory (for relocatability)
-curdir=`dirname $0`
-cd $curdir
+bindir=`dirname $0`
+cd $bindir
 cwd=`pwd`
-curdir=`echo $curdir | sed -e "s|^\(\.\+\)|$cwd/\1|"`
+bindir=`echo $bindir | sed -e "s|^\(\.\+\)|$cwd/\1|"`
 cd ..
 parentdir=`pwd`
-cd $curdir
 
 R3R_INSTALLED_PREFIX=$parentdir
 export R3R_INSTALLED_PREFIX
@@ -29,7 +28,7 @@ err()
 # Start up the preferred UI if defined
 if test -n "$R3R_UI";
 then
-  ./r3r-$R3R_UI "$@"
+  $bindir/r3r-$R3R_UI "$@"
 else
   false
 fi
@@ -37,5 +36,5 @@ fi
 # There was an error or no preferred UI is defined
 if test $? -ne 0;
 then
-  ./r3r-wx "$@" || ./r3r-tui "$@" || ./r3r-html "$@" || err "Cannot start any UI"
+  $bindir/r3r-wx "$@" || $bindir/r3r-tui "$@" || $bindir/r3r-html "$@" || err "Cannot start any UI"
 fi

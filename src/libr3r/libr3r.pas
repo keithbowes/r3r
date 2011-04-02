@@ -3,7 +3,7 @@ unit LibR3R;
 interface
 
 uses
-  FeedItem, RSettings, RSock, RSubscriptions;
+  FeedItem, RHistory, RSettings, RSock, RSubscriptions;
 
 const
   SettingsRead = RSettings.SettingsRead;
@@ -35,6 +35,7 @@ type
   end;
 
 var
+  History: PRHistory;
   Settings: TRSettings;
   Subscriptions: PRSubscriptions;
 
@@ -118,6 +119,8 @@ begin
     FSock.Free;
 {$ENDIF}
   end;
+
+  History^.Add(Resource);
 end;
 
 procedure TLibR3R.Parse;
@@ -168,6 +171,7 @@ end;
 
 initialization
 
+History := RHistory.History;
 Settings := RSettings.Settings;
 Subscriptions := RSubscriptions.Subscriptions;
 

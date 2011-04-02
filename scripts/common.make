@@ -3,6 +3,11 @@
 SHELL = /bin/sh
 
 # Let's try to figure out what OS we're using
+ifneq ($(HOST),)
+CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\([^-]\+\).\+$$/\1/g')
+OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
+endif
+
 ifndef OS_TARGET
 ifneq ($(findstring ;,$(PATH)),)
 ifdef ComSpec
@@ -275,7 +280,6 @@ DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
 ifdef inWindows
 DEFS_SETTINGS ?= SETTINGS_REG
-override DEFS_EXTRA+=NO_SUPPORTS_UNICODE
 else
 DEFS_SETTINGS ?= SETTINGS_TAB
 endif # inWindows
@@ -289,6 +293,9 @@ export USE_FPC
 else
 ifdef USE_GPC
 GPC=$(call programpath,gpc)
+ifneq ($(HOST),)
+override GPC := $(subst gpc,$(HOST)-gpc,$(GPC))
+endif
 override COMPILER=GPC $(shell $(GPC) -dumpversion)
 PLATFORM=$(shell $(GPC) -dumpmachine)
 

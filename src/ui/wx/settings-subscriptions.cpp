@@ -1,4 +1,5 @@
 #include "settings-subscriptions.h"
+#include "settingsdialog.h"
 #include "subscriptions.h"
 #include "widgetids.h"
 
@@ -23,12 +24,9 @@ void CreateSubscriptionsPage(wxTreebook * parent)
 {
   InitGettext();
 
-	wxSize mysize = wxDefaultSize;
-	int entryflag = wxALL;
-#if wxCHECK_VERSION(2,9,0)
-	mysize.x /= 2;
-	entryflag |= wxEXPAND;
-#endif
+	wxSize mysize = DLGSIZE;
+	mysize.x /= 3;
+	mysize.y /= 2;
 
   SubscriptionData * data = (SubscriptionData *) malloc(sizeof(SubscriptionData));
   wxPanel * panel = new wxPanel(parent);
@@ -38,7 +36,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
 
   wxListBox * box = new wxListBox(panel, -1, wxDefaultPosition, mysize, 0, NULL, wxLB_NEEDED_SB | wxLB_HSCROLL);
   data->box = box;
-  hbox->Add(box, 2, wxALL);
+  hbox->Add(box, 2, wxBOTTOM | wxEXPAND);
 
 	FillSubscriptionsListBox(box);
 
@@ -53,7 +51,7 @@ void CreateSubscriptionsPage(wxTreebook * parent)
   vbox->Add(add, 1, wxEXPAND | wxALL, 5);
 
   wxTextCtrl * addEntry = new wxTextCtrl(panel, -1);
-  vbox->Add(addEntry, 1, entryflag, 5);
+  vbox->Add(addEntry, 1, wxEXPAND | wxALL, 5);
   data->entry = addEntry;
   add->SetClientData(data);
 

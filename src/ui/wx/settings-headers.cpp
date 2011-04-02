@@ -12,12 +12,8 @@ void CreateHeadersPage(wxTreebook * parent)
   wxFlexGridSizer * table = new wxFlexGridSizer(2, 3, 0, 0);
   panel->SetSizer(table);
 
-#if wxCHECK_VERSION(2,9,0)
-  wxStaticText * typeText = new wxStaticText(panel, -1, _("&Types: "));
+  wxStaticText * typeText = new wxStaticText(panel, -1, _("Accept &Types: "));
 	typeText->SetToolTip(_("Custom Accept Types"));
-#else
-  wxStaticText * typeText = new wxStaticText(panel, -1, _("Custom Accept Types: "));
-#endif
   table->Add(typeText, 1, wxEXPAND | wxALL, 5);
 
   SettingsEntry * typeEntry = new SettingsEntry(panel, (char *) "accept-types");
@@ -27,12 +23,8 @@ void CreateHeadersPage(wxTreebook * parent)
   typeCheck->SetToolTip(_("Enable"));
   table->Add(typeCheck, 1, wxEXPAND | wxALL, 5);
 
-#if wxCHECK_VERSION(2,9,0)
-  wxStaticText * langText = new wxStaticText(panel, -1, _("&Languages: "));
+  wxStaticText * langText = new wxStaticText(panel, -1, _("Accept &Languages: "));
 	langText->SetToolTip(_("Custom Accept Languages"));
-#else
-  wxStaticText * langText = new wxStaticText(panel, -1, _("Custom Accept Languages: "));
-#endif
   table->Add(langText, 1, wxEXPAND | wxALL, 5);
 
   SettingsEntry * langEntry = new SettingsEntry(panel, (char *) "accept-langs");

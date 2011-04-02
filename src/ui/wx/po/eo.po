@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-23 00:47-0500\n"
-"PO-Revision-Date: 2010-12-26 14:50-0500\n"
+"POT-Creation-Date: 2011-03-29 02:32-0400\n"
+"PO-Revision-Date: 2011-03-31 22:21-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "MIME-Version: 1.0\n"
@@ -33,39 +33,39 @@ msgstr "&Aboni"
 msgid "&Play Podcast..."
 msgstr "&Legi podkaston..."
 
-#: ../events.cpp:211
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Pri R3R"
 
-#: ../events.cpp:261
+#: ../events.cpp:256
 msgid "Open a file"
 msgstr "Malfermi dosieron"
 
-#: ../feedlist.cpp:22 ../feedlist.cpp:26
+#: ../feedlist.cpp:21
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:103
+#: ../feedlist.cpp:97
 msgid "An update is available."
 msgstr "Promocio haveblas."
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:112
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:115
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:124
+#: ../feedlist.cpp:118
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:127
+#: ../feedlist.cpp:121
 msgid "Date Created"
 msgstr "Dato kreita"
 
-#: ../feedlist.cpp:250
+#: ../feedlist.cpp:243
 msgid ""
 "\n"
 "\n"
@@ -159,35 +159,27 @@ msgstr "&Averti pri mankaj fluaj datumoj"
 msgid "Display"
 msgstr "Montro"
 
-#: ../settings-headers.cpp:16
-msgid "&Types: "
-msgstr "&Tipoj: "
+#: ../settings-headers.cpp:15
+msgid "Accept &Types: "
+msgstr "Akcepti &tipojn: "
 
-#: ../settings-headers.cpp:17
+#: ../settings-headers.cpp:16
 msgid "Custom Accept Types"
 msgstr "Kutimaj akceptataj tipoj"
 
-#: ../settings-headers.cpp:19
-msgid "Custom Accept Types: "
-msgstr "Kutimaj akceptataj tipoj: "
-
-#: ../settings-headers.cpp:27 ../settings-headers.cpp:42
+#: ../settings-headers.cpp:23 ../settings-headers.cpp:34
 msgid "Enable"
 msgstr "Aktivigi"
 
-#: ../settings-headers.cpp:31
-msgid "&Languages: "
-msgstr "&Lingvoj: "
+#: ../settings-headers.cpp:26
+msgid "Accept &Languages: "
+msgstr "Akcepti &lingvojn: "
 
-#: ../settings-headers.cpp:32
+#: ../settings-headers.cpp:27
 msgid "Custom Accept Languages"
 msgstr "Kutimaj akceptataj lingvoj"
 
-#: ../settings-headers.cpp:34
-msgid "Custom Accept Languages: "
-msgstr "Kutimaj akceptataj lingvoj: "
-
-#: ../settings-headers.cpp:45
+#: ../settings-headers.cpp:37
 msgid "HTTP Headers"
 msgstr "HTTP-ĉapoj"
 
@@ -228,18 +220,18 @@ msgstr "&Plurmedia legilo"
 msgid "Programs"
 msgstr "Programoj"
 
-#: ../settings-subscriptions.cpp:48
+#: ../settings-subscriptions.cpp:46
 msgid "&Delete"
 msgstr "&Forigi"
 
-#: ../settings-subscriptions.cpp:52
+#: ../settings-subscriptions.cpp:50
 msgid "&Add"
 msgstr "&Aldoni"
 
-#: ../settings-subscriptions.cpp:60
+#: ../settings-subscriptions.cpp:58
 msgid "Subscriptions"
 msgstr "Abonoj"
 
-#: ../settingsdialog.cpp:12
+#: ../settingsdialog.cpp:8
 msgid "Settings"
 msgstr "Agordo"
