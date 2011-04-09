@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2008-12-18 00:29-0400\n"
+"PO-Revision-Date: 2011-04-05 00:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -81,7 +81,7 @@ msgstr "Benachrichtigen über Aktuelles"
 msgid "Warn about missing data"
 msgstr "Warnen über fehlende Daten"
 
-msgid "Use item filters"
+msgid "Enable item filters"
 msgstr "Benutzen Eintrag-Filtere"
 
 msgid "Display character encoding"

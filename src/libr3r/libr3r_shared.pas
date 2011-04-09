@@ -227,6 +227,21 @@ begin
   end;
 end;
 
+procedure libr3r_history_add(Entry: PChar);
+begin
+  History^.Add(StrPas(Entry));
+end;
+
+function libr3r_history_is_next: integer;
+begin
+  libr3r_history_is_next := Ord(History^.IsNext);
+end;
+
+function libr3r_history_next: PChar;
+begin
+  libr3r_history_next := StrToPChar(History^.GetNext);
+end;
+
 function libr3r_get_settings_dir: PChar; cdecl;
 begin
   libr3r_get_settings_dir := StrToPChar(SettingsDir);
@@ -249,6 +264,7 @@ exports
   libr3r_get_user_agent,
   libr3r_register_setting, libr3r_access_settings,
   libr3r_access_subscriptions,
+  libr3r_history_add, libr3r_history_is_next, libr3r_history_next,
   libr3r_get_settings_dir, libr3r_get_data_dir, libr3r_get_cache_dir;
 
 end.

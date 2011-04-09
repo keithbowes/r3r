@@ -59,7 +59,7 @@ begin
 
 {$IFDEF USE_PCRE}
       re := pcre_compile(StrToPChar(FilterEntry), PCRE_CASELESS, @errptr, @erroffset, 0);
-      rc := pcre_exec(re, nil, StrToPChar(Fieldvalue), Length(FieldValue), 0, 0, nil, 0);
+      rc := pcre_exec(re, nil, StrToPChar(FieldValue), Length(FieldValue), 0, 0, nil, 0);
       if rc >= 0 then
 {$ELSE}
       if Pos(LowerCase(FilterEntry), LowerCase(FieldValue)) <> 0 then

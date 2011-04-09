@@ -71,7 +71,30 @@ uses
   , Crt
 {$ELSE}
   , nCrt, nCurses
-{$ENDIF USE_NCRT};
+{$ENDIF USE_NCRT}
+  
+{$IFDEF USE_READLINE}
+  , ReadLine, RStrings
+{$ENDIF};
+
+{$IFDEF USE_READLINE}
+var
+  rl_finished: Boolean;
+
+{$calling cdecl}
+procedure read_chars(chars: PChar);
+begin
+  ClrScr;
+  rl_finished := true;
+
+  if StrLen(chars) > 0 then
+  begin
+    add_history(chars);
+  end;
+end;
+
+{$calling default}
+{$ENDIF}
 
 function CreateFeedItem: TFeedItem;
 begin
@@ -94,6 +117,13 @@ begin
 
   Draw;
   SetNewTitle(AppName);
+
+{$IFDEF USE_READLINE}
+  while History^.IsNext do
+  begin
+    add_history(StrToPChar(History^.GetNext));
+  end;
+{$ENDIF}
 
   for FeedIndex := 1 to ParamCount do
   begin
@@ -376,8 +406,24 @@ begin
   DrawStatus;
 
   WriteLn;
+{$IFNDEF USE_READLINE}
   TuiWrite(Feed);
   ReadLn(URI);
+{$ELSE}
+  rl_finished := false;
+  rl_callback_handler_install('', read_chars);
+  repeat
+    ClrScr;
+    TuiWrite(Feed);
+    if StrLen(rl_line_buffer) > 0 then
+    begin
+      URI := StrPas(rl_line_buffer);
+      TuiWrite(URI);
+    end;
+    rl_callback_read_char;
+  until rl_finished;
+  rl_callback_handler_remove;
+{$ENDIF}
 
   if URI <> '' then
   begin
@@ -527,6 +573,12 @@ begin
     Browser := Copy(Browser, 1, Index - 2);
 
     Link := StringReplace(Tmp, '%1', Link, [rfReplaceAll]);
+  end;
+
+  { Windows puts the path in quotes, which Exec() doesn't like }
+  if (Copy(Browser, 1, 1) = '"') and (Copy(Browser, Length(Browser), 1) = '"') then
+  begin
+    Browser := Copy(Browser, 2, Length(Browser) - 2);
   end;
 
   SwapVectors;

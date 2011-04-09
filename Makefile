@@ -103,6 +103,12 @@ endif
 ifneq ($(USE_NLS),0)
 	@$(ECHO) $(call checklib,intl)
 endif
+ifneq ($(USE_PCRE),0)
+	@$(ECHO) $(call checklib,pcre)
+endif
+ifneq ($(USE_READLINE),0)
+	@$(ECHO) $(call checklib,readline)
+endif
 ifdef inWindows
 	@$(ECHO) $(call checkprog,png2ico)
 endif

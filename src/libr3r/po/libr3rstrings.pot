@@ -69,7 +69,7 @@ msgstr ""
 msgid "Warn about missing data"
 msgstr ""
 
-msgid "Use item filters"
+msgid "Enable item filters"
 msgstr ""
 
 msgid "Display character encoding"

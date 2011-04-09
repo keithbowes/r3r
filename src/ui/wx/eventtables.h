@@ -24,7 +24,7 @@ BEGIN_EVENT_TABLE(RFrame, wxFrame)
   EVT_SIZE(FrameEvents::OnSize)
 END_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(GoField, wxTextCtrl)
+BEGIN_EVENT_TABLE(GoField, wxComboBox)
   EVT_KEY_DOWN(GoFieldEvents::OnKeyDown)
 END_EVENT_TABLE()
 

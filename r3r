@@ -1,12 +1,14 @@
 #! /bin/sh
 
 # Get the parent directory (for relocatability)
+origdir=`pwd`
 bindir=`dirname $0`
 cd $bindir
 cwd=`pwd`
 bindir=`echo $bindir | sed -e "s|^\(\.\+\)|$cwd/\1|"`
 cd ..
 parentdir=`pwd`
+cd $origdir
 
 R3R_INSTALLED_PREFIX=$parentdir
 export R3R_INSTALLED_PREFIX

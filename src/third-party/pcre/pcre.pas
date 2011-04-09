@@ -315,7 +315,7 @@ var
 begin
   size := SizeOf(ppcre(p)^);
 {$IFNDEF __GPC__} {Causes crashes in GPC}
-  if p <> nil then
+  if (p <> nil) and (size > 0) then
   begin
     FreeMem(p, size);
   end;

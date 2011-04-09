@@ -71,6 +71,8 @@ do
       echo "USE_NLS=0" >> config.make;;
     --disable-pcre)
       echo "USE_PCRE=0" >> config.make;;
+    --disable-readline)
+      echo "USE_READLINE=0" >> config.make;;
     --disable-xml)
       echo "USE_EXPAT=0" >> config.make;;
     --help)
@@ -86,6 +88,7 @@ do
       echo -e "\t--disable-ncurses Disable the use of ncurses where used (Unix/FPC TUI only)"
       echo -e "\t--disable-nls Disable gettext support"
       echo -e "\t--disable-pcre Disable PCRE support (regular expressions)"
+      echo -e "\t--disable-readline Disable GNU Readline support (TUI only)"
       echo -e "\t--disable-xml Disable XML support"
       echo -e "\t--help This help"
       exit;;

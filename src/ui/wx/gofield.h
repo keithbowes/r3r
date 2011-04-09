@@ -1,6 +1,6 @@
 #include "wx.h"
 
-class GoField : public wxTextCtrl
+class GoField : public wxComboBox
 {
   public:
     GoField(wxWindow * parent);

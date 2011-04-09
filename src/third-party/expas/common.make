@@ -196,6 +196,7 @@ USE_ICONV ?= 1
 USE_IDN ?= 1
 USE_NLS ?= 1
 USE_PCRE ?= 1
+USE_READLINE ?= 1
 
 NO_NCURSES ?= 0
 
@@ -227,6 +228,10 @@ endif
 
 ifneq ($(USE_PCRE),0)
 override DEFS_EXTRA+=USE_PCRE
+endif
+
+ifneq ($(USE_READLINE),0)
+override DEFS_EXTRA+=USE_READLINE
 endif
 
 ifneq ($(or $(USE_GPC),$(USE_FPC)),)

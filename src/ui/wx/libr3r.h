@@ -35,6 +35,10 @@ extern void libr3r_access_settings(int * index, char ** setting_name, void ** se
 
 extern void libr3r_access_subscriptions(unsigned char index, unsigned char mode, char ** sub, unsigned int * count);
 
+extern void libr3r_history_add(char * entry);
+extern int libr3r_history_is_next(void);
+extern char * libr3r_history_next(void);
+
 extern char * libr3r_get_settings_dir(void);
 extern char * libr3r_get_data_dir(void);
 extern char * libr3r_get_cache_dir(void);

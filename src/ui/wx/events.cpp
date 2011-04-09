@@ -179,7 +179,7 @@ void FrameEvents::OnSize(wxSizeEvent & event)
 void GoButtonEvents::OnClick(wxCommandEvent & event)
 {
   wxButton * button = (wxButton * ) event.GetEventObject();
-  wxTextCtrl * entry = (wxTextCtrl *) button->GetClientData();
+  wxComboBox * entry = (wxComboBox *) button->GetClientData();
   wxString feed = entry->GetValue();
   ParseFeed((char *) (const char *) feed.mb_str());
 }
@@ -192,7 +192,7 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
   }
   else
   {
-    wxTextCtrl * entry = (wxTextCtrl *) event.GetEventObject();
+    wxComboBox * entry = (wxComboBox *) event.GetEventObject();
     wxString feed = entry->GetValue();
     ParseFeed((char *) (const char *) feed.mb_str());
   }

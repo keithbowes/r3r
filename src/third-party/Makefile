@@ -16,6 +16,9 @@ endif
 ifneq ($(USE_PCRE),0)
 	cd pcre && $(MAKE) all
 endif
+ifneq ($(USE_READLINE),0)
+	cd readline && $(MAKE) all
+endif
 
 clean:
 	cd expas && $(MAKE) clean
@@ -23,3 +26,4 @@ clean:
 	cd iconv && $(MAKE) clean
 	cd libidn && $(MAKE) clean
 	cd pcre && $(MAKE) clean
+	cd readline && $(MAKE) clean
