@@ -4,6 +4,7 @@ interface
 
 const
   DonateKey = 'd';
+  DownArrow = Chr(80);
   DownKey = 'j';
   EnclosureKey = 'x';
   EndKey = Chr(79);
@@ -19,10 +20,13 @@ const
   PageUpKey = Chr(73);
   QuitKey = 'q';
   RefreshKey = 'l';
+  RightArrow = Chr(77);
+  RightKey = 'l';
   ScrollDownKey = Chr(32);
   ScrollUpKey = Chr(8);
   SearchKey = '/';
   ShellKey = '!';
+  UpArrow = Chr(72);
   UpKey = 'k';
 
 function TranslateControl(const Key: char): char;

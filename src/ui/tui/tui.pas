@@ -172,7 +172,7 @@ begin
     begin
       GoDonate;
     end
-    else if KeyChar = DownKey then
+    else if (KeyChar = DownArrow) or (KeyChar = DownKey) then
     begin
       if FCurrentItem < FItems^.Count then
       begin
@@ -185,7 +185,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if KeyChar = UpKey then
+    else if (KeyChar = UpArrow) or (KeyChar = UpKey) then
     begin
       if FCurrentItem > 1 then
       begin
@@ -233,7 +233,7 @@ begin
     begin
       OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName) + PathDelim + 'docs' + PathDelim + 'keys.html');
     end
-    else if KeyChar = EnterKey then
+    else if (KeyChar = EnterKey) or (KeyChar = RightArrow) or (KeyChar = RightKey) then
     begin
       if FItems^.Count > 0 then
       begin
