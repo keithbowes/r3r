@@ -66,7 +66,12 @@
       </element>
       <element name="TLibR3R.DisplayItem">
         <descr>
-          A virtual method that must be overriden and given code which will display the feed item given from the back end in a way suitable for the current UI.  It's the same as setting the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.
+          A virtual method that must be overriden and given code which will display the feed item given from the back end in a way suitable for the current UI.  It's the same as setting the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event. A newer (better) way to do it is through the <link id="TLibR3R.RegisterItemCallback">RegisterItemCallback</link> method.
+        </descr>
+      </element>
+      <element name="TLibR3R.RegisterItemCallback">
+        <descr>
+          Registers a callback to process items.  A replacement for the deprecated <link id="TLibR3R.DisplayItem">DisplayItem</link> virtual method and <link id="TLibR3R.OnItemParsed">OnItemParsed</link> method.
         </descr>
       </element>
       <element name="TLibR3R.OnItemParsed">

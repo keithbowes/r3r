@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  RDate, RStrings, SockConsts, SysUtils;
+  ItemCallbacks, RDate, RStrings, SockConsts, SysUtils;
 
 const
   WhiteSpaceChars: set of char = [#0, #8, #9, #10, #13, #32];
@@ -131,6 +131,7 @@ begin
   end
   else
   begin
+    CallItemCallback(Item);
     ShouldShow := Item.Title <> '';
     FInHead := false;
   end;

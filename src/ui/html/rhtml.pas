@@ -10,7 +10,6 @@ type
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
-    procedure DisplayItem(const Item: TFeedItem); override;
   end;
 
 implementation
@@ -28,42 +27,7 @@ const
   Sep2 = ':';
   DescPre = ': ';
 
-constructor TRHtml.Create;
-var
-  i: cardinal;
-begin
-  inherited Create;
-
-  WriteLn(HTMLProlog);
-  WriteLn(StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
-
-  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
-  begin
-    for i := 0 to Subscriptions^.Count - 1 do
-    begin
-      RetrieveFeed(Subscriptions^.GetNth(i));
-    end;
-  end;
-
-  if ParamCount > 0 then
-  begin
-    for i := 1 to ParamCount do
-    begin
-      RetrieveFeed(ParamStr(i));
-    end;
-  end;
-end;
-
-destructor TRHtml.Destroy;
-begin
-  WriteLn(HTMLFooter);
-
-{$IFNDEF __GPC__}
-  inherited Destroy;
-{$ENDIF}
-end;
-
-procedure TRHtml.DisplayItem(const Item: TFeedItem);
+procedure RetrieveItem(const Item: TFeedItem);
 begin
   Write(PreElement);
 
@@ -114,6 +78,42 @@ begin
 
     WriteLn(PostElement);
   end;
+end;
+
+constructor TRHtml.Create;
+var
+  i: cardinal;
+begin
+  inherited Create;
+  RegisterItemCallback(RetrieveItem);
+
+  WriteLn(HTMLProlog);
+  WriteLn(StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
+
+  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
+  begin
+    for i := 0 to Subscriptions^.Count - 1 do
+    begin
+      RetrieveFeed(Subscriptions^.GetNth(i));
+    end;
+  end;
+
+  if ParamCount > 0 then
+  begin
+    for i := 1 to ParamCount do
+    begin
+      RetrieveFeed(ParamStr(i));
+    end;
+  end;
+end;
+
+destructor TRHtml.Destroy;
+begin
+  WriteLn(HTMLFooter);
+
+{$IFNDEF __GPC__}
+  inherited Destroy;
+{$ENDIF}
 end;
 
 end.

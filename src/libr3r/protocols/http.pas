@@ -448,7 +448,7 @@ function IsAtom: Boolean;
   end;
   GetType := Headers.ContentType;
 end;
-  if Pos('atom', Line) <> 0 then
+  if (Pos('atom', Line) <> 0) or (Pos('blogspot', Line) <> 0) then
   if Pos('esf', Line) <> 0 then
     GetType := ftAtom;
   end

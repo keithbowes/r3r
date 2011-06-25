@@ -21,7 +21,8 @@ type
 implementation
 
 uses
-  Atom, DC, Mod_Enclosure, RDate, RStrings, SockConsts, SysUtils;
+  Atom, DC, ItemCallbacks, Mod_Enclosure, RDate, RStrings, SockConsts,
+  SysUtils;
 
 function GetAtomFeed: TAtomFeed;
 begin
@@ -78,9 +79,14 @@ begin
     Item.Finished := (Elem.Name = 'item') or (Line = SockEOF);
   end;
 
-  if Item.Finished and FLeftChannel then
+  if Item.Finished then
   begin
-    FLeftChannel := false;
+    CallItemCallback(Item);
+    
+    if FLeftChannel then
+    begin
+      FLeftChannel := false;
+    end;
   end;
 end;
 
@@ -175,6 +181,11 @@ begin
     else if Name = 'channel' then
     begin
       FLeftChannel := true;
+    end;
+
+    if Name = 'item' then
+    begin
+      CallItemCallback(CurrentItem);
     end;
   end;
 end;

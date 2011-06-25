@@ -32,7 +32,7 @@ type
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts
+  DC, ItemCallbacks, RDate, RStrings, SockConsts
 
 {$IFDEF __GPC__}
   , SysUtils
@@ -73,8 +73,10 @@ begin
   
   if Item.Finished and FLeftFeed then
   begin
+    CallItemCallback(Item);
     FLeftFeed := false;
   end;
+
 end;
 
 procedure TAtomFeed.SendItem(const Name, Content: String);
@@ -244,6 +246,11 @@ begin
     else if Name = 'feed' then
     begin
       FLeftFeed := true;
+    end;
+
+    if (Name = 'entry') then
+    begin
+      CallItemCallBack(CurrentItem);
     end;
   end;
 end;

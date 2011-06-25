@@ -55,7 +55,6 @@ type
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
-    procedure DisplayItem(const Item: TFeedItem); override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
     procedure RetrieveFeed(Resource: String); override;
   end;
@@ -96,9 +95,50 @@ end;
 {$calling default}
 {$ENDIF}
 
+var
+  obj: TTui;
+
 function CreateFeedItem: TFeedItem;
 begin
   CreateFeedItem := TFeedItem.Create;
+end;
+
+procedure ItemReceived(const Item: TFeedItem);
+var
+  AItem: TFeedItem;
+  Items: cardinal;
+  Title: String;
+begin
+  with obj do
+  begin
+    AItem := CreateFeedItem;
+    AItem.Title := Item.TitleText;
+    AItem.Subject := Item.Subject;
+    AItem.Created := Item.Created;
+    AItem.Description := Item.DescriptionText;
+    AItem.Link := Item.Link;
+    AItem.Contact.Email := Item.Contact.Email;
+    AItem.Enclosure.URL := Item.GetPodcast;
+    FItems^.Add(AItem);
+    Items := FItems^.Count;
+
+    if Items <= FViewPort.PortHeight then
+    begin
+      Title := AItem.TitleText;
+      if Length(Title) > (FDimList.LeftEnd - 3 - Length(IntToStr(Items))) then
+      begin
+        Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(Items)) - 6) + '...';
+      end;
+
+      TextBackground(SkinColorTable.FIndexBack);
+      TextColor(SkinColorTable.FIndexFore);
+      Write(Items, ': ');
+
+      TextBackground(SkinColorTable.FTitleBack);
+      TextColor(SkinColorTable.FTitleFore);
+      TuiWriteLn(Title);
+    end;
+  end;
 end;
 
 constructor TTui.Create;
@@ -110,6 +150,9 @@ begin
   New(FItems, Init);
   FCurrentItem := 1;
   FScrollingUp := true;
+
+  RegisterItemCallback(ItemReceived);
+  obj := Self;
 
 {$IFDEF __GPC__}
   CRTInit;
@@ -285,41 +328,6 @@ begin
 {$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
-end;
-
-procedure TTui.DisplayItem(const Item: TFeedItem);
-var
-  AItem: TFeedItem;
-  Items: cardinal;
-  Title: String;
-begin
-  AItem := CreateFeedItem;
-  AItem.Title := Item.TitleText;
-  AItem.Subject := Item.Subject;
-  AItem.Created := Item.Created;
-  AItem.Description := Item.DescriptionText;
-  AItem.Link := Item.Link;
-  AItem.Contact.Email := Item.Contact.Email;
-  AItem.Enclosure.URL := Item.GetPodcast;
-  FItems^.Add(AItem);
-  Items := FItems^.Count;
-
-  if Items <= FViewPort.PortHeight then
-  begin
-    Title := AItem.TitleText;
-    if Length(Title) > (FDimList.LeftEnd - 3 - Length(IntToStr(Items))) then
-    begin
-      Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(Items)) - 6) + '...';
-    end;
-
-    TextBackground(SkinColorTable.FIndexBack);
-    TextColor(SkinColorTable.FIndexFore);
-    Write(Items, ': ');
-
-    TextBackground(SkinColorTable.FTitleBack);
-    TextColor(SkinColorTable.FTitleFore);
-    TuiWriteLn(Title);
-  end;
 end;
 
 procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);

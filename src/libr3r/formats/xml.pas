@@ -44,6 +44,7 @@ type
     Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
+    FItemFinished: Boolean;
 {$IFDEF USE_EXPAT}
     FParser: XML_PARSER;
 {$ENDIF}
@@ -63,7 +64,7 @@ uses
 {$IFDEF USE_EXPAT}
   SaxCallbacks,
 {$ENDIF}
-  LibR3RStrings, RMessage, RSettings, RStrings, SysUtils;
+   LibR3RStrings, RMessage, RSettings, RStrings, SysUtils;
 
 constructor TXmlFeed.Create;
 begin

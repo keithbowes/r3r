@@ -19,7 +19,6 @@ type
     FParsedProc: TParsedProc;
     FUpdateProc: TUpdateProc;
   public
-    procedure DisplayItem(const Item: TFeedItem); override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
     procedure NotifyUpdate; override;
 
@@ -28,15 +27,15 @@ type
     property UpdateProc: TUpdateProc write FUpdateProc;
   end;
 
-{ Implemetation of the helper class }
-procedure TLibR3R_Shared.DisplayItem(const Item: TFeedItem);
+var
+  CurProc: TParsedProc;
+
+procedure ItemReceived(const Item: TFeedItem);
 begin
-  if Assigned(FParsedProc) then
-  begin
-    FParsedProc(Item);
-  end;
+  CurProc(Item);
 end;
 
+{ Implemetation of the helper class }
 procedure TLibR3R_Shared.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(FMessageProc) then
@@ -71,7 +70,8 @@ end;
 
 procedure libr3r_on_item_parsed(Lib: Pointer; Proc: TParsedProc); cdecl;
 begin
-  TLibR3R_Shared(Lib).ParsedProc := Proc;
+  TLibR3R_Shared(Lib).RegisterItemCallback(ItemReceived);
+  CurProc := Proc;
 end;
 
 procedure libr3r_on_message_received(Lib: Pointer; Proc: TMessageProc); cdecl;

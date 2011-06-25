@@ -3,7 +3,7 @@ unit LibR3R;
 interface
 
 uses
-  FeedItem, RHistory, RSettings, RSock, RSubscriptions;
+  FeedItem, ItemCallbacks, RHistory, RSettings, RSock, RSubscriptions;
 
 const
   SettingsRead = RSettings.SettingsRead;
@@ -32,6 +32,7 @@ type
     procedure RetrieveFeed(Resource: String); virtual;
     procedure DisplayItem(const Item: TFeedItem); virtual;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
+    procedure RegisterItemCallback(const cb: TItemCallback);
   end;
 
 var
@@ -89,6 +90,8 @@ begin
 {$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
+
+  FreeItemCallback;
 end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
@@ -144,6 +147,11 @@ procedure TLibR3R.NotifyUpdate;
 begin
 end;
 
+procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback);
+begin
+  ItemCallbacks.RegisterItemCallback(cb);
+
+end;
 procedure TLibR3R.DoParseItem(Item: TFeedItem);
 begin
   DisplayItem(Item);

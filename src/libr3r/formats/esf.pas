@@ -30,7 +30,7 @@ type
 implementation
 
 uses
-  RDate, RStrings, SockConsts, SysUtils;
+  ItemCallbacks, RDate, RStrings, SockConsts, SysUtils;
 
 constructor TEsfFeed.Create;
 begin
@@ -153,6 +153,11 @@ begin
     begin
       Item.Finished := true;
     end;
+  end;
+
+  if Item.Finished then
+  begin
+    CallItemCallback(Item);
   end;
 
   inherited ParseLine(Line, Item);
