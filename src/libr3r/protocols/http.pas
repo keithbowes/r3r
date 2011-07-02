@@ -78,6 +78,7 @@ var
   RespList: TStringsList;
 begin
   Headers.ContentEncoding := ceNone;
+  Headers.Sniff := Settings.GetBoolean(Settings.IndexOf('enable-mime-guess'));
   HeaderState := hsUnstarted;
   NullLines := 0;
 
@@ -200,6 +201,13 @@ begin
         end;
 {$ENDIF}
       end
+      else if HeaderName = 'x-content-type-options' then
+      begin
+        if Pos('nosniff', HeaderValue) <> 0 then
+        begin
+          Headers.Sniff := false;
+        end;
+      end
       else if HeaderName = 'location' then
       begin
         Headers.Status := 0;
@@ -262,7 +270,7 @@ begin
     end;
   end;
 
-  if Settings.GetBoolean(Settings.IndexOf('enable-mime-guess')) or (Headers.ContentType = ftXml) then
+  if (Headers.Sniff) or (Headers.ContentType = ftXml) then
   begin
     Headers.ContentType := GetType;
   end;
@@ -448,7 +456,7 @@ function IsAtom: Boolean;
   end;
   GetType := Headers.ContentType;
 end;
-  if (Pos('atom', Line) <> 0) or (Pos('blogspot', Line) <> 0) then
+  if Pos('atom', Line) <> 0 then
   if Pos('esf', Line) <> 0 then
     GetType := ftAtom;
   end

@@ -15,6 +15,7 @@ type
     Etag: String;
     Expires: String;
     LastModified: String;
+    Sniff: Boolean;
     Status: word;
   end;
 
