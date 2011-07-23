@@ -9,7 +9,8 @@ mo_files= $(addsuffix .mo, $(LINGUAS))
 
 include ../../../scripts/common.make
 
-all: libr3rstrings$(PPUEXT) $(mo_files)
+all: libr3rstrings$(PPUEXT)
+	-$(MAKE) $(mo_files)
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)

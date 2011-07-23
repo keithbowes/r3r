@@ -9,7 +9,8 @@ mo_files= $(addsuffix .mo, $(LINGUAS))
 [rules]
 include ../../../../scripts/common.make
 
-all: tvstrings.pot $(mo_files)
+all: tvstrings.pot
+	-$(MAKE) $(mo_files)
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~) tvstrings.pot

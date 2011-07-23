@@ -5,11 +5,13 @@ all:
 	cd strtok && $(MAKE) all
 	cd rdate && $(MAKE) all
 	cd rprop && $(MAKE) all
+	cd mailcap && $(MAKE) unit
 ifeq ($(DEFS_SETTINGS),SETTINGS_TAB)
 	cd tabfiles && $(MAKE) all
 endif
 
 clean:
+	cd mailcap && $(MAKE) clean
 	cd opml && $(MAKE) clean
 	cd rdate && $(MAKE) clean
 	cd rlist && $(MAKE) clean

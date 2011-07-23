@@ -63,7 +63,7 @@ var
 implementation
 
 uses
-  RProp, RSettings_Routines, RSettings_Strings, RStrings
+  MailCap, RProp, RSettings_Routines, RSettings_Strings, RStrings
 
 {$IFDEF __GPC__}
   ,SysUtils
@@ -221,7 +221,11 @@ begin
 end;
 
 procedure TRSettings.InitRec;
+var
+  mc: PMailCap;
 begin
+  New(mc, Init);
+
   CheckBoolean('show-messages', 'Display', true, DescMsg);
   CheckBoolean('display-feed-title-only', 'Display', false, DescDisplay);
   CheckBoolean('hide-cached-feeds', 'Display', true, DescHide);
@@ -244,12 +248,14 @@ begin
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false, DescUseLang);
   CheckString('accept-langs', 'HTTP Headers', '', DescLang);
 
-  CheckString('for:http', 'Programs', '', DescBrowser);
+  CheckString('for:http', 'Programs', Cap2Doze(mc^.GetProg('text/html')), DescBrowser);
   CheckString('for:mailto', 'Programs', '', DescMail);
-  CheckString('for:.ogg', 'Programs', '', DescMedia);
+  CheckString('for:.ogg', 'Programs', Cap2Doze(mc^.GetProg('audio/ogg')), DescMedia);
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
   SetProp('installed-prefix', StrToPChar(GetString(IndexOf('installed-prefix'))));
+
+  Dispose(mc, Done);
 end;
 
 initialization

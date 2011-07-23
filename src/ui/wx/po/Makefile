@@ -5,7 +5,8 @@ mo_files= $(addsuffix .mo, $(LINGUAS))
 INTLTOOL_UPDATE ?= $(call programpath,intltool-update)
 
 include ../../../../scripts/common.make
-all: $(mo_files)
+all:
+	-$(MAKE) $(mo_files)
 
 install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_wx.mo;)

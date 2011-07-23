@@ -7,7 +7,8 @@ mo_files= $(addsuffix .mo, $(LINGUAS))
 
 include ../../../../scripts/common.make
 
-all: $(mo_files)
+all:
+	-$(MAKE) $(mo_files)
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)

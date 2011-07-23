@@ -11,7 +11,8 @@ mo_files= $(addsuffix .mo, $(LINGUAS))
 
 include ../../../../scripts/common.make
 
-all: $(mo_files) tuistrings$(PPUEXT)
+all: tuistrings$(PPUEXT)
+	-$(MAKE) $(mo_files)
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)

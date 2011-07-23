@@ -64,8 +64,8 @@ implementation
 {$INCLUDE "tuidefs.inc"}
 
 uses
-  Dos, Info, RKeys, RSettings_Routines, RTitle, Skin, SysUtils,
-  TuiFuncs, TuiStrings
+  Dos, Info, Mailcap, RKeys, RSettings_Routines, RTitle, Skin,
+  SysUtils, TuiFuncs, TuiStrings
 {$IFNDEF USE_NCRT}
   , Crt
 {$ELSE}
@@ -118,7 +118,8 @@ begin
     AItem.Description := Item.DescriptionText;
     AItem.Link := Item.Link;
     AItem.Contact.Email := Item.Contact.Email;
-    AItem.Enclosure.URL := Item.GetPodcast;
+    AItem.Enclosure.MimeType := Item.Enclosure.MimeType;
+    AItem.Enclosure.URL := Item.Enclosure.URL;
     FItems^.Add(AItem);
     Items := FItems^.Count;
 
@@ -145,6 +146,8 @@ constructor TTui.Create;
 var
   FeedIndex: word;
   KeyChar: char;
+  mc: PMailCap;
+  prog: String;
 begin
   inherited Create;
   New(FItems, Init);
@@ -286,9 +289,20 @@ begin
     else if KeyChar = EnclosureKey then
     begin
       EndWin;
+      New(mc, Init);
       SwapVectors;
-      Exec(Settings.GetString(Settings.IndexOf('for:.ogg')), TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+      prog := mc^.GetProg(TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType);
+      if Prog <> '' then
+      begin
+        mc^.ExecProg(mc^.GetProg(TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType), TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+      end
+      else
+      begin
+        prog := Settings.GetString(Settings.IndexOf('for:.ogg'));
+        Exec(prog, TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+      end;
       SwapVectors;
+      Dispose(mc, Done);
       ClrScr;
       Redraw;
     end

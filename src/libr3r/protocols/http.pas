@@ -464,11 +464,14 @@ end;
   if ContentType <> ftRss then
     GetType := ftEsf;
   end
-  else if (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0) or ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0)) or (Pos('txt', Line) <> 0) then
+  else if (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0) or
+    ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0)) or
+    (Pos('txt', Line) <> 0) then
   if b then
     GetType := ftRss3;
   end
-  else if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or (Pos('xml', Line) <> 0) then
+  else if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
+  if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
     (Pos('xml', Line) <> 0) then
     GetType := ftRss;
     end;
