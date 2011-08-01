@@ -33,6 +33,15 @@ type
     Prog: String;
   end;
 
+function FileExists(const f: String): Boolean;
+var
+  s: SearchRec;
+begin
+  FindFirst(f, anyfile, s);
+  FileExists := DosError = 0;
+  FindClose(s);
+end;
+
 function StringReplace(s: String; const _in, repl: String; const Global: Boolean): String;
 var
   l: word;
@@ -103,7 +112,7 @@ end;
 constructor TMailCap.Init;
 var
   Com1, Com2: String;
-  Com1End, Com2End: byte;
+  Com1End, Com2End: word;
   f: text;
   mcfile: String;
   p: PMailCapEntry;
@@ -127,35 +136,38 @@ begin
   end;
 
   New(FList, Init);
-  {TODO: test whether mcfile exists}
-  Assign(f, mcfile);
-  Reset(f);
 
-  while not Eof(f) do
+  if FileExists(mcfile) then
   begin
-    ReadLn(f, s);
+    Assign(f, mcfile);
+    Reset(f);
 
-    if Length(s) > 0 then
+    while not Eof(f) do
     begin
-      Com1End := Pos(';', s);
-      Com1 := Copy(s, 1, Com1End - 1);
-      Delete(s, 1, Com1End);
-      Com2End := Pos(';', s);
-      if Com2End = 0 then
-      begin
-        Com2End := Length(s) + 1;
-      end;
-      Com2 := Trim(Copy(s, 1, Com2End - 1));
-      StripPost(Com2);
-      {TODO: Support for the test= parameter}
-      New(p);
-      p^.MType := Com1;
-      p^.Prog := Com2;
-      FList^.Add(p);
-    end;
-  end;
+      ReadLn(f, s);
 
-  Close(f);
+      if Length(s) > 0 then
+      begin
+        Com1End := Pos(';', s);
+        Com1 := Copy(s, 1, Com1End - 1);
+        Delete(s, 1, Com1End);
+        Com2End := Pos(';', s);
+        if Com2End = 0 then
+        begin
+          Com2End := Length(s) + 1;
+        end;
+        Com2 := Trim(Copy(s, 1, Com2End - 1));
+        StripPost(Com2);
+        {TODO: Support for the test= parameter}
+        New(p);
+        p^.MType := Com1;
+        p^.Prog := Com2;
+        FList^.Add(p);
+      end;
+    end;
+
+    Close(f);
+  end;
 end;
 
 destructor TMailCap.Done;
@@ -194,6 +206,7 @@ begin
   end;
 end;
 
+{TODO: Download the file before executing it}
 function TMailCap.ExecProg(const mtype, param: String): byte;
 var
   args, prog: String;

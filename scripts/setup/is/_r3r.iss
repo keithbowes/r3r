@@ -61,7 +61,7 @@ Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 [Languages]
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"
 Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "eo"; MessagesFile: "Esperanto.isl"
+Name: "eo"; MessagesFile: "scripts/setup/is/Esperanto.isl"
 Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
 
 [CustomMessages]

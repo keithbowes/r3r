@@ -17,7 +17,7 @@ dist-autopackage: r3r-$(VERSION).x86.package
 
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian
-	$(MOVE) $(wildcard ../../*.deb) ../../..
+	$(MOVE) $(wildcard $(curdir)/../.r/*.deb) $(curdir)/../../..
 
 dist-rpm:
 	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
