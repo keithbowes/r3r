@@ -1,4 +1,5 @@
 USE_PAX ?= 1
+USE_XZ ?= 1
 
 ifneq ($(USE_PAX),0)
 	PAX = $(call programpath,pax)
@@ -8,8 +9,15 @@ else
 	PAXFLAGS = -cf -
 endif
 
+ifneq ($(USE_XZ),0)
+GZIP = $(call programpath,xz)
+GZIPFLAGS = -c
+GZIPEXT = xz
+else
 GZIP = $(call programpath,gzip)
 GZIPFLAGS ?= -cf
+GZIPEXT = gz
+endif
 
 .PHONY: check
 
@@ -134,7 +142,7 @@ docs:
 	cd $(srcdir)/doc && $(MAKE)
 
 dist-docs: docs
-	$(PAX) $(PAXFLAGS) doc/api | $(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-api.tar.gz
+	$(PAX) $(PAXFLAGS) doc/api | $(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-api.tar.$(GZIPEXT)
 
 
 # Uninstallation rules
@@ -175,7 +183,7 @@ endif
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/wx/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/wx/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_wx.mo;)
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
-		$(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.gz
+		$(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.$(GZIPEXT)
 	$(DELTREE) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
 
 dist-src: clean
@@ -183,7 +191,7 @@ dist-src: clean
 	-$(MKDIR) ../r3r-$(VERSION)
 	-$(COPY) -rf * ../r3r-$(VERSION)
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
-		$(GZIP) $(GZIPFLAGS) > r3r-$(VERSION)-src.tar.gz 
+		$(GZIP) $(GZIPFLAGS) > r3r-$(VERSION)-src.tar.$(GZIPEXT)
 	$(DELTREE) ../r3r-$(VERSION)
 
 dist-autopackage: dist-build

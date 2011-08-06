@@ -138,7 +138,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.2-alpha1
+VERSION = 2.2-beta1
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
