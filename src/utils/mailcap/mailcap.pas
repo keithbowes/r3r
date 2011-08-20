@@ -146,7 +146,7 @@ begin
     begin
       ReadLn(f, s);
 
-      if Length(s) > 0 then
+      if (Length(s) > 0) and (Pos('#', s) = 0) then
       begin
         Com1End := Pos(';', s);
         Com1 := Copy(s, 1, Com1End - 1);
@@ -206,21 +206,31 @@ begin
   end;
 end;
 
-{TODO: Download the file before executing it}
 function TMailCap.ExecProg(const mtype, param: String): byte;
 var
   args, prog: String;
+  dl, dop: String;
   expstart: byte;
+  fl: String;
 begin
+  dl := GetEnv('DOWNLOADER');
+  dop := GetEnv('DOWNLOADEROPTIONS');
+  fl := GetEnv('TEMP') + '/dl';
+
+  if Length(dl) = 0 then
+  begin
+    dl := 'wget';
+    dop := '-O ' + fl;
+  end;
+  Exec(dl, dop + ' ' + param);
+
   prog := GetProg(mtype);
   StripPost(prog);
-
-  prog := StringReplace(prog, '%s', param, true);
 
   expstart := Pos(' ', prog);
   args := Copy(prog, expstart, Pos(param, prog) + Length(param) - expstart);
   prog := Copy(prog, 1, expstart - 1);
-  Exec(FSearch(prog, GetEnv('PATH')), args);
+  Exec(FSearch(prog, GetEnv('PATH')), dl);
 
   ExecProg := DosExitCode;
 end;

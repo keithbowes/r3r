@@ -7,3 +7,6 @@ all: unit prog
 prog: example$(PPUEXT)
 
 unit: mailcap$(PPUEXT)
+
+clean:
+	$(RM) example$(EXEXT)

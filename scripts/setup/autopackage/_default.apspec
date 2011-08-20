@@ -74,6 +74,9 @@ require @libexpat.org/expat 1.2
 [Test]
 testForLib -i libidn.so
 testForLib -i libintl.so
+testForLib -i libncursesw.so
+testForLib -i libpcre.so
+testForLib -i libreadline.so
 
 [Install]
 # Put your installation script here

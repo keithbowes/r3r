@@ -197,6 +197,8 @@ dist-src: clean
 dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage
 
+dist-deb dist-rpm dist-slackware: DESTDIR = /usr/bin
+
 dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb
 

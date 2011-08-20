@@ -18,7 +18,6 @@ SourceDir=..\..\..
 Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
 
 [Files]
-Source: "../*.dll"; DestDir: "{app}\bin"
 Source: "r3r-tui.exe"; DestDir: "{app}\bin"
 Source: "r3r-wx.exe"; DestDir: "{app}\bin"
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
