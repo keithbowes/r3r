@@ -283,7 +283,7 @@ endif # DEBUG
 
 DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 
-ifdef inWindows
+ifdef forWindows
 DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_TAB

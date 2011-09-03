@@ -1077,14 +1077,22 @@ end;
 
 procedure TTui.Redraw;
 var
-  iTmp: word;
+  iTmp, iTop: word;
 begin
+  iTmp := FCurrentItem;
+  iTop := FViewPort.FirstItem;
+  FCurrentItem := iTop;
+
+  if iTop = 0 then
+  begin
+    iTop := 1
+  end;
+
   Draw;
 
   if FItems^.Count > 0 then
   begin
-    iTmp := FCurrentItem;
-    ScrollTo(FViewPort.FirstItem);
+    ScrollTo(iTop);
     ScrollTo(iTmp);
   end;
 end;

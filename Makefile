@@ -19,6 +19,10 @@ GZIPFLAGS ?= -cf
 GZIPEXT = gz
 endif
 
+CSUM ?= sha1sum
+CSUMOPTS ?=
+CSUMEXT ?= sha1
+
 .PHONY: check
 
 include scripts/common.make
@@ -193,6 +197,7 @@ dist-src: clean
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
 		$(GZIP) $(GZIPFLAGS) > r3r-$(VERSION)-src.tar.$(GZIPEXT)
 	$(DELTREE) ../r3r-$(VERSION)
+	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.$(GZIPEXT) > r3r-$(VERSION)-src.tar.$(GZIPEXT).$(CSUMEXT)
 
 dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage

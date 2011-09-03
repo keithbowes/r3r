@@ -24,7 +24,7 @@ function Doze2Cap(const doze: String): String;
 implementation
 
 uses
-  Dos;
+  Dos, Strings;
 
 type
   PMailCapEntry = ^TMailCapEntry;
@@ -111,63 +111,132 @@ end;
 
 constructor TMailCap.Init;
 var
-  Com1, Com2: String;
-  Com1End, Com2End: word;
+  Com1, Com2, Com3, Com3Part: String;
+  Com1End, Com2End, Com3End, i: word;
   f: text;
-  mcfile: String;
+  mcfile, mcfilelist: String;
+  mcfiles: PRList;
   p: PMailCapEntry;
+  pc: PChar;
   s: String;
+  TestPassed: Boolean;
 begin
-  {TODO: Support multiple mailcaps }
-  mcfile :=  GetEnv('MAILCAPS');
-  if Length(mcfile) > 0 then
-  begin
-    Com1End := Pos(':', mcfile);
-    if Com1End = 0 then
-    begin
-      Com1End := Length(mcfile) + 1;
-    end;
-
-    mcfile := Copy(mcfile, 1, Com1End - 1);
-  end
-  else
+  New(mcfiles, Init);
+  New(FList, Init);
+  mcfilelist :=  GetEnv('MAILCAPS');
+  if Length(mcfilelist) = 0 then
   begin
     mcfile := GetEnv('HOME') + '/' + '.mailcap';
   end;
 
-  New(FList, Init);
-
-  if FileExists(mcfile) then
-  begin
-    Assign(f, mcfile);
-    Reset(f);
-
-    while not Eof(f) do
+  repeat
+    com1End := Pos(':', mcfilelist);
+    if Com1End > 0 then
     begin
-      ReadLn(f, s);
+      Com1 := Copy(mcfilelist, 1, Com1End - 1);
+      Delete(mcfilelist, 1, Com1End);
+      pc := StrAlloc(Length(Com1) + 1);
+      StrPCopy(pc, Com1);
+      mcfiles^.Add(pc);
+    end
+  until Com1End = 0;
 
-      if (Length(s) > 0) and (Pos('#', s) = 0) then
+  if Length(mcfilelist) > 0 then
+  begin
+    pc := StrAlloc(Length(mcfilelist) + 1);
+    StrPCopy(pc, mcfilelist);
+    mcfiles^.Add(pc);
+  end;
+
+  if mcfiles^.Count > 0 then
+  begin
+    for i := 0 to mcfiles^.Count - 1 do
+    begin
+      mcfile := StrPas(mcfiles^.GetNth(i));
+
+      if FileExists(mcfile) then
       begin
-        Com1End := Pos(';', s);
-        Com1 := Copy(s, 1, Com1End - 1);
-        Delete(s, 1, Com1End);
-        Com2End := Pos(';', s);
-        if Com2End = 0 then
+        Assign(f, mcfile);
+        Reset(f);
+
+        while not Eof(f) do
         begin
-          Com2End := Length(s) + 1;
+          ReadLn(f, s);
+
+          if (Length(s) > 0) and (Pos('#', s) = 0) then
+          begin
+            TestPassed := true;
+            Com1End := Pos(';', s);
+            Com1 := Copy(s, 1, Com1End - 1);
+            Delete(s, 1, Com1End);
+            Com2End := Pos(';', s);
+            if Com2End = 0 then
+            begin
+              Com2End := Length(s) + 1;
+            end;
+            Com2 := Trim(Copy(s, 1, Com2End - 1));
+            StripPost(Com2);
+
+            Com3 := Copy(s, Com2End, Length(s) - Com2End + 1);
+            if Length(Com3) > 0 then
+            begin
+              repeat
+                Com2End := 0;
+                Com3End := Pos('test', Com3);
+                Delete(Com3, 1, Com3End - 1);
+
+                if Com3End <> 0 then
+                begin
+                  Com2End := Pos(';', Com3);
+                  if Com2End = 0 then
+                  begin
+                    Com2End := Length(Com3) + 1;
+                  end;
+
+                  Com3End := 1;
+                  Com3Part := Copy(Com3, Com3End, Com2End - 1);
+                  Delete(Com3Part, 1, Length('test='));
+                  Delete(Com3, Com3End, Com2End);
+
+                  SwapVectors;
+                  Exec(FSearch(Com3Part, GetEnv('PATH')), '');
+                  SwapVectors;
+
+                  if DosExitCode <> 0 then
+                  begin
+                    TestPassed := false;
+                    Com3End := 0;
+                  end;
+                end;
+              until Com3End = 0;
+            end;
+
+            if TestPassed then
+            begin
+              New(p);
+              p^.MType := Com1;
+              p^.Prog := Com2;
+
+              FList^.Add(p);
+            end;
+          end;
         end;
-        Com2 := Trim(Copy(s, 1, Com2End - 1));
-        StripPost(Com2);
-        {TODO: Support for the test= parameter}
-        New(p);
-        p^.MType := Com1;
-        p^.Prog := Com2;
-        FList^.Add(p);
+
+        Close(f);
       end;
     end;
-
-    Close(f);
   end;
+
+  if mcfiles^.Count > 0 then
+  begin
+    for i := 0 to mcfiles^.Count - 1 do
+    begin
+      pc := mcfiles^.GetNth(i);
+      StrDispose(pc);
+    end;
+  end;
+
+  Dispose(mcfiles, Done);
 end;
 
 destructor TMailCap.Done;
