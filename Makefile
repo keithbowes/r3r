@@ -130,7 +130,7 @@ endif
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install:
+install install-strip:
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/doc && $(MAKE) install
 	cd $(srcdir)/icons && $(MAKE) install

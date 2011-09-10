@@ -44,7 +44,7 @@ install
 
 Helpful environment variables:
 BUILDDIR
-  Where the build programs should go.
+  Where the built programs should go.
   (See the notes below.)
 CC
   The C compiler to use (default: gcc).
@@ -130,6 +130,8 @@ USE_NLS
   Default: 1
 USE_PCRE
   Allow the use of PCRE to allow more powerful text matching.
+  Note: PCRE uses hidden structures, so Pascal compilers don't know
+  about their size and this will lead to memory leaks.
   Default: 1
 
 Out-of-source builds:
@@ -137,7 +139,7 @@ The configure script will do that for you.  If you're not using the
 configure script, use the BUILDDIR environment variable.  Also use
 the SRCDIR environment variable if you're not building in the
 project root.  They must be absolute directory paths (again, the
-configure script will convert the paths to absolute paths for you;
+configure script will convert the paths to absolute paths for you);
 in other words you can either of these in the source directory:
 1. make BUILDDIR=$(pwd)/BUILD.
 2. mkdir BUILD; cd BUILD; ../configure; make).
