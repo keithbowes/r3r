@@ -57,7 +57,7 @@ DEFS_EXTRA
 DEFS_SETTINGS
   The type of settings to use:
   * SETTINGS_BIN: Dump the internal settings structure to a
-    binary file and read it during startup (not recommended).
+    binary file and read it during startup (deprecated).
   * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
     to read/write the settings to a .ini file.
   * SETTINGS_REG: Use the Delphi/Free Pascal TRegistry class to
@@ -65,7 +65,7 @@ DEFS_SETTINGS
     GetAppConfigDir(false)/reg.xml on non-Windows versions of
     Free Pascal).
   * SETTINGS_TAB: Use the TTabFile object to read/write settings
-    to a .tab file.
+    to a .tab file (deprecated).
   (The default depends on the compiler and OS.)
 DEFS_SOCKETS
   The sockets library to use:

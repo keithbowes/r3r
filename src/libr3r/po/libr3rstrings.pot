@@ -60,13 +60,13 @@ msgstr ""
 msgid "Hide cached feed items"
 msgstr ""
 
+msgid "Keep cached feeds for these amount of days"
+msgstr ""
+
 msgid "Guess the type of feed"
 msgstr ""
 
 msgid "Check for updates"
-msgstr ""
-
-msgid "Warn about missing data"
 msgstr ""
 
 msgid "Enable item filters"

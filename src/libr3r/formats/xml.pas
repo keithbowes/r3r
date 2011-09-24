@@ -148,22 +148,6 @@ begin
 
   if FNthElem > 0 then
   begin
-    if Settings.GetBoolean(Settings.IndexOf('warn-missing-data')) and
-      (FNthElem > LastElemNum + 1) then
-    begin
-      s := '';
-      for i := LastElemNum to FNthElem - 1 do
-      begin
-        s := s + PXmlElement(FElemList^.GetNth(i))^.Content + #13#10;
-      end;
-
-      s := Trim(s);
-      if Length(s) > 0 then
-      begin
-        CallMessageEventEx(Self, true, MissingData, s);
-      end;
-    end;
-
     Elem := PXmlElement(FElemList^.GetNth(FNthElem))^;
     if Elem.Base <> '' then
     begin

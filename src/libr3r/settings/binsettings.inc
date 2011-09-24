@@ -17,8 +17,7 @@ begin
 		(Setting = 'use-filters') or
     (Setting = 'use-custom-accept-langs') or
     (Setting = 'use-custom-accept-types') or
-    (Setting = 'use-proxy') or
-		(Setting = 'warn-missing-data');
+    (Setting = 'use-proxy')
 end;
 
 var

@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-29 02:32-0400\n"
-"PO-Revision-Date: 2011-03-31 22:21-0400\n"
+"POT-Creation-Date: 2011-09-20 23:04-0400\n"
+"PO-Revision-Date: 2011-09-20 23:04-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../app.cpp:11
@@ -76,7 +76,7 @@ msgstr ""
 "[Abstellen Nachrichten (in der Einstellungen) om zu nicht wieder dieser "
 "sehen.]"
 
-#: ../location.cpp:18
+#: ../location.cpp:24
 msgid "Go"
 msgstr "Gehen"
 
@@ -152,11 +152,7 @@ msgstr "&Benachrichtigen über Aktuelles"
 msgid "&Load subscriptions on startup"
 msgstr "&Laden Abonnements an ausführen"
 
-#: ../settings-display.cpp:37
-msgid "&Warn about missing data in feeds"
-msgstr "&Warnen über fehlende Daten in Feeds"
-
-#: ../settings-display.cpp:40
+#: ../settings-display.cpp:38
 msgid "Display"
 msgstr "Anzeige"
 
@@ -233,6 +229,6 @@ msgstr "&Hinzufügen"
 msgid "Subscriptions"
 msgstr "Abbonements"
 
-#: ../settingsdialog.cpp:8
+#: ../settingsdialog.cpp:6
 msgid "Settings"
 msgstr "Einstellungen"

@@ -230,10 +230,10 @@ begin
   CheckBoolean('display-feed-title-only', 'Display', false, DescDisplay);
   CheckBoolean('hide-cached-feeds', 'Display', true, DescHide);
   CheckBoolean('hide-cached-feed-items', 'Display', true, DescHideItems);
+  CheckInteger('cache-expiry', 'Display', 90, DescCacheExpiry);
   CheckBoolean('enable-mime-guess', 'Display', false, DescGuess);
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
   CheckBoolean('load-subscriptions-on-startup', 'Display', false, LoadSubscriptions);
-  CheckBoolean('warn-missing-data', 'Display', false, DescWarn);
   CheckBoolean('use-filters', 'Display', true, DescFilters);
 {$IFDEF USE_ICONV}
   CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);

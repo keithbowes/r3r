@@ -293,6 +293,8 @@ ifdef OS_TARGET
 override PCFLAGS_BASE+=-T$(OS_TARGET)
 endif
 
+override DEFS_EXTRA+=HAS_ANSISTRING
+
 BUILD_SHARED ?= 1
 export USE_FPC
 else

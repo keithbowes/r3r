@@ -2,6 +2,7 @@
 #include "feedlist.h"
 #include "frame.h"
 #include "i18n.h"
+#include "libr3r.h"
 
 IMPLEMENT_APP(R3R)
 

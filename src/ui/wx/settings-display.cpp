@@ -34,8 +34,5 @@ void CreateDisplayPage(wxTreebook * parent)
   SettingsCheckBox * subCheck = new SettingsCheckBox(panel, _("&Load subscriptions on startup"), (char *) "load-subscriptions-on-startup");
   vbox->Add(subCheck, 1);
 
-	SettingsCheckBox * missingCheck = new SettingsCheckBox(panel, _("&Warn about missing data in feeds"), (char *) "warn-missing-data");
-	vbox->Add(missingCheck);
-
   parent->AddPage(panel, _("Display"));
 }

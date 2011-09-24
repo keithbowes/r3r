@@ -7,6 +7,7 @@ var
   DescDisplay: String;
   DescHide: String;
   DescHideItems: String;
+  DescCacheExpiry: String;
   DescGuess: String;
   DescCheck: String;
   DescWarn: String;
@@ -44,6 +45,7 @@ begin
   DescDisplay := _('Show feed titles only');
   DescHide := _('Hide cached feeds');
   DescHideItems := _('Hide cached feed items');
+  DescCacheExpiry := _('Keep cached feeds for these amount of days');
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');

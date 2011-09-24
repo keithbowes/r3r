@@ -1,5 +1,9 @@
 unit RStrings;
 
+{$IFDEF HAS_ANSISTRING}
+{$H+}
+{$ENDIF}
+
 interface
 
 function StrToPChar(const Str: String): PChar;
@@ -12,6 +16,7 @@ var
 
 implementation
 
+{$IFNDEF HAS_ANSISTRING}
 uses
   RList, SysUtils;
 
@@ -37,8 +42,13 @@ begin
 
   Dispose(PChars, Done);
 end;
+{$ENDIF}
 
 function StrToPChar(const Str: String): PChar;
+{$IFDEF HAS_ANSISTRING}
+begin
+  StrToPChar := PChar(Str);
+{$ELSE}
 var
   Index: integer;
   p, r: PChar;
@@ -57,20 +67,31 @@ begin
   end;
 
   StrToPChar := r;
+{$ENDIF}
 end;
 
 function GetPChar(const N: cardinal): PChar;
 begin
+{$IFDEF HAS_ANSISTRING}
+  GetPChar := nil;
+{$ELSE}
   GetPChar := PChars^.GetNth(N);
+{$ENDIF}
 end;
 
 procedure SetPChar(const N: cardinal; const p: PChar);
 begin
+{$IFNDEF HAS_ANSISTRING}
   PChars^.Delete(N);
   PChars^.Insert(p, N);
+{$ENDIF}
 end;
 
 function GetPCharIndex(const p: PChar): longint;
+{$IFDEF HAS_ANSISTRING}
+begin
+  GetPCharIndex := -1;
+{$ELSE}
 var
   i, Len: longint;
 begin
@@ -90,8 +111,10 @@ begin
   begin
     GetPCharIndex := -1;
   end;
+{$ENDIF}
 end;
 
+{$IFNDEF HAS_ANSISTRING}
 initialization
 
 InitPChars;
@@ -100,5 +123,6 @@ RemoveDuplicatePChars := true;
 finalization
 
 FreePChars;
+{$ENDIF}
 
 end.
