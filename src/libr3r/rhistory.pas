@@ -25,8 +25,17 @@ uses
   RSettings_Routines, SysUtils;
 
 constructor TRHistory.Init;
+var
+  tf: String;
 begin
-  Assign(FFile, DataDir + PathDelim + 'history');
+  tf := DataDir + PathDelim + 'history';
+  Assign(FFile, tf);
+
+  if not FileExists(tf) then
+  begin
+    Rewrite(FFile);
+  end;
+
   Reset(FFile);
   IsWriting := false;
 end;
@@ -65,18 +74,22 @@ begin
     EntryStart := 0;
   end;
 
-  Reset(FFile);
-  for i := 1 to EntryStart + MaxEntries do
+  if EntryCount < 1 then
   begin
-    if IsNext and (i >= EntryStart) then
+    Reset(FFile);
+
+    for i := 1 to EntryStart + MaxEntries do
     begin
-      ReadLn(FFile, s);
-      EntryCount := i - EntryStart;
-      Entries[EntryCount] := s;
-    end
-    else
-    begin
-      Break;
+      if IsNext and (i >= EntryStart) then
+      begin
+        ReadLn(FFile, s);
+        EntryCount := i - EntryStart;
+        Entries[EntryCount] := s;
+      end
+      else
+      begin
+        Break;
+      end;
     end;
   end;
 
