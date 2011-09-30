@@ -66,6 +66,10 @@ msgstr ""
 msgid "Option to change (number or empty to exit): "
 msgstr ""
 
+#: tuistrings:settingtochangereadline
+msgid "Option to change (select or enter a number; 0 exits): "
+msgstr ""
+
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr ""

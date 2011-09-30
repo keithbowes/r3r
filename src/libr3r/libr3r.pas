@@ -90,8 +90,6 @@ begin
 {$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
-
-  FreeItemCallback;
 end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
@@ -150,8 +148,8 @@ end;
 procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback);
 begin
   ItemCallbacks.RegisterItemCallback(cb);
-
 end;
+
 procedure TLibR3R.DoParseItem(Item: TFeedItem);
 begin
   DisplayItem(Item);

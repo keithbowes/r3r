@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2009-01-20 16:36-0500\n"
+"PO-Revision-Date: 2011-09-26 00:17-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -77,6 +77,10 @@ msgstr "Valor de la opción"
 #: tuistrings:settingtochange
 msgid "Option to change (number or empty to exit): "
 msgstr "Opción de cambio (número o vacío para cesar): "
+
+#: tuistrings:settingtochangereadline
+msgid "Option to change (select or enter a number; 0 exits): "
+msgstr "Opción de cambio (elegir o entrar un número; 0 para cesar): "
 
 #: tuistrings:newvalue
 msgid "New Value: "

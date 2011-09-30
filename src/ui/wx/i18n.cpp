@@ -1,10 +1,7 @@
-#include "feedlist.h"
 #include "libr3r.h"
 #include "wx.h"
 
 #include "i18n.h"
-
-bool i18n_inited = false;
 
 void InitGettext()
 {
@@ -33,25 +30,15 @@ void InitGettext()
   localeDir = prefix + path;
 
   wxLocale * locale = new wxLocale();
-	int language;
-	if (locale->GetSystemLanguage() != wxLANGUAGE_UNKNOWN)
-	{
-		language = wxLANGUAGE_DEFAULT;
-	}
-	else
-	{
-		language = wxLANGUAGE_ENGLISH;
-	}
+	int language = wxLANGUAGE_DEFAULT;
+	
+	/* Kludge for Windows */
+#ifdef __WIN32__
+	language = locale->GetSystemLanguage();
+#endif
 
-  locale->Init(language);
-  locale->AddCatalogLookupPathPrefix(localeDir);
-  locale->AddCatalog(wxT("r3r_wx"));
-
-  if (!i18n_inited && !locale->IsOk())
-  {
-    SendOwnMessage(0, (char *) "Locale support is not available in your computer's current configuration.", NULL);
-  }
-
-  i18n_inited = true;
+	locale->Init(language);
+	locale->AddCatalogLookupPathPrefix(localeDir);
+	locale->AddCatalog(wxT("r3r_wx"));
 #endif
 }

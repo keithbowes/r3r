@@ -27,5 +27,3 @@ void * ParseFeedThread(void * resource);
 void GetAllFeeds(int argc, wxChar ** argv);
 
 void GoBrowser(char * link);
-
-void SendOwnMessage(unsigned char is_error, char * message, char * extra);

@@ -78,7 +78,7 @@ uses
 
 {$IFDEF USE_READLINE}
 var
-  rl_finished: Boolean;
+  rl_finished, rl_option_finished: Boolean;
 
 {$calling cdecl}
 procedure read_chars(chars: PChar);
@@ -86,6 +86,18 @@ begin
   ClrScr;
   rl_finished := true;
 
+  if StrLen(chars) > 0 then
+  begin
+    add_history(chars);
+  end;
+end;
+
+procedure read_option_chars(chars: PChar);
+begin
+  ClrScr;
+  rl_option_finished := true;
+
+  { Should this be taken out? }
   if StrLen(chars) > 0 then
   begin
     add_history(chars);
@@ -618,6 +630,21 @@ var
   SetName, SetVal: String;
   SRec: PRList;
   Width: word;
+{$IFDEF USE_READLINE}
+  Backup: PChar;
+{$ENDIF}
+
+function TruncateString(const s: String): String;
+begin
+  if Length(s) >= Width then
+  begin
+    TruncateString := Copy(s, 1, Width - 1 - 3) + '...';
+  end
+  else
+  begin
+    TruncateString := s;
+  end;
+end;
 
 function BoolToString(i: Boolean): String;
 begin
@@ -634,18 +661,6 @@ end;
 procedure DisplayOptions;
 var
   i: byte;
-
-function TruncateString(const s: String): String;
-begin
-  if Length(s) >= Width then
-  begin
-    TruncateString := Copy(s, 1, Width - 1 - 3) + '...';
-  end
-  else
-  begin
-    TruncateString := s;
-  end;
-end;
 
 begin
   DrawFeedList;
@@ -721,13 +736,23 @@ begin
           TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetName)) + Len);
         end;
       end;
+{$IFDEF USE_READLINE}
+      add_history(StrToPChar(PRSetting(SRec^.GetNth(i))^.Description));
+{$ENDIF}
 
       WriteLn;
     end;
-  end
+  end;
 end;
 
 begin
+{$IFDEF USE_READLINE}
+  rl_callback_handler_install('', read_option_chars);
+  Backup := StrToPChar(DataDir + PathDelim + '_temp_history');
+  write_history(Backup);
+  clear_history;
+{$ENDIF}
+
   Width := ScreenWidth div 2;
   while Width >= 80 do
   begin
@@ -740,13 +765,42 @@ begin
   begin
     repeat
       DrawStatus;
+{$IFDEF USE_READLINE}
+      rl_option_finished := false;
+      repeat
+        ClrScr;
+        TextBackground(SkinColorTable.FOptionPromptBack);
+        TextColor(SkinColorTable.FOptionPromptFore);
+        TuiWrite(SettingToChangeReadLine);
+
+        TextBackground(SkinColorTable.FOptionIndexBack);
+        TextColor(SkinColorTable.FOptionIndexFore);
+
+        if StrLen(rl_line_buffer) > 0 then
+        begin
+          SetName := StrPas(rl_line_buffer);
+          TuiWrite(SetName);
+        end;
+        rl_callback_read_char;
+      until rl_option_finished;
+
+      for Len := 0 to SRec^.Count - 1 do
+      begin
+        if PRSetting(SRec^.GetNth(Len))^.Description = SetName then
+        begin
+          SetName := IntToStr(Len + 1);
+          Break;
+        end;
+      end;
+{$ELSE}
       TextBackground(SkinColorTable.FOptionPromptBack);
       TextColor(SkinColorTable.FOptionPromptFore);
       TuiWrite(SettingToChange);
+
       TextBackground(SkinColorTable.FOptionIndexBack);
       TextColor(SkinColorTable.FOptionIndexFore);
-
       ReadLn(SetName);
+{$ENDIF}
       Len := Length(SetName);
 
       Val(SetName, Index, ErrPos);
@@ -764,16 +818,35 @@ begin
 
       if (Index >= 0) and (Index < HBound) and (Len <> 0) then
       begin
+{$IFDEF USE_READLINE}
+        TuiWrite('(');
+        case PRSetting(SRec^.GetNth(Index))^.ValueType of
+          TypeString:
+          begin
+            TuiWrite(TruncateString(PRSetting(SRec^.GetNth(Index))^.ValueString));
+          end;
+          TypeInteger:
+          begin
+            Write(PRSetting(SRec^.GetNth(Index))^.ValueInteger);
+          end;
+          TypeBoolean:
+          begin
+            TuiWrite(BoolToString(PRSetting(SRec^.GetNth(Index))^.ValueBoolean));
+          end
+        end;
+        TuiWrite(') ');
+{$ENDIF}
         TuiWrite(NewValue);
 
         TextBackground(SkinColorTable.FOptionValueBack);
         TextColor(SkinColorTable.FOptionValueFore);
         ReadLn(SetVal);
-
-        case PRSetting(SRec^.GetNth(Index))^.ValueType of
-          TypeString:
-          begin
-            SetString(Index, SetVal);
+        if SetVal <> '' then
+        begin
+          case PRSetting(SRec^.GetNth(Index))^.ValueType of
+            TypeString:
+            begin
+              SetString(Index, SetVal);
           end;
           TypeInteger:
           begin
@@ -783,17 +856,18 @@ begin
             begin
               SetInteger(Index, SetInt);
             end;
-          end;
-          TypeBoolean:
-          begin
-            if LowerCase(SetVal) = LowerCase(TrueString) then
+            end;
+            TypeBoolean:
             begin
-              SetBoolean(Index, True)
-            end
-            else if LowerCase(SetVal) = LowerCase(FalseString) then
-            begin
-              SetBoolean(Index, False)
-            end
+              if LowerCase(SetVal) = LowerCase(TrueString) then
+              begin
+                SetBoolean(Index, True)
+              end
+              else if LowerCase(SetVal) = LowerCase(FalseString) then
+              begin
+                SetBoolean(Index, False)
+              end
+            end;
           end;
         end;
         DisplayOptions
@@ -803,6 +877,13 @@ begin
     Redraw;
     GoItem;
   end;
+  
+{$IFDEF USE_READLINE}
+  rl_callback_handler_remove;
+  clear_history;
+  read_history(Backup);
+  DeleteFile(Backup);
+{$ENDIF}
 end;
 
 procedure TTui.GoDonate;

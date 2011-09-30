@@ -31,7 +31,8 @@ end;
 
 procedure CallItemCallback(Item: TFeedItem);
 const
-  LastTitle: String = '';
+  { For some reason, using an AnsiString causes a memory leak }
+  LastTitle: {$IFDEF HAS_ANSISTRING}ShortString{$ELSE}String{$ENDIF} = '';
 var
   cb: TItemCallback;
 begin

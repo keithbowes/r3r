@@ -30,6 +30,7 @@ var
   OptionVal: String;
 
   SettingToChange: String;
+  SettingToChangeReadLine: String;
   NewValue: String;
 
   UpdateAvailable: String;
@@ -81,6 +82,7 @@ begin
   OptionVal := _('Option Value');
 
   SettingToChange := _('Option to change (number or empty to exit): ');
+  SettingToChangeReadLine := _('Option to change (select or enter a number; 0 exits): ');
   NewValue := _('New Value: ');
 
   UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
