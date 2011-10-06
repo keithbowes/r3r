@@ -5,6 +5,7 @@ AC_SUBST(configured_user)
 configured_user=`whoami`
 
 AC_SUBST(VERSION)
+VERSION=`cat version.php | grep -Eo "'1\.." | sed -e "s/'//g"`
 
 dnl Checks for programs.
 AC_PROG_INSTALL

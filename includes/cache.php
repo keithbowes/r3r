@@ -207,9 +207,9 @@ function writeCacheData()
   fwrite($_cache_cache, "\t");
 
   if ($data = $feeds[-1]['etag'])
-    fwrite($_cache_cache, "etag=$data");
+    fwrite($_cache_cache, "etag\t$data");
   else if ($data = $feeds[-1]['last-modified'])
-    fwrite($_cache_cache, 'modified=' . strtotime($data));
+    fwrite($_cache_cache, "modified\t" . strtotime($data));
 
   fwrite($_cache_cache, "\t" . strtotime($feeds[-1]['date']));
   fwrite($_cache_cache, "\t$mime_type");
@@ -230,10 +230,16 @@ function readCacheData()
 
   $str = fgets($_cache_cache);
   $data = explode("\t", $str);
-  list($arr['expires'], $mod, $arr['date'], $mime_type) = $data;
+  $datc = count($data);
 
-  preg_match('/^(\w+)=(.+)$/', $mod, $matches);
-  list($match, $arr['mod-type'], $arr['mod-val']) = $matches;
+  if ( 5 == $datc )
+    list($arr['expires'], $arr['mod-type'], $arr['mod-val'], $arr['date'], $mime_type) = $data;
+  else if ( 4 == $datc )
+  {
+    list($arr['expires'], $mod, $arr['date'], $mime_type) = $data;
+    preg_match('/^(\w+)=(.+)$/', $mod, $matches);
+    list($match, $arr['mod-type'], $arr['mod-val']) = $matches;
+  }
 
   return $arr;
 }

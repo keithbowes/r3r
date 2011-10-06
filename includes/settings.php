@@ -84,10 +84,10 @@ function setInitialSetting($setting)
     case 'hide-cached-feeds':
       $val = false;
       break;
-    case 'mail-client-cl':
+    case 'mail-client':
       $val = 'system';
       break;
-    case 'proxy-addr':
+    case 'proxy-address':
       $val = '0.0.0.0';
       break;
     case 'proxy-port':
@@ -133,8 +133,8 @@ function setInitialSettings()
   setInitialSetting('editor');
   setInitialSetting('enable-mime-guess');
   setInitialSetting('hide-cached-feeds');
-  setInitialSetting('mail-client-cl');
-  setInitialSetting('proxy-addr');
+  setInitialSetting('mail-client');
+  setInitialSetting('proxy-address');
   setInitialSetting('proxy-port');
   setInitialSetting('rc-file');
   setInitialSetting('show-warnings');
@@ -165,7 +165,6 @@ function getSettings()
   {
     $fh = fopen(SETTINGS_FILE, 'w');
     fclose($fh);
-    @include_once(SETTINGS_DIR . '/' . OLD_SETTINGS_FILE);
     if (!$_settings)
       setInitialSettings();
     saveSettings();
@@ -206,35 +205,33 @@ function catSettings()
   {
     switch ($setting_name)
     {
-      case 'accept-langs':
-      case 'accept-types':
-      case 'enable-mime-guess':
-      case 'proxy-addr':
+      case 'proxy-address':
       case 'proxy-port':
       case 'timeout-sec':
+      case 'use-proxy':
         $cat = 'HTTP';
         break;
+      case 'enable-mime-guess':
       case 'show-warnings':
-        $cat = 'General';
-        break;
       case 'display-feed-title-only':
       case 'hide-cached-feeds':
       case 'wrap-desc':
-        $cat = 'GUI';
+        $cat = 'Display';
         break;
       case 'user-agent':
         $cat = 'Info';
         break;
       case 'browser':
       case 'editor':
-      case 'mail-client-cl':
+      case 'mail-client':
         $cat = 'Programs';
         break;
       case 'use-custom-accept-langs':
       case 'use-custom-accept-types':
       case 'use-custom-user-agent':
-      case 'use-proxy':
-        $cat = 'Volatile';
+      case 'accept-langs':
+      case 'accept-types':
+        $cat = 'HTTP Headers';
         break;
       default:
         if (strpos($setting_name, 'Subscription') !== 0)
@@ -273,7 +270,7 @@ function saveSettings()
 
     while (list($cat, $setting) = each($_cat_settings))
     {
-      fwrite($fh, "[$cat]\n");
+      fwrite($fh, "\n[$cat]\n");
       while (list($setting_name, $setting_val) = each($setting))
         if ($setting_name !== null)
           fwrite($fh, "$setting_name=$setting_val\n");

@@ -16,7 +16,6 @@ function getSubscriptions()
 
   if ($_subscriptions === null)
   {
-    getSubscriptionsOld();
     @reset($_subscriptions);
 
     $wd = getcwd();
@@ -33,25 +32,6 @@ function getSubscriptions()
     }
     chdir($wd);
   }
-
-  return $_subscriptions;
-}
-
-/**
-  * Get subscriptions from the settings file.
-  * @return An array of subscriptions.
-  * @deprecated
-*/
-function getSubscriptionsOld()
-{
-  global $_subscriptions;
-  
-  $subs = getSetting('subscribed-feeds');
-  $sarr = explode(' ', $subs);
-  $narr = count($sarr);
-
-  for ($idx = 0; $idx < $narr; $idx++)
-    $_subscriptions[$sarr[$idx]] = 1;
 
   return $_subscriptions;
 }

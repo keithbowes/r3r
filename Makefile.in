@@ -14,6 +14,7 @@ clean:
 
 genclean:
 	$(RM) Makefile R3R.Desktop config.cache config.log config.status configure r3r autopackage/default.apspec scripts/setup.iss
+	$(RMDIR) autom4te.cache
 
 distclean: clean genclean
 

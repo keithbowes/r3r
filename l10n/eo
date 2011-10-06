@@ -89,7 +89,6 @@ INFO_SETTINGS_DIR=Agordujo
 
 # File-selection captions
 FS_OPEN=Trovu kanalon...
-FS_RC=Foliumu por risurc-doseieroj...
 FS_CLIENT=Foliumu por via prefera krozilo...
 
 # Settings dialog
@@ -100,10 +99,6 @@ SET_OK_BTN=Bone
 SET_CANCEL_BTN=Rezigni
 SET_SAVE_BTN=Konservi
 SET_BROWS_BTN=Foliumi...
-
-# Appearance tab
-SET_APP_TAB=Apero
-SET_YOUR_RC=Uzi neaŭtomatajn risurc-doseierojn
 
 # Feeds tab
 SET_FEEDS_TAB=Kanaloj

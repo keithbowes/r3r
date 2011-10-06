@@ -79,6 +79,7 @@ function internalizeFeedData($res)
 
   while (!@feof($res))
   {
+    doEvent();
     if (!$str = @fgets($res))
       break;
 
@@ -236,7 +237,7 @@ function getRemoteFeed($url)
 
   if (getSetting('use-proxy'))
   {
-    $server = getSetting('proxy-addr');
+    $server = getSetting('proxy-address');
     $port = getSetting('proxy-port');
   }
   else

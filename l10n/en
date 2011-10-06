@@ -89,7 +89,6 @@ INFO_SETTINGS_DIR=Settings Path
 
 # File-selection captions
 FS_OPEN=Find Feed...
-FS_RC=Browse for resource files...
 FS_CLIENT=Browse for your preferred browser...
 
 # Settings dialog
@@ -100,10 +99,6 @@ SET_OK_BTN=OK
 SET_CANCEL_BTN=Cancel
 SET_SAVE_BTN=Save
 SET_BROWS_BTN=Browse...
-
-# Appearance tab
-SET_APP_TAB=Appearance
-SET_YOUR_RC=Use a non-default resource file
 
 # Feeds tab
 SET_FEEDS_TAB=Feeds

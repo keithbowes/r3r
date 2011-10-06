@@ -94,8 +94,8 @@ function createHttpPage($notebook)
   $proxyFields = &new GtkVBox(false);
   $proxyBox->pack_start($proxyFields, false);
 
-  $proxyAddrField = createEdit(getSetting('proxy-addr'));
-  $proxyAddrField->connect('changed', 'settingsEntryChanged', 'proxy-addr');
+  $proxyAddrField = createEdit(getSetting('proxy-address'));
+  $proxyAddrField->connect('changed', 'settingsEntryChanged', 'proxy-address');
   $proxyFields->pack_start($proxyAddrField);
 
   $proxyPortField = createEdit(getSetting('proxy-port'));
@@ -194,12 +194,12 @@ function createMailPage($notebook)
   $mailClientLbl = &new GtkLabel(SET_MAIL_CLIENT);
   $mailTable->attach($mailClientLbl, 0, 1, 1, 2);
 
-  $mailClientField = createEdit(getSetting('mail-client-cl'));
-  $mailClientField->connect('changed', 'settingsEntryChanged', 'mail-client-cl');
+  $mailClientField = createEdit(getSetting('mail-client'));
+  $mailClientField->connect('changed', 'settingsEntryChanged', 'mail-client');
   $mailTable->attach($mailClientField, 1, 2, 1, 2);
 
   $mailerBrowse = &new GtkButton(SET_BROWS_BTN);
-  $mailerBrowse->connect('clicked', 'createFileSelection', array($mailClientField, FS_CLIENT, 'mail-client-cl', $browserField));
+  $mailerBrowse->connect('clicked', 'createFileSelection', array($mailClientField, FS_CLIENT, 'mail-client', $browserField));
   $mailTable->attach($mailerBrowse, 2, 3, 1, 2);
 
   $editorLbl = &new GtkLabel(SET_EDITOR);

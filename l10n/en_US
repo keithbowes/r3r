@@ -80,7 +80,7 @@ ALERT_NOT_XML=This is not an XML feed (or it's one with errors).
 
 # Info... Dialog
 INFO_TITLE=About R3R
-INFO_NAME=Really Radical Reader for RSS
+INFO_NAME=RSS 3.0 Reader (R3R)
 INFO_VERSION=Version
 INFO_OS=Operating System
 INFO_PHP_VERSION=PHP Version
@@ -89,7 +89,6 @@ INFO_SETTINGS_DIR=Settings Path
 
 # File-selection captions
 FS_OPEN=Find Feed...
-FS_RC=Browse for resource files...
 FS_CLIENT=Browse for your preferred HTTP Client...
 
 # Settings dialog
@@ -101,12 +100,8 @@ SET_CANCEL_BTN=Cancel
 SET_SAVE_BTN=Save
 SET_BROWS_BTN=Browse...
 
-# Appearance tab
-SET_APP_TAB=Appearance
-SET_YOUR_RC=Use a non-default resource file
-
 # Feeds tab
-SET_FEEDS_TAB=Feeds
+SET_FEEDS_TAB=Display
 SET_WARNINGS=Show Warnings
 SET_KNOWN_FEEDS=Display known feeds in a combo box
 SET_DESC_WRAP=Wrap item descriptions

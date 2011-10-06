@@ -70,7 +70,7 @@ function sendMail($addr, $subj)
   $addr = rawurlencode($addr);
   $subj = rawurlencode($subj);
 
-  $mcc = getSetting('mail-client-cl');
+  $mcc = getSetting('mail-client');
   $mcc = str_replace('%a', $addr, $mcc);
   $mcc = str_replace('%s', $subj, $mcc);
 

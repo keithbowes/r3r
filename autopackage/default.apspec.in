@@ -1,7 +1,7 @@
 # -*-shell-script-*-
 
 #
-# Rudamentary spec file for autopackage.  It doesn't work yet, but hopefully
+# Rudimentary spec file for autopackage.  It doesn't work yet, but hopefully
 # it will some day.
 #
 # Mildly altered version from makeinstaller --mkspec
@@ -29,18 +29,20 @@ R3R is a reader for RSS, ESF and Atom feeds. It will retrieve feeds and display 
 R3R estas kanallegilo por RSS, ESF kaj Atomo.
 
 [BuildPrepare]
-prepareBuild
-rm -fv congig.status
+#prepareBuild
+rm -fv config.status
 
 [BuildUnprepare]
-unprepareBuild
+#unprepareBuild
 
 [Imports]
+cd ..
 echo '*' | import
+cd $sourcedir
 
 [Prepare]
 # Dependency checking
-require @php.net/php4 4.3.4
+#require @php.net/php4 4.3.4
 
 [Install]
 mkdir -p @prefix@/r3r/includes
