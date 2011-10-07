@@ -259,8 +259,24 @@ end;
 function TMailCap.GetProg(const mtype: String): String;
 var
   i: word;
+  MSubType, MSuperType: String;
+  Res: String;
+  Reserv: String;
+  SubType, SuperType: String;
+
+procedure ParseMType(const pbl: String; var SuperType, SubType: String);
+var
+  pst: word;
 begin
-  GetProg := '';
+  pst := Pos('/', pbl);
+  SubType := Copy(pbl, pst + 1, Length(mtype) - i);
+  SuperType := Copy(pbl, 1, pst - 1);
+end;
+
+begin
+  Res := '';
+  Reserv := '';
+  ParseMType(mtype, SuperType, SubType);
 
   if FList^.Count > 0 then
   begin
@@ -268,11 +284,27 @@ begin
     begin
       if PMailCapEntry(FList^.GetNth(i))^.MType = mtype then
       begin
-        GetProg := PMailCapEntry(FList^.GetNth(i))^.Prog;
+        Res := PMailCapEntry(FList^.GetNth(i))^.Prog;
         Break;
+      end;
+      
+      if Reserv = '' then
+      begin
+        ParseMType(PMailCapEntry(FList^.GetNth(i))^.MType, MSuperType, MSubType);
+        if (SuperType = MSuperType) and (MSubType = '*') then
+        begin
+          Reserv := PMailCapEntry(FList^.GetNth(i))^.Prog;
+        end;
       end;
     end;
   end;
+
+  if Res = '' then
+  begin
+    Res := Reserv;
+  end;
+
+  GetProg := Res;
 end;
 
 function TMailCap.ExecProg(const mtype, param: String): byte;
@@ -282,8 +314,8 @@ var
   expstart: byte;
   fl: String;
 begin
-  dl := GetEnv('DOWNLOADER');
-  dop := GetEnv('DOWNLOADEROPTIONS');
+  dl := GetEnv('MAILCAP_DOWNLOADER');
+  dop := GetEnv('MAILCAP_DOWNLOADER_OPTIONS');
   fl := GetEnv('TEMP') + '/dl';
 
   if Length(dl) = 0 then

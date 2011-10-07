@@ -1,11 +1,11 @@
 For information on installing from source, get
-r3r-<version>.tar.gz and then read the file BUILDING.
+r3r-<version>.tar.xz and then read the file BUILDING.
 
-For installing on x86 Linux, run r3r-<version>_<ui>.x86.package.
+For installing on x86 Linux, run r3r-<version>.x86.package.
 See <http://www.autopackage.org/howtoinstall.html> if you need help
 installing it.
 
-For installing on Windows, run r3r-<version>_<ui>.exe (created with
+For installing on Windows, run r3r-<version>-setup.exe (created with
 Inno Setup <http://jrsoftware.org>; sure, you don't need to know
 that, but I'm just giving the developer of the program some credit).
 

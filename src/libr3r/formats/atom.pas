@@ -32,7 +32,7 @@ type
 implementation
 
 uses
-  DC, ItemCallbacks, RDate, RStrings, SockConsts
+  DC, HttpCache, ItemCallbacks, RDate, RStrings, SockConsts
 
 {$IFDEF __GPC__}
   , SysUtils
@@ -251,6 +251,11 @@ begin
     if (Name = 'entry') then
     begin
       CallItemCallBack(CurrentItem);
+
+      if (Id <> '') and Assigned(CurrentCache) then
+      begin
+        CurrentCache.WriteData(Id, cdtIds);
+      end;
     end;
   end;
 end;

@@ -21,8 +21,8 @@ type
 implementation
 
 uses
-  Atom, DC, ItemCallbacks, Mod_Enclosure, RDate, RStrings, SockConsts,
-  SysUtils;
+  Atom, DC, HttpCache, ItemCallbacks, Mod_Enclosure, RDate,
+  RStrings, SockConsts, SysUtils;
 
 function GetAtomFeed: TAtomFeed;
 begin
@@ -186,6 +186,11 @@ begin
     if Name = 'item' then
     begin
       CallItemCallback(CurrentItem);
+
+      if (Id <> '') and Assigned(CurrentCache) then
+      begin
+        CurrentCache.WriteData(Id, cdtIds);
+      end;
     end;
   end;
 end;

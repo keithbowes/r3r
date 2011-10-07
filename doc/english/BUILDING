@@ -60,6 +60,9 @@ DEFS_SETTINGS
     binary file and read it during startup (deprecated).
   * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
     to read/write the settings to a .ini file.
+  * SETTINGS_LIBINI: Use libini
+    <http://sourceforge.net/projects/libini/> to read/write
+    settings to a .ini file.
   * SETTINGS_REG: Use the Delphi/Free Pascal TRegistry class to
     read/write the settings to the registry (or to
     GetAppConfigDir(false)/reg.xml on non-Windows versions of

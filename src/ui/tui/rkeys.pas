@@ -6,6 +6,7 @@ const
   DonateKey = 'd';
   DownArrow = Chr(80);
   DownKey = 'j';
+  EmailKey = 'c';
   EnclosureKey = 'x';
   EndKey = Chr(79);
   EnterKey = Chr(13);

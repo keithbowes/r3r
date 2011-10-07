@@ -73,6 +73,7 @@ begin
 
   while not Finished do
   begin
+    if Finished then begin WriteLn('Uh, yeah'); Halt; end;
 {$IFNDEF SOCKETS_NONE}
     if Assigned(Sock.Sock) and Sock.Error then
     begin

@@ -102,6 +102,31 @@ begin
   Close(FFile);
 end;
 
+procedure TRHistory.Add(const Entry: String);
+var
+  Already: Boolean;
+  s: String;
+begin
+  Already := false;
+  Reset(FFile);
+  while IsNext and not Already do
+  begin
+    ReadLn(FFile, s);
+    Already := s = Entry;
+  end;
+
+  if not Already then
+  begin
+    IsWriting := true;
+    Append(FFile);
+
+    if Length(Entry) > 0 then
+    begin
+      WriteLn(FFile, Entry);
+    end;
+  end;
+end;
+
 function TRHistory.IsNext: Boolean;
 begin
   if IsWriting then

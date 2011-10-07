@@ -95,8 +95,12 @@ endif
 ifeq ($(DEFS_SETTINGS),SETTINGS_INI)
 	@$(ECHO) $(call checkunit,IniFiles)
 else
+ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
+	@$(ECHO) $(call checkunit,LibIni)
+else
 ifeq ($(DEFS_SETTINGS),SETTINGS_REG)
 	@$(ECHO) $(call checkunit,Registry)
+endif
 endif
 endif
 ifneq ($(USE_EXPAT),0)
@@ -202,7 +206,7 @@ dist-src: clean
 dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage
 
-dist-deb dist-rpm dist-slackware: DESTDIR = /usr/bin
+dist-deb dist-rpm dist-slackware: DESTDIR = /usr
 
 dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb

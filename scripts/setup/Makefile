@@ -5,7 +5,7 @@ LN ?= $(call programpath,ln)
 MAKEPACKAGE ?= $(call programpath,makepackage)
 
 ARCH ?= i386
-RPMSOURCEDIR ?= /usr/src/rpm
+RPMSOURCEDIR ?= $(HOME)/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
 
 include ../common.make
@@ -17,7 +17,7 @@ all:
 dist-autopackage: r3r-$(VERSION).x86.package
 
 dist-deb:
-	$(MAKE) checkinstall TYPE=debian
+	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
 	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(curdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
 
 dist-rpm:
@@ -26,7 +26,7 @@ dist-rpm:
 	 	$(curdir)/../../..
 
 dist-slackware:
-	$(MAKE) checkinstall TYPE=slackware
+	$(MAKE) checkinstall TYPE=slackware VERSION=$(VERSION)
 	$(MOVE) $(wildcard ../../*.tgz) ../../..
 
 dist-inno_setup:

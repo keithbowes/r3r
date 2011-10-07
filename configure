@@ -31,6 +31,8 @@ do
           st=SETTINGS_BIN;;
         ini)
           st=SETTINGS_INI;;
+        libini)
+          st=SETTINGS_LIBINI;;
         registry)
           st=SETTINGS_REG;;
         tab)
@@ -80,7 +82,7 @@ do
       echo -e "\t--prefix=PFX Where to install it [/usr/local]"
       echo -e "\t--host=HOST Build for HOST (e.g. i386-win32)"
       echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS.\n\t\tOnly works on Unix systems without the --disable-iconv option"
-      echo -e "\t--with-settings=database Type of settings database to use (binary|ini|registry|tab)"
+      echo -e "\t--with-settings=database Type of settings database to use (binary|ini|libini|registry|tab)"
       echo -e "\t--with-sockets=lib Sockets library to use (bsd|none|synapse)"
       echo -e "\t--with-ui=ui Which UI to build it with (classic|html|tui|tv|wx)"
       echo -e "\t--disable-iconv Build without iconv support"

@@ -47,6 +47,7 @@ type
     procedure QueryItemNumber;
     procedure GoItem;
     procedure OpenBrowser(Link: String);
+    procedure OpenEmail(Address: String);
     procedure SetOptions;
     procedure GoDonate;
     procedure ScrollDown;
@@ -296,6 +297,14 @@ begin
       if FItems^.Count > 0 then
       begin
         OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
+      end;
+    end
+    else if KeyChar = EmailKey then
+    begin
+      prog := TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Contact.Email;
+      if prog <> '' then
+      begin
+        OpenEmail(prog);
       end;
     end
     else if KeyChar = EnclosureKey then
@@ -621,6 +630,39 @@ begin
   Redraw;
 end;
 
+procedure TTui.OpenEmail(Address: String);
+var
+  Client, Tmp: String;
+  Index: byte;
+begin
+  Client := Settings.GetString(Settings.IndexOf('for:mailto'));
+  { Check for the default registry association }
+  if Pos('%1', Client) <> 0 then
+  begin
+    { Check for the first command-line switch }
+    Index := Pos('-', Client);
+    if Index = 0 then
+    begin
+      Index := Pos('/', Client);
+    end;
+
+    if Index = 0 then
+    begin
+      Index := Pos('%1', Client);
+    end;
+
+    Tmp := Copy(Client, Index, Length(Client) - Index + 1);
+    Client := Copy(Client, 1, Index - 2);
+
+    Address := StringReplace(Tmp, '%1', Address, [rfReplaceAll]);
+  end;
+
+  SwapVectors;
+  Exec(FSearch(Client, GetEnv('PATH')), Address);
+  SwapVectors;
+  Redraw;
+end;
+
 procedure TTui.SetOptions;
 const
   NumLen = 2;
@@ -748,7 +790,7 @@ end;
 begin
 {$IFDEF USE_READLINE}
   rl_callback_handler_install('', read_option_chars);
-  Backup := StrToPChar(DataDir + PathDelim + '_temp_history');
+  Backup := StrToPChar(DataDir + PathDelim + '_options_history');
   write_history(Backup);
   clear_history;
 {$ENDIF}

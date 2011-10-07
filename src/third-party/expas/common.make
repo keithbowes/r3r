@@ -138,7 +138,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.2-beta1
+VERSION = 2.2-beta2
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
@@ -286,7 +286,7 @@ DEFS_SOCKETS ?= SOCKETS_SYNAPSE
 ifdef forWindows
 DEFS_SETTINGS ?= SETTINGS_REG
 else
-DEFS_SETTINGS ?= SETTINGS_TAB
+DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
 ifdef OS_TARGET
@@ -312,7 +312,7 @@ PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 -DFree=Destroy -DPtrUInt=PtrWord \
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
-DEFS_SETTINGS ?= SETTINGS_TAB
+DEFS_SETTINGS ?= SETTINGS_LIBINI
 DEFS_SOCKETS ?= SOCKETS_BSD
 USE_ICONV=0
 DIRFLAG=--unit-path=

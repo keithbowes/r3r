@@ -2,6 +2,7 @@ function IsValidSetting(Setting: String): Boolean;
 begin
   IsValidSetting := (Setting = 'accept-langs') or
     (Setting = 'accept-types') or
+		(Setting = 'cache-expiry') or
     (Setting = 'check-for-updates') or
 		(Setting = 'display-encoding') or
     (Setting = 'display-feed-title-only') or

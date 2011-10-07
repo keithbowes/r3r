@@ -8,6 +8,10 @@ override LIBS += -llibr3r_shared
 
 ifdef DEBUG
 override CXXFLAGS += -g
+else
+ifdef forWindows
+override LDFLAGS+=-mno-windows
+endif
 endif
 
 ifneq ($(USE_NLS),0)
@@ -26,7 +30,7 @@ objects = app desc events feedlist feedlistthread feedlistview \
 
 include ../../../scripts/common.make
 
-ifdef inWindows
+ifdef forWindows
 rcobjs = ../../../icons/r3r.res
 else
 rcobjs =

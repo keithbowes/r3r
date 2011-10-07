@@ -76,6 +76,10 @@ uses
 {$IFDEF SETTINGS_INI}
   , IniFiles
 {$ENDIF}
+
+{$IFDEF SETTINGS_LIBINI}
+  , LibIni
+{$ENDIF}
   
 {$IFDEF SETTINGS_REG}
   , Registry
@@ -91,6 +95,10 @@ uses
 
 {$IFDEF SETTINGS_INI}
   {$INCLUDE "inisettings.inc"}
+{$ENDIF}
+
+{$IFDEF SETTINGS_LIBINI}
+  {$INCLUDE "libinisettings.inc"}
 {$ENDIF}
 
 {$IFDEF SETTINGS_REG}
