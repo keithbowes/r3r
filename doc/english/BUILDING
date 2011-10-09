@@ -74,6 +74,9 @@ DEFS_SOCKETS
   The sockets library to use:
   * SOCKETS_BSD: Use the low-level BSD sockets wrapper
     (*nix and Windows). Requires a C compiler. (Extremely buggy!)
+  * SOCKETS_CURL: Use cURL <http://curl.haxx.se/> to retrieve
+    the feeds. There are limitations, but it should be the most
+    portable solution.
   * SOCKETS_NONE: Build without sockets support.
   * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal)
     <http://synapse.ararat.cz>.

@@ -44,7 +44,8 @@ void item_parsed(void * item)
   info->title = title;
   info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");
   info->self = (char *) libr3r_get_item_field(item, (char *) "myself");
-  info->podcast = (char *) libr3r_get_item_field(item, (char *) "podcast");
+  info->enclosure.type = (char *) libr3r_get_item_field(item, (char *) "enclosure-type");
+  info->enclosure.url = (char *) libr3r_get_item_field(item, (char *) "enclosure-url");
 
   wxListItem listItem;
   listItem.SetColumn(0);

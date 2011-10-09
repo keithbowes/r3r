@@ -47,6 +47,8 @@ type
     function GetIdsList: PRStringList;
   end;
 
+function CacheEncode(const URL: String): String;
+
 var
   CurrentCache: THttpCache;
   FCacheDir: String;
@@ -58,6 +60,15 @@ uses
   GPC,
 {$ENDIF}
   RSettings, RSettings_Routines, StrTok;
+
+function CacheEncode(const URL: String): String;
+var
+  Res: String;
+begin
+  Res := StringReplace(URL, '/', '_', [rfReplaceAll]);
+  Res := StringReplace(Res, '?', '__', [rfReplaceAll]);
+  CacheEncode := Res;
+end;
 
 constructor THttpCache.Create(const Url: String);
 var

@@ -42,27 +42,24 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
   wxExecute(cl);
 }
 
-void DescriptionBoxEvents::OnPodcast(wxCommandEvent & event)
+void DescriptionBoxEvents::OnEnclosure(wxCommandEvent & event)
 {
-  char * name;
-  int count, index;
-  unsigned char type;
-  void * value;
-  wxString cl, enclosure, mp;
+	enclosure_data * enclosure;
+  wxString cl, mp;
 
-  wxButton * podcast = (wxButton *) event.GetEventObject();
-  enclosure = wxString((wxChar *) podcast->GetClientData());
+  wxButton * enclosure_button = (wxButton *) event.GetEventObject();
+  enclosure = (enclosure_data *) (enclosure_button->GetClientData());
 
-  index = 0;
-  name = (char *) "for:.ogg";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+	if (!wxGetEnv(wxT("SESSION_MANAGER"), NULL))
+		return;
 
-  mp = wxString((wxChar *) value);
-  mp.Replace(wxT("%1"), enclosure);
+	wxMimeTypesManager * mgr = new wxMimeTypesManager();
+  mp = mgr->GetFileTypeFromMimeType(enclosure->type)->GetOpenCommand(enclosure->url);
+  mp.Replace(wxT("%1"), enclosure->url);
 
-  if (wxNOT_FOUND == mp.Find(enclosure))
+  if (wxNOT_FOUND == mp.Find(enclosure->url))
   {
-    cl = mp + wxString(wxT(" ")) + enclosure;
+    cl = mp + wxString(wxT(" ")) + enclosure->url;
   }
   else
   {
@@ -148,15 +145,15 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
     subscribe->Disable();
   }
 
-  wxButton * podcast = GetPodcastButton();
-  if (strlen(info->podcast) > 0)
+  wxButton * enclosure_button = GetEnclosureButton();
+  if (wxGetEnv("SESSION_MANAGER", NULL) && strlen(info->enclosure.url) > 0)
   {
-    podcast->SetClientData(info->podcast);
-    podcast->Enable();
+    enclosure_button->SetClientData(&(info->enclosure));
+    enclosure_button->Enable();
   }
   else
   {
-    podcast->Disable();
+    enclosure_button->Disable();
   }
 }
 

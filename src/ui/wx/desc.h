@@ -3,5 +3,5 @@
 void CreateDescriptionBox(wxPanel * parent);
 wxStaticBox * GetDescriptionBox();
 wxButton * GetContactButton();
-wxButton * GetPodcastButton();
+wxButton * GetEnclosureButton();
 wxButton * GetSubscribeButton();

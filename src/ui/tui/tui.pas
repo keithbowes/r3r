@@ -315,12 +315,7 @@ begin
       prog := mc^.GetProg(TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType);
       if Prog <> '' then
       begin
-        mc^.ExecProg(mc^.GetProg(TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType), TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
-      end
-      else
-      begin
-        prog := Settings.GetString(Settings.IndexOf('for:.ogg'));
-        Exec(prog, TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+        mc^.ExecProg(mc^.GetProg(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType), TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
       end;
       SwapVectors;
       Dispose(mc, Done);
@@ -924,7 +919,7 @@ begin
   rl_callback_handler_remove;
   clear_history;
   read_history(Backup);
-  DeleteFile(Backup);
+  DeleteFile(StrPas(Backup));
 {$ENDIF}
 end;
 

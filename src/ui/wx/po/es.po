@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-20 23:04-0400\n"
-"PO-Revision-Date: 2011-09-20 23:05-0400\n"
+"POT-Creation-Date: 2011-10-08 13:29-0400\n"
+"PO-Revision-Date: 2011-10-08 13:35-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: \n"
@@ -31,14 +31,14 @@ msgid "&Subscribe"
 msgstr "&Abonarse"
 
 #: ../desc.cpp:35
-msgid "&Play Podcast..."
-msgstr "&Jugar Podcast..."
+msgid "&View Enclosure..."
+msgstr "&Ver el archivo incluso..."
 
-#: ../events.cpp:206
+#: ../events.cpp:203
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../events.cpp:256
+#: ../events.cpp:253
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
@@ -46,35 +46,25 @@ msgstr "Abrir un archivo"
 msgid "[None]"
 msgstr "[Ningún]"
 
-#: ../feedlist.cpp:97
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "Un nueve versión es disponible."
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Título Fuente"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Título de Entrada"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Tema"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Fecha Creado"
-
-#: ../feedlist.cpp:243
-msgid ""
-"\n"
-"\n"
-"[Disable messages (in your settings) to not see this again.]"
-msgstr ""
-"\n"
-"\n"
-"[Desactivar mensajes (en tus configuraciones) para ne más ver esto.]"
 
 #: ../location.cpp:24
 msgid "Go"
@@ -152,7 +142,7 @@ msgstr "&Notifiqueme de cambios"
 msgid "&Load subscriptions on startup"
 msgstr "&Cargar subscripciones a rodando"
 
-#: ../settings-display.cpp:38
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Visualización"
 
@@ -201,7 +191,6 @@ msgid "&Browser"
 msgstr "&Navegador"
 
 #: ../settings-programs.cpp:21 ../settings-programs.cpp:31
-#: ../settings-programs.cpp:41
 msgid "&Browse..."
 msgstr "&Hojear..."
 
@@ -210,10 +199,6 @@ msgid "&Mail Client"
 msgstr "&Cliente de mensajes electrónicos"
 
 #: ../settings-programs.cpp:35
-msgid "Media &Player"
-msgstr "&Reproductor multimedia"
-
-#: ../settings-programs.cpp:45
 msgid "Programs"
 msgstr "Programas"
 

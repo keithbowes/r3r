@@ -31,6 +31,10 @@ type
 
 implementation
 
+{$IFDEF SOCKETS_CURL}
+{$DEFINE SOCKETS_NONE}
+{$ENDIF}
+
 uses
   DC, HttpCache, ItemCallbacks, RDate, RStrings, SockConsts
 
@@ -237,11 +241,6 @@ begin
     begin
       Id := Content;
       Uri := Id;
-
-      if FLeftFeed then
-      begin
-        Id := '';
-      end;
     end
     else if Name = 'feed' then
     begin

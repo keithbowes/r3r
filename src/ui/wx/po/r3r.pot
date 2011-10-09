@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-20 23:04-0400\n"
+"POT-Creation-Date: 2011-10-08 13:29-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,14 +30,14 @@ msgid "&Subscribe"
 msgstr ""
 
 #: ../desc.cpp:35
-msgid "&Play Podcast..."
+msgid "&View Enclosure..."
 msgstr ""
 
-#: ../events.cpp:206
+#: ../events.cpp:203
 msgid "About R3R"
 msgstr ""
 
-#: ../events.cpp:256
+#: ../events.cpp:253
 msgid "Open a file"
 msgstr ""
 
@@ -45,31 +45,24 @@ msgstr ""
 msgid "[None]"
 msgstr ""
 
-#: ../feedlist.cpp:97
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr ""
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr ""
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr ""
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr ""
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:122
 msgid "Date Created"
-msgstr ""
-
-#: ../feedlist.cpp:243
-msgid ""
-"\n"
-"\n"
-"[Disable messages (in your settings) to not see this again.]"
 msgstr ""
 
 #: ../location.cpp:24
@@ -148,7 +141,7 @@ msgstr ""
 msgid "&Load subscriptions on startup"
 msgstr ""
 
-#: ../settings-display.cpp:38
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr ""
 
@@ -197,7 +190,6 @@ msgid "&Browser"
 msgstr ""
 
 #: ../settings-programs.cpp:21 ../settings-programs.cpp:31
-#: ../settings-programs.cpp:41
 msgid "&Browse..."
 msgstr ""
 
@@ -206,10 +198,6 @@ msgid "&Mail Client"
 msgstr ""
 
 #: ../settings-programs.cpp:35
-msgid "Media &Player"
-msgstr ""
-
-#: ../settings-programs.cpp:45
 msgid "Programs"
 msgstr ""
 

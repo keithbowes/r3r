@@ -6,6 +6,9 @@ uses
   Feed, FeedItem
 {$IFDEF SOCKETS_SYNAPSE}
   , BlckSock
+{$IFDEF USE_SSL}
+  ,ssl_openssl
+{$ENDIF}
 {$ENDIF}
   
 {$IFDEF SOCKETS_BSD}
@@ -43,6 +46,10 @@ type
   end;
 
 implementation
+
+{$IFDEF SOCKETS_CURL}
+{$DEFINE SOCKETS_NONE}
+{$ENDIF}
 
 uses
   Atom, Esf, Rss, Rss3, SockConsts, SysUtils;

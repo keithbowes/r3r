@@ -7,12 +7,14 @@ UNIT_DIRS = ../../../libr3r ../../../libr3r/* \
 
 po_files = $(wildcard *.po)
 LINGUAS ?= $(subst .po,,$(po_files))
-mo_files= $(addsuffix .mo, $(LINGUAS)) 
+mo_files = $(addsuffix .mo, $(LINGUAS)) 
 
 include ../../../../scripts/common.make
 
 all: tuistrings$(PPUEXT)
+ifneq ($(mo_files),)
 	-$(MAKE) $(mo_files)
+endif
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)

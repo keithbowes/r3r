@@ -23,14 +23,12 @@ type
     FSock: TRSock;
   protected
     procedure NotifyUpdate; virtual;
-    procedure DoParseItem(Item: TFeedItem);
     procedure DoUpdate;
     procedure Parse;
   public
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
     procedure RetrieveFeed(Resource: String); virtual;
-    procedure DisplayItem(const Item: TFeedItem); virtual;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
     procedure RegisterItemCallback(const cb: TItemCallback);
   end;
@@ -41,6 +39,10 @@ var
   Subscriptions: PRSubscriptions;
 
 implementation
+
+{$IFDEF SOCKETS_CURL}
+{$DEFINE SOCKETS_NONE}
+{$ENDIF}
 
 uses
 {$IFNDEF SOCKETS_NONE}
@@ -55,7 +57,11 @@ begin
     GetSockType := TLocalFile.Create(Resource);
   end
 {$IFNDEF SOCKETS_NONE}
-  else if Prot = 'http' then
+  else if (Prot = 'http')
+{$IFDEF USE_SSL}
+  or (Prot = 'https')
+{$ENDIF}
+  then
   begin
     GetSockType := THttpSock.Create(Host, Port, Path, Para);
   end
@@ -131,12 +137,6 @@ begin
   ParseFeed(FSock);
 end;
 
-{ Implement as empty so if the UI doesn't implement them,
-  there won't be crashes. }
-procedure TLibR3R.DisplayItem(const Item: TFeedItem);
-begin
-end;
-
 procedure TLibR3R.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
 end;
@@ -148,11 +148,6 @@ end;
 procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback);
 begin
   ItemCallbacks.RegisterItemCallback(cb);
-end;
-
-procedure TLibR3R.DoParseItem(Item: TFeedItem);
-begin
-  DisplayItem(Item);
 end;
 
 procedure TLibR3R.DoUpdate;

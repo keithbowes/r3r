@@ -40,7 +40,6 @@ type
 
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
-    function GetPodcast: String;
     function DescriptionText: String;
     function TitleText: String;
     procedure Translate;
@@ -248,19 +247,6 @@ begin
   Enclosure.URL := '';
 
   Finished := false;
-end;
-
-function TFeedItem.GetPodcast: String;
-begin
-  if (Pos('audio', Enclosure.MimeType) = 1) or
-    (Pos('video', Enclosure.MimeType) = 1) then
-  begin
-    GetPodcast := Enclosure.URL;
-  end
-  else
-  begin
-    GetPodcast := '';
-  end;
 end;
 
 { Get the textual representation (without HTML) of the description. }

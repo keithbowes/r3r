@@ -27,8 +27,6 @@ do
       echo "USE_LIBICONV=1" >> config.make;;
     --with-settings*)
       case $val in
-        binary)
-          st=SETTINGS_BIN;;
         ini)
           st=SETTINGS_INI;;
         libini)
@@ -46,6 +44,8 @@ do
       case $val in
         bsd)
           st=SOCKETS_BSD;;
+        curl)
+          st=SOCKETS_CURL;;
         none)
           st=SOCKETS_NONE;;
         synapse)
@@ -55,6 +55,8 @@ do
           exit;;
       esac
       echo "DEFS_SOCKETS=$st" >> config.make;;
+    --with-ssl)
+      echo "USE_SSL=1" >> config.make;;
     --with-ui*)
       case $val in
         classic|html|tui|tv|wx)
@@ -82,8 +84,9 @@ do
       echo -e "\t--prefix=PFX Where to install it [/usr/local]"
       echo -e "\t--host=HOST Build for HOST (e.g. i386-win32)"
       echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS.\n\t\tOnly works on Unix systems without the --disable-iconv option"
-      echo -e "\t--with-settings=database Type of settings database to use (binary|ini|libini|registry|tab)"
-      echo -e "\t--with-sockets=lib Sockets library to use (bsd|none|synapse)"
+      echo -e "\t--with-settings=database Type of settings database to use (ini|libini|registry|tab)"
+      echo -e "\t--with-sockets=lib Sockets library to use (bsd|curl|none|synapse)"
+      echo -e "\t--with-ssl Build with OpenSSL"
       echo -e "\t--with-ui=ui Which UI to build it with (classic|html|tui|tv|wx)"
       echo -e "\t--disable-iconv Build without iconv support"
       echo -e "\t--disable-libidn Build without IDN support"

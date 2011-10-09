@@ -138,7 +138,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.2-beta2
+VERSION = 2.2-beta3
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
@@ -180,7 +180,7 @@ localedir = $(datadir)/locale
 rdatadir = $(datadir)/r3r
 skindir = $(rdatadir)/skins
 
-uis = classic html tui tv wx
+uis = html tui wx
 
 PCFLAGS += $(DEFS) $(PCFLAGS_BASE) $(PCFLAGS_DEBUG) $(PCFLAGS_EXTRA) \
 	$(UNITDIRS)
@@ -201,6 +201,7 @@ USE_READLINE ?= 1
 NO_NCURSES ?= 0
 
 USE_LIBICONV ?= 0
+USE_SSL ?= 0
 
 ifneq ($(USE_NLS),0)
 override DEFS_EXTRA+=USE_NLS
@@ -232,6 +233,10 @@ endif
 
 ifneq ($(USE_READLINE),0)
 override DEFS_EXTRA+=USE_READLINE
+endif
+
+ifneq ($(USE_SSL),0)
+override DEFS_EXTRA+=USE_SSL
 endif
 
 ifneq ($(or $(USE_GPC),$(USE_FPC)),)
@@ -313,7 +318,7 @@ PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_LIBINI
-DEFS_SOCKETS ?= SOCKETS_BSD
+DEFS_SOCKETS ?= SOCKETS_CURL
 USE_ICONV=0
 DIRFLAG=--unit-path=
 PPUEXT=.gpi

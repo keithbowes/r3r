@@ -32,15 +32,5 @@ void CreateProgramsPage(wxTreebook * parent)
   mailButton->SetClientData(mailEntry);
   table->Add(mailButton, 1, wxEXPAND | wxALL, 5);
 
-  wxStaticText * medText = new wxStaticText(panel, -1, _("Media &Player"));
-  table->Add(medText, 1, wxEXPAND | wxALL, 5);
-
-  SettingsEntry * medEntry = new SettingsEntry(panel, (char *) "for:.ogg");
-  table->Add(medEntry, 1, wxEXPAND | wxALL, 5);
-
-  wxButton * medButton = new wxButton(panel, wxID_BROWSE, _("&Browse..."));
-  medButton->SetClientData(medEntry);
-  table->Add(medButton, 1, wxEXPAND | wxALL, 5);
-
   parent->AddPage(panel, _("Programs"));
 }

@@ -2,6 +2,11 @@
 
 typedef struct
 {
+  char * type, * url;
+} enclosure_data;
+
+typedef struct
+{
   bool isTopLevel;
 
   char * contact;
@@ -9,7 +14,7 @@ typedef struct
   char * link;
   char * title;
   char * self;
-  char * podcast;
+  enclosure_data enclosure;
 } ItemInfo;
 
 typedef struct

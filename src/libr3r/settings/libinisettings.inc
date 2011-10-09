@@ -142,7 +142,7 @@ begin
     ValueType := TypeBoolean;
   end;
 
-  ASetting.Description := ADescription;
+  ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 
@@ -167,7 +167,7 @@ begin
     ValueType := TypeInteger;
   end;
 
-  ASetting.Description := ADescription;
+  ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 
@@ -197,7 +197,7 @@ begin
 		FreeMem(Res);
   end;
 
-  ASetting.Description := ADescription;
+  ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
 end;
 

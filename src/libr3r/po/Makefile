@@ -5,12 +5,14 @@ UNIT_DIRS = .. ../* ../../third-party/* ../../utils/*
 
 po_files = $(wildcard *.po)
 LINGUAS ?= $(subst .po,,$(po_files))
-mo_files= $(addsuffix .mo, $(LINGUAS))
+mo_files = $(addsuffix .mo,$(LINGUAS))
 
 include ../../../scripts/common.make
 
 all: libr3rstrings$(PPUEXT)
+ifneq ($(mo_files),)
 	-$(MAKE) $(mo_files)
+endif
 
 clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
@@ -28,3 +30,6 @@ ifneq ($(USE_NLS),0)
 else
 	-$(TOUCH) $<
 endif
+
+test:
+	@$(ECHO) x$(LINGUAS)x

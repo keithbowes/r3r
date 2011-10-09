@@ -4,6 +4,10 @@ interface
 
 uses
   LibR3R, RSock, RMessage
+{$IFDEF SOCKETS_CURL}
+  , DOS
+{$ENDIF}
+
 {$IFDEF SOCKETS_SYNAPSE}
   , SynaUtil
 {$ENDIF}
@@ -12,17 +16,22 @@ uses
   , SockWrap
 {$ENDIF};
 
-procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
+procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
 procedure ParseFeed(const Sock: TRSock);
 procedure SetFeedObject(const Lib: TLibR3R);
 
 implementation
 
+{$IFDEF SOCKETS_CURL}
+{$DEFINE SOCKETS_NONE}
+{$ENDIF}
+
 uses
 {$IFDEF USE_IDN}
   LibIdn, 
 {$ENDIF}
-  LibR3RStrings, RFilter, RStrings, SysUtils
+  HttpCache, LibR3RStrings, RFilter, RSettings_Routines,
+  RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
 {$ENDIF};
@@ -31,7 +40,7 @@ var
   FeedObj: TLibR3R;
   Item: TFeedItem;
 
-procedure GetFeed(Resource: String; var Prot, Host, Port, Path, Para: String);
+procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
 {$IFDEF __GPC__}
 const
   PathDelim = DirSeparator;
@@ -41,7 +50,57 @@ var
 {$IFDEF USE_IDN}
   PHost: PChar;
 {$ENDIF}
+{$IFDEF SOCKETS_CURL}
+  f1, f2: TSearchRec;
+  OrigResource, Resource2: String;
+{$ENDIF}
 begin
+{$IFDEF SOCKETS_CURL}
+  Prot := 'file';
+
+  if not FileExists(Resource) then
+  begin
+    OrigResource := Resource;
+    Resource := CacheDir + PathDelim + 'curl';
+    CheckDir(Resource);
+    Resource := Resource + PathDelim + CacheEncode(OrigResource);
+  end;
+
+  if FileExists(Resource) then
+  begin
+    Resource2 := StringReplace(Resource, 'http:', '2http:', []);
+  end
+  else
+  begin
+    Resource2 := Resource;
+  end;
+
+  SwapVectors;
+  Exec(FSearch('curl', GetEnv('PATH')), '-ks -o ' + Resource2 + ' ' + OrigResource);
+  SwapVectors;
+
+  if DosExitCode <> 0 then
+  begin
+    Resource := '';
+    Exit;
+  end;
+
+  FindFirst(Resource, AnyFile, f1);
+  FindFirst(Resource2, AnyFile, f2);
+  if (Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds'))) and (Resource <> Resource2) and (f1.Size = f2.Size) then
+  begin
+    DeleteFile(Resource);
+    RenameFile(Resource2, Resource);
+    Resource := '';
+  end
+  else
+  begin
+    DeleteFile(Resource);
+    RenameFile(Resource2, Resource);
+  end;
+  FindClose(f2);
+  FindClose(f1);
+{$ENDIF}
   if FileExists(Resource) then
   begin
     Prot := 'file';
@@ -74,7 +133,7 @@ begin
   while not Finished do
   begin
     if Finished then begin WriteLn('Uh, yeah'); Halt; end;
-{$IFNDEF SOCKETS_NONE}
+{$IF not defined(SOCKETS_NONE) and not defined(SOCKETS_CURL)}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
       CallMessageEvent(Sock, true, ErrorGetting);
@@ -93,11 +152,6 @@ begin
       if UseFilters then
       begin
         FilterItem(Item);
-      end;
-
-      if Item.Title <> '' then
-      begin
-        FeedObj.DisplayItem(Item);
       end;
     end;
   end;

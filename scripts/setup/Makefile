@@ -5,7 +5,7 @@ LN ?= $(call programpath,ln)
 MAKEPACKAGE ?= $(call programpath,makepackage)
 
 ARCH ?= i386
-RPMSOURCEDIR ?= $(HOME)/rpmbuild
+RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
 
 include ../common.make

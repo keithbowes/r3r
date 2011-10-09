@@ -3,7 +3,7 @@ var
 
 const
   AssocPrefix = 'for:';
-  SectionPrefix = '\Software\R3R\';
+  SectionPrefix = '\Software\' + AppName + '\';
 
 function ReadAssocString(const Name: String): String;
 var
@@ -122,6 +122,7 @@ begin
       Reg.OpenKey(SectionPrefix + Section, true);
       Reg.WriteBool(Name, Setting);
       Reg.CloseKey;
+			ValueBoolean := Setting;
     end;
   end;
 end;
@@ -135,6 +136,7 @@ begin
       Reg.OpenKey(SectionPrefix + Section, true);
       Reg.WriteInteger(Name, Setting);
       Reg.CloseKey;
+			ValueInteger := Setting;
     end;
   end;
 end;
@@ -157,8 +159,10 @@ begin
       begin
         AName := Name;
         Delete(AName, 1, Length(AssocPrefix));
-        WriteAssocString(AName, Setting);
+        WriteAssocString(AName, Setting)
       end;
+
+			ValueString := Setting;
     end;
   end;
 end;

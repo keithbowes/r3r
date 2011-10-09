@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-20 23:04-0400\n"
-"PO-Revision-Date: 2011-09-20 23:04-0400\n"
+"POT-Creation-Date: 2011-10-08 13:29-0400\n"
+"PO-Revision-Date: 2011-10-08 13:34-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
 "Language: \n"
@@ -30,14 +30,14 @@ msgid "&Subscribe"
 msgstr "&Subscribe"
 
 #: ../desc.cpp:35
-msgid "&Play Podcast..."
-msgstr "&Play Podcast..."
+msgid "&View Enclosure..."
+msgstr "&View Enclosure..."
 
-#: ../events.cpp:206
+#: ../events.cpp:203
 msgid "About R3R"
 msgstr "About R3R"
 
-#: ../events.cpp:256
+#: ../events.cpp:253
 msgid "Open a file"
 msgstr "Open a file"
 
@@ -45,35 +45,25 @@ msgstr "Open a file"
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:97
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "An update is available."
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Date Created"
-
-#: ../feedlist.cpp:243
-msgid ""
-"\n"
-"\n"
-"[Disable messages (in your settings) to not see this again.]"
-msgstr ""
-"\n"
-"\n"
-"[Disable messages (in your settings) to not see this again.]"
 
 #: ../location.cpp:24
 msgid "Go"
@@ -151,7 +141,7 @@ msgstr "&Notify of updates"
 msgid "&Load subscriptions on startup"
 msgstr "&Load subscriptions on startup"
 
-#: ../settings-display.cpp:38
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Display"
 
@@ -200,7 +190,6 @@ msgid "&Browser"
 msgstr "&Browser"
 
 #: ../settings-programs.cpp:21 ../settings-programs.cpp:31
-#: ../settings-programs.cpp:41
 msgid "&Browse..."
 msgstr "&Browse..."
 
@@ -209,10 +198,6 @@ msgid "&Mail Client"
 msgstr "&Mail Client"
 
 #: ../settings-programs.cpp:35
-msgid "Media &Player"
-msgstr "Media &Player"
-
-#: ../settings-programs.cpp:45
 msgid "Programs"
 msgstr "Programs"
 

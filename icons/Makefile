@@ -1,6 +1,7 @@
 include ../scripts/common.make
 
 WINDRES ?= $(call programpath,windres)
+WINDRESFLAGS  ?= -O coff
 
 all: r3r.ico r3r.res
 
@@ -8,7 +9,7 @@ r3r.ico: r3r.png
 	-png2ico $@ $<
 
 r3r.res: r3r.rc
-	-$(WINDRES) -i $< -o $@
+	-$(WINDRES) $(WINDRESFLAGS) -i $< -o $@
 
 clean:
 	$(DEL) r3r.ico r3r.res

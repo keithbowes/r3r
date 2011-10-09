@@ -1,7 +1,6 @@
 ; vim:nospell
 [Setup]
 AllowNoIcons=yes
-AlwaysRestart=yes
 AppName=R3R
 AppPublisher=Keith Bowes
 AppPublisherURL=http://sourceforge.net/users/zooplah
@@ -50,6 +49,11 @@ Source: "src/utils/opml/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES";
 Source: "src/ui/tui/docs/*.html";  DestDir: "{app}\share\r3r\docs"
 Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"
 
+Source: "scripts/setup/is/LEERME"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/LEGUMIN"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/LESENMICH"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/README"; DestDir: "{app}\share\r3r\docs"
+
 [Icons]
 Name: "{userdesktop}\R3R (TUI)"; FileName: "{app}\bin\r3r-tui.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
 Name: "{userdesktop}\R3R (GUI)"; FileName: "{app}\bin\r3r-wx.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
@@ -69,8 +73,21 @@ en.CreateDesktopIcons=Create &desktop icons
 eo.CreateDesktopIcons= Krei &labortablajn piktogramojn
 es.CreateDesktopIcons=Crear pictogramas de &escritorio
 
+de.readme=LESENMICH
+en.readme=README
+eo.readme=LEGUMIN
+es.readme=LEERME
+
+de.viewreadme=Die Datei LESENMICH sehen
+en.viewreadme=View the README file
+eo.viewreadme=Vidi la dosieron LEGUMIN
+es.viewreadme=Ver el archivo LEERME
+
 [Registry]
 Root: HKCU; SubKey: "Environment"; ValueType: string; ValueName: "R3R_INSTALLED_PREFIX"; ValueData: "{app}"; Flags: uninsdeletevalue
 Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
 Root: HKCU; SubKey: "Software\R3R\Display"; ValueType: string; ValueName: "display-encoding"; ValueData: "ISO-8859-1"; Flags: createvalueifdoesntexist
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"
+
+[Run]
+FileName: "{app}\share\r3r\docs\{cm:readme}"; Description: "{cm:viewreadme}"; Verb: "open"; Flags: postinstall shellexec

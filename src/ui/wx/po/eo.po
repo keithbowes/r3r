@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-20 23:04-0400\n"
-"PO-Revision-Date: 2011-09-20 23:04-0400\n"
+"POT-Creation-Date: 2011-10-08 13:29-0400\n"
+"PO-Revision-Date: 2011-10-08 13:34-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "Language: \n"
@@ -30,14 +30,14 @@ msgid "&Subscribe"
 msgstr "&Aboni"
 
 #: ../desc.cpp:35
-msgid "&Play Podcast..."
-msgstr "&Legi podkaston..."
+msgid "&View Enclosure..."
+msgstr "&Vidi la emetaĵon..."
 
-#: ../events.cpp:206
+#: ../events.cpp:203
 msgid "About R3R"
 msgstr "Pri R3R"
 
-#: ../events.cpp:256
+#: ../events.cpp:253
 msgid "Open a file"
 msgstr "Malfermi dosieron"
 
@@ -45,35 +45,25 @@ msgstr "Malfermi dosieron"
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:97
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "Promocio haveblas."
 
-#: ../feedlist.cpp:112
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:115
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:118
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:121
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Dato kreita"
-
-#: ../feedlist.cpp:243
-msgid ""
-"\n"
-"\n"
-"[Disable messages (in your settings) to not see this again.]"
-msgstr ""
-"\n"
-"\n"
-"[Malaktivigi mesaĝojn (en la agordo) por ne plu vidi ĉi tion.]"
 
 #: ../location.cpp:24
 msgid "Go"
@@ -151,7 +141,7 @@ msgstr "&Sciigi pri promocioj min"
 msgid "&Load subscriptions on startup"
 msgstr "&Ŝargi abonojn je lanĉo"
 
-#: ../settings-display.cpp:38
+#: ../settings-display.cpp:37
 msgid "Display"
 msgstr "Montro"
 
@@ -200,7 +190,6 @@ msgid "&Browser"
 msgstr "&TTT-legilo"
 
 #: ../settings-programs.cpp:21 ../settings-programs.cpp:31
-#: ../settings-programs.cpp:41
 msgid "&Browse..."
 msgstr "&Foliumi..."
 
@@ -209,10 +198,6 @@ msgid "&Mail Client"
 msgstr "&Retpoŝtilo"
 
 #: ../settings-programs.cpp:35
-msgid "Media &Player"
-msgstr "&Plurmedia legilo"
-
-#: ../settings-programs.cpp:45
 msgid "Programs"
 msgstr "Programoj"
 

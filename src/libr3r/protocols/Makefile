@@ -1,7 +1,9 @@
 UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
 
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
+ifneq ($(DEFS_SOCKETS),SOCKETS_CURL)
 REMOTE_PROTOCOLS=headers http
+endif
 endif
 
 UNITS = rsock localfile $(REMOTE_PROTOCOLS)

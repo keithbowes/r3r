@@ -10,5 +10,6 @@
 #include <wx/listbase.h>
 #include <wx/listctrl.h>
 #include <wx/listimpl.cpp>
+#include <wx/mimetype.h>
 #include <wx/treebook.h>
 #endif /* WX_PRECOMP */

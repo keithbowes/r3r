@@ -57,6 +57,7 @@ begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteBool(Section, Name, Setting);
+			ValueBoolean := Setting;
     end;
   end;
 end;
@@ -68,6 +69,7 @@ begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteInteger(Section, Name, Setting);
+			ValueInteger := Setting;
     end;
   end;
 end;
@@ -79,6 +81,7 @@ begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteString(Section, Name, Setting);
+			ValueString := Setting;
     end;
   end;
 end;

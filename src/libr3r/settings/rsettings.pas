@@ -68,9 +68,6 @@ uses
 {$IFDEF __GPC__}
   ,SysUtils
 {$ELSE}
-{$IFDEF SETTINGS_BIN}
-	, SysUtils
-{$ENDIF SETTINGS_BIN}
 {$ENDIF __GPC__}
 
 {$IFDEF SETTINGS_INI}
@@ -82,16 +79,12 @@ uses
 {$ENDIF}
   
 {$IFDEF SETTINGS_REG}
-  , Registry
+  , Info, Registry
 {$ENDIF}
   
 {$IFDEF SETTINGS_TAB}
   , TabFiles
 {$ENDIF};
-
-{$IFDEF SETTINGS_BIN}
-  {$INCLUDE "binsettings.inc"}
-{$ENDIF}
 
 {$IFDEF SETTINGS_INI}
   {$INCLUDE "inisettings.inc"}
@@ -258,7 +251,6 @@ begin
 
   CheckString('for:http', 'Programs', Cap2Doze(mc^.GetProg('text/html')), DescBrowser);
   CheckString('for:mailto', 'Programs', '', DescMail);
-  CheckString('for:.ogg', 'Programs', Cap2Doze(mc^.GetProg('audio/ogg')), DescMedia);
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
   SetProp('installed-prefix', StrToPChar(GetString(IndexOf('installed-prefix'))));

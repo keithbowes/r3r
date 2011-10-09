@@ -299,7 +299,11 @@ var
 begin
   FIndirectHost := Host;
 
-  if Port <> '80' then
+  if (Port <> '80')
+{$IFDEF USE_SSL}
+  and (Port <> '443')
+{$ENDIF}
+  then
   begin
     FIndirectHost := FIndirectHost + ':' + Port;
   end;
@@ -388,8 +392,7 @@ var
   FullPath: String;
 begin
   FullPath := FIndirectHost + FPath;
-  FullPath := StringReplace(FullPath, '/', '_', [rfReplaceAll]);
-  FullPath := StringReplace(FullPath, '?', '__', [rfReplaceAll]);
+  FullPath := CacheEncode(FullPath);
 
   Cache := CreateCache(FullPath);
   Cache.Info^.CacheParam := '';

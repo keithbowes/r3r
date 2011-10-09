@@ -56,8 +56,10 @@ ifdef inUnix
 endif
 endif
 else
-ifneq ($(DEFS_SOCKETS), SOCKETS_NONE)
+ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
+ifneq ($(DEFS_SOCKETS),SOCKETS_CURL)
 	$(error Unsupported sockets library)
+endif
 endif
 endif
 endif
@@ -77,18 +79,8 @@ ifeq ($(R3R_UI),wx)
 	@$(ECHO) $(call checkprog,$(notdir $(CXX)))
 	@$(ECHO) $(call checkprog,wx-config)
 else
-ifeq ($(R3R_UI),classic)
-	$(warning This UI is NOT maintained)
-	@$(ECHO) $(call checkunit,LResources)
-else
-ifeq ($(R3R_UI),tv)
-	$(warning This UI is NOT maintained)
-	@$(ECHO) $(call checkunit,FvConsts)
-else
 ifneq ($(R3R_UI),html)
 	$(error Unknown UI)
-endif
-endif
 endif
 endif
 endif
@@ -203,10 +195,12 @@ dist-src: clean
 	$(DELTREE) ../r3r-$(VERSION)
 	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.$(GZIPEXT) > $(CSUMOUT)
 
+dist dist-autopackage dist-deb dist-rpm dist-slackware: DESTDIR=/usr
+
+dist dist-autopackage dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
+
 dist-autopackage: dist-build
 	cd scripts/setup && $(MAKE) dist-autopackage
-
-dist-deb dist-rpm dist-slackware: DESTDIR = /usr
 
 dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb

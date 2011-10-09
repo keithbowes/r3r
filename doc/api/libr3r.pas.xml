@@ -8,35 +8,24 @@
       <descr>
         The higher-level part of libr3r.  This is a bridge between the feed processor and front-end user interfaces (UIs).
       </descr>
-      <element name="TParsedEvent">
-        <short>Parsed Event</short>
-        <descr>
-          The type of the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  Don't use directly.
-        </descr>
-      </element>
       <element name="TFeedItem">
         <short>Information about the concerned feed item.</short>
         <descr>
           This is the same as FeedItem.TFeedItem.  The only reason for it is so that this unit is all you need to include in your uses clause (the less back-end stuff in the front end, the better).
-          Only use with the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event.  In this context, you won't get access violations.
+          Only use with the <link id="TItemCallback">OnItemParsed</link> event.  In this context, you won't get access violations.
           &lt;rant&gt;If only units had the exportation of imported symbols, like Extended Pascal modules do, this wouldn't be needed at all.&lt;/rant&gt;
         </descr>
-        <errors>
-          Accessing an out-of-bounds element in the field "Links" will raise an exception.  Specifically, don't access even the first element until you can verify that there is one.  The list is only guaranteed to have been allocated for the OnItemParsed event.  For best results, use only in a for loop.
-        </errors>
+      </element>
+      <element name="TItemCallback">
+        <descr>Callback function for parsed items.</descr>
       </element>
       <element name="TLibR3R">
         <descr>
           A simple high-level bridge class, which wraps the complicated back-end, making it easier and safer to create new user interfaces.  The general procedure for using the class in a front end: <link id="TLibR3R.Create">Create</link>
-          the class, set the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event to a class's method (or override the <link id="TLibR3R.DisplayItem">DisplayItem</link> method),
+          the class, set the <link id="TLibR3R.RegisterItemCallback">item callback</link>,
           tell the back-end to <link id="TLibR3R.Parse">parse</link> the feed, and finally,
           <link id="TLibR3R.Destroy">free</link> the back-end.
           See the existing front ends for examples.
-        </descr>
-      </element>
-      <element name="TLibR3R.DoParseItem">
-        <descr>
-          The procedure which calls the method to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points, when conditions permit it.
         </descr>
       </element>
       <element name="TLibR3R.Create">
@@ -51,7 +40,7 @@
       </element>
       <element name="TLibR3R.Parse">
         <descr>
-          Parses the feed at the connected address, and calls (indirectly via <link id="TLibR3R.DoParseItem">DoParseItem</link>) the callback to which the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event points each time an entire feed item has been parsed.
+          Parses the feed at the connected address, and calls the item callback.
         </descr>
       </element>
       <element name="TLibR3R.RetrieveFeed">
@@ -64,24 +53,9 @@
           A virtual method that must be overridden and given code which will handle any messages LibR3R generates.  It's the same as setting the <link id="TLibR3R.OnMessage">OnMessage</link> event.
         </descr>
       </element>
-      <element name="TLibR3R.DisplayItem">
-        <descr>
-          A virtual method that must be overriden and given code which will display the feed item given from the back end in a way suitable for the current UI.  It's the same as setting the <link id="TLibR3R.OnItemParsed">OnItemParsed</link> event. A newer (better) way to do it is through the <link id="TLibR3R.RegisterItemCallback">RegisterItemCallback</link> method.
-        </descr>
-      </element>
       <element name="TLibR3R.RegisterItemCallback">
         <descr>
-          Registers a callback to process items.  A replacement for the deprecated <link id="TLibR3R.DisplayItem">DisplayItem</link> virtual method and <link id="TLibR3R.OnItemParsed">OnItemParsed</link> method.
-        </descr>
-      </element>
-      <element name="TLibR3R.OnItemParsed">
-        <descr>
-          An event, which points to a class' method that is to be called whenever a feed item has been <link id="TLibR3R.Parse">parse</link>d.  Its one parameter is of type <link id="TFeedItem">TFeedItem</link>.
-        </descr>
-      </element>
-      <element name="TLibR3R.OnMessage">
-        <descr>
-          An event, which points to a class' method that is to be called whenever the backend needs to send a message to the UI.  If an error occurred, the second parameter will be true and the UI can act accordingly.
+          Registers a callback to process items.
         </descr>
       </element>
       <element name="Settings">

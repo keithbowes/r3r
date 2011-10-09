@@ -100,9 +100,13 @@ begin
     begin
       libr3r_get_item_field := StrToPChar(Link);
     end
-    else if FieldName = 'podcast' then
+    else if FieldName = 'enclosure-url' then
     begin
-      libr3r_get_item_field := StrToPChar(GetPodcast);
+      libr3r_get_item_field := StrToPChar(Enclosure.URL);
+    end
+    else if FieldName = 'enclosure-type' then
+    begin
+      libr3r_get_item_field := StrToPChar(Enclosure.MimeType);
     end
     else if FieldName = 'description' then
     begin
