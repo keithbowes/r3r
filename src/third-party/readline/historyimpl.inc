@@ -1,5 +1,3 @@
-uses
-	Strings;
 
   function HISTENT_BYTES(hs : PHIST_ENTRY) : longint;
   begin

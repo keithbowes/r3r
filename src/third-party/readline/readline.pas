@@ -4,6 +4,11 @@ interface
 {$calling cdecl}
 {$mode objfpc}
 
+{$IFDEF __GPC__}
+uses
+  Strings;
+{$ENDIF}
+
 {
   Automatically converted by H2Pas 1.0.0 from readline.h
   The following command line parameters were used:

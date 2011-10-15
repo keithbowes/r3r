@@ -124,8 +124,14 @@ begin
       s := StrPas(outstr);
       FreeMem(outstr);
     end;
+{$IFDEF USE_LIBICONV}
+    iconv_close(cd);
   end;
+{$ELSE}
+  end;
+
   iconv_close(cd);
+{$ENDIF}
 {$ENDIF}
 end;
 

@@ -2,8 +2,14 @@
 unit History;
 
 {$calling cdecl}
+{$mode objfpc}
 
 interface
+
+{$IFDEF __GPC__}
+uses
+	Strings;
+{$ENDIF}
 
 {$INCLUDE "rltypedefs.inc"}
 {$ENDIF}
@@ -236,6 +242,7 @@ interface
 
 {$IFNDEF HISTORY_INCLUDE}
 implementation
+
 {$INCLUDE "historyimpl.inc"}
 
 end.

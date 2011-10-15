@@ -5,7 +5,7 @@ interface
 uses
   LibR3R, RSock, RMessage
 {$IFDEF SOCKETS_CURL}
-  , DOS
+  , DOS, Info
 {$ENDIF}
 
 {$IFDEF SOCKETS_SYNAPSE}
@@ -76,7 +76,7 @@ begin
   end;
 
   SwapVectors;
-  Exec(FSearch('curl', GetEnv('PATH')), '-ks -o ' + Resource2 + ' ' + OrigResource);
+  Exec(FSearch('curl', GetEnv('PATH')), '-ks -A "' + UserAgent + '" -o "' + Resource2 + '" "' + OrigResource + '"');
   SwapVectors;
 
   if DosExitCode <> 0 then

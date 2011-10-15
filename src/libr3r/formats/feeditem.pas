@@ -176,6 +176,7 @@ var
   inbytesleft, outbytesleft: size_t;
   outbuf, outstr: PChar;
 begin
+  if FieldValue = '' then Exit;
 {$IFNDEF __GPC__}
   inbuf := PChar(FieldValue);
 {$ELSE}
@@ -221,8 +222,15 @@ begin
     TranslateField(LastModified);
     TranslateField(Subject);
     TranslateField(Title);
+
+{$IFDEF USE_LIBICONV}
+    iconv_close(cd);
   end;
-  iconv_close(cd);
+{$ELSE}
+  end;
+
+  iconv_close(cd)
+{$ENDIF}
 {$ENDIF}
 end;
 
