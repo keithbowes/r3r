@@ -71,6 +71,9 @@ begin
           Item.Clear;
           ShouldShow := false;
         end;
+
+        { Needed so that feed items will get displayed before they're cached }
+        Item.Id := '';
       end;
     end;
   end;

@@ -49,10 +49,10 @@ Source: "src/utils/opml/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES";
 Source: "src/ui/tui/docs/*.html";  DestDir: "{app}\share\r3r\docs"
 Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"
 
-Source: "scripts/setup/is/LEERME"; DestDir: "{app}\share\r3r\docs"
-Source: "scripts/setup/is/LEGUMIN"; DestDir: "{app}\share\r3r\docs"
-Source: "scripts/setup/is/LESENMICH"; DestDir: "{app}\share\r3r\docs"
-Source: "scripts/setup/is/README"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/LEERME.TXT"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/LEGUMIN.TXT"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/LESENMICH.TXT"; DestDir: "{app}\share\r3r\docs"
+Source: "scripts/setup/is/README.TXT"; DestDir: "{app}\share\r3r\docs"
 
 [Icons]
 Name: "{userdesktop}\R3R (TUI)"; FileName: "{app}\bin\r3r-tui.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
@@ -73,15 +73,15 @@ en.CreateDesktopIcons=Create &desktop icons
 eo.CreateDesktopIcons= Krei &labortablajn piktogramojn
 es.CreateDesktopIcons=Crear pictogramas de &escritorio
 
-de.readme=LESENMICH
-en.readme=README
-eo.readme=LEGUMIN
-es.readme=LEERME
+de.readme=LESENMICH.TXT
+en.readme=README.TXT
+eo.readme=LEGUMIN.TXT
+es.readme=LEERME.TXT
 
-de.viewreadme=Die Datei LESENMICH sehen
+de.viewreadme=Die LESENMICH-Datei sehen
 en.viewreadme=View the README file
-eo.viewreadme=Vidi la dosieron LEGUMIN
-es.viewreadme=Ver el archivo LEERME
+eo.viewreadme=Vidi la LEGUMIN-dosieron
+es.viewreadme=Ver el archivo de LEERME
 
 [Registry]
 Root: HKCU; SubKey: "Environment"; ValueType: string; ValueName: "R3R_INSTALLED_PREFIX"; ValueData: "{app}"; Flags: uninsdeletevalue

@@ -73,7 +73,7 @@ begin
     (AFeed as TDCFeed).Free;
   end;
 
-  Item.Finished := ((GetCurrentElement.Name = 'entry') and ((GetPreviousElement.Name = 'entry') or (FLeftFeed))) or (Line = SockEof);
+  Item.Finished := Line = SockEof;
   
   if Item.Finished and FLeftFeed then
   begin

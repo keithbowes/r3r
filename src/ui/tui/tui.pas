@@ -44,7 +44,7 @@ type
     procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
-    procedure QueryItemNumber;
+    function QueryItemNumber: Boolean;
     procedure GoItem;
     procedure OpenBrowser(Link: String);
     procedure OpenEmail(Address: String);
@@ -224,8 +224,10 @@ begin
     end
     else if KeyChar = SearchKey then
     begin
-      QueryItemNumber;
-      ScrollTo(FCurrentItem);
+      if QueryItemNumber then
+      begin
+        ScrollTo(FCurrentItem);
+      end;
     end
     else if KeyChar = DonateKey then
     begin
@@ -469,7 +471,7 @@ begin
   end;
 end;
 
-procedure TTui.QueryItemNumber;
+function TTui.QueryItemNumber: Boolean;
 var
   ErrPos: word;
   iNo: cardinal;
@@ -483,13 +485,15 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if ErrPos = 0 then
+  if (ErrPos = 0) and ((iNo > 0) and (iNo <= FItems.Count)) then
   begin
     FCurrentItem := iNo;
+    QueryItemNumber := true;
   end
   else
   begin
-    TuiWriteLn(InvalidNumber);
+    TuiWrite(InvalidNumber);
+    QueryItemNumber := false;
   end;
 end;
 
