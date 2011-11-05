@@ -75,7 +75,7 @@ begin
 
   Item.Finished := Line = SockEof;
   
-  if Item.Finished and FLeftFeed then
+  if Item.Finished then
   begin
     CallItemCallback(Item);
     FLeftFeed := false;
@@ -247,8 +247,14 @@ begin
       FLeftFeed := true;
     end;
 
+    if FLeftFeed then
+    begin
+      Id := '';
+    end;
+
     if (Name = 'entry') then
     begin
+      FLeftFeed := false;
       CallItemCallBack(CurrentItem);
 
       if (Id <> '') and Assigned(CurrentCache) then
