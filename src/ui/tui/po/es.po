@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2011-10-08 13:33-0400\n"
+"PO-Revision-Date: 2011-11-06 13:53-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -108,7 +108,7 @@ msgstr "La dirección del mensaje electrónico: "
 
 #: tuistrings:numsym
 msgid "#"
-msgstr "N°"
+msgstr "Nº"
 
 #: tuistrings:falsestring
 msgid "FALSE"
