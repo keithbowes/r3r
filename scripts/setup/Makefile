@@ -14,8 +14,6 @@ curdir = $(PWD)
 all:
 	@echo "You shouldn't run this Makefile directly"
 
-dist-autopackage: r3r-$(VERSION).x86.package
-
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
 	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(curdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
@@ -44,18 +42,6 @@ checkinstall:
 clean: distclean
 
 distclean:
-	$(DEL) *.package autopackage/default.apspec is/r3r.iss is/setup.exe
-	$(DEL) r3r.xml* *.meta
+	$(DEL) is/r3r.iss is/setup.exe
 	$(DEL) ../../description-pak
 	$(DELTREE) ../../doc-pak
-
-r3r-$(VERSION).x86.package: autopackage/default.apspec
-	$(MAKEPACKAGE)
-	$(MOVE) r3r-$(VERSION).x86.package \
-		../../..
-
-autopackage/default.apspec: autopackage/_default.apspec
-	$(SED) \
-	       	-e 's/@VERSION@/$(VERSION)/g' \
-      		autopackage/_default.apspec > \
-		autopackage/default.apspec

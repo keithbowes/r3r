@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-10-08 13:29-0400\n"
-"PO-Revision-Date: 2011-10-08 13:34-0400\n"
+"PO-Revision-Date: 2011-12-02 23:03-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "Language: \n"
@@ -139,7 +139,7 @@ msgstr "&Sciigi pri promocioj min"
 
 #: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
-msgstr "&Ŝargi abonojn je lanĉo"
+msgstr "&Ŝargi abonojn dum plenumiĝo"
 
 #: ../settings-display.cpp:37
 msgid "Display"

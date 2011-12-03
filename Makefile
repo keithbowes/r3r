@@ -1,23 +1,8 @@
-USE_PAX ?= 1
-USE_XZ ?= 1
+PAX = $(call programpath,pax)
+PAXFLAGS = -w -x ustar
 
-ifneq ($(USE_PAX),0)
-	PAX = $(call programpath,pax)
-	PAXFLAGS = -w -x ustar
-else
-	PAX = $(call programpath,tar)
-	PAXFLAGS = -cf -
-endif
-
-ifneq ($(USE_XZ),0)
-GZIP = $(call programpath,xz)
-GZIPFLAGS = -c
-GZIPEXT = xz
-else
-GZIP = $(call programpath,gzip)
-GZIPFLAGS ?= -cf
-GZIPEXT = gz
-endif
+XZ = $(call programpath,xz)
+XZFLAGS = -c
 
 CSUM ?= sha256sum
 CSUMOPTS ?=
@@ -142,7 +127,7 @@ docs:
 	cd $(srcdir)/doc && $(MAKE)
 
 dist-docs: docs
-	$(PAX) $(PAXFLAGS) doc/api | $(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-api.tar.$(GZIPEXT)
+	$(PAX) $(PAXFLAGS) doc/api | $(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-api.tar.xz
 
 
 # Uninstallation rules
@@ -183,7 +168,7 @@ endif
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/wx/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/wx/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_wx.mo;)
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
-		$(GZIP) $(GZIPFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.$(GZIPEXT)
+		$(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.xz
 	$(DELTREE) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
 
 dist-src: clean
@@ -191,16 +176,13 @@ dist-src: clean
 	-$(MKDIR) ../r3r-$(VERSION)
 	-$(COPY) -rf * ../r3r-$(VERSION)
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
-		$(GZIP) $(GZIPFLAGS) > r3r-$(VERSION)-src.tar.$(GZIPEXT)
+		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
 	$(DELTREE) ../r3r-$(VERSION)
-	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.$(GZIPEXT) > $(CSUMOUT)
+	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > $(CSUMOUT)
 
-dist dist-autopackage dist-deb dist-rpm dist-slackware: DESTDIR=/usr
+dist dist-deb dist-rpm dist-slackware: DESTDIR=/usr
 
-dist dist-autopackage dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
-
-dist-autopackage: dist-build
-	cd scripts/setup && $(MAKE) dist-autopackage
+dist dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
 
 dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb
