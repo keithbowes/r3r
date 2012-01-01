@@ -1,0 +1,71 @@
+.TH R3R 1 "2011-12-25"
+
+.SH NAME
+  r3r - Ein einfacher Feedleser
+
+.SH ÜBERSICHT
+
+.P
+r3r [URL1 [URL2 [...]]]
+
+.SH BESCHREIBUNG
+.P
+r3r nimmt ein HTTP-URL oder lokale Datei und liest sie. Man kann mehr als eins URL geben an der Komandlinie. Außerdem man kann die Abonnements-Datei benutzen um sichere Feeds zu laden auf Start.
+
+.SS Datei-Formaten
+
+.P
+R3R versteht aktuell die Formaten RSS (0.9 zu 2.0), RSS 3.0, Atom und ESF. Es werde der Format herausnehmen aus dem HTTP-Type oder dem Dateiendung. Man kann die Erraten des Types aktivieren, um ein HTTP-URL zu analysieren für bessere Resultaten.
+
+.P
+Typen:
+ application/rdf+xml, application/rss+xml:  RSS (0.9 zu 2.0)
+ application/atom+xml: Atom
+ text/x-rss, text/plain: RSS 3.0
+ esf/text: ESF
+
+.P
+Dateiendung:
+ .rss, .rdf: RSS (0.9 zu 2.0)
+ .r3, .rss3: RSS 3.0
+ .atom: Atom
+ .esf: ESF
+
+.SH DATEI
+
+.P
+ config/r3r/r3r.ini
+   Einstellungen-Datei
+ data/r3r/history
+   Geschichte des besuchten URLs.
+ data/r3r/subscriptions.txt
+   URLs, die Sie Abonnements haben.
+ 
+ 
+.SS Filtere
+
+.P
+Man kann Filtere erstellen im Verzeichnis data. Sie haben den Namen <Feld>.filter, mit <Feld> wird title (Titel), subject (Thema), author (Autor), usw. Die Datei enthaltet Reguläre Ausdrucken zu blocken, eine für jede Linie.
+
+.SH TUI
+
+.P
+Die TUI ist die meiste reife der Benutzeroberfläche (die ich die meiste benutze). Sie zeige eine Liste der Eintragen in dem linken Rahmen und wichtige Informationen über die Eintrag in dem rechten Rahmen. Man kann rollen unter den Eintragen mit den gewöhnlichen Tasten. Schieben h in dem Programm für mehre Hilfe über die Tasten.
+
+.SH GUI
+
+.P
+Die GUI nur zeigt, wie die Pascal-Bibliothek benutzt ist in einem C++-Programm, aber man kann es benutzen. Sie zeigt eine Liste der Eintragen in einer Liste. Wählen eine Eintrag wird seine Beschreibung in einem Browser. Man kann die Abonnements kontrollieren in die Einstellungen-Dialog.
+
+.SH HTML
+
+.P
+Man kann die HTML-UI auch benutzen. Rufend sie, sie schriebt eine HTML-Webseite zu Standardeingabe. Man kann sie legen in einer Datei. An einem Webserver, man kann das rufen um Feeds zu sehen aus der ganzen Welt.
+
+.SH "Dokumentation für Entwickler"
+
+.P
+Bitte suchen in Verzeichnis in ./doc des Quelltexts für Informationen über Zusammenbauen, Entwicklung, Schreibend einigen Oberflächen, usw.
+
+.SH AUTOR
+  Keith Bowes

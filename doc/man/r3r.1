@@ -1,0 +1,71 @@
+.TH R3R 1 "2011-12-24"
+
+.SH NAME
+  r3r - A simple feed reader
+
+.SH SYNOPSIS
+
+.P
+r3r [URL1 [URL2 [...]]]
+
+.SH DESCRIPTION
+.P
+r3r takes an HTTP URL or a local file and reads it.  Multiple URLs can be specified on the command line.  Additionally, the subscriptions file can be used to load certain feeds on every startup.
+
+.SS "File Formats"
+
+.P
+R3R currently supports the formats RSS (0.9—2.0), RSS 3.0, Atom, and ESF.  It will extract the format from the HTTP content type or the file extension.  Content-type guessing can be enabled, which will analyze HTTP URLs for hopefully better results.
+
+.P
+Content types:
+ application/rdf+xml, application/rss+xml:  RSS (0.9—2.0)
+ application/atom+xml: Atom
+ text/x-rss, text/plain: RSS 3.0
+ esf/text: ESF
+
+.P
+File extensions:
+ .rss, .rdf: RSS (0.9—2.0)
+ .r3, .rss3: RSS 3.0
+ .atom: Atom
+ .esf: ESF
+
+.SH FILES
+
+.P
+ config/r3r/r3r.ini
+   Settings file
+ data/r3r/history
+   History of visited URLs.
+ data/r3r/subscriptions.txt
+   URLs to which you've subscribed.
+ 
+ 
+.SS Filters
+
+.P
+Filters can be created in the data directory.  They have the name <field>.filter, where <field> can be title, subject, author, etc.  The file will contain regular expressions to block, one on each line.
+
+.SH TUI
+
+.P
+The TUI is the most mature of the user interfaces (the one I use most often).  It displays a list of items in the left pane and important data about it in the right pane.  You can scroll through the items via customary keys.  Press h within the program for more help about the keys.
+
+.SH GUI
+
+.P
+The GUI is nothing but a technology demonstration of using the Pascal shared library from a C++ program (it should be usable also from other programming languages), but it's usable.  It displays a list of items in a list view.  Selecting an item, will display its contents in a web widget.  Subscriptions can be managed from the settings dialog.
+
+.SH HTML
+
+.P
+The HTML UI is also usable.  When called, it writes an HTML web page to standard output.  That output can be directed to a file.  On a web server, this can easily be invoked for remote access of your favorite feeds.
+
+.SH "Developer Documentation"
+
+.P
+Please look in subdirectories in ./doc of the source distribution for pertinent information about building, development, writing your own UI, etc.
+
+.SH AUTHOR
+  Keith Bowes

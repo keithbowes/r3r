@@ -1,0 +1,71 @@
+.TH R3R 1 "2011-12-24"
+
+.SH NOMO
+  r3r - Facila fluo-legilo
+
+.SH RESUMO
+
+.P
+r3r [URL1 [URL2 [...]]]
+
+.SH PRESKRIBO
+.P
+r3r prenas HTTP-an URL-on aux lokan dosieron kaj legas gxin. Pluraj URL-oj estas specifeblaj cxe la komandlinio. Krome la abono-dosiero estas uzebla por sxargi iujn fluojn dum plenumigxo.
+
+.SS "Dosieraj formatoj"
+
+.P
+R3R aktuale komprenas la fluo-formatojn RSS (0.9 gxis 2.0), RSS 3.0, Atom kaj ESF. Gxi elprenas la formaton de la dosiero laux la HTTP-a enhavtipo aux la dosiersufikso. Vi povas aktivigi enhavtipan divenadon, kiu analizos HTTP-ajn URL-ojn por pli trafaj rezultoj.
+
+.P
+Enhavtipoj:
+ application/rdf+xml, application/rss+xml. RSS (0.9 gxis 2.0)
+ application/atom+xml: Atom
+ text/x-rss, text/plain: RSS 3.0
+ esf/text: ESF
+
+.P
+Dosiersufiksoj:
+ .rss, .rdf: RSS (0.9 gxis 2.0)
+ .r3, .rss3: RSS 3.0
+ .atom: Atom
+ .esf: ESF
+
+.SH DOSIEROJ
+
+.P
+ config/r3r/r3r.ini
+   Agordo-dosiero.
+ data/r3r/history
+   Historio de vizititaj URL-oj.
+ data/r3r/subscriptions.txt
+    URL-oj al kiuj vi abonas.
+ 
+ 
+.SS Filtriloj
+
+.P
+Filtriloj estas kreeblaj en data/r3r. Ili havas la nomon <kampo>.filter, dum <kampo> estas title (titolo), description (priskribo), author (skribinto) ktp. La dosiero enhavus regulesprimojn por barindaj kampaj valoroj, unu cxe cxiu linio.
+
+.SH TUI
+
+.P
+TUI estas la plej maturigxinta fasado (kia mi plej uzas). Gxi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
+
+.SH GUI
+
+.P
+GUI nur montras, kiel uzi la dinamikan bibliotekon en aliaj programlingvoj. Gxi montras liston de eroj en lista fenestrajxo. Elekti eron montras gxian priskribon en aparta fenestrajxo. Vi povas administri abonojn en la agordo-dialogujo.
+
+.SH HTML
+
+.P
+La HTML-fasado ankaux uzeblas. Dum plenumigxo gxi eligas HTML-tekston al la norma eligo. Vi povas alidirekti tiun eligon al dosiero. En TTT-servilo, tiu estas oportuna por defora atingo de viaj plej sxatataj fluoj.
+
+.SH "Disvolvado-informoj"
+
+.P
+Bonvolu rigardi en la dosierujo ./doc de la fontoteksto por koncernaj dosieroj pri muntado, disvolvado, verkado de propraj fasadoj ktp.
+
+.SH VERKINTO
+  Keith Bowes

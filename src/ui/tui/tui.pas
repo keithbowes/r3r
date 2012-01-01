@@ -485,7 +485,7 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if (ErrPos = 0) and ((iNo > 0) and (iNo <= FItems.Count)) then
+  if (ErrPos = 0) and ((iNo > 0) and (iNo <= FItems^.Count)) then
   begin
     FCurrentItem := iNo;
     QueryItemNumber := true;
