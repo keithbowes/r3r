@@ -274,7 +274,12 @@ override COMPILER=FPC $(shell $(PC) -iW)
 PLATFORM=$(shell $(PC) -iTO)-$(shell $(PC) -iTP)
 
 DEFFLAG=-d
-PCFLAGS_BASE=-Mdelphi -Sh -WR -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
+PCFLAGS_BASE=-Mdelphi -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
+
+ifdef forWindows
+override PCFLAGS_BASE+=-WR
+endif
+
 DIRFLAG=-Fu
 ifdef DEBUG
 PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
