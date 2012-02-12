@@ -218,6 +218,8 @@ void GoBrowser(char * url)
   void * value;
   wxString browser, command, URL;
 
+	if (!url) return;
+
   index = 0;
   name = (char *) "for:http";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
