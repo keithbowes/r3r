@@ -457,11 +457,16 @@ var
   Line: String;
 
 function IsAtom: Boolean;
+<<<<<<< HEAD
 begin
+=======
+function IsAtom: Boolean;
+>>>>>>> a9a1141... Backported fixes from the trunk
   if Pos('atom', Line) <> 0 then
   begin
     ContentType := ftAtom;
   end;
+<<<<<<< HEAD
 
   IsAtom := ContentType = ftAtom;
 end;
@@ -470,6 +475,16 @@ function IsEsf: Boolean;
 begin
   if Pos('esf', Line) <> 0 then
   begin
+=======
+  end;
+  IsAtom := ContentType = ftAtom;
+end;
+end;
+function IsEsf: Boolean;
+begin
+  if Pos('esf', Line) <> 0 then
+  if Pos('esf', Line) <> 0 then
+>>>>>>> a9a1141... Backported fixes from the trunk
     ContentType := ftEsf;
   end;
 
@@ -483,14 +498,22 @@ begin
   b := (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0);
 
   if ContentType <> ftRss then
+<<<<<<< HEAD
   begin
+=======
+  if ContentType <> ftRss then
+>>>>>>> a9a1141... Backported fixes from the trunk
      b := b or ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0));
   end;
   
   b := b or (Pos('txt', Line) <> 0);
 
   if b then
+<<<<<<< HEAD
   begin
+=======
+  if b then
+>>>>>>> a9a1141... Backported fixes from the trunk
     ContentType := ftRss3;
   end;
 
@@ -499,9 +522,15 @@ end;
 
 function IsRss: Boolean;
 begin
+<<<<<<< HEAD
   if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
     (Pos('xml', Line) <> 0) then
   begin
+=======
+  if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
+  if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
+    (Pos('xml', Line) <> 0) then
+>>>>>>> a9a1141... Backported fixes from the trunk
     ContentType := ftRss;
   end;
 
@@ -540,8 +569,14 @@ begin
         IsRss;
     end;
     end;
+<<<<<<< HEAD
   end;
 
+=======
+    end;
+
+  GetType := ContentType;
+>>>>>>> a9a1141... Backported fixes from the trunk
   GetType := ContentType;
 end;
 
