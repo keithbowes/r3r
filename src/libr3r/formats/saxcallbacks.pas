@@ -1,6 +1,7 @@
 unit SaxCallbacks;
 
 {$CALLING cdecl}
+{$POINTERMATH ON}
 
 interface
 
