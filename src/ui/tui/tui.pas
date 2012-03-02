@@ -186,7 +186,7 @@ begin
 
   for FeedIndex := 1 to ParamCount do
   begin
-    RetrieveFeed(ParamStr(FeedIndex));
+   RetrieveFeed(ParamStr(FeedIndex));
   end;
 
   if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
@@ -485,7 +485,7 @@ begin
 
   Val(No, iNo, ErrPos);
 
-  if (ErrPos = 0) and ((iNo > 0) and (iNo <= FItems.Count)) then
+  if (ErrPos = 0) and ((iNo > 0) and (iNo <= FItems^.Count)) then
   begin
     FCurrentItem := iNo;
     QueryItemNumber := true;
@@ -595,38 +595,42 @@ var
   Browser, Tmp: String;
   Index: byte;
 begin
-  Browser := Settings.GetString(Settings.IndexOf('for:http'));
-  { Check for the default registry association }
-  if Pos('%1', Browser) <> 0 then
+  { Do nothing on empty links }
+  if Link <> '' then
   begin
-    { Check for the first command-line switch }
-    Index := Pos('-', Browser);
-    if Index = 0 then
+    Browser := Settings.GetString(Settings.IndexOf('for:http'));
+    { Check for the default registry association }
+    if Pos('%1', Browser) <> 0 then
     begin
-      Index := Pos('/', Browser);
+      { Check for the first command-line switch }
+      Index := Pos('-', Browser);
+      if Index = 0 then
+      begin
+        Index := Pos('/', Browser);
+      end;
+
+      if Index = 0 then
+      begin
+        Index := Pos('%1', Browser);
+      end;
+
+      Tmp := Copy(Browser, Index, Length(Browser) - Index + 1);
+      Browser := Copy(Browser, 1, Index - 2);
+
+      Link := StringReplace(Tmp, '%1', Link, [rfReplaceAll]);
     end;
 
-    if Index = 0 then
+    { Windows puts the path in quotes, which Exec() doesn't like }
+    if (Copy(Browser, 1, 1) = '"') and (Copy(Browser, Length(Browser), 1) = '"') then
     begin
-      Index := Pos('%1', Browser);
+      Browser := Copy(Browser, 2, Length(Browser) - 2);
     end;
 
-    Tmp := Copy(Browser, Index, Length(Browser) - Index + 1);
-    Browser := Copy(Browser, 1, Index - 2);
-
-    Link := StringReplace(Tmp, '%1', Link, [rfReplaceAll]);
-  end;
-
-  { Windows puts the path in quotes, which Exec() doesn't like }
-  if (Copy(Browser, 1, 1) = '"') and (Copy(Browser, Length(Browser), 1) = '"') then
-  begin
-    Browser := Copy(Browser, 2, Length(Browser) - 2);
-  end;
-
-  SwapVectors;
-  Exec(FSearch(Browser, GetEnv('PATH')), '"' + Link + '"');
-  SwapVectors;
-  Redraw;
+    SwapVectors;
+    Exec(FSearch(Browser, GetEnv('PATH')), '"' + Link + '"');
+    SwapVectors;
+    Redraw;
+  end
 end;
 
 procedure TTui.OpenEmail(Address: String);

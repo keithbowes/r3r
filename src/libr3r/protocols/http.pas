@@ -453,31 +453,95 @@ end;
 
 function THttpSock.GetType: TFeedType;
 var
+  ContentType: TFeedType;
   Line: String;
 function IsAtom: Boolean;
-  Line := LowerCase(FIndirectHost + FPath);
-  end;
-  GetType := Headers.ContentType;
-end;
+function IsAtom: Boolean;
   if Pos('atom', Line) <> 0 then
+  begin
+    ContentType := ftAtom;
+  end;
+  end;
+  IsAtom := ContentType = ftAtom;
+end;
+end;
+function IsEsf: Boolean;
+begin
   if Pos('esf', Line) <> 0 then
-    GetType := ftAtom;
-  end
-  else if Pos('esf', Line) <> 0 then
+  if Pos('esf', Line) <> 0 then
+    ContentType := ftEsf;
+  end;
+
+  IsEsf := ContentType = ftEsf;
+end;
+
+function IsRss3: Boolean;
+var
+  b: Boolean;
+begin
+  b := (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0);
+
   if ContentType <> ftRss then
-    GetType := ftEsf;
-  end
-  else if (Pos('rss3', Line) <> 0) or (Pos('r3', Line) <> 0) or
-    ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0)) or
-    (Pos('txt', Line) <> 0) then
+  if ContentType <> ftRss then
+     b := b or ((Pos('rss', Line) <> 0) and (Pos('3', Line) <> 0));
+  end;
+  
+  b := b or (Pos('txt', Line) <> 0);
+
   if b then
-    GetType := ftRss3;
-  end
-  else if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
+  if b then
+    ContentType := ftRss3;
+  end;
+
+  IsRss3 := ContentType = ftRss3;
+end;
+
+function IsRss: Boolean;
+begin
+  if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
   if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
     (Pos('xml', Line) <> 0) then
-    GetType := ftRss;
+    ContentType := ftRss;
+  end;
+
+  IsRss := ContentType = ftRss;
+end;
+
+begin
+  Line := LowerCase(FIndirectHost + FPath);
+  ContentType := Headers.ContentType;
+
+  case ContentType of
+    ftRss:
+    begin
+      if not IsAtom then
+      begin
+        IsRss3;
+      end;
     end;
+    ftUnknown:
+    begin
+      if not IsAtom then
+      begin
+        if not IsEsf then
+        begin
+          if not IsRss3 then
+          begin
+            IsRss;
+          end;
+        end;
+      end;
+    end;
+    ftXml:
+    begin
+      if not IsAtom then
+      begin
+        IsRss;
+    end;
+    end;
+    end;
+
+  GetType := ContentType;
   GetType := ContentType;
 end;
 
