@@ -1,3 +1,4 @@
-For the latest sources of the 1.2.x series, check out from the 1.2
-branch of CVS:
-cvs -z3 -d:pserver:anonymous@r3r.cvs.sourceforge.net:/cvsroot/r3r co -r R3R_1_2_x r3r
+For the latest sources of the 1.2.x series, check out of git:
+git clone git://r3r.git.sourceforge.net/gitroot/r3r/r3r
+cd r3r
+git checkout --track -b 1.2-branch origin/1.2-branch
