@@ -16,7 +16,7 @@ index.html: libr3r.pas.xml ../../src/libr3r/formats/feeditem.pas \
 
 clean:
 	$(RM) $(wildcard *.html)
-	$(DELTREE) feeditem libr3r rmessage rsettings rsubscriptions
+	$(DELTREE) feeditem itemcallbacks libr3r rmessage rsettings rsubscriptions
 
 install: all
 	-$(MKDIR) $(docdir)
