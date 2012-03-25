@@ -180,8 +180,6 @@ dist-src: clean
 	$(DELTREE) ../r3r-$(VERSION)
 	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > $(CSUMOUT)
 
-dist dist-deb dist-rpm dist-slackware: DESTDIR=/usr
-
 dist dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
 
 dist-deb: all
