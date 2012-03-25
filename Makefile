@@ -6,7 +6,6 @@ XZFLAGS = -c
 
 CSUM ?= sha256sum
 CSUMOPTS ?=
-CSUMOUT ?= sha256.sum
 
 .PHONY: check
 
@@ -179,7 +178,7 @@ dist-src: clean
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
 		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
 	$(DELTREE) ../r3r-$(VERSION)
-	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > $(CSUMOUT)
+	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > r3r-$(VERSION)-src.tar.xz.sha256
 
 dist dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
 
