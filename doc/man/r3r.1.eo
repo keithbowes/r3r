@@ -10,23 +10,23 @@ r3r
 
 .SH PRESKRIBO
 .P
-r3r prenas HTTP-an URL-on aux lokan dosieron kaj legas gxin. La abono-dosiero estas uzebla por sxargi iujn fluojn dum plenumigxo.
+r3r prenas HTTP-an URL-on aŭ lokan dosieron kaj legas ĝin. La abono-dosiero estas uzebla por ŝargi iujn fluojn dum plenumiĝo.
 
 .SS "Dosieraj formatoj"
 
 .P
-R3R aktuale komprenas la fluo-formatojn RSS (0.9 gxis 2.0), RSS 3.0, Atom kaj ESF. Gxi elprenas la formaton de la dosiero laux la HTTP-a enhavtipo aux la dosiersufikso. Vi povas aktivigi enhavtipan divenadon, kiu analizos HTTP-ajn URL-ojn por pli trafaj rezultoj.
+R3R aktuale komprenas la fluo-formatojn RSS (0.9 ĝis 2.0), RSS 3.0, Atom kaj ESF. Ĝi elprenas la formaton de la dosiero laŭ la HTTP-a enhavtipo aŭ la dosiersufikso. Vi povas aktivigi enhavtipan divenadon, kiu analizos HTTP-ajn URL-ojn por pli trafaj rezultoj.
 
 .P
 Enhavtipoj:
- application/rdf+xml, application/rss+xml. RSS (0.9 gxis 2.0)
+ application/rdf+xml, application/rss+xml. RSS (0.9 ĝis 2.0)
  application/atom+xml: Atom
  text/x-rss, text/plain: RSS 3.0
  esf/text: ESF
 
 .P
 Dosiersufiksoj:
- .rss, .rdf: RSS (0.9 gxis 2.0)
+ .rss, .rdf: RSS (0.9 ĝis 2.0)
  .r3, .rss3: RSS 3.0
  .atom: Atom
  .esf: ESF
@@ -45,22 +45,22 @@ Dosiersufiksoj:
 .SS Filtriloj
 
 .P
-Filtriloj estas kreeblaj en data/r3r. Ili havas la nomon <kampo>.filter, dum <kampo> estas title (titolo), description (priskribo), author (skribinto) ktp. La dosiero enhavus regulesprimojn por barindaj kampaj valoroj, unu cxe cxiu linio.
+Filtriloj estas kreeblaj en data/r3r. Ili havas la nomon <kampo>.filter, dum <kampo> estas title (titolo), description (priskribo), author (skribinto) ktp. La dosiero enhavus regulesprimojn por barindaj kampaj valoroj, unu ĉe ĉiu linio.
 
 .SH TUI
 
 .P
-TUI estas la plej maturigxinta fasado (kia mi plej uzas). Gxi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
+TUI estas la plej maturiĝinta fasado (kia mi plej uzas). Ĝi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
 
 .SH GUI
 
 .P
-GUI nur montras, kiel uzi la dinamikan bibliotekon en aliaj programlingvoj. Gxi montras liston de eroj en lista fenestrajxo. Elekti eron montras gxian priskribon en aparta fenestrajxo. Vi povas administri abonojn en la agordo-dialogujo.
+GUI nur montras, kiel uzi la dinamikan bibliotekon en aliaj programlingvoj. Ĝi montras liston de eroj en lista fenestraĵo. Elekti eron montras ĝian priskribon en aparta fenestraĵo. Vi povas administri abonojn en la agordo-dialogujo.
 
 .SH HTML
 
 .P
-La HTML-fasado ankaux uzeblas. Dum plenumigxo gxi eligas HTML-tekston al la norma eligo. Vi povas alidirekti tiun eligon al dosiero. En TTT-servilo, tiu estas oportuna por defora atingo de viaj plej sxatataj fluoj.
+La HTML-fasado ankaŭ uzeblas. Dum plenumiĝo ĝi eligas HTML-tekston al la norma eligo. Vi povas alidirekti tiun eligon al dosiero. En TTT-servilo, tiu estas oportuna por defora atingo de viaj plej ŝatataj fluoj.
 
 .SH "Disvolvado-informoj"
 
