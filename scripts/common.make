@@ -170,6 +170,7 @@ endif # PREFIX
 
 prefix = $(PREFIX)
 
+appdir = $(datadir)/applications
 bindir = $(prefix)/bin
 datadir = $(prefix)/share
 docdir = $(rdatadir)/docs

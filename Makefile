@@ -115,6 +115,7 @@ install install-strip:
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/doc && $(MAKE) install
 	cd $(srcdir)/icons && $(MAKE) install
+	cd $(srcdir)/scripts/setup && $(MAKE) install
 	cd $(srcdir)/src && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
 ifdef inUnix

@@ -14,6 +14,11 @@ curdir = $(PWD)
 all:
 	@echo "You shouldn't run this Makefile directly"
 
+install:
+	$(MKDIR) $(appdir)
+	$(INSTALL) r3r.desktop $(appdir)
+	-update-desktop-database
+
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
 	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(curdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
