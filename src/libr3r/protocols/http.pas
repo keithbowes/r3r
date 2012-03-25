@@ -457,7 +457,11 @@ var
   Line: String;
 function IsAtom: Boolean;
 <<<<<<< HEAD
+<<<<<<< HEAD
 function IsAtom: Boolean;
+=======
+begin
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
 =======
 begin
 >>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
@@ -466,13 +470,18 @@ begin
     ContentType := ftAtom;
   end;
 <<<<<<< HEAD
+<<<<<<< HEAD
   end;
+=======
+
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
   IsAtom := ContentType = ftAtom;
 end;
 end;
 function IsEsf: Boolean;
 begin
   if Pos('esf', Line) <> 0 then
+<<<<<<< HEAD
   if Pos('esf', Line) <> 0 then
 =======
 
@@ -482,6 +491,9 @@ end;
 function IsEsf: Boolean;
 begin
   if Pos('esf', Line) <> 0 then
+  begin
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
+=======
   begin
 >>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
     ContentType := ftEsf;
@@ -498,7 +510,11 @@ begin
 
   if ContentType <> ftRss then
 <<<<<<< HEAD
+<<<<<<< HEAD
   if ContentType <> ftRss then
+=======
+  begin
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
 =======
   begin
 >>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
@@ -509,7 +525,11 @@ begin
 
   if b then
 <<<<<<< HEAD
+<<<<<<< HEAD
   if b then
+=======
+  begin
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
 =======
   begin
 >>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
@@ -521,11 +541,17 @@ end;
 
 function IsRss: Boolean;
 begin
+<<<<<<< HEAD
   if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
 <<<<<<< HEAD
   if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
     (Pos('xml', Line) <> 0) then
 =======
+    (Pos('xml', Line) <> 0) then
+  begin
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
+=======
+  if (Pos('rss', Line) <> 0) or (Pos('rdf', Line) <> 0) or
     (Pos('xml', Line) <> 0) then
   begin
 >>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
@@ -568,9 +594,14 @@ begin
     end;
     end;
 <<<<<<< HEAD
+<<<<<<< HEAD
     end;
 
   GetType := ContentType;
+=======
+  end;
+
+>>>>>>> d581a22... Fixed badly merged file from pre-migration CVS
 =======
   end;
 
