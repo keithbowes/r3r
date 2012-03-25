@@ -1,4 +1,4 @@
-.TH R3R 1 "2011-12-24"
+.TH R3R 1 "2012-03-25"
 
 .SH NOMO
   r3r - Facila fluo-legilo
@@ -6,11 +6,11 @@
 .SH RESUMO
 
 .P
-r3r [URL1 [URL2 [...]]]
+r3r
 
 .SH PRESKRIBO
 .P
-r3r prenas HTTP-an URL-on aux lokan dosieron kaj legas gxin. Pluraj URL-oj estas specifeblaj cxe la komandlinio. Krome la abono-dosiero estas uzebla por sxargi iujn fluojn dum plenumigxo.
+r3r prenas HTTP-an URL-on aux lokan dosieron kaj legas gxin. La abono-dosiero estas uzebla por sxargi iujn fluojn dum plenumigxo.
 
 .SS "Dosieraj formatoj"
 

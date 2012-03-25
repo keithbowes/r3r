@@ -1,4 +1,4 @@
-.TH R3R 1 "2011-12-25"
+.TH R3R 1 "2012-03-25"
 
 .SH NAME
   r3r - Ein einfacher Feedleser
@@ -6,11 +6,11 @@
 .SH ‹BERSICHT
 
 .P
-r3r [URL1 [URL2 [...]]]
+r3r
 
 .SH BESCHREIBUNG
 .P
-r3r nimmt ein HTTP-URL oder lokale Datei und liest sie. Man kann mehr als eins URL geben an der Komandlinie. Auﬂerdem man kann die Abonnements-Datei benutzen um sichere Feeds zu laden auf Start.
+r3r nimmt ein HTTP-URL oder lokale Datei und liest sie. Die Abonnements-Datei benutzen um sichere Feeds zu laden auf Start.
 
 .SS Datei-Formaten
 

@@ -7,11 +7,11 @@
 .SH SINTAXIS
 
 .P
-r3r [URL1 [URL2 [...]]]
+r3r
 
 .SH DESCRIPCIÓN
 .P
-r3r obtiene una dirección de  HTTP o un archivo local y lo lee. Puede especificar diferentes URL-es en el linio de comando. También puede usar el archivo de subscripciones para leer fuentes siempre.
+r3r obtiene una dirección de  HTTP o un archivo local y lo lee. El archivo de subscripciones para leer fuentes siempre.
 
 .SS "Los formatos de archivos"
 
