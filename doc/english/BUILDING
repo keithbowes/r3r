@@ -141,6 +141,11 @@ USE_PCRE
   Note: PCRE uses hidden structures, so Pascal compilers don't know
   about their size and this will lead to memory leaks.
   Default: 1
+USE_SSL
+  Allow secure HTTP connections via SSL.
+  Note: It only works with the Synapse and (undertested) cURL
+  sockets backends (see the DEFS_SOCKETS variable above).
+  Default: 1
 
 Out-of-source builds:
 The configure script will do that for you.  If you're not using the
