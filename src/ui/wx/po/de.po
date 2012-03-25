@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-08 13:29-0400\n"
-"PO-Revision-Date: 2011-10-08 13:35-0400\n"
+"POT-Creation-Date: 2012-03-25 18:56-0400\n"
+"PO-Revision-Date: 2012-03-25 18:58-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
 "Language: \n"
@@ -17,7 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../app.cpp:11
+#: ../app.cpp:14
+#, c-format
+msgid ""
+"The use of the command line is deprecated.  Please add feeds to which you "
+"want to subscribe to.\n"
+msgstr ""
+"Benutzen die Befehlszeile ist veraltet. Hinzufügen bitte Feeds, die Sie "
+"wollen zu abonnieren.\n"
+
+#: ../app.cpp:18
 msgid "R3R"
 msgstr "R3R"
 
@@ -41,27 +50,27 @@ msgstr "Über R3R"
 msgid "Open a file"
 msgstr "Öffnen eine Datei"
 
-#: ../feedlist.cpp:21
+#: ../feedlist.cpp:18
 msgid "[None]"
 msgstr "[Keine]"
 
-#: ../feedlist.cpp:98
+#: ../feedlist.cpp:95
 msgid "An update is available."
 msgstr "Ein Aktual ist verfügbar."
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:110
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:113
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:116
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:122
+#: ../feedlist.cpp:119
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 

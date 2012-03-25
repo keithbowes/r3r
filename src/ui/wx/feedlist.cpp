@@ -9,9 +9,6 @@ void * rlib;
 FeedListView * feedList;
 bool topItem = false;
 
-int rargc;
-wxChar ** rargv;
-
 void normalize_field_value(char ** field_value)
 {
   char * s = *field_value;
@@ -178,24 +175,12 @@ void ParseFeed(char * res)
 	}
 }
 
-void GetAllFeeds(int argc, wxChar ** argv)
+void LoadFeeds()
 {
   char * name, * s;
-  int count, i, index;
+  int count, index;
   unsigned char type;
   void * value;
-
-  if (argv)
-  {
-    rargc = argc;
-    rargv = argv;
-  }
-
-  for (i = 1; i < rargc; i++)
-  {
-    ParseFeed((char *) (const char *) wxString(rargv[i], wxConvUTF8).mb_str());
-  }
-
   index = 0;
   name = (char *) "load-subscriptions-on-startup";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);

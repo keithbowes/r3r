@@ -45,6 +45,8 @@ var
 
   SkinToUse: String;
 
+  DeprecatedCL: String;
+
 {$IFNDEF USE_NLS}
 function _(s: String): String;
 {$ENDIF}
@@ -96,6 +98,8 @@ begin
   TrueString := _('TRUE');
 
   SkinToUse := _('Skin to use');
+
+  DeprecatedCL := 'The use of the command line is deprecated.  Please add feeds to which you want to subscribe to %s.';
 end;
 
 {$IFNDEF USE_NLS}

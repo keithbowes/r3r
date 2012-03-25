@@ -63,7 +63,7 @@ TOUCH ?= $(call programpath,touch)
 MSGFMT ?= $(call programpath,msgfmt)
 MSGMERGE ?= $(call programpath,msgmerge)
 
-MSGFMTFLAGS ?= --statistics
+MSGFMTFLAGS ?= -c --statistics
 
 ifndef inDOS
 COPY ?= $(call programpath,cp)

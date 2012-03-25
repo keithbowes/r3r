@@ -163,6 +163,13 @@ var
   prog: String;
 begin
   inherited Create;
+
+  if ParamCount > 0 then
+  begin
+    WriteLn(StringReplace(DeprecatedCL, '%s', DataDir + PathDelim + 'subscriptions.txt', [rfReplaceAll]));
+    Exit
+  end;
+
   New(FItems, Init);
   FCurrentItem := 1;
   FScrollingUp := true;
@@ -183,11 +190,6 @@ begin
     add_history(StrToPChar(History^.GetNext));
   end;
 {$ENDIF}
-
-  for FeedIndex := 1 to ParamCount do
-  begin
-   RetrieveFeed(ParamStr(FeedIndex));
-  end;
 
   if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
   begin
@@ -355,7 +357,10 @@ begin
     Dispose(FItems, Done);
   end;
 
-  EndWin;
+  if ParamCount = 0 then
+  begin
+    EndWin;
+  end;
 
 {$IFNDEF __GPC__}
   inherited Destroy;

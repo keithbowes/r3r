@@ -109,3 +109,7 @@ msgstr ""
 #: tuistrings:skintouse
 msgid "Skin to use"
 msgstr ""
+
+#: tuistrings:deprecatedcl
+msgid "The use of the command line is deprecated.  Please add feeds to which you want to subscribe to %s."
+msgstr ""
