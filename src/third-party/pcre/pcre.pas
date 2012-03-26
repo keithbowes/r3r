@@ -71,7 +71,11 @@ interface
 
 type
 {$IFDEF FPC}
+{$IFDEF VER2_0}
   size_t = PtrUInt;
+{$ELSE}
+  size_t = cardinal;
+{$ENDIF}
 {$ELSE}
 {$IFDEF __GPC}
   size_t = SizeType;
@@ -82,7 +86,7 @@ type
 
 { The current PCRE version information. }
 var
-  PCRE_MAJOR, PCRE_MINOR: byte;
+  PCRE_MAJOR, PCRE_MINOR: integer;
   PCRE_PRERELEASE, PCRE_DATE: String;
 
   {Options}
@@ -256,12 +260,12 @@ type
     non-recursive case for "frames". There is also an optional callout function
     that is triggered by the (?) regex item. For Virtual Pascal, these definitions
     have to take another form. }
-function pcre_malloc(size: size_t): Pointer;
-procedure pcre_free(p: Pointer);
+function pcre_malloc(size: size_t): ppcre;
+procedure pcre_free(p: ppcre);
 
 const
-  pcre_stack_malloc: function(size: size_t): Pointer = pcre_malloc;
-  pcre_stack_free: procedure(p: Pointer) = pcre_free;
+  pcre_stack_malloc: function(size: size_t): ppcre = pcre_malloc;
+  pcre_stack_free: procedure(p: ppcre) = pcre_free;
 
 var
   pcre_callout: function(block: ppcre_callout_block): integer;
@@ -301,26 +305,16 @@ uses
 
 { The memory allocation functions were pretty much stolen
   from the Virtual Pascal binding. I confess. }
-function pcre_malloc(size: size_t): Pointer;
+function pcre_malloc(size: size_t): ppcre;
 var
-  Res: Pointer;
+  Res: ppcre;
 begin
-  GetMem(Res, size);
+  GetMem(Res, size * SizeOf(ppcre^));
   pcre_malloc := Res;
 end;
 
-procedure pcre_free(p: Pointer);
-var
-  size: size_t;
+procedure pcre_free(p: ppcre);
 begin
-  size := SizeOf(ppcre(p)^);
-{$IFNDEF __GPC__} {Causes crashes in GPC}
-  if (p <> nil) and (size > 0) then
-  begin
-    FreeMem(p, size);
-  end;
-{$ENDIF}
-
   p := nil;
 end;
 
@@ -335,7 +329,7 @@ var
 
 function versiontoint: integer;
 var
-  err, h, iv: byte;
+  err, h, iv: integer;
   s: String;
 begin
   start := Pos('.', version);
