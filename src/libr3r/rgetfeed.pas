@@ -46,6 +46,7 @@ const
   PathDelim = DirSeparator;
 {$ENDIF}
 var
+  ExplicitFile: Boolean;
   Pass, User: String;
 {$IFDEF USE_IDN}
   PHost: PChar;
@@ -101,7 +102,13 @@ begin
   FindClose(f2);
   FindClose(f1);
 {$ENDIF}
-  if FileExists(Resource) then
+  ExplicitFile := Pos('file://', Resource) = 1;
+  if ExplicitFile then
+  begin
+    Resource := Copy(Resource, 8, Length(Resource) - 7);
+  end;
+
+  if ExplicitFile or FileExists(Resource) then
   begin
     Prot := 'file';
 
