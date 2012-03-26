@@ -32,6 +32,7 @@ type
   TPageType = (ptNone, ptMain, ptOptions);
 
 var
+  ColorTableInited: Boolean = false;
   SkinColorTable: TColorTable;
   SkinOptionFull: Boolean;
 
@@ -101,6 +102,17 @@ begin
 end;
 
 begin
+  { Make sure the color table isn't loaded more than once;
+    that causes some display problems. }
+  if ColorTableInited then
+  begin
+    Exit
+  end
+  else
+  begin
+    ColorTableInited := true
+  end;
+
   SkinOptionFull := true;
   Settings.RegisterString('skin', 'Display', 'default', SkinToUse);
   SkinFile := Settings.GetString(Settings.IndexOf('skin'));
