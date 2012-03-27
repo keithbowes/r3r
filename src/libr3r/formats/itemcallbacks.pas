@@ -16,6 +16,9 @@ procedure CallItemCallback(Item: TFeedItem);
 
 implementation
 
+{ For some reason, using AnsiString causes a memory leak }
+{$H-}
+
 uses
   RFilter, RProp, RSettings;
 
@@ -31,8 +34,7 @@ end;
 
 procedure CallItemCallback(Item: TFeedItem);
 const
-  { For some reason, using an AnsiString causes a memory leak }
-  LastTitle: {$IFDEF HAS_ANSISTRING}ShortString{$ELSE}String{$ENDIF} = '';
+  LastTitle: String = '';
 var
   cb: TItemCallback;
 begin
