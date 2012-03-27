@@ -2,7 +2,7 @@
 .SUFFIXES: $(OEXT) .mo .pas .po .pot
 
 UNIT_DIRS = ../../../libr3r ../../../libr3r/* \
-						../../../third-party/* ../../../utils/* \
+						../../../bindings/* ../../../utils/* \
 						../../../wrappers/*
 
 po_files = $(wildcard *.po)

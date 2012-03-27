@@ -1,4 +1,4 @@
-UNIT_DIRS=../* ../../libr3r ../../libr3r/* ../../third-party/* \
+UNIT_DIRS=../* ../../libr3r ../../libr3r/* ../../bindings/* \
 					../../utils/*
 
 include ../../../scripts/common.make

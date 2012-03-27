@@ -1,4 +1,4 @@
-UNIT_DIRS = .. ../../utils/* ../../third-party/*
+UNIT_DIRS = .. ../../utils/* ../../bindings/*
 UNITS = rsettings_routines rsettings_strings rsettings
 
 include ../../../scripts/common.make

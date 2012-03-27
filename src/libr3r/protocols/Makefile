@@ -1,4 +1,4 @@
-UNIT_DIRS=.. ../* ../../third-party/* ../../utils/* ../../wrappers/*
+UNIT_DIRS=.. ../* ../../bindings/* ../../utils/* ../../wrappers/*
 
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
 ifneq ($(DEFS_SOCKETS),SOCKETS_CURL)

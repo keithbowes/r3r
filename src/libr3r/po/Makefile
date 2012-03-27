@@ -1,7 +1,7 @@
 .SUFFIXES:
 .SUFFIXES: $(OEXT) .mo .pas .po .pot
 
-UNIT_DIRS = .. ../* ../../third-party/* ../../utils/*
+UNIT_DIRS = .. ../* ../../bindings/* ../../utils/*
 
 po_files = $(wildcard *.po)
 LINGUAS ?= $(subst .po,,$(po_files))

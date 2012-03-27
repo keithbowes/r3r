@@ -1,5 +1,4 @@
-UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../third-party/* \
-					../../utils/* ../../wrappers/*
+UNIT_DIRS=../../libr3r ../../libr3r/* ../../bindings/* ../../utils/*
 
 include ../../../scripts/common.make
 all:
