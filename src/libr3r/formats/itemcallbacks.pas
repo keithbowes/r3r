@@ -41,19 +41,18 @@ begin
   cb := TItemCallback(GetProp('item-callback'));
   if Assigned(cb) then
   begin
+    if Settings.GetBoolean(Settings.IndexOf('use-filters')) then
+    begin
+      FilterItem(Item);
+    end;
+
     if (Item.Title <> '') and (Item.Title <> LastTitle) then
     begin
       Item.Translate;
-
-      if Settings.GetBoolean(Settings.IndexOf('use-filters')) then
-      begin
-        FilterItem(Item);
-      end;
-
       cb(Item);
-      LastTitle := Item.Title;
-    end;
-  end;
+      LastTitle := Item.Title
+    end
+  end
 end;
 
 end.
