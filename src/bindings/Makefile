@@ -13,7 +13,7 @@ endif
 ifneq ($(USE_IDN),0)
 	cd libidn && $(MAKE) all
 endif
-ifneq ($(SETTINGS_LIBINI),0)
+ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
 	cd libini && $(MAKE) all
 endif
 ifneq ($(USE_PCRE),0)
