@@ -1,7 +1,7 @@
-; XDG Desktop entry for compliant desktop environments.
+# XDG Desktop entry for compliant desktop environments.
 [Desktop Entry]
 Name=R3R
-Exec=r3r
-Icon=r3r.png
+Exec=@bindir@/r3r
+Icon=@icondir@/r3r.png
 Type=Application
 MimeType=text/plain;application/xml;text/x-rss;application/rss+xml;application/rdf+xml;application/atom+xml

@@ -14,7 +14,7 @@ curdir = $(PWD)
 all:
 	@echo "You shouldn't run this Makefile directly"
 
-install:
+install: r3r.desktop
 	$(MKDIR) $(appdir)
 	$(INSTALL) r3r.desktop $(appdir)
 	-update-desktop-database
@@ -47,6 +47,10 @@ checkinstall:
 clean: distclean
 
 distclean:
+	$(DEL) r3r.desktop
 	$(DEL) is/r3r.iss is/setup.exe
 	$(DEL) ../../description-pak
 	$(DELTREE) ../../doc-pak
+
+r3r.desktop: r3r.desktop.in
+	-$(SED) -e 's|@bindir@|$(bindir)|g' -e 's|@icondir@|$(icondir)|g' $< > $@
