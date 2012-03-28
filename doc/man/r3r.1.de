@@ -45,7 +45,10 @@ Dateiendung:
 .SS Filtere
 
 .P
-Man kann Filtere erstellen im Verzeichnis data. Sie haben den Namen <Feld>.filter, mit <Feld> wird title (Titel), subject (Thema), author (Autor), usw. Die Datei enthaltet Reguläre Ausdrucken zu blocken, eine für jede Linie.
+Man kann Filtere erstellen im Verzeichnis data. Sie haben den Namen <Feld>.filter, mit <Feld> wird title (Titel), subject (Thema), author (Autor), usw. Die Datei enthaltet Texten oder Reguläre Ausdrucken zu blocken, eine für jede Linie. Beispiel:
+foo
+/b[aeiou]r/i
+/Baz/
 
 .SH TUI
 

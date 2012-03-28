@@ -45,7 +45,10 @@ Dosiersufiksoj:
 .SS Filtriloj
 
 .P
-Filtriloj estas kreeblaj en data/r3r. Ili havas la nomon <kampo>.filter, dum <kampo> estas title (titolo), description (priskribo), author (skribinto) ktp. La dosiero enhavus regulesprimojn por barindaj kampaj valoroj, unu ĉe ĉiu linio.
+Filtriloj estas kreeblaj en data/r3r. Ili havas la nomon <kampo>.filter, dum <kampo> estas title (titolo), description (priskribo), author (skribinto) ktp. La dosiero enhavus teksterojn aŭ regulesprimojn por barindaj kampaj valoroj, unu ĉe ĉiu linio. Ekzemple:
+foo
+/b[aeiou]r/i
+/Baz/
 
 .SH TUI
 

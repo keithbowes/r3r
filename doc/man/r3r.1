@@ -45,7 +45,10 @@ File extensions:
 .SS Filters
 
 .P
-Filters can be created in the data directory.  They have the name <field>.filter, where <field> can be title, subject, author, etc.  The file will contain regular expressions to block, one on each line.
+Filters can be created in the data directory.  They have the name <field>.filter, where <field> can be title, subject, author, etc.  The file will contain text entries or regular expressions to block, one on each line. Example:
+foo
+/b[aeiou]r/i
+/Baz/
 
 .SH TUI
 

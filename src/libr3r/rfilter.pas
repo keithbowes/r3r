@@ -22,9 +22,11 @@ var
   EntryFile: String;
   FieldValue: String;
   FilterEntry: String;
+  IsRegExp, ShouldFilter: Boolean;
 {$IFDEF USE_PCRE}
   errptr: PChar;
   erroffset: integer;
+  opt: byte;
   rc: integer;
   re: ppcre;
 {$ENDIF}
@@ -57,20 +59,40 @@ begin
         FieldValue := Item.Contact.Name;
       end;
 
+      IsRegExp := (Copy(FilterEntry, 1, 1) = '/') and
+        ((Copy(FilterEntry, Length(FilterEntry), 1) = '/') or
+        (Copy(FilterEntry, Length(FilterEntry) - 1, 2) = '/i'));
+      if IsRegExp then
+      begin
 {$IFDEF USE_PCRE}
-      re := pcre_compile(StrToPChar(FilterEntry), PCRE_CASELESS, @errptr, @erroffset, 0);
-      rc := pcre_exec(re, nil, StrToPChar(FieldValue), Length(FieldValue), 0, 0, nil, 0);
-      if rc >= 0 then
-{$ELSE}
-      if Pos(LowerCase(FilterEntry), LowerCase(FieldValue)) <> 0 then
+        if Copy(FilterEntry, Length(FilterEntry), 1) = 'i' then
+        begin
+          Delete(FilterEntry, Length(FilterEntry), 1);
+          opt := PCRE_CASELESS
+        end
+        else
+        begin
+          opt := 0
+        end;
+        FilterEntry := Copy(FilterEntry, 2, Length(FilterEntry) - 2);
+
+        re := pcre_compile(StrToPChar(FilterEntry), opt, @errptr, @erroffset, 0);
+        rc := pcre_exec(re, nil, StrToPChar(FieldValue), Length(FieldValue), 0, 0, nil, 0);
+
+        ShouldFilter := rc >= 0;
+        pcre_free(re);
 {$ENDIF}
+      end
+      else
+      begin
+        ShouldFilter := Pos(LowerCase(FilterEntry), LowerCase(FieldValue)) <> 0
+      end;
+
+      if ShouldFilter then
       begin
         Item.Clear;
         Break;
       end;
-{$IFDEF USE_PCRE}
-      pcre_free(re);
-{$ENDIF}
     end;
 
     Close(AFile);
