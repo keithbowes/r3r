@@ -113,3 +113,7 @@ msgstr ""
 #: tuistrings:deprecatedcl
 msgid "The use of the command line is deprecated.  Please add feeds to which you want to subscribe to %s."
 msgstr ""
+
+#: tuistrings:nofeedurl
+msgid "No feed URL specified."
+msgstr ""

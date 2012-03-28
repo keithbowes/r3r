@@ -54,6 +54,7 @@ type
     procedure ScrollUp;
     procedure ScrollTo(n: word);
     procedure LoadSubscriptions;
+    procedure AddDeleteSubscription;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -131,6 +132,7 @@ begin
     AItem.Created := Item.Created;
     AItem.Description := Item.DescriptionText;
     AItem.Link := Item.Link;
+    AItem.MySelf := Item.MySelf;
     AItem.Contact.Email := Item.Contact.Email;
     AItem.Enclosure.MimeType := Item.Enclosure.MimeType;
     AItem.Enclosure.URL := Item.Enclosure.URL;
@@ -158,7 +160,6 @@ end;
 
 constructor TTui.Create;
 var
-  FeedIndex: word;
   KeyChar: char;
   mc: PMailCap;
   prog: String;
@@ -324,6 +325,10 @@ begin
     else if KeyChar = GetBoundKey(SubscriptionsKey) then
     begin
       LoadSubscriptions;
+    end
+    else if KeyChar = GetBoundKey(AddKey) then
+    begin
+      AddDeleteSubscription;
     end
     else if KeyChar = GetBoundKey(ShellKey) then
     begin
@@ -1088,9 +1093,6 @@ end;
 procedure TTui.LoadSubscriptions;
 var
   FeedIndex: word;
-  KeyChar: char;
-  mc: PMailCap;
-  prog: String;
 begin
   if Subscriptions^.Count > 0 then
   begin
@@ -1099,6 +1101,34 @@ begin
       RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
     end;
   end;
+end;
+
+procedure TTui.AddDeleteSubscription;
+var
+  My: String;
+begin
+  if FItems^.Count > 0 then
+  begin
+    My := TFeedItem(FItems^.GetNth(FCurrentItem - 1)).MySelf;
+    if My <> '' then
+    begin
+      if Subscriptions^.Count > 0 then
+      begin
+        if Subscriptions^.IndexOf(My) = -1 then
+        begin
+          Subscriptions^.Add(My)
+        end
+        else
+        begin
+          Subscriptions^.DeleteIndex(Subscriptions^.IndexOf(My))
+        end
+      end
+    end
+    else
+    begin
+      HandleMessage(true, NoFeedURL, My)
+    end
+  end
 end;
 
 procedure TTui.DrawFeedInfo;

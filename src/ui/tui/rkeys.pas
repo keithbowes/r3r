@@ -3,6 +3,7 @@ unit RKeys;
 interface
 
 const
+  AddKey = 'a';
   DonateKey = 'd';
   DownArrow = Chr(80);
   DownKey = 'j';

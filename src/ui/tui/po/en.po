@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-03-27 23:20-0400\n"
+"PO-Revision-Date: 2012-03-28 01:34-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -132,3 +132,7 @@ msgid ""
 msgstr ""
 "The use of the command line is deprecated.  Please add feeds to which you "
 "want to subscribe to %s."
+
+#: tuistrings:nofeedurl
+msgid "No feed URL specified."
+msgstr "No feed URL specified."

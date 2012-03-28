@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-03-27 23:17-0400\n"
+"PO-Revision-Date: 2012-03-28 01:32-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -15,27 +15,22 @@ msgid "Feed Address: "
 msgstr "Die Feedadresse: "
 
 #: tuistrings:gourl
-#, fuzzy
 msgid "%s:go to a URL"
 msgstr "%s:gehen nach einem URL"
 
 #: tuistrings:options
-#, fuzzy
 msgid "%s:options"
 msgstr "%s:Einstellungen"
 
 #: tuistrings:donate
-#, fuzzy
 msgid "%s:donate"
 msgstr "%s:spenden"
 
 #: tuistrings:help
-#, fuzzy
 msgid "%s:help"
 msgstr "%s:Hilfe"
 
 #: tuistrings:quit
-#, fuzzy
 msgid "%s:quit the program"
 msgstr "%s:verlassen dem Programm"
 
@@ -134,3 +129,7 @@ msgid ""
 msgstr ""
 "Benutzen die Befehlszeile ist veraltet. Hinzufügen bitte Feeds, die Sie "
 "wollen zu abonnieren zu %s."
+
+#: tuistrings:nofeedurl
+msgid "No feed URL specified."
+msgstr "Hat keinen Feed-URL."

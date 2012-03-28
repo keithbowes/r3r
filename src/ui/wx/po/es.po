@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-03-25 18:56-0400\n"
-"PO-Revision-Date: 2012-03-25 19:02-0400\n"
+"PO-Revision-Date: 2012-03-28 01:45-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: \n"
@@ -25,7 +25,7 @@ msgid ""
 "want to subscribe to.\n"
 msgstr ""
 "Usando de la línea de comandos es obsoleto. Añade los alimentos que usted "
-"quiere subscribir por favor.\n"
+"quiere suscribir por favor.\n"
 
 #: ../app.cpp:18
 msgid "R3R"
@@ -149,7 +149,7 @@ msgstr "&Notifiqueme de cambios"
 
 #: ../settings-display.cpp:34
 msgid "&Load subscriptions on startup"
-msgstr "&Cargar subscripciones a rodando"
+msgstr "&Cargar suscripciones a rodando"
 
 #: ../settings-display.cpp:37
 msgid "Display"
