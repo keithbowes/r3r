@@ -53,6 +53,7 @@ type
     procedure ScrollDown;
     procedure ScrollUp;
     procedure ScrollTo(n: word);
+    procedure LoadSubscriptions;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -170,6 +171,11 @@ begin
     Exit
   end;
 
+  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
+  begin
+    LoadSubscriptions;
+  end;
+
   New(FItems, Init);
   FCurrentItem := 1;
   FScrollingUp := true;
@@ -190,17 +196,6 @@ begin
     add_history(StrToPChar(History^.GetNext));
   end;
 {$ENDIF}
-
-  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
-  begin
-    if Subscriptions^.Count > 0 then
-    begin
-      for FeedIndex := 0 to Subscriptions^.Count - 1 do
-      begin
-        RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
-      end;
-    end;
-  end;
 
   repeat
     KeyChar := ReadKey;
@@ -325,6 +320,10 @@ begin
       Dispose(mc, Done);
       ClrScr;
       Redraw;
+    end
+    else if KeyChar = GetBoundKey(SubscriptionsKey) then
+    begin
+      LoadSubscriptions;
     end
     else if KeyChar = GetBoundKey(ShellKey) then
     begin
@@ -1084,6 +1083,22 @@ begin
 
   FCurrentItem := n;
   GoItem;
+end;
+
+procedure TTui.LoadSubscriptions;
+var
+  FeedIndex: word;
+  KeyChar: char;
+  mc: PMailCap;
+  prog: String;
+begin
+  if Subscriptions^.Count > 0 then
+  begin
+    for FeedIndex := 0 to Subscriptions^.Count - 1 do
+    begin
+      RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
+    end;
+  end;
 end;
 
 procedure TTui.DrawFeedInfo;

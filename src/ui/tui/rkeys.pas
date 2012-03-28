@@ -27,6 +27,7 @@ const
   ScrollUpKey = Chr(8);
   SearchKey = '/';
   ShellKey = '!';
+  SubScriptionsKey = '-';
   UpArrow = Chr(72);
   UpKey = 'k';
 
