@@ -175,7 +175,6 @@ end;
 function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   ErrPos: word;
-  ItemFinished: Boolean;
   Len: word;
   Line, Tmp: String;
 begin

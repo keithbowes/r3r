@@ -5,6 +5,9 @@ interface
 uses
   Feed, FeedItem, Xml;
 
+const
+  Mod_EnclosureNS = 'http://purl.oclc.org/net/rss_2.0/enc#';
+
 type
   TModEnclosure = class(TXmlFeed)
   protected

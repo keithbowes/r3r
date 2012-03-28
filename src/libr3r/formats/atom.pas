@@ -5,6 +5,9 @@ interface
 uses
   Feed, FeedItem, Xml;
 
+const
+  AtomNS = 'http://www.w3.org/2005/Atom';
+
 type
   TAtomLink = record
     Href, MimeType, Rel: String;
@@ -24,7 +27,7 @@ type
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
-    procedure SendItem(const Name, Content: String); override;
+    procedure SendItem; override;
     function GetCurrentElement: TXmlElement; override;
     function GetPreviousElement: TXmlElement; override;
   end;
@@ -83,12 +86,10 @@ begin
 
 end;
 
-procedure TAtomFeed.SendItem(const Name, Content: String);
+procedure TAtomFeed.SendItem;
 var
   Idx: integer;
 begin
-  inherited SendItem(Name, Content);
-
   with CurrentItem, GetCurrentElement do
   begin
     Language := Lang;

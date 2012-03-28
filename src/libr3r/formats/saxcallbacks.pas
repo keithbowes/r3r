@@ -67,7 +67,7 @@ begin
     if Elem^.Name <> '' then
     begin
       FElemList^.Add(Elem);
-      SendItem(Elem^.Name, '');
+      SendItem;
     end;
   end;
 end;
@@ -104,7 +104,7 @@ begin
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
       Elem^.Content := Elem^.Content + enh;
-      SendItem(Elem^.Name, Elem^.Content);
+      SendItem;
     end;
   end;
 end;

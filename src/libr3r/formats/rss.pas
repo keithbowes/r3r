@@ -5,6 +5,10 @@ interface
 uses
   Feed, FeedItem, Xml;
 
+const
+  RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+  RSS1NS = 'http://purl.org/rss/1.0/';
+
 type
   TRssFeed = class(TXmlFeed)
   private
@@ -15,7 +19,7 @@ type
   public
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     function GetCurrentElement: TXmlElement; override;
-    procedure SendItem(const Name, Content: String); override;
+    procedure SendItem; override;
   end;
 
 implementation
@@ -95,7 +99,7 @@ begin
   GetFormat := ftRss;
 end;
 
-procedure TRssFeed.SendItem(const Name, Content: String);
+procedure TRssFeed.SendItem;
 var
   Idx: byte;
 begin

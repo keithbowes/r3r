@@ -9,11 +9,6 @@ uses
   Feed, FeedItem, RList;
 
 const
-  AtomNS = 'http://www.w3.org/2005/Atom';
-  DCNS = 'http://purl.org/dc/elements/1.1/';
-  Mod_EnclosureNS = 'http://purl.oclc.org/net/rss_2.0/enc#';
-  RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-  RSS1NS = 'http://purl.org/rss/1.0/';
   XMLNSNS = 'http://www.w3.org/XML/1998/namespace';
 
 type
@@ -55,7 +50,7 @@ type
     procedure Clone(const List: PRList);
     function GetCurrentElement: TXmlElement; virtual;
     function GetPreviousElement: TXmlElement; virtual;
-    procedure SendItem(const Name, Content: String); virtual;
+    procedure SendItem; virtual;
   end;
 
 implementation
@@ -64,7 +59,7 @@ uses
 {$IFDEF USE_EXPAT}
   SaxCallbacks,
 {$ENDIF}
-   LibR3RStrings, RMessage, RSettings, RStrings, SysUtils;
+   LibR3RStrings, RSettings, RStrings, SysUtils;
 
 constructor TXmlFeed.Create;
 begin
@@ -136,10 +131,6 @@ end;
 function TXmlFeed.GetCurrentElement: TXmlElement;
 var
   Elem: TXmlElement;
-  i: cardinal;
-  s: String;
-const
-  LastElemNum: cardinal = 0;
 begin
   if FElemList^.Count > 0 then
   begin
@@ -179,8 +170,6 @@ begin
   end;
 
   GetCurrentElement := Elem;
-
-  LastElemNum := FNthElem;
 end;
 
 function TXmlFeed.GetPreviousElement: TXmlElement;
@@ -208,7 +197,7 @@ begin
   end;
 end;
 
-procedure TXmlFeed.SendItem(const Name, Content: String);
+procedure TXmlFeed.SendItem;
 begin
 end;
 

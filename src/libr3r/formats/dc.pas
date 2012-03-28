@@ -7,6 +7,9 @@ interface
 uses
   Feed, FeedItem, Xml;
 
+const
+  DCNS = 'http://purl.org/dc/elements/1.1/';
+
 type
   TDCFeed = class(TXmlFeed)
   protected
