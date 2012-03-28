@@ -3,23 +3,23 @@ msgid "Feed Address: "
 msgstr ""
 
 #: tuistrings:gourl
-msgid "g:go to a URL"
+msgid "%s:go to a URL"
 msgstr ""
 
 #: tuistrings:options
-msgid "o:options"
+msgid "%s:options"
 msgstr ""
 
 #: tuistrings:donate
-msgid "d:donate"
+msgid "%s:donate"
 msgstr ""
 
 #: tuistrings:help
-msgid "?:help"
+msgid "%s:help"
 msgstr ""
 
 #: tuistrings:quit
-msgid "q:quit the program"
+msgid "%s:quit the program"
 msgstr ""
 
 #: tuistrings:itemno

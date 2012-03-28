@@ -216,26 +216,26 @@ begin
       KeyChar := ReadKey;
     end;
 
-    if KeyChar = GoKey then
+    if KeyChar = GetBoundKey(GoKey) then
     begin
       GoURI;
     end
-    else if KeyChar = OptionsKey then
+    else if KeyChar = GetBoundKey(OptionsKey) then
     begin
       SetOptions;
     end
-    else if KeyChar = SearchKey then
+    else if KeyChar = GetBoundKey(SearchKey) then
     begin
       if QueryItemNumber then
       begin
         ScrollTo(FCurrentItem);
       end;
     end
-    else if KeyChar = DonateKey then
+    else if KeyChar = GetBoundKey(DonateKey) then
     begin
       GoDonate;
     end
-    else if (KeyChar = DownArrow) or (KeyChar = DownKey) then
+    else if (KeyChar = DownArrow) or (KeyChar = GetBoundKey(DownKey)) then
     begin
       if FCurrentItem < FItems^.Count then
       begin
@@ -248,7 +248,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if (KeyChar = UpArrow) or (KeyChar = UpKey) then
+    else if (KeyChar = UpArrow) or (KeyChar = GetBoundKey(UpKey)) then
     begin
       if FCurrentItem > 1 then
       begin
@@ -261,27 +261,27 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if TranslateControl(KeyChar) = RefreshKey then
+    else if TranslateControl(KeyChar) = GetBoundKey(RefreshKey) then
     begin
       Redraw;
     end
-    else if (KeyChar = ScrollDownKey) or (KeyChar = PageDownKey) then
+    else if (KeyChar = GetBoundKey(ScrollDownKey)) or (KeyChar = GetBoundKey(PageDownKey)) then
     begin
       ScrollDown;
     end
-    else if (KeyChar = ScrollUpKey) or (KeyChar = PageUpKey) then
+    else if (KeyChar = GetBoundKey(ScrollUpKey)) or (KeyChar = GetBoundKey(PageUpKey)) then
     begin
       ScrollUp;
     end
-    else if KeyChar = HomeKey then
+    else if KeyChar = GetBoundKey(HomeKey) then
     begin
       ScrollTo(1);
     end
-    else if KeyChar = EndKey then
+    else if KeyChar = GetBoundKey(EndKey) then
     begin
       ScrollTo(FItems^.Count);
     end
-    else if KeyChar = HomeEndKey then
+    else if KeyChar = GetBoundKey(HomeEndKey) then
     begin
       if FCurrentItem > 1 then
       begin
@@ -292,18 +292,18 @@ begin
         ScrollTo(FItems^.Count);
       end;
     end
-    else if (KeyChar = HelpKey) or (KeyChar = HelpSymKey) then
+    else if (KeyChar = GetBoundKey(HelpKey)) or (KeyChar = GetBoundKey(HelpSymKey)) then
     begin
       OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName) + PathDelim + 'docs' + PathDelim + 'keys.html');
     end
-    else if (KeyChar = EnterKey) or (KeyChar = RightArrow) or (KeyChar = RightKey) then
+    else if (KeyChar = GetBoundKey(EnterKey)) or (KeyChar = RightArrow) or (KeyChar = GetBoundKey(RightKey)) then
     begin
       if FItems^.Count > 0 then
       begin
         OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
       end;
     end
-    else if KeyChar = EmailKey then
+    else if KeyChar = GetBoundKey(EmailKey) then
     begin
       prog := TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Contact.Email;
       if prog <> '' then
@@ -311,7 +311,7 @@ begin
         OpenEmail(prog);
       end;
     end
-    else if KeyChar = EnclosureKey then
+    else if KeyChar = GetBoundKey(EnclosureKey) then
     begin
       EndWin;
       New(mc, Init);
@@ -326,7 +326,7 @@ begin
       ClrScr;
       Redraw;
     end
-    else if KeyChar = ShellKey then
+    else if KeyChar = GetBoundKey(ShellKey) then
     begin
       EndWin;
       SwapVectors;
@@ -335,7 +335,7 @@ begin
       ClrScr;
       Redraw;
     end;
-  until KeyChar = QuitKey;
+  until KeyChar = GetBoundKey(QuitKey);
 end;
 
 destructor TTui.Destroy;
@@ -430,16 +430,21 @@ begin
   end;
 end;
 
+function ReplaceKey(const s: String; const c: char): String;
+begin
+  ReplaceKey := StringReplace(s, '%s', GetBoundKey(c), [rfReplaceAll]);
+end;
+
 begin
   Opts := '';
 
   DrawInfoBar;
 
-  AddOption(GoURL);
-  AddOption(Options);
-  AddOption(Donate);
-  AddOption(Quit);
-  AddOption(Help);
+  AddOption(ReplaceKey(GoURL, 'g'));
+  AddOption(ReplaceKey(Options, 'o'));
+  AddOption(ReplaceKey(Donate, 'd'));
+  AddOption(ReplaceKey(Quit, 'q'));
+  AddOption(ReplaceKey(Help, '?'));
 
   TuiWrite(Opts);
 end;
@@ -922,7 +927,7 @@ begin
         end;
         DisplayOptions
       end;
-    until (Len = 0) or (Index < 0) or (SetName = QuitKey);
+    until (Len = 0) or (Index < 0) or (SetName = GetBoundKey(QuitKey));
 
     Redraw;
     GoItem;

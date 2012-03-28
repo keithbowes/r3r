@@ -61,11 +61,11 @@ uses
 procedure InitStrings;
 begin
   Feed := _('Feed Address: ');
-  GoUrl :=_('g:go to a URL');
-  Options := _('o:options');
-  Donate := _('d:donate');
-  Quit := _('q:quit the program');
-  Help := _('?:help');
+  GoUrl :=_('%s:go to a URL');
+  Options := _('%s:options');
+  Donate := _('%s:donate');
+  Quit := _('%s:quit the program');
+  Help := _('%s:help');
 
   ItemNo := _('Item number: ');
 

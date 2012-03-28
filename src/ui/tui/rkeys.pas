@@ -30,9 +30,44 @@ const
   UpArrow = Chr(72);
   UpKey = 'k';
 
+function GetBoundKey(const Key: char): char;
 function TranslateControl(const Key: char): char;
 
 implementation
+
+uses
+  RSettings_Routines, SysUtils;
+
+{ Get the key binding }
+function GetBoundKey(const Key: char): char;
+var
+  bindfile: String;
+  f: text;
+  Res: char;
+  s: String;
+begin
+  bindfile := DataDir + 'clav';
+  Res := Key;
+
+  if FileExists(bindfile) then
+  begin
+    Assign(f, bindfile);
+    Reset(f);
+
+    while not Eof(f) do
+    begin
+      ReadLn(f, s);
+      if s[1] = Key then
+      begin
+        Res := s[3];
+      end;
+    end;
+
+    Close(f);
+  end;
+
+  GetBoundKey := Res;
+end;
 
 { Convert a Ctrl+key to a key }
 function TranslateControl(const Key: char): char;

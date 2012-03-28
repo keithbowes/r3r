@@ -35,7 +35,9 @@ Dateiendung:
 
 .P
  config/r3r/r3r.ini
-   Einstellungen-Datei
+   Einstellungen-Datei.
+ data/r3r/clav
+   Tasten-Bindungen.
  data/r3r/history
    Geschichte des besuchten URLs.
  data/r3r/subscriptions.txt

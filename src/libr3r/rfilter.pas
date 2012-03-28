@@ -26,7 +26,7 @@ var
 {$IFDEF USE_PCRE}
   errptr: PChar;
   erroffset: integer;
-  opt: byte;
+  opt: integer;
   rc: integer;
   re: ppcre;
 {$ENDIF}

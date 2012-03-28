@@ -36,6 +36,8 @@ Dosiersufiksoj:
 .P
  config/r3r/r3r.ini
    Agordo-dosiero.
+ data/r3r/clav
+   Klavaj asignoj.
  data/r3r/history
    Historio de vizititaj URL-oj.
  data/r3r/subscriptions.txt

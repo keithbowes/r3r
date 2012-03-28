@@ -37,6 +37,8 @@ Extensiones de Archivos:
 .P
  config/r3r/r3r.ini
    Archivo de configuración.
+ data/r3r/clav
+   Asignaciones de teclas.
  data/r3r/history
    Historia de visitadas fuentes.
  data/r3r/subscriptions.txt

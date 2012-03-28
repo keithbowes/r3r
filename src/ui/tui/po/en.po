@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-03-25 18:27-0400\n"
+"PO-Revision-Date: 2012-03-27 23:20-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -18,24 +18,24 @@ msgid "Feed Address: "
 msgstr "Feed Address: "
 
 #: tuistrings:gourl
-msgid "g:go to a URL"
-msgstr "g:go to a URL"
+msgid "%s:go to a URL"
+msgstr "%s:go to a URL"
 
 #: tuistrings:options
-msgid "o:options"
-msgstr "o:options"
+msgid "%s:options"
+msgstr "%s:options"
 
 #: tuistrings:donate
-msgid "d:donate"
-msgstr "d:donate"
+msgid "%s:donate"
+msgstr "%s:donate"
 
 #: tuistrings:help
-msgid "?:help"
-msgstr "?:help"
+msgid "%s:help"
+msgstr "%s:help"
 
 #: tuistrings:quit
-msgid "q:quit the program"
-msgstr "q:quit the program"
+msgid "%s:quit the program"
+msgstr "%s:quit the program"
 
 #: tuistrings:itemno
 msgid "Item number: "
