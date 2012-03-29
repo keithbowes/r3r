@@ -39,16 +39,14 @@ begin
   if Ret <> '' then
   begin
     CheckDir(Ret);
-    Ret := Ret + PathDelim + PrivName;
+    Ret := Ret + PathDelim + PrivName + PathDelim;
   end
   else
   begin
     Ret := SettingsDir;
   end;
 
-  Ret := Ret + PathDelim;
   CheckDir(Ret);
-
   DataDir := Ret;
 end;
 
@@ -65,7 +63,7 @@ begin
   end
   else
   begin
-    Ret := SettingsDir + PathDelim + 'cache';
+    Ret := SettingsDir + 'cache';
   end;
 
   Ret := Ret + PathDelim;
@@ -106,9 +104,10 @@ begin
   end;
   
   CheckDir(Ret);
-  Ret := Ret + PathDelim + PrivName + PathDelim;
+  Ret := Ret + PathDelim + PrivName;
 {$ENDIF}
 
+  Ret := Ret + PathDelim;
   CheckDir(Ret);
   SettingsDir := Ret;
 end;

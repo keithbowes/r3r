@@ -429,8 +429,8 @@ begin
 {$IFDEF USE_ICONV}
       SetProp('charset', {$IFNDEF __GPC__}PChar(Cache.GetEncoding){$ELSE}StrToPChar(Cache.GetEncoding){$ENDIF});
 {$ENDIF}
-      FLocal := GetLocalFile(FCacheDir + PathDelim +
-        CacheFeedFile + '.' + Cache.GetFeedExtension(Headers.ContentType));
+      FLocal := GetLocalFile(FCacheDir + PathDelim + CacheFeedFile +
+        '.' + Cache.GetFeedExtension(Headers.ContentType));
       FLocal.Execute;
     end;
 

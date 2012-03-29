@@ -82,7 +82,7 @@ begin
   FRootCacheDir := CacheDir;
   CheckDir(FRootCacheDir);
 
-  FCacheDir := FRootCacheDir + PathDelim  + Url;
+  FCacheDir := FRootCacheDir  + Url;
   CheckDir(FCacheDir);
 
   ChDir(FCacheDir);

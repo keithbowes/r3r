@@ -168,7 +168,7 @@ begin
 
   if ParamCount > 0 then
   begin
-    WriteLn(StringReplace(DeprecatedCL, '%s', DataDir + PathDelim + 'subscriptions.txt', [rfReplaceAll]));
+    WriteLn(StringReplace(DeprecatedCL, '%s', DataDir + 'subscriptions.txt', [rfReplaceAll]));
     Exit
   end;
 
@@ -807,7 +807,7 @@ end;
 begin
 {$IFDEF USE_READLINE}
   rl_callback_handler_install('', read_option_chars);
-  Backup := StrToPChar(DataDir + PathDelim + '_options_history');
+  Backup := StrToPChar(DataDir + '_options_history');
   write_history(Backup);
   clear_history;
 {$ENDIF}

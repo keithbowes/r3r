@@ -62,7 +62,7 @@ begin
   if not FileExists(Resource) then
   begin
     OrigResource := Resource;
-    Resource := CacheDir + PathDelim + 'curl';
+    Resource := CacheDir + 'curl';
     CheckDir(Resource);
     Resource := Resource + PathDelim + CacheEncode(OrigResource);
   end;
