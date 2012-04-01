@@ -309,7 +309,7 @@ function pcre_malloc(size: size_t): ppcre;
 var
   Res: ppcre;
 begin
-  GetMem(Res, size * SizeOf(ppcre^));
+  GetMem(Res, size * SizeOf(Res^));
   pcre_malloc := Res;
 end;
 
