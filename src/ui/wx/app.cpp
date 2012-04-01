@@ -9,11 +9,8 @@ bool R3R::OnInit()
 {
   InitGettext();
 
-	if (argc > 1)
-	{
-		printf(_("The use of the command line is deprecated.  Please add feeds to which you want to subscribe to.\n"));
-		exit(argc - 1);
-	}
+	gargc = argc;
+	gargv = argv;
 
   RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
   frame->Show(TRUE);

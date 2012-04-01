@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-03-28 01:44-0400\n"
+"PO-Revision-Date: 2012-04-01 14:06-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -122,13 +122,9 @@ msgstr "Sí"
 msgid "Skin to use"
 msgstr "Aspecto para usar"
 
-#: tuistrings:deprecatedcl
-msgid ""
-"The use of the command line is deprecated.  Please add feeds to which you "
-"want to subscribe to %s."
-msgstr ""
-"Usando de la línea de comandos es obsoleto. Añade los alimentos que usted "
-"quiere suscribir a %s por favor."
+#: tuistrings:usage
+msgid "Usage: %s [URL]"
+msgstr "Usando: %s [URL]"
 
 #: tuistrings:nofeedurl
 msgid "No feed URL specified."

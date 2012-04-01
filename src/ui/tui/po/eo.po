@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-03-28 01:33-0400\n"
+"PO-Revision-Date: 2012-04-01 14:17-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -122,13 +122,9 @@ msgstr "Jes"
 msgid "Skin to use"
 msgstr "Etoso por uzi"
 
-#: tuistrings:deprecatedcl
-msgid ""
-"The use of the command line is deprecated.  Please add feeds to which you "
-"want to subscribe to %s."
-msgstr ""
-"Uzo de la komandlinio estas malfavorata. Bonvolu aldoni al la dosiero %s "
-"fluojn, kiujn vi deziras aboni."
+#: tuistrings:usage
+msgid "Usage: %s [URL]"
+msgstr "Sintakso: %s [retadreso]"
 
 #: tuistrings:nofeedurl
 msgid "No feed URL specified."

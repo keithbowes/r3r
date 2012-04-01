@@ -18,6 +18,7 @@ type
 
   TTui = class(TLibR3R)
   private
+    FCanStart: Boolean;
     FCurrentItem: cardinal;
     FDimInfo: TWindowDim;
     FDimInfoBar: TWindowDim;
@@ -161,6 +162,7 @@ end;
 constructor TTui.Create;
 var
   KeyChar: char;
+  i: word;
   mc: PMailCap;
   prog: String;
 begin
@@ -168,14 +170,17 @@ begin
 
   if ParamCount > 0 then
   begin
-    WriteLn(StringReplace(DeprecatedCL, '%s', DataDir + 'subscriptions.txt', [rfReplaceAll]));
-    Exit
+    for i := 1 to ParamCount do
+    begin
+      if Pos('-', ParamStr(i)) = 1 then
+      begin
+        FCanStart := false;
+        WriteLn(StringReplace(Usage, '%s', ParamStr(0), []));
+        Exit;
+      end;
+    end;
   end;
-
-  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
-  begin
-    LoadSubscriptions;
-  end;
+  FCanStart := true;
 
   New(FItems, Init);
   FCurrentItem := 1;
@@ -190,6 +195,18 @@ begin
 
   Draw;
   SetNewTitle(AppName);
+
+  if ParamCount > 0 then
+  begin
+    for i := 1 to ParamCount do
+    begin
+      RetrieveFeed(ParamStr(i));
+    end;
+  end
+  else if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
+  begin
+    LoadSubscriptions;
+  end;
 
 {$IFDEF USE_READLINE}
   while History^.IsNext do
@@ -361,7 +378,7 @@ begin
     Dispose(FItems, Done);
   end;
 
-  if ParamCount = 0 then
+  if FCanStart then
   begin
     EndWin;
   end;

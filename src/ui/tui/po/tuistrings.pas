@@ -45,7 +45,7 @@ var
 
   SkinToUse: String;
 
-  DeprecatedCL: String;
+  Usage: String;
 
   NoFeedURL: String;
 
@@ -101,7 +101,7 @@ begin
 
   SkinToUse := _('Skin to use');
 
-  DeprecatedCL := 'The use of the command line is deprecated.  Please add feeds to which you want to subscribe to %s.';
+  Usage := 'Usage: %s [URL]';
 
   NoFeedURL := 'No feed URL specified.';
 end;

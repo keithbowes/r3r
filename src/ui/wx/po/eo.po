@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-25 18:56-0400\n"
-"PO-Revision-Date: 2012-03-25 19:01-0400\n"
+"POT-Creation-Date: 2012-04-01 14:01-0400\n"
+"PO-Revision-Date: 2012-04-01 14:02-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "Language: \n"
@@ -17,16 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../app.cpp:14
-#, c-format
-msgid ""
-"The use of the command line is deprecated.  Please add feeds to which you "
-"want to subscribe to.\n"
-msgstr ""
-"Uzo de la komandlinio estas malfavorata. Bonvolu aldoni fluojn, kiujn vi "
-"volas aboni.\n"
-
-#: ../app.cpp:18
+#: ../app.cpp:15
 msgid "R3R"
 msgstr "R3R"
 
@@ -50,27 +41,27 @@ msgstr "Pri R3R"
 msgid "Open a file"
 msgstr "Malfermi dosieron"
 
-#: ../feedlist.cpp:18
+#: ../feedlist.cpp:19
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:95
+#: ../feedlist.cpp:96
 msgid "An update is available."
 msgstr "Promocio haveblas."
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:111
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:114
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:117
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:120
 msgid "Date Created"
 msgstr "Dato kreita"
 

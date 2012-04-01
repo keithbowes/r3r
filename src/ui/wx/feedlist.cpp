@@ -1,3 +1,4 @@
+#include "app.h"
 #include "feedlist.h"
 #include "feedlistthread.h"
 #include "libr3r.h"
@@ -185,7 +186,11 @@ void LoadFeeds()
   name = (char *) "load-subscriptions-on-startup";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-  if ((bool) value)
+	if (gargc > 1)
+	{
+		ParseFeed(gargv[1]);
+	}
+	else if ((bool) value)
   {
     Subscriptions * subs = GetSubscriptionsObject();
     while ((s = subs->GetNext()) != NULL)
