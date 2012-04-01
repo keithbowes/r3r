@@ -21,7 +21,7 @@ const
   PageDownKey = Chr(81);
   PageUpKey = Chr(73);
   QuitKey = 'q';
-  RefreshKey = 'l';
+  RefreshKey = 'u';
   RightArrow = Chr(77);
   RightKey = 'l';
   ScrollDownKey = Chr(32);
@@ -33,7 +33,6 @@ const
   UpKey = 'k';
 
 function GetBoundKey(const Key: char): char;
-function TranslateControl(const Key: char): char;
 
 implementation
 
@@ -69,12 +68,6 @@ begin
   end;
 
   GetBoundKey := Res;
-end;
-
-{ Convert a Ctrl+key to a key }
-function TranslateControl(const Key: char): char;
-begin
-  TranslateControl := char(ord(Key) + 96);
 end;
 
 end.

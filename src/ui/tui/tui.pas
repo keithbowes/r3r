@@ -257,7 +257,7 @@ begin
 
       ScrollTo(FCurrentItem);
     end
-    else if TranslateControl(KeyChar) = GetBoundKey(RefreshKey) then
+    else if KeyChar = GetBoundKey(RefreshKey) then
     begin
       Redraw;
     end

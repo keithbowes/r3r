@@ -23,7 +23,7 @@ Optional dependencies (see below for how to enable/disable):
 * gettext <http://gnu.org/software/gettext>
 * libidn <http://gnu.org/software/libidn>
 * readline <http://gnu.org/software/readline> or
-  libedit <>
+  libedit <http://www.thrysoee.dk/editline/>
 * PCRE <http://pcre.org>
 * For a GUI:
   * a C++ compiler; I'm only testing in GCC <http://gcc.gnu.org/>
