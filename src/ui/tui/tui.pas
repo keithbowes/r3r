@@ -708,6 +708,7 @@ var
   Width: word;
 {$IFDEF USE_READLINE}
   Backup: PChar;
+  InitDesc: String;
 {$ENDIF}
 
 function TruncateString(const s: String): String;
@@ -814,6 +815,11 @@ begin
       end;
 {$IFDEF USE_READLINE}
       add_history(StrToPChar(PRSetting(SRec^.GetNth(i))^.Description));
+      history_set_pos(history_length div 2);
+      if current_history <> nil then
+      begin
+        InitDesc := StrPas(current_history^.Line);
+      end;
 {$ENDIF}
 
       WriteLn;
@@ -856,6 +862,12 @@ begin
         begin
           SetName := StrPas(rl_line_buffer);
           TuiWrite(SetName);
+        end
+        else if InitDesc <> '' then
+        begin
+          SetName := InitDesc;
+          TuiWrite(SetName);
+          InitDesc := '';
         end;
         rl_callback_read_char;
       until rl_option_finished;
