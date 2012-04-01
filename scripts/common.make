@@ -201,6 +201,7 @@ USE_READLINE ?= 1
 
 NO_NCURSES ?= 0
 
+USE_LIBEDIT ?= 0
 USE_LIBICONV ?= 0
 USE_SSL ?= 0
 
@@ -234,6 +235,10 @@ endif
 
 ifneq ($(USE_READLINE),0)
 override DEFS_EXTRA+=USE_READLINE
+endif
+
+ifneq ($(USE_LIBEDIT),0)
+override DEFS_EXTRA+=USE_LIBEDIT
 endif
 
 ifneq ($(USE_SSL),0)

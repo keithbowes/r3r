@@ -22,6 +22,8 @@ Optional dependencies (see below for how to enable/disable):
 * iconv
 * gettext <http://gnu.org/software/gettext>
 * libidn <http://gnu.org/software/libidn>
+* readline <http://gnu.org/software/readline> or
+  libedit <>
 * PCRE <http://pcre.org>
 * For a GUI:
   * a C++ compiler; I'm only testing in GCC <http://gcc.gnu.org/>
@@ -125,9 +127,15 @@ USE_IDN
   Allow the use of the libidn library to decode IDN (web addresses
   with non-English characters).
   Default: 1
+USE_LIBEDIT
+  Use libedit's readline emulation (only valid when USE_READLINE
+  is defined).  Beware that libedit is very buggy, especially
+  when a screen library is used (as is in the TUI).
+  Default: 0
 USE_LIBICONV
   Enable the use of GNU libiconv <http://gnu.org/software/libiconv>
-  instead of the built-in iconv.
+  instead of the built-in iconv.  Only valid when USE_ICONV is also
+  defined.
   Default: 0 for Unix platforms; 1 for non-Unix platforms
 USE_NCURSES
   Enable the use of ncurses <http://gnu.org/software/ncurses> for
@@ -138,14 +146,15 @@ USE_NLS
   Default: 1
 USE_PCRE
   Allow the use of PCRE to allow more powerful text matching.
-  Note: PCRE uses hidden structures, so Pascal compilers don't know
-  about their size and this will lead to memory leaks.
+  Default: 1
+USE_READLINE
+  Use GNU readline to keep a history of visited URLs.
   Default: 1
 USE_SSL
   Allow secure HTTP connections via SSL.
   Note: It only works with the Synapse and (undertested) cURL
   sockets backends (see the DEFS_SOCKETS variable above).
-  Default: 1
+  Default: 0
 
 Out-of-source builds:
 The configure script will do that for you.  If you're not using the
