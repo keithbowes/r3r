@@ -1,8 +1,6 @@
 include ../../common.make
 ISCC ?= $(call programpath,iscc)
-
-mos_lib = $(wildcard $(rootdir)/src/libr3r/po/*.mo)
-mos_ui = $(wildcard $(rootdir)/src/ui/$(R3R_UI)/po/*.mo)
+ISCCFLAGS ?=
 
 ifeq ($(VERSION),)
 $(error VERSION should be set.  Try running from the root dir)
