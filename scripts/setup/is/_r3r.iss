@@ -1,4 +1,6 @@
 ; vim:nospell
+#include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','')
+
 [Setup]
 AllowNoIcons=yes
 AppName=R3R
@@ -15,6 +17,8 @@ SourceDir=..\..\..
 
 [Tasks]
 Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
+Name: cordedlls; Description "{cm:InstallCoreDlls}"; BeforeInstall: UnzipComp('core-dlls', '20120202');
+Name: wxdlls; Description "{cm:InstallWxDlls}; BeforeInstall: UnzipComp('wxWidgets', '2.9.3');
 
 [Files]
 Source: "r3r-tui.exe"; DestDir: "{app}\bin"
@@ -91,3 +95,26 @@ Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "instal
 
 [Run]
 FileName: "{app}\share\r3r\docs\{cm:readme}"; Description: "{cm:viewreadme}"; Verb: "open"; Flags: postinstall shellexec
+
+[Code]
+procedure InitializeWizard;
+begin
+  ITD_Init;
+end;
+
+procedure UnzipComp(Name, Version: String);
+var
+  files, fs: Variant;
+  FullName, loc, rem, post: String;
+begin
+  FullName := Name + ' -' + Version;
+  //Use ExpandConstant?
+  loc := '{tmp}\' + FullName;
+  rem := 'http://sourceforge.net/projects/r3r/files/' + Name + '/' +  FullName + '/download';
+  post := '{app}\bin';
+  ITD_DownFloadFile(rem, loc);
+  fs := CreateOleObject('Shell.Application');
+  files := fs.NameSpace(loc).Items;
+  CreateDir(post);
+  fss.NameSpace(post).CopyHere(files);
+end;
