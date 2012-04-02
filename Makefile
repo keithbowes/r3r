@@ -113,7 +113,7 @@ endif
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install install-strip:
+install: all
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/doc && $(MAKE) install
 	cd $(srcdir)/icons && $(MAKE) install
@@ -124,6 +124,14 @@ ifdef inUnix
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
 	$(INSTALLEXE) $(srcdir)/r3r-settitle $(bindir)
 endif
+
+install-strip: install
+	$(call programpath,strip) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
+		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
+	$(call programpath,upx) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
+		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 
 # Documentation rules
 docs:
@@ -142,6 +150,7 @@ uninstall:
 	$(foreach ui,$(uis),$(DEL) $(bindir)/r3r-$(ui)$(TARGETEXEEXT); )
 	$(DEL) $(bindir)/r3r-settitle
 	-$(RMDIR) $(bindir)
+	$(RM) $(appdir)/r3r.desktop
 	$(DELTREE) $(rdatadir)
 	-$(RMDIR) $(prefix)
 
