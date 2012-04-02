@@ -9,14 +9,11 @@ bool R3R::OnInit()
 {
   InitGettext();
 
-	gargc = argc;
-	gargv = argv;
-
   RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
   frame->Show(TRUE);
   SetTopWindow(frame);
 
-  LoadFeeds();
+  LoadFeeds(argc, argv);
 
   return TRUE;
 }

@@ -2,9 +2,8 @@ SHELL = /bin/sh
 
 CHECKINSTALL ?= $(call programpath,checkinstall)
 LN ?= $(call programpath,ln)
-MAKEPACKAGE ?= $(call programpath,makepackage)
 
-ARCH ?= i386
+ARCH ?= $(CPU_TARGET)
 RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
 
@@ -19,18 +18,16 @@ install: r3r.desktop
 	$(INSTALL) r3r.desktop $(appdir)
 	-update-desktop-database
 
+dist-deb: LANGUAGE=
+
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
-	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(curdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
+	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
 
 dist-rpm:
 	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
 	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-1.$(ARCH).rpm \
 	 	$(curdir)/../../..
-
-dist-slackware:
-	$(MAKE) checkinstall TYPE=slackware VERSION=$(VERSION)
-	$(MOVE) $(wildcard ../../*.tgz) ../../..
 
 dist-inno_setup:
 	cd is && $(MAKE) installer
@@ -47,6 +44,7 @@ checkinstall:
 clean: distclean
 
 distclean:
+	$(DEL) description-pak
 	$(DEL) r3r.desktop
 	$(DEL) is/r3r.iss is/setup.exe
 	$(DEL) ../../description-pak

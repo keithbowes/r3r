@@ -7,6 +7,9 @@ XZFLAGS = -c
 CSUM ?= sha256sum
 CSUMOPTS ?=
 
+MAKEPKG ?= $(call programpath,makepkg)
+MAKEPKGFLAGS ?=
+
 .PHONY: check
 
 include scripts/common.make
@@ -180,16 +183,20 @@ dist-src: clean
 	$(DELTREE) ../r3r-$(VERSION)
 	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > r3r-$(VERSION)-src.tar.xz.sha256
 
-dist dist-deb dist-inno_setup dist-rpm dist-slackware: LINGUAS=$(shell \$$(subst .po,,\$$(po_files)))
-
 dist-deb: all
 	cd scripts/setup && $(MAKE) dist-deb
 
 dist-rpm: all
 	cd scripts/setup && $(MAKE) dist-rpm
 
-dist-slackware: all
-	cd scripts/setup && $(MAKE) dist-slackware
+dist-slackware:
+	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
+		-e 's/@VERSION@/$(VERSION)/g' scripts/setup/PKGBUILD.in > PKGBUILD
+	$(MAKEPKG) $(MAKEPKGFLAGS)
+	$(MOVE) r3r-$(VERSION)-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
+	$(RM) PKGBUILD
+	$(DELTREE) pkg
+	$(RM) r3r_opml$(TARGETEXEEXT)
 
 dist-inno_setup: dist-build
 	cd scripts/setup && $(MAKE) dist-inno_setup

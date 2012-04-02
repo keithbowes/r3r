@@ -1,5 +1,10 @@
 ; vim:nospell
+
+; Syntax errors in it_download.iss currently.
+; Maybe this can be implemented in the future.
+#ifdef USE_IT_DOWNLOAD
 #include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','')
+#endif
 
 [Setup]
 AllowNoIcons=yes
@@ -17,12 +22,10 @@ SourceDir=..\..\..
 
 [Tasks]
 Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
-Name: cordedlls; Description "{cm:InstallCoreDlls}"; BeforeInstall: UnzipComp('core-dlls', '20120202');
-Name: wxdlls; Description "{cm:InstallWxDlls}; BeforeInstall: UnzipComp('wxWidgets', '2.9.3');
 
 [Files]
-Source: "r3r-tui.exe"; DestDir: "{app}\bin"
-Source: "r3r-wx.exe"; DestDir: "{app}\bin"
+Source: "r3r-tui.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('core-dlls', '20120202');
+Source: "r3r-wx.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('wxWidgets', '2.9.3');
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
@@ -99,22 +102,39 @@ FileName: "{app}\share\r3r\docs\{cm:readme}"; Description: "{cm:viewreadme}"; Ve
 [Code]
 procedure InitializeWizard;
 begin
+#ifdef USE_IT_DOWNLOAD
   ITD_Init;
+#endif
 end;
 
 procedure UnzipComp(Name, Version: String);
 var
+  App, Tmp: String;
   files, fs: Variant;
   FullName, loc, rem, post: String;
 begin
+#ifdef USE_IT_DOWNLOAD
+  App := ExpandConstant('{app}');
+  Tmp := ExpandConstant('{tmp}');
+
   FullName := Name + ' -' + Version;
-  //Use ExpandConstant?
-  loc := '{tmp}\' + FullName;
-  rem := 'http://sourceforge.net/projects/r3r/files/' + Name + '/' +  FullName + '/download';
-  post := '{app}\bin';
-  ITD_DownFloadFile(rem, loc);
-  fs := CreateOleObject('Shell.Application');
-  files := fs.NameSpace(loc).Items;
-  CreateDir(post);
-  fss.NameSpace(post).CopyHere(files);
+  loc := Tmp + '\' + FullName;
+  rem := 'http://sourceforge.net/projects/r3r/files/' + Name + '/' +  FullName + '.zip/download';
+  post := App + '\bin';
+
+  if MsgBox('Download ' +  FullName + '?', mbConfirmation, MB_YESNO) = IDYES then
+  begin
+    ITD_DownloadFile(rem, loc);
+    fs := CreateOleObject('Shell.Application');
+    if fs <> nil then
+    begin
+      files := fs.NameSpace(loc).Items;
+      if files <> nil then
+      begin
+        CreateDir(post);
+        fs.NameSpace(post).CopyHere(files);
+      end;
+    end;
+  end;
+#endif
 end;

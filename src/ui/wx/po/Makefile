@@ -1,6 +1,10 @@
 po_files = $(wildcard *.po)
 LINGUAS ?= $(subst .po,,$(po_files))
-mo_files= $(addsuffix .mo, $(LINGUAS)) 
+ifneq ($(LINGUAS),)
+mo_files = $(addsuffix .mo,$(LINGUAS))
+else
+mo_files = $(subst .po,.mo,$(po_files))
+endif
 
 INTLTOOL_UPDATE ?= $(call programpath,intltool-update)
 

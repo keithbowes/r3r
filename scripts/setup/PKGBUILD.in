@@ -1,0 +1,17 @@
+pkgname=r3r
+pkgver=@VERSION@
+pkgrel=@UI@
+pkgdesc="A simple feed reader"
+url=http://sourceforge.net/projects/r3r
+arch=('@ARCH@')
+license=('Public Domain')
+
+build() {
+  cd ..
+  make PREFIX="${pkgdir}"
+}
+
+package() {
+  cd ..
+  make PREFIX="${pkgdir}" install
+}

@@ -2,12 +2,6 @@
 
 SHELL = /bin/sh
 
-# Let's try to figure out what OS we're using
-ifneq ($(HOST),)
-CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\([^-]\+\).\+$$/\1/g')
-OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
-endif
-
 ifndef OS_TARGET
 ifneq ($(findstring ;,$(PATH)),)
 ifdef ComSpec
@@ -277,7 +271,7 @@ endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
 override COMPILER=FPC $(shell $(PC) -iW)
-PLATFORM=$(shell $(PC) -iTO)-$(shell $(PC) -iTP)
+PLATFORM=$(shell $(PC) -iTP)-$(shell $(PC) -iTO)
 
 DEFFLAG=-d
 PCFLAGS_BASE=-Mdelphi -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
@@ -350,6 +344,13 @@ endif # DEBUG
 export USE_GPC
 endif # USE_GPC
 endif # USE_FPC
+
+# Let's try to figure out what OS we're using
+HOST ?= $(PLATFORM)
+ifneq ($(HOST),)
+CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\([^-]\+\).\+$$/\1/g')
+OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
+endif
 
 export CC DEFS DEFS_SOCKETS DESTDIR R3R_UI VERSION \
 	bindir datadir prefix rootdir

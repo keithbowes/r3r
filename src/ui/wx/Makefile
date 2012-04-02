@@ -3,7 +3,7 @@ WX_CONFIG ?= wx-config $(WXFLAGS)
 CXX = $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
 						-DVERSION=\"$(VERSION)\"
-override LDFLAGS += $(shell $(WX_CONFIG) --libs) -zmuldefs -L../../libr3r
+override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
 ifdef DEBUG
@@ -66,8 +66,6 @@ desc.cpp location.cpp settings-programs.cpp \
 
 events.cpp: eventtables.h libr3r.h widgetids.h
 	$(TOUCH) $@
-
-feedlist.h: app.h
 
 feedlist.h frame.h settingscheckbox.h subscriptions.h: libr3r.h
 	$(TOUCH) $@

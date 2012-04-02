@@ -268,7 +268,7 @@ void MenuEvents::OnRefresh(wxCommandEvent & WXUNUSED(event))
 {
   FeedListView * view = GetFeedList();
   view->DeleteAllItems();
-  LoadFeeds();
+  LoadFeeds(get_argc(), get_argv());
 }
 
 void MenuEvents::OnSettings(wxCommandEvent & WXUNUSED(event))

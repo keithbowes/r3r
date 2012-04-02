@@ -1,4 +1,3 @@
-#include "app.h"
 #include "feedlist.h"
 #include "feedlistthread.h"
 #include "libr3r.h"
@@ -9,6 +8,9 @@
 void * rlib;
 FeedListView * feedList;
 bool topItem = false;
+
+int rargc;
+wxChar ** rargv;
 
 void normalize_field_value(char ** field_value)
 {
@@ -176,7 +178,7 @@ void ParseFeed(char * res)
 	}
 }
 
-void LoadFeeds()
+void LoadFeeds(int argc, wxChar ** argv)
 {
   char * name, * s;
   int count, index;
@@ -186,9 +188,12 @@ void LoadFeeds()
   name = (char *) "load-subscriptions-on-startup";
   libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
 
-	if (gargc > 1)
+	rargc = argc;
+	rargv = argv;
+
+	if (argc > 1)
 	{
-		ParseFeed(gargv[1]);
+		ParseFeed((char *) (const char *) wxString(argv[1], wxConvUTF8).mb_str());
 	}
 	else if ((bool) value)
   {
@@ -229,4 +234,14 @@ void GoBrowser(char * url)
   }
 
   wxExecute(command);
+}
+
+int get_argc()
+{
+	return rargc;
+}
+
+wxChar ** get_argv()
+{
+	return rargv;
 }

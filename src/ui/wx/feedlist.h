@@ -29,6 +29,9 @@ void ResizeColumns(FeedListView * list);
 void CleanupFeedList();
 void ParseFeed(char * res);
 void * ParseFeedThread(void * resource);
-void LoadFeeds();
+void LoadFeeds(int argc, wxChar ** argv);
 
 void GoBrowser(char * link);
+
+int get_argc();
+wxChar ** get_argv();
