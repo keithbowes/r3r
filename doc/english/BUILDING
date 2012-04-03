@@ -58,8 +58,6 @@ DEFS_EXTRA
   Extra defines to send to the compiler.
 DEFS_SETTINGS
   The type of settings to use:
-  * SETTINGS_BIN: Dump the internal settings structure to a
-    binary file and read it during startup (deprecated).
   * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
     to read/write the settings to a .ini file.
   * SETTINGS_LIBINI: Use libini  to read/write
