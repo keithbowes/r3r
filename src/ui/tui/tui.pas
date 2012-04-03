@@ -259,7 +259,10 @@ begin
         FCurrentItem := 1;
       end;
 
-      ScrollTo(FCurrentItem);
+      if FItems^.Count > 0 then
+      begin
+        ScrollTo(FCurrentItem);
+      end;
     end
     else if (KeyChar = UpArrow) or (KeyChar = GetBoundKey(UpKey)) then
     begin
