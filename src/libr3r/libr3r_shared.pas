@@ -231,17 +231,17 @@ begin
   end;
 end;
 
-procedure libr3r_history_add(Entry: PChar);
+procedure libr3r_history_add(Entry: PChar); cdecl;
 begin
   History^.Add(StrPas(Entry));
 end;
 
-function libr3r_history_is_next: integer;
+function libr3r_history_is_next: integer; cdecl;
 begin
   libr3r_history_is_next := Ord(History^.IsNext);
 end;
 
-function libr3r_history_next: PChar;
+function libr3r_history_next: PChar; cdecl;
 begin
   libr3r_history_next := StrToPChar(History^.GetNext);
 end;
