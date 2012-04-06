@@ -1,3 +1,4 @@
+\" vi: ft=nroff
 .TH R3R 1 "2012-03-25"
 
 .SH NAME
@@ -37,7 +38,7 @@ File extensions:
  config/r3r/r3r.ini
    Settings file.
  data/r3r/clav
-   Key bindings.
+   Key bindings (TUI).
  data/r3r/history
    History of visited URLs.
  data/r3r/subscriptions.txt
@@ -48,8 +49,11 @@ File extensions:
 
 .P
 Filters can be created in the data directory.  They have the name <field>.filter, where <field> can be title, subject, author, etc.  The file will contain text entries or regular expressions to block, one on each line. Example:
+.br
 foo
+.br
 /b[aeiou]r/i
+.br
 /Baz/
 
 .SH TUI

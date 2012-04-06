@@ -1,4 +1,4 @@
-." vi:filetype=groff
+\" vi:ft=nroff
 .TH R3R 1 "2011-12-25"
 
 .SH NOMBRE
@@ -49,8 +49,11 @@ Extensiones de Archivos:
 
 .P
 Filtradores pueden haber creados en la carpeta de datos. Tenemos el nombre <campo>.filter, donde <campo> puede ser title (título), subject (tema), author (autor), etc. El archivo contiene texto o expresiones regulares para bloquear, uno por línea. Ejemplo:
+.br
 foo
+.br
 /b[aeiou]r/i
+.br
 /Baz/
 
 .SH TUI

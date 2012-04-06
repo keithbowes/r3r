@@ -1,3 +1,4 @@
+\" vi: ft=nroff
 .TH R3R 1 "2012-03-25"
 
 .SH NAME
@@ -37,7 +38,7 @@ Dateiendung:
  config/r3r/r3r.ini
    Einstellungen-Datei.
  data/r3r/clav
-   Tasten-Bindungen.
+   Tasten-Bindungen (TUI).
  data/r3r/history
    Geschichte des besuchten URLs.
  data/r3r/subscriptions.txt
@@ -48,8 +49,11 @@ Dateiendung:
 
 .P
 Man kann Filtere erstellen im Verzeichnis data. Sie haben den Namen <Feld>.filter, mit <Feld> wird title (Titel), subject (Thema), author (Autor), usw. Die Datei enthaltet Texten oder Reguläre Ausdrucken zu blocken, eine für jede Linie. Beispiel:
+.br
 foo
+.br
 /b[aeiou]r/i
+.br
 /Baz/
 
 .SH TUI
