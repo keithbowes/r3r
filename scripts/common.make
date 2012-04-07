@@ -353,6 +353,7 @@ OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
 endif
 
 export CC DEFS DEFS_SOCKETS DESTDIR R3R_UI VERSION \
+	OS_TARGET CPU_TARGET \
 	bindir datadir prefix rootdir
 
 default: all

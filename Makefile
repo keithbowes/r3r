@@ -207,6 +207,8 @@ dist-slackware:
 	$(DELTREE) pkg
 	$(RM) r3r_opml$(TARGETEXEEXT)
 
+dist-inno_setup: OS_TARGET=win32
+
 dist-inno_setup: dist-build
 	cd scripts/setup && $(MAKE) dist-inno_setup
 

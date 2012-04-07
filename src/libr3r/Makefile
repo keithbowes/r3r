@@ -16,7 +16,7 @@ endif
 	$(MAKE) libr3r$(PPUEXT)
 ifdef BUILD_SHARED
 ifneq ($(BUILD_SHARED),0)
-	$(MAKE) libr3r_shared$(PPUEXT)  && $(TOUCH) libr3r_shared.pas
+	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
 endif
 endif
 
