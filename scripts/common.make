@@ -59,6 +59,8 @@ MSGMERGE ?= $(call programpath,msgmerge)
 
 MSGFMTFLAGS ?= -c --statistics
 
+GIT ?= $(call programpath,git)
+
 ifndef inDOS
 COPY ?= $(call programpath,cp)
 ECHO ?= $(call programpath,echo)
@@ -132,7 +134,7 @@ success=$(shell $(ECHO) Consult the messages above to ascertain whether you can 
 endif
 
 # OK, the actual start of the Makefile
-VERSION = 2.3.1
+VERSION = $(shell $(GIT) describe --always --tag)
 
 SRCDIR ?= .
 top_srcdir ?= $(SRCDIR)
