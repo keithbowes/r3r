@@ -86,7 +86,7 @@ DESTDIR
 HAS_ANSISTRING
   The compiler supports the AnsiString data type. This can enable
   more efficient conversion between C and Pascal strings.
-pcflags_dEBUG
+PCFLAGS_DEBUG
   The compiler's debugging options.
 PCFLAGS_EXTRA
   Extra options to send to the compiler.
