@@ -54,11 +54,6 @@ RMDIR ?= $(call programpath,rmdir)
 SED ?= $(call programpath,sed)
 TOUCH ?= $(call programpath,touch)
 
-MSGFMT ?= $(call programpath,msgfmt)
-MSGMERGE ?= $(call programpath,msgmerge)
-
-MSGFMTFLAGS ?= -c --statistics
-
 GIT ?= $(call programpath,git)
 
 ifndef inDOS
@@ -380,3 +375,22 @@ distclean: clean
 
 %$(PPUEXT): %.pas
 	$(PC) $(PCFLAGS) $<
+
+# Gettext
+
+.SUFFIXES:
+.SUFFIXES: .mo .po .pot
+
+po_files = $(wildcard *.po)
+LINGUAS ?= $(subst .po,,$(po_files))
+ifneq ($(LINGUAS),)
+mo_files = $(addsuffix .mo,$(LINGUAS))
+else
+mo_files = $(subst .po,.mo,$(po_files))
+override LINGUAS := $(subst .mo,,$(mo_files))
+endif
+
+MSGFMT ?= $(call programpath,msgfmt)
+MSGMERGE ?= $(call programpath,msgmerge)
+
+MSGFMTFLAGS ?= -c --statistics

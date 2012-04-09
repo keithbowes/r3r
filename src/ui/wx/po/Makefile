@@ -1,11 +1,3 @@
-po_files = $(wildcard *.po)
-LINGUAS ?= $(subst .po,,$(po_files))
-ifneq ($(LINGUAS),)
-mo_files = $(addsuffix .mo,$(LINGUAS))
-else
-mo_files = $(subst .po,.mo,$(po_files))
-endif
-
 INTLTOOL_UPDATE ?= $(call programpath,intltool-update)
 
 include ../../../../scripts/common.make

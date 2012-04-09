@@ -1,15 +1,4 @@
-.SUFFIXES:
-.SUFFIXES: $(OEXT) .mo .pas .po .pot
-
 UNIT_DIRS = .. ../* ../../bindings/* ../../utils/*
-
-po_files = $(wildcard *.po)
-LINGUAS ?= $(subst .po,,$(po_files))
-ifneq ($(LINGUAS),)
-mo_files = $(addsuffix .mo,$(LINGUAS))
-else
-mo_files = $(subst .po,.mo,$(po_files))
-endif
 
 include ../../../scripts/common.make
 
@@ -34,6 +23,3 @@ ifneq ($(USE_NLS),0)
 else
 	-$(TOUCH) $<
 endif
-
-test:
-	@$(ECHO) x$(LINGUAS)x

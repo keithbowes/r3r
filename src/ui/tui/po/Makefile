@@ -1,17 +1,6 @@
-.SUFFIXES:
-.SUFFIXES: $(OEXT) .mo .pas .po .pot
-
 UNIT_DIRS = ../../../libr3r ../../../libr3r/* \
 						../../../bindings/* ../../../utils/* \
 						../../../wrappers/*
-
-po_files = $(wildcard *.po)
-LINGUAS ?= $(subst .po,,$(po_files))
-ifneq ($(LINGUAS),)
-mo_files = $(addsuffix .mo,$(LINGUAS))
-else
-mo_files = $(subst .po,.mo,$(po_files))
-endif
 
 include ../../../../scripts/common.make
 
