@@ -310,7 +310,7 @@ begin
     end
     else if (KeyChar = GetBoundKey(HelpKey)) or (KeyChar = GetBoundKey(HelpSymKey)) then
     begin
-      OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName) + PathDelim + 'docs' + PathDelim + 'keys.html');
+      OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim +  'doc' + PathDelim + LowerCase(AppName) + '-' + AppVersion + PathDelim + 'keys.html');
     end
     else if (KeyChar = GetBoundKey(EnterKey)) or (KeyChar = RightArrow) or (KeyChar = GetBoundKey(RightKey)) then
     begin

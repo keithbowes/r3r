@@ -120,7 +120,7 @@ install: all
 	cd $(srcdir)/scripts/setup && $(MAKE) install
 	cd $(srcdir)/src && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
-ifdef inUnix
+ifdef forUnix
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
 	$(INSTALLEXE) $(srcdir)/r3r-settitle $(bindir)
 endif
@@ -192,10 +192,10 @@ dist-src: clean
 	$(DELTREE) ../r3r-$(VERSION)
 	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > r3r-$(VERSION)-src.tar.xz.sha256
 
-dist-deb: all
+dist-deb:
 	cd scripts/setup && $(MAKE) dist-deb
 
-dist-rpm: all
+dist-rpm:
 	cd scripts/setup && $(MAKE) dist-rpm
 
 dist-slackware:

@@ -19,7 +19,7 @@ clean:
 	$(DELTREE) feeditem itemcallbacks libr3r rmessage rsettings rsubscriptions
 
 install: all
-	-$(MKDIR) $(docdir)
+	$(MKDIR) $(docdir)
 	$(INSTALL) $(wildcard *.html) $(docdir)
 	$(foreach file, $(wildcard */*.html), $(MKDIR) $(docdir)/$(dir $(file)); $(INSTALL) $(file) $(docdir)/$(file);  )
 

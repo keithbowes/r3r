@@ -169,12 +169,12 @@ prefix = $(PREFIX)
 appdir = $(datadir)/applications
 bindir = $(prefix)/bin
 datadir = $(prefix)/share
-docdir = $(rdatadir)/docs
+docdir = $(datadir)/doc/r3r-$(VERSION)
 icondir = $(datadir)/icons
 incdir = $(prefix)/include
 libdir = $(prefix)/lib
 localedir = $(datadir)/locale
-rdatadir = $(datadir)/r3r
+rdatadir = $(datadir)/r3r-$(VERSION)
 skindir = $(rdatadir)/skins
 
 uis = html tui wx
