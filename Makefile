@@ -82,6 +82,7 @@ ifeq ($(DEFS_SETTINGS),SETTINGS_INI)
 else
 ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
 	@$(ECHO) $(call checkunit,LibIni)
+	@$(ECHO) $(call checklib,ini)
 else
 ifeq ($(DEFS_SETTINGS),SETTINGS_REG)
 	@$(ECHO) $(call checkunit,Registry)
@@ -93,7 +94,7 @@ ifneq ($(USE_EXPAT),0)
 endif
 ifneq ($(USE_ICONV),0)
 ifneq ($(USE_LIBICONV),0)
-ifdef inUnix
+ifndef forWindows
 	@$(ECHO) $(call checklib,iconv)
 else
 	@$(ECHO) $(call checklib,libiconv)
@@ -112,7 +113,7 @@ endif
 ifneq ($(USE_READLINE),0)
 	@$(ECHO) $(call checklib,readline)
 endif
-ifdef inWindows
+ifdef forWindows
 	@$(ECHO) $(call checkprog,png2ico)
 endif
 	-@$(DEL) $(wildcard *check*)
@@ -201,14 +202,15 @@ dist-src: clean
 	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > r3r-$(VERSION)-src.tar.xz.sha256
 
 dist-deb:
-	cd scripts/setup && $(MAKE) dist-deb
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb
 
 dist-rpm:
-	cd scripts/setup && $(MAKE) dist-rpm
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm
 
-dist-slackware:
+dist-arch:
 	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
-		-e 's/@VERSION@/$(VERSION)/g' scripts/setup/PKGBUILD.in > PKGBUILD
+		-e 's/@VERSION@/$(VERSION)/g' $(srcdir)/scripts/setup/PKGBUILD.in > \
+		PKGBUILD
 	$(MAKEPKG) $(MAKEPKGFLAGS)
 	$(MOVE) r3r-$(VERSION)-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
 	$(RM) PKGBUILD
@@ -218,7 +220,7 @@ dist-slackware:
 dist-inno_setup: OS_TARGET=win32
 
 dist-inno_setup: dist-build
-	cd scripts/setup && $(MAKE) dist-inno_setup
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-inno_setup
 
 # Cleaning rules
 clean:
