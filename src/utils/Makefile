@@ -6,9 +6,6 @@ all:
 	cd rdate && $(MAKE) all
 	cd rprop && $(MAKE) all
 	cd mailcap && $(MAKE) unit
-ifeq ($(DEFS_SETTINGS),SETTINGS_TAB)
-	cd tabfiles && $(MAKE) all
-endif
 
 clean:
 	cd mailcap && $(MAKE) clean
@@ -18,7 +15,6 @@ clean:
 	cd rprop && $(MAKE) clean
 	cd rstrings && $(MAKE) clean
 	cd strtok && $(MAKE) clean
-	cd tabfiles && $(MAKE) clean
 
 install:
 	cd opml && $(MAKE) install

@@ -22,7 +22,7 @@ dist-deb: LANGUAGE=
 
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
-	$(MOVE) $(wildcard $(curdir)/../../*.deb) $(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
+	$(MOVE) $(wildcard $(srcdir)/../../*.deb) $(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
 
 dist-rpm:
 	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
@@ -44,7 +44,6 @@ checkinstall:
 clean: distclean
 
 distclean:
-	$(DEL) description-pak
 	$(DEL) r3r.desktop
 	$(DEL) is/r3r.iss is/setup.exe
 	$(DEL) ../../description-pak

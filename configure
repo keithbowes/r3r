@@ -33,8 +33,6 @@ do
           st=SETTINGS_LIBINI;;
         registry)
           st=SETTINGS_REG;;
-        tab)
-          st=SETTINGS_TAB;;
         *)
           echo "$opt invalid"
           exit;;

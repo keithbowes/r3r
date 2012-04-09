@@ -10,6 +10,12 @@ CSUMOPTS ?=
 MAKEPKG ?= $(call programpath,makepkg)
 MAKEPKGFLAGS ?=
 
+STRIP ?= $(call programpath,strip)
+STRIPFLAGS ?=
+
+UPX ?= $(call programpath,upx)
+UPXFLAGS ?=
+
 .PHONY: check
 
 include scripts/common.make
@@ -126,10 +132,10 @@ ifdef forUnix
 endif
 
 install-strip: install
-	$(call programpath,strip) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
+	-$(STRIP) $(STRIPFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
 		$(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
-	$(call programpath,upx) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
+	-$(UPX) $(UPXFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
 		$(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 

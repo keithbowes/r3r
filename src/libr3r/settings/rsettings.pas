@@ -81,10 +81,7 @@ uses
 {$IFDEF SETTINGS_REG}
   , Info, Registry
 {$ENDIF}
-  
-{$IFDEF SETTINGS_TAB}
-  , TabFiles
-{$ENDIF};
+  ;
 
 {$IFDEF SETTINGS_INI}
   {$INCLUDE "inisettings.inc"}
@@ -96,10 +93,6 @@ uses
 
 {$IFDEF SETTINGS_REG}
   {$INCLUDE "regsettings.inc"}
-{$ENDIF}
-
-{$IFDEF SETTINGS_TAB}
-  {$INCLUDE "tabsettings.inc"}
 {$ENDIF}
 
 function TRSettings.Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;

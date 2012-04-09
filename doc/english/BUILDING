@@ -66,8 +66,6 @@ DEFS_SETTINGS
     read/write the settings to the registry (or to
     GetAppConfigDir(false)/reg.xml on non-Windows versions of
     Free Pascal).
-  * SETTINGS_TAB: Use the TTabFile object to read/write settings
-    to a .tab file (deprecated).
   (The default depends on the compiler and OS.)
 DEFS_SOCKETS
   The sockets library to use:
