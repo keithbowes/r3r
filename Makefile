@@ -92,10 +92,12 @@ ifneq ($(USE_EXPAT),0)
 	@$(ECHO) $(call checklib,expat)
 endif
 ifneq ($(USE_ICONV),0)
+ifneq ($(USE_LIBICONV),0)
 ifdef inUnix
 	@$(ECHO) $(call checklib,iconv)
 else
 	@$(ECHO) $(call checklib,libiconv)
+endif
 endif
 endif
 ifneq ($(USE_IDN),0)
