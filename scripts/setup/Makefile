@@ -16,7 +16,9 @@ all:
 install: r3r.desktop
 	$(MKDIR) $(appdir)
 	$(INSTALL) r3r.desktop $(appdir)
+ifndef MAKING_PACKAGE
 	-update-desktop-database
+endif
 
 dist-deb: LANGUAGE=
 
@@ -28,6 +30,10 @@ dist-rpm:
 	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
 	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-1.$(ARCH).rpm \
 	 	$(curdir)/../../..
+
+dist-slackware:
+	$(MAKE) checkinstall TYPE=slackware VERSION=$(VERSION)
+	$(MOVE) $(srcdir)/../../r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-1.tgz $(srcdir)/../../..
 
 dist-inno_setup:
 	cd is && $(MAKE) installer

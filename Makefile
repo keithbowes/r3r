@@ -131,7 +131,9 @@ install: all
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
 ifdef forUnix
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
+ifeq ($(R3R_UI),tui)
 	$(INSTALLEXE) $(srcdir)/r3r-settitle $(bindir)
+endif
 endif
 
 install-strip: install
@@ -206,6 +208,9 @@ dist-deb:
 
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm
+
+dist-slackware:
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-slackware
 
 dist-arch:
 	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
