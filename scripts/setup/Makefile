@@ -2,10 +2,12 @@ SHELL = /bin/sh
 
 CHECKINSTALL ?= $(call programpath,checkinstall)
 LN ?= $(call programpath,ln)
+LNFLAGS ?= -fs
 
 ARCH ?= $(CPU_TARGET)
 RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
+PKGRELEASE ?=1
 
 include ../common.make
 curdir = $(PWD)
@@ -20,31 +22,31 @@ ifndef MAKING_PACKAGE
 	-update-desktop-database
 endif
 
-dist-deb: LANGUAGE=
-
 dist-deb:
 	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
-	$(MOVE) $(wildcard $(srcdir)/../../*.deb) $(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-1_$(ARCH).deb
+	$(MOVE) $(srcdir)/../../r3r_0-$(PKGRELEASE)_$(ARCH).deb \
+		$(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb
 
 dist-rpm:
 	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
-	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-1.$(ARCH).rpm \
+	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm \
 	 	$(curdir)/../../..
 
 dist-slackware:
 	$(MAKE) checkinstall TYPE=slackware VERSION=$(VERSION)
-	$(MOVE) $(srcdir)/../../r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-1.tgz $(srcdir)/../../..
+	$(MOVE) $(srcdir)/../../r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-$(PKGRELEASE).tgz $(srcdir)/../../..
 
 dist-inno_setup:
 	cd is && $(MAKE) installer
 
 checkinstall:
-	$(LN) -fs $(curdir)/description-pak ../../description-pak
+	$(LN) $(LNFLAGS) $(curdir)/description-pak ../../description-pak
 	cd ../.. && $(CHECKINSTALL) --default --type=$(TYPE) \
 		--install=no --pkgname=r3r --pkgversion="$(VERSION)_$(R3R_UI)" \
-		--pkgarch=$(ARCH) --pkgrelease=1 --pkggroup="Networking/News" \
-		--pkglicense=none --nodoc --deldesc=yes --deldoc=yes \
-		--delspec=yes --backup=no --pkgsource=$(curdir)/../.. \
+		--pkgarch=$(ARCH) --pkgrelease=$(PKGRELEASE) \
+		--pkggroup="Networking/News" --pkglicense=none --nodoc \
+		--deldesc=yes --deldoc=yes --delspec=yes --backup=no \
+		--pkgsource=$(curdir)/../.. \
 		--maintainer=zooplah@users.sourceforge.net
 
 clean: distclean
