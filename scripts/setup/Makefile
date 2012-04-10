@@ -36,7 +36,7 @@ checkinstall:
 	$(LN) -fs $(curdir)/description-pak ../../description-pak
 	cd ../.. && $(CHECKINSTALL) --default --type=$(TYPE) \
 		--install=no --pkgname=r3r --pkgversion="$(VERSION)_$(R3R_UI)" \
-		--pkgarch=$(ARCH) --pkgrelease=1 \
+		--pkgarch=$(ARCH) --pkgrelease=1 --pkggroup="Networking/News" \
 		--pkglicense=none --nodoc --deldesc=yes --deldoc=yes \
 		--delspec=yes --backup=no --pkgsource=$(curdir)/../.. \
 		--maintainer=zooplah@users.sourceforge.net

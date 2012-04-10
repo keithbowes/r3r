@@ -209,10 +209,10 @@ dist-rpm:
 
 dist-arch:
 	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
-		-e 's/@VERSION@/$(VERSION)/g' $(srcdir)/scripts/setup/PKGBUILD.in > \
+		-e 's/@VERSION@/$(subst -,_,$(VERSION))/g' $(srcdir)/scripts/setup/PKGBUILD.in > \
 		PKGBUILD
 	$(MAKEPKG) $(MAKEPKGFLAGS)
-	$(MOVE) r3r-$(VERSION)-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
+	$(MOVE) r3r-$(subst -,_,$(VERSION))-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
 	$(RM) PKGBUILD
 	$(DELTREE) pkg
 	$(RM) r3r_opml$(TARGETEXEEXT)

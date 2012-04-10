@@ -119,7 +119,7 @@ begin
 
   if not FileExists(SkinFile) then
   begin
-    if not GetSkinFrom(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName) + '-' + AppVersion) then
+    if not GetSkinFrom(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName)) then
     begin
       GetSkinFrom(DataDir);
     end;

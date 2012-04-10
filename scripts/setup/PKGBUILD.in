@@ -13,5 +13,5 @@ build() {
 
 package() {
   cd ..
-  make PREFIX="${pkgdir}" install-strip
+  make PREFIX="${pkgdir}" install
 }
