@@ -220,7 +220,7 @@ begin
 
     if KeyChar <> NullKey then
     begin
-      { Case insensitivity a la other programs}
+      { Case insensitivity a la other programs }
       KeyChar := LowerCase(KeyChar);
     end
     else

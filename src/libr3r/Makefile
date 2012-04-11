@@ -23,7 +23,7 @@ endif
 clean: _clean
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) clean && cd ..;)
 	$(DEL) info.pas
-	$(DEL) $(wildcard $(SHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT))
+	$(DEL) $(TARGETSHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT)
 	
 install:
 	cd po && $(MAKE) install
@@ -33,7 +33,7 @@ install:
 
 uninstall:
 	cd po && $(MAKE) uninstall
-	$(DEL) $(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT)
+	$(DEL) $(libdir)/$(TARGETSHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT)
 	-$(RMDIR) $(libdir)
 
 info.pas: _info.pas ../../scripts/common.make

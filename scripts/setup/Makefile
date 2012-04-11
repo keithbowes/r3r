@@ -54,6 +54,7 @@ clean: distclean
 distclean:
 	$(DEL) r3r.desktop
 	$(DEL) is/r3r.iss is/setup.exe
+	$(DEL) ../../PKGBUILD
 	$(DEL) ../../description-pak
 	$(DELTREE) ../../doc-pak
 
