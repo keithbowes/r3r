@@ -15,7 +15,7 @@ function ShortDateToTime(Time: String): TRDate;
 function TimeToString(Time: TRDate): String;
 
 {$IFNDEF USE_NLS}
-function _(s: String): String;
+function _(s: PChar): String;
 {$ENDIF}
 
 implementation
@@ -23,6 +23,9 @@ implementation
 uses
 {$IFDEF USE_NLS}
   LibIntl,
+{$ENDIF}
+{$IFDEF __GPC__}
+  SysUtils,
 {$ENDIF}
   LibR3RStrings, StrTok;
 
@@ -201,9 +204,9 @@ begin
 end;
 
 {$IFNDEF USE_NLS}
-function _(s: String): String;
+function _(s: PChar): String;
 begin
-  _ := s;
+  _ := StrPas(s);
 end;
 {$ENDIF}
 

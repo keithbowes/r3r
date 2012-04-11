@@ -80,6 +80,7 @@ begin
 end;
 
 {$CALLING cdecl}
+{$IFDEF USE_EXPAT}
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
   attr, n: String;
@@ -103,6 +104,7 @@ begin
   
   Close(fo);
 end;
+{$ENDIF}
 {$CALLING default}
 
 procedure DoImport;
