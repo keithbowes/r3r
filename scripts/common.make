@@ -188,7 +188,12 @@ USE_ICONV ?= 1
 USE_IDN ?= 1
 USE_NLS ?= 1
 USE_PCRE ?= 1
+
+ifndef USE_GPC
 USE_READLINE ?= 1
+else
+USE_READLINE = 0
+endif
 
 NO_NCURSES ?= 0
 
@@ -324,8 +329,7 @@ PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_LIBINI
-DEFS_SOCKETS ?= SOCKETS_CURL
-USE_ICONV=0
+DEFS_SOCKETS ?= SOCKETS_BSD
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
@@ -337,6 +341,38 @@ PCFLAGS_DEBUG=--no-io-checking --no-pointer-checking \
 							--no-range-checking --no-stack-checking \
 							--no-warning
 endif # DEBUG
+
+# Let's get the proper LDFLAGS
+ifneq ($(SETTINGS_LIBINI),0)
+override LDFLAGS+=-lini
+endif
+
+ifneq ($(USE_EXPAT),0)
+override LDFLAGS+=-lexpat
+endif
+
+# glibc's implementation of iconv seems to not work well in GPC
+ifneq ($(USE_ICONV),0)
+$(warning Using libiconv. You may need to define USE_ICONV=0 or install libiconv.)
+override DEFS_EXTRA+=USE_LIBICONV
+ifndef forDOS
+override LDFLAGS+=-liconv
+else
+override LDFLAGS+=-llibiconv
+endif
+endif
+
+ifneq ($(USE_IDN),0)
+override LDFLAGS+=-lidn
+endif
+
+ifneq ($(USE_NLS),0)
+override LDFLAGS+=-lintl
+endif
+
+ifneq ($(USE_PCRE),0)
+override LDFLAGS+=-lpcre
+endif
 
 export USE_GPC
 endif # USE_GPC
