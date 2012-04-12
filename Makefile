@@ -179,6 +179,7 @@ endif
 	$(INSTALLEXE) $(builddir)/r3r-tui$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 	$(INSTALLEXE) $(builddir)/r3r-wx$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 	$(INSTALLEXE) $(srcdir)/r3r-settitle ../r3r-$(VERSION)-$(PLATFORM)/bin
+	$(INSTALLEXE) $(srcdir)/src/utils/conv/r3r-conv$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 	$(INSTALLEXE) $(srcdir)/src/utils/opml/r3r_opml$(EXEEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/bin
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib
 	$(INSTALLEXE) $(srcdir)/src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib

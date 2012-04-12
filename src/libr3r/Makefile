@@ -1,7 +1,7 @@
 EXEOUT = .
 TARGET_DIRS = po settings protocols formats
 UNIT_DIRS = $(TARGET_DIRS) ../bindings/* ../utils/* ../wrappers/*
-UNITS = info rfilter rgetfeed rhistory rmessage rsubscriptions
+UNITS = info rfilter rgetfeed rhistory rmessage rparseurl rsubscriptions
 
 include ../../scripts/common.make
 
@@ -28,6 +28,8 @@ clean: _clean
 install:
 	cd po && $(MAKE) install
 	$(MKDIR) $(libdir)
+	$(MKDIR) $(incdir)
+	$(INSTALL) libr3r.h $(incdir)
 	-$(INSTALLEXE) $(TARGETSHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT) $(libdir)
 	-ldconfig
 

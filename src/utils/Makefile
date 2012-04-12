@@ -1,4 +1,9 @@
+include ../../scripts/common.make
+
 all:
+ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
+	cd conv && $(MAKE) all
+endif
 	cd opml && $(MAKE) all
 	cd rlist && $(MAKE) all
 	cd rstrings && $(MAKE) all
@@ -8,6 +13,7 @@ all:
 	cd mailcap && $(MAKE) unit
 
 clean:
+	cd conv && $(MAKE) clean
 	cd mailcap && $(MAKE) clean
 	cd opml && $(MAKE) clean
 	cd rdate && $(MAKE) clean
@@ -17,6 +23,9 @@ clean:
 	cd strtok && $(MAKE) clean
 
 install:
+ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
+	cd conv && $(MAKE) install
+endif
 	cd opml && $(MAKE) install
 
 uninstall:

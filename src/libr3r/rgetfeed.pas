@@ -1,5 +1,9 @@
 unit RGetFeed;
 
+{$IFDEF SOCKETS_CURL}
+{$DEFINE SOCKETS_NONE}
+{$ENDIF}
+
 interface
 
 uses
@@ -8,12 +12,8 @@ uses
   , DOS, Info
 {$ENDIF}
 
-{$IFDEF SOCKETS_SYNAPSE}
-  , SynaUtil
-{$ENDIF}
-  
-{$IFDEF SOCKETS_BSD}
-  , SockWrap
+{$IFNDEF SOCKETS_NONE}
+  RParseURL
 {$ENDIF};
 
 procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
@@ -21,10 +21,6 @@ procedure ParseFeed(const Sock: TRSock);
 procedure SetFeedObject(const Lib: TLibR3R);
 
 implementation
-
-{$IFDEF SOCKETS_CURL}
-{$DEFINE SOCKETS_NONE}
-{$ENDIF}
 
 uses
 {$IFDEF USE_IDN}

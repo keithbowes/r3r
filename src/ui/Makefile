@@ -8,8 +8,6 @@ clean:
 
 install:
 	cd $(R3R_UI) && $(MAKE) install
-	$(MKDIR) $(incdir)
-	$(INSTALL) wx/libr3r.h $(incdir)
 
 uninstall:
 	cd $(R3R_UI) && $(MAKE) uninstall

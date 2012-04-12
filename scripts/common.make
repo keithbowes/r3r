@@ -154,7 +154,7 @@ else
 ifdef OS
 PREFIX = /
 else
-PREFIX = build
+PREFIX = /usr/local
 endif # OS
 endif # inUnix
 endif # PREFIX
@@ -401,6 +401,7 @@ _clean:
 	$(DEL) $(wildcard *$(OEXT))
 	$(DEL) $(wildcard *$(PPUEXT))
 	$(DEL) $(wildcard *$(STATICLIBEXT))
+	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
 
 cleanbuild:
 	cd $(BUILDDIR) && make _clean
@@ -428,5 +429,6 @@ endif
 
 MSGFMT ?= $(call programpath,msgfmt)
 MSGMERGE ?= $(call programpath,msgmerge)
+XGETTEXT ?= $(call programpath,xgettext)
 
 MSGFMTFLAGS ?= -c --statistics

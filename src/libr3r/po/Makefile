@@ -7,9 +7,6 @@ ifneq ($(mo_files),)
 	-$(MAKE) $(mo_files)
 endif
 
-clean:
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
-
 install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
 

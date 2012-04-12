@@ -13,9 +13,6 @@ install:
 uninstall:
 	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_wx.mo)
 
-clean:
-	$(DEL) $(mo_files)
-
 %.mo: %.po
 	-$(MSGFMT) $(MSGFMTFLAGS) -o $@ $<
 

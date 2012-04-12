@@ -45,12 +45,8 @@ uses
   , SysUtils
 {$ENDIF}
 
-{$IFDEF SOCKETS_SYNAPSE}  
-  , SynaUtil
-{$ENDIF}
-
-{$IFDEF SOCKETS_BSD}
-, SockWrap
+{$IFNDEF SOCKETS_NONE}  
+  , RParseURL
 {$ENDIF};
 
 constructor TAtomFeed.Create;
