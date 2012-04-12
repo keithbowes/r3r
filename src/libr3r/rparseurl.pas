@@ -2,7 +2,7 @@ unit RParseURL;
 
 interface
 
-function ParseURL(URL: String; var Protocol, USer, Password, Host, Port, Path, Search: String): String;
+function ParseURL(URL: String; var Protocol, User, Password, Host, Port, Path, Search: String): String;
 
 implementation
 
@@ -37,7 +37,7 @@ begin
     if (Index2 <> 0) and (Index2 < Index) then
     begin
       User := Copy(URL, 1, Index2 - 1);
-      PassWord := Copy(URL, Index2 + 1, Index - Index2 - 1);
+      Password := Copy(URL, Index2 + 1, Index - Index2 - 1);
     end
     else
     begin

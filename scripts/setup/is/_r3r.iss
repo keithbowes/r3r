@@ -32,7 +32,7 @@ Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r-conv.exe"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
-Source: "src\ui\wx\libr3r.h"; DestDir: "{app}\include"
+Source: "src\libr3r\libr3r.h"; DestDir: "{app}\include"
 
 Source: "src/libr3r/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "libr3r.mo"
 Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "libr3r.mo"

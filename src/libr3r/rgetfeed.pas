@@ -13,7 +13,7 @@ uses
 {$ENDIF}
 
 {$IFNDEF SOCKETS_NONE}
-  RParseURL
+  , RParseURL
 {$ENDIF};
 
 procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
