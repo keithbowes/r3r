@@ -29,4 +29,5 @@ endif
 	cd opml && $(MAKE) install
 
 uninstall:
+	cd conv && $(MAKE) uninstall
 	cd opml && $(MAKE) uninstall

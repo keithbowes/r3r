@@ -224,7 +224,6 @@ dist-arch:
 	$(RM) r3r_opml$(TARGETEXEEXT)
 
 dist-inno_setup: OS_TARGET=win32
-
 dist-inno_setup: dist-build
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-inno_setup
 

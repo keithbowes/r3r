@@ -583,7 +583,7 @@ begin
       end;
 
       DrawFeedInfo;
-      PrintField(ItemNo, IntToStr(FCurrentItem) + NextPrevLink);
+      PrintField(ItemNo, IntToStr(FCurrentItem) + StringReplace(StringReplace(NextPrevLink, '%1', GetBoundKey(DownKey), []), '%2', GetBoundKey(UpKey), []));
       PrintField(ItemTitle, Title);
       PrintField(ItemSubject, Subject);
       PrintField(ItemCreated, Created);
