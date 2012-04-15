@@ -385,6 +385,9 @@ CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\([^-]\+\).\+$$/\1/g')
 OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
 endif
 
+ARCH ?= $(CPU_TARGET)
+PKGRELEASE ?=1
+
 export CC DEFS DEFS_SOCKETS DESTDIR R3R_UI VERSION \
 	OS_TARGET CPU_TARGET \
 	bindir datadir prefix rootdir
