@@ -82,9 +82,8 @@ const
 
    IDNA_ALLOW_UNASSIGNED = $0001;
    IDNA_USE_STD3_ASCII_RULES = $0002;
-{$ifndef IDNA_ACE_PREFIX}
-{$define IDNA_ACE_PREFIX xn--}
-{$endif}
+
+   IDNA_ACE_PREFIX = 'xn--';
 
 function idna_strerror(rc:longint):Pchar;external 'idn';
 { Core functions  }
