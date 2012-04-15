@@ -1,9 +1,6 @@
 include ../../scripts/common.make
 
 all:
-ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
-	cd conv && $(MAKE) all
-endif
 	cd opml && $(MAKE) all
 	cd rlist && $(MAKE) all
 	cd rstrings && $(MAKE) all
@@ -31,3 +28,8 @@ endif
 uninstall:
 	cd conv && $(MAKE) uninstall
 	cd opml && $(MAKE) uninstall
+
+r3r-conv:
+ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
+	cd conv && $(MAKE) all
+endif

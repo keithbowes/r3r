@@ -138,10 +138,10 @@ endif
 
 install-strip: install
 	-$(STRIP) $(STRIPFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
-		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(bindir)/r3r-conv$(TARGETEXEEXT) $(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 	-$(UPX) $(UPXFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
-		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(bindir)/r3r-conv$(TARGETEXEEXT) $(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 
 # Documentation rules
