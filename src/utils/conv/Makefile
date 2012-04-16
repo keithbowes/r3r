@@ -1,8 +1,8 @@
 include ../../../scripts/common.make
 
-CFLAGS=-DLOCDIR="\"$(localedir)\"" -I../../libr3r
-LIBS=-lintl -llibr3r_shared
-LDFLAGS=-L../../libr3r
+override CFLAGS+=-DLOCDIR="\"$(localedir)\"" -I../../libr3r
+override LIBS+=-lintl -llibr3r_shared
+override LDFLAGS+=-L../../libr3r
 
 all: r3r-conv$(TARGETEXEEXT)
 	cd po && $(MAKE) all

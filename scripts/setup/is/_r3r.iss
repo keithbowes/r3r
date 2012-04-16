@@ -29,7 +29,7 @@ Source: "r3r-wx.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('wxWidgets',
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
-Source: "src\utils\opml\r3r-conv.exe"; DestDir: "{app}\bin"
+Source: "src\utils\conv\r3r-conv.exe"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r.h"; DestDir: "{app}\include"
