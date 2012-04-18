@@ -7,12 +7,11 @@ SettingsCheckBox::SettingsCheckBox(wxWindow * parent, const wxString & label, ch
 {
   bool is_enabled;
   char * name;
-  int count, index;
+  int count;
   unsigned char type;
   void * setting_value;
 
-  index = 0;
-  libr3r_access_settings(&index, &setting_name, &setting_value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&setting_name, &setting_value, &type, &count, SETTINGS_READ);
   is_enabled = (bool) setting_value;
   SetValue(is_enabled);
 

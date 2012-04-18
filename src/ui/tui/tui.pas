@@ -203,7 +203,7 @@ begin
       RetrieveFeed(ParamStr(i));
     end;
   end
-  else if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
+  else if Settings.GetBoolean('load-subscriptions-on-startup') then
   begin
     LoadSubscriptions;
   end;
@@ -632,7 +632,7 @@ begin
   { Do nothing on empty links }
   if Link <> '' then
   begin
-    Browser := Settings.GetString(Settings.IndexOf('for:http'));
+    Browser := Settings.GetString('for:http');
     { Check for the default registry association }
     if Pos('%1', Browser) <> 0 then
     begin
@@ -672,7 +672,7 @@ var
   Client, Tmp: String;
   Index: byte;
 begin
-  Client := Settings.GetString(Settings.IndexOf('for:mailto'));
+  Client := Settings.GetString('for:mailto');
   { Check for the default registry association }
   if Pos('%1', Client) <> 0 then
   begin
@@ -706,7 +706,7 @@ const
 var
   ErrPos, Len: byte;
   HBound, Index, SetInt: integer;
-  SetName, SetVal: String;
+  SetDesc, SetName, SetVal: String;
   SRec: PRList;
   Width: word;
 {$IFDEF USE_READLINE}
@@ -778,15 +778,15 @@ begin
       TextBackground(SkinColorTable.FOptionIndexBack);
       TextColor(SkinColorTable.FOptionIndexFore);
 
-      SetName := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
-      TuiConvertCodeset(SetName);
+      SetDesc := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
+      TuiConvertCodeset(SetDesc);
 
       TuiEcho(IntToStr(i + 1), false, NumLen);
       TuiWrite('.');
 
       TextBackground(SkinColorTable.FOptionDescBack);
       TextColor(SkinColorTable.FOptionDescFore);
-      TuiEcho(SetName, false, NumLen + Length(SetName));
+      TuiEcho(SetDesc, false, NumLen + Length(SetDesc));
 
       TextBackground(SkinColorTable.FOptionValueBack);
       TextColor(SkinColorTable.FOptionValueFore);
@@ -794,7 +794,7 @@ begin
       case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
         begin
-          TuiEcho(PRSetting(SRec^.GetNth(i))^.ValueString, false, Width - Length(UTF8Decode(SetName)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
+          TuiEcho(PRSetting(SRec^.GetNth(i))^.ValueString, false, Width - Length(UTF8Decode(SetDesc)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
         end;
         TypeInteger:
         begin
@@ -807,13 +807,14 @@ begin
             Index := Index div 10;
           end;
 
-          TuiEcho(IntToStr(PRSetting(SRec^.GetNth(i))^.ValueInteger), false, Width - Length(UTF8Decode(SetName)) + Len);
+          Str(PRSetting(SRec^.GetNth(i))^.ValueInteger, SetVal);
+          TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetDesc)) + Len);
         end;
         TypeBoolean:
         begin
           SetVal := BoolToString(PRSetting(SRec^.GetNth(i))^.ValueBoolean);
           Len := Length(SetVal);
-          TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetName)) + Len);
+          TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetDesc)) + Len);
         end;
       end;
 {$IFDEF USE_READLINE}
@@ -863,13 +864,13 @@ begin
 
         if StrLen(rl_line_buffer) > 0 then
         begin
-          SetName := StrPas(rl_line_buffer);
-          TuiWrite(SetName);
+          SetDesc := StrPas(rl_line_buffer);
+          TuiWrite(SetDesc);
         end
         else if InitDesc <> '' then
         begin
-          SetName := InitDesc;
-          TuiWrite(SetName);
+          SetDesc := InitDesc;
+          TuiWrite(SetDesc);
           InitDesc := '';
         end;
         rl_callback_read_char;
@@ -877,9 +878,9 @@ begin
 
       for Len := 0 to SRec^.Count - 1 do
       begin
-        if PRSetting(SRec^.GetNth(Len))^.Description = SetName then
+        if PRSetting(SRec^.GetNth(Len))^.Description = SetDesc then
         begin
-          SetName := IntToStr(Len + 1);
+          SetDesc := IntToStr(Len + 1);
           Break;
         end;
       end;
@@ -890,11 +891,11 @@ begin
 
       TextBackground(SkinColorTable.FOptionIndexBack);
       TextColor(SkinColorTable.FOptionIndexFore);
-      ReadLn(SetName);
+      ReadLn(SetDesc);
 {$ENDIF}
-      Len := Length(SetName);
+      Len := Length(SetDesc);
 
-      Val(SetName, Index, ErrPos);
+      Val(SetDesc, Index, ErrPos);
       if ErrPos = 0 then
       begin
         Dec(Index)
@@ -934,36 +935,37 @@ begin
         ReadLn(SetVal);
         if SetVal <> '' then
         begin
+          SetName := PRSetting(SRec^.GetNth(Index))^.Name;
           case PRSetting(SRec^.GetNth(Index))^.ValueType of
             TypeString:
             begin
-              SetString(Index, SetVal);
-          end;
-          TypeInteger:
-          begin
-            Val(SetVal, SetInt, ErrPos);
-
-            if ErrPos = 0 then
-            begin
-              SetInteger(Index, SetInt);
+              SetString(SetName, SetVal);
             end;
+            TypeInteger:
+            begin
+              Val(SetVal, SetInt, ErrPos);
+
+              if ErrPos = 0 then
+              begin
+                SetInteger(SetName, SetInt);
+              end;
             end;
             TypeBoolean:
             begin
               if LowerCase(SetVal) = LowerCase(TrueString) then
               begin
-                SetBoolean(Index, True)
+                SetBoolean(SetName, True)
               end
               else if LowerCase(SetVal) = LowerCase(FalseString) then
               begin
-                SetBoolean(Index, False)
+                SetBoolean(SetName, False)
               end
             end;
           end;
         end;
         DisplayOptions
       end;
-    until (Len = 0) or (Index < 0) or (SetName = GetBoundKey(QuitKey));
+    until (Len = 0) or (Index < 0) or (SetDesc = GetBoundKey(QuitKey));
 
     Redraw;
     GoItem;

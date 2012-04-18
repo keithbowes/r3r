@@ -353,7 +353,7 @@ begin
       if FileExists(CacheFile) then
       begin
         Age := DateTimeToTimeStamp(FileDateToDateTime(FileAge(CacheFile)));
-        if Age.Date < Cur.Date - Settings.GetInteger(Settings.IndexOf('cache-expiry')) then
+        if Age.Date < Cur.Date - Settings.GetInteger('cache-expiry') then
         begin
           Empty(Rec.Name);
           RemoveDir(Rec.Name);

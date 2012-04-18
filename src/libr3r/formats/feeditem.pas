@@ -199,9 +199,9 @@ begin
 {$IFDEF USE_ICONV}
   incharset := GetProp('charset');
 {$IFNDEF __GPC__}
-  outcharset := PChar(String((Settings.GetString(Settings.IndexOf('display-encoding')))));
+  outcharset := PChar(String((Settings.GetString('display-encoding'))));
 {$ELSE}
-  outcharset := Settings.GetString(Settings.IndexOf('display-encoding'));
+  outcharset := Settings.GetString('display-encoding');
 {$ENDIF}
 
   if incharset = nil then

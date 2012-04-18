@@ -32,7 +32,7 @@ end;
 procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(MessageObject) and
-    Settings.GetBoolean(Settings.IndexOf('show-messages')) then
+    Settings.GetBoolean('show-messages') then
   begin
     MessageObject.HandleMessage(IsError, MessageName, Extra);
 

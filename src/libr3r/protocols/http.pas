@@ -78,7 +78,7 @@ var
   RespList: TStringsList;
 begin
   Headers.ContentEncoding := ceNone;
-  Headers.Sniff := Settings.GetBoolean(Settings.IndexOf('enable-mime-guess'));
+  Headers.Sniff := Settings.GetBoolean('enable-mime-guess');
   HeaderState := hsUnstarted;
   NullLines := 0;
 
@@ -308,11 +308,11 @@ begin
     FIndirectHost := FIndirectHost + ':' + Port;
   end;
 
-  UseProxy := Settings.GetBoolean(Settings.IndexOf('use-proxy'));
+  UseProxy := Settings.GetBoolean('use-proxy');
   if UseProxy then
   begin
-    Host := Settings.GetString(Settings.IndexOf('proxy-address'));
-    Port := IntToStr(Settings.GetInteger(Settings.IndexOf('proxy-port')));
+    Host := Settings.GetString('proxy-address');
+    Port := IntToStr(Settings.GetInteger('proxy-port'));
   end;
 
   FCachable := true;
@@ -368,14 +368,14 @@ begin
     SendHeader(CacheHeader);
   end;
 
-  if Settings.GetBoolean(Settings.IndexOf('use-custom-accept-langs')) then
+  if Settings.GetBoolean('use-custom-accept-langs') then
   begin
-    SendHeader('Accept-Language: ' + Settings.GetString(Settings.IndexOf('accept-langs')));
+    SendHeader('Accept-Language: ' + Settings.GetString('accept-langs'));
   end;
 
-  if Settings.GetBoolean(Settings.IndexOf('use-custom-accept-types')) then
+  if Settings.GetBoolean('use-custom-accept-types') then
   begin
-    SendHeader('Accept: ' + Settings.GetString(Settings.IndexOf('accept-types')));
+    SendHeader('Accept: ' + Settings.GetString('accept-types'));
   end
   else
   begin
@@ -414,7 +414,7 @@ begin
   begin
     Res := inherited ParseItem(Item);
   end
-  else if (Headers.Status = 304) and not Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds')) then
+  else if (Headers.Status = 304) and not Settings.GetBoolean('hide-cached-feeds') then
   begin
     CurrentCache := nil;
     Ext := Cache.GetFeedExtension(Headers.ContentType);

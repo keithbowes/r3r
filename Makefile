@@ -127,18 +127,16 @@ endif
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install: all
+install:
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/doc && $(MAKE) install
 	cd $(srcdir)/icons && $(MAKE) install
 	cd $(srcdir)/scripts/setup && $(MAKE) install
 	cd $(srcdir)/src && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
-ifdef forUnix
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
 ifeq ($(R3R_UI),tui)
 	$(INSTALLEXE) $(srcdir)/r3r-settitle $(bindir)
-endif
 endif
 
 install-strip: install

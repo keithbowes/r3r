@@ -46,8 +46,8 @@ begin
   { Don't cache local files }
   if CurrentCache <> nil then
   begin
-    HideItems := Settings.GetBoolean(Settings.IndexOf('hide-cached-feed-items'));
-    HideItems := HideItems or Settings.GetBoolean(Settings.IndexOf('display-feed-title-only'));
+    HideItems := Settings.GetBoolean('hide-cached-feed-items');
+    HideItems := HideItems or Settings.GetBoolean('display-feed-title-only');
 
     with CurrentCache do
     begin

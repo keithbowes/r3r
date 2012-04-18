@@ -90,7 +90,7 @@ begin
   WriteLn(HTMLProlog);
   WriteLn(StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));
 
-  if Settings.GetBoolean(Settings.IndexOf('load-subscriptions-on-startup')) then
+  if Settings.GetBoolean('load-subscriptions-on-startup') then
   begin
     for i := 0 to Subscriptions^.Count - 1 do
     begin

@@ -14,7 +14,7 @@
 void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
 {
   char * name;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
   wxString cl, mclient, recep;
@@ -22,9 +22,8 @@ void DescriptionBoxEvents::OnContact(wxCommandEvent & event)
   wxButton * contact = (wxButton *) event.GetEventObject();
   char * whom = (char *) contact->GetClientData();
 
-  index = 0;
   name = (char *) "for:mailto";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
   mclient = wxString((char *) value, wxConvUTF8);
   recep = wxString(whom, wxConvUTF8);
@@ -294,7 +293,7 @@ void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
 void SettingsDialogEvents::OnOK(wxCommandEvent & event)
 {
   char * name;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
 
@@ -305,10 +304,9 @@ void SettingsDialogEvents::OnOK(wxCommandEvent & event)
   {
     SettingsListElement * current = *iter;
     
-    index = 0;
     name = current->GetName();
     value = current->GetValue();
-    libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_WRITE);
+    libr3r_access_settings(&name, &value, &type, &count, SETTINGS_WRITE);
   }
 
   HideSettingsDialog();

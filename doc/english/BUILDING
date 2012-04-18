@@ -60,8 +60,8 @@ DEFS_SETTINGS
   The type of settings to use:
   * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
     to read/write the settings to a .ini file.
-  * SETTINGS_LIBINI: Use libini  to read/write
-    settings to a .ini file.
+  * SETTINGS_LIBINI: Use libini <http://sourceforge.net/projects/libini>
+    to read/write settings to a .ini file.
   * SETTINGS_REG: Use the Delphi/Free Pascal TRegistry class to
     read/write the settings to the registry (or to
     GetAppConfigDir(false)/reg.xml on non-Windows versions of
@@ -109,6 +109,10 @@ succeed because the gp utility always returns a success exit code.)
 Enabling/disabling features:
 You can use the configure script or set the make environment
 variables manually (0 to disable; 1 to enable):
+NO_NCURSES
+  Enable the use of ncurses <http://gnu.org/software/ncurses> for
+  the TUI. It only makes sense in Free Pascal on Unix platforms.
+  Default: 0
 USE_EXPAT
   Allow the use of Expat to parse XML files.
   Note: Expat is required for RSS and XML feeds.  If you're only
@@ -133,10 +137,6 @@ USE_LIBICONV
   instead of the built-in iconv.  Only valid when USE_ICONV is also
   defined.
   Default: 0 for Unix platforms; 1 for non-Unix platforms
-USE_NCURSES
-  Enable the use of ncurses <http://gnu.org/software/ncurses> for
-  the TUI. It only makes sense in Free Pascal on Unix platforms.
-  Default: 1
 USE_NLS
   Allow the use of gettext to enable NLS (native language support).
   Default: 1

@@ -64,10 +64,12 @@ begin
   Reg.Free;
 end;
 
-function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
+function TRSettings.GetBoolean(const Setting: String): Boolean;
 var
+	Index: TRSetIndex;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
@@ -77,10 +79,12 @@ begin
   end;
 end;
 
-function TRSettings.GetInteger(const Index: TRSetIndex): integer;
+function TRSettings.GetInteger(const Setting: String): integer;
 var
+	Index: TRSetIndex;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
@@ -90,15 +94,17 @@ begin
   end;
 end;
 
-function TRSettings.GetString(const Index: TRSetIndex): String;
+function TRSettings.GetString(const Setting: String): String;
 var
+	Index: TRSetIndex;
   Name: String;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
-    if Pos(AssocPrefix, Sett.Name) = 0 then
+    if Pos(AssocPrefix, Sett.Name) <> 1 then
     begin
       Reg.OpenKey(SectionPrefix + Sett.Section, true);
       GetString := Reg.ReadString(Sett.Name);
@@ -113,56 +119,64 @@ begin
   end;
 end;
 
-procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
+procedure TRSettings.SetBoolean(const Setting: String; const Value: Boolean);
+var
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       Reg.OpenKey(SectionPrefix + Section, true);
-      Reg.WriteBool(Name, Setting);
+      Reg.WriteBool(Name, Value);
       Reg.CloseKey;
-			ValueBoolean := Setting;
+			ValueBoolean := Value;
     end;
   end;
 end;
 
-procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer);
+procedure TRSettings.SetInteger(const Setting: String; const Value: integer);
+var
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       Reg.OpenKey(SectionPrefix + Section, true);
-      Reg.WriteInteger(Name, Setting);
+      Reg.WriteInteger(Name, Value);
       Reg.CloseKey;
-			ValueInteger := Setting;
+			ValueInteger := Value;
     end;
   end;
 end;
 
-procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+procedure TRSettings.SetString(const Setting: String; const Value: String);
 var
   AName: String;
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
-      if Pos(AssocPrefix, Name) = 0 then
+      if Pos(AssocPrefix, Name) <> 1 then
       begin
         Reg.OpenKey(SectionPrefix + Section, true);
-        Reg.WriteString(Name, Setting);
+        Reg.WriteString(Name, Value);
         Reg.CloseKey;
       end
       else
       begin
         AName := Name;
         Delete(AName, 1, Length(AssocPrefix));
-        WriteAssocString(AName, Setting)
+        WriteAssocString(AName, Value)
       end;
 
-			ValueString := Setting;
+			ValueString := Value;
     end;
   end;
 end;
@@ -254,10 +268,14 @@ begin
     end
     else if Index = 1 then
     begin
+			Reg.CloseKey;
+
       AName := Setting;
       Delete(AName, 1, Length(AssocPrefix));
       ValueString := ReadAssocString(AName);
-      Exists := ValueString <> '';
+
+			Reg.OpenKey(SectionPrefix + ASection, true);
+      Exists := true;
     end;
 
     if not Exists then
