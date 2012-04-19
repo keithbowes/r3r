@@ -1,8 +1,6 @@
 SHELL = /bin/sh
 
 CHECKINSTALL ?= $(call programpath,checkinstall)
-LN ?= $(call programpath,ln)
-LNFLAGS ?= -fs
 
 ARCH ?= $(CPU_TARGET)
 RPMSOURCEDIR ?= ~/rpmbuild

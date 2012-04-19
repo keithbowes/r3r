@@ -2,12 +2,12 @@
 # Copyright (C) 2012 THE r'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the r package.
 # Keith Bowes <zooplah@users.sourceforge.net>, 2012.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: r 3r-git\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-12 02:14-0400\n"
+"POT-Creation-Date: 2012-04-18 21:35-0400\n"
 "PO-Revision-Date: 2012-04-12 01:57-0400\n"
 "Last-Translator: Keith Bowes <zooplah@users.sourceforge.net>\n"
 "Language-Team: Spanish\n"

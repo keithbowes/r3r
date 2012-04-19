@@ -54,6 +54,9 @@ RMDIR ?= $(call programpath,rmdir)
 SED ?= $(call programpath,sed)
 TOUCH ?= $(call programpath,touch)
 
+LN ?= $(call programpath,ln)
+LNFLAGS ?= -fs
+
 GIT ?= $(call programpath,git)
 
 ifndef inDOS
