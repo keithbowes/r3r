@@ -301,6 +301,10 @@ else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
+ifdef CPU_TARGET
+override PCFLAGS_BASE+=-P$(CPU_TARGET)
+endif
+
 ifdef OS_TARGET
 override PCFLAGS_BASE+=-T$(OS_TARGET)
 endif
@@ -381,8 +385,8 @@ endif # USE_FPC
 # Let's try to figure out what OS we're using
 HOST ?= $(PLATFORM)
 ifneq ($(HOST),)
-CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\([^-]\+\).\+$$/\1/g')
-OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.\+-\(\w\+\)$$/\1/g')
+CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\(.*\)\-.*$$/\1/g')
+OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.*\-\([a-z]*\)$$/\1/g')
 endif
 
 ARCH ?= $(CPU_TARGET)

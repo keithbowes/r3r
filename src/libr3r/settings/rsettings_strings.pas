@@ -67,7 +67,7 @@ begin
   DescMedia := _('Media player');
   DescPrefix := _('Where the program is installed');
 
-  NoDir := 'Cannot create directory %s. Perhaps you should try to create it manually.';
+  NoDir := _('Cannot create directory %s. Perhaps you should try to create it manually.');
 end;
 
 {$IFNDEF USE_NLS}

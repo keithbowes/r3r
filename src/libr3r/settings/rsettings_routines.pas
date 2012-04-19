@@ -79,7 +79,7 @@ begin
     if not CreateDir(Dir) then
     begin
       WriteLn(StringReplace(NoDir, '%s', Dir, []));
-      Halt(DosError);
+      Halt(Random(256));
     end;
   end;
 end;
