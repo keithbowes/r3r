@@ -20,7 +20,7 @@ function GetInstalledPrefix: String;
 implementation
 
 uses
-  Dos, Info, RProp, SysUtils;
+  Dos, Info, RProp, RSettings_Strings, SysUtils;
 
 var
   PrivName: String;
@@ -76,7 +76,11 @@ procedure CheckDir(const Dir: String);
 begin
   if not DirectoryExists(Dir) then
   begin
-    CreateDir(Dir);
+    if not CreateDir(Dir) then
+    begin
+      WriteLn(StringReplace(NoDir, '%s', Dir, []));
+      Halt(DosError);
+    end;
   end;
 end;
 
@@ -104,10 +108,9 @@ begin
   end;
   
   CheckDir(Ret);
-  Ret := Ret + PathDelim + PrivName;
+  Ret := Ret + PathDelim + PrivName + PathDelim;
 {$ENDIF}
 
-  Ret := Ret + PathDelim;
   CheckDir(Ret);
   SettingsDir := Ret;
 end;

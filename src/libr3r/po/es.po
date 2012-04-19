@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2011-09-20 23:04-0400\n"
+"PO-Revision-Date: 2012-04-18 23:33-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -122,3 +122,8 @@ msgstr "Legador de multimedia"
 
 msgid "Where the program is installed"
 msgstr "Dónde el programa es instalado"
+
+msgid ""
+"Cannot create directory %s. Perhaps you should try to create it manually."
+msgstr ""
+"No puedo crear la carpeta %s. Quizás deberías probar crear ella manualmente."
