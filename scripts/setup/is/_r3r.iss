@@ -6,6 +6,8 @@
 #include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','')
 #endif
 
+#define R3R_@UI@
+
 [Setup]
 AllowNoIcons=yes
 AppName=R3R
@@ -24,10 +26,8 @@ SourceDir=..\..\..
 Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
 
 [Files]
-Source: "r3r-tui.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('core-dlls', '20120202');
-Source: "r3r-wx.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('wxWidgets', '2.9.3');
+Source: "r3r-@UI@.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('core-dlls', '20120202');
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
-Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
 Source: "src\utils\conv\r3r-conv.exe"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
@@ -39,15 +39,10 @@ Source: "src/libr3r/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; Des
 Source: "src/libr3r/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "libr3r.mo"
 Source: "src/libr3r/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "libr3r.mo"
 
-Source: "src/ui/tui/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_tui.mo"
-Source: "src/ui/tui/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_tui.mo"
-
-Source: "src/ui/wx/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_wx.mo"
-Source: "src/ui/wx/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_wx.mo"
+Source: "src/ui/@UI@/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_tui.mo"
+Source: "src/ui/@UI@/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_@UI@.mo"
+Source: "src/ui/@UI@/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_@UI@.mo"
 
 Source: "src/utils/conv/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_conv.mo"
 Source: "src/utils/conv/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_conv.mo"
@@ -59,8 +54,14 @@ Source: "src/utils/opml/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES";
 Source: "src/utils/opml/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_opml.mo"
 Source: "src/utils/opml/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_opml.mo"
 
+#ifdef R3R_TUI
 Source: "src/ui/tui/docs/*.html";  DestDir: "{app}\share\r3r\docs"
 Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"
+#endif
+
+#ifdef R3R_WX
+Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
+#endif
 
 Source: "scripts/setup/is/LEERME.TXT"; DestDir: "{app}\share\r3r\docs"
 Source: "scripts/setup/is/LEGUMIN.TXT"; DestDir: "{app}\share\r3r\docs"
@@ -68,10 +69,8 @@ Source: "scripts/setup/is/LESENMICH.TXT"; DestDir: "{app}\share\r3r\docs"
 Source: "scripts/setup/is/README.TXT"; DestDir: "{app}\share\r3r\docs"
 
 [Icons]
-Name: "{userdesktop}\R3R (TUI)"; FileName: "{app}\bin\r3r-tui.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
-Name: "{userdesktop}\R3R (GUI)"; FileName: "{app}\bin\r3r-wx.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
-Name: "{group}\R3R (TUI)"; FileName: "{app}\bin\r3r-tui.exe"; IconFilename: "{app}\share\icons\r3r.ico"
-Name: "{group}\R3R (GUI)"; FileName: "{app}\bin\r3r-wx.exe"; IconFilename: "{app}\share\icons\r3r.ico"
+Name: "{userdesktop}\R3R"; FileName: "{app}\bin\r3r-@UI@.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
+Name: "{group}\R3R"; FileName: "{app}\bin\r3r-@UI@.exe"; IconFilename: "{app}\share\icons\r3r.ico"
 Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 
 [Languages]

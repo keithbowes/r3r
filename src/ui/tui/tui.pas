@@ -499,6 +499,7 @@ begin
   rl_callback_handler_remove;
 {$ENDIF}
 
+  Redraw;
   if URI <> '' then
   begin
     RetrieveFeed(URI);
@@ -652,6 +653,10 @@ begin
       Browser := Copy(Browser, 1, Index - 2);
 
       Link := StringReplace(Tmp, '%1', Link, [rfReplaceAll]);
+    end
+    else
+    begin
+      Link := '"' + Link + '"';
     end;
 
     { Windows puts the path in quotes, which Exec() doesn't like }
@@ -661,7 +666,7 @@ begin
     end;
 
     SwapVectors;
-    Exec(FSearch(Browser, GetEnv('PATH')), '"' + Link + '"');
+    Exec(FSearch(Browser, GetEnv('PATH')), Link);
     SwapVectors;
     Redraw;
   end

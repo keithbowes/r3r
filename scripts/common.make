@@ -46,6 +46,7 @@ endif #Linux
 endif #OS_TARGET
 
 # Now what programs
+CUT ?= $(call programpath,cut)
 DELTREE ?= $(call programpath,rm) -fr
 MOVE ?= mv -f
 PWD ?= $(call programpath,pwd)
@@ -53,6 +54,8 @@ RM ?= $(call programpath,rm) -f
 RMDIR ?= $(call programpath,rmdir)
 SED ?= $(call programpath,sed)
 TOUCH ?= $(call programpath,touch)
+
+LN ?= $(call programpath,ln) -sf
 
 GIT ?= $(call programpath,git)
 
@@ -385,8 +388,11 @@ endif # USE_FPC
 # Let's try to figure out what OS we're using
 HOST ?= $(PLATFORM)
 ifneq ($(HOST),)
-CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^\(.*\)\-.*$$/\1/g')
-OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(SED) -e 's/^.*\-\([a-z]*\)$$/\1/g')
+CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 1)
+OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 3)
+ifeq ($(OS_TARGET),)
+override OS_TARGET = $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 2)
+endif
 endif
 
 ARCH ?= $(CPU_TARGET)

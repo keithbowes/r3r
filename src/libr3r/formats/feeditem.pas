@@ -120,7 +120,11 @@ begin
         else if Copy(EntStr, 1, 1) = '#' then { numerical entity }
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
-          if ErrPos = 0 then
+          if (ErrPos = 0)
+          {$IFNDEF UNIX}
+            and (EntNum < 256)
+          {$ENDIF}
+            then
           begin
             EntStr := Chr(EntNum)
           end

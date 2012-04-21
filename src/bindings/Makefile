@@ -2,7 +2,7 @@ include ../../scripts/common.make
 
 all:
 ifneq ($(USE_EXPAT),0)
-	cd expas && $(LN) $(LNFLAGS) ../../../scripts/common.make \
+	cd expas && $(LN) ../../../scripts/common.make \
 		&& $(MAKE) unit
 endif
 ifneq ($(USE_NLS),0)

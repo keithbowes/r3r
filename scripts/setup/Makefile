@@ -1,8 +1,6 @@
 SHELL = /bin/sh
 
 CHECKINSTALL ?= $(call programpath,checkinstall)
-LN ?= $(call programpath,ln)
-LNFLAGS ?= -fs
 
 RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
@@ -38,7 +36,7 @@ dist-inno_setup:
 	cd is && $(MAKE) installer
 
 checkinstall:
-	$(LN) $(LNFLAGS) $(curdir)/description-pak ../../description-pak
+	$(LN) $(curdir)/description-pak ../../description-pak
 	cd ../.. && $(CHECKINSTALL) --default --type=$(TYPE) \
 		--install=no --pkgname=r3r --pkgversion="$(VERSION)_$(R3R_UI)" \
 		--pkgarch=$(ARCH) --pkgrelease=$(PKGRELEASE) \
