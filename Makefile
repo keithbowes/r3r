@@ -4,8 +4,11 @@ PAXFLAGS = -w -x ustar
 XZ = $(call programpath,xz)
 XZFLAGS = -c
 
-CSUM ?= sha256sum
-CSUMOPTS ?=
+CSUM ?= $(call programpath,sha256sum)
+CSUMFLAGS ?=
+
+GPG ?= $(call programpath,gpg)
+GPGFLAGS ?= -ab
 
 MAKEPKG ?= $(call programpath,makepkg)
 MAKEPKGFLAGS ?=
@@ -15,6 +18,8 @@ STRIPFLAGS ?=
 
 UPX ?= $(call programpath,upx)
 UPXFLAGS ?=
+
+sign = cd $(srcdir)/..; $(CSUM) $(CSUMFLAGS) $1 > $1.sha256; $(GPG) $(GPGFLAGS) $1
 
 .PHONY: check
 
@@ -122,26 +127,24 @@ endif
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install: all
+install:
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/doc && $(MAKE) install
 	cd $(srcdir)/icons && $(MAKE) install
 	cd $(srcdir)/scripts/setup && $(MAKE) install
 	cd $(srcdir)/src && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
-ifdef forUnix
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
 ifeq ($(R3R_UI),tui)
 	$(INSTALLEXE) $(srcdir)/r3r-settitle $(bindir)
 endif
-endif
 
 install-strip: install
 	-$(STRIP) $(STRIPFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
-		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(bindir)/r3r-conv$(TARGETEXEEXT) $(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 	-$(UPX) $(UPXFLAGS) $(bindir)/r3r-$(R3R_UI)$(TARGETEXEEXT) \
-		$(bindir)/r3r_opml$(TARGETEXEEXT) \
+		$(bindir)/r3r-conv$(TARGETEXEEXT) $(bindir)/r3r_opml$(TARGETEXEEXT) \
 		$(libdir)/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT)
 
 # Documentation rules
@@ -150,7 +153,7 @@ docs:
 
 dist-docs: docs
 	$(PAX) $(PAXFLAGS) doc/api | $(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-api.tar.xz
-
+	$(call sign,r3r-$(VERSION)-api.tar.xz)
 
 # Uninstallation rules
 uninstall:
@@ -194,6 +197,7 @@ endif
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
 		$(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.xz
 	$(DELTREE) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
+	$(call sign,r3r-$(VERSION)-$(PLATFORM).tar.xz)
 
 dist-src: clean
 	cd $(srcdir)
@@ -202,16 +206,19 @@ dist-src: clean
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
 		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
 	$(DELTREE) ../r3r-$(VERSION)
-	cd .. && $(CSUM) $(CSUMOPTS) r3r-$(VERSION)-src.tar.xz > r3r-$(VERSION)-src.tar.xz.sha256
+	$(call sign,r3r-$(VERSION)-src.tar.xz)
 
 dist-deb:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb
+	$(call sign,r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb)
 
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm
+	$(call sign,r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm)
 
 dist-slackware:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-slackware
+	$(call sign,r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-$(PKGRELEASE).tgz)
 
 dist-arch:
 	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
@@ -219,14 +226,15 @@ dist-arch:
 		PKGBUILD
 	$(MAKEPKG) $(MAKEPKGFLAGS)
 	$(MOVE) r3r-$(subst -,_,$(VERSION))-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
+	$(call sign,r3r-$(subst -,_,$(VERSION))-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz)
 	$(RM) PKGBUILD
 	$(DELTREE) pkg
 	$(RM) r3r_opml$(TARGETEXEEXT)
 
 dist-inno_setup: OS_TARGET=win32
-
 dist-inno_setup: dist-build
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-inno_setup
+	$(call sign,r3r-$(VERSION)-setup.exe)
 
 # Cleaning rules
 clean:

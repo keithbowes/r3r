@@ -85,7 +85,7 @@ begin
   inherited Create;
 {$ENDIF}
 
-  if Settings.GetBoolean(Settings.IndexOf('check-for-updates')) then
+  if Settings.GetBoolean('check-for-updates') then
   begin
     DoUpdate;
   end;

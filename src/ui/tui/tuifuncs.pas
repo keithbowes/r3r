@@ -103,7 +103,7 @@ var
 begin
 {$IFDEF USE_ICONV}
   incharset := 'UTF-8';
-  outcharset := StrToPChar(Settings.GetString(Settings.IndexOf('display-encoding')));
+  outcharset := StrToPChar(Settings.GetString('display-encoding'));
 
   cd := iconv_open(outcharset, incharset);
   if cd <> iconv_t(-1) then

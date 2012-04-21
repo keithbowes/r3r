@@ -6,14 +6,13 @@
 void InitGettext()
 {
 #ifdef USE_NLS
-  int count, index;
+  int count;
   char * name;
   unsigned char type;
   void * value;
 
-  index = 0;
   name = (char *) "installed-prefix";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
   wxString localeDir, path, prefix;
 

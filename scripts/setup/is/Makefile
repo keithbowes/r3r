@@ -10,7 +10,7 @@ all installer: setup.exe
 
 setup.exe: r3r.iss
 	$(ISCC) $<
-	$(MOVE) $@  $(builddir)/r3r-$(VERSION)-$@
+	$(MOVE) $@  $(srcdir)/../../../../r3r-$(VERSION)-$@
 
 r3r.iss: _r3r.iss
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' $< > $@

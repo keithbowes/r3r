@@ -41,7 +41,7 @@ begin
   cb := TItemCallback(GetProp('item-callback'));
   if Assigned(cb) then
   begin
-    if Settings.GetBoolean(Settings.IndexOf('use-filters')) then
+    if Settings.GetBoolean('use-filters') then
     begin
       FilterItem(Item);
     end;

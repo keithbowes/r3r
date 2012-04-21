@@ -92,7 +92,7 @@ begin
   UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
 
   ActivateLink := _(' (Press enter to open in your web browser)');
-  NextPrevLink := _(' (Press j for the next item or k for the previous item)');
+  NextPrevLink := _(' (Press %1 for the next item or %2 for the previous item)');
 
   NumSym := _('#');
 

@@ -111,7 +111,7 @@ const
   LC_MEASUREMENT    = 11;
   LC_IDENTIFICATION = 12;
 
-function setlocale(category: LongInt; locale: PChar): PChar; external {$ifdef MSWINDOWS}'msvcrt'{$else}'intl'{$endif};
+function setlocale(category: LongInt; locale: PChar): PChar; external {$ifdef MSWINDOWS}'msvcrt'{$else}'c'{$endif};
 
 function _(msgid: PChar): String;
 

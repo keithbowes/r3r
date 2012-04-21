@@ -84,7 +84,7 @@ begin
 
   FindFirst(Resource, AnyFile, f1);
   FindFirst(Resource2, AnyFile, f2);
-  if (Settings.GetBoolean(Settings.IndexOf('hide-cached-feeds'))) and (Resource <> Resource2) and (f1.Size = f2.Size) then
+  if Settings.GetBoolean('hide-cached-feeds') and (Resource <> Resource2) and (f1.Size = f2.Size) then
   begin
     DeleteFile(Resource);
     RenameFile(Resource2, Resource);
@@ -131,7 +131,7 @@ var
   UseFilters: Boolean;
 begin
   Finished := false;
-  UseFilters := Settings.GetBoolean(Settings.IndexOf('use-filters'));
+  UseFilters := Settings.GetBoolean('use-filters');
 
   while not Finished do
   begin

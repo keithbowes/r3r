@@ -40,21 +40,21 @@ type
     procedure CheckString(const Setting, ASection, Value, ADescription: String);
     procedure ReadRec;
     procedure WriteRec;
+    function IndexOf(const Name: String): TRSetIndex;
   public
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
-    function Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
-    function IndexOf(const Name: String): TRSetIndex;
-    function GetBoolean(const Index: TRSetIndex): Boolean;
-    function GetInteger(const Index: TRSetIndex): integer;
-    function GetString(const Index: TRSetIndex): String;
-    procedure SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
-    procedure SetInteger(const Index: TRSetIndex; const Setting: integer);
-    procedure SetString(const Index: TRSetIndex; const Setting: String);
+    procedure Enumerate(var Settings: PRList; var Count: TRSetIndex);
+    function GetBoolean(const Setting: String): Boolean;
+    function GetInteger(const Setting: String): integer;
+    function GetString(const Setting: String): String;
+    procedure SetBoolean(const Setting: String; const Value: Boolean);
+    procedure SetInteger(const Setting: String; const Value: integer);
+    procedure SetString(const Setting: String; const Value: String);
     procedure RegisterBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
     procedure RegisterInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
     procedure RegisterString(const Setting, ASection, Value, ADescription: String);
-    procedure Access(var Index: TRSetIndex; var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
+    procedure Access(var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
   end;
 
 var
@@ -67,7 +67,6 @@ uses
 
 {$IFDEF __GPC__}
   ,SysUtils
-{$ELSE}
 {$ENDIF __GPC__}
 
 {$IFDEF SETTINGS_INI}
@@ -95,14 +94,10 @@ uses
   {$INCLUDE "regsettings.inc"}
 {$ENDIF}
 
-function TRSettings.Enumerate(var Settings: PRList; var Count: TRSetIndex): Boolean;
-var
-  OrigCount: TRSetIndex;
+procedure TRSettings.Enumerate(var Settings: PRList; var Count: TRSetIndex);
 begin
-  OrigCount := Count;
   Settings := FSettings;
   Count := FSettings^.Count;
-  Enumerate := Count = OrigCount;
 end;
 
 function TRSettings.IndexOf(const Name: String): TRSetIndex;
@@ -155,18 +150,15 @@ end;
   Quick and dirty access method.
   Mostly useful for the C API.
 }
-procedure TRSettings.Access(var Index: TRSetIndex; var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
+procedure TRSettings.Access(var SettingName: String; var SettingValue: Pointer; var SettingType: byte; var Count: TRSetIndex; const SettingsMode: byte);
 var
   BoolVal: Boolean;
+  Index: TRSetIndex;
   IntVal: integer;
   StrVal: String;
 begin
   Count := FSettings^.Count;
-
-  if Index = 0 then
-  begin
-    Index := IndexOf(SettingName);
-  end;
+  Index := IndexOf(SettingName);
 
   if Index <> -1 then
   begin
@@ -178,15 +170,15 @@ begin
       case SettingType of
         TypeBoolean:
         begin
-          SetBoolean(Index, Boolean(PtrUInt(SettingValue)));
+          SetBoolean(SettingName, Boolean(PtrUInt(SettingValue)));
         end;
         TypeInteger:
         begin
-          SetInteger(Index, PtrUInt(SettingValue));
+          SetInteger(SettingName, PtrUInt(SettingValue));
         end;
         TypeString:
         begin
-          SetString(Index, StrPas(SettingValue));
+          SetString(SettingName, StrPas(SettingValue));
         end;
       end;
     end;
@@ -196,17 +188,17 @@ begin
       case SettingType of
         TypeBoolean:
         begin
-          BoolVal := GetBoolean(Index);
+          BoolVal := GetBoolean(SettingName);
           SettingValue := Pointer(PtrUInt(BoolVal));
         end;
         TypeInteger:
         begin
-          IntVal := GetInteger(Index);
+          IntVal := GetInteger(SettingName);
           SettingValue := Pointer(PtrInt(IntVal));
         end;
         TypeString:
         begin
-          StrVal := GetString(Index);
+          StrVal := GetString(SettingName);
           SettingValue := StrToPChar(StrVal);
         end;
       end;
@@ -246,7 +238,7 @@ begin
   CheckString('for:mailto', 'Programs', '', DescMail);
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
-  SetProp('installed-prefix', StrToPChar(GetString(IndexOf('installed-prefix'))));
+  SetProp('installed-prefix', StrToPChar(GetString('installed-prefix')));
 
   Dispose(mc, Done);
 end;

@@ -10,12 +10,11 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   wxFrame((wxFrame *) NULL, -1, title, pos, size)
 {
   char * name;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
-  index = 0;
   name = (char *) "installed-prefix";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
   wxString path, prefix;
 	wxChar sep = wxFileName::GetPathSeparator();

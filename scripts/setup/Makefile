@@ -1,11 +1,11 @@
 SHELL = /bin/sh
 
 CHECKINSTALL ?= $(call programpath,checkinstall)
+LN ?= $(call programpath,ln)
+LNFLAGS ?= -fs
 
-ARCH ?= $(CPU_TARGET)
 RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
-PKGRELEASE ?=1
 
 include ../common.make
 curdir = $(PWD)

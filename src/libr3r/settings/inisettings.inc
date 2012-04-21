@@ -17,10 +17,12 @@ begin
   IniFile.Free;
 end;
 
-function TRSettings.GetBoolean(const Index: TRSetIndex): Boolean;
+function TRSettings.GetBoolean(const Setting: String): Boolean;
 var
+	Index: TRSetIndex;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
@@ -28,10 +30,12 @@ begin
   end;
 end;
 
-function TRSettings.GetInteger(const Index: TRSetIndex): integer;
+function TRSettings.GetInteger(const Setting: String): integer;
 var
+	Index: TRSetIndex;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
@@ -39,10 +43,12 @@ begin
   end;
 end;
 
-function TRSettings.GetString(const Index: TRSetIndex): String;
+function TRSettings.GetString(const Setting: String): String;
 var
+	Index: TRSetIndex;
   Sett: TRSetting;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
@@ -50,38 +56,47 @@ begin
   end;
 end;
 
-procedure TRSettings.SetBoolean(const Index: TRSetIndex; const Setting: Boolean);
+procedure TRSettings.SetBoolean(const Setting: String; const Value: Boolean);
+var
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
-      IniFile.WriteBool(Section, Name, Setting);
-			ValueBoolean := Setting;
+      IniFile.WriteBool(Section, Name, Value);
+			ValueBoolean := Value;
     end;
   end;
 end;
 
-procedure TRSettings.SetInteger(const Index: TRSetIndex; const Setting: integer);
+procedure TRSettings.SetInteger(const Setting: String; const Value: integer);
+var
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
-      IniFile.WriteInteger(Section, Name, Setting);
-			ValueInteger := Setting;
+      IniFile.WriteInteger(Section, Name, Value);
+			ValueInteger := Value;
     end;
   end;
 end;
 
-procedure TRSettings.SetString(const Index: TRSetIndex; const Setting: String);
+procedure TRSettings.SetString(const Setting: String; const Value: String);
+var
+	Index: TRSetIndex;
 begin
+	Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
-      IniFile.WriteString(Section, Name, Setting);
-			ValueString := Setting;
+      IniFile.WriteString(Section, Name, Value);
+			ValueString := Value;
     end;
   end;
 end;

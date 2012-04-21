@@ -194,14 +194,14 @@ begin
   end;
 end;
 
-procedure libr3r_access_settings(var Index: integer; var setting_name: PChar; var SettingValue: Pointer; var SettingType: byte; var Count: integer; const SettingsMode: byte); cdecl;
+procedure libr3r_access_settings(var setting_name: PChar; var SettingValue: Pointer; var SettingType: byte; var Count: integer; const SettingsMode: byte); cdecl;
 var
   SettingName: ShortString;
 begin
   RemoveDuplicatePChars := false;
 
   SettingName := StrPas(setting_name);
-  Settings.Access(Index, SettingName, SettingValue, SettingType, Count, SettingsMode);
+  Settings.Access(SettingName, SettingValue, SettingType, Count, SettingsMode);
   setting_name := StrToPChar(SettingName);
 end;
 

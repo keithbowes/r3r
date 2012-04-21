@@ -181,12 +181,11 @@ void ParseFeed(char * res)
 void LoadFeeds(int argc, wxChar ** argv)
 {
   char * name, * s;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
-  index = 0;
   name = (char *) "load-subscriptions-on-startup";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
 	rargc = argc;
 	rargv = argv;
@@ -208,16 +207,15 @@ void LoadFeeds(int argc, wxChar ** argv)
 void GoBrowser(char * url)
 {
   char * name;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
   wxString browser, command, URL;
 
 	if (!url) return;
 
-  index = 0;
   name = (char *) "for:http";
-  libr3r_access_settings(&index, &name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
   browser = wxString((char *) value, wxConvUTF8);
   URL = wxString(url, wxConvUTF8);

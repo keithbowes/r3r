@@ -5,12 +5,11 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
   wxTextCtrl(parent, -1)
 {
   char * name, * text;
-  int count, index;
+  int count;
   unsigned char type;
   void * value;
 
-  index = 0;
-  libr3r_access_settings(&index, &setting_name, &value, &type, &count, SETTINGS_READ);
+  libr3r_access_settings(&setting_name, &value, &type, &count, SETTINGS_READ);
 
   switch (type)
   {

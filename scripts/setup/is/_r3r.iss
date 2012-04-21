@@ -29,7 +29,7 @@ Source: "r3r-wx.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('wxWidgets',
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"
-Source: "src\utils\opml\r3r-conv.exe"; DestDir: "{app}\bin"
+Source: "src\utils\conv\r3r-conv.exe"; DestDir: "{app}\bin"
 Source: "src\utils\opml\r3r_opml.exe"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r_shared.dll"; DestDir: "{app}\bin"
 Source: "src\libr3r\libr3r.h"; DestDir: "{app}\include"
@@ -49,10 +49,10 @@ Source: "src/ui/wx/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; Dest
 Source: "src/ui/wx/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_wx.mo"
 Source: "src/ui/wx/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_wx.mo"
 
-Source: "src/utils/conv/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_opml.mo"
-Source: "src/utils/conv/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_opml.mo"
-Source: "src/utils/conv/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_opml.mo"
-Source: "src/utils/conv/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_opml.mo"
+Source: "src/utils/conv/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_conv.mo"
+Source: "src/utils/conv/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_conv.mo"
+Source: "src/utils/conv/po/eo.mo"; DestDir: "{app}\share\locale\eo\LC_MESSAGES"; DestName: "r3r_conv.mo"
+Source: "src/utils/conv/po/es.mo"; DestDir: "{app}\share\locale\es\LC_MESSAGES"; DestName: "r3r_conv.mo"
 
 Source: "src/utils/opml/po/de.mo"; DestDir: "{app}\share\locale\de\LC_MESSAGES"; DestName: "r3r_opml.mo"
 Source: "src/utils/opml/po/en.mo"; DestDir: "{app}\share\locale\en\LC_MESSAGES"; DestName: "r3r_opml.mo"
