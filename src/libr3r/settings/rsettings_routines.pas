@@ -123,11 +123,8 @@ begin
 
   if Res = '' then
   begin
-    if StrPas(GetProp('installed-prefix')) <> '' then
-    begin
-      Res := StrPas(GetProp('installed-prefix'))
-    end
-    else
+    Res := StrPas(GetProp('installed-prefix'));
+    if Res = '' then
     begin
       Res := InstalledPrefix
     end

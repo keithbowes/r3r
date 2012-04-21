@@ -192,8 +192,10 @@ begin
   if outstr <> nil then
   begin
     outbuf := outstr;
-    iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft);
-    FieldValue := StrPas(outstr);
+    if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> size_t(-1) then
+    begin
+      FieldValue := StrPas(outstr);
+    end;
     FreeMem(outstr);
   end;
 end;
