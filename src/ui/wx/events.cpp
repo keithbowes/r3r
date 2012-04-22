@@ -349,6 +349,7 @@ void SubscriptionsEvents::OnAdd(wxCommandEvent & event)
     wxString * value = new wxString();
     *value = entry->GetValue();
     box->InsertItems(1, value, box->GetCount());
+		box->SetSelection(box->GetCount() - 1);
 
     Subscriptions * subs = GetSubscriptionsObject();
     subs->Add((char *) (const char *) value->mb_str());
@@ -389,6 +390,7 @@ void SubscriptionsEvents::OnDelete(wxCommandEvent & event)
 
     if (box->GetCount() > 0)
     {
+			sel = (sel > 0) ? sel - 1 : 0;
       box->Select(sel);
     }
   }

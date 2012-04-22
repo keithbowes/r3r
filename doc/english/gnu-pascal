@@ -8,9 +8,6 @@ Requirements:
 * The SysUtils unit <http://www.gnu-pascal.de/contrib/chief/sysutils/>.
 
 Notes:
-* You'll need to link to Expat, libidn and perhaps some other
-  libraries.  Be sure to set your LDFLAGS environment variable
-  accordingly.
 * GNU Pascal limits its strings to 255 chars when no length is
   specified (unlike Free Pascal, where you can use long strings,
   which are dynamic and can be up to the size of a machine word
@@ -19,6 +16,10 @@ Notes:
   the first truncated line).
 * UTF-8 seems not to work in the TUI.  Foreign feeds and
   translated interfaces may not display properly.
+  Note: If you compiled it with (lib)iconv, you can set the display
+  character encoding to ISO-8859-1 (add the suffix //TRANSLIT for
+  glibc's iconv) to get everything to display more or less
+  correctly through surrogates.
 * This is a very early stage and there may be remaining
   crashers.  I've found several after I thought it was working
   (generally, it's related to Free Pascal being more tolerant to

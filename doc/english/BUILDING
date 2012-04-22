@@ -6,6 +6,7 @@ Minimal dependencies:
   welcome).
 * Unix tools (preferably, the GNU versions):
   * Those included with Free Pascal plus:
+    * cut
     * grep
     * sed <http://sed.sourceforge.net/>
     * test

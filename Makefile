@@ -25,7 +25,7 @@ sign = cd $(srcdir)/..; $(CSUM) $(CSUMFLAGS) $1 > $1.sha256; $(GPG) $(GPGFLAGS) 
 
 include scripts/common.make
 
-all: docs
+all build: docs
 	cd $(srcdir)/icons && $(MAKE)
 	cd $(srcdir)/src && $(MAKE)
 	$(MOVE) $(srcdir)/src/ui/$(R3R_UI)/r3r$(TARGETEXEEXT) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT)
@@ -232,7 +232,7 @@ dist-arch:
 	$(RM) r3r_opml$(TARGETEXEEXT)
 
 dist-inno_setup: OS_TARGET=win32
-dist-inno_setup: dist-build
+dist-inno_setup: all
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-inno_setup
 	$(call sign,r3r-$(VERSION)-setup.exe)
 
