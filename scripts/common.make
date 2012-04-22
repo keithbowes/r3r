@@ -388,7 +388,11 @@ override LDFLAGS+=-lintl
 endif
 
 ifneq ($(USE_PCRE),0)
+ifeq ($(PcreLib),)
 override LDFLAGS+=-lpcre
+else
+override LDFLAGS+=-l$(PcreLib)
+endif
 endif
 
 export USE_GPC

@@ -69,15 +69,24 @@ interface
   -----------------------------------------------------------------------------
  }
 
-type
-{$IFDEF FPC}
-{$IFDEF VER2_0}
-  size_t = PtrUInt;
+{$IFNDEF __GPC__}
+const
+{$IFDEF MSWINDOWS}
+  PcreLib = 'libpcre-0';
 {$ELSE}
-  size_t = cardinal;
+  PcreLib = 'pcre';
 {$ENDIF}
 {$ELSE}
-{$IFDEF __GPC}
+{$IFNDEF PcreLib}
+{$DEFINE PcreLib 'pcre'}
+{$ENDIF}
+{$ENDIF}
+
+type
+{$IFDEF FPC}
+  size_t = PtrUInt;
+{$ELSE}
+{$IFDEF __GPC__}
   size_t = SizeType;
 {$ELSE}
   size_t = cardinal;
@@ -198,25 +207,6 @@ var
 
       ppcre = ^real_pcre;
 
-{ When PCRE is compiled as a C++ library, the subject pointer type can be
-replaced with a custom type. For conventional use, the public interface is a
-const char *. }
-{$IFDEF FPC}
-{$MACRO ON}
-{$IFNDEF PCRE_SPTR}
-{$DEFINE PCRE_SPTR := PChar}
-{$ENDIF}
-{$ELSE}
-{$IFDEF __GPC__}
-{$IFNDEF PCRE_SPTR}
-{$DEFINE PCRE_SPTR PChar}
-{$ENDIF}
-{$ELSE}
-type
-  PCRE_SPTR = PChar;
-{$ENDIF}
-{$ENDIF}
-
     { The structure for passing additional data to pcre_exec(). This is defined in
     such as way as to be extensible. Always add new fields at the end, in order to
     remain compatible. }
@@ -242,7 +232,7 @@ type
     { ------------------------ Version 0 ------------------------------- }
           callout_number : longint; { Number compiled into pattern }
           offset_vector : PInteger; { The offset vector }
-          subject : PCRE_SPTR; { The subject being matched }
+          subject : PChar; { The subject being matched }
           subject_length : longint; { The length of the subject }
           start_match : longint; { Offset to start of this match attempt }
           current_position : longint; { Where we currently are in the subject }
@@ -271,29 +261,29 @@ var
   pcre_callout: function(block: ppcre_callout_block): integer;
 
 { Exported PCRE functions }
-function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external 'pcre';
-function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external 'pcre';
-function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra; external 'pcre';
-function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer; external 'pcre';
-function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer; external 'pcre';
+function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external PcreLib;
+function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external PcreLib;
+function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra; external PcreLib;
+function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer; external PcreLib;
+function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer; external PcreLib;
 
-function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer; external 'pcre';
-function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer; external 'pcre';
-function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer; external 'pcre';
-function pcre_get_stringnumber(code: ppcre; name: PChar): integer; external 'pcre';
-function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer; external 'pcre';
-function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer; external 'pcre';
-function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer; external 'pcre';
-procedure pcre_free_substring(stringptr: PChar); external 'pcre';
-procedure pcre_free_substring_list(stringptr: PPChar); external 'pcre';
+function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer; external PcreLib;
+function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer; external PcreLib;
+function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer; external PcreLib;
+function pcre_get_stringnumber(code: ppcre; name: PChar): integer; external PcreLib;
+function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer; external PcreLib;
+function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer; external PcreLib;
+function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer; external PcreLib;
+procedure pcre_free_substring(stringptr: PChar); external PcreLib;
+procedure pcre_free_substring_list(stringptr: PPChar); external PcreLib;
 
-function pcre_maketables: byte; external 'pcre';
+function pcre_maketables: byte; external PcreLib;
 
-function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external 'pcre';
-function pcre_info(code: ppcre; optptr, firstcharptr: PInteger): integer; external 'pcre';
-function pcre_refcount(code: ppcre; adjust: integer): integer; external 'pcre';
-function pcre_config(what: integer; where: Pointer): integer; external 'pcre';
-function pcre_version: PChar; external 'pcre';
+function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external PcreLib;
+function pcre_info(code: ppcre; optptr, firstcharptr: PInteger): integer; external PcreLib;
+function pcre_refcount(code: ppcre; adjust: integer): integer; external PcreLib;
+function pcre_config(what: integer; where: Pointer): integer; external PcreLib;
+function pcre_version: PChar; external PcreLib;
 
 
 implementation
