@@ -2,9 +2,9 @@
 #include <libr3r.h>
 #include <locale.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 
-#include "esfwriter.h"
 #include "r3r-conv.h"
 
 #ifdef _
@@ -72,11 +72,28 @@ FILE * get_handle()
 	return fh;
 }
 
+char * get_locale_dir()
+{
+	int count;
+	char * name, * s;
+	char type;
+	void * value;
+
+	name = "installed-prefix";
+	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
+
+	s = malloc(sizeof(char) * 256);
+	sprintf(s, "%s/share/locale", (char *) value);
+	return s;
+}
+
 int main(int argc, char ** argv)
 {
+	char * locdir = get_locale_dir();
 	setlocale(LC_ALL, "");
 	textdomain("r3r_conv");
-	bindtextdomain("r3r_conv", LOCDIR);
+	bindtextdomain("r3r_conv", locdir);
+	free(locdir);
 
 	int i;
 	char * invok = argv[0];

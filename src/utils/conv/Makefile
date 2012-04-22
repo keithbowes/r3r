@@ -1,6 +1,6 @@
 include ../../../scripts/common.make
 
-override CFLAGS+=-DLOCDIR="\"$(localedir)\"" -I../../libr3r
+override CFLAGS+=-I../../libr3r
 override LIBS+=-lintl -llibr3r_shared
 override LDFLAGS+=-L../../libr3r
 
