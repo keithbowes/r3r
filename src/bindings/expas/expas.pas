@@ -23,61 +23,70 @@ Type
 {$PACKRECORDS C}
 {$ENDIF}
 
-
-  {
-  Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd
-  See the file copying.txt for copying permission.
-   }
-
-  const
-     XmlParse_INCLUDED = 1;
-
-  type
-
-     XML_Parser = pointer;
-{$ifdef XML_UNICODE_WCHAR_T}
-  { XML_UNICODE_WCHAR_T will work only if sizeof(wchar_t) == 2 and wchar_t
-  uses Unicode.  }
-  { Information is UTF-16 encoded as wchar_ts  }
-{$ifndef XML_UNICODE}
-{$define XML_UNICODE}  
+{$ifndef __GPC__}
+const
+{$ifdef MSWINDOWS}
+{$ifdef XML_UNICODE}
+{$ifdef EXPAT_2}
+  ExpatLib = 'libexpatw-1';
+{$else}
+  ExpatLib = 'expatw';
+{$endif}
+{$else}
+{$ifdef EXPAT_2}
+  ExpatLib = 'libexpat-1';
+{$else}
+  ExpatLib = 'expat';
+{$endif}
+{$endif}
+{$else}
+{$ifdef XML_UNICODE}
+  ExpatLib = 'expatw';
+{$else}
+  ExpatLib = 'expat';
+{$endif}
+{$endif}
+{$else}
+{$ifndef ExpatLib}
+{$ifdef XML_UNICODE}
+  {$define ExpatLib 'expatw'}
+{$else}
+  {$define ExpatLib 'expat'}
+{$endif}
+{$endif}
 {$endif}
 
-  type
-
-     XML_Char = wchar_t;
-
-     XML_LChar = wchar_t;
+type
+{$ifdef EXPAT_2}
+{$ifndef __GPC__}
+  number = cardinal;
 {$else}
-  { not XML_UNICODE_WCHAR_T  }
+  number = PtrCard;
+{$endif}
+{$else}
+  number = integer;
+{$endif}
+
+     XML_Parser = pointer;
 {$ifdef XML_UNICODE}
-  { Information is UTF-16 encoded as unsigned shorts  }
-
   type
-
-     XML_Char = word;
-
-     XML_LChar = char;
+     XML_Char = widechar;
+     XML_LChar = widechar;
 {$else}
   { not XML_UNICODE  }
   { Information is UTF-8 encoded.  }
-
   type
-
      XML_Char = char;
-
      XML_LChar = char;
 {$endif}
   { not XML_UNICODE  }
-{$endif}
 
   PXML_LChar = ^XML_LChar;
      
-  { not XML_UNICODE_WCHAR_T  }
   { Constructs a new parser; encoding is the encoding specified by the external
   protocol or null if there is none specified.  }
 
-  function XML_ParserCreate(const encoding:PChar):XML_Parser; external 'expat' name 'XML_ParserCreate';
+  function XML_ParserCreate(const encoding:PChar):XML_Parser; external ExpatLib name 'XML_ParserCreate';
 
   { Constructs a new parser and namespace processor.  Element type names
   and attribute names that belong to a namespace will be expanded;
@@ -88,7 +97,7 @@ Type
   the namespace URI and the local part will be concatenated without any
   separator.  When a namespace is not declared, the name and prefix will be
   passed through without expansion.  }
-  function XML_ParserCreateNS(encoding:PChar; namespaceSeparator:XML_Char):XML_Parser; external 'expat' name 'XML_ParserCreateNS';
+  function XML_ParserCreateNS(encoding:PChar; namespaceSeparator:XML_Char):XML_Parser; external ExpatLib name 'XML_ParserCreateNS';
 
   { atts is array of name/value pairs, terminated by 0;
      names and values are 0 terminated.  }
@@ -249,67 +258,72 @@ Type
   then the parser will return an XML_UNKNOWN_ENCODING error.  }
 
      XML_UnknownEncodingHandler = function (var encodingHandlerData:pointer; name:PChar; var info:XML_Encoding):integer;
+     XML_Status = integer;
+  const
+     XML_STATUS_ERROR = 0;
+     XML_STATUS_OK = 1;
+     XML_STATUS_SUSPENDED = 2;
 
-  procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external 'expat' name 'XML_SetElementHandler';
+  procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external ExpatLib name 'XML_SetElementHandler';
 
-  procedure XML_SetCharacterDataHandler(parser:XML_Parser; handler:XML_CharacterDataHandler); external 'expat' name 'XML_SetCharacterDataHandler';
+  procedure XML_SetCharacterDataHandler(parser:XML_Parser; handler:XML_CharacterDataHandler); external ExpatLib name 'XML_SetCharacterDataHandler';
 
-  procedure XML_SetProcessingInstructionHandler(parser:XML_Parser; handler:XML_ProcessingInstructionHandler); external 'expat' name 'XML_SetProcessingInstructionHandler';
+  procedure XML_SetProcessingInstructionHandler(parser:XML_Parser; handler:XML_ProcessingInstructionHandler); external ExpatLib name 'XML_SetProcessingInstructionHandler';
 
-  procedure XML_SetCommentHandler(parser:XML_Parser; handler:XML_CommentHandler); external 'expat' name 'XML_SetCommentHandler';
+  procedure XML_SetCommentHandler(parser:XML_Parser; handler:XML_CommentHandler); external ExpatLib name 'XML_SetCommentHandler';
 
-  procedure XML_SetCdataSectionHandler(parser:XML_Parser; startEl:XML_StartCdataSectionHandler; endEl:XML_EndCdataSectionHandler); external 'expat' name 'XML_SetCdataSectionHandler';
+  procedure XML_SetCdataSectionHandler(parser:XML_Parser; startEl:XML_StartCdataSectionHandler; endEl:XML_EndCdataSectionHandler); external ExpatLib name 'XML_SetCdataSectionHandler';
 
   { This sets the default handler and also inhibits expansion of internal entities.
   The entity reference will be passed to the default handler.  }
-  procedure XML_SetDefaultHandler(parser:XML_Parser; handler:XML_DefaultHandler); external 'expat' name 'XML_SetDefaultHandler';
+  procedure XML_SetDefaultHandler(parser:XML_Parser; handler:XML_DefaultHandler); external ExpatLib name 'XML_SetDefaultHandler';
 
   { This sets the default handler but does not inhibit expansion of internal entities.
   The entity reference will not be passed to the default handler.  }
-  procedure XML_SetDefaultHandlerExpand(parser:XML_Parser; handler:XML_DefaultHandler); external 'expat' name 'XML_SetDefaultHandlerExpand';
+  procedure XML_SetDefaultHandlerExpand(parser:XML_Parser; handler:XML_DefaultHandler); external ExpatLib name 'XML_SetDefaultHandlerExpand';
 
-  procedure XML_SetDoctypeDeclHandler(parser:XML_Parser; startEl:XML_StartDoctypeDeclHandler; endEl:XML_EndDoctypeDeclHandler); external 'expat' name 'XML_SetDoctypeDeclHandler';
+  procedure XML_SetDoctypeDeclHandler(parser:XML_Parser; startEl:XML_StartDoctypeDeclHandler; endEl:XML_EndDoctypeDeclHandler); external ExpatLib name 'XML_SetDoctypeDeclHandler';
 
-  procedure XML_SetUnparsedEntityDeclHandler(parser:XML_Parser; handler:XML_UnparsedEntityDeclHandler); external 'expat' name 'XML_SetUnparsedEntityDeclHandler';
+  procedure XML_SetUnparsedEntityDeclHandler(parser:XML_Parser; handler:XML_UnparsedEntityDeclHandler); external ExpatLib name 'XML_SetUnparsedEntityDeclHandler';
 
-  procedure XML_SetNotationDeclHandler(parser:XML_Parser; handler:XML_NotationDeclHandler); external 'expat' name 'XML_SetNotationDeclHandler';
+  procedure XML_SetNotationDeclHandler(parser:XML_Parser; handler:XML_NotationDeclHandler); external ExpatLib name 'XML_SetNotationDeclHandler';
 
-  procedure XML_SetExternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_ExternalParsedEntityDeclHandler); external 'expat' name 'XML_SetExternalParsedEntityDeclHandler';
+  procedure XML_SetExternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_ExternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetExternalParsedEntityDeclHandler';
 
-  procedure XML_SetInternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_InternalParsedEntityDeclHandler); external 'expat' name 'XML_SetInternalParsedEntityDeclHandler';
+  procedure XML_SetInternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_InternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetInternalParsedEntityDeclHandler';
 
-  procedure XML_SetNamespaceDeclHandler(parser:XML_Parser; startEl:XML_StartNamespaceDeclHandler; endEl:XML_EndNamespaceDeclHandler); external 'expat' name 'XML_SetNamespaceDeclHandler';
+  procedure XML_SetNamespaceDeclHandler(parser:XML_Parser; startEl:XML_StartNamespaceDeclHandler; endEl:XML_EndNamespaceDeclHandler); external ExpatLib name 'XML_SetNamespaceDeclHandler';
 
-  procedure XML_SetNotStandaloneHandler(parser:XML_Parser; handler:XML_NotStandaloneHandler); external 'expat' name 'XML_SetNotStandaloneHandler';
+  procedure XML_SetNotStandaloneHandler(parser:XML_Parser; handler:XML_NotStandaloneHandler); external ExpatLib name 'XML_SetNotStandaloneHandler';
 
-  procedure XML_SetExternalEntityRefHandler(parser:XML_Parser; handler:XML_ExternalEntityRefHandler); external 'expat' name 'XML_SetExternalEntityRefHandler';
+  procedure XML_SetExternalEntityRefHandler(parser:XML_Parser; handler:XML_ExternalEntityRefHandler); external ExpatLib name 'XML_SetExternalEntityRefHandler';
 
   { If a non-null value for arg is specified here, then it will be passed
   as the first argument to the external entity ref handler instead
   of the parser object.  }
-  procedure XML_SetExternalEntityRefHandlerArg(_para1:XML_Parser; var arg:pointer); external 'expat' name 'XML_SetExternalEntityRefHandlerArg';
+  procedure XML_SetExternalEntityRefHandlerArg(_para1:XML_Parser; var arg:pointer); external ExpatLib name 'XML_SetExternalEntityRefHandlerArg';
 
-  procedure XML_SetUnknownEncodingHandler(parser:XML_Parser; handler:XML_UnknownEncodingHandler; var encodingHandlerData:pointer); external 'expat' name 'XML_SetUnknownEncodingHandler';
+  procedure XML_SetUnknownEncodingHandler(parser:XML_Parser; handler:XML_UnknownEncodingHandler; var encodingHandlerData:pointer); external ExpatLib name 'XML_SetUnknownEncodingHandler';
 
   { This can be called within a handler for a start element, end element,
   processing instruction or character data.  It causes the corresponding
   markup to be passed to the default handler.  }
-  procedure XML_DefaultCurrent(parser:XML_Parser); external 'expat' name 'XML_DefaultCurrent';
+  procedure XML_DefaultCurrent(parser:XML_Parser); external ExpatLib name 'XML_DefaultCurrent';
 
   { This value is passed as the userData argument to callbacks.  }
-  procedure XML_SetUserData(parser:XML_Parser; userData:pointer); external 'expat' name 'XML_SetUserData';
+  procedure XML_SetUserData(parser:XML_Parser; userData:pointer); external ExpatLib name 'XML_SetUserData';
 
   { Returns the last value set by XML_SetUserData or null.  }
   function XML_GetUserData(parser: XML_Parser): Pointer;
   { This is equivalent to supplying an encoding argument
   to XML_ParserCreate. It must not be called after XML_Parse
   or XML_ParseBuffer.  }
-  function XML_SetEncoding(parser:XML_Parser; encoding:PChar):integer; external 'expat' name 'XML_SetEncoding';
+  function XML_SetEncoding(parser:XML_Parser; encoding:PChar):XML_Status; external ExpatLib name 'XML_SetEncoding';
 
   { If this function is called, then the parser will be passed
   as the first argument to callbacks instead of userData.
   The userData will still be accessible using XML_GetUserData.  }
-  procedure XML_UseParserAsHandlerArg(parser:XML_Parser); external 'expat' name 'XML_UseParserAsHandlerArg';
+  procedure XML_UseParserAsHandlerArg(parser:XML_Parser); external ExpatLib name 'XML_UseParserAsHandlerArg';
 
   { Sets the base to be used for resolving relative URIs in system identifiers in
   declarations.  Resolving relative identifiers is left to the application:
@@ -317,31 +331,31 @@ Type
   XML_ExternalEntityRefHandler, XML_NotationDeclHandler
   and XML_UnparsedEntityDeclHandler. The base argument will be copied.
   Returns zero if out of memory, non-zero otherwise.  }
-  function XML_SetBase(parser:XML_Parser; base:PChar):integer; external 'expat' name 'XML_SetBase';
+  function XML_SetBase(parser:XML_Parser; base:PChar):XML_Status; external ExpatLib name 'XML_SetBase';
 
-  function XML_GetBase(parser:XML_Parser):PChar; external 'expat' name 'XML_GetBase';
+  function XML_GetBase(parser:XML_Parser):PChar; external ExpatLib name 'XML_GetBase';
 
   { Returns the number of the attribute/value pairs passed in last call
   to the XML_StartElementHandler that were specified in the start-tag
   rather than defaulted. Each attribute/value pair counts as 2; thus
   this correspondds to an index into the atts array passed to the
   XML_StartElementHandler.  }
-  function XML_GetSpecifiedAttributeCount(parser:XML_Parser):integer; external 'expat' name 'XML_GetSpecifiedAttributeCount';
+  function XML_GetSpecifiedAttributeCount(parser:XML_Parser):integer; external ExpatLib name 'XML_GetSpecifiedAttributeCount';
 
   { Returns the index of the ID attribute passed in the last call to
   XML_StartElementHandler, or -1 if there is no ID attribute.  Each
   attribute/value pair counts as 2; thus this correspondds to an index
   into the atts array passed to the XML_StartElementHandler.  }
-  function XML_GetIdAttributeIndex(parser:XML_Parser):integer; external 'expat' name 'XML_GetIdAttributeIndex';
+  function XML_GetIdAttributeIndex(parser:XML_Parser):integer; external ExpatLib name 'XML_GetIdAttributeIndex';
 
   { Parses some input. Returns 0 if a fatal error is detected.
   The last call to XML_Parse must have isFinal true;
   len may be zero for this call (or any other).  }
-  function XML_Parse(parser:XML_Parser; s:pchar; len:integer; isFinal:integer):integer; external 'expat' name 'XML_Parse';
+  function XML_Parse(parser:XML_Parser; s:pchar; len:integer; isFinal:integer):XML_Status; external ExpatLib name 'XML_Parse';
 
-  function XML_GetBuffer(parser:XML_Parser; len:integer):pointer; external 'expat' name 'XML_GetBuffer';
+  function XML_GetBuffer(parser:XML_Parser; len:integer):pointer; external ExpatLib name 'XML_GetBuffer';
 
-  function XML_ParseBuffer(parser:XML_Parser; len:integer; isFinal:integer):integer; external 'expat' name 'XML_ParseBuffer';
+  function XML_ParseBuffer(parser:XML_Parser; len:integer; isFinal:integer):XML_Status; external ExpatLib name 'XML_ParseBuffer';
 
   { Creates an XML_Parser object that can parse an external general entity;
   context is a '\0'-terminated string specifying the parse context;
@@ -356,7 +370,7 @@ Type
   The new parser is completely independent and may safely be used in a separate thread.
   The handlers and userData are initialized from the parser argument.
   Returns 0 if out of memory.  Otherwise returns a new XML_Parser object.  }
-  function XML_ExternalEntityParserCreate(parser:XML_Parser; context:PChar; encoding:PChar):XML_Parser; external 'expat' name 'XML_ExternalEntityParserCreate';
+  function XML_ExternalEntityParserCreate(parser:XML_Parser; context:PChar; encoding:PChar):XML_Parser; external ExpatLib name 'XML_ExternalEntityParserCreate';
 
 
   type
@@ -382,7 +396,7 @@ Type
   XML_SetParamEntityParsing will return 0 if parsing of parameter
   entities is requested; otherwise it will return non-zero.  }
 
-  function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external 'expat' name 'XML_SetParamEntityParsing';
+  function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external ExpatLib name 'XML_SetParamEntityParsing';
 
   type
      XML_Error = (XML_ERROR_NONE,XML_ERROR_NO_MEMORY,XML_ERROR_SYNTAX,
@@ -400,7 +414,7 @@ Type
 
   { If XML_Parse or XML_ParseBuffer have returned 0, then XML_GetErrorCode
   returns information about the error.  }
-  function XML_GetErrorCode(parser: XML_Parser): XML_Error; external 'expat' name 'XML_GetCurrentLineNumber';
+  function XML_GetErrorCode(parser: XML_Parser): XML_Error; external ExpatLib name 'XML_GetErrorCode';
   { These functions return information about the current parse location.
   They may be called when XML_Parse or XML_ParseBuffer return 0;
   in this case the location is the location of the character at which
@@ -409,27 +423,28 @@ Type
   some parse event; in this the location is the location of the first
   of the sequence of characters that generated the event.  }
 
-  function XML_GetCurrentLineNumber(parser:XML_Parser):integer; external 'expat' name 'XML_GetCurrentLineNumber';
+  function XML_GetCurrentLineNumber(parser:XML_Parser):number; external ExpatLib name 'XML_GetCurrentLineNumber';
 
-  function XML_GetCurrentColumnNumber(parser:XML_Parser):integer; external 'expat' name 'XML_GetCurrentColumnNumber';
+  function XML_GetCurrentColumnNumber(parser:XML_Parser):number; external ExpatLib name 'XML_GetCurrentColumnNumber';
 
-  function XML_GetCurrentByteIndex(parser:XML_Parser):integer; external 'expat' name 'XML_GetCurrentByteIndex';
+  function XML_GetCurrentByteIndex(parser:XML_Parser):integer; external ExpatLib name 'XML_GetCurrentByteIndex';
 
   { Return the number of bytes in the current event.
   Returns 0 if the event is in an internal entity.  }
-  function XML_GetCurrentByteCount(parser:XML_Parser):integer; external 'expat' name 'XML_GetCurrentByteCount';
+  function XML_GetCurrentByteCount(parser:XML_Parser):integer; external ExpatLib name 'XML_GetCurrentByteCount';
 
-  { For backwards compatibility with previous versions.  }
-
-  function XML_GetErrorLineNumber(parser: XML_Parser): integer;  external 'expat' name 'XML_GetCurrentLineNumber';
-  function XML_GetErrorColumnNumber(parser: XML_Parser): integer;  external 'expat' name 'XML_GetCurrentColumnNumber';
-  function XML_GetErrorByteIndex(parser: XML_Parser): integer;  external 'expat' name 'XML_GetCurrentByteIndex';   
   { Frees memory used by the parser.  }
 
-  procedure XML_ParserFree(parser:XML_Parser); external 'expat' name 'XML_ParserFree';
+  procedure XML_ParserFree(parser:XML_Parser); external ExpatLib name 'XML_ParserFree';
 
   { Returns a string describing the error.  }
-  function XML_ErrorString(code:integer):PXML_LChar; external 'expat' name 'XML_ErrorString';
+  function XML_ErrorString(code:XML_Error):PXML_LChar; external ExpatLib name 'XML_ErrorString';
+
+const
+  { For backwards compatibility with previous versions.  }
+  XML_GetErrorLineNumber: function(parser:XML_Parser):number   = XML_GetCurrentLineNumber;
+  XML_GetErrorColumnNumber: function(parser:XML_Parser):number = XML_GetCurrentColumnNumber;
+  XML_GetErrorByteIndex: function(parser:XML_Parser):integer   = XML_GetCurrentByteIndex;   
 
 implementation
 

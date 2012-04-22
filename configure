@@ -1,6 +1,10 @@
 #! /bin/sh
 
 prefix=/usr/local
+if test -z "$PREFIX";
+then
+  PREFIX=$prefix
+fi
 
 builddir=$(pwd)
 srcrel=`echo $0 | sed -e 's|/configure||g'`
@@ -79,9 +83,11 @@ do
       echo "USE_READLINE=0" >> config.make;;
     --disable-xml)
       echo "USE_EXPAT=0" >> config.make;;
+    --without-expat2)
+      echo "EXPAT_2=0" >> confning.make;;
     --help)
       echo "Available options:"
-      echo -e "\t--prefix=PFX Where to install it [/usr/local]"
+      echo -e "\t--prefix=PFX Where to install it [$PREFIX]"
       echo -e "\t--host=HOST Build for HOST (e.g. i386-win32)"
       echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS.\n\t\tOnly works on Unix systems without the --disable-iconv option"
       echo -e "\t--with-settings=database Type of settings database to use (ini|libini|registry)"
@@ -96,6 +102,7 @@ do
       echo -e "\t--disable-pcre Disable PCRE support (regular expressions)"
       echo -e "\t--disable-readline Disable GNU Readline support (TUI only)"
       echo -e "\t--disable-xml Disable XML support"
+      echo -e "\t--without-expat2 XML parsing via Expat 1 instead of Expat 2.\n\t\tOnly valid if --disable-xml wasn't specified"
       echo -e "\t--help This help"
       exit;;
     *)

@@ -42,7 +42,6 @@ endif
 	@$(ECHO) $(call checkunit,SysUtils)
 ifeq ($(DEFS_SOCKETS),SOCKETS_SYNAPSE)
 	@$(ECHO) $(call checkunit,BlckSock)
-	@$(ECHO) $(call checkunit,SynaUtil)
 else
 ifeq ($(DEFS_SOCKETS),SOCKETS_BSD)
 	@$(ECHO) $(call checkprog,$(notdir $(CC)))
@@ -95,7 +94,15 @@ endif
 endif
 endif
 ifneq ($(USE_EXPAT),0)
+ifdef forWindows
+ifneq ($(EXPAT_2),0)
+	@$(ECHO) $(call checklib,libexpat-1)
+else
 	@$(ECHO) $(call checklib,expat)
+endif
+else
+	@$(ECHO) $(call checklib,expat)
+endif
 endif
 ifneq ($(USE_ICONV),0)
 ifneq ($(USE_LIBICONV),0)
@@ -116,7 +123,11 @@ ifneq ($(USE_PCRE),0)
 	@$(ECHO) $(call checklib,pcre)
 endif
 ifneq ($(USE_READLINE),0)
+ifeq ($(USE_LIBEDIT),0)
 	@$(ECHO) $(call checklib,readline)
+else
+	@$(ECHO) $(call checklib,edit)
+endif
 endif
 ifdef forWindows
 	@$(ECHO) $(call checkprog,png2ico)

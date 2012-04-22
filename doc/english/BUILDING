@@ -110,13 +110,16 @@ succeed because the gp utility always returns a success exit code.)
 Enabling/disabling features:
 You can use the configure script or set the make environment
 variables manually (0 to disable; 1 to enable):
+EXPAT_2
+  Use Expat 2 instead of Expat 1.
+  Default: 1
 NO_NCURSES
   Enable the use of ncurses <http://gnu.org/software/ncurses> for
   the TUI. It only makes sense in Free Pascal on Unix platforms.
   Default: 0
 USE_EXPAT
   Allow the use of Expat to parse XML files.
-  Note: Expat is required for RSS and XML feeds.  If you're only
+  Note: Expat is required for RSS and Atom feeds.  If you're only
   interested in ESF feeds, then you can disable this.
   Default: 1
 USE_ICONV
