@@ -51,8 +51,6 @@ var
   i: integer;
   s: String;
 begin
-  Reset(FFile);
-
   i := 0;
   while IsNext do
   begin
@@ -78,9 +76,9 @@ begin
   begin
     Reset(FFile);
 
-    for i := 1 to EntryStart + MaxEntries do
+    for i := EntryStart to MaxEntries do
     begin
-      if IsNext and (i >= EntryStart) then
+      if IsNext then
       begin
         ReadLn(FFile, s);
         EntryCount := i - EntryStart;

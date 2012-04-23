@@ -50,7 +50,9 @@ begin
   ScreenHeight := ScreenSize.Y;
 {$ELSE}
 {$IFDEF USE_NCRT}
-  ScreenHeight := LINES;
+  refresh;
+  doupdate;
+  ScreenHeight := getmaxy(stdscr);
 {$ELSE}
   ScreenHeight := 25;
 {$ENDIF USE_NCRT}
@@ -63,7 +65,9 @@ begin
   ScreenWidth := ScreenSize.X;
 {$ELSE}
 {$IFDEF USE_NCRT}
-  ScreenWidth := COLS;
+  refresh;
+  doupdate;
+  ScreenWidth := getmaxx(stdscr);
 {$ELSE}
   ScreenWidth := 80;
 {$ENDIF USE_NCRT}

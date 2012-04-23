@@ -120,7 +120,7 @@ ifneq ($(USE_NLS),0)
 	@$(ECHO) $(call checklib,intl)
 endif
 ifneq ($(USE_PCRE),0)
-ifdef inWindows
+ifdef forWindows
 	@$(ECHO) $(call checklib,libpcre-0)
 else
 	@$(ECHO) $(call checklib,pcre)

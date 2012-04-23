@@ -216,7 +216,19 @@ begin
 {$ENDIF}
 
   repeat
+{$IFNDEF USE_NCRT}
     KeyChar := ReadKey;
+{$ELSE}
+    noecho;
+    i := getch;
+    echo;
+    KeyChar := Chr(i);
+    if i = KEY_RESIZE then
+    begin
+      Redraw;
+      Continue;
+    end;
+{$ENDIF}
 
     if KeyChar <> NullKey then
     begin
@@ -1127,6 +1139,12 @@ begin
 
   FCurrentItem := n;
   GoItem;
+{$IFNDEF USE_NCRT}
+  DrawFeedList;
+  GotoXY(1, FCurrentItem - FViewPort.FirstItem);
+{$ELSE}
+  move(FCurrentItem - FViewPort.FirstItem, 0);
+{$ENDIF}
 end;
 
 procedure TTui.LoadSubscriptions;
