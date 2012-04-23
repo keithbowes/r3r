@@ -11,5 +11,6 @@
 #include <wx/listctrl.h>
 #include <wx/listimpl.cpp>
 #include <wx/mimetype.h>
+#include <wx/statline.h>
 #include <wx/treebook.h>
 #endif /* WX_PRECOMP */

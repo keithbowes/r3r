@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-01 14:01-0400\n"
-"PO-Revision-Date: 2012-04-01 14:02-0400\n"
+"POT-Creation-Date: 2012-04-23 15:39-0400\n"
+"PO-Revision-Date: 2012-04-23 15:41-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: English\n"
 "Language: \n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../app.cpp:15
+#: ../app.cpp:12
 msgid "R3R"
 msgstr "R3R"
 
@@ -33,35 +33,35 @@ msgstr "&Subscribe"
 msgid "&View Enclosure..."
 msgstr "&View Enclosure..."
 
-#: ../events.cpp:203
+#: ../events.cpp:202
 msgid "About R3R"
 msgstr "About R3R"
 
-#: ../events.cpp:253
+#: ../events.cpp:252
 msgid "Open a file"
 msgstr "Open a file"
 
-#: ../feedlist.cpp:19
+#: ../feedlist.cpp:21
 msgid "[None]"
 msgstr "[None]"
 
-#: ../feedlist.cpp:96
+#: ../feedlist.cpp:98
 msgid "An update is available."
 msgstr "An update is available."
 
-#: ../feedlist.cpp:111
+#: ../feedlist.cpp:113
 msgid "Feed Title"
 msgstr "Feed Title"
 
-#: ../feedlist.cpp:114
+#: ../feedlist.cpp:116
 msgid "Item Title"
 msgstr "Item Title"
 
-#: ../feedlist.cpp:117
+#: ../feedlist.cpp:119
 msgid "Subject"
 msgstr "Subject"
 
-#: ../feedlist.cpp:120
+#: ../feedlist.cpp:122
 msgid "Date Created"
 msgstr "Date Created"
 
@@ -69,79 +69,83 @@ msgstr "Date Created"
 msgid "Go"
 msgstr "Go"
 
-#: ../menu.cpp:26
+#: ../menu.cpp:25
 msgid "&Open..."
 msgstr "&Open..."
 
-#: ../menu.cpp:28
+#: ../menu.cpp:27
 msgid "E&xit"
 msgstr "E&xit"
 
-#: ../menu.cpp:32
+#: ../menu.cpp:31
 msgid "&Load Subscriptions"
 msgstr "&Load Subscriptions"
 
-#: ../menu.cpp:33
+#: ../menu.cpp:32
 msgid "&Refresh"
 msgstr "&Refresh"
 
-#: ../menu.cpp:35
+#: ../menu.cpp:34
 msgid "&Settings..."
 msgstr "&Settings..."
 
-#: ../menu.cpp:41
+#: ../menu.cpp:40
 msgid "&Donate"
 msgstr "&Donate"
 
-#: ../menu.cpp:43
+#: ../menu.cpp:42
 msgid "&Check for updates"
 msgstr "&Check for updates"
 
-#: ../menu.cpp:44
+#: ../menu.cpp:43
 msgid "&About"
 msgstr "&About"
 
-#: ../menu.cpp:48
+#: ../menu.cpp:47
 msgid "&File"
 msgstr "&File"
 
-#: ../menu.cpp:49
+#: ../menu.cpp:48
 msgid "&Tools"
 msgstr "&Tools"
 
-#: ../menu.cpp:50
+#: ../menu.cpp:49
 msgid "&Help"
 msgstr "&Help"
 
-#: ../settings-display.cpp:16
+#: ../settings-display.cpp:17
 msgid "Show &messages from the back-end"
 msgstr "Show &messages from the back-end"
 
-#: ../settings-display.cpp:19
+#: ../settings-display.cpp:20
 msgid "Show &feed titles only"
 msgstr "Show &feed titles only"
 
-#: ../settings-display.cpp:22
+#: ../settings-display.cpp:23
 msgid "Hide &cached feeds"
 msgstr "Hide &cached feeds"
 
-#: ../settings-display.cpp:25
+#: ../settings-display.cpp:26
 msgid "&Hide cached feed items"
 msgstr "&Hide cached feed items"
 
-#: ../settings-display.cpp:28
+#: ../settings-display.cpp:29
 msgid "&Guess the file types of feeds"
 msgstr "&Guess the file types of feeds"
 
-#: ../settings-display.cpp:31
+#: ../settings-display.cpp:32
 msgid "&Notify of updates"
 msgstr "&Notify of updates"
 
-#: ../settings-display.cpp:34
+#: ../settings-display.cpp:35
 msgid "&Load subscriptions on startup"
 msgstr "&Load subscriptions on startup"
 
-#: ../settings-display.cpp:37
+#: ../settings-display.cpp:44
+msgid "&Display encoding: "
+msgstr "&Display encoding: "
+
+#: ../settings-display.cpp:50
 msgid "Display"
 msgstr "Display"
 
