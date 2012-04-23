@@ -7,7 +7,9 @@
 .SH RESUMO
 
 .P
-r3r
+ r3r [URL]
+ r3r-conv -i eniga_dosiero -t eliga_tipo [-o eliga_dosiero]
+ r3r_opml 0|1 [celo [fonto]]
 
 .SH PRESKRIBO
 .P
@@ -31,6 +33,9 @@ Dosiersufiksoj:
  .r3, .rss3: RSS 3.0
  .atom: Atom
  .esf: ESF
+ 
+.P
+ r3r-conv uzeblas por konverti inter formatoj.
 
 .SH DOSIEROJ
 
@@ -43,7 +48,7 @@ Dosiersufiksoj:
    Historio de vizititaj URL-oj.
  data/r3r/subscriptions.txt
     URL-oj al kiuj vi abonas.
- 
+    r3r_opml uzeblas por konverti OPML-dosieron el alia fluo-legilo por uzi ĝin en R3R.
  
 .SS Filtriloj
 

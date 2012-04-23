@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r-git\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-21 21:41-0400\n"
-"PO-Revision-Date: 2012-04-12 02:04-0400\n"
+"POT-Creation-Date: 2012-04-23 16:56-0400\n"
+"PO-Revision-Date: 2012-04-23 16:27-0400\n"
 "Last-Translator: Keith Bowes <zooplah@users.sourceforge.net>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -24,5 +24,5 @@ msgstr "Ausgabedatei muss eine aus atom, esf, rss, rss3 sein\n"
 
 #: ../r3r-conv.c:36
 #, c-format
-msgid "Usage: %s -i in_file -t out_type [-o out_file])\n"
+msgid "Usage: %s -i in_file -t out_type [-o out_file]\n"
 msgstr "Benutzung: %s -i Eingabedatei -t Ausgabetype [-o Ausgabedatei]\n"

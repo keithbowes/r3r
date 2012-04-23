@@ -7,7 +7,9 @@
 .SH SYNOPSIS
 
 .P
-r3r
+ r3r [URL]
+ r3r-conv -i input_file -t output_type [-o output_file]
+ r3r_opml 0|1 [infile [outfile]]
 
 .SH DESCRIPTION
 .P
@@ -32,6 +34,9 @@ File extensions:
  .atom: Atom
  .esf: ESF
 
+.P
+ r3r-conv can be used to convert between file formats.
+
 .SH FILES
 
 .P
@@ -43,6 +48,7 @@ File extensions:
    History of visited URLs.
  data/r3r/subscriptions.txt
    URLs to which you've subscribed.
+   r3r_opml can be used to import an OPML file from an existing feed reader.
  
  
 .SS Filters

@@ -27,13 +27,13 @@ void item_received(void * item)
 	else if (0 == strcmp(out_type, "atom"))
 		write_atom(item, is_top_elem);
 	else
-		printf(_("Out-file type must be one of atom, esf, rss, rss3\n"));
+		fprintf(stderr, _("Out-file type must be one of atom, esf, rss, rss3\n"));
 	is_top_elem = 0;
 }
 
 void show_help(char * invok)
 {
-	printf(_("Usage: %s -i in_file -t out_type [-o out_file])\n"), invok);
+	fprintf(stderr, _("Usage: %s -i in_file -t out_type [-o out_file]\n"), invok);
 }
 
 FILE * get_handle()

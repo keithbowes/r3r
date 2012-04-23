@@ -7,7 +7,9 @@
 .SH ÜBERSICHT
 
 .P
-r3r
+ r3r [URL]
+ r3r-conv -i Eingabedatei -t Ausgabetype [-o Ausgabedatei]
+ r3r_opml 0|1 [Quelle [Ziel]]
 
 .SH BESCHREIBUNG
 .P
@@ -32,6 +34,9 @@ Dateiendung:
  .atom: Atom
  .esf: ESF
 
+.P
+r3r-conv kann zwischen Feed-Formate konvertieren.
+
 .SH DATEI
 
 .P
@@ -43,6 +48,7 @@ Dateiendung:
    Geschichte des besuchten URLs.
  data/r3r/subscriptions.txt
    URLs, die Sie Abonnements haben.
+   r3r_opml kann eine OPML-Datei aus einem anderen Feed-Leser importieren.
  
  
 .SS Filtere

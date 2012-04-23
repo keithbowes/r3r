@@ -7,7 +7,9 @@
 .SH SINTAXIS
 
 .P
-r3r
+ r3r [URL]
+ r3r-conv -i archivo_entrado -t tipo_salido [-o archivo_salido]
+ r3r_opml 0|1 [fuente [finalidad]]
 
 .SH DESCRIPCIÓN
 .P
@@ -32,6 +34,9 @@ Extensiones de Archivos:
  .atom: Atom
  .esf: ESF
 
+.P
+r3r-conv está utilizable para convertir entre formatos de fuentes.
+
 .SH FILES
 
 .P
@@ -43,6 +48,7 @@ Extensiones de Archivos:
    Historia de visitadas fuentes.
  data/r3r/subscriptions.txt
    URL-es a que estás subscribiendo.
+   r3r_opml está utilizable para importar subscripciones de otros legadores de fuentes.
  
  
 .SS Filtradores 
