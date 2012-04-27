@@ -1,11 +1,18 @@
 include ../../../scripts/common.make
 
 override CFLAGS+=-I../../libr3r
-override LIBS+=-lintl -llibr3r_shared
+override LIBS+=-llibr3r_shared
 override LDFLAGS+=-L../../libr3r
 
+ifneq ($(USE_NLS),0)
+override CFLAGS+=-DUSE_NLS
+override LIBS+=-lintl
+endif
+
 all: r3r-conv$(TARGETEXEEXT)
+ifneq ($(USE_NLS),0)
 	cd po && $(MAKE) all
+endif
 
 r3r-conv$(TARGETEXEEXT): atomwriter$(OEXT) esfwriter$(OEXT) r3r-conv$(OEXT) rss3writer$(OEXT) rsswriter$(OEXT)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)

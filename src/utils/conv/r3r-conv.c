@@ -1,17 +1,22 @@
-#include <libintl.h>
 #include <libr3r.h>
-#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "r3r-conv.h"
+#ifdef USE_NLS
+#include <libintl.h>
+#include <locale.h>
 
 #ifdef _
 #undef _
 #endif
 
 #define _ gettext
+#else
+#define _(s) s
+#endif
+
+#include "r3r-conv.h"
 
 char is_top_elem = 1;
 
@@ -72,6 +77,7 @@ FILE * get_handle()
 	return fh;
 }
 
+#ifdef USE_NLS
 char * get_locale_dir()
 {
 	int count;
@@ -86,14 +92,17 @@ char * get_locale_dir()
 	sprintf(s, "%s/share/locale", (char *) value);
 	return s;
 }
+#endif
 
 int main(int argc, char ** argv)
 {
+#ifdef USE_NLS
 	char * locdir = get_locale_dir();
 	setlocale(LC_ALL, "");
 	textdomain("r3r_conv");
 	bindtextdomain("r3r_conv", locdir);
 	free(locdir);
+#endif
 
 	int i;
 	char * invok = argv[0];
