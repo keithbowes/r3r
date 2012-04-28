@@ -431,7 +431,7 @@ _clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
 
 cleanbuild:
-	cd $(BUILDDIR) && make _clean
+	cd $(BUILDDIR) && $(MAKE) _clean
 
 clean: _clean cleanbuild
 
