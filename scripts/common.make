@@ -431,7 +431,9 @@ _clean:
 	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
 
 cleanbuild:
+ifneq ($(BUILDDIR),$(SRCDIR))
 	cd $(BUILDDIR) && $(MAKE) _clean
+endif
 
 clean: _clean cleanbuild
 
