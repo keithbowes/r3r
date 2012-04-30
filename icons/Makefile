@@ -1,12 +1,14 @@
 include ../scripts/common.make
 
+PNG2ICO ?= $(call programpath,png2ico)
+
 WINDRES ?= $(call programpath,windres)
 WINDRESFLAGS  ?= -O coff
 
 all: r3r.ico r3r.res
 
 r3r.ico: r3r.png
-	-png2ico $@ $<
+	-$(PNG2ICO) $@ $<
 
 r3r.res: r3r.rc
 	-$(WINDRES) $(WINDRESFLAGS) -i $< -o $@

@@ -419,7 +419,9 @@ export CC DEFS DEFS_SOCKETS DESTDIR R3R_UI VERSION \
 default: all
 
 _all:
+ifeq ($(wildcard $(builddir)),)
 	@$(MKDIR) $(builddir)
+endif
 
 all: _all
 

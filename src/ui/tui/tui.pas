@@ -29,7 +29,6 @@ type
     FItems: PRList;
     FScreenHeight: word;
     FScreenWidth: word;
-    FScrollingUp: Boolean;
     FViewPort: TViewport;
     procedure Draw;
     procedure Redraw;
@@ -56,6 +55,7 @@ type
     procedure ScrollTo(n: word);
     procedure LoadSubscriptions;
     procedure AddDeleteSubscription;
+    procedure PrintFeedItems;
   public
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     destructor Destroy; override;
@@ -184,7 +184,6 @@ begin
 
   New(FItems, Init);
   FCurrentItem := 1;
-  FScrollingUp := true;
 
   RegisterItemCallback(ItemReceived);
   obj := Self;
@@ -1002,9 +1001,6 @@ begin
 end;
 
 procedure TTui.ScrollDown;
-var
-  i: word;
-  Title: String;
 begin
   if FViewPort.LastItem = 0 then
   begin
@@ -1019,8 +1015,6 @@ begin
     FCurrentItem := FViewPort.FirstItem;
   end;
 
-  FScrollingUp := false;
-
   if FItems^.Count < FViewPort.PortHeight then
   begin
     FViewPort.FirstItem := 1;
@@ -1032,7 +1026,7 @@ begin
     FViewPort.LastItem := FItems^.Count;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
     FCurrentItem := FViewPort.FirstItem + 1;
-    FScrollingUp := true;
+    PrintFeedItems;
   end
   else
   begin
@@ -1040,35 +1034,9 @@ begin
     Inc(FViewPort.LastItem);
     Inc(FCurrentItem);
   end;
-
-  DrawFeedList;
-  ClrScr;
-  GotoXY(1, 1);
-
-  for i := FViewPort.FirstItem to FViewPort.LastItem  do
-  begin
-    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
-    if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
-    begin
-      Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
-    end;
-
-    TextBackground(SkinColorTable.FIndexBack);
-    TextColor(SkinColorTable.FIndexFore);
-    Write(i, ': ');
-
-    TextBackground(SkinColorTable.FTitleBack);
-    TextColor(SkinColorTable.FTitleFore);
-    TuiWriteLn(Title);
-  end;
-
-  GoItem;
 end;
 
 procedure TTui.ScrollUp;
-var
-  i: word;
-  Title: String;
 begin
   FCurrentItem := 1;
 
@@ -1076,12 +1044,6 @@ begin
   begin
     FViewPort.LastItem := FViewPort.FirstItem;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
-
-    if not FScrollingUp then
-    begin
-      Dec(FviewPort.FirstItem);
-      Dec(FViewPort.LastItem);
-    end;
   end
   else if FItems^.Count < FViewPort.PortHeight then
   begin
@@ -1092,32 +1054,9 @@ begin
   begin
     FViewPort.FirstItem := 0;
     FViewPort.LastItem := FViewPort.PortHeight;
+    PrintFeedItems;
   end;
   FCurrentItem := FViewPort.FirstItem + 1;
-
-  DrawFeedList;
-  ClrScr;
-  GotoXY(1, 1);
-
-  for i := FViewPort.FirstItem + 1 to FViewPort.LastItem do
-  begin
-    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
-    if Length(Title) > FDimList.LeftEnd - 3 - Length(IntToStr(i)) then
-    begin
-      Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(i)) - 6) + '...';
-    end;
-
-    TextBackground(SkinColorTable.FIndexBack);
-    TextColor(SkinColorTable.FIndexFore);
-    Write(i, ': ');
-
-    TextBackground(SkinColorTable.FTitleBack);
-    TextColor(SkinColorTable.FTitleFore);
-    TuiWriteLn(Title);
-  end;
-
-  FScrollingUp := true;
-  GoItem;
 end;
 
 procedure TTui.ScrollTo(n: word);
@@ -1186,6 +1125,35 @@ begin
       HandleMessage(true, NoFeedURL, My)
     end
   end
+end;
+
+procedure TTui.PrintFeedItems;
+var
+  i: word;
+  Title: String;
+begin
+  DrawFeedList;
+  ClrScr;
+  GotoXY(1, 1);
+
+  for i := FViewPort.FirstItem + 1 to FViewPort.LastItem  do
+  begin
+    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
+    if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
+    begin
+      Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
+    end;
+
+    TextBackground(SkinColorTable.FIndexBack);
+    TextColor(SkinColorTable.FIndexFore);
+    Write(i, ': ');
+
+    TextBackground(SkinColorTable.FTitleBack);
+    TextColor(SkinColorTable.FTitleFore);
+    TuiWriteLn(Title);
+  end;
+
+  GoItem;
 end;
 
 procedure TTui.DrawFeedInfo;

@@ -15,7 +15,7 @@ ifneq ($(USE_NLS),0)
 endif
 
 r3r-conv$(TARGETEXEEXT): atomwriter$(OEXT) esfwriter$(OEXT) r3r-conv$(OEXT) rss3writer$(OEXT) rsswriter$(OEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(builddir)/$@ $^ $(LIBS)
 
 install:
 	$(INSTALLEXE) r3r-conv$(TARGETEXEEXT) $(bindir)
