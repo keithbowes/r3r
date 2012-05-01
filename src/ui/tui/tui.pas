@@ -27,6 +27,7 @@ type
     FDimStatus: TWindowDim;
     FDimUI: TWindowDim;
     FItems: PRList;
+    FPrintItems: Boolean;
     FScreenHeight: word;
     FScreenWidth: word;
     FScrollingUp: Boolean;
@@ -185,6 +186,7 @@ begin
 
   New(FItems, Init);
   FCurrentItem := 1;
+  FPrintItems := false;
 
   RegisterItemCallback(ItemReceived);
   obj := Self;
@@ -218,17 +220,6 @@ begin
   repeat
 {$IFNDEF USE_NCRT}
     KeyChar := ReadKey;
-{$ELSE}
-    noecho;
-    i := getch;
-    echo;
-    KeyChar := Chr(i);
-    if i = KEY_RESIZE then
-    begin
-      Redraw;
-      Continue;
-    end;
-{$ENDIF}
 
     if KeyChar <> NullKey then
     begin
@@ -240,6 +231,23 @@ begin
       { Read the scan code of control characters }
       KeyChar := ReadKey;
     end;
+{$ELSE}
+    noecho;
+    i := getch;
+    echo;
+    if i = KEY_RESIZE then
+    begin
+      Redraw;
+      Continue;
+    end;
+
+    KeyChar := Chr(i);
+    if i < 256 then
+    begin
+      { Case insensitivity a la other programs }
+      KeyChar := LowerCase(KeyChar);
+    end;
+{$ENDIF}
 
     if KeyChar = GetBoundKey(GoKey) then
     begin
@@ -296,10 +304,12 @@ begin
     else if (KeyChar = GetBoundKey(ScrollDownKey)) or (KeyChar = GetBoundKey(PageDownKey)) then
     begin
       ScrollDown;
+      PrintFeedItems;
     end
     else if (KeyChar = GetBoundKey(ScrollUpKey)) or (KeyChar = GetBoundKey(PageUpKey)) then
     begin
       ScrollUp;
+      ScrollTo(FCurrentItem);
     end
     else if KeyChar = GetBoundKey(HomeKey) then
     begin
@@ -1014,7 +1024,7 @@ begin
     FViewPort.FirstItem := FViewPort.LastItem;
     FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
     FCurrentItem := FViewPort.FirstItem;
-    PrintFeedItems;
+    FPrintItems := true;
   end;
 
   if FItems^.Count < FViewPort.PortHeight then
@@ -1028,7 +1038,7 @@ begin
     FViewPort.LastItem := FItems^.Count;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
     FCurrentItem := FViewPort.FirstItem + 1;
-    PrintFeedItems;
+    FPrintItems := true;
   end
   else
   begin
@@ -1045,9 +1055,9 @@ begin
 
   if FViewPort.FirstItem > FViewPort.PortHeight then
   begin
-    FViewPort.LastItem := FViewPort.FirstItem - 1;
+    FViewPort.LastItem := FViewPort.FirstItem;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
-    PrintFeedItems;
+    FPrintItems := true;
   end
   else if FItems^.Count < FViewPort.PortHeight then
   begin
@@ -1058,10 +1068,9 @@ begin
   begin
     FViewPort.FirstItem := 0;
     FViewPort.LastItem := FViewPort.PortHeight;
-    PrintFeedItems;
+    FPrintItems := true;
   end;
   FCurrentItem := FViewPort.FirstItem + 1;
-  PrintFeedItems;
   FScrollingUp := true;
 end;
 
@@ -1084,14 +1093,23 @@ begin
 
   FCurrentItem := n;
 {$IFDEF LESS_FLICKERING}
-  GoItem;
+  if not FPrintItems then
+  begin
+    GoItem;
+  end
+  else
+  begin
+    PrintFeedItems
+  end;
+
+  FPrintItems := false;
 {$ELSE}
   PrintFeedItems;
 {$ENDIF}
 
 {$IFNDEF USE_NCRT}
   DrawFeedList;
-  GotoXY(1, FCurrentItem - FViewPort.FirstItem);
+  GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
 {$ELSE}
   move(FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp), 0);
 {$ENDIF}

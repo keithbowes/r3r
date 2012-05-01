@@ -1,36 +1,54 @@
 unit RKeys;
 
+{$INCLUDE "tuidefs.inc"}
+
 interface
+
+{$IFDEF USE_NCRT}
+uses
+  nCurses;
+{$ENDIF}
 
 const
   AddKey = 'a';
   DonateKey = 'd';
-  DownArrow = Chr(80);
   DownKey = 'j';
   EmailKey = 'c';
   EnclosureKey = 'x';
-  EndKey = Chr(79);
   EnterKey = Chr(13);
   GoKey = 'g';
   HelpKey = 'h';
   HelpSymKey = '?';
   HomeEndKey = '~'; // For some reason, FPC reports both HOME and END as a tilde
-  HomeKey = Chr(71);
   NullKey = Chr(0);
   OptionsKey = 'o';
-  PageDownKey = Chr(81);
-  PageUpKey = Chr(73);
   QuitKey = 'q';
   RefreshKey = 'u';
-  RightArrow = Chr(77);
   RightKey = 'l';
   ScrollDownKey = Chr(32);
-  ScrollUpKey = Chr(8);
+  ScrollUpKey = 'b';
   SearchKey = '/';
   ShellKey = '!';
   SubScriptionsKey = '-';
-  UpArrow = Chr(72);
   UpKey = 'k';
+{$IFNDEF USE_NCRT}
+  DownArrow = Chr(80);
+  EndKey = Chr(79);
+  HomeKey = Chr(71);
+  PageDownKey = Chr(81);
+  PageUpKey = Chr(73);
+  RightArrow = Chr(77);
+  UpArrow = Chr(72);
+{$ELSE}
+  { For differences between ncurses's getch and CRT's ReadKey }
+  DownArrow = Chr(KEY_DOWN);
+  EndKey = Chr(KEY_END);
+  HomeKey = Chr(KEY_HOME);
+  PageDownKey = Chr(KEY_NPAGE);
+  PageUpKey = Chr(KEY_PPAGE);
+  RightArrow = Chr(KEY_RIGHT);
+  UpArrow = Chr(KEY_UP);
+{$ENDIF}
 
 function GetBoundKey(const Key: char): char;
 
