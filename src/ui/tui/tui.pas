@@ -29,6 +29,7 @@ type
     FItems: PRList;
     FScreenHeight: word;
     FScreenWidth: word;
+    FScrollingUp: Boolean;
     FViewPort: TViewport;
     procedure Draw;
     procedure Redraw;
@@ -1013,6 +1014,7 @@ begin
     FViewPort.FirstItem := FViewPort.LastItem;
     FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
     FCurrentItem := FViewPort.FirstItem;
+    PrintFeedItems;
   end;
 
   if FItems^.Count < FViewPort.PortHeight then
@@ -1034,6 +1036,7 @@ begin
     Inc(FViewPort.LastItem);
     Inc(FCurrentItem);
   end;
+  FScrollingUp := FViewPort.LastItem = FItems^.Count;
 end;
 
 procedure TTui.ScrollUp;
@@ -1042,8 +1045,9 @@ begin
 
   if FViewPort.FirstItem > FViewPort.PortHeight then
   begin
-    FViewPort.LastItem := FViewPort.FirstItem;
+    FViewPort.LastItem := FViewPort.FirstItem - 1;
     FViewPort.FirstItem := FViewPort.LastItem - FViewPort.PortHeight;
+    PrintFeedItems;
   end
   else if FItems^.Count < FViewPort.PortHeight then
   begin
@@ -1057,6 +1061,8 @@ begin
     PrintFeedItems;
   end;
   FCurrentItem := FViewPort.FirstItem + 1;
+  PrintFeedItems;
+  FScrollingUp := true;
 end;
 
 procedure TTui.ScrollTo(n: word);
@@ -1077,12 +1083,17 @@ begin
   end;
 
   FCurrentItem := n;
+{$IFDEF LESS_FLICKERING}
   GoItem;
+{$ELSE}
+  PrintFeedItems;
+{$ENDIF}
+
 {$IFNDEF USE_NCRT}
   DrawFeedList;
   GotoXY(1, FCurrentItem - FViewPort.FirstItem);
 {$ELSE}
-  move(FCurrentItem - FViewPort.FirstItem, 0);
+  move(FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp), 0);
 {$ENDIF}
 end;
 
@@ -1136,7 +1147,7 @@ begin
   ClrScr;
   GotoXY(1, 1);
 
-  for i := FViewPort.FirstItem + 1 to FViewPort.LastItem  do
+  for i := FViewPort.FirstItem + Ord(FScrollingUp) to FViewPort.LastItem  do
   begin
     Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
     if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
