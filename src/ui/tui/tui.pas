@@ -436,19 +436,17 @@ end;
 
 procedure TTui.RetrieveFeed(Resource: String);
 begin
-  if FItems^.Count > 0 then
-  begin
-    ScrollTo(FCurrentItem);
-  end;
+  DrawStatus;
+  TuiWrite(StringReplace(Retrieving, '%s', Resource, []));
 
   DrawFeedList;
+  GoToXY(1, 1);
   inherited RetrieveFeed(Resource);
-  GoItem;
+  Redraw;
+  PrintFeedItems;
 
-  if FItems^.Count > 0 then
-  begin
-    ScrollTo(FCurrentItem);
-  end;
+  DrawStatus;
+  TuiWrite(Done);
 end;
 
 procedure TTui.NotifyUpdate;
@@ -1092,7 +1090,6 @@ begin
   end;
 
   FCurrentItem := n;
-{$IFDEF LESS_FLICKERING}
   if not FPrintItems then
   begin
     GoItem;
@@ -1103,9 +1100,6 @@ begin
   end;
 
   FPrintItems := false;
-{$ELSE}
-  PrintFeedItems;
-{$ENDIF}
 
 {$IFNDEF USE_NCRT}
   DrawFeedList;

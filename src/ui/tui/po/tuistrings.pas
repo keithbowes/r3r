@@ -49,6 +49,9 @@ var
 
   NoFeedURL: String;
 
+  Retrieving: String;
+  Done: String;
+
 {$IFNDEF USE_NLS}
 function _(s: String): String;
 {$ENDIF}
@@ -104,6 +107,9 @@ begin
   Usage := 'Usage: %s [URL]';
 
   NoFeedURL := 'No feed URL specified.';
+
+  Retrieving := 'Retrieving items from %s...';
+  Done := 'Done.';
 end;
 
 {$IFNDEF USE_NLS}

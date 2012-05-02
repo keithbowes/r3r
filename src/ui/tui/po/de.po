@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-04-14 03:42-0400\n"
+"PO-Revision-Date: 2012-05-02 01:03-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -129,3 +129,11 @@ msgstr "Benutzung: %s [URL]"
 #: tuistrings:nofeedurl
 msgid "No feed URL specified."
 msgstr "Hat keinen Feed-URL."
+
+#: tuistrings:retrieving
+msgid "Retrieving items from %s..."
+msgstr "Ich herunterlade Teilen aus %s..."
+
+#: tuistrings:done
+msgid "Done."
+msgstr "Fertig"

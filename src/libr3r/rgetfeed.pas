@@ -135,7 +135,6 @@ begin
 
   while not Finished do
   begin
-    if Finished then begin WriteLn('Uh, yeah'); Halt; end;
 {$IF not defined(SOCKETS_NONE) and not defined(SOCKETS_CURL)}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
