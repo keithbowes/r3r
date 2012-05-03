@@ -187,6 +187,7 @@ begin
   New(FItems, Init);
   FCurrentItem := 1;
   FPrintItems := false;
+  FScrollingUp := false;
 
   RegisterItemCallback(ItemReceived);
   obj := Self;
@@ -440,11 +441,11 @@ begin
   TuiWrite(StringReplace(Retrieving, '%s', Resource, []));
 
   DrawFeedList;
+  ClrScr;
   GoToXY(1, 1);
   inherited RetrieveFeed(Resource);
   Redraw;
-  PrintFeedItems;
-
+  
   DrawStatus;
   TuiWrite(Done);
 end;
@@ -1153,6 +1154,7 @@ end;
 procedure TTui.PrintFeedItems;
 var
   i: word;
+  Item: TFeedItem;
   Title: String;
 begin
   DrawFeedList;
@@ -1161,19 +1163,23 @@ begin
 
   for i := FViewPort.FirstItem + Ord(FScrollingUp) to FViewPort.LastItem  do
   begin
-    Title := TFeedItem(FItems^.GetNth(i - 1)).Title;
-    if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
+    Item := FItems^.GetNth(i - 1);
+    if Item <> nil then
     begin
-      Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
+      Title := Item.Title;
+      if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
+      begin
+        Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
+      end;
+
+      TextBackground(SkinColorTable.FIndexBack);
+      TextColor(SkinColorTable.FIndexFore);
+      Write(i, ': ');
+
+      TextBackground(SkinColorTable.FTitleBack);
+      TextColor(SkinColorTable.FTitleFore);
+      TuiWriteLn(Title);
     end;
-
-    TextBackground(SkinColorTable.FIndexBack);
-    TextColor(SkinColorTable.FIndexFore);
-    Write(i, ': ');
-
-    TextBackground(SkinColorTable.FTitleBack);
-    TextColor(SkinColorTable.FTitleFore);
-    TuiWriteLn(Title);
   end;
 
   GoItem;
@@ -1322,6 +1328,7 @@ begin
   if FItems^.Count > 0 then
   begin
     ScrollTo(iTop);
+    FPrintItems := true;
     ScrollTo(iTmp);
   end;
 end;

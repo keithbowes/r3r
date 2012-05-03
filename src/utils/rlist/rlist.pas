@@ -191,7 +191,7 @@ begin
   i := 0;
   Tmp := FFirst;
 
-  if N >= FCount then
+  if (N >= FCount) and (FCount > 0) then
   begin
     N := FCount - 1;
   end;
@@ -208,7 +208,14 @@ begin
     end;
   end;
 
-  GetNth := Tmp^.Data;
+  if Tmp <> nil then
+  begin
+    GetNth := Tmp^.Data;
+  end
+  else
+  begin
+    GetNth := nil;
+  end;
 end;
 
 function TRList.IndexOf(Data: Pointer): integer;
