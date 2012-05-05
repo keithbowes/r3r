@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2012-05-02 01:03-0400\n"
+"PO-Revision-Date: 2012-05-03 16:31-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -36,7 +36,7 @@ msgstr "%s:verlassen dem Programm"
 
 #: tuistrings:itemno
 msgid "Item number: "
-msgstr "Teilzahl: "
+msgstr "Entragzahl: "
 
 #: tuistrings:itemtitle
 msgid "Title: "
@@ -100,7 +100,7 @@ msgstr " (Drücken Sie die Eingabetaste um in Ihrem Webbrowser zu öffnen)"
 
 #: tuistrings:nextprevlink
 msgid " (Press %1 for the next item or %2 for the previous item)"
-msgstr " (Drücken Sie %1 für dem nächste Teil oder %2 für dem vorige)"
+msgstr " (Drücken Sie %1 für die nächste Entrag oder %2 für die vorige)"
 
 #: tuistrings:itememail
 msgid "Email address: "
@@ -122,6 +122,10 @@ msgstr "Wahr"
 msgid "Skin to use"
 msgstr "Skin benutzen"
 
+#: tuistrings:errorseconds
+msgid "Seconds to wait after an error"
+msgstr "Sekunden um nach einem Fehler warten"
+
 #: tuistrings:usage
 msgid "Usage: %s [URL]"
 msgstr "Benutzung: %s [URL]"
@@ -132,8 +136,12 @@ msgstr "Hat keinen Feed-URL."
 
 #: tuistrings:retrieving
 msgid "Retrieving items from %s..."
-msgstr "Ich herunterlade Teilen aus %s..."
+msgstr "Ich herunterlade Einträge aus %s..."
 
 #: tuistrings:done
 msgid "Done."
 msgstr "Fertig"
+
+#: tuistrings:nodata
+msgid "This item contains no data."
+msgstr "Diese Eintrag enthält keine Daten."

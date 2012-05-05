@@ -110,6 +110,10 @@ msgstr ""
 msgid "Skin to use"
 msgstr ""
 
+#: tuistrings:errorseconds
+msgid "Seconds to wait after an error"
+msgstr ""
+
 #: tuistrings:usage
 msgid "Usage: %s [URL]"
 msgstr ""
@@ -124,4 +128,8 @@ msgstr ""
 
 #: tuistrings:done
 msgid "Done."
+msgstr ""
+
+#: tuistrings:nodata
+msgid "This item contains no data."
 msgstr ""

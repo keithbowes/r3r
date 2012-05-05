@@ -141,7 +141,7 @@ begin
     AItem.Enclosure.URL := Item.Enclosure.URL;
     FItems^.Add(AItem);
     Items := FItems^.Count;
-
+  
     if Items <= FViewPort.PortHeight then
     begin
       Title := AItem.TitleText;
@@ -191,6 +191,7 @@ begin
 
   RegisterItemCallback(ItemReceived);
   obj := Self;
+  Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
 
 {$IFDEF __GPC__}
   CRTInit;
@@ -203,6 +204,10 @@ begin
   begin
     for i := 1 to ParamCount do
     begin
+      if i = ParamCount then
+      begin
+        FPrintItems := true;
+      end;
       RetrieveFeed(ParamStr(i));
     end;
   end
@@ -433,6 +438,11 @@ begin
   begin
     TuiWrite('(' + Extra + ')');
   end;
+
+  if IsError then
+  begin
+    Delay(Settings.GetInteger('error-seconds') * 1000);
+  end;
 end;
 
 procedure TTui.RetrieveFeed(Resource: String);
@@ -444,7 +454,12 @@ begin
   ClrScr;
   GoToXY(1, 1);
   inherited RetrieveFeed(Resource);
-  Redraw;
+
+  if FPrintItems then
+  begin
+    Redraw;
+    FPrintItems := false;
+  end;
   
   DrawStatus;
   TuiWrite(Done);
@@ -485,10 +500,10 @@ begin
 
   DrawInfoBar;
 
+  AddOption(ReplaceKey(Quit, 'q'));
   AddOption(ReplaceKey(GoURL, 'g'));
   AddOption(ReplaceKey(Options, 'o'));
   AddOption(ReplaceKey(Donate, 'd'));
-  AddOption(ReplaceKey(Quit, 'q'));
   AddOption(ReplaceKey(Help, '?'));
 
   TuiWrite(Opts);
@@ -520,9 +535,9 @@ begin
   rl_callback_handler_remove;
 {$ENDIF}
 
-  Redraw;
   if URI <> '' then
   begin
+    FPrintItems := true;
     RetrieveFeed(URI);
   end;
 end;
@@ -1118,6 +1133,10 @@ begin
   begin
     for FeedIndex := 0 to Subscriptions^.Count - 1 do
     begin
+      if FeedIndex = Subscriptions^.Count - 1 then
+      begin
+        FPrintItems := true;
+      end;
       RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
     end;
   end;
@@ -1179,6 +1198,10 @@ begin
       TextBackground(SkinColorTable.FTitleBack);
       TextColor(SkinColorTable.FTitleFore);
       TuiWriteLn(Title);
+    end
+    else
+    begin
+      HandleMessage(true, NoData, '');
     end;
   end;
 

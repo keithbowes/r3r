@@ -44,6 +44,7 @@ var
   TrueString: String;
 
   SkinToUse: String;
+  ErrorSeconds: String;
 
   Usage: String;
 
@@ -51,6 +52,8 @@ var
 
   Retrieving: String;
   Done: String;
+
+  NoData: String;
 
 {$IFNDEF USE_NLS}
 function _(s: String): String;
@@ -103,6 +106,7 @@ begin
   TrueString := _('TRUE');
 
   SkinToUse := _('Skin to use');
+  ErrorSeconds := _('Seconds to wait after an error');
 
   Usage := 'Usage: %s [URL]';
 
@@ -110,6 +114,8 @@ begin
 
   Retrieving := 'Retrieving items from %s...';
   Done := 'Done.';
+
+  NoData := 'This item contains no data.';
 end;
 
 {$IFNDEF USE_NLS}
