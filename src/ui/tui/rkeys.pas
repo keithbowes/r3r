@@ -41,13 +41,13 @@ const
   UpArrow = Chr(72);
 {$ELSE}
   { For differences between ncurses's getch and CRT's ReadKey }
-  DownArrow = Chr(KEY_DOWN);
-  EndKey = Chr(KEY_END);
-  HomeKey = Chr(KEY_HOME);
-  PageDownKey = Chr(KEY_NPAGE);
-  PageUpKey = Chr(KEY_PPAGE);
-  RightArrow = Chr(KEY_RIGHT);
-  UpArrow = Chr(KEY_UP);
+  DownArrow = Chr(byte(KEY_DOWN));
+  EndKey = Chr(byte(KEY_END));
+  HomeKey = Chr(byte(KEY_HOME));
+  PageDownKey = Chr(byte(KEY_NPAGE));
+  PageUpKey = Chr(byte(KEY_PPAGE));
+  RightArrow = Chr(byte(KEY_RIGHT));
+  UpArrow = Chr(byte(KEY_UP));
 {$ENDIF}
 
 function GetBoundKey(const Key: char): char;

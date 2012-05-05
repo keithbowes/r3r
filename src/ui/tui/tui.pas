@@ -247,7 +247,7 @@ begin
       Continue;
     end;
 
-    KeyChar := Chr(i);
+    KeyChar := Chr(byte(i));
     if i < 256 then
     begin
       { Case insensitivity a la other programs }
