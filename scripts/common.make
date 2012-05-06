@@ -339,6 +339,7 @@ PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 --extended-syntax \
 						 --unit-destination-path=$(builddir)\
 						 -DFree=Destroy -DPtrUInt=PtrWord \
+						 -DWideChar=Chr \
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_LIBINI

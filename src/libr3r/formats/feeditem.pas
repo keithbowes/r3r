@@ -54,6 +54,10 @@ uses
 {$IFDEF USE_ICONV}
   iconv, RProp, RSettings,
 {$ENDIF}
+
+{$IFDEF UNIX}
+  cwstring,
+{$ENDIF}
   SysUtils;
 
 function StripHtml(const InStr: String): String;
@@ -121,12 +125,12 @@ begin
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
           if (ErrPos = 0)
-          {$IFNDEF UNIX}
+          {$IFDEF __GPC__}
             and (EntNum < 256)
           {$ENDIF}
             then
           begin
-            EntStr := Chr(EntNum)
+            EntStr := WideChar(EntNum)
           end
           else
           begin
