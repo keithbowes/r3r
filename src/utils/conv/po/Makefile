@@ -19,3 +19,4 @@ r3r_conv.pot: ../r3r-conv.c
 
 %.po: r3r_conv.pot
 	-$(MSGMERGE) -Uq $@ $<
+	-$(TOUCH) $@ $^

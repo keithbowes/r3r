@@ -463,6 +463,7 @@ begin
   
   DrawStatus;
   TuiWrite(Done);
+  DrawFeedList;
 end;
 
 procedure TTui.NotifyUpdate;
@@ -659,6 +660,8 @@ begin
       end;
     end;
   end;
+
+  DrawFeedList;
 end;
 
 procedure TTui.OpenBrowser(Link: String);
@@ -1121,7 +1124,7 @@ begin
   DrawFeedList;
   GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
 {$ELSE}
-  move(FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp), 0);
+  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUI.TopEnd) + Ord(not FScrollingUp), 0);
 {$ENDIF}
 end;
 
@@ -1225,8 +1228,6 @@ begin
   begin
     ClrScr;
   end;
-
-  GotoXY(1, FItems^.Count + FDimUI.TopEnd);
 end;
 
 procedure TTui.DrawInfoBar;
