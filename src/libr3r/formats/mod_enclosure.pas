@@ -25,7 +25,6 @@ var
 begin
   inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
-  StripNS(Elem.Name, Mod_EnclosureNS);
 
   with Elem, Item do
   begin
@@ -33,7 +32,6 @@ begin
     begin
       for i := Low(Attributes) to High(Attributes) do
       begin
-        StripNS(Attributes[i].Name, Mod_EnclosureNS);
         if Attributes[i].Name = 'resource' then
         begin
           Enclosure.URL := Attributes[i].Value;

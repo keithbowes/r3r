@@ -60,16 +60,17 @@ end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
-  AFeed: TFeed;
+  AFeed: TXmlFeed;
 begin
   inherited ParseLine(Line, Item);
 
-  if Pos(DCNS, GetCurrentElement.Name) <> 0 then
+  if GetCurrentElement.NameSpace = DCNS then
   begin
     AFeed := TDCFeed.Create;
-    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    (AFeed as TDCFeed).Free;
+    AFeed.SendItem;
+    AFeed.Free;
   end;
 
   Item.Finished := Line = SockEof;
@@ -267,9 +268,6 @@ var
   Res: TXmlElement;
 begin
   Res := inherited GetCurrentElement;
-  StripNS(Res.Name, AtomNS);
-  StripNS(Res.Name, LowerCase(AtomNS));
-
   GetCurrentElement := Res;
 end;
 
@@ -278,9 +276,6 @@ var
   Res: TXmlElement;
 begin
   Res := inherited GetPreviousElement;
-  StripNS(Res.Name, AtomNS);
-  StripNS(Res.Name, LowerCase(AtomNS));
-
   GetPreviousElement := Res;
 end;
 

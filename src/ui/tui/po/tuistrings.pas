@@ -51,7 +51,6 @@ var
   NoFeedURL: String;
 
   Retrieving: String;
-  Done: String;
 
   NoData: String;
 
@@ -113,7 +112,6 @@ begin
   NoFeedURL := 'No feed URL specified.';
 
   Retrieving := 'Retrieving items from %s...';
-  Done := 'Done.';
 
   NoData := 'This item contains no data.';
 end;

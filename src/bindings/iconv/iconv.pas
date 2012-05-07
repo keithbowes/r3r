@@ -153,18 +153,16 @@ begin
     flags := 0;
 {$ENDIF}
     outbuf := outarray;
-    iconv_convert(cd, @inarray, @inlen, @outbuf, @outlen);
+    Res := iconv_convert(cd, @inarray, @inlen, @outbuf, @outlen);
     iconv_close(cd);
     if trueinlen > outlen then
     begin
       outarray[trueinlen - outlen] := #0;
     end;
-
-    Res := 0;
   end
   else
   begin
-    Res := -1;
+    Res := iconv_convert_error;
   end;
 
   iconvstr := Res;

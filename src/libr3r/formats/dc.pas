@@ -27,8 +27,6 @@ procedure TDCFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
   with Item, GetCurrentElement do
   begin
-    StripNS(Name, DCNS);
-
     if Name = 'title' then
     begin
       Title := Content;

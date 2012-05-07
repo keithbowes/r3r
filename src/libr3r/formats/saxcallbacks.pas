@@ -19,7 +19,24 @@ uses
 {$IFDEF USE_ICONV}
   RProp, RStrings,
 {$ENDIF}
-  SysUtils, Xml;
+  StrTok, SysUtils, Xml;
+
+procedure SplitName(const Name: String; var QName, NameSpace: String);
+var
+  List: TStringsList;
+begin
+  List := Split(Name, NameSpaceSeparator);
+  if List.Length = 2 then
+  begin
+    NameSpace := List.Strings[0];
+    QName := List.Strings[1];
+  end
+  else if List.Length = 1 then
+  begin
+    NameSpace := '';
+    QName := List.Strings[0];
+  end;
+end;
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
@@ -32,7 +49,7 @@ begin
   with TXmlFeed(user_data) do
   begin
     New(Elem);
-    Elem^.Name := StrPas(name);
+    SplitName(StrPas(name), Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
     Elem^.Depth := Depth;
 
@@ -41,8 +58,10 @@ begin
       while Assigned(attrs^) do
       begin
         attr := StrPas(attrs^);
-        StripNS(attr, XMLNSNS);
         attrs^ := PChar(attr);
+
+        SplitName(attr, Elem^.Attributes[i].Name, Elem^.Attributes[i].NameSpace);
+        attr := Elem^.Attributes[i].Name;
 
         if attr = 'base' then
         begin
@@ -54,7 +73,6 @@ begin
         end
         else if i < 11 then
         begin
-          Elem^.Attributes[i].Name := attr;
           Elem^.Attributes[i].Value := StrPas((attrs + 1)^);
           Inc(i);
         end;
@@ -74,14 +92,14 @@ end;
 
 procedure ElementEnded(user_data: Pointer; name: PChar);
 var
-  ELem: PXmlElement;
+  Elem: PXmlElement;
 begin
   with TXmlFeed(user_data) do
   begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.Name := LowerCase(StrPas(name));
+      SplitName(StrPas(name), Elem^.Name, Elem^.NameSpace);
     end;
 
     if Elem^.Name <> '' then

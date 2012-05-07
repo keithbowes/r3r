@@ -460,10 +460,6 @@ begin
     Redraw;
     FPrintItems := false;
   end;
-  
-  DrawStatus;
-  TuiWrite(Done);
-  DrawFeedList;
 end;
 
 procedure TTui.NotifyUpdate;

@@ -35,7 +35,7 @@ end;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
-  AFeed: TFeed;
+  AFeed: TXmlFeed;
   Elem, Prev: TXmlElement;
   IsRDF: Boolean;
 begin
@@ -43,34 +43,33 @@ begin
   Elem := GetCurrentElement;
   Prev := GetPreviousElement;
 
-  if Pos(DCNS, Elem.Name) = 1 then
+  if Elem.NameSpace = DCNS then
   begin
     AFeed := TDCFeed.Create;
-    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    (AFeed as TXmlFeed).Free;
+    AFeed.SendItem;
+    AFeed.Free;
   end
-  else if Pos(LowerCase(AtomNS), Elem.Name) = 1 then
+  else if Elem.NameSpace = AtomNS then
   begin
     AFeed := GetAtomFeed;
-    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    (AFeed as TXmlFeed).Free;
+    AFeed.SendItem;
+    AFeed.Free;
   end
-  else if Pos(Mod_EnclosureNS, Elem.Name) = 1 then
+  else if Elem.NameSpace = Mod_EnclosureNS then
   begin
     AFeed := TModEnclosure.Create;
-    (AFeed as TXmlFeed).Clone(FElemList);
+    AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    (AFeed as TXmlFeed).Free;
+    AFeed.SendItem;
+    AFeed.Free;
   end
   else
   begin
-    IsRDF := Pos(RSS1NS, Elem.Name) <> 0;
-    if IsRDF then
-    begin
-      StripNS(Elem.Name, RSS1NS);
-    end;
+    IsRDF := Elem.NameSpace = RSS1NS;
   end;
 
   if not IsRDF then
@@ -105,9 +104,6 @@ var
 begin
   with GetCurrentElement, CurrentItem do
   begin 
-    StripNS(Name, RDFNS);
-    StripNS(Name, RSS1NS);
-
     if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
     begin
       Title := Content;
@@ -116,7 +112,7 @@ begin
     begin
       Description := Content;
     end
-    else if Name = 'link' then
+    else if (Name = 'link') and (Link = '') then
     begin
       Link := Trim(Content);
     end
@@ -204,8 +200,6 @@ var
   Res: TXmlElement;
 begin
   Res := inherited GetCurrentElement;
-  StripNS(Res.Name, RDFNS);
-
   GetCurrentElement := Res;
 end;
 

@@ -9,17 +9,20 @@ uses
   Feed, FeedItem, RList;
 
 const
+  NameSpaceSeparator = #$FF;
   XMLNSNS = 'http://www.w3.org/XML/1998/namespace';
 
 type
   TXmlAttr = record
     Name: String;
+    NameSpace: String;
     Value: String;
   end;
 
   PXmlElement = ^TXmlELement;
   TXmlElement = record
     Name: String;
+    NameSpace: String;
     { Yeah, like anybody will exceed 11 attributes per element }
     Attributes: array [0..10] of TXmlAttr;
     Content: String;
@@ -46,7 +49,6 @@ type
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
-    procedure StripNS(var Element: String; const NS: String);
     procedure Clone(const List: PRList);
     function GetCurrentElement: TXmlElement; virtual;
     function GetPreviousElement: TXmlElement; virtual;
@@ -72,7 +74,7 @@ begin
   FNthElem := 0;
 
 {$IFDEF USE_EXPAT}
-  FParser := XML_ParserCreateNS(nil, #0);
+  FParser := XML_ParserCreateNS(nil, NameSpaceSeparator);
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
   XML_SetProcessingInstructionHandler(FParser, InstructionReceived);
@@ -83,8 +85,8 @@ end;
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
   inherited ParseLine(Line, Item);
-
   CurrentItem := Item;
+
 {$IFDEF USE_EXPAT}
   XML_Parse(FParser, {$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, Length(Line), 0);
 {$ENDIF}
@@ -106,6 +108,7 @@ var
   p: PXmlElement;
 begin
 {$IFDEF USE_EXPAT}
+  XML_Parse(FParser, '', 0, 1);
   Xml_ParserFree(FParser);
 {$ENDIF}
 
@@ -187,14 +190,6 @@ begin
   end;
 
   GetPreviousElement := Res;
-end;
-
-procedure TXmlFeed.StripNS(var Element: String; const NS: String);
-begin
-  if Pos(NS, Element) = 1 then
-  begin
-    Delete(Element, 1, Length(NS));
-  end;
 end;
 
 procedure TXmlFeed.SendItem;
