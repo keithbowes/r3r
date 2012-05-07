@@ -196,7 +196,7 @@ begin
   if outstr <> nil then
   begin
     outbuf := outstr;
-    if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> size_t(-1) then
+    if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> iconv_convert_error then
     begin
       FieldValue := StrPas(outstr);
     end;

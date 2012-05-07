@@ -45,7 +45,7 @@ type
 {$calling cdecl}
 
 function iconv_open(tocode, fromcode: PChar): iconv_t; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv_open'{$else}'libiconv_open'{$endif};
-function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): SizeType; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv'{$else}'libiconv'{$endif};
+function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): size_t; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv'{$else}'libiconv'{$endif};
 function iconv_close(cd: iconv_t): integer; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv_close'{$else}'libiconv_close'{$endif};
 
 {$IFDEF USE_LIBICONV}
@@ -71,6 +71,7 @@ function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t
 {$calling default}
 
 function iconv_bytesperchar(enc: String): byte;
+function iconv_convert_error: size_t;
 
 {$IFNDEF SOLARIS}
 function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t; var outarray: PChar; var outlen: size_t; flags: integer): size_t;
@@ -103,6 +104,20 @@ begin
   end;
 
   iconv_bytesperchar := Ret;
+end;
+
+function iconv_convert_error: size_t;
+type
+  TConvertRec = record
+    case Boolean of
+      true: (i: integer);
+      false: (s: size_t);
+    end;
+var
+  cr: TConvertRec;
+begin
+  cr.i := -1;
+  iconv_convert_error := cr.s;
 end;
 
 {$IFNDEF SOLARIS}
@@ -140,7 +155,11 @@ begin
     outbuf := outarray;
     iconv_convert(cd, @inarray, @inlen, @outbuf, @outlen);
     iconv_close(cd);
-    outarray[trueinlen - outlen] := #0;
+    if trueinlen > outlen then
+    begin
+      outarray[trueinlen - outlen] := #0;
+    end;
+
     Res := 0;
   end
   else

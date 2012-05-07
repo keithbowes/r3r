@@ -130,7 +130,7 @@ begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
 			FindKey(Section, Name);
-      ini_writeString(IniFile, StrToPChar(Setting));
+      ini_writeString(IniFile, StrToPChar(Value));
 			ValueString := Value;
     end;
   end;
