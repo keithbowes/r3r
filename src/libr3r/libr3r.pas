@@ -122,9 +122,9 @@ begin
       FSock.Sock.CloseSocket;
     end;
 {$ENDIF}
-{$ELSE}
-    FSock.Free;
 {$ENDIF}
+
+    FSock.Free;
   end;
 
   History^.Add(Resource);

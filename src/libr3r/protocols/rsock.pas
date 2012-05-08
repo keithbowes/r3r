@@ -37,7 +37,7 @@ type
 
     ShouldShow: Boolean;
     constructor Create(Host, Port: String);
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
+    destructor Destroy; {$IFNDEF __GPC__}override;{$ELSE}virtual;{$ENDIF}
     procedure DomainSet(Host, Port: String);
     procedure Execute; virtual;
     function GetLine: String; virtual;

@@ -46,11 +46,18 @@ end;
 
 function TLocalFile.GetLine: String;
 var
-  Res: String;
+  Res: String[255];
 begin
   if not Eof(FFileHandle) then
   begin
-    ReadLn(FFileHandle, Res);
+    if not Eoln(FFileHandle) then
+    begin
+      Read(FFileHandle, Res);
+    end
+    else
+    begin
+      ReadLn(FFileHandle, Res);
+    end;
   end
   else
   begin
