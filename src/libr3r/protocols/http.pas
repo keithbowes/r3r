@@ -34,15 +34,14 @@ type
 implementation
 
 uses
+{$IFDEF __GPC__}
+  GPC,
+{$ENDIF}
 {$IFDEF USE_ICONV}
   RProp,
 {$ENDIF}
   Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
-  RStrings, SockConsts, StrTok, SysUtils
-  
-{$IFDEF __GPC__}
-  ,GPC
-{$ENDIF};
+  RStrings, StrTok, SysUtils;
 
 const
   Tab = #9;
@@ -73,13 +72,12 @@ var
   HeaderState: THeaderState;
   Host, Para, Path, Port, Prot: String;
   i: byte;
+  InfoText: String;
   Line: String;
-  NullLines: 0..20;
   RespList: TStringsList;
 begin
   Headers.Sniff := Settings.GetBoolean('enable-mime-guess');
   HeaderState := hsUnstarted;
-  NullLines := 0;
 
   while (HeaderState <> hsFinished) do
   begin
@@ -91,12 +89,6 @@ begin
     end
     else if (Line <> '') and (HeaderState = hsUnstarted) then
     begin
-      if (Line = SockEof) and (NullLines < 20) then
-      begin
-        Inc(NullLines);
-        Continue;
-      end;
-
       HeaderState := hsStarted;
       RespList := Split(Line, WhitespaceChars);
 
@@ -249,7 +241,8 @@ begin
 
   if FCachable and (Headers.Status = 200) then
   begin
-    Cache.WriteData(IntToStr(Ord(Cache.Info^.CacheType)) + Tab + Cache.Info^.CacheParam + Tab + IntToStr(Ord(Cache.Info^.HeaderRec.ContentType)) + Tab + Headers.Charset, cdtInfo);
+    WriteStr(InfoText, Ord(Cache.Info^.CacheType), Tab, Cache.Info^.CacheParam, Tab, Ord(Cache.Info^.HeaderRec.ContentType), Tab, Headers.Charset);
+    Cache.WriteData(InfoText, cdtInfo);
   end;
 end;
 
@@ -282,7 +275,7 @@ begin
   if UseProxy then
   begin
     Host := Settings.GetString('proxy-address');
-    Port := IntToStr(Settings.GetInteger('proxy-port'));
+    WriteStr(Port, Settings.GetInteger('proxy-port'));
   end;
 
   FCachable := true;

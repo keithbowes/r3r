@@ -24,12 +24,11 @@ uses
       Dos
     {$ENDIF}
   {$ENDIF}
-{$ENDIF},
+{$ENDIF}
 
 {$IFDEF SOCKETS_SYNAPSE}
-  BlckSock,
-{$ENDIF}
-  SysUtils;
+  ,BlckSock
+{$ENDIF};
 
 function Os: String;
 var
@@ -67,12 +66,12 @@ begin
             Name := 'Win32s';
           end;
         end;
-        Version := IntToStr(dwMajorVersion) + '.' + IntToStr(dwMinorVersion);
+        WriteStr(Version, dwMajorVersion, '.', dwMinorVersion);
       end;
       Dispose(LPOSVERSIONINFO(Data));
     {$ELSE}
       Name := 'DOS';
-      Version := IntToStr(Lo(DosVersion)) + '.' + IntToStr(Hi(DosVersion));
+      WriteStr(Version, Lo(DosVersion), '.', Hi(DosVersion));
     {$ENDIF}
   {$ENDIF}
 {$ENDIF}

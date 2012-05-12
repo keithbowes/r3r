@@ -124,7 +124,8 @@ end;
 procedure ItemReceived(const Item: TFeedItem);
 var
   AItem: TFeedItem;
-  Items: cardinal;
+  Items: PtrUInt;
+  LenStr: String;
   Title: String;
 begin
   with obj do
@@ -145,9 +146,10 @@ begin
     if Items <= FViewPort.PortHeight then
     begin
       Title := AItem.TitleText;
-      if Length(Title) > (FDimList.LeftEnd - 3 - Length(IntToStr(Items))) then
+      WriteStr(LenStr, Items);
+      if Length(Title) > (FDimList.LeftEnd - 3 - Length(LenStr)) then
       begin
-        Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(IntToStr(Items)) - 6) + '...';
+        Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(LenStr)) + '...';
       end;
 
       TextBackground(SkinColorTable.FIndexBack);
@@ -569,6 +571,7 @@ procedure TTui.GoItem;
 var
   Desc, DescLine: String;
   FreeLines: word;
+  ItemText: String;
   Len: word;
   StatusText: String;
 
@@ -616,8 +619,9 @@ begin
         TuiWrite(StatusText);
       end;
 
+      WriteStr(ItemText, FCurrentItem, StringReplace(StringReplace(NextPrevLink, '%1', GetBoundKey(DownKey), []), '%2', GetBoundKey(UpKey), []));
       DrawFeedInfo;
-      PrintField(ItemNo, IntToStr(FCurrentItem) + StringReplace(StringReplace(NextPrevLink, '%1', GetBoundKey(DownKey), []), '%2', GetBoundKey(UpKey), []));
+      PrintField(ItemNo, ItemText);
       PrintField(ItemTitle, Title);
       PrintField(ItemSubject, Subject);
       PrintField(ItemCreated, Created);
@@ -821,7 +825,8 @@ begin
       SetDesc := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
       TuiConvertCodeset(SetDesc);
 
-      TuiEcho(IntToStr(i + 1), false, NumLen);
+      WriteStr(SetDesc, i + 1);
+      TuiEcho(SetDesc, false, NumLen);
       TuiWrite('.');
 
       TextBackground(SkinColorTable.FOptionDescBack);
@@ -847,7 +852,7 @@ begin
             Index := Index div 10;
           end;
 
-          Str(PRSetting(SRec^.GetNth(i))^.ValueInteger, SetVal);
+          WriteStr(SetVal, PRSetting(SRec^.GetNth(i))^.ValueInteger);
           TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetDesc)) + Len);
         end;
         TypeBoolean:
@@ -920,7 +925,7 @@ begin
       begin
         if PRSetting(SRec^.GetNth(Len))^.Description = SetDesc then
         begin
-          SetDesc := IntToStr(Len + 1);
+          WriteStr(SetDesc, Len + 1);
           Break;
         end;
       end;
@@ -1173,6 +1178,7 @@ procedure TTui.PrintFeedItems;
 var
   i: word;
   Item: TFeedItem;
+  LenStr: String;
   Title: String;
 begin
   DrawFeedList;
@@ -1185,9 +1191,10 @@ begin
     if Item <> nil then
     begin
       Title := Item.Title;
-      if Length(Title) > FDimList.LeftEnd - Length(IntToStr(i)) - 3 then
+      WriteStr(LenStr, i);
+      if Length(Title) > FDimList.LeftEnd - Length(LenStr) - 3 then
       begin
-        Title := Copy(Title, 1, FDimList.LeftEnd - Length(IntToStr(i)) - 6) + '...';
+        Title := Copy(Title, 1, FDimList.LeftEnd - Length(LenStr) - 6) + '...';
       end;
 
       TextBackground(SkinColorTable.FIndexBack);

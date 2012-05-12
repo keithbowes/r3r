@@ -64,8 +64,8 @@ begin
 
   if TableParts.Length = 2 then
   begin
-    Back := StrToInt(TableParts.Strings[0]);
-    Fore := StrToInt(TableParts.Strings[1]);
+    ReadStr(TableParts.Strings[0], Back);
+    ReadStr(TableParts.Strings[1], Fore);
   end;
 
   if Back <> Fore then
@@ -181,7 +181,7 @@ begin
             end;
             3:
             begin
-              SkinColorTable.FSep := StrToInt(Line);
+              ReadStr(Line, SkinColorTable.FSep);
             end;
             4:
             begin
