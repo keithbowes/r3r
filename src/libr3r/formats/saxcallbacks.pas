@@ -42,13 +42,12 @@ procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 var
   attr: String;
   Elem: PXmlElement;
-  i: word;
+  patt: PXmlAttr;
 begin
-  i := 0;
-
   with TXmlFeed(user_data) do
   begin
     New(Elem);
+    New(Elem^.Attributes, Init);
     SplitName(StrPas(name), Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
     Elem^.Depth := Depth;
@@ -57,28 +56,25 @@ begin
     begin
       while Assigned(attrs^) do
       begin
+        New(patt);
         attr := StrPas(attrs^);
-        attrs^ := PChar(attr);
+        SplitName(attr, patt^.Name, patt^.NameSpace);
+        patt^.Value := StrPas((attrs + 1)^);
 
-        SplitName(attr, Elem^.Attributes[i].Name, Elem^.Attributes[i].NameSpace);
-        attr := Elem^.Attributes[i].Name;
-        if Elem^.Attributes[i].NameSpace = '' then
+        if patt^.NameSpace = '' then
         begin
-          Elem^.Attributes[i].NameSpace := Elem^.NameSpace;
+          patt^.NameSpace := Elem^.NameSpace;
         end;
+        Elem^.Attributes^.Add(patt);
 
+        attr := patt^.Name;
         if attr = 'base' then
         begin
-          Elem^.Base := StrPas((attrs + 1)^);
+          Elem^.Base := patt^.Value;
         end
         else if attr = 'lang' then
         begin
-          Elem^.Lang := StrPas((attrs + 1)^);
-        end
-        else if i < 11 then
-        begin
-          Elem^.Attributes[i].Value := StrPas((attrs + 1)^);
-          Inc(i);
+          Elem^.Lang := patt^.Value;
         end;
 
         Inc(attrs, 2);

@@ -44,7 +44,7 @@ destructor TRHistory.Done;
 const
   MaxEntries = 100;
 type
-  TEntries = array [1..MaxEntries] of String;
+  TEntries = array [0..(MaxEntries * 2)] of String;
 var
   Entries: TEntries;
   EntryCount, EntryStart: integer;
@@ -76,22 +76,17 @@ begin
   begin
     Reset(FFile);
 
-    for i := EntryStart to MaxEntries do
+    i := EntryStart;
+    while IsNext and (i <= EntryCount) do
     begin
-      if IsNext then
-      begin
-        ReadLn(FFile, s);
-        EntryCount := i - EntryStart;
-        Entries[EntryCount] := s;
-      end
-      else
-      begin
-        Break;
-      end;
+      ReadLn(FFile, s);
+      EntryCount := i - EntryStart;
+      Entries[EntryCount] := s;
+      Inc(i);
     end;
 
     Rewrite(FFile);
-    for i := 1 to EntryCount do
+    for i := 0 to EntryCount do
     begin
       WriteLn(FFile, Entries[i]);
     end;

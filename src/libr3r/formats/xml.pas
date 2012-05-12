@@ -13,6 +13,7 @@ const
   XMLNSNS = 'http://www.w3.org/XML/1998/namespace';
 
 type
+  PXmlAttr = ^TXmlAttr;
   TXmlAttr = record
     Name: String;
     NameSpace: String;
@@ -24,7 +25,7 @@ type
     Name: String;
     NameSpace: String;
     { Yeah, like anybody will exceed 11 attributes per element }
-    Attributes: array [0..10] of TXmlAttr;
+    Attributes: PRList;
     Content: String;
     Base: String;
     Lang: String;
@@ -104,8 +105,9 @@ end;
 
 destructor TXmlFeed.Destroy;
 var
-  i: cardinal;
+  i, j: PtrUInt;
   p: PXmlElement;
+  q: PXmlAttr;
 begin
 {$IFDEF USE_EXPAT}
   XML_Parse(FParser, '', 0, 1);
@@ -119,6 +121,15 @@ begin
       for i := 0 to FElemList^.Count - 1 do
       begin
         p := FElemList^.GetNth(i);
+        if p^.Attributes^.Count > 0 then
+        begin
+          for j := 0 to p^.Attributes^.Count - 1 do
+          begin
+            q := p^.Attributes^.GetNth(j);
+            Dispose(q);
+          end;
+        end;
+        Dispose(p^.Attributes, Done);
         Dispose(p);
       end;
 

@@ -100,7 +100,8 @@ end;
 
 procedure TRssFeed.SendItem;
 var
-  Idx: byte;
+  Attr: TXmlAttr;
+  Idx: PtrUInt;
 begin
   with GetCurrentElement, CurrentItem do
   begin 
@@ -118,16 +119,17 @@ begin
     end
     else if Name = 'enclosure' then
     begin
-      for Idx := Low(Attributes) to High(Attributes) do
+      for Idx := 0 to Attributes^.Count - 1 do
       begin
-        if Attributes[Idx].Name = 'url' then
+        Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
+        if Attr.Name = 'url' then
         begin
-          Enclosure.URL := Attributes[Idx].Value;
+          Enclosure.URL := Attr.Value;
         end;
 
-        if Attributes[Idx].Name = 'type' then
+        if Attr.Name = 'type' then
         begin
-          Enclosure.MimeType := Attributes[Idx].Value;
+          Enclosure.MimeType := Attr.Value;
         end;
       end;
     end

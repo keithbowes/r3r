@@ -20,8 +20,9 @@ implementation
 
 procedure TModEnclosure.ParseLine(Line: String; var Item: TFeedItem);
 var
+  Attr: TXmlAttr;
   Elem: TXmlElement;
-  i: byte;
+  i: PtrUInt;
 begin
   inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
@@ -30,15 +31,16 @@ begin
   begin
     if Elem.Name = 'enclosure' then
     begin
-      for i := Low(Attributes) to High(Attributes) do
+      for i := 0 to Attributes^.Count - 1 do
       begin
-        if Attributes[i].Name = 'resource' then
+        Attr := PXmlAttr(Attributes^.GetNth(i))^;
+        if Attr.Name = 'resource' then
         begin
-          Enclosure.URL := Attributes[i].Value;
+          Enclosure.URL := Attr.Value;
         end
-        else if Attributes[i].Name = 'type' then
+        else if Attr.Name = 'type' then
         begin
-          Enclosure.MimeType := Attributes[i].Value;
+          Enclosure.MimeType := Attr.Value;
         end;
       end;
     end;

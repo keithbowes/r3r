@@ -85,7 +85,8 @@ end;
 
 procedure TAtomFeed.SendItem;
 var
-  Idx: integer;
+  Attr: TXmlAttr;
+  Idx: PtrUInt;
 begin
   with CurrentItem, GetCurrentElement do
   begin
@@ -116,19 +117,20 @@ begin
     end
     else if Name = 'link' then
     begin
-      for Idx := Low(Attributes) to High(Attributes) do
+      for Idx := 0 to Attributes^.Count - 1 do
       begin
-        if Attributes[Idx].Name = 'href' then
+        Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
+        if Attr.Name = 'href' then
         begin
-          FAtomLink.Href := GetAbsoluteURL(Attributes[Idx].Value);
+          FAtomLink.Href := GetAbsoluteURL(Attr.Value);
         end
-        else if Attributes[Idx].Name = 'rel' then
+        else if Attr.Name = 'rel' then
         begin
-          FAtomLink.Rel := Attributes[Idx].Value;
+          FAtomLink.Rel := Attr.Value;
         end
-        else if Attributes[Idx].Name = 'type' then
+        else if Attr.Name = 'type' then
         begin
-          FAtomLink.MimeType := Attributes[Idx].Value;
+          FAtomLink.MimeType := Attr.Value;
         end;
       end;
 
@@ -155,10 +157,11 @@ begin
     end
     else if Name = 'category' then
     begin
-      for Idx := Low(Attributes) to High(Attributes) do
+      for Idx := 0 to Attributes^.Count - 1 do
       begin
+        Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
         { The human-readable label attribute should override term }
-        if Attributes[Idx].Name = 'label' then
+        if Attr.Name = 'label' then
         begin
           if FCatType = 'term' then
           begin
@@ -172,12 +175,12 @@ begin
 
           if Content <> '' then
           begin
-            Subject := Subject + Attributes[Idx].Value;
+            Subject := Subject + Attr.Value;
           end;
 
           FCatType := 'label';
         end
-        else if Attributes[Idx].Name = 'term' then
+        else if Attr.Name = 'term' then
         begin
           if FCatType <> 'label' then
           begin
@@ -188,7 +191,7 @@ begin
 
             if '' <> Content then
             begin
-              Subject := Subject + Attributes[Idx].Value;
+              Subject := Subject + Attr.Value;
             end;
 
             FCatType := 'term';
