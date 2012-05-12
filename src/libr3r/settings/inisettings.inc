@@ -152,10 +152,6 @@ begin
   FSettings^.Add(ASetting);
 end;
 
-procedure TRSettings.ReadRec;
-begin
-end;
-
 procedure TRSettings.WriteRec;
 var
   ASetting: PRSetting;

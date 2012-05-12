@@ -24,7 +24,7 @@ end;
 function TRSettings.GetBoolean(const Setting: String): Boolean;
 var
 	Index: TRSetIndex;
-	Res: bool;
+	Res: integer;
   Sett: TRSetting;
 begin
 	Index := IndexOf(Setting);
@@ -32,12 +32,12 @@ begin
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
 		FindKey(Sett.Section, Sett.Name);
-		if ini_readBool(IniFile, Res) < 0 then
+		if ini_readInt(IniFile, Res) < 0 then
 		begin
-			Res := Sett.ValueBoolean;
+			Res := Ord(Sett.ValueBoolean);
 		end;
 
-    GetBoolean := Res;
+    GetBoolean := Res <> 0;
   end;
 end;
 
@@ -98,7 +98,7 @@ begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
 			FindKey(Section, Name);
-      ini_writeBool(IniFile, Value);
+      ini_writeInt(IniFile, Ord(Value));
 			ValueBoolean := Value;
     end;
   end;
@@ -139,21 +139,21 @@ end;
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
-	Res: bool;
+	Res: integer;
 begin
   New(ASetting);
   with ASetting^ do
   begin
 		FindKey(ASection, Setting);
-		if ini_readBool(IniFile, Res) < 0 then
+		if ini_readInt(IniFile, Res) < 0 then
 		begin
-			Res := Value;
+			Res := Ord(Value);
 		end;
-		ini_writeBool(IniFile, Res);
+		ini_writeInt(IniFile, Res);
 
 		Name := Setting;
 		Section := ASection;
-    ValueBoolean := Res;
+    ValueBoolean := Res <> 0;
     ValueType := TypeBoolean;
   end;
 
@@ -214,10 +214,6 @@ begin
 
   ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
-end;
-
-procedure TRSettings.ReadRec;
-begin
 end;
 
 procedure TRSettings.WriteRec;

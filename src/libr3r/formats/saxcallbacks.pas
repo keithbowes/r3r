@@ -62,6 +62,10 @@ begin
 
         SplitName(attr, Elem^.Attributes[i].Name, Elem^.Attributes[i].NameSpace);
         attr := Elem^.Attributes[i].Name;
+        if Elem^.Attributes[i].NameSpace = '' then
+        begin
+          Elem^.Attributes[i].NameSpace := Elem^.NameSpace;
+        end;
 
         if attr = 'base' then
         begin

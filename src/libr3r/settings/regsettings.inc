@@ -289,10 +289,6 @@ begin
   Reg.CloseKey;
 end;
 
-procedure TRSettings.ReadRec;
-begin
-end;
-
 procedure TRSettings.WriteRec;
 var
   ASetting: PRSetting;

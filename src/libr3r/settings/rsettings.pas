@@ -38,7 +38,6 @@ type
     procedure CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
     procedure CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
     procedure CheckString(const Setting, ASection, Value, ADescription: String);
-    procedure ReadRec;
     procedure WriteRec;
     function IndexOf(const Name: String): TRSetIndex;
   public
