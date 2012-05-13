@@ -48,8 +48,7 @@ type
     procedure GoURI;
     function QueryItemNumber: Boolean;
     procedure GoItem;
-    procedure OpenBrowser(Link: String);
-    procedure OpenEmail(Address: String);
+    procedure OpenProg(Sett, Link: String);
     procedure SetOptions;
     procedure GoDonate;
     procedure ScrollDown;
@@ -340,13 +339,13 @@ begin
     end
     else if (KeyChar = GetBoundKey(HelpKey)) or (KeyChar = GetBoundKey(HelpSymKey)) then
     begin
-      OpenBrowser(GetInstalledPrefix + PathDelim + 'share' + PathDelim +  'doc' + PathDelim + LowerCase(AppName) + PathDelim + 'keys.html');
+      OpenProg('for:http', GetInstalledPrefix + PathDelim + 'share' + PathDelim +  'doc' + PathDelim + LowerCase(AppName) + PathDelim + 'keys.html');
     end
     else if (KeyChar = GetBoundKey(EnterKey)) or (KeyChar = RightArrow) or (KeyChar = GetBoundKey(RightKey)) then
     begin
       if FItems^.Count > 0 then
       begin
-        OpenBrowser(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
+        OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
       end;
     end
     else if KeyChar = GetBoundKey(EmailKey) then
@@ -354,7 +353,7 @@ begin
       prog := TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Contact.Email;
       if prog <> '' then
       begin
-        OpenEmail(prog);
+        OpenProg('for:mailto', prog);
       end;
     end
     else if KeyChar = GetBoundKey(EnclosureKey) then
@@ -403,7 +402,7 @@ begin
     begin
       for i := 0 to FItems^.Count - 1 do
       begin
-        p := FItems^.GetNth(i);
+        p := TFeedItem(FItems^.GetNth(i));
         p.Free;
       end;
     end;
@@ -664,7 +663,7 @@ begin
   DrawFeedList;
 end;
 
-procedure TTui.OpenBrowser(Link: String);
+procedure TTui.OpenProg(Sett, Link: String);
 var
   Browser, Tmp: String;
   Index: byte;
@@ -672,7 +671,7 @@ begin
   { Do nothing on empty links }
   if Link <> '' then
   begin
-    Browser := Settings.GetString('for:http');
+    Browser := Settings.GetString(Sett);
     { Check for the default registry association }
     if Pos('%1', Browser) <> 0 then
     begin
@@ -699,7 +698,7 @@ begin
     end;
 
     { Windows puts the path in quotes, which Exec() doesn't like }
-    if (Copy(Browser, 1, 1) = '"') and (Copy(Browser, Length(Browser), 1) = '"') then
+    if (Browser[1] = '"') and (Browser[Length(Browser)] = '"') then
     begin
       Browser := Copy(Browser, 2, Length(Browser) - 2);
     end;
@@ -709,39 +708,6 @@ begin
     SwapVectors;
     Redraw;
   end
-end;
-
-procedure TTui.OpenEmail(Address: String);
-var
-  Client, Tmp: String;
-  Index: byte;
-begin
-  Client := Settings.GetString('for:mailto');
-  { Check for the default registry association }
-  if Pos('%1', Client) <> 0 then
-  begin
-    { Check for the first command-line switch }
-    Index := Pos('-', Client);
-    if Index = 0 then
-    begin
-      Index := Pos('/', Client);
-    end;
-
-    if Index = 0 then
-    begin
-      Index := Pos('%1', Client);
-    end;
-
-    Tmp := Copy(Client, Index, Length(Client) - Index + 1);
-    Client := Copy(Client, 1, Index - 2);
-
-    Address := StringReplace(Tmp, '%1', Address, [rfReplaceAll]);
-  end;
-
-  SwapVectors;
-  Exec(FSearch(Client, GetEnv('PATH')), Address);
-  SwapVectors;
-  Redraw;
 end;
 
 procedure TTui.SetOptions;
@@ -825,8 +791,8 @@ begin
       SetDesc := TruncateString(PRSetting(SRec^.GetNth(i))^.Description);
       TuiConvertCodeset(SetDesc);
 
-      WriteStr(SetDesc, i + 1);
-      TuiEcho(SetDesc, false, NumLen);
+      WriteStr(SetVal, i + 1);
+      TuiEcho(SetVal, false, NumLen);
       TuiWrite('.');
 
       TextBackground(SkinColorTable.FOptionDescBack);
@@ -1026,7 +992,7 @@ end;
 
 procedure TTui.GoDonate;
 begin
-  OpenBrowser('http://sourceforge.net/donate/index.php?group_id=90897');
+  OpenProg('for:http', 'http://sourceforge.net/donate/index.php?group_id=90897');
 end;
 
 procedure TTui.ScrollDown;
@@ -1187,7 +1153,7 @@ begin
 
   for i := FViewPort.FirstItem + Ord(FScrollingUp) to FViewPort.LastItem  do
   begin
-    Item := FItems^.GetNth(i - 1);
+    Item := TFeedItem(FItems^.GetNth(i - 1));
     if Item <> nil then
     begin
       Title := Item.Title;

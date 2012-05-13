@@ -118,7 +118,7 @@ begin
 {$ENDIF}
     inbuf := StrToPChar(s);
     inbytesleft := Length(s) + 1;
-    outbytesleft := inbytesleft div iconv_bytesperchar(StrPas(incharset)) * iconv_bytesperchar(StrPas(outcharset));
+    outbytesleft := 0;
     GetMem(outstr, outbytesleft);
 
     if outstr <> nil then

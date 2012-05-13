@@ -90,7 +90,7 @@ begin
   begin
     if FList.List[1] = 'title' then
     begin
-      Item.Title := FList.List[2];
+      Title := FList.List[2];
     end
     else if FList.List[1] = 'link' then
     begin
@@ -139,6 +139,12 @@ begin
 
     if FList.Count > 2 then
     begin
+      if FLineType = ltMeta then
+      begin
+        CallItemCallback(Item);
+        Item.Clear;
+      end;
+
       ParseDataLine(Item);
       FLineType := ltData;
       Item.Finished := true;
@@ -149,7 +155,7 @@ begin
       Item.Finished := false;
       FLineType := ltMeta;
     end
-    else if (Line = SockEof) or ((FLineType = ltMeta) and (Trim(Line) = '')) then
+    else if FList.Count = 1 then
     begin
       Item.Finished := true;
     end;

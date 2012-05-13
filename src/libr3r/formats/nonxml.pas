@@ -7,6 +7,8 @@ uses
 
 type
   TNonXmlFeed = class(TFeed)
+  private
+    FLastLine: String;
   public
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end; 
@@ -17,13 +19,11 @@ uses
   SockConsts;
 
 procedure TNonXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
-const
-  LastLine: String = '';
 begin
   inherited ParseLine(Line, Item);
 
-  ShouldShow := (not ((Line = '') and (Line = LastLine))) and (Line <> SockEof);
-  LastLine := Line;
+  ShouldShow := (not ((Line = '') and (Line = FLastLine))) and (Line <> SockEof);
+  FLastLine := Line;
 end;
 
 end.

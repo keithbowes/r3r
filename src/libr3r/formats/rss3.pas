@@ -11,6 +11,7 @@ type
     FCurrentField: String;
     FData: String;
     FInHead: Boolean;
+    FLastLine: String;
   protected
     procedure FillItem(var Item: TFeedItem);
     function GetFormat: TFeedType; override;
@@ -31,6 +32,7 @@ constructor TRss3Feed.Create;
 begin
   inherited Create;
   FInHead := true;
+  FLastLine := '!';
 end;
 
 function TRss3Feed.GetFormat: TFeedType;
@@ -107,27 +109,31 @@ var
   SepPos: word;
 begin
   inherited ParseLine(Line, Item);
-  Item.Finished := (Line = '') or (Line = SockEof);
+  Item.Finished := ((Line = '') and (FLastLine = '')) or (Line = SockEof);
+  if Line = '' then WriteLn(':', FCurrentField);
 
   if not Item.Finished then
   begin
-    if Line[1] in WhiteSpaceChars then
+    if Line <> '' then
     begin
-      while (Length(Line) > 0) and (Line[1] in WhiteSpaceChars) do
+      if Line[1] in WhiteSpaceChars then
+        begin
+        while (Length(Line) > 0) and (Line[1] in WhiteSpaceChars) do
+        begin
+          Delete(Line, 1, 1);
+        end;
+
+        FData := Line;
+      end
+      else
       begin
-        Delete(Line, 1, 1);
+        SepPos := Pos(':', Line);
+        FCurrentField := LowerCase(Copy(Line, 1, SepPos - 1));
+        FData := Copy(Line, SepPos + 2, Length(Line) - SepPos - 1);
       end;
 
-      FData := Line;
-    end
-    else
-    begin
-      SepPos := Pos(':', Line);
-      FCurrentField := LowerCase(Copy(Line, 1, SepPos - 1));
-      FData := Copy(Line, SepPos + 2, Length(Line) - SepPos - 1);
+      FillItem(Item);
     end;
-
-    FillItem(Item);
   end
   else
   begin
@@ -135,6 +141,8 @@ begin
     ShouldShow := Item.Title <> '';
     FInHead := false;
   end;
+
+  FLastLine := Line;
 end;
 
 end.

@@ -23,8 +23,7 @@ implementation
 uses
 {$IFDEF USE_NLS}
   LibIntl,
-{$ENDIF}
-{$IFDEF __GPC__}
+{$ELSE}
   SysUtils,
 {$ENDIF}
   LibR3RStrings, StrTok;

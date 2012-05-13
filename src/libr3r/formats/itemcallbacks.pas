@@ -1,7 +1,5 @@
 unit ItemCallbacks;
 
-{$MODE delphi}
-
 interface
 
 uses

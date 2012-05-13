@@ -1,9 +1,9 @@
 Minimal dependencies:
-* A Pascal Compiler (Free Pascal 2.0
-  <http://www.freepascal.org/> [2.0 or higher] is recommended.
+* A Pascal Compiler (Free Pascal
+  <http://www.freepascal.org/> [2.4 or higher] is recommended.
   GNU Pascal <http://gnu-pascal.de/> will compile it, but the
-  binary is much more crash-prone.  Patches for other compilers are
-  welcome).
+  binary is much more crash-prone (See the file gnu-pascal for more
+  information).  Patches for other compilers are welcome).
 * Unix tools (preferably, the GNU versions):
   * Those included with Free Pascal plus:
     * cut
@@ -82,9 +82,6 @@ DEFS_SOCKETS
    SOCKETS_SYNAPSE with Free Pascal.)
 DESTDIR
   Where to install the software.
-HAS_ANSISTRING
-  The compiler supports the AnsiString data type. This can enable
-  more efficient conversion between C and Pascal strings.
 PCFLAGS_DEBUG
   The compiler's debugging options.
 PCFLAGS_EXTRA

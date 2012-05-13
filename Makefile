@@ -7,9 +7,6 @@ XZFLAGS = -c
 CSUM ?= $(call programpath,sha256sum)
 CSUMFLAGS ?=
 
-GPG ?= $(call programpath,gpg)
-GPGFLAGS ?= -ab
-
 MAKEPKG ?= $(call programpath,makepkg)
 MAKEPKGFLAGS ?=
 
@@ -19,7 +16,7 @@ STRIPFLAGS ?=
 UPX ?= $(call programpath,upx)
 UPXFLAGS ?=
 
-sign = cd $(srcdir)/..; $(CSUM) $(CSUMFLAGS) $1 > $1.sha256; $(GPG) $(GPGFLAGS) $1
+sign = cd $(srcdir)/..; $(CSUM) $(CSUMFLAGS) $1 > $1.sha256
 
 .PHONY: check
 

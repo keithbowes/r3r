@@ -285,7 +285,7 @@ override COMPILER=FPC $(shell $(PC) -iW)
 PLATFORM=$(shell $(PC) -iTP)-$(shell $(PC) -iTO)
 
 DEFFLAG=-d
-PCFLAGS_BASE=-Mdelphi -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
+PCFLAGS_BASE=-Mclass -Mclassicprocvars -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
 
 ifdef forWindows
 override PCFLAGS_BASE+=-WR
@@ -316,12 +316,6 @@ endif
 
 ifdef OS_TARGET
 override PCFLAGS_BASE+=-T$(OS_TARGET)
-endif
-
-HAS_ANSISTRING ?= 0
-
-ifneq ($(HAS_ANSISTRING),0)
-override DEFS_EXTRA+=HAS_ANSISTRING
 endif
 
 BUILD_SHARED ?= 1
