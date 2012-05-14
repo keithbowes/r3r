@@ -24,7 +24,7 @@ var
 procedure SetProp(const PropName: String; PropValue: Pointer);
 var
   Found: Boolean;
-  i: cardinal;
+  i: PtrUInt;
   Prop: PRProp;
 begin
   Found := false;
@@ -54,7 +54,7 @@ end;
 
 function GetProp(const PropName: String): Pointer;
 var
-  i: cardinal;
+  i: PtrUInt;
   p: PRProp;
   r: Pointer;
 begin
@@ -77,7 +77,7 @@ end;
 
 procedure RemoveProp(const PropName: String);
 var
-  i: cardinal;
+  i: PtrUInt;
   p: PRProp;
 begin
   if List^.Count > 0 then
@@ -95,7 +95,7 @@ end;
 
 procedure FreeProps;
 var
-  i: cardinal;
+  i: PtrUInt;
   p: PRProp;
 begin
   if List^.Count > 0 then

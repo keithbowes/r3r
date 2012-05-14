@@ -63,11 +63,6 @@ implementation
 
 uses
   MailCap, RProp, RSettings_Routines, RSettings_Strings, RStrings
-
-{$IFDEF __GPC__}
-  ,SysUtils
-{$ENDIF __GPC__}
-
 {$IFDEF SETTINGS_INI}
   , IniFiles
 {$ENDIF}
@@ -177,7 +172,8 @@ begin
         end;
         TypeString:
         begin
-          SetString(SettingName, StrPas(SettingValue));
+          WriteStr(StrVal, PChar(SettingValue));
+          SetString(SettingName, StrVal);
         end;
       end;
     end;

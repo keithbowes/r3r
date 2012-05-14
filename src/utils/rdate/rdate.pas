@@ -204,8 +204,11 @@ end;
 
 {$IFNDEF USE_NLS}
 function _(s: PChar): String;
+var
+  Res: String;
 begin
-  _ := StrPas(s);
+  WriteStr(Res, s);
+  _ := Res;
 end;
 {$ENDIF}
 

@@ -67,6 +67,7 @@ var
 	Len: integer;
 	Res: char_p;
   Sett: TRSetting;
+	Sres: String;
 begin
 	Index := IndexOf(Setting);
   if Index <> -1 then
@@ -80,7 +81,8 @@ begin
 			Res := StrToPChar(Sett.ValueString);
 		end;
 
-		GetString := StrPas(Res);
+		WriteStr(Sres, Res);
+		GetString := sRes;
 		if Len > 0 then
 		begin
 			FreeMem(Res);
@@ -198,7 +200,7 @@ begin
 		GetMem(Res, ini_dataLength(IniFile) + 1);
 		if ini_readString(IniFile, Res, ini_dataLength(IniFile) + 1) >= 0 then
 		begin
-			ValueString := StrPas(Res);
+			WriteStr(ValueString, Res);
 		end
 		else
 		begin

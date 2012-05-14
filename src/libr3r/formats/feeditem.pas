@@ -56,9 +56,8 @@ uses
 {$ENDIF}
 
 {$IFDEF UNIX}
-  cwstring,
-{$ENDIF}
-  SysUtils;
+  cwstring
+{$ENDIF};
 
 function StripHtml(const InStr: String): String;
 var
@@ -198,7 +197,7 @@ begin
     outbuf := outstr;
     if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> iconv_convert_error then
     begin
-      FieldValue := StrPas(outstr);
+      WriteStr(FieldValue, outstr);
     end;
     FreeMem(outstr);
   end;
@@ -284,8 +283,6 @@ var
   BegName: cardinal;
   Rec: TAuthor;
 begin
-  EmailStr := Trim(EmailStr);
-
   BegName := Pos(Delim, EmailStr);
   with Rec do
   begin

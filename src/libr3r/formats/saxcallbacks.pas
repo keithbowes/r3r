@@ -48,7 +48,8 @@ begin
   begin
     New(Elem);
     New(Elem^.Attributes, Init);
-    SplitName(StrPas(name), Elem^.Name, Elem^.NameSpace);
+    WriteStr(attr, name);
+    SplitName(attr, Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
     Elem^.Depth := Depth;
 
@@ -57,9 +58,9 @@ begin
       while Assigned(attrs^) do
       begin
         New(patt);
-        attr := StrPas(attrs^);
+        WriteStr(attr, attrs^);
         SplitName(attr, patt^.Name, patt^.NameSpace);
-        patt^.Value := StrPas((attrs + 1)^);
+        WriteStr(patt^.Value, (attrs + 1)^);
 
         if patt^.NameSpace = '' then
         begin
@@ -93,13 +94,15 @@ end;
 procedure ElementEnded(user_data: Pointer; name: PChar);
 var
   Elem: PXmlElement;
+  Ename: STring;
 begin
   with TXmlFeed(user_data) do
   begin
     if FElemList^.Count > 0 then
     begin
+      WriteStr(Ename, name);
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      SplitName(StrPas(name), Elem^.Name, Elem^.NameSpace);
+      SplitName(Ename, Elem^.Name, Elem^.NameSpace);
     end;
 
     if Elem^.Name <> '' then
@@ -114,7 +117,7 @@ var
   Elem: PXmlElement;
   enh: String;
 begin
-  enh := Copy(StrPas(ch), 1, len);
+  WriteStr(enh, ch[0..len - 1]);
 
   with TXmlFeed(ctx) do
   begin
@@ -139,7 +142,7 @@ begin
   begin
     if GetProp('charset') = nil then
     begin
-      Priv := StrPas(data);
+      WriteStr(Priv, data);
       PrivStart := Pos('encoding=', Priv);
       if PrivStart <> 0 then
       begin

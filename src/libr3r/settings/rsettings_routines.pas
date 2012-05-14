@@ -123,7 +123,7 @@ begin
 
   if Res = '' then
   begin
-    Res := StrPas(GetProp('installed-prefix'));
+    WriteStr(Res, PChar(GetProp('installed-prefix')));
     if Res = '' then
     begin
       Res := InstalledPrefix

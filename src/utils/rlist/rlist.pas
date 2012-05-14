@@ -2,6 +2,8 @@
 
 unit RList;
 
+{$X+}
+
 interface
 
 type
@@ -58,7 +60,6 @@ uses
 constructor TRList.Init;
 begin
   FCount := 0;
-  FFirst := nil;
   FHasFirst := false;
 end;
 
@@ -192,7 +193,7 @@ begin
   i := 0;
   Tmp := FFirst;
 
-  if (N >= FCount) and (FCount > 0) then
+  if N >= FCount then
   begin
     N := FCount - 1;
   end;
@@ -209,14 +210,7 @@ begin
     end;
   end;
 
-  if Tmp <> nil then
-  begin
-    GetNth := Tmp^.Data;
-  end
-  else
-  begin
-    GetNth := nil;
-  end;
+  GetNth := Tmp^.Data;
 end;
 
 function TRList.IndexOf(Data: Pointer): integer;
@@ -289,12 +283,14 @@ end;
 destructor TRStringList.Done;
 var
   i: word;
+  p: Pointer;
 begin
   if FStrings^.Count > 0 then
   begin
     for i := 0 to FStrings^.Count - 1 do
     begin
-      FreeMem(FStrings^.GetNth(i));
+      p := FStrings^.GetNth(i);
+      FreeMem(p);
     end;
   end;
 
@@ -325,8 +321,11 @@ begin
 end;
 
 function TRStringList.GetNth(N: word): String;
+var
+  Res: String;
 begin
-  GetNth := StrPas(inherited GetNth(N));
+  WriteStr(Res, GetNth(N));
+  GetNth := Res;
 end;
 
 function TRStringList.IndexOf(Data: String): integer;
@@ -358,7 +357,7 @@ var
   p: PChar;
 begin
   GetMem(p, Length(s) + 1);
-  StrPCopy(p, s);
+  p := StrPCopy(p, s);
   StrToPChar := p;
 
   FStrings^.Add(p);

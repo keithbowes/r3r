@@ -28,7 +28,7 @@ begin
 {$IFDEF MSWINDOWS}
     GetMem(Data, MAX_PATH);
     GetConsoleTitle(Data, MAX_PATH);
-    Res := StrPas(Data);
+    WriteStr(Res, Data);
     FreeMem(Data);
 {$ELSE}
     Data := nil;

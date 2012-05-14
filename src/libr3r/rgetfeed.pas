@@ -119,7 +119,7 @@ begin
     ParseURL(Resource, Prot, User, Pass, Host, Port, Path, Para);
 {$IFDEF USE_IDN}
     idna_to_ascii_8z(StrToPChar(Host), @PHost, 0);
-    Host := StrPas(PHost);
+    WriteStr(Host, PHost);
 {$ENDIF}
 {$ENDIF}
   end;

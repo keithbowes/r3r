@@ -99,7 +99,7 @@ begin
   begin
     for i := 0 to mcfiles^.Count - 1 do
     begin
-      mcfile := StrPas(mcfiles^.GetNth(i));
+      WriteStr(mcfile, PChar(mcfiles^.GetNth(i)));
 
       if FileExists(mcfile) then
       begin

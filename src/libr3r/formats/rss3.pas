@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  ItemCallbacks, RDate, RStrings, SockConsts, SysUtils;
+  ItemCallbacks, RDate, RProp, RStrings, SockConsts;
 
 const
   WhiteSpaceChars: set of char = [#0, #8, #9, #10, #13, #32];
@@ -56,11 +56,6 @@ begin
   end
   else if FCurrentField = 'link' then
   begin
-{$IFNDEF __GPC__}
-    Data := TrimRight(Data);
-{$ELSE}
-    Data := wTrimRight(Data);
-{$ENDIF}
     Item.Link := Data;
   end
   else if FCurrentField = 'subject' then
@@ -109,8 +104,13 @@ var
   SepPos: word;
 begin
   inherited ParseLine(Line, Item);
+
+  if GetProp('shortstring') = nil then
+  begin
+    FLastLine := Line;
+  end;
+
   Item.Finished := ((Line = '') and (FLastLine = '')) or (Line = SockEof);
-  if Line = '' then WriteLn(':', FCurrentField);
 
   if not Item.Finished then
   begin

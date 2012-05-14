@@ -525,7 +525,7 @@ begin
     TuiWrite(Feed);
     if StrLen(rl_line_buffer) > 0 then
     begin
-      URI := StrPas(rl_line_buffer);
+      WriteStr(URI, rl_line_buffer);
       TuiWrite(URI);
     end;
     rl_callback_read_char;
@@ -833,7 +833,7 @@ begin
       history_set_pos(history_length div 2);
       if current_history <> nil then
       begin
-        InitDesc := StrPas(current_history^.Line);
+        WriteStr(InitDesc, current_history^.Line);
       end;
 {$ENDIF}
 
@@ -875,7 +875,7 @@ begin
 
         if StrLen(rl_line_buffer) > 0 then
         begin
-          SetDesc := StrPas(rl_line_buffer);
+          WriteStr(SetDesc, rl_line_buffer);
           TuiWrite(SetDesc);
         end
         else if InitDesc <> '' then
@@ -986,7 +986,8 @@ begin
   rl_callback_handler_remove;
   clear_history;
   read_history(Backup);
-  DeleteFile(StrPas(Backup));
+  WriteStr(InitDesc, Backup);
+  DeleteFile(InitDesc);
 {$ENDIF}
 end;
 

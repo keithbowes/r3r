@@ -72,6 +72,7 @@ end;
 function TSockWrap.RecvString(Timeout: word): String;
 var
   Buf: PChar{array [1..255] of char};
+  BufStr: String;
   CurStr, LastStr: String;
   LastReceived: integer;
 begin
@@ -83,9 +84,11 @@ begin
   begin
     GetMem(Buf, 255 * SizeOf(Buf));
     FReceived := socket_receive(FSocket, Buf, 255);
+    WriteStr(BufStr, Buf);
     LastStr := FStrings.Strings[FStringIndex];
-    FStrings := Split(Copy(StrPas(Buf), 1, FReceived + 2), #10#13);
+    FStrings := Split(BufStr, 1, FReceived + 2), #10#13);
     FStringIndex := 0;
+    FreeMem(buf);
   end;
   
   if FReceived > 0 then

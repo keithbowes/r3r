@@ -86,13 +86,13 @@ var
   attr, n: String;
   fo: text;
 begin
-  n := StrPas(name);
+  WriteStr(n, name);
   Assign(fo, OutName);
   Append(fo);
 
   while (Assigned(attrs^)) do
   begin
-    attr := StrPas(attrs^);
+    WriteStr(attr, attrs^);
 
     if (n = 'outline') and (attr = 'xmlUrl') then
     begin

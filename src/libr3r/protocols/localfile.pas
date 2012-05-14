@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  Feed, SockConsts, SysUtils;
+  Feed, RProp, SockConsts, SysUtils;
 
 constructor TLocalFile.Create(FileName: String);
 begin
@@ -46,10 +46,13 @@ end;
 
 function TLocalFile.GetLine: String;
 var
-  Res: String[255];
+  Res: String{$IFDEF __GPC__}(255){$ENDIF};
 begin
   if not Eof(FFileHandle) then
   begin
+{$IFNDEF __GPC__}
+    ReadLn(FFileHandle, Res);
+{$ELSE}
     if not Eoln(FFileHandle) then
     begin
       Read(FFileHandle, Res);
@@ -58,6 +61,9 @@ begin
     begin
       ReadLn(FFileHandle, Res);
     end;
+
+    SetProp('shortstring', Self);
+{$ENDIF}
   end
   else
   begin
