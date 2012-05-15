@@ -72,15 +72,22 @@ type
   type
      XML_Char = widechar;
      XML_LChar = widechar;
+
+  const
+     XML_NsSeparator = WideChar($FFFF);
 {$else}
   { not XML_UNICODE  }
   { Information is UTF-8 encoded.  }
   type
      XML_Char = char;
      XML_LChar = char;
+
+  const
+     XML_NsSeparator = Chr($FF);
 {$endif}
   { not XML_UNICODE  }
 
+type
   PXML_LChar = ^XML_LChar;
      
   { Constructs a new parser; encoding is the encoding specified by the external

@@ -60,6 +60,7 @@ uses
 constructor TRList.Init;
 begin
   FCount := 0;
+  FFirst := nil;
   FHasFirst := false;
 end;
 

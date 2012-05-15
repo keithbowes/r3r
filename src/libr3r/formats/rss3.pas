@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  ItemCallbacks, RDate, RProp, RStrings, SockConsts;
+  ItemCallbacks, RDate, RProp, RStrings, SockConsts, SysUtils;
 
 const
   WhiteSpaceChars: set of char = [#0, #8, #9, #10, #13, #32];

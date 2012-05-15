@@ -50,14 +50,14 @@ function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEn
 
 implementation
 
-uses
 {$IFDEF USE_ICONV}
-  iconv, RProp, RSettings,
-{$ENDIF}
+uses
+  iconv, RProp, RSettings
 
 {$IFDEF UNIX}
-  cwstring
+  , cwstring
 {$ENDIF};
+{$ENDIF}
 
 function StripHtml(const InStr: String): String;
 var

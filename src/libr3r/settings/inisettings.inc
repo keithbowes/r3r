@@ -1,6 +1,25 @@
 var
   IniFile: TIniFile;
 
+procedure StripComment(var s: String);
+var
+  Idx: PtrUInt;
+  t: String;
+begin
+  Idx := Pos(CommentSeparator, s);
+  if Idx <> 0 then
+  begin
+    if Idx > 2 then
+    begin
+      WriteStr(s, s[1..Idx - 2])
+    end  
+    else
+    begin
+      s := '';
+    end;
+  end;
+end;
+
 constructor TRSettings.Create;
 begin
   IniFile := TIniFile.Create(SettingsDir + 'r3r.ini');
@@ -19,84 +38,98 @@ end;
 
 function TRSettings.GetBoolean(const Setting: String): Boolean;
 var
-	Index: TRSetIndex;
+  Index: TRSetIndex;
+  Res: String;
   Sett: TRSetting;
+  v: String;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
-    GetBoolean := IniFile.ReadBool(Sett.Section, Sett.Name, Sett.ValueBoolean);
+    WriteStr(v, Ord(Sett.ValueBoolean));
+    Res := IniFile.ReadString(Sett.Section, Sett.Name, v);
+    StripComment(Res);
+    GetBoolean := Res <> '0';
   end;
 end;
 
 function TRSettings.GetInteger(const Setting: String): integer;
 var
-	Index: TRSetIndex;
+  i: integer;
+  Index: TRSetIndex;
+  Res: String;
   Sett: TRSetting;
+  v: String;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
-    GetInteger := IniFile.ReadInteger(Sett.Section, Sett.Name, Sett.ValueInteger);
+    WriteStr(v, Sett.ValueInteger);
+    Res := IniFile.ReadString(Sett.Section, Sett.Name, v);
+    ReadStr(Res, i);
+    GetInteger := i;
   end;
 end;
 
 function TRSettings.GetString(const Setting: String): String;
 var
-	Index: TRSetIndex;
+  Index: TRSetIndex;
+  Res: String;
   Sett: TRSetting;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     Sett := PRSetting(FSettings^.GetNth(Index))^;
-    GetString := IniFile.ReadString(Sett.Section, Sett.Name, Sett.ValueString);
+    Res := IniFile.ReadString(Sett.Section, Sett.Name, Sett.ValueString);
+    StripComment(Res);
+    GetString := Res;
   end;
 end;
 
 procedure TRSettings.SetBoolean(const Setting: String; const Value: Boolean);
 var
-	Index: TRSetIndex;
+  Index: TRSetIndex;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteBool(Section, Name, Value);
-			ValueBoolean := Value;
+      ValueBoolean := Value;
     end;
   end;
 end;
 
 procedure TRSettings.SetInteger(const Setting: String; const Value: integer);
 var
-	Index: TRSetIndex;
+  Index: TRSetIndex;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteInteger(Section, Name, Value);
-			ValueInteger := Value;
+      ValueInteger := Value;
     end;
   end;
 end;
 
 procedure TRSettings.SetString(const Setting: String; const Value: String);
 var
-	Index: TRSetIndex;
+  Index: TRSetIndex;
 begin
-	Index := IndexOf(Setting);
+  Index := IndexOf(Setting);
   if Index <> -1 then
   begin
     with PRSetting(FSettings^.GetNth(Index))^ do
     begin
       IniFile.WriteString(Section, Name, Value);
-			ValueString := Value;
+      ValueString := Value;
     end;
   end;
 end;
@@ -104,13 +137,17 @@ end;
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
+  s, v: String;
 begin
   New(ASetting);
   with ASetting^ do
   begin
     Name := Setting;
     Section := ASection;
-    ValueBoolean := IniFile.ReadBool(ASection, Setting, Value);
+    WriteStr(v, Ord(Value));
+    s := IniFile.ReadString(ASection, Setting, v);
+    StripComment(s);
+    ValueBoolean := s <> '0';
     ValueType := TypeBoolean;
   end;
 
@@ -121,13 +158,17 @@ end;
 procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 var
   ASetting: PRSetting;
+  s, v: String;
 begin
   New(ASetting);
   with ASetting^ do
   begin
     Name := Setting;
     Section := ASection;
-    ValueInteger := IniFile.ReadInteger(ASection, Setting, Value);
+    WriteStr(v, Value);
+    s := IniFile.ReadString(ASection, Setting, v);
+    StripComment(s);
+    ReadStr(s, ValueInteger);
     ValueType := TypeInteger;
   end;
 
@@ -145,6 +186,7 @@ begin
     Name := Setting;
     Section := ASection;
     ValueString := IniFile.ReadString(ASection, Setting, Value);
+    StripComment(ValueString);
     ValueType := TypeString;
   end;
 

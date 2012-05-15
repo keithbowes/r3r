@@ -76,6 +76,11 @@ uses
 {$ENDIF}
   ;
 
+{$IF defined(SETTINGS_INI) or defined(SETTINGS_LIBINI)}
+const
+  CommentSeparator = ';; ';
+{$ENDIF}
+
 {$IFDEF SETTINGS_INI}
   {$INCLUDE "inisettings.inc"}
 {$ENDIF}

@@ -694,7 +694,9 @@ begin
     end
     else
     begin
+{$IFNDEF __GPC__}
       Link := '"' + Link + '"';
+{$ENDIF}
     end;
 
     { Windows puts the path in quotes, which Exec() doesn't like }

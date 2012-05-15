@@ -9,7 +9,9 @@ uses
   Feed, FeedItem, RList;
 
 const
-  NameSpaceSeparator = #$FF;
+{$IFDEF USE_EXPAT}
+  NameSpaceSeparator = XML_NsSeparator;
+{$ENDIF}
   XMLNSNS = 'http://www.w3.org/XML/1998/namespace';
 
 type
@@ -24,7 +26,6 @@ type
   TXmlElement = record
     Name: String;
     NameSpace: String;
-    { Yeah, like anybody will exceed 11 attributes per element }
     Attributes: PRList;
     Content: String;
     Base: String;

@@ -86,7 +86,7 @@ begin
     FReceived := socket_receive(FSocket, Buf, 255);
     WriteStr(BufStr, Buf);
     LastStr := FStrings.Strings[FStringIndex];
-    FStrings := Split(BufStr, 1, FReceived + 2), #10#13);
+    FStrings := Split(Copy(BufStr, 1, FReceived + 2), #10#13);
     FStringIndex := 0;
     FreeMem(buf);
   end;
