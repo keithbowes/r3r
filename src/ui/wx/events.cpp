@@ -329,8 +329,7 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
         elem->SetValue((void *) atoi(text.mb_str()));
         break;
       case TYPE_STRING:
-        char * val = (char *) malloc(257);
-        strcpy(val, text.mb_str());
+        char * val = strdup(text.mb_str());
         elem->SetValue((void *) val);
         break;
     }

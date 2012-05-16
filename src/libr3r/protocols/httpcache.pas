@@ -5,7 +5,7 @@ unit HttpCache;
 interface
 
 uses
-	Feed, Headers, RList, SysUtils;
+  Feed, Headers, RList, SysUtils;
 
 const
   CacheFeedFile = 'feed';
@@ -16,15 +16,15 @@ const
 
 type
   TCacheDataType = (cdtFeed, cdtIds, cdtInfo, cdtResponse);
-	TCacheType = (ctNone, ctEtag, ctExpires, ctLastModified);
+  TCacheType = (ctNone, ctEtag, ctExpires, ctLastModified);
 
-	TCacheInfo = record
+  TCacheInfo = record
     CacheParam: String; { the data of the cache type }
-		CacheType: TCacheType;
-		DateInfo: TDateTime;
-		FeedData: String;
-		HeaderRec: THeaders;
-	end;
+    CacheType: TCacheType;
+    DateInfo: TDateTime;
+    FeedData: String;
+    HeaderRec: THeaders;
+  end;
   PCacheInfo = ^TCacheInfo;
 
   THttpCache = class

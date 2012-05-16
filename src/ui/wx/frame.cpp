@@ -16,9 +16,14 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   name = (char *) "installed-prefix";
   libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
+  wxPanel * panel = new wxPanel(this, wxID_ANY);
+  wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
+  panel->SetSizer(vbox);
+
+#ifdef wxUSE_PNG
   wxString path, prefix;
 	wxChar sep = wxFileName::GetPathSeparator();
-	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 256);
+	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * MAX_PATH);
 	wxStrcpy(spath, wxString(sep));
 	wxStrcat(spath, wxT("share"));
 	wxStrcat(spath, wxString(sep));
@@ -29,12 +34,9 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
   path = wxString(spath, wxConvUTF8);
 	free(spath);
 
-  wxPanel * panel = new wxPanel(this, wxID_ANY);
-  wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
-  panel->SetSizer(vbox);
-
 	wxInitAllImageHandlers();
   SetIcon(wxIcon(prefix + path, wxBITMAP_TYPE_PNG));
+#endif
   
   CreateMenus(this);
 

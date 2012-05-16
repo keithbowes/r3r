@@ -22,8 +22,7 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
       break;
   }
 
-  name = (char *) malloc(257);
-  strcpy(name, setting_name);
+  name = strdup(setting_name);
 
   SetValue(wxString(text, wxConvUTF8));
   SetToolTip(wxString(text, wxConvUTF8));
@@ -39,6 +38,7 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
   elem->SetName(name);
   elem->SetType(type);
   elem->SetValue(value);
+	free(name);
 
   list->Append(elem);
   SetClientData(elem);

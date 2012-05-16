@@ -155,10 +155,7 @@ void ParseFeed(char * res)
   resource->lib = rlib;
   resource->res = res;
 
-	/* Extremely buggy thread support in Windows atm */
-#ifdef _WIN32
-	ParseFeedThread(resource);
-#else
+#ifdef wxUSE_THREADS
 	FeedListThread * thread = new FeedListThread(wxTHREAD_JOINABLE);
 	thread->SetEntryData(resource);
 
@@ -181,6 +178,8 @@ void ParseFeed(char * res)
 		thread->Wait();
 		delete thread;
 	}
+#else
+	ParseFeedThread(resource);
 #endif
 }
 

@@ -15,8 +15,7 @@ SettingsCheckBox::SettingsCheckBox(wxWindow * parent, const wxString & label, ch
   is_enabled = (bool) setting_value;
   SetValue(is_enabled);
 
-  name = (char *) malloc(257);
-  strcpy(name, setting_name);
+  name = strdup(setting_name);
 
   SettingsList * list = GetSettingsList();
 
@@ -24,6 +23,7 @@ SettingsCheckBox::SettingsCheckBox(wxWindow * parent, const wxString & label, ch
   elem->SetName(name);
   elem->SetType(type);
   elem->SetValue((void *) setting_value);
+	free(name);
 
   list->Append(elem);
   SetClientData(elem);
