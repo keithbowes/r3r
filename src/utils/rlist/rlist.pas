@@ -323,9 +323,11 @@ end;
 
 function TRStringList.GetNth(N: word): String;
 var
+  p: PChar;
   Res: String;
 begin
-  WriteStr(Res, GetNth(N));
+  p := inherited GetNth(N);
+  WriteStr(Res, p);
   GetNth := Res;
 end;
 
