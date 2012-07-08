@@ -107,13 +107,13 @@ begin
   SkinToUse := _('Skin to use');
   ErrorSeconds := _('Seconds to wait after an error');
 
-  Usage := 'Usage: %s [URL]';
+  Usage := _('Usage: %s [URL]');
 
-  NoFeedURL := 'No feed URL specified.';
+  NoFeedURL := _('No feed URL specified.');
 
-  Retrieving := 'Retrieving items from %s...';
+  Retrieving := _('Retrieving items from %s...');
 
-  NoData := 'This item contains no data.';
+  NoData := _('This item contains no data.');
 end;
 
 {$IFNDEF USE_NLS}

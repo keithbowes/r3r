@@ -1,5 +1,5 @@
 \" vi: ft=nroff
-.TH R3R 1 "2012-03-25"
+.TH R3R 1 "2012-05-27"
 
 .SH NOMO
   r3r - Facila fluo-legilo
@@ -64,7 +64,7 @@ foo
 .SH TUI
 
 .P
-TUI estas la plej maturiĝinta fasado (kia mi plej uzas). Ĝi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
+TUI estas la plej maturiĝinta fasado (kian mi plej uzas). Ĝi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
 
 .SH GUI
 
