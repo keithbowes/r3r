@@ -73,15 +73,15 @@ var
 {$CALLING CDECL}
 function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
 var
-  i: integer;
+  i: PtrUInt;
   s: String;
 begin
-  s := StrPas(ptr);
+  s := ptr;
 
   repeat
-    if (Pos(#10, s) > 0) then
+    i := Pos(#10, s);
+    if i > 0 then
     begin
-      i := Pos(#10, s);
       PRStringList(UserData)^.Add(TrimRight(Copy(s, 1, i)));
       Delete(s, 1, i);
     end
