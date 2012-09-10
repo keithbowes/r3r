@@ -1,14 +1,24 @@
 unit Http;
 
+{$IFDEF SOCKETS_LIBCURL}
+{$DEFINE USE_SSL}
+{$ENDIF}
+
 interface
 
 uses
-  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock;
+  Feed, FeedItem, Headers, HttpCache, LocalFile, RSock
+{$IFDEF SOCKETS_LIBCURL}
+  , CurlCore, CurlEasy, CurlSList
+{$ENDIF};
 
 type
   THttpSock = class(TRSock)
   private
     FCachable: Boolean;
+{$IFDEF SOCKETS_LIBCURL}
+    FHeaderList: Pcurl_slist;
+{$ENDIF}
     FHttpVersion: real;
     FIndirectHost: String;
     FLocal: TLocalFile;
@@ -173,7 +183,11 @@ begin
       else if HeaderName = 'location' then
       begin
         Headers.Status := 0;
+{$IFNDEF SOCKETS_LIBCURL}
         Sock.CloseSocket;
+{$ELSE}
+        curl_easy_cleanup(FHandle);
+{$ENDIF}
         ShouldShow := true;
 
         GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
@@ -254,6 +268,11 @@ begin
 
   Method := 'GET';
   FChunkedLength := 0;
+
+{$IFDEF SOCKETS_LIBCURL}
+  curl_easy_setopt(FHandle, CURLOPT_HEADER, Pointer(1));
+  FHeaderList := nil;
+{$ENDIF}
 end;
 
 procedure THttpSock.Connect(Host, Port, Path, Search: String);
@@ -262,6 +281,7 @@ var
 begin
   FIndirectHost := Host;
 
+{$IFNDEF SOCKETS_LIBCURL}
   if (Port <> '80')
 {$IFDEF USE_SSL}
   and (Port <> '443')
@@ -270,12 +290,18 @@ begin
   begin
     FIndirectHost := FIndirectHost + ':' + Port;
   end;
+{$ENDIF}
 
   UseProxy := Settings.GetBoolean('use-proxy');
   if UseProxy then
   begin
+{$IFNDEF SOCKETS_LIBCURL}
     Host := Settings.GetString('proxy-address');
     WriteStr(Port, Settings.GetInteger('proxy-port'));
+{$ELSE}
+    curl_easy_setopt(FHandle, CURLOPT_PROXY, StrToPChar(Settings.GetString('proxy-address')));
+    curl_easy_setopt(FHandle, CURLOPT_PROXYPORT, Pointer(Settings.GetInteger('proxy-port')));
+{$ENDIF}
   end;
 
   FCachable := true;
@@ -289,15 +315,28 @@ begin
 
   FURL := 'http://' + FIndirectHost + FPath;
 
+{$IFNDEF SOCKETS_LIBCURL}
   if UseProxy then
   begin
     FPath := FURL;
   end;
+{$ENDIF}
+
+{$IFDEF SOCKETS_LIBCURL}
+  curl_easy_setopt(FHandle, CURLOPT_URL, StrToPChar(FURL));
+{$ENDIF}
 end;
 
 destructor THttpSock.Destroy;
 begin
   Cache.Free;
+
+{$IFDEF SOCKETS_LIBCURL}
+  if Assigned(FHeaderList) then
+  begin
+    curl_slist_free_all(FHeaderList);
+  end;
+{$ENDIF}
 
 {$IFNDEF __GPC__}
   inherited Destroy;
@@ -308,12 +347,20 @@ procedure THttpSock.Execute;
 begin
   inherited Execute;
   SendHeaders;
+
+{$IFDEF SOCKETS_LIBCURL}
+  curl_easy_perform(FHandle);
+{$ENDIF}
 end;
 
 procedure THttpSock.SendHeader(Name: String);
 begin
+{$IFNDEF SOCKETS_LIBCURL}
   Sock.SendString(Name);
   Sock.SendString(#13#10);
+{$ELSE}
+  FHeaderList := curl_slist_append(FHeaderList, StrToPChar(Name));
+{$ENDIF}
 end;
 
 procedure THttpSock.SendHeaders;
@@ -348,6 +395,10 @@ begin
   SendHeader('Accept-Encoding: ');
   SendHeader('Connection: close');
   SendHeader('');
+
+{$IFDEF SOCKETS_LIBCURL}
+  curl_easy_setopt(FHandle, CURLOPT_HTTPHEADER, FHeaderList);
+{$ENDIF}
 end;
 
 procedure THttpSock.InitCache;

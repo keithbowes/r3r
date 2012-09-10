@@ -28,6 +28,10 @@ uses
 
 {$IFDEF SOCKETS_SYNAPSE}
   ,BlckSock
+{$ENDIF}
+  
+{$IFDEF SOCKETS_LIBCURL}
+  ,CurlVer
 {$ENDIF};
 
 function Os: String;
@@ -84,7 +88,10 @@ begin
   UserAgent := AppName + '/' + AppVersion + ' (' + OS + '; @COMPILER@)'
 {$IFDEF SOCKETS_SYNAPSE}
     + ' Synapse/' + SynapseRelease
-{$ENDIF};
+{$ENDIF}
+{$IFDEF SOCKETS_LIBCURL}
+    + ' ' + StrPas(curl_version)
+{$ENDIF}
 end;
 
 end.

@@ -2,6 +2,10 @@ unit RSock;
 
 interface
 
+{$IFDEF SOCKETS_LIBCURL}
+{$DEFINE USE_SSL}
+{$ENDIF}
+
 uses
   Feed, FeedItem
 {$IFDEF SOCKETS_SYNAPSE}
@@ -13,6 +17,10 @@ uses
   
 {$IFDEF SOCKETS_BSD}
   , SockWrap
+{$ENDIF}
+  
+{$IFDEF SOCKETS_LIBCURL}
+  , CurlCore, CurlEasy, RList, RStrings
 {$ENDIF};
 
 type
@@ -22,6 +30,10 @@ type
     FChunkedLength: integer;
     FError: Boolean;
     FFeedType: TFeedType;
+{$IFDEF SOCKETS_LIBCURL}
+    FHandle: CURL;
+    FList: PRStringList;
+{$ENDIF}
     FHost: String;
     FPort: String;
     FShouldShow: Boolean;
@@ -47,7 +59,7 @@ type
 
 implementation
 
-{$IFDEF SOCKETS_CURL}
+{$IF DEFINED(SOCKETS_CURL) or DEFINED(SOCKETS_LIBCURL)}
 {$DEFINE SOCKETS_NONE}
 {$ENDIF}
 
@@ -56,6 +68,34 @@ uses
 
 var
   FAbstractFeed: TFeed;
+
+{$IFDEF SOCKETS_LIBCURL}
+{$CALLING CDECL}
+function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
+var
+  i: integer;
+  s: String;
+begin
+  s := StrPas(ptr);
+
+  repeat
+    if (Pos(#10, s) > 0) then
+    begin
+      i := Pos(#10, s);
+      PRStringList(UserData)^.Add(TrimRight(Copy(s, 1, i)));
+      Delete(s, 1, i);
+    end
+    else
+    begin
+      PRStringList(UserData)^.Add(s);
+      s := '';
+    end;
+  until Length(s) = 0;
+
+  WriteData := size * nmemb;
+end;
+{$CALLING DEFAULT}
+{$ENDIF}
 
 
 {$IFNDEF SOCKETS_NONE}
@@ -115,7 +155,17 @@ begin
 {$IFNDEF SOCKETS_NONE}
   Sock := CreateSocket;
 {$ENDIF}
+
+{$IFDEF SOCKETS_LIBCURL}
+  New(FList, Init);
+  FHandle := curl_easy_init;
+  FError := FHandle = nil;
+  curl_easy_setopt(FHandle, CURLOPT_WRITEFUNCTION, @WriteData);
+  curl_easy_setopt(FHandle, CURLOPT_WRITEDATA, FList);
+{$ELSE}
   FError := false;
+{$ENDIF}
+
   DomainSet(Host, Port);
   FShouldShow := true;
 end;
@@ -127,6 +177,15 @@ begin
   begin
     Sock.Free;
   end;
+{$ENDIF}
+
+{$IFDEF SOCKETS_LIBCURL}
+  if Assigned(FList) then
+  begin
+    Dispose(FList, Done);
+  end;
+
+  curl_easy_cleanup(FHandle);
 {$ENDIF}
 
   FAbstractFeed.Free;
@@ -145,6 +204,11 @@ begin
   FHost := Host;
   FPort := Port;
   FUseChunked := false;
+
+{$IFDEF SOCKETS_LIBCURL}
+  curl_easy_setopt(FHandle, CURLOPT_URL, StrToPChar(Host));
+  curl_easy_setopt(FHandle, CURLOPT_PORT, @Port);
+{$ENDIF}
 end;
 
 function TRSock.GetLine: String;
@@ -156,6 +220,18 @@ begin
 {$ELSE}
   FError := Sock.LastError <> 0;
 {$ENDIF}
+{$ENDIF}
+
+{$IFDEF SOCKETS_LIBCURL}
+  if FList^.Count > 0 then
+  begin
+    GetLine := FList^.GetNth(0);
+    FList^.Delete(0);
+  end
+  else
+  begin
+    FError := true;
+  end;
 {$ENDIF}
 
   if FError then

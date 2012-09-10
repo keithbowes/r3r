@@ -44,6 +44,10 @@ implementation
 {$DEFINE SOCKETS_NONE}
 {$ENDIF}
 
+{$IFDEF SOCKETS_LIBCURL}
+{$DEFINE USE_SSL}
+{$ENDIF}
+
 uses
 {$IFNDEF SOCKETS_NONE}
   Http, RUpdate, 

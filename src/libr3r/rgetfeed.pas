@@ -4,6 +4,10 @@ unit RGetFeed;
 {$DEFINE SOCKETS_NONE}
 {$ENDIF}
 
+{$IFDEF SOCKETS_LIBCURL}
+{$UNDEF USE_IDN}
+{$ENDIF}
+
 interface
 
 uses
@@ -135,7 +139,7 @@ begin
 
   while not Finished do
   begin
-{$IF not defined(SOCKETS_NONE) and not defined(SOCKETS_CURL)
+{$IF not defined(SOCKETS_NONE) and not defined(SOCKETS_CURL) and not defined(SOCKETS_LIBCURL)
     and not defined(__GPC__)} { Hack: Sock.Error is always true in GPC }
     if Assigned(Sock.Sock) and Sock.Error then
     begin
