@@ -73,7 +73,7 @@ var
 {$CALLING CDECL}
 function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
 var
-  i: PtrUInt;
+  i: byte;
   s: String;
 begin
   s := ptr;
@@ -160,6 +160,7 @@ begin
   New(FList, Init);
   FHandle := curl_easy_init;
   FError := FHandle = nil;
+  curl_easy_setopt(FHandle, CURLOPT_BUFFERSIZE, Pointer(255));
   curl_easy_setopt(FHandle, CURLOPT_WRITEFUNCTION, @WriteData);
   curl_easy_setopt(FHandle, CURLOPT_WRITEDATA, FList);
 {$ELSE}
