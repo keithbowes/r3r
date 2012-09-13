@@ -52,7 +52,7 @@ begin
   if ErrPos = 0 then
   begin
     Res := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
-    FormatSettings.DateSeparator := '-';
+    {$IFNDEF __GPC__}FormatSettings.{$ENDIF}DateSeparator := '-';
     DT := StrToDateTime(Res);
     Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
     Res := TimeToString(ShortDateToTime(Res));

@@ -120,7 +120,7 @@ begin
   if Assigned(FSock) then
   begin
 {$IFDEF __GPC__}
-{$IFNDEF SOCKETS_NONE}
+{$IFDEF SOCKETS_BSD}
     if Prot <> 'file' then
     begin
       FSock.Sock.CloseSocket;

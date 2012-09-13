@@ -13,7 +13,7 @@ implementation
 
 uses
 {$IFDEF __GPC__}
-  GPC
+  GPC, SysUtils
 {$ELSE}
   {$IF DEFINED(FPC) and DEFINED(UNIX)}
     BaseUnix

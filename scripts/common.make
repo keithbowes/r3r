@@ -333,11 +333,11 @@ PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 --extended-syntax \
 						 --unit-destination-path=$(builddir)\
 						 -DFree=Destroy -DPtrUInt=PtrWord \
-						 -DWideChar=Chr \
+						 -DWideChar=Chr -DTrimRight=wTrimRight\
 						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
 DEFFLAG=-D
 DEFS_SETTINGS ?= SETTINGS_LIBINI
-DEFS_SOCKETS ?= SOCKETS_BSD
+DEFS_SOCKETS ?= SOCKETS_LIBCURL
 DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
@@ -353,6 +353,10 @@ endif # DEBUG
 # Let's get the proper LDFLAGS
 ifneq ($(SETTINGS_LIBINI),0)
 override LDFLAGS+=-lini
+endif
+
+ifeq ($(SETTINGS_SOCKETS),SOCKETS_LIBCURL)
+override LDFLAGS+=-lcurl
 endif
 
 ifneq ($(USE_EXPAT),0)

@@ -76,7 +76,7 @@ var
   i: byte;
   s: String;
 begin
-  s := ptr;
+  s := StrPas(ptr);
 
   repeat
     i := Pos(#10, s);
