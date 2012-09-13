@@ -50,9 +50,17 @@ ifdef inUnix
 endif
 endif
 else
+ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
+	@$(ECHO) $(call checklib,curl)
+	@$(ECHO) $(call checkunit,CurlCore)
+	@$(ECHO) $(call checkunit,CurlEasy)
+	@$(ECHO) $(call checkunit,CurlSList)
+	@$(ECHO) $(call checkunit,CurlVer)
+else
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
 ifneq ($(DEFS_SOCKETS),SOCKETS_CURL)
 	$(error Unsupported sockets library)
+endif
 endif
 endif
 endif

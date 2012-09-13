@@ -351,12 +351,12 @@ PCFLAGS_DEBUG=--no-io-checking --no-pointer-checking \
 endif # DEBUG
 
 # Let's get the proper LDFLAGS
-ifneq ($(SETTINGS_LIBINI),0)
-override LDFLAGS+=-lini
+ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
+override LDFLAGS+=-lcurl
 endif
 
-ifeq ($(SETTINGS_SOCKETS),SOCKETS_LIBCURL)
-override LDFLAGS+=-lcurl
+ifneq ($(SETTINGS_LIBINI),0)
+override LDFLAGS+=-lini
 endif
 
 ifneq ($(USE_EXPAT),0)

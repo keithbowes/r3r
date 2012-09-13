@@ -91,7 +91,7 @@ do
       echo -e "\t--host=HOST Build for HOST (e.g. i386-win32)"
       echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS.\n\t\tOnly works on Unix systems without the --disable-iconv option"
       echo -e "\t--with-settings=database Type of settings database to use (ini|libini|registry)"
-      echo -e "\t--with-sockets=lib Sockets library to use (bsd|curl|none|synapse)"
+      echo -e "\t--with-sockets=lib Sockets library to use (bsd|curl|libcurl|none|synapse)"
       echo -e "\t--with-ssl Build with OpenSSL"
       echo -e "\t--with-ui=ui Which UI to build it with (html|tui|wx)"
       echo -e "\t--enable-libedit Use libedit's readline emulation.\n\t\tOnly works without the --disable-readline option"
