@@ -17,7 +17,7 @@ endif
 ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
 	cd libini && $(MAKE) all
 endif
-ifeq ($(DEFS_SOCKETS,SOCKETS_LIBCURL)
+ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
 	cd libcurl && $(MAKE) all
 endif
 ifneq ($(USE_PCRE),0)

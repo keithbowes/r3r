@@ -22,10 +22,13 @@ Optional dependencies (see below for how to enable/disable):
 * Expat <http://libexpat.org>
 * iconv
 * gettext <http://gnu.org/software/gettext>
+* libcurl <http://curl.haxx.se/>
 * libidn <http://gnu.org/software/libidn>
+* libini <http://sourceforge.net/projects/libini>
 * readline <http://gnu.org/software/readline> or
   libedit <http://www.thrysoee.dk/editline/>
 * PCRE <http://pcre.org>
+* Synapse <http://synapse.ararat.cz>
 * For a GUI:
   * a C++ compiler; I'm only testing in GCC <http://gcc.gnu.org/>
   * wxWidgets <http://wxwidgets.org/>
@@ -75,10 +78,12 @@ DEFS_SOCKETS
   * SOCKETS_CURL: Use cURL <http://curl.haxx.se/> to retrieve
     the feeds. There are limitations, but it should be the most
     portable solution.
+  * SOCKETS_LIBCURL: Use libcurl (cURL's library) directly instead
+    of having to invoke the cURL program. (Experimental!)
   * SOCKETS_NONE: Build without sockets support.
   * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal)
     <http://synapse.ararat.cz>.
-  (Currently the default is SOCKETS_BSD with GNU Pascal and
+  (Currently the default is SOCKETS_LIBCURL with GNU Pascal and
    SOCKETS_SYNAPSE with Free Pascal.)
 DESTDIR
   Where to install the software.
