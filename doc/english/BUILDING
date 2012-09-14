@@ -28,7 +28,7 @@ Optional dependencies (see below for how to enable/disable):
 * readline <http://gnu.org/software/readline> or
   libedit <http://www.thrysoee.dk/editline/>
 * PCRE <http://pcre.org>
-* Synapse <http://synapse.ararat.cz>
+* Synapse <http://synapse.ararat.cz/>
 * For a GUI:
   * a C++ compiler; I'm only testing in GCC <http://gcc.gnu.org/>
   * wxWidgets <http://wxwidgets.org/>

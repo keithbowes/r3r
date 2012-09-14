@@ -141,24 +141,6 @@ begin
     AItem.Enclosure.URL := Item.Enclosure.URL;
     FItems^.Add(AItem);
     Items := FItems^.Count;
-  
-    if Items <= FViewPort.PortHeight then
-    begin
-      Title := AItem.TitleText;
-      WriteStr(LenStr, Items);
-      if Length(Title) > (FDimList.LeftEnd - 3 - Length(LenStr)) then
-      begin
-        Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(LenStr)) + '...';
-      end;
-
-      TextBackground(SkinColorTable.FIndexBack);
-      TextColor(SkinColorTable.FIndexFore);
-      Write(Items, ': ');
-
-      TextBackground(SkinColorTable.FTitleBack);
-      TextColor(SkinColorTable.FTitleFore);
-      TuiWriteLn(Title);
-    end;
   end;
 end;
 
