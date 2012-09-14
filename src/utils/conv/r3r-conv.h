@@ -5,4 +5,6 @@ char * in_file, * out_file, * out_type;
 void item_received(void * item);
 void show_help(char * invok);
 
+char * format_time(char * in_time, char * out_fmt);
+
 FILE * get_handle();

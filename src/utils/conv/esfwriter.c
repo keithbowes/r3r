@@ -18,7 +18,8 @@ void write_esf(void * item, char is_top)
 	}
 	else
 	{
-		fprintf(fh, "%d\t%s\t%s\n", ri(item, "created"), ri(item, "title"), ri(item, "link"));
+		char * created = format_time(ri(item, "created"), "%s");
+		fprintf(fh, "%d\t%s\t%s\n", created, ri(item, "title"), ri(item, "link"));
 	}
 
 	if (out_file)

@@ -1,7 +1,7 @@
 include ../../../scripts/common.make
 
 override CFLAGS+=-I../../libr3r
-override LIBS+=-llibr3r_shared
+override LIBS+=-lcurl -llibr3r_shared
 override LDFLAGS+=-L../../libr3r
 
 ifneq ($(USE_NLS),0)

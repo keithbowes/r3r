@@ -123,9 +123,6 @@ end;
 procedure ItemReceived(const Item: TFeedItem);
 var
   AItem: TFeedItem;
-  Items: PtrUInt;
-  LenStr: String;
-  Title: String;
 begin
   with obj do
   begin
@@ -140,7 +137,6 @@ begin
     AItem.Enclosure.MimeType := Item.Enclosure.MimeType;
     AItem.Enclosure.URL := Item.Enclosure.URL;
     FItems^.Add(AItem);
-    Items := FItems^.Count;
   end;
 end;
 

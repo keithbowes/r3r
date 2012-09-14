@@ -1,3 +1,4 @@
+#include <curl/curl.h>
 #include <libr3r.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,6 +78,17 @@ FILE * get_handle()
 	return fh;
 }
 
+char * format_time(char * in_time, char * out_fmt)
+{
+#define MAXSIZE 255
+	char * out_time = malloc(MAXSIZE);
+	time_t t = curl_getdate(in_time, NULL);
+	if (-1 == t) return in_time; /* Unparsable date format */
+	struct tm * lt = localtime(&t);
+	strftime(out_time, MAXSIZE, out_fmt, lt);
+	return out_time;
+}
+
 #ifdef USE_NLS
 char * get_locale_dir()
 {
@@ -141,7 +153,7 @@ int main(int argc, char ** argv)
 
 	void * feed = libr3r_create();
 	libr3r_on_item_parsed(feed, &item_received);
-	libr3r_retrieve_feed(feed, in_file /*"/home/keith/Documents/programs/r3r/feed.atom"*/);
+	libr3r_retrieve_feed(feed, in_file);
 	libr3r_free(feed);
 
 	if (0 == strcmp("rss", out_type))

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r-git\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-27 16:21-0400\n"
+"POT-Creation-Date: 2012-09-14 17:21-0400\n"
 "PO-Revision-Date: 2012-04-23 17:03-0400\n"
 "Last-Translator: Keith Bowes <zooplah@users.sourceforge.net>\n"
 "Language-Team: German\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../r3r-conv.c:35
+#: ../r3r-conv.c:36
 #, c-format
 msgid "Out-file type must be one of atom, esf, rss, rss3\n"
 msgstr "Ausgabedatei muss eine aus atom, esf, rss, rss3 sein\n"
 
-#: ../r3r-conv.c:41
+#: ../r3r-conv.c:42
 #, c-format
 msgid "Usage: %s -i in_file -t out_type [-o out_file]\n"
 msgstr "Benutzung: %s -i Eingabedatei -t Ausgabetyp [-o Ausgabedatei]\n"
