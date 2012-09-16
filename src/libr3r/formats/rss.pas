@@ -119,12 +119,15 @@ begin
     end
     else if Name = 'enclosure' then
     begin
-      for Idx := 0 to Attributes^.Count - 1 do
+      if Attributes^.Count > 0 then
       begin
-        Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
-        if Attr.Name = 'url' then
+        for Idx := 0 to Attributes^.Count - 1 do
         begin
-          Enclosure.URL := Attr.Value;
+          Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
+          if Attr.Name = 'url' then
+          begin
+            Enclosure.URL := Attr.Value;
+          end;
         end;
 
         if Attr.Name = 'type' then
