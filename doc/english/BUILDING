@@ -112,9 +112,14 @@ succeed because the gp utility always returns a success exit code.)
 Enabling/disabling features:
 You can use the configure script or set the make environment
 variables manually (0 to disable; 1 to enable):
-EXPAT_2
-  Use Expat 2 instead of Expat 1.
-  Default: 1
+EXPAT_VERSION
+  The version of Expat to use. Valid values:
+  * 1.0
+  * 1.1
+  * 1.2
+  * 2.0
+  * 2.1
+  Default: 2.0 in Unix; 1.1 everywhere else
 NO_NCURSES
   Enable the use of ncurses <http://gnu.org/software/ncurses> for
   the TUI. It only makes sense in Free Pascal on Unix platforms.

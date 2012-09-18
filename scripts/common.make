@@ -192,7 +192,11 @@ USE_IDN ?= 1
 USE_NLS ?= 1
 USE_PCRE ?= 1
 
-EXPAT_2 ?= 1
+ifdef forUnix
+EXPAT_VERSION ?= 2.0
+else
+EXPAT_VERSION ?= 1.1
+endif
 
 ifndef USE_GPC
 USE_READLINE ?= 1
@@ -220,10 +224,9 @@ endif
 
 ifneq ($(USE_EXPAT),0)
 override DEFS_EXTRA+=USE_EXPAT
+ifneq ($(EXPAT_VERSION),)
+override DEFS_EXTRA+=EXPAT_$(shell $(ECHO) $(EXPAT_VERSION) | $(SED) -e 's/\./_/g')
 endif
-
-ifneq ($(EXPAT_2),0)
-override DEFS_EXTRA+=EXPAT_2
 endif
 
 ifneq ($(NO_NCURSES),0)

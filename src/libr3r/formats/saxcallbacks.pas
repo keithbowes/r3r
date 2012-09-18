@@ -11,13 +11,22 @@ uses
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
 procedure ElementEnded(user_data: Pointer; name: PChar);
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
-procedure InstructionReceived(userData: Pointer; target, data: PChar);
+
+{$IFDEF EXPAT_2_0}
+procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
+{$ELSE}
+{$IFDEF EXPAT_1_0}
+function UnknownEncodingDetected(encodingHandlerData:pointer; name:PChar; info:PXML_Encoding):integer;
+{$ENDIF}
+{$ENDIF}
+
+function DataToUTF8(const InStr, Encoding: PChar): PChar;
 
 implementation
 
 uses
 {$IFDEF USE_ICONV}
-  RProp, RStrings,
+  Iconv, RProp, RStrings,
 {$ENDIF}
   StrTok, SysUtils, Xml;
 
@@ -130,32 +139,66 @@ begin
   end;
 end;
 
-procedure InstructionReceived(userData: Pointer; target, data: PChar);
-{$IFDEF USE_ICONV}
-var
-  Priv: String;
-  PrivStart: word;
-{$ENDIF}
+{$IFDEF EXPAT_2_0}
+procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
 begin
 {$IFDEF USE_ICONV}
-  if StrComp(target, 'xml') <> 0 then
+  SetProp(charset, 'UTF-8');
+{$ENDIF}
+  TXmlFeed(userData).FEncoding := encoding;
+end;
+{$ELSE}
+{$IFDEF EXPAT_1_0}
+function UnknownEncodingDetected(encodingHandlerData:pointer; name:PChar; info:PXML_Encoding):integer;
+begin
+  CallMessageEventEx(TXmlFeed(encodingHandlerData), true, UnknownEncoding, StrPas(name));
+end;
+{$ENDIF}
+{$ENDIF}
+
+function DataToUTF8(const InStr, Encoding: PChar): PChar;
+var
+{$IFDEF USE_ICONV}
+  cd: iconv_t;
+{$IFDEF USE_LIBICONV}
+  i: integer;
+{$ENDIF}
+  inbytesleft, outbytesleft: size_t;
+  inbuf, outbuf: PChar;
+{$ENDIF}
+  outstr: PChar;
+begin
+{$IFDEF USE_ICONV}
+  if (Encoding <> nil) and (StrIComp('UTF-8', Encoding) <> 0) then
   begin
-    if GetProp('charset') = nil then
+    cd := iconv_open('UTF-8', Encoding);
+    if cd <> iconv_t(-1) then
     begin
-      WriteStr(Priv, data);
-      PrivStart := Pos('encoding=', Priv);
-      if PrivStart <> 0 then
+  {$IFDEF USE_LIBICONV}
+      i := 1;
+      iconvctl(cd, ICONV_SET_TRANSLITERATE, @i);
+  {$ENDIF}
+      if outstr <> nil then
       begin
-        Delete(Priv, 1, PrivStart + Length('encoding='));
-        PrivStart := Pos('''', Priv);
-        Delete(Priv, PrivStart, Length(Priv) - PrivStart + Length(''''));
-        PrivStart := Pos('"', Priv);
-        Delete(Priv, PrivStart, Length(Priv) - PrivStart + Length('"'));
-        SetProp('charset', StrToPChar(Priv));
+        inbytesleft := StrLen(InStr);
+        outbytesleft := 0;
+        outbuf := outstr;
+        if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) = iconv_convert_error then
+        begin
+          outstr := InStr;
+        end;
       end;
     end;
+    iconv_close(cd);
+  end
+  else
+  begin
+    outstr := InStr;
   end;
+{$ELSE}
+  outstr := InStr;
 {$ENDIF}
+  DataToUTF8 := outstr;
 end;
 
 end.

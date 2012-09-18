@@ -44,6 +44,7 @@ type
     Depth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
+    FEncoding: PChar;
     FItemFinished: Boolean;
 {$IFDEF USE_EXPAT}
     FParser: XML_PARSER;
@@ -66,6 +67,10 @@ uses
    LibR3RStrings, RSettings, RStrings, SysUtils;
 
 constructor TXmlFeed.Create;
+{$IFDEF USE_EXPAT}
+var
+  Encoding: PChar;
+{$ENDIF}
 begin
 {$IFNDEF __GPC__}
   inherited Create;
@@ -76,21 +81,39 @@ begin
   FNthElem := 0;
 
 {$IFDEF USE_EXPAT}
-  FParser := XML_ParserCreateNS(nil, NameSpaceSeparator);
+  Encoding := {$IFDEF USE_ICONV}'UTF-8'{$ELSE}nil{$ENDIF};
+{$IFDEF EXPAT_1_1}
+  FParser := XML_ParserCreateNS(Encoding, NameSpaceSeparator);
+{$ELSE}
+  FParser := XML_ParserCreate(Encoding);
+{$ENDIF}
+
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
-  XML_SetProcessingInstructionHandler(FParser, InstructionReceived);
+
+{$IFDEF EXPAT_2_0}
+  XML_SetXmlDeclHandler(parser, XmlDeclarationReceived);
+{$ELSE}
+{$IFDEF EXPAT_1_0}
+  XML_SetUnknownEncodingHandler(parser, UnknownEncodingDetected, Self);
+{$ENDIF}
+{$ENDIF}
   XML_SetUserData(FParser, Self);
 {$ENDIF}
 end;
 
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
+{$IFDEF USE_EXPAT}
+var
+  pLine: PChar;
+{$ENDIF}
 begin
   inherited ParseLine(Line, Item);
   CurrentItem := Item;
 
 {$IFDEF USE_EXPAT}
-  XML_Parse(FParser, {$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, Length(Line), 0);
+  pLine := DataToUTF8({$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, FEncoding);
+  XML_Parse(FParser, pLine, StrLen(pLine), 0);
 {$ENDIF}
 
   Item.Finished := true;
