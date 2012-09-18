@@ -22,11 +22,31 @@ interface
 {$PACKRECORDS C}
 {$ENDIF}
 
-{$IFDEF __GPC__}
-type
-  DWord = cardinal; { GPC doesn't have a DWord type }
+{ $DEFINE LINK_DYNAMIC}
+{$IFNDEF __GPC__}
+const
+{$IFDEF MSWINDOWS}
+  IntlLib = 'libintl';
+{$ELSE}
+  IntlLib = 'intl';
+{$ENDIF}
+{$ELSE}
+{$IFNDEF IntlLib}
+{$DEFINE IntlLib intl}
+{$ENDIF}
 {$ENDIF}
 
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libintl.a}
+{$ENDIF}
+
+{$IFDEF UNIX}
+{$linklib c}
+{$ELSE}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ENDIF}
+{$ENDIF}
 
   { Message catalogs for internationalization.
      Copyright (C) 1995-2002, 2004, 2005 Free Software Foundation, Inc.
@@ -56,44 +76,44 @@ type
   { Look up MSGID in the current default message catalog for the current
      LC_MESSAGES locale.  If not found, returns MSGID itself (the default
      text).   }
-  function gettext(__msgid:Pchar):Pchar;external 'intl';
+  function gettext(__msgid:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Look up MSGID in the DOMAINNAME message catalog for the current
      LC_MESSAGES locale.   }
-  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external 'intl';
+  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
-  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external 'intl';
+  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
      locale.   }
-  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external 'intl';
+  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
-  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external 'intl';
+  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Similar to `gettext' but select the plural form corresponding to the
      number N.   }
-  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external 'intl';
+  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Similar to `dgettext' but select the plural form corresponding to the
      number N.   }
-  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword):Pchar;external 'intl';
+  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Similar to `dcgettext' but select the plural form corresponding to the
      number N.   }
-  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:dword; __category:longint):Pchar;external 'intl';
+  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal; __category:longint):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Set the current default message catalog to DOMAINNAME.
      If DOMAINNAME is null, return the current default.
      If DOMAINNAME is "", reset to the default of "messages".   }
-  function textdomain(__domainname:Pchar):Pchar;external 'intl';
+  function textdomain(__domainname:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Specify that the DOMAINNAME message catalog will be found
      in DIRNAME rather than in the system locale data base.   }
-  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external 'intl';
+  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
   { Specify the character encoding in which the messages from the
      DOMAINNAME message catalog will be returned.   }
-  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external 'intl';
+  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external {$IFDEF LYNK_DYNAMIC}IntlLib{$ENDIF};
 
 { Additions }
 const
@@ -111,7 +131,7 @@ const
   LC_MEASUREMENT    = 11;
   LC_IDENTIFICATION = 12;
 
-function setlocale(category: LongInt; locale: PChar): PChar; external {$ifdef MSWINDOWS}'msvcrt'{$else}'c'{$endif};
+function setlocale(category: LongInt; locale: PChar): PChar; external name 'setlocale';
 
 function _(msgid: PChar): String;
 

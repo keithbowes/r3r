@@ -5,6 +5,10 @@
 
 unit iconv;
 
+{ $DEFINE LINK_DYNAMIC}
+
+{$X+}
+
 interface
 
 {$IFDEF FPC}
@@ -16,6 +20,45 @@ interface
 {$IFDEF UNIX}
 {$IFNDEF USE_LIBICONV}
 {$LINKLIB c}
+{$ENDIF}
+{$ENDIF}
+
+{$IFNDEF __GPC__}
+const
+{$IFNDEF USE_LIBICONV}
+  FuncPref = '';
+  IconvLib = '';
+{$ELSE}
+  FuncPref = 'lib';
+{$IFDEF MSWINDOWS}
+  IconvLib = 'libiconv';
+{$ELSE}
+  IconvLib = 'libiconv2';
+{$ENDIF}
+{$ENDIF}
+{$ELSE}
+{$IFNDEF FuncPref}
+{$DEFINE FuncPref 'lib'}
+{$ENDIF}
+{$IFNDEF IconvLib}
+{$DEFINE IconvLib iconv}
+{$ENDIF}
+{$ENDIF}
+
+{$IFNDEF USE_LIBICONV}
+{$undef LINK_DYNAMIC}
+{$ENDIF}
+
+{$IFDEF USE_LIBICONV}
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libiconv.a}
+{$IFDEF UNIX}
+{$linklib c}
+{$ELSE}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 
@@ -44,9 +87,9 @@ type
 
 {$calling cdecl}
 
-function iconv_open(tocode, fromcode: PChar): iconv_t; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv_open'{$else}'libiconv_open'{$endif};
-function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): size_t; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv'{$else}'libiconv'{$endif};
-function iconv_close(cd: iconv_t): integer; external {$ifdef USE_LIBICONV}{$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif}{$endif} name {$ifndef USE_LIBICONV}'iconv_close'{$else}'libiconv_close'{$endif};
+function iconv_open(tocode, fromcode: PChar): iconv_t; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv_open';
+function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): size_t; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv';
+function iconv_close(cd: iconv_t): integer; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv_close';
 
 {$IFDEF USE_LIBICONV}
 { Extras not available in non-GNU versions of iconv }
@@ -60,8 +103,8 @@ const
 type
   piconv_allocation_t = iconv_t;
 
-function iconv_open_into(tocode, fromcode: PChar; resultp: piconv_allocation_t): integer; external {$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif} name 'libiconv_open_into';
-function iconvctl(cd: iconv_t; request: integer; argument: Pointer): integer; external {$ifdef MSWINDOWS}'libiconv2'{$else}'iconv'{$endif} name 'libiconvctl';
+function iconv_open_into(tocode, fromcode: PChar; resultp: piconv_allocation_t): integer; external {$IFDEF LINK_DYNAMIC}IconvLib{$ENDIF} name 'libiconv_open_into';
+function iconvctl(cd: iconv_t; request: integer; argument: Pointer): integer; external {$IFDEF LINK_DYNAMIC}IconvLib{$ENDIF} name 'libiconvctl';
 {$ENDIF}
 
 {$IFDEF SOLARIS}
@@ -80,13 +123,17 @@ function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t
 implementation
 
 uses
-  SysUtils;
+  Strings;
 
 function iconv_bytesperchar(enc: String): byte;
 var
+  i: byte;
   Ret: byte;
 begin
-  enc := UpperCase(enc);
+  for i := 1 to Length(enc) do
+  begin
+    enc[i] := UpCase(enc[i]);
+  end;
 
   if (Pos('ISO-8859', enc) = 1) or (Pos('WINDOWS', enc) = 1) or
     (enc = 'ASCII') or (enc = 'UTF-8') then
@@ -127,6 +174,7 @@ var
   outbuf: PChar;
   trueinlen: size_t;
   Res: integer;
+  sfrom, sto: String;
 {$IFDEF USE_LIBICONV}
   i: integer;
 {$ENDIF}
@@ -137,7 +185,9 @@ begin
   end;
   trueinlen := inlen;
 
-  outlen := inlen div iconv_bytesperchar(StrPas(fromcode)) * iconv_bytesperchar(StrPas(tocode));
+  WriteStr(sfrom, fromcode);
+  WriteStr(sto, tocode);
+  outlen := inlen div iconv_bytesperchar(sfrom) * iconv_bytesperchar(sto);
   cd := iconv_open(tocode, fromcode);
 
   if cd <> iconv_t(-1) then

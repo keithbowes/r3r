@@ -51,3 +51,52 @@ type
   prl_command_func_t = Pointer;
   prl_icppfunc_t = Pointer;
 {$ENDIF}
+
+{ Let's setup the libraries}
+{ $DEFINE LINK_DYNAMIC}
+{$IFDEF USE_LIBEDIT}
+{$IFNDEF __GPC__}
+const
+	RlLib = 'edit';
+	HistLib = RlLib;
+{$ELSE}
+{$IFNDEF RlLib}
+{$DEFINE RlLib edit}
+{$ENDIF}
+{$ENDIF}
+{$ELSE}
+{$IFNDEF __GPC__}
+const
+{$IFDEF MSWINDOWS}
+	RlLib = 'readline5';
+{$IFDEF HISTORY_INCLUDE}
+	HistLib = 'history5';
+{$ELSE}
+	HistLib = RlLib;
+{$ENDIF}
+{$ELSE}
+	RlLib = 'readline';
+{$IFDEF HISTORY_INCLUDE}
+	HistLib = 'history';
+{$ELSE}
+	HistLib= RlLib;
+{$ENDIF}
+{$ENDIF}
+{$ELSE}
+{$IFNDEF RlLib}
+{$DEFINE RlLib 'readline'}
+{$DEFINE HistLib RlLib}
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libreadline.a}
+{$IFDEF UNIX}
+{$linklib c}
+{$ELSE}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}

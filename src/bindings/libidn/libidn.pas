@@ -2,6 +2,7 @@
 unit LibIdn;
 
 {$CALLING cdecl}
+{ $DEFINE LINK_DYNAMIC}
 
 interface
 
@@ -30,14 +31,47 @@ Type
   PDouble   = ^Double;
   PPChar    = ^PChar;
 
+{$IFDEF FPC}
+  size_t = PtrUInt;
+{$ELSE}
+{$IFDEF __GPC__}
+  size_t = SizeType;
+{$ELSE}
+  size_t = cardinal;
+{$ENDIF}
+{$ENDIF}
+
 Type
-size_t = cardinal;
 uint32_t = word;
 Psize_t  = ^size_t;
 Puint32_t  = ^uint32_t;
 PPuint32_t = ^Puint32_t;
 {$IFDEF FPC}
 {$PACKRECORDS C}
+{$ENDIF}
+
+{$IFNDEF __GPC__}
+const
+{$IFDEF MSWINDOWS}
+  IdnLib = 'libidn-11';
+{$ELSE}
+  IdnLib = 'idn';
+{$ENDIF}
+{$ELSE}
+{$IFNDEF IdnLib}
+{$DEFINE IDnLib idn}
+{$ENDIF}
+{$ENDIF}
+
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libidn.a}
+{$IFDEF UNIX}
+{$linklib c}
+{$ELSE}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
 
 
@@ -85,19 +119,19 @@ const
 
    IDNA_ACE_PREFIX = 'xn--';
 
-function idna_strerror(rc:longint):Pchar;external 'idn';
+function idna_strerror(rc:longint):Pchar;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
 { Core functions  }
-function idna_to_ascii_4i(input:Puint32_t; inlen:size_t; output:Pchar; flags:longint):longint;external 'idn';
-function idna_to_unicode_44i(input:Puint32_t; inlen:size_t; output:Puint32_t; outlen:Psize_t; flags:longint):longint;external 'idn';
+function idna_to_ascii_4i(input:Puint32_t; inlen:size_t; output:Pchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_44i(input:Puint32_t; inlen:size_t; output:Puint32_t; outlen:Psize_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
 { Wrappers that handle several labels  }
-function idna_to_ascii_4z(input:Puint32_t; output:PPchar; flags:longint):longint;external 'idn';
-function idna_to_ascii_8z(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-function idna_to_ascii_lz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-function idna_to_unicode_4z4z(input:Puint32_t; output:PPuint32_t; flags:longint):longint;external 'idn';
-function idna_to_unicode_8z4z(input:Pchar; output:PPuint32_t; flags:longint):longint;external 'idn';
-function idna_to_unicode_8z8z(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-function idna_to_unicode_8zlz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
-function idna_to_unicode_lzlz(input:Pchar; output:PPchar; flags:longint):longint;external 'idn';
+function idna_to_ascii_4z(input:Puint32_t; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_ascii_8z(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_ascii_lz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_4z4z(input:Puint32_t; output:PPuint32_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_8z4z(input:Pchar; output:PPuint32_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_8z8z(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_8zlz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_unicode_lzlz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
 
 implementation
 

@@ -92,7 +92,7 @@ begin
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
 
 {$IFDEF EXPAT_2_0}
-  XML_SetXmlDeclHandler(parser, XmlDeclarationReceived);
+  XML_SetXmlDeclHandler(FParser, XmlDeclarationReceived);
 {$ELSE}
 {$IFDEF EXPAT_1_0}
   XML_SetUnknownEncodingHandler(parser, UnknownEncodingDetected, Self);
@@ -113,7 +113,7 @@ begin
 
 {$IFDEF USE_EXPAT}
   pLine := DataToUTF8({$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, FEncoding);
-  XML_Parse(FParser, pLine, StrLen(pLine), 0);
+  XML_Parse(FParser, pLine, StrLen(pLine), XML_FALSE);
 {$ENDIF}
 
   Item.Finished := true;
@@ -134,7 +134,7 @@ var
   q: PXmlAttr;
 begin
 {$IFDEF USE_EXPAT}
-  XML_Parse(FParser, '', 0, 1);
+  XML_Parse(FParser, '', 0, XML_TRUE);
   Xml_ParserFree(FParser);
 {$ENDIF}
 

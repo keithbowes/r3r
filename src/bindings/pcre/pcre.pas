@@ -1,8 +1,19 @@
 
 unit PCRE;
 
+{ $DEFINE LINK_DYNAMIC}
+
+{$X+}
+
+{$IFDEF FPC}
 {$calling cdecl}
-{$mode delphi}
+{$modeswitch classicprocvars}
+{$ENDIF}
+
+{$IFDEF VIRTUALPASCAL}
+{&cdecl+}
+{$DEFINE LINK_DYNAMIC}
+{$ENDIF}
 
 interface
 
@@ -80,6 +91,21 @@ const
 {$IFNDEF PcreLib}
 {$DEFINE PcreLib 'pcre'}
 {$ENDIF}
+{$ENDIF}
+
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libpcre.a}
+{$IFDEF UNIX}
+{$linklib c}
+{$ELSE}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+
+{$IFDEF VIRTUALPASCAL}
+{$UNDEF LINK_DYNAMIC}
 {$ENDIF}
 
 type
@@ -250,61 +276,85 @@ var
     non-recursive case for "frames". There is also an optional callout function
     that is triggered by the (?) regex item. For Virtual Pascal, these definitions
     have to take another form. }
-function pcre_malloc(size: size_t): ppcre;
-procedure pcre_free(p: ppcre);
+function new_malloc(size: size_t): ppcre;
+procedure new_free(p: ppcre);
 
+type
+  tfreefunc = procedure(p: ppcre);
+  tmallocfunc = function(size: size_t): ppcre;
+
+{$IFNDEF VIRTUALPASCAL}
+var
+  pcre_malloc: tmallocfunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+  pcre_free: tfreefunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+  pcre_stack_malloc: tmallocfunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+  pcre_stack_free: tfreefunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+{$ELSE}
 const
-  pcre_stack_malloc: function(size: size_t): ppcre = pcre_malloc;
-  pcre_stack_free: procedure(p: ppcre) = pcre_free;
+  pcre_malloc: tmallocfunc = new_malloc;
+  pcre_free: tfreefunc = new_free;
+  pcre_stack_malloc: tmallocfunc = new_malloc;
+  pcre_stack_free: tfreefunc = new_free;
+{$ENDIF}
 
 var
-  pcre_callout: function(block: ppcre_callout_block): integer;
+  pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};{$ENDIF}
 
-{ Exported PCRE functions }
-function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external PcreLib;
-function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external PcreLib;
-function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra; external PcreLib;
-function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer; external PcreLib;
-function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer; external PcreLib;
+{ Imported PCRE functions }
+function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 
-function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer; external PcreLib;
-function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer; external PcreLib;
-function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer; external PcreLib;
-function pcre_get_stringnumber(code: ppcre; name: PChar): integer; external PcreLib;
-function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer; external PcreLib;
-function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer; external PcreLib;
-function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer; external PcreLib;
-procedure pcre_free_substring(stringptr: PChar); external PcreLib;
-procedure pcre_free_substring_list(stringptr: PPChar); external PcreLib;
+function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_get_stringnumber(code: ppcre; name: PChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+procedure pcre_free_substring(stringptr: PChar); external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+procedure pcre_free_substring_list(stringptr: PPChar); external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 
-function pcre_maketables: byte; external PcreLib;
+function pcre_maketables: byte; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 
-function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external PcreLib;
-function pcre_info(code: ppcre; optptr, firstcharptr: PInteger): integer; external PcreLib;
-function pcre_refcount(code: ppcre; adjust: integer): integer; external PcreLib;
-function pcre_config(what: integer; where: Pointer): integer; external PcreLib;
-function pcre_version: PChar; external PcreLib;
-
+function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_info(code: ppcre; optptr, firstcharptr: PInteger): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_refcount(code: ppcre; adjust: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_config(what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+function pcre_version: PChar; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 
 implementation
 
-{$IFDEF __GPC__}
+{$IFDEF VIRTUALPASCAL}
 uses
-  SysUtils;
+  Strings;
 {$ENDIF}
 
 { The memory allocation functions were pretty much stolen
   from the Virtual Pascal binding. I confess. }
-function pcre_malloc(size: size_t): ppcre;
+function new_malloc(size: size_t): ppcre;
 var
-  Res: ppcre;
+  p: ppcre;
 begin
-  GetMem(Res, size * SizeOf(Res^));
-  pcre_malloc := Res;
+  GetMem(p, size);
+  new_malloc := p;
 end;
 
-procedure pcre_free(p: ppcre);
+procedure new_free(p: ppcre);
 begin
+  if p <> nil then
+  begin
+{$IFNDEF __GPC__}
+    FreeMem(p)
+{$ELSE}
+{$IFDEF VIRTUALPASCAL}
+    FreeMem(p, 0)
+{$ENDIF}
+{$ENDIF}
+  end;
+
   p := nil;
 end;
 
@@ -319,7 +369,8 @@ var
 
 function versiontoint: integer;
 var
-  err, h, iv: integer;
+  err: longint;
+  h, iv: integer;
   s: String;
 begin
   start := Pos('.', version);
@@ -355,7 +406,12 @@ begin
 end;
 
 begin
-  version := {$IFNDEF __GPC__}pcre_version{$ELSE}StrPas(pcre_version){$ENDIF};
+{$IFNDEF __GPC__}
+  version := StrPas(pcre_version);
+{$ELSE}
+  WriteStr(version, pcre_version);
+{$ENDIF}
+
   PCRE_MAJOR := versiontoint;
   PCRE_MINOR := versiontoint;
 
@@ -377,5 +433,13 @@ end;
 initialization
 
 parseversion;
+
+{$IFNDEF VIRTUALPASCAL}
+pcre_callout := nil;
+pcre_free := new_free;
+pcre_malloc := new_malloc;
+pcre_stack_free := new_free;
+pcre_stack_malloc := new_malloc;
+{$ENDIF}
 
 end.

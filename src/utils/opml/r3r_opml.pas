@@ -141,11 +141,12 @@ begin
   begin
     ReadLn(fi, s);
 {$IFDEF USE_EXPAT}
-    XML_Parse(Parser, {$IFNDEF __GPC__}PChar(s){$ELSE}s{$ENDIF}, Length(s), 0);
+    XML_Parse(Parser, {$IFNDEF __GPC__}PChar(s){$ELSE}s{$ENDIF}, Length(s), XML_FALSE);
 {$ENDIF}
   end;
 
 {$IFDEF USE_EXPAT}
+  XML_Parse(Parser, '', 0, XML_TRUE);
   XML_ParserFree(Parser);
 {$ENDIF}
 

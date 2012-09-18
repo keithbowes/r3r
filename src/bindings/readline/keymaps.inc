@@ -36,33 +36,33 @@
       ISMACR = 2;      
 
       var
-        emacs_standard_keymap : KEYMAP_ENTRY_ARRAY;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF};
-        vi_insertion_keymap : KEYMAP_ENTRY_ARRAY;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF};
+        emacs_standard_keymap : KEYMAP_ENTRY_ARRAY;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF};
+        vi_insertion_keymap : KEYMAP_ENTRY_ARRAY;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF};
 
     { Return a new, empty keymap.
        Free it with rl_free() when you are done.  }
-    function rl_make_bare_keymap:Keymap;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_make_bare_keymap';
+    function rl_make_bare_keymap:Keymap;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_make_bare_keymap';
 
     { Return a new keymap which is a copy of MAP.  }
-    function rl_copy_keymap(_para1:Keymap):Keymap;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_copy_keymap';
+    function rl_copy_keymap(_para1:Keymap):Keymap;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_copy_keymap';
 
     { Return a new keymap with the printing characters bound to rl_insert,
        the lowercase Meta characters bound to run their equivalents, and
        the Meta digits bound to produce numeric arguments.  }
-    function rl_make_keymap:Keymap;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_make_keymap';
+    function rl_make_keymap:Keymap;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_make_keymap';
 
     { Free the storage associated with a keymap.  }
-    procedure rl_discard_keymap(_para1:Keymap);external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_discard_keymap';
+    procedure rl_discard_keymap(_para1:Keymap);external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_discard_keymap';
 
     { These functions actually appear in bind.c  }
     { Return the keymap corresponding to a given name.  Names look like
        `emacs' or `emacs-meta' or `vi-insert'.   }
-    function rl_get_keymap_by_name(_para1:Pchar):Keymap;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_get_keymap_by_name';
+    function rl_get_keymap_by_name(_para1:Pchar):Keymap;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_get_keymap_by_name';
 
     { Return the current keymap.  }
-    function rl_get_keymap:Keymap;external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_get_keymap';
+    function rl_get_keymap:Keymap;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_get_keymap';
 
     { Set the current keymap to MAP.  }
-    procedure rl_set_keymap(_para1:Keymap);external {$IFNDEF USE_LIBEDIT}'readline'{$ELSE}'edit'{$ENDIF} name 'rl_set_keymap';
+    procedure rl_set_keymap(_para1:Keymap);external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_set_keymap';
 
 

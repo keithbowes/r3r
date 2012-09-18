@@ -1,6 +1,25 @@
 unit expas;
 interface
 
+{ $DEFINE EXPAT_2_0}
+{ $DEFINE LINK_DYNAMIC}
+
+{$IFDEF EXPAT_2_1}
+{$DEFINE EXPAT_2_0}
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
+{$DEFINE EXPAT_1_2}
+{$ENDIF}
+
+{$IFDEF EXPAT_1_2}
+{$DEFINE EXPAT_1_1}
+{$ENDIF}
+
+{$IFDEF EXPAT_1_1}
+{$DEFINE EXPAT_1_0}
+{$ENDIF}
+
 {$CALLING cdecl}
 {$MODE DELPHI}
 
@@ -17,7 +36,6 @@ interface
 }
 
 Type
-  PPChar = ^PChar;
   PPointer = ^pointer;
 {$IFDEF FPC}
 {$PACKRECORDS C}
@@ -27,13 +45,13 @@ Type
 const
 {$ifdef MSWINDOWS}
 {$ifdef XML_UNICODE}
-{$ifdef EXPAT_2}
+{$ifdef EXPAT_2_0}
   ExpatLib = 'libexpatw-1';
 {$else}
   ExpatLib = 'expatw';
 {$endif}
 {$else}
-{$ifdef EXPAT_2}
+{$ifdef EXPAT_2_0}
   ExpatLib = 'libexpat-1';
 {$else}
   ExpatLib = 'expat';
@@ -56,31 +74,59 @@ const
 {$endif}
 {$endif}
 
+{$IFNDEF LINK_DYNAMIC}
+{$linklib libexpat.a}
+{$IFDEF MSWINDOWS}
+{$linklib msvcrt}
+{$ELSE}
+{$IFDEF UNIX}
+{$linklib c}
+{$ENDIF}
+{$ENDIF}
+{$ENDIF}
+
 type
-{$ifdef EXPAT_2}
+{$ifdef EXPAT_2_0}
+  XML_Bool = ByteBool;
+  XML_Index = PtrInt;
 {$ifndef __GPC__}
-  number = cardinal;
+  size_t = PtrUInt;
+  XML_Size = PtrUInt;
 {$else}
-  number = PtrCard;
+  size_t = SizeType;
+  XML_Size = PtrCard;
 {$endif}
 {$else}
-  number = integer;
+  XML_Bool = integer;
+  XML_Index = integer;
+  XML_Size = integer;
 {$endif}
 
-     XML_Parser = pointer;
-{$ifdef XML_UNICODE}
+const
+{$ifdef EXPAT_2_0}
+  XML_FALSE = false;
+  XML_TRUE = true;
+{$else}
+  XML_FALSE = 0;
+  XML_TRUE = 1;
+{$endif}
+
   type
+  XML_Parser = pointer;
+{$ifdef XML_UNICODE}
      XML_Char = widechar;
      XML_LChar = widechar;
-
+     PXML_Char = ^XML_Char;
+     PXML_LChar = ^XML_LChar;
   const
      XML_NsSeparator = WideChar($FFFF);
 {$else}
   { not XML_UNICODE  }
   { Information is UTF-8 encoded.  }
-  type
      XML_Char = char;
      XML_LChar = char;
+     PXML_Char = PChar;
+     PXML_LChar = PChar;
 
   const
      XML_NsSeparator = Chr($FF);
@@ -88,13 +134,14 @@ type
   { not XML_UNICODE  }
 
 type
-  PXML_LChar = ^XML_LChar;
+  PPXML_Char = ^PXML_Char;
      
   { Constructs a new parser; encoding is the encoding specified by the external
   protocol or null if there is none specified.  }
 
-  function XML_ParserCreate(const encoding:PChar):XML_Parser; external ExpatLib name 'XML_ParserCreate';
+  function XML_ParserCreate(const encoding:PXML_Char):XML_Parser; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreate';
 
+{$IFDEF EXPAT_1_1}
   { Constructs a new parser and namespace processor.  Element type names
   and attribute names that belong to a namespace will be expanded;
   unprefixed attribute names are never expanded; unprefixed element type
@@ -104,29 +151,34 @@ type
   the namespace URI and the local part will be concatenated without any
   separator.  When a namespace is not declared, the name and prefix will be
   passed through without expansion.  }
-  function XML_ParserCreateNS(encoding:PChar; namespaceSeparator:XML_Char):XML_Parser; external ExpatLib name 'XML_ParserCreateNS';
+  function XML_ParserCreateNS(encoding:PXML_Char; namespaceSeparator:XML_Char):XML_Parser; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreateNS';
+{$ENDIF}
 
   { atts is array of name/value pairs, terminated by 0;
      names and values are 0 terminated.  }
 
   type
 
-     XML_StartElementHandler = procedure (userData:pointer; name:PChar; atts:PPChar);
+     XML_StartElementHandler = procedure (userData:pointer; name:PXML_Char; atts:PPXML_Char);
 
-     XML_EndElementHandler = procedure (userData:pointer; name:PChar);
+     XML_EndElementHandler = procedure (userData:pointer; name:PXML_Char);
   { s is not 0 terminated.  }
 
-     XML_CharacterDataHandler = procedure (userData:pointer; s:PChar; len:integer);
+     XML_CharacterDataHandler = procedure (userData:pointer; s:PXML_Char; len:integer);
   { target and data are 0 terminated  }
 
-     XML_ProcessingInstructionHandler = procedure (userData:pointer; target:PChar; data:PChar);
+     XML_ProcessingInstructionHandler = procedure (userData:pointer; target:PXML_Char; data:PXML_Char);
   { data is 0 terminated  }
 
-     XML_CommentHandler = procedure (userData:pointer; data:PChar);
+{$IFDEF EXPAT_1_1}
+     XML_CommentHandler = procedure (userData:pointer; data:PXML_Char);
 
      XML_StartCdataSectionHandler = procedure (userData:pointer);
 
      XML_EndCdataSectionHandler = procedure (userData:pointer);
+{$ENDIF}
+     
+{$IFDEF EXPAT_1_0}
   { This is called for any characters in the XML document for
   which there is no applicable handler.  This includes both
   characters that are part of markup which is of a kind that is
@@ -140,40 +192,49 @@ type
   to the default handler: for example, a comment might be split between
   multiple calls.  }
 
-     XML_DefaultHandler = procedure (userData:pointer; s:PChar; len:integer);
+     XML_DefaultHandler = procedure (userData:pointer; s:PXML_Char; len:integer);
+{$ENDIF}
+
+{$IFDEF EXPAT_1_2}
   { This is called for the start of the DOCTYPE declaration when the
   name of the DOCTYPE is encountered.  }
-
-     XML_StartDoctypeDeclHandler = procedure (userData:pointer; doctypeName:PChar);
+     XML_StartDoctypeDeclHandler = procedure (userData:pointer; doctypeName:PXML_Char);
   { This is called for the start of the DOCTYPE declaration when the
   closing > is encountered, but after processing any external subset.  }
 
      XML_EndDoctypeDeclHandler = procedure (userData:pointer);
+{$ENDIF}
+
+{$IFDEF EXPAT_1_0}
   { This is called for a declaration of an unparsed (NDATA)
   entity.  The base argument is whatever was set by XML_SetBase.
   The entityName, systemId and notationName arguments will never be null.
   The other arguments may be.  }
 
-     XML_UnparsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; base:PChar; systemId:PChar; publicId:PChar; 
-                   notationName:PChar);
+     XML_UnparsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char; 
+                   notationName:PXML_Char);
   { This is called for a declaration of notation.
   The base argument is whatever was set by XML_SetBase.
   The notationName will never be null.  The other arguments can be.  }
 
-     XML_NotationDeclHandler = procedure (userData:pointer; notationName:PChar; base:PChar; systemId:PChar; publicId:PChar);
+     XML_NotationDeclHandler = procedure (userData:pointer; notationName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char);
+{$ENDIF}
 
-     XML_ExternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; base:PChar; systemId:PChar; publicId:PChar);
+{$IFDEF EXPAT_1_2}
+     XML_ExternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char);
 
-     XML_InternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PChar; replacementText:PChar; replacementTextLength:integer);
+     XML_InternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; replacementText:PXML_Char; replacementTextLength:integer);
+{$ENDIF}
+
+{$IFDEF EXPAT_1_1}
   { When namespace processing is enabled, these are called once for
   each namespace declaration. The call to the start and end element
   handlers occur between the calls to the start and end namespace
   declaration handlers. For an xmlns attribute, prefix will be null.
   For an xmlns="" attribute, uri will be null.  }
+     XML_StartNamespaceDeclHandler = procedure (userData:pointer; prefix:PXML_Char; uri:PXML_Char);
 
-     XML_StartNamespaceDeclHandler = procedure (userData:pointer; prefix:PChar; uri:PChar);
-
-     XML_EndNamespaceDeclHandler = procedure (userData:pointer; prefix:PChar);
+     XML_EndNamespaceDeclHandler = procedure (userData:pointer; prefix:PXML_Char);
   { This is called if the document is not standalone (it has an
   external subset or a reference to a parameter entity, but does not
   have standalone="yes"). If this handler returns 0, then processing
@@ -181,6 +242,9 @@ type
   XML_ERROR_NOT_STANDALONE error.  }
 
      XML_NotStandaloneHandler = function (userData:pointer):integer;
+{$ENDIF}
+
+{$IFDEF EXPAT_1_0}
   { This is called for a reference to an external parsed general entity.
   The referenced entity is not automatically parsed.
   The application can parse it immediately or later using
@@ -205,7 +269,8 @@ type
   error.
   Note that unlike other handlers the first argument is the parser, not userData.  }
 
-     XML_ExternalEntityRefHandler = function (parser:XML_Parser; context:PChar; base:PChar; systemId:PChar; publicId:PChar):integer;
+     XML_ExternalEntityRefHandler = function (parser:XML_Parser; context:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char):integer;
+
   { This structure is filled in by the XML_UnknownEncodingHandler
   to provide information to the parser about encodings that are unknown
   to the parser.
@@ -247,11 +312,12 @@ type
   4. No Unicode character may be encoded by more than one distinct sequence
   of bytes.  }
 
+     PXML_Encoding = ^XML_Encoding;
      XML_Encoding = record
           map : array[0..255] of integer;
           data : pointer;
-          convert : function (var data:pointer; s:pchar):integer;
-          release : procedure (var data:pointer);
+          convert : function (data:pointer; s:pchar):integer;
+          release : procedure (data:pointer);
        end;
   { This is called for an encoding that is unknown to the parser.
   The encodingHandlerData argument is that which was passed as the
@@ -264,106 +330,218 @@ type
   If info does not describe a suitable encoding,
   then the parser will return an XML_UNKNOWN_ENCODING error.  }
 
-     XML_UnknownEncodingHandler = function (var encodingHandlerData:pointer; name:PChar; var info:XML_Encoding):integer;
-     XML_Status = integer;
+     XML_UnknownEncodingHandler = function (encodingHandlerData:pointer; name:PXML_Char; info:PXML_Encoding):integer;
+{$ENDIF}
+
+     XML_Error = (XML_ERROR_NONE,XML_ERROR_NO_MEMORY,XML_ERROR_SYNTAX,
+       XML_ERROR_NO_ELEMENTS,XML_ERROR_INVALID_TOKEN,
+       XML_ERROR_UNCLOSED_TOKEN,XML_ERROR_PARTIAL_CHAR,
+       XML_ERROR_TAG_MISMATCH,XML_ERROR_DUPLICATE_ATTRIBUTE,
+       XML_ERROR_JUNK_AFTER_DOC_ELEMENT,XML_ERROR_PARAM_ENTITY_REF,
+       XML_ERROR_UNDEFINED_ENTITY,XML_ERROR_RECURSIVE_ENTITY_REF,
+       XML_ERROR_ASYNC_ENTITY,XML_ERROR_BAD_CHAR_REF,
+       XML_ERROR_BINARY_ENTITY_REF,XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
+       XML_ERROR_MISPLACED_XML_PI,XML_ERROR_UNKNOWN_ENCODING,
+       XML_ERROR_INCORRECT_ENCODING
+       {$IFDEF EXPAT_1_0}
+       ,XML_ERROR_UNCLOSED_CDATA_SECTION,
+       XML_ERROR_EXTERNAL_ENTITY_HANDLING
+       {$ENDIF}
+       {$IFDEF EXPAT_1_1}
+       ,XML_ERROR_NOT_STANDALONE
+       {$ENDIF}
+       {$IFDEF EXPAT_2_0}
+       ,XML_ERROR_UNEXPECTED_STATE,XML_ERROR_DECLARED_IN_PE,
+       XML_ERROR_FEATURE_REQUIRES_XML_DTD,XML_ERROR_CHANGE_FEATURE_ONCE_PARSING,
+       { Added in 1.95.7 }
+       XML_ERROR_UNBOUND_PREFIX,
+       { Added in 1.95.8 }
+       XML_ERROR_UNDECLARING_PREFIX,XML_ERROR_INCOMPLETE_PE,
+       XML_ERROR_XML_DECL,XML_ERROR_TEXT_DECL,XML_ERROR_PUBLICID,
+       XML_ERROR_SUSPENDED,XML_ERROR_NOTSUSPENDED,XML_ERROR_ABORTED,
+       XML_ERROR_FINISHED,XML_ERROR_SUSPEND_PE,
+       { Added in 2.0 }
+       XML_ERROR_RESERVED_PREFIX_XML,XML_ERROR_RESERVED_PREFIX_XMLNS,
+       XML_ERROR_RESERVED_NAMESPACE_URI
+       {$ENDIF});
+       
+  XML_Status = integer;
   const
      XML_STATUS_ERROR = 0;
      XML_STATUS_OK = 1;
      XML_STATUS_SUSPENDED = 2;
 
-  procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external ExpatLib name 'XML_SetElementHandler';
+  procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetElementHandler';
 
-  procedure XML_SetCharacterDataHandler(parser:XML_Parser; handler:XML_CharacterDataHandler); external ExpatLib name 'XML_SetCharacterDataHandler';
+  procedure XML_SetCharacterDataHandler(parser:XML_Parser; handler:XML_CharacterDataHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetCharacterDataHandler';
 
-  procedure XML_SetProcessingInstructionHandler(parser:XML_Parser; handler:XML_ProcessingInstructionHandler); external ExpatLib name 'XML_SetProcessingInstructionHandler';
+  procedure XML_SetProcessingInstructionHandler(parser:XML_Parser; handler:XML_ProcessingInstructionHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetProcessingInstructionHandler';
 
-  procedure XML_SetCommentHandler(parser:XML_Parser; handler:XML_CommentHandler); external ExpatLib name 'XML_SetCommentHandler';
+{$IFDEF EXPAT_1_1}
+  procedure XML_SetCommentHandler(parser:XML_Parser; handler:XML_CommentHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetCommentHandler';
 
-  procedure XML_SetCdataSectionHandler(parser:XML_Parser; startEl:XML_StartCdataSectionHandler; endEl:XML_EndCdataSectionHandler); external ExpatLib name 'XML_SetCdataSectionHandler';
+  procedure XML_SetCdataSectionHandler(parser:XML_Parser; startEl:XML_StartCdataSectionHandler; endEl:XML_EndCdataSectionHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetCdataSectionHandler';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_0}
   { This sets the default handler and also inhibits expansion of internal entities.
   The entity reference will be passed to the default handler.  }
-  procedure XML_SetDefaultHandler(parser:XML_Parser; handler:XML_DefaultHandler); external ExpatLib name 'XML_SetDefaultHandler';
+  procedure XML_SetDefaultHandler(parser:XML_Parser; handler:XML_DefaultHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetDefaultHandler';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_1}
   { This sets the default handler but does not inhibit expansion of internal entities.
   The entity reference will not be passed to the default handler.  }
-  procedure XML_SetDefaultHandlerExpand(parser:XML_Parser; handler:XML_DefaultHandler); external ExpatLib name 'XML_SetDefaultHandlerExpand';
+  procedure XML_SetDefaultHandlerExpand(parser:XML_Parser; handler:XML_DefaultHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetDefaultHandlerExpand';
+{$ENDIF}
 
-  procedure XML_SetDoctypeDeclHandler(parser:XML_Parser; startEl:XML_StartDoctypeDeclHandler; endEl:XML_EndDoctypeDeclHandler); external ExpatLib name 'XML_SetDoctypeDeclHandler';
+{$IFDEF EXPAT_1_2}
+  procedure XML_SetDoctypeDeclHandler(parser:XML_Parser; startEl:XML_StartDoctypeDeclHandler; endEl:XML_EndDoctypeDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetDoctypeDeclHandler';
+{$ENDIF}
 
-  procedure XML_SetUnparsedEntityDeclHandler(parser:XML_Parser; handler:XML_UnparsedEntityDeclHandler); external ExpatLib name 'XML_SetUnparsedEntityDeclHandler';
+{$IFDEF EXPAT_1_0}
+  procedure XML_SetUnparsedEntityDeclHandler(parser:XML_Parser; handler:XML_UnparsedEntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetUnparsedEntityDeclHandler';
 
-  procedure XML_SetNotationDeclHandler(parser:XML_Parser; handler:XML_NotationDeclHandler); external ExpatLib name 'XML_SetNotationDeclHandler';
+  procedure XML_SetNotationDeclHandler(parser:XML_Parser; handler:XML_NotationDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetNotationDeclHandler';
+{$ENDIF}
 
-  procedure XML_SetExternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_ExternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetExternalParsedEntityDeclHandler';
+{$IFDEF EXPAT_1_2}
+  procedure XML_SetExternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_ExternalParsedEntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetExternalParsedEntityDeclHandler';
 
-  procedure XML_SetInternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_InternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetInternalParsedEntityDeclHandler';
+  procedure XML_SetInternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_InternalParsedEntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetInternalParsedEntityDeclHandler';
+{$ENDIF}
 
-  procedure XML_SetNamespaceDeclHandler(parser:XML_Parser; startEl:XML_StartNamespaceDeclHandler; endEl:XML_EndNamespaceDeclHandler); external ExpatLib name 'XML_SetNamespaceDeclHandler';
+{$IFDEF EXPAT_1_1}
+  procedure XML_SetNamespaceDeclHandler(parser:XML_Parser; startEl:XML_StartNamespaceDeclHandler; endEl:XML_EndNamespaceDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetNamespaceDeclHandler';
+{$ENDIF}
 
-  procedure XML_SetNotStandaloneHandler(parser:XML_Parser; handler:XML_NotStandaloneHandler); external ExpatLib name 'XML_SetNotStandaloneHandler';
+{$IFDEF EXPAT_2_0}
+  procedure XML_SetStartNamespaceDeclHandler(parser:XML_Parser; startEl:XML_StartNamespaceDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetStartNamespaceDeclHandler';
 
-  procedure XML_SetExternalEntityRefHandler(parser:XML_Parser; handler:XML_ExternalEntityRefHandler); external ExpatLib name 'XML_SetExternalEntityRefHandler';
+  procedure XML_SetEndNamespaceDeclHandler(parser:XML_Parser; endEl:XML_EndNamespaceDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetEndNamespaceDeclHandler';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_1}
+  procedure XML_SetNotStandaloneHandler(parser:XML_Parser; handler:XML_NotStandaloneHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetNotStandaloneHandler';
+{$ENDIF}
+
+{$IFDEF EXPAT_1_0}
+  procedure XML_SetExternalEntityRefHandler(parser:XML_Parser; handler:XML_ExternalEntityRefHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetExternalEntityRefHandler';
+{$ENDIF}
+
+{$IFDEF EXPAT_1_1}
   { If a non-null value for arg is specified here, then it will be passed
   as the first argument to the external entity ref handler instead
   of the parser object.  }
-  procedure XML_SetExternalEntityRefHandlerArg(_para1:XML_Parser; var arg:pointer); external ExpatLib name 'XML_SetExternalEntityRefHandlerArg';
+  procedure XML_SetExternalEntityRefHandlerArg(_para1:XML_Parser; arg:pointer); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetExternalEntityRefHandlerArg';
+{$ENDIF}
 
-  procedure XML_SetUnknownEncodingHandler(parser:XML_Parser; handler:XML_UnknownEncodingHandler; var encodingHandlerData:pointer); external ExpatLib name 'XML_SetUnknownEncodingHandler';
+{$IFDEF EXPAT_1_0}
+  procedure XML_SetUnknownEncodingHandler(parser:XML_Parser; handler:XML_UnknownEncodingHandler; encodingHandlerData:pointer); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetUnknownEncodingHandler';
 
   { This can be called within a handler for a start element, end element,
   processing instruction or character data.  It causes the corresponding
   markup to be passed to the default handler.  }
-  procedure XML_DefaultCurrent(parser:XML_Parser); external ExpatLib name 'XML_DefaultCurrent';
+  procedure XML_DefaultCurrent(parser:XML_Parser); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_DefaultCurrent';
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
+  procedure XML_SetReturnNSTriplet(parser: XML_Parser; do_nst: integer); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetReturnNSTriplet';
+{$ENDIF}
 
   { This value is passed as the userData argument to callbacks.  }
-  procedure XML_SetUserData(parser:XML_Parser; userData:pointer); external ExpatLib name 'XML_SetUserData';
+  procedure XML_SetUserData(parser:XML_Parser; userData:pointer); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetUserData';
 
+{$IFDEF EXPAT_1_0}
   { Returns the last value set by XML_SetUserData or null.  }
   function XML_GetUserData(parser: XML_Parser): Pointer;
+{$ENDIF}
+
+{$IFDEF EXPAT_1_1}
   { This is equivalent to supplying an encoding argument
   to XML_ParserCreate. It must not be called after XML_Parse
   or XML_ParseBuffer.  }
-  function XML_SetEncoding(parser:XML_Parser; encoding:PChar):XML_Status; external ExpatLib name 'XML_SetEncoding';
+  function XML_SetEncoding(parser:XML_Parser; encoding:PXML_Char):XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetEncoding';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_0}
   { If this function is called, then the parser will be passed
   as the first argument to callbacks instead of userData.
   The userData will still be accessible using XML_GetUserData.  }
-  procedure XML_UseParserAsHandlerArg(parser:XML_Parser); external ExpatLib name 'XML_UseParserAsHandlerArg';
+  procedure XML_UseParserAsHandlerArg(parser:XML_Parser); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_UseParserAsHandlerArg';
+{$ENDIF}
 
+{$IFDEF EXPAT_2_0}
+  function XML_UseForeignDTD(parser: XML_Parser; useDTD: XML_Bool): XML_Error; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_UseForeignDTD';
+{$ENDIF}
+
+{$IFDEF EXPAT_1_0}
   { Sets the base to be used for resolving relative URIs in system identifiers in
   declarations.  Resolving relative identifiers is left to the application:
   this value will be passed through as the base argument to the
   XML_ExternalEntityRefHandler, XML_NotationDeclHandler
   and XML_UnparsedEntityDeclHandler. The base argument will be copied.
   Returns zero if out of memory, non-zero otherwise.  }
-  function XML_SetBase(parser:XML_Parser; base:PChar):XML_Status; external ExpatLib name 'XML_SetBase';
+  function XML_SetBase(parser:XML_Parser; base:PXML_Char):XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetBase';
 
-  function XML_GetBase(parser:XML_Parser):PChar; external ExpatLib name 'XML_GetBase';
+  function XML_GetBase(parser:XML_Parser):PXML_Char; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetBase';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_1}
   { Returns the number of the attribute/value pairs passed in last call
   to the XML_StartElementHandler that were specified in the start-tag
   rather than defaulted. Each attribute/value pair counts as 2; thus
   this correspondds to an index into the atts array passed to the
   XML_StartElementHandler.  }
-  function XML_GetSpecifiedAttributeCount(parser:XML_Parser):integer; external ExpatLib name 'XML_GetSpecifiedAttributeCount';
+  function XML_GetSpecifiedAttributeCount(parser:XML_Parser):integer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetSpecifiedAttributeCount';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_2}
   { Returns the index of the ID attribute passed in the last call to
   XML_StartElementHandler, or -1 if there is no ID attribute.  Each
   attribute/value pair counts as 2; thus this correspondds to an index
   into the atts array passed to the XML_StartElementHandler.  }
-  function XML_GetIdAttributeIndex(parser:XML_Parser):integer; external ExpatLib name 'XML_GetIdAttributeIndex';
+  function XML_GetIdAttributeIndex(parser:XML_Parser):integer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetIdAttributeIndex';
+{$ENDIF}
+
+{$IFDEF EXPAT_2_1}
+{$IFDEF XML_ATTR_INFO}
+  type
+    PXML_AttrInfo = ^XML_AttrInfo;
+    XML_AttrInfo = record
+      nameStart: XML_Index;
+      nameEnd: XML_Index;
+      valueStart: XML_Index;
+      valueEnd: XML_Index;
+    end;
+
+  function XML_GetAttributeInfo(parser: XML_Parser): PXML_AttrInfo; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetAttributeInfo';
+{$ENDIF}
+{$ENDIF}
 
   { Parses some input. Returns 0 if a fatal error is detected.
   The last call to XML_Parse must have isFinal true;
   len may be zero for this call (or any other).  }
-  function XML_Parse(parser:XML_Parser; s:pchar; len:integer; isFinal:integer):XML_Status; external ExpatLib name 'XML_Parse';
+  function XML_Parse(parser:XML_Parser; s:pchar; len:integer; isFinal:XML_Bool):XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_Parse';
 
-  function XML_GetBuffer(parser:XML_Parser; len:integer):pointer; external ExpatLib name 'XML_GetBuffer';
+  function XML_GetBuffer(parser:XML_Parser; len:integer):pointer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetBuffer';
 
-  function XML_ParseBuffer(parser:XML_Parser; len:integer; isFinal:integer):XML_Status; external ExpatLib name 'XML_ParseBuffer';
+  function XML_ParseBuffer(parser:XML_Parser; len:integer; isFinal:XML_Bool):XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParseBuffer';
 
+{$IFDEF EXPAT_2_0}
+  type
+    TXML_Parsing = (XML_INITIALIZED, XML_PARSING, XML_FINISHED, XML_SUSPENDED);
+  XML_ParsingStatus = record
+    parsing: TXML_Parsing;
+    finalBuffer: XML_Bool;
+  end;
+
+  function XML_StopParser(parser: XML_Parser; resumable: XML_Bool): XML_Status; external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_StopParser';
+  function XML_ResumeParser(parser: XML_Parser): XML_Status; external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ResumeParser';
+  procedure XML_GetParsingStatus(parser: XML_parser; var status: XML_ParsingStatus); external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetParsingStatus';
+{$ENDIF}
+
+{$IFDEF EXPAT_1_1}
   { Creates an XML_Parser object that can parse an external general entity;
   context is a '\0'-terminated string specifying the parse context;
   encoding is a '\0'-terminated string giving the name of the externally specified encoding,
@@ -377,9 +555,10 @@ type
   The new parser is completely independent and may safely be used in a separate thread.
   The handlers and userData are initialized from the parser argument.
   Returns 0 if out of memory.  Otherwise returns a new XML_Parser object.  }
-  function XML_ExternalEntityParserCreate(parser:XML_Parser; context:PChar; encoding:PChar):XML_Parser; external ExpatLib name 'XML_ExternalEntityParserCreate';
+  function XML_ExternalEntityParserCreate(parser:XML_Parser; context:PXML_Char; encoding:PXML_Char):XML_Parser; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ExternalEntityParserCreate';
+{$ENDIF}
 
-
+{$IFDEF EXPAT_1_2}
   type
      XML_ParamEntityParsing = (XML_PARAM_ENTITY_PARSING_NEVER,XML_PARAM_ENTITY_PARSING_UNLESS_STANDALONE,
        XML_PARAM_ENTITY_PARSING_ALWAYS);
@@ -403,25 +582,54 @@ type
   XML_SetParamEntityParsing will return 0 if parsing of parameter
   entities is requested; otherwise it will return non-zero.  }
 
-  function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external ExpatLib name 'XML_SetParamEntityParsing';
+  function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetParamEntityParsing';
+{$ENDIF}
 
+{$IFDEF EXPAT_2_1}
+  function XML_SetHashSalt(parser:XML_Parser; hash_salt: cardinal):integer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetHashSalt';
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
   type
-     XML_Error = (XML_ERROR_NONE,XML_ERROR_NO_MEMORY,XML_ERROR_SYNTAX,
-       XML_ERROR_NO_ELEMENTS,XML_ERROR_INVALID_TOKEN,
-       XML_ERROR_UNCLOSED_TOKEN,XML_ERROR_PARTIAL_CHAR,
-       XML_ERROR_TAG_MISMATCH,XML_ERROR_DUPLICATE_ATTRIBUTE,
-       XML_ERROR_JUNK_AFTER_DOC_ELEMENT,XML_ERROR_PARAM_ENTITY_REF,
-       XML_ERROR_UNDEFINED_ENTITY,XML_ERROR_RECURSIVE_ENTITY_REF,
-       XML_ERROR_ASYNC_ENTITY,XML_ERROR_BAD_CHAR_REF,
-       XML_ERROR_BINARY_ENTITY_REF,XML_ERROR_ATTRIBUTE_EXTERNAL_ENTITY_REF,
-       XML_ERROR_MISPLACED_XML_PI,XML_ERROR_UNKNOWN_ENCODING,
-       XML_ERROR_INCORRECT_ENCODING,XML_ERROR_UNCLOSED_CDATA_SECTION,
-       XML_ERROR_EXTERNAL_ENTITY_HANDLING,
-       XML_ERROR_NOT_STANDALONE);
+    XML_Content_Type = (XML_CTYPE_NONE, XML_CTYPE_EMPTY, XML_CTYPE_ANY, XML_CTYPE_MIXED,
+      XML_CTYPE_NAME, XML_CTYPE_CHOICE, XML_CTYPE_SEQ);
+
+    XML_Content_Quant = (XML_CQUANT_NONE, XML_CQUANT_OPT, XML_CQUANT_REP, XML_CQUANT_PLUS);
+
+  PXML_Content = ^XML_Content;
+  XML_Content = record
+    thetype: XML_Content_Type;
+    quant: XML_Content_Quant;
+    name: PXML_Char;
+    numchildren: word;
+    children: PXml_Content;
+  end;
+
+  PXML_Memory_Handling_Suite = record
+    malloc_fcn: function(size: size_t): Pointer;
+    realloc_fcn: function(ptr: Pointer; size: size_t): Pointer;
+    free_fcn: procedure(ptr: Pointer);
+  end;
+
+  XML_ElementDeclHandler = procedure(userData: Pointer; name: PXML_Char; model: PXML_Content);
+  XML_AttlistDeclHandler = procedure(userData: Pointer; elname, attname, att_type, dflt: PXML_Char; isrequired: integer);
+  XML_XmlDeclHandler = procedure(userData: Pointer; version, encoding: PXML_Char; standalone: integer);
+  XML_EntityDeclHandler = procedure(userData: Pointer; entityName: PXML_Char; is_parameter_entity: integer; value: PXML_Char; value_length: integer; base, systemId, publicId, notationName: PXML_Char);
+
+  procedure XML_SetElementDeclHandler(parser: XML_Parser; eldecl: XML_ElementDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetElementDeclHandler';
+  procedure XML_SetAttlistDeclHandler(parser: XML_Parser; attdecl: XML_AttlistDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetElementDeclHandler';
+  procedure XML_SetXmlDeclHandler(parser: XML_Parser; xmldecl: XML_XmlDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetXmlDeclHandler';
+  procedure XML_SetEntityDeclHandler(parser: XML_Parser; handler: XML_EntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetXmlDeclHandler';
+
+  procedure XML_ParserCreate_MM(encoding: PXML_Char; memsuite: PXML_Memory_Handling_Suite; namespaceSeparator: PXML_Char); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreate_MM';
+{$ENDIF}
+
 
   { If XML_Parse or XML_ParseBuffer have returned 0, then XML_GetErrorCode
   returns information about the error.  }
-  function XML_GetErrorCode(parser: XML_Parser): XML_Error; external ExpatLib name 'XML_GetErrorCode';
+  function XML_GetErrorCode(parser: XML_Parser): XML_Error; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetErrorCode';
+
+{$IFDEF EXPAT_1_0}
   { These functions return information about the current parse location.
   They may be called when XML_Parse or XML_ParseBuffer return 0;
   in this case the location is the location of the character at which
@@ -430,34 +638,79 @@ type
   some parse event; in this the location is the location of the first
   of the sequence of characters that generated the event.  }
 
-  function XML_GetCurrentLineNumber(parser:XML_Parser):number; external ExpatLib name 'XML_GetCurrentLineNumber';
+  function XML_GetCurrentLineNumber(parser:XML_Parser):XML_Size; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetCurrentLineNumber';
 
-  function XML_GetCurrentColumnNumber(parser:XML_Parser):number; external ExpatLib name 'XML_GetCurrentColumnNumber';
+  function XML_GetCurrentColumnNumber(parser:XML_Parser):XML_Size; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetCurrentColumnNumber';
 
-  function XML_GetCurrentByteIndex(parser:XML_Parser):integer; external ExpatLib name 'XML_GetCurrentByteIndex';
+  function XML_GetCurrentByteIndex(parser:XML_Parser):XML_Index; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetCurrentByteIndex';
+{$ELSE}
+  function XML_GetErrorLineNumber(parser:XML_Parser):XML_Size; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetErrorLineNumber';
+  function XML_GetErrorColumnNumber(parser:XML_Parser):XML_Size; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetErrorColumnNumber';
+  function XML_GetErrorByteIndex(parser:XML_Parser):XML_Index; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetErrorByteIndex';
+{$ENDIF}
 
+{$IFDEF EXPAT_1_1}
   { Return the number of bytes in the current event.
   Returns 0 if the event is in an internal entity.  }
-  function XML_GetCurrentByteCount(parser:XML_Parser):integer; external ExpatLib name 'XML_GetCurrentByteCount';
+  function XML_GetCurrentByteCount(parser:XML_Parser):integer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetCurrentByteCount';
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
+  function XML_GetInputContext(parser: XML_Parser; var offset, size: integer): pchar; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetInputContext';
+  procedure XML_FreeContentModel(parser: XML_Parser; model: PXML_Content); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_FreeContentModel';
+  function XML_MemMalloc(parser: XML_Parser; size: size_t): Pointer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_MemMalloc';
+  function XML_MemRealloc(parser: XML_Parser; ptr: Pointer; size: size_t): Pointer; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_MemRealloc';
+  procedure XML_MemFree(parser: XML_Parser; ptr: Pointer); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_MemFree';
+{$ENDIF}
 
   { Frees memory used by the parser.  }
 
-  procedure XML_ParserFree(parser:XML_Parser); external ExpatLib name 'XML_ParserFree';
+  procedure XML_ParserFree(parser:XML_Parser); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserFree';
 
   { Returns a string describing the error.  }
-  function XML_ErrorString(code:XML_Error):PXML_LChar; external ExpatLib name 'XML_ErrorString';
+  function XML_ErrorString(code:XML_Error):PXML_LChar; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ErrorString';
 
+{$IFDEF EXPAT_1_0}
 const
   { For backwards compatibility with previous versions.  }
-  XML_GetErrorLineNumber: function(parser:XML_Parser):number   = XML_GetCurrentLineNumber;
-  XML_GetErrorColumnNumber: function(parser:XML_Parser):number = XML_GetCurrentColumnNumber;
-  XML_GetErrorByteIndex: function(parser:XML_Parser):integer   = XML_GetCurrentByteIndex;   
+  XML_GetErrorLineNumber: function(parser:XML_Parser):XML_Size   = XML_GetCurrentLineNumber;
+  XML_GetErrorColumnNumber: function(parser:XML_Parser):XML_Size = XML_GetCurrentColumnNumber;
+  XML_GetErrorByteIndex: function(parser:XML_Parser):XML_Index   = XML_GetCurrentByteIndex;   
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
+type
+  XML_Expat_Version = record
+    major: integer;
+    minor: integer;
+    micro: integer;
+  end;
+
+  XML_FeatureEnum = (XML_FEATURE_END, XML_FEATURE_UNICODE,
+    XML_FEATURE_UNICODE_WCHAR_T, XML_FEATURE_DTD,
+    XML_FEATURE_CONTEXT_BYTES, XML_FEATURE_MIN_SIZE,
+    XML_FEATURE_SIZEOF_XML_CHAR, XML_FEATURE_SIZEOF_XML_LCHAR,
+    XML_FEATURE_NS, XML_FEATURE_LARGE_SIZE, XML_FEATURE_ATTR_INFO);
+  PXML_Feature = ^XML_Feature;
+  XML_Feature = record
+    feature: XML_FeatureEnum;
+    name: PXML_LChar;
+    value: longint;
+  end;
+
+  function XML_ExpatVersion: PXML_LChar; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ExpatVersion';
+  function XML_ExpatVersionInfo: XML_Expat_Version; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ExpatVersionInfo';
+
+  function XML_GetFeatureList: PXml_Feature; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetFeatureList';
+{$ENDIF}
 
 implementation
 
+{$IFDEF EXPAT_1_0}
 function XML_GetUserData(parser: XML_Parser): Pointer;
 begin
   XML_GetUserData := PPointer(parser)^
 end;
+{$ENDIF}
 
 end.
