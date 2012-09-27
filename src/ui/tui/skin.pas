@@ -116,7 +116,6 @@ begin
   SkinOptionFull := true;
   Settings.RegisterString('skin', 'Display', 'default', SkinToUse);
   SkinFile := Settings.GetString('skin');
-  WriteLn(SkinFile);
 
   if not FileExists(SkinFile) then
   begin
