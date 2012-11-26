@@ -117,20 +117,23 @@ begin
     end
     else if Name = 'link' then
     begin
-      for Idx := 0 to Attributes^.Count - 1 do
+      if Attributes^.Count > 0 then
       begin
-        Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
-        if Attr.Name = 'href' then
+        for Idx := 0 to Attributes^.Count - 1 do
         begin
-          FAtomLink.Href := GetAbsoluteURL(Attr.Value);
-        end
-        else if Attr.Name = 'rel' then
-        begin
-          FAtomLink.Rel := Attr.Value;
-        end
-        else if Attr.Name = 'type' then
-        begin
-          FAtomLink.MimeType := Attr.Value;
+          Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
+          if Attr.Name = 'href' then
+          begin
+            FAtomLink.Href := GetAbsoluteURL(Attr.Value);
+          end
+          else if Attr.Name = 'rel' then
+          begin
+            FAtomLink.Rel := Attr.Value;
+          end
+          else if Attr.Name = 'type' then
+          begin
+            FAtomLink.MimeType := Attr.Value;
+          end;
         end;
       end;
 
