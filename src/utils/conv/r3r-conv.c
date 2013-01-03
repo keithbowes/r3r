@@ -130,7 +130,7 @@ int main(int argc, char ** argv)
 			{
 				case 'h':
 					show_help(invok);
-					return;
+					return 0;
 				case 'i':
 					in_file = optarg;
 					break;

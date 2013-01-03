@@ -9,13 +9,15 @@ override CFLAGS+=-DUSE_NLS
 override LIBS+=-lintl
 endif
 
+CCLD ?= $(CC)
+
 all: r3r-conv$(TARGETEXEEXT)
 ifneq ($(USE_NLS),0)
 	cd po && $(MAKE) all
 endif
 
 r3r-conv$(TARGETEXEEXT): atomwriter$(OEXT) esfwriter$(OEXT) r3r-conv$(OEXT) rss3writer$(OEXT) rsswriter$(OEXT)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(builddir)/$@ $^ $(LIBS)
+	$(CCLD) $(LDFLAGS) -o $(builddir)/$@ $^ $(LIBS)
 
 install:
 	$(INSTALLEXE) r3r-conv$(TARGETEXEEXT) $(bindir)
