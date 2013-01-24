@@ -246,7 +246,7 @@ begin
     end;
   end;
 
-  if (Headers.Sniff) or (Headers.ContentType = ftXml) then
+  if Headers.Sniff then
   begin
     Headers.ContentType := GetType;
   end;

@@ -113,7 +113,7 @@ begin
     begin
       Description := Content;
     end
-    else if (Name = 'link') and (Link = '') then
+    else if Name = 'link' then
     begin
       Link := Trim(Content);
     end

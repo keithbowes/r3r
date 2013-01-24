@@ -87,13 +87,17 @@ begin
   begin
     FeedType := ftRss3;
   end
-  else if (FileExt = '.rdf') or (FileExt = '.rss') or (FileExt = '.xml') then
+  else if (FileExt = '.rdf') or (FileExt = '.rss') then
   begin
     FeedType := ftRss;
   end
   else if FileExt = '.atom' then
   begin
     FeedType := ftAtom
+  end
+  else if FileExt = '.xml' then
+  begin
+    FeedType := ftXml
   end
   else
   begin
