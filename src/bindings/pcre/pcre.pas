@@ -320,7 +320,6 @@ procedure pcre_free_substring_list(stringptr: PPChar); external {$IFDEF LINK_DYN
 function pcre_maketables: byte; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 
 function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_info(code: ppcre; optptr, firstcharptr: PInteger): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 function pcre_refcount(code: ppcre; adjust: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 function pcre_config(what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
 function pcre_version: PChar; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
@@ -346,11 +345,11 @@ procedure new_free(p: ppcre);
 begin
   if p <> nil then
   begin
-{$IFNDEF __GPC__}
-    FreeMem(p)
-{$ELSE}
 {$IFDEF VIRTUALPASCAL}
     FreeMem(p, 0)
+{$ELSE}
+{$IFNDEF __GPC__}
+    FreeMem(p)
 {$ENDIF}
 {$ENDIF}
   end;
