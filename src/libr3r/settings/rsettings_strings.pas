@@ -23,6 +23,7 @@ var
   DescTypes: String;
   DescUseLang: String;
   DescLang: String;
+  DescUserAgent: String;
   DescBrowser: String;
   DescMail: String;
   DescMedia: String;
@@ -60,8 +61,9 @@ begin
   DescProxyPort := _('Proxy port');
   DescUseTypes := _('Use custom accept types?');
   DescTypes := _('Custom accept types');
-  DescUSeLang := _('Use custom accept languages?');
+  DescUseLang := _('Use custom accept languages?');
   DescLang := _('Custom accept languages');
+  DescUserAgent := _('User Agent');
   DescBrowser := _('Browser');
   DescMail := _('Email client');
   DescMedia := _('Media player');

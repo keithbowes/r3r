@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-25 08:45-0500\n"
+"PO-Revision-Date: 2013-01-25 10:05-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -110,6 +110,9 @@ msgstr "¿Usar idiomas proprios?"
 
 msgid "Custom accept languages"
 msgstr "Idiomas proprios"
+
+msgid "User Agent"
+msgstr "Agento de usuario"
 
 msgid "Browser"
 msgstr "Navegador de web"

@@ -1230,12 +1230,27 @@ begin
 end;
 
 procedure TTui.DrawUIString;
+var
+  fw: word;
+  ua: String;
 begin
   Window(FDimUI.LeftStart, FDimUI.TopStart, FDimUI.LeftEnd, FDimUI.TopEnd);
   TextBackground(SkinColorTable.FUIBack);
   TextColor(SkinColorTable.FUIFore);
   ClrScr;
-  TuiEcho(UserAgent, false, ScreenWidth - ((ScreenWidth - Length(UserAgent)) div 2));
+
+  ua := UserAgent;
+  if Length(ua) < ScreenWidth then
+  begin
+    fw := ScreenWidth - ((ScreenWidth - Length(ua)) div 2);
+  end
+  else
+  begin
+    fw := 1;
+    ua := Copy(ua, 1, ScreenWidth - 1);
+  end;
+
+  TuiEcho(ua, false, fw);
 end;
 
 procedure TTui.InitWindowDims;

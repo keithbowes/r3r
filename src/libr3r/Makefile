@@ -42,5 +42,6 @@ uninstall:
 info.pas: _info.pas ../../scripts/common.make
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
 		-e 's/@COMPILER@/$(COMPILER)/g' \
+		-e 's/@UI@/$(R3R_UI)/g' \
 		-e 's&@PREFIX@&$(prefix)&g' _info.pas > info.pas
 	$(MAKE) info$(PPUEXT)

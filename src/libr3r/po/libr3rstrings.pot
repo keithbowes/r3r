@@ -99,6 +99,9 @@ msgstr ""
 msgid "Custom accept languages"
 msgstr ""
 
+msgid "User Agent"
+msgstr ""
+
 msgid "Browser"
 msgstr ""
 

@@ -12,26 +12,35 @@ function UserAgent: String;
 implementation
 
 uses
+  RSettings, SysUtils
 {$IFDEF __GPC__}
-  GPC, SysUtils
+  , GPC
 {$ELSE}
   {$IF DEFINED(FPC) and DEFINED(UNIX)}
-    BaseUnix
+    , BaseUnix
   {$ELSE}
     {$IFDEF MSWINDOWS}
-      Windows
+      , Windows
     {$ELSE}
-      Dos
+      , Dos
     {$ENDIF}
   {$ENDIF}
 {$ENDIF}
 
+{$IFDEF EXPAT_2_0}
+  , Expas
+{$ENDIF}
+
 {$IFDEF SOCKETS_SYNAPSE}
-  ,BlckSock
+  , BlckSock
 {$ENDIF}
   
 {$IFDEF SOCKETS_LIBCURL}
-  ,CurlVer
+  , CurlVer
+{$ENDIF}
+  
+{$IFDEF USE_PCRE}
+  , Pcre
 {$ENDIF};
 
 function Os: String;
@@ -84,14 +93,45 @@ begin
 end;
 
 function UserAgent: String;
+var
+{$IFDEF USE_PCRE}
+  Data: String;
+{$ENDIF}
+  Ret: String;
 begin
-  UserAgent := AppName + '/' + AppVersion + ' (' + OS + '; @COMPILER@)'
+  Ret := Settings.GetString('user-agent');
+  Ret := StringReplace(Ret, '%a', AppName + '/' + AppVersion, []);
+  Ret := StringReplace(Ret, '%c', '@COMPILER@', []);
+{$IFDEF EXPAT_2_0}
+  Ret := StringReplace(Ret, '%e', StringReplace(StrPas(XML_ExpatVersion), '_', '/', []), []);
+{$ELSE}
+  Ret := StringReplace(Ret, '%e', '', []);
+{$ENDIF}
+  Ret := StringReplace(Ret, '%o', OS, []);
+{$IFDEF USE_PCRE}
+  WriteStr(Data, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
+  Data := StringReplace(Data, '. ', ' ', [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%p', Data, []);
+{$ELSE}
+  Ret := StringReplace(Ret, '%p', '', []);
+{$ENDIF}
 {$IFDEF SOCKETS_SYNAPSE}
-    + ' Synapse/' + SynapseRelease
-{$ENDIF}
+  Ret := StringReplace(Ret, '%s', ' Synapse/' + SynapseRelease, []);
+{$ELSE}
 {$IFDEF SOCKETS_LIBCURL}
-    + ' ' + StrPas(curl_version)
+  Ret := StringReplace(Ret, '%s', StrPas(curl_version), []);
+{$ELSE}
+  Ret := StringReplace(Ret, '%s', '', []);
 {$ENDIF}
+{$ENDIF}
+  Ret := StringReplace(Ret, '%u', '@UI@', []);
+  
+  while Pos('  ', Ret) <> 0 do
+  begin
+    Ret := StringReplace(Ret, '  ', ' ', [rfReplaceAll]);
+  end;
+
+  UserAgent := Ret
 end;
 
 end.

@@ -4,7 +4,6 @@ var
 procedure StripComment(var s: String);
 var
   Idx: PtrUInt;
-  t: String;
 begin
   Idx := Pos(CommentSeparator, s);
   if Idx <> 0 then
