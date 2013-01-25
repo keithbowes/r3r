@@ -126,6 +126,10 @@ msgstr ""
 msgid "Retrieving items from %s..."
 msgstr ""
 
+#: tuistrings:showincomingitems
+msgid "Show incoming items"
+msgstr ""
+
 #: tuistrings:nodata
 msgid "This item contains no data."
 msgstr ""

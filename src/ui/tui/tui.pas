@@ -123,6 +123,9 @@ end;
 procedure ItemReceived(const Item: TFeedItem);
 var
   AItem: TFeedItem;
+  Items: PtrUint;
+  LenStr: String;
+  Title: String;
 begin
   with obj do
   begin
@@ -137,6 +140,28 @@ begin
     AItem.Enclosure.MimeType := Item.Enclosure.MimeType;
     AItem.Enclosure.URL := Item.Enclosure.URL;
     FItems^.Add(AItem);
+    Items := FItems^.Count;
+
+    if Settings.GetBoolean('show-incoming-items') then
+    begin
+      if Items <= FViewPort.PortHeight then
+      begin
+        Title := AItem.TitleText;
+        WriteStr(LenStr, Items);
+        if Length(Title) > (FDimList.LeftEnd - 3 - Length(LenStr)) then
+        begin
+          Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(LenStr)) + '...'
+        end;
+
+        TextBackground(SkinColorTable.FIndexBack);
+        TextColor(SkinColorTable.FIndexFore);
+        Write(Items, ': ');
+
+        TextBackground(SkinColorTable.FTitleBack);
+        TextColor(SkinColorTable.FTitleFore);
+        TuiWriteLn(Title);
+      end;
+    end;
   end;
 end;
 
@@ -170,6 +195,7 @@ begin
 
   RegisterItemCallback(ItemReceived);
   obj := Self;
+  Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
 
 {$IFDEF __GPC__}

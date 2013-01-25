@@ -51,6 +51,7 @@ var
   NoFeedURL: String;
 
   Retrieving: String;
+  ShowIncomingItems: String;
 
   NoData: String;
 
@@ -112,6 +113,7 @@ begin
   NoFeedURL := _('No feed URL specified.');
 
   Retrieving := _('Retrieving items from %s...');
+  ShowIncomingItems := _('Show incoming items');
 
   NoData := _('This item contains no data.');
 end;
