@@ -76,7 +76,7 @@ begin
         end;
         FilterEntry := Copy(FilterEntry, 2, Length(FilterEntry) - 2);
 
-        re := pcre_compile(StrToPChar(FilterEntry), opt, @errptr, @erroffset, 0);
+        re := pcre_compile(StrToPChar(FilterEntry), opt, @errptr, @erroffset, nil);
         rc := pcre_exec(re, nil, StrToPChar(FieldValue), Length(FieldValue), 0, 0, nil, 0);
 
         ShouldFilter := rc >= 0;

@@ -104,10 +104,6 @@ const
 {$ENDIF}
 {$ENDIF}
 
-{$IFDEF VIRTUALPASCAL}
-{$UNDEF LINK_DYNAMIC}
-{$ENDIF}
-
 type
 {$IFDEF FPC}
   size_t = PtrUInt;
@@ -229,6 +225,8 @@ var
     type
       real_pcre = record
           { declaration; the definition is private }
+          { but I must know the size of the allocated memory}
+          magic_number, size: cardinal;
         end;
 
       ppcre = ^real_pcre;
@@ -300,35 +298,21 @@ const
 var
   pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};{$ENDIF}
 
-{ Imported PCRE functions }
-function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: byte): ppcre; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-
-function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_get_stringnumber(code: ppcre; name: PChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-procedure pcre_free_substring(stringptr: PChar); external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-procedure pcre_free_substring_list(stringptr: PPChar); external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-
-function pcre_maketables: byte; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-
-function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_refcount(code: ppcre; adjust: integer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_config(what: integer; where: Pointer): integer; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-function pcre_version: PChar; external {$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+{$IFNDEF VIRTUALPASCAL}
+{$DEFINE PCRE_IMPORT}
+{$INCLUDE "pcreimports.inc"}
+{$ELSE}
+{$I "pcreimports.inc"}
+{$ENDIF}
 
 implementation
 
 {$IFDEF VIRTUALPASCAL}
 uses
   Strings;
+
+{$DEFINE PCRE_IMPORT}
+{$I "pcreimports.inc"}
 {$ENDIF}
 
 { The memory allocation functions were pretty much stolen
@@ -348,9 +332,7 @@ begin
 {$IFDEF VIRTUALPASCAL}
     FreeMem(p, 0)
 {$ELSE}
-{$IFNDEF __GPC__}
-    FreeMem(p)
-{$ENDIF}
+    FreeMem(p, p^.size)
 {$ENDIF}
   end;
 
