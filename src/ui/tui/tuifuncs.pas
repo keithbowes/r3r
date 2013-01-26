@@ -118,7 +118,7 @@ begin
 {$ENDIF}
     inbuf := StrToPChar(s);
     inbytesleft := Length(s) + 1;
-    outbytesleft := 0;
+    outbytesleft := inbytesleft;
     GetMem(outstr, outbytesleft);
 
     if outstr <> nil then

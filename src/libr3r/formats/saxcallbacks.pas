@@ -181,7 +181,7 @@ begin
       if outstr <> nil then
       begin
         inbytesleft := StrLen(InStr);
-        outbytesleft := 0;
+        outbytesleft := inbytesleft;
         outbuf := outstr;
         if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) = iconv_convert_error then
         begin
