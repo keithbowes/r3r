@@ -6,6 +6,7 @@ unit RGetFeed;
 
 {$IFDEF SOCKETS_LIBCURL}
 {$UNDEF USE_IDN}
+{$UNDEF USE_LIBIDN2}
 {$ENDIF}
 
 interface
@@ -29,6 +30,10 @@ implementation
 uses
 {$IFDEF USE_IDN}
   LibIdn, 
+{$ELSE}
+{$IFDEF USE_LIBIDN2}
+  LibIdn2, LibIntl,
+{$ENDIF}
 {$ENDIF}
   HttpCache, LibR3RStrings, RFilter, RSettings_Routines,
   RStrings, SysUtils
@@ -48,7 +53,7 @@ const
 var
   ExplicitFile: Boolean;
   Pass, User: String;
-{$IFDEF USE_IDN}
+{$IF DEFINED(USE_IDN) or DEFINED(USE_LIBIDN2)}
   PHost: PChar;
 {$ENDIF}
 {$IFDEF SOCKETS_CURL}
@@ -124,6 +129,12 @@ begin
 {$IFDEF USE_IDN}
     idna_to_ascii_8z(StrToPChar(Host), @PHost, 0);
     WriteStr(Host, PHost);
+{$ELSE}
+{$IFDEF USE_LIBIDN2}
+    setlocale(LC_ALL, '');
+    idn2_lookup_ul(StrToPChar(Host), @PHost, 0);
+    WriteStr(Host, PHost);
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
   end;

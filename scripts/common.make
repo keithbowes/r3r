@@ -189,6 +189,7 @@ override COMPILER_OPTIONS += $(PCFLAGS)
 USE_EXPAT ?= 1
 USE_ICONV ?= 1
 USE_IDN ?= 1
+USE_LIBIDN2 ?= 0
 USE_NLS ?= 1
 USE_PCRE ?= 1
 
@@ -216,6 +217,10 @@ endif
 
 ifneq ($(USE_IDN),0)
 override DEFS_EXTRA+=USE_IDN
+endif
+
+ifneq ($(USE_LIBIDN2),0)
+override DEFS_EXTRA+=USE_LIBIDN2
 endif
 
 ifneq ($(USE_ICONV),0)
@@ -383,6 +388,10 @@ endif
 
 ifneq ($(USE_IDN),0)
 override LDFLAGS+=-lidn
+endif
+
+ifneq ($(USE_LIBIDN2),0)
+override LDFLAGS+=-lidn2
 endif
 
 ifneq ($(USE_NLS),0)
