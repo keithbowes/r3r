@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-25 10:02-0500\n"
+"PO-Revision-Date: 2013-01-27 13:57-0500\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -136,3 +136,6 @@ msgstr ""
 
 msgid "Unknown Encoding"
 msgstr "Unknown Encoding"
+
+msgid "No Data"
+msgstr "No Data"

@@ -59,7 +59,7 @@ uses
 {$IFDEF __GPC__}
   GPC,
 {$ENDIF}
-  RSettings, RSettings_Routines, StrTok;
+  LibR3RStrings, RSettings, RSettings_Routines, StrTok;
 
 function CacheEncode(const URL: String): String;
 var
@@ -76,7 +76,9 @@ var
   IdsFile: text;
 begin
   New(FIdsList, Init);
+
   New(Info);
+  Info^.CacheParam := NoData;
 
   FCurrentDir := GetCurrentDir;
   FRootCacheDir := CacheDir;

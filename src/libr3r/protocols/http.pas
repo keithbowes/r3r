@@ -409,7 +409,6 @@ begin
   FullPath := CacheEncode(FullPath);
 
   Cache := CreateCache(FullPath);
-  Cache.Info^.CacheParam := '';
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;

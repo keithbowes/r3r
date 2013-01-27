@@ -9,6 +9,7 @@ var
   Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec: String;
 
   UnknownEncoding: String;
+  NoData: String;
 
 {$IFNDEF USE_NLS}
 function _(s: String): String;
@@ -40,6 +41,7 @@ begin
   Dec := _('Dec');
 
   UnknownEncoding := _('Unknown Encoding');
+  NoData := _('No Data');
 end;
 
 {$IFNDEF USE_NLS}

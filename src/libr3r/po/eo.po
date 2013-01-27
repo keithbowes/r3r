@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-27 12:13-0500\n"
+"PO-Revision-Date: 2013-01-27 13:57-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -132,3 +132,6 @@ msgstr "Ne eblas krei dosierujon %s. Eble vi volus provi permane krei ĝin."
 
 msgid "Unknown Encoding"
 msgstr "Nekonata kodoprezento"
+
+msgid "No Data"
+msgstr "Neniuj datumoj"

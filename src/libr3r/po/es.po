@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-25 10:05-0500\n"
+"PO-Revision-Date: 2013-01-27 13:58-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -133,3 +133,6 @@ msgstr ""
 
 msgid "Unknown Encoding"
 msgstr "Codificación desconocida"
+
+msgid "No Data"
+msgstr "Ningunos datos"
