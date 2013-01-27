@@ -8,7 +8,7 @@ interface
 uses
   Expas;
 
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
+procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 procedure ElementEnded(user_data: Pointer; name: PChar);
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 
@@ -47,7 +47,7 @@ begin
   end;
 end;
 
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
+procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 var
   attr: String;
   Elem: PXmlElement;

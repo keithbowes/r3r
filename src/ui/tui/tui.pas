@@ -123,7 +123,7 @@ end;
 procedure ItemReceived(const Item: TFeedItem);
 var
   AItem: TFeedItem;
-  Items: PtrUint;
+  Items: PtrUInt;
   LenStr: String;
   Title: String;
 begin

@@ -81,7 +81,7 @@ end;
 
 {$CALLING cdecl}
 {$IFDEF USE_EXPAT}
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPChar);
+procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 var
   attr, n: String;
   fo: text;

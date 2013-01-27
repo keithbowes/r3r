@@ -321,10 +321,6 @@ else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
 
-ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
-override DEFS_EXTRA=INI_ADD_EXTRAS
-endif
-
 ifdef CPU_TARGET
 override PCFLAGS_BASE+=-P$(CPU_TARGET)
 endif
@@ -416,6 +412,10 @@ endif
 export USE_GPC
 endif # USE_GPC
 endif # USE_FPC
+
+ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
+override DEFS_EXTRA+=INI_ADD_EXTRAS
+endif
 
 # Let's try to figure out what OS we're using
 HOST ?= $(PLATFORM)
