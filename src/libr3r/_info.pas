@@ -7,6 +7,7 @@ const
   AppVersion = '@VERSION@';
   InstalledPrefix = '@PREFIX@';
 
+procedure SetUserAgentInfo(const uainfo: String);
 function UserAgent: String;
 
 implementation
@@ -38,10 +39,17 @@ uses
 {$IFDEF SOCKETS_LIBCURL}
   , CurlVer
 {$ENDIF}
+
+{$IFDEF USE_LIBIDN2}
+  , LibIdn2
+{$ENDIF}
   
 {$IFDEF USE_PCRE}
   , Pcre
 {$ENDIF};
+
+var
+  UserAgentInfo: String;
 
 function Os: String;
 var
@@ -92,6 +100,11 @@ begin
   OS := Name + ' ' + Version;
 end;
 
+procedure SetUserAgentInfo(const uainfo: String);
+begin
+  UserAgentInfo := uainfo;
+end;
+
 function UserAgent: String;
 var
 {$IFDEF USE_PCRE}
@@ -100,32 +113,52 @@ var
   Ret: String;
 begin
   Ret := Settings.GetString('user-agent');
-  Ret := StringReplace(Ret, '%a', AppName + '/' + AppVersion, []);
-  Ret := StringReplace(Ret, '%c', '@COMPILER@', []);
+
+  { Interpret escape sequences }
+  Ret := StringReplace(Ret, '%a', AppName + '/' + AppVersion, [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%c', '@COMPILER@', [rfReplaceAll]);
 {$IFDEF EXPAT_2_0}
-  Ret := StringReplace(Ret, '%e', StringReplace(StrPas(XML_ExpatVersion), '_', '/', []), []);
+  Ret := StringReplace(Ret, '%e', StringReplace(StrPas(XML_ExpatVersion), '_', '/', [rfReplaceAll]), [rfReplaceAll]);
 {$ELSE}
-  Ret := StringReplace(Ret, '%e', '', []);
+  Ret := StringReplace(Ret, '%e', '', [rfReplaceAll]);
 {$ENDIF}
-  Ret := StringReplace(Ret, '%o', OS, []);
+{$IFDEF USE_LIBIDN2}
+  Ret := StringReplace(Ret, '%i', 'libidn2/' + StrPas(IDN2_VERSION), [rfReplaceAll]);
+{$ELSE}
+  Ret := StringReplace(ret, '%i', '', [rfReplaceAll]);
+{$ENDIF}
+{$IFDEF SOCKETS_SYNAPSE}
+  Ret := StringReplace(Ret, '%n', ' Synapse/' + SynapseRelease, [rfReplaceAll]);
+{$ELSE}
+{$IFDEF SOCKETS_LIBCURL}
+  Ret := StringReplace(Ret, '%n', StrPas(curl_version), [rfReplaceAll]);
+{$ELSE}
+  Ret := StringReplace(Ret, '%n', '', [rfReplaceAll]);
+{$ENDIF}
+{$ENDIF}
+  Ret := StringReplace(Ret, '%o', OS, [rfReplaceAll]);
 {$IFDEF USE_PCRE}
   WriteStr(Data, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
   Data := StringReplace(Data, '. ', ' ', [rfReplaceAll]);
-  Ret := StringReplace(Ret, '%p', Data, []);
+  Ret := StringReplace(Ret, '%p', Data, [rfReplaceAll]);
 {$ELSE}
-  Ret := StringReplace(Ret, '%p', '', []);
+  Ret := StringReplace(Ret, '%p', '', [rfReplaceAll]);
 {$ENDIF}
-{$IFDEF SOCKETS_SYNAPSE}
-  Ret := StringReplace(Ret, '%s', ' Synapse/' + SynapseRelease, []);
+{$IFDEF USE_SSL}
+  Ret := StringReplace(Ret, '%s', 'U', [rfReplaceAll]);
 {$ELSE}
-{$IFDEF SOCKETS_LIBCURL}
-  Ret := StringReplace(Ret, '%s', StrPas(curl_version), []);
-{$ELSE}
-  Ret := StringReplace(Ret, '%s', '', []);
+  Ret := StringReplace(Ret, '%s', 'I', [rfReplaceAll]);
 {$ENDIF}
-{$ENDIF}
-  Ret := StringReplace(Ret, '%u', '@UI@', []);
+  Ret := StringReplace(Ret, '%u', '@UI@', [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%w', UserAgentInfo, [rfReplaceAll]);
+
+  { Remove unknown formatting chars }
+  while Pos('%', Ret) <> 0 do
+  begin
+    Delete(Ret, Pos('%', Ret), 2);
+  end;
   
+  { Remove multiple spaces }
   while Pos('  ', Ret) <> 0 do
   begin
     Ret := StringReplace(Ret, '  ', ' ', [rfReplaceAll]);
@@ -133,5 +166,9 @@ begin
 
   UserAgent := Ret
 end;
+
+initialization
+
+UserAgentInfo := '';
 
 end.

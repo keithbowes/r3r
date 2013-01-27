@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 15:39-0400\n"
+"POT-Creation-Date: 2013-01-27 12:06-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../app.cpp:12
+#: ../app.cpp:21
 msgid "R3R"
 msgstr ""
 
@@ -185,7 +185,11 @@ msgstr ""
 msgid "&Enable Proxy"
 msgstr ""
 
-#: ../settings-http.cpp:33
+#: ../settings-http.cpp:35
+msgid "&User Agent: "
+msgstr ""
+
+#: ../settings-http.cpp:41
 msgid "HTTP"
 msgstr ""
 

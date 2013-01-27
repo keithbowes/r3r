@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-23 15:39-0400\n"
-"PO-Revision-Date: 2012-04-23 15:47-0400\n"
+"POT-Creation-Date: 2013-01-27 12:06-0500\n"
+"PO-Revision-Date: 2013-01-27 12:12-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: \n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../app.cpp:12
+#: ../app.cpp:21
 msgid "R3R"
 msgstr "R3R"
 
@@ -186,7 +186,11 @@ msgstr "&Puerto de Procura: "
 msgid "&Enable Proxy"
 msgstr "&Activar prokura"
 
-#: ../settings-http.cpp:33
+#: ../settings-http.cpp:35
+msgid "&User Agent: "
+msgstr "El agento del &usuario: "
+
+#: ../settings-http.cpp:41
 msgid "HTTP"
 msgstr "HTTP"
 

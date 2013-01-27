@@ -39,12 +39,8 @@ const
 {$ELSE}
 {$IFNDEF __GPC__}
 {$LINKLIB libidn2.a}
-{$IFDEF UNIX}
-{$LINKLIB c}
-{$ELSE}
 {$IFDEF WINDOWS}
 {$LINKLIB msvcrt}
-{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -74,8 +70,7 @@ const
    * header file and run-time library consistency.
     }
 
-  const
-    IDN2_VERSION = '0.3';    
+    function IDN2_VERSION: PChar;    
   {*
    * IDN2_VERSION_NUMBER
    *
@@ -85,13 +80,15 @@ const
    * digits are used to enumerate development snapshots, but for all
    * public releases they will be 0000.
     }
-    IDN2_VERSION_NUMBER = $00030000;    
+    function IDN2_VERSION_NUMBER: longint;    
   {*
    * IDN2_LABEL_MAX_LENGTH
    *
    * Constant specifying the maximum length of a DNS label to 63
    * characters, as specified in RFC 1034.
     }
+
+  const
     IDN2_LABEL_MAX_LENGTH = 63;    
   {*
    * IDN2_DOMAIN_MAX_LENGTH
@@ -212,5 +209,107 @@ const
 
 implementation
 
+{$IFDEF __GPC__}
+uses
+  Strings;
+{$ENDIF}
+
+function IDN2_VERSION: PChar;
+begin
+  IDN2_VERSION := idn2_check_version(nil);
+end;
+
+function IDN2_VERSION_NUMBER: longint;
+var
+  err: byte;
+  major, minor, patch, ver: longint;
+  v: String;
+
+function vertoint: longint;
+var
+  dot: word;
+  i: longint;
+  r: String;
+begin
+  dot := Pos('.', v);
+  if dot <> 0 then
+  begin
+    r := Copy(v, 1, dot - 1);
+    Delete(v, 1, dot);
+    Val(r, i, err);
+    if err = 0 then
+    begin
+      vertoint := i;
+    end
+    else
+    begin
+      vertoint := 0
+    end;
+  end
+  else
+  begin
+    Val(v, i, err);
+    if err = 0 then
+    begin
+      vertoint := i;
+      v := '';
+    end
+    else
+    begin
+      vertoint := 0
+    end;
+  end;
+end;
+
+function inttohex(p: longint): integer;
+var
+  d, m: longint;
+  i: longint;
+  o, s: String;
+begin
+  o :='';
+
+  while p > 0 do
+    begin
+    d := p div 16;
+    m := p mod 16;
+    case m of
+      10: s := 'A';
+      11: s := 'B';
+      12: s := 'C';
+      13: s := 'D';
+      14: s := 'E';
+      15: s := 'F';
+      otherwise WriteStr(s, m);
+    end;
+    o := s + o; 
+    p := d;
+  end;
+
+  Val(o, i, err);
+  if err <> 0 then
+  begin
+    i := 0;
+  end;
+
+  inttohex := i;
+end;
+
+begin
+  v := StrPas(IDN2_VERSION);
+  major := vertoint;
+  minor := vertoint;
+  patch := vertoint;
+  ver := (inttohex(major) * 10000000) + (inttohex(minor) * 100000) + inttohex(patch);
+
+  WriteStr(v, '$', ver);
+  Val(v, ver, err);
+  if err <> 0 then
+  begin
+    err := 0;
+  end;
+
+  IDN2_VERSION_NUMBER := ver;
+end;
 
 end.

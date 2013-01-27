@@ -176,6 +176,11 @@ begin
   libr3r_get_user_agent := StrToPChar(UserAgent);
 end;
 
+procedure libr3r_set_user_agent_info(uainfo: PChar); cdecl;
+begin
+  SetUserAgentInfo(StrPas(uainfo));
+end;
+
 procedure libr3r_register_setting(setting_name, setting_section: PChar; setting_value: Pointer; setting_type: word; descr: PChar); cdecl;
 begin
   case setting_type of
@@ -265,7 +270,7 @@ exports
   libr3r_create, libr3r_free, libr3r_retrieve_feed,
   libr3r_on_item_parsed, libr3r_on_message_received, libr3r_on_update,
   libr3r_get_item_field,
-  libr3r_get_user_agent,
+  libr3r_get_user_agent, libr3r_set_user_agent_info,
   libr3r_register_setting, libr3r_access_settings,
   libr3r_access_subscriptions,
   libr3r_history_add, libr3r_history_is_next, libr3r_history_next,

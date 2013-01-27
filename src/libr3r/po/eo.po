@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-25 10:03-0500\n"
+"PO-Revision-Date: 2013-01-27 12:13-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -112,7 +112,7 @@ msgid "Custom accept languages"
 msgstr "Propraj lingvoj"
 
 msgid "User Agent"
-msgstr "TTT-legila pretendo"
+msgstr "Idento de la legilo"
 
 msgid "Browser"
 msgstr "TTT-legilo"

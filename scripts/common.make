@@ -215,12 +215,15 @@ ifneq ($(USE_NLS),0)
 override DEFS_EXTRA+=USE_NLS
 endif
 
+ifneq ($(USE_LIBIDN2),0)
+override DEFS_EXTRA+=USE_LIBIDN2
+ifeq ($(USE_NLS),0)
+$(error LibIDN2 *requires* gettext)
+endif
+else
 ifneq ($(USE_IDN),0)
 override DEFS_EXTRA+=USE_IDN
 endif
-
-ifneq ($(USE_LIBIDN2),0)
-override DEFS_EXTRA+=USE_LIBIDN2
 endif
 
 ifneq ($(USE_ICONV),0)
@@ -317,6 +320,10 @@ DEFS_SETTINGS ?= SETTINGS_REG
 else
 DEFS_SETTINGS ?= SETTINGS_INI
 endif # inWindows
+
+ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
+override DEFS_EXTRA=INI_ADD_EXTRAS
+endif
 
 ifdef CPU_TARGET
 override PCFLAGS_BASE+=-P$(CPU_TARGET)

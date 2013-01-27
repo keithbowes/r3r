@@ -30,5 +30,13 @@ void CreateHTTPPage(wxTreebook * parent)
   SettingsCheckBox * proxyCheck = new SettingsCheckBox(panel, _("&Enable Proxy"), (char *) "use-proxy");
   vbox->Add(proxyCheck);
 
+	wxBoxSizer * uaBox = new wxBoxSizer(wxHORIZONTAL);
+	vbox->Add(uaBox);
+	wxStaticText * uaText = new wxStaticText(panel, -1, _("&User Agent: "));
+	uaBox->Add(uaText, 1, wxEXPAND | wxALL, 5);
+
+	SettingsEntry * uaEntry = new SettingsEntry(panel, (char *) "user-agent");
+	uaBox->Add(uaEntry, 3, wxEXPAND | wxALL, 5);
+
   parent->AddPage(panel, _("HTTP"));
 }

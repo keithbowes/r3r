@@ -165,6 +165,21 @@ begin
   end;
 end;
 
+function GetUserAgentInfo: String;
+var
+  t: String;
+begin
+  t := '';
+{$IFDEF USE_NCRT}
+  t := t + StringReplace(StrPas(curses_version), ' ', '/', []) + ' ';
+{$ENDIF}
+{$IFDEF USE_READLINE}
+  t := t + 'readline/' + StrPas(rl_library_version) + ' ';
+{$ENDIF}
+
+  GetUserAgentInfo := t;
+end;
+
 constructor TTui.Create;
 var
   KeyChar: char;
@@ -194,6 +209,7 @@ begin
   FScrollingUp := false;
 
   RegisterItemCallback(ItemReceived);
+  SetUserAgentInfo(GetUserAgentInfo);
   obj := Self;
   Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);

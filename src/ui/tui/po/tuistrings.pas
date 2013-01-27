@@ -1,8 +1,5 @@
 unit TuiStrings;
 
-{$codepage utf8}
-{$X+}
-
 interface
 
 var

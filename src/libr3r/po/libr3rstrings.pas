@@ -1,8 +1,5 @@
 unit LibR3RStrings;
 
-{$codepage utf8}
-{$X+}
-
 interface
 
 var

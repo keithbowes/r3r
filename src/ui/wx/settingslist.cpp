@@ -10,7 +10,7 @@ char * SettingsListElement::GetName()
 
 void SettingsListElement::SetName(char * name)
 {
-  m_name = name;
+  m_name = strdup(name);
 }
 
 unsigned char SettingsListElement::GetType()

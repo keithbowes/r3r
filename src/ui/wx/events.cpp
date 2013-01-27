@@ -292,7 +292,7 @@ void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
 
 void SettingsDialogEvents::OnOK(wxCommandEvent & event)
 {
-  char * name;
+  char * name = (char *) malloc(255);
   int count;
   unsigned char type;
   void * value;

@@ -136,8 +136,11 @@ end;
 procedure TRSettings.CheckBoolean(const Setting, ASection: String; const Value: Boolean; const ADescription: String);
 var
   ASetting: PRSetting;
+  Exists: Boolean;
   s, v: String;
 begin
+  Exists := IniFile.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
@@ -152,13 +155,21 @@ begin
 
   ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
+
+  if not Exists then
+  begin
+    IniFile.WriteString(ASection, Setting, v);
+  end;
 end;
 
 procedure TRSettings.CheckInteger(const Setting, ASection: String; const Value: integer; const ADescription: String);
 var
   ASetting: PRSetting;
+  Exists: Boolean;
   s, v: String;
 begin
+  Exists := IniFile.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
@@ -173,12 +184,20 @@ begin
 
   ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
+
+  if not Exists then
+  begin
+    IniFile.WriteString(ASection, Setting, v);
+  end;
 end;
 
 procedure TRSettings.CheckString(const Setting, ASection, Value, ADescription: String);
 var
   ASetting: PRSetting;
+  Exists: Boolean;
 begin
+  Exists := IniFile.ValueExists(ASection, Setting);
+
   New(ASetting);
   with ASetting^ do
   begin
@@ -191,6 +210,11 @@ begin
 
   ASetting^.Description := ADescription;
   FSettings^.Add(ASetting);
+
+  if not Exists then
+  begin
+    IniFile.WriteString(ASection, Setting, Value);
+  end;
 end;
 
 procedure TRSettings.WriteRec;

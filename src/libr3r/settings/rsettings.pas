@@ -233,7 +233,7 @@ begin
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false, DescUseLang);
   CheckString('accept-langs', 'HTTP Headers', '', DescLang);
-  CheckString('user-agent', 'HTTP Headers', '%a (%o; %c; %u) %s %e %p', DescUserAgent);
+  CheckString('user-agent', 'HTTP Headers', '%a (%o; %c; %s; %u) %n %i %e %p %w', DescUserAgent);
 
   CheckString('for:http', 'Programs', Cap2Doze(mc^.GetProg('text/html')), DescBrowser);
   CheckString('for:mailto', 'Programs', '', DescMail);

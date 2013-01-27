@@ -19,14 +19,15 @@ Minimal dependencies:
   <http://www.winterdrache.de/freeware/png2ico/>
 
 Optional dependencies (see below for how to enable/disable):
-* Expat <http://libexpat.org>
+* Expat <http://www.libexpat.org>
 * iconv
 * gettext <http://gnu.org/software/gettext>
 * libcurl <http://curl.haxx.se/>
 * libidn <http://gnu.org/software/libidn>
+* libidn2 <http://www.josefsson.org/libidn2/>
 * libini <http://sourceforge.net/projects/libini>
 * readline <http://gnu.org/software/readline> or
-  libedit <http://www.thrysoee.dk/editline/>
+* libedit <http://www.thrysoee.dk/editline/>
 * PCRE <http://pcre.org>
 * Synapse <http://synapse.ararat.cz/>
 * For a GUI:
@@ -126,8 +127,9 @@ NO_NCURSES
   Default: 0
 USE_EXPAT
   Allow the use of Expat to parse XML files.
-  Note: Expat is required for RSS and Atom feeds.  If you're only
-  interested in ESF feeds, then you can disable this.
+  Note: Expat is required for RSS (<= 2.0) and Atom feeds.  If
+  you're only interested in ESF and RSS 3.0 feeds, then you can
+  disable this.
   Default: 1
 USE_ICONV
   Allow the use of iconv to convert between character encodings.
@@ -148,6 +150,10 @@ USE_LIBICONV
   instead of the built-in iconv.  Only valid when USE_ICONV is also
   defined.
   Default: 0 for Unix platforms; 1 for non-Unix platforms
+USE_LIBIDN2
+  Enable the use of libidn2 instead of libidn to decode IDN
+  addresses.
+  Default: 0
 USE_NLS
   Allow the use of gettext to enable NLS (native language support).
   Default: 1
