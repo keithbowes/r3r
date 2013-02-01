@@ -212,6 +212,7 @@ begin
   SetUserAgentInfo(GetUserAgentInfo);
   obj := Self;
   Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
+  Settings.RegisterBoolean('wrap-descriptions', 'Display', true, WrapDescriptions);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
 
 {$IFDEF __GPC__}
@@ -588,6 +589,7 @@ end;
 
 procedure TTui.GoItem;
 var
+  Desc: String;
   FreeLines: word;
   ItemText: String;
   Len: word;
@@ -648,15 +650,28 @@ begin
       PrintField(ItemEmail, Contact.Email);
       PrintField(ItemEncl, Enclosure.URL);
 
-      if (Description <> '') and (FreeLines > 1) then
+      Desc := Description;
+      if (Desc <> '') and (FreeLines > 1) then
       begin
         TextBackground(SkinColorTable.FDescBack);
         TextColor(SkinColorTable.FDescFore);
 
-        Remaining := TuiWriteWrapped(Description, [#0, #8, #9, #10, #13, ' ', '-'], GetPortLength - 1, FreeLines);
-        if Remaining > 0 then
+        if not Settings.GetBoolean('wrap-descriptions') then
         begin
-          TuiWriteLn('...');
+          if Length(Desc) > (GetPortLength - 1) * FreeLines then
+          begin
+            Desc := Copy(Desc, 1, ((GetPortLength - 1) * FreeLines) - 3) + '...';
+          end;
+
+          TuiWriteLn(Desc);
+        end
+        else
+        begin
+          Remaining := TuiWriteWrapped(Desc, [#0, #8, #9, #10, #13, ' ', '-'], GetPortLength - 1, FreeLines);
+          if Remaining > 0 then
+          begin
+            TuiWriteLn('...');
+          end;
         end;
 
         TextBackground(SkinColorTable.FInfoBack);

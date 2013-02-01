@@ -133,3 +133,7 @@ msgstr ""
 #: tuistrings:nodata
 msgid "This item contains no data."
 msgstr ""
+
+#: tuistrings:wrapdescriptions
+msgid "Wrap descriptions"
+msgstr ""

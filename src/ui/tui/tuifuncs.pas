@@ -175,7 +175,7 @@ var
   c, t: integer;
   Ret: String;
 begin
-  Line := WrapText(Line, LineEnding, BreakChars, MaxCol - 3);
+  Line := WrapText(Line, LineEnding, BreakChars, MaxCol);
   Ret := Line;
 
   c := Length(Line);
@@ -197,8 +197,10 @@ function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: 
 var
   DescLine: String;
   Len: word;
+  OrigLen: PtrUInt;
   Remaining: PtrInt;
 begin
+  OrigLen := Length(Line);
   repeat
     Len := MaxCol;
     if Length(Line) > Len then
@@ -206,6 +208,11 @@ begin
       repeat
         Dec(Len)
       until (Len = 1) or (Line[Len] in BreakChars);
+    end;
+
+    if Len = 1 then
+    begin
+      Len := OrigLen;
     end;
 
     DescLine := Copy(Line, 1, Len);

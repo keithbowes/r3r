@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2013-01-25 08:25-0500\n"
+"PO-Revision-Date: 2013-02-01 00:54-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -148,3 +148,7 @@ msgstr "Show incoming items"
 #: tuistrings:nodata
 msgid "This item contains no data."
 msgstr "This item contains no data."
+
+#: tuistrings:wrapdescriptions
+msgid "Wrap descriptions"
+msgstr "Wrap descriptions"

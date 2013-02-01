@@ -49,6 +49,7 @@ var
 
   Retrieving: String;
   ShowIncomingItems: String;
+  WrapDescriptions: String;
 
   NoData: String;
 
@@ -111,6 +112,7 @@ begin
 
   Retrieving := _('Retrieving items from %s...');
   ShowIncomingItems := _('Show incoming items');
+  WrapDescriptions := _('Wrap descriptions');
 
   NoData := _('This item contains no data.');
 end;
