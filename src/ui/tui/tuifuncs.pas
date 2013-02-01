@@ -4,6 +4,9 @@ interface
 
 {$INCLUDE "tuidefs.inc"}
 
+type
+  TSysCharSet = set of char;
+
 procedure FullScreen;
 
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
@@ -24,6 +27,7 @@ procedure TuiEcho(s: String; const NewLine: Boolean; const flen: cardinal);
 { Shortcut procedures: }
 procedure TuiWrite(const s: String);
 procedure TuiWriteLn(const s: String);
+function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): integer;
 
 implementation
 
@@ -164,5 +168,55 @@ procedure TuiWriteLn(const s: String);
 begin
   TuiEcho(s, true, 0);
 end;
+
+{$IFDEF HAS_WRAPTEXT}
+function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
+var
+  c, t: integer;
+  Ret: String;
+begin
+  Line := WrapText(Line, LineEnding, BreakChars, MaxCol - 3);
+  Ret := Line;
+
+  c := Length(Line);
+  t := 0;
+  while (c <> 0) and (MaxRow > 1) do
+  begin
+    c := Pos(LineEnding, Line);
+    TuiWrite(Copy(Line, 1, c));
+
+    Delete(Line, 1, c);
+    Dec(MaxRow);
+    t := t + c;
+  end;
+
+  TuiWriteWrapped := Length(Ret) - t;
+end;
+{$ELSE}
+function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
+var
+  DescLine: String;
+  Len: word;
+  Remaining: PtrInt;
+begin
+  repeat
+    Len := MaxCol;
+    if Length(Line) > Len then
+    begin
+      repeat
+        Dec(Len)
+      until (Len = 1) or (Line[Len] in BreakChars);
+    end;
+
+    DescLine := Copy(Line, 1, Len);
+    Delete(Line, 1, Len);
+    Dec(MaxRow);
+    TuiWriteLn(DescLine);
+    Remaining := Length(Line);
+  until (MaxRow = 1) or (Remaining = 0);
+
+  TuiWriteWrapped := Remaining;
+end;
+{$ENDIF}
 
 end.

@@ -588,10 +588,10 @@ end;
 
 procedure TTui.GoItem;
 var
-  Desc, DescLine: String;
   FreeLines: word;
   ItemText: String;
   Len: word;
+  Remaining: PtrInt;
   StatusText: String;
 
 function GetPortLength: cardinal;
@@ -648,28 +648,13 @@ begin
       PrintField(ItemEmail, Contact.Email);
       PrintField(ItemEncl, Enclosure.URL);
 
-      Desc := Description;
-      if (Desc <> '') and (FreeLines > 1) then
+      if (Description <> '') and (FreeLines > 1) then
       begin
         TextBackground(SkinColorTable.FDescBack);
         TextColor(SkinColorTable.FDescFore);
 
-        repeat
-          Len := GetPortLength - 1;
-          if Length(Desc) > Len then
-          begin
-            repeat
-              Dec(Len)
-            until (Len = 1) or (Desc[Len] in [#0, #8, #9, #10, #13, #32]);
-          end;
-
-          DescLine := Copy(Desc, 1, Len);
-          Delete(Desc, 1, Len);
-          Dec(FreeLines);
-          TuiWriteLn(DescLine);
-        until (FreeLines = 1) or (Length(Desc) = 0);
-
-        if Length(Desc) > 0 then
+        Remaining := TuiWriteWrapped(Description, [#0, #8, #9, #10, #13, ' ', '-'], GetPortLength - 1, FreeLines);
+        if Remaining > 0 then
         begin
           TuiWriteLn('...');
         end;

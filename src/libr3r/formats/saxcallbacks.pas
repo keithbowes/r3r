@@ -133,6 +133,10 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
+      if Length(Elem^.Content) <> 0 then
+      begin
+        Elem^.Content := Elem^.Content + ' ';
+      end;
       Elem^.Content := Elem^.Content + enh;
       SendItem;
     end;
