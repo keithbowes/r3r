@@ -550,7 +550,14 @@ begin
       if not IsAtom then
       begin
         IsRss;
+      end;
     end;
+    ftEsf:
+    begin
+      if not IsRss3 then
+      begin
+        IsEsf;
+      end;
     end;
   end;
 

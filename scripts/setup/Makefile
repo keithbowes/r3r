@@ -56,3 +56,9 @@ distclean:
 
 r3r.desktop: r3r.desktop.in
 	-$(SED) -e 's|@bindir@|$(bindir)|g' -e 's|@icondir@|$(icondir)|g' $< > $@
+ifeq ($(R3R_UI),tui)
+	$(ECHO) "Terminal=true" >> $@
+else
+	-$(SED) -i -e 's/\nTerminal=true//' $@
+endif
+	-$(TOUCH) $<
