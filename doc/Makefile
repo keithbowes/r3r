@@ -1,5 +1,6 @@
 all:
 	cd api && $(MAKE) all
+	cd man && $(MAKE) html
 
 install:
 	cd api && $(MAKE) install
@@ -11,3 +12,4 @@ uninstall:
 
 clean:
 	cd api && $(MAKE) clean
+	cd man && $(MAKE) clean
