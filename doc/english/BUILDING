@@ -122,9 +122,12 @@ EXPAT_VERSION
   * 2.1
   Default: 2.0 in Unix; 1.1 everywhere else
 NO_NCURSES
-  Enable the use of ncurses <http://gnu.org/software/ncurses> for
+  Disable the use of ncurses <http://gnu.org/software/ncurses> for
   the TUI. It only makes sense in Free Pascal on Unix platforms.
   Default: 0
+NO_X
+  Don't use X to get and set the terminal title in the TUI.
+  Default: 1
 USE_EXPAT
   Allow the use of Expat to parse XML files.
   Note: Expat is required for RSS (<= 2.0) and Atom feeds.  If

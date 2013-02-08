@@ -6,16 +6,25 @@ procedure SetNewTitle(const NewTitle: String);
 
 implementation
 
+{$INCLUDE "tuidefs.inc"}
+
 uses
   Dos,
 {$IFDEF MSWINDOWS}
   Windows
 {$ELSE}
-  RSettings_Routines, SysUtils
+{$IFDEF FPC_UNIX}
+  X, XLib, XUtil,
+{$ENDIF}
+  SysUtils
 {$ENDIF};
 
 var
   OrigTitle: String;
+{$IFDEF FPC_UNIX}
+  WindowDisplay: PDisplay;
+  WindowHandle: TWindow;
+{$ENDIF}
 
 function GetOriginalTitle: String;
 var
@@ -31,6 +40,23 @@ begin
     WriteStr(Res, Data);
     FreeMem(Data);
 {$ELSE}
+{$IFDEF FPC_UNIX}
+    try
+      ReadStr(GetEnvironmentVariable('WINDOWID'), WindowHandle);
+    except
+      WindowHandle := 0;
+    end;
+
+    if WindowHandle <> 0 then
+    begin
+      WindowDisplay := XOpenDisplay(nil);
+      GetMem(Data, SizeOf(TXTextProperty));
+      XGetWMName(WindowDisplay, WindowHandle, Data);
+      XCloseDisplay(WindowDisplay);
+      WriteStr(Res, PChar(PXTextProperty(Data)^.value));
+      FreeMem(Data);
+    end;
+{$ELSE}
     Data := nil;
 
     if GetEnv('DISPLAY') <> '' then
@@ -41,6 +67,7 @@ begin
     begin
       Res := String(Data);
     end;
+{$ENDIF FPC_UNIX}
 {$ENDIF MSWINDOWS}
   end;
 
@@ -51,18 +78,47 @@ procedure SetNewTitle(const NewTitle: String);
 {$IFDEF MSWINDOWS}
 var
   Data: Pointer;
+{$ELSE}
+{$IFDEF FPC_UNIX}
+var
+  Data: Pointer;
+  Title: PChar;
+{$ENDIF}
 {$ENDIF}
 begin
 {$IFDEF MSWINDOWS}
   Data := PChar(NewTitle);
   SetConsoleTitle(Data);
 {$ELSE}
+{$IFDEF FPC_UNIX}
+  if WindowHandle <> 0 then
+  begin
+    Title := PChar(NewTitle);
+    WindowDisplay := XOpenDisplay(nil);
+    GetMem(Data, SizeOf(TXTextProperty));
+    XStringListToTextProperty(@Title, 1, Data); 
+    XSetWMProperties(WindowDisplay, WindowHandle, Data, nil, nil, 0, nil, nil, nil);
+    XFree(PXTextProperty(Data)^.value);
+    FreeMem(Data);
+    XFlush(WindowDisplay);
+    XCloseDisplay(WindowDisplay);
+  end;
+
+  { Hack for non-xterm terminal emulators }
+  if (GetEnv('DISPLAY') <> '') and (GetEnv('XTERM_VERSION') = '') then
+  begin
+    SwapVectors;
+    Exec(FSearch('printf', GetEnv('PATH')), '\033]0;' + NewTitle + '\007');
+    SwapVectors;
+  end;
+{$ELSE}
   if GetEnv('DISPLAY') <> '' then
   begin
     SwapVectors;
-    Exec(GetInstalledPrefix + PathDelim + 'bin' + PathDelim + 'r3r-settitle', '"' + NewTitle + '"');
+    Exec(FSearch('printf', GetEnv('PATH')), '\033]0;' + NewTitle + '\007');
     SwapVectors;
   end;
+{$ENDIF FPC_UNIX}
 {$ENDIF MSWINDOWS}
 end;
 

@@ -207,6 +207,13 @@ endif
 
 NO_NCURSES ?= 0
 
+NO_X ?= 1
+ifdef forUnix
+ifeq ($(NO_X),0)
+override DEFS_EXTRA+=USE_X
+endif
+endif
+
 USE_LIBEDIT ?= 0
 USE_LIBICONV ?= 0
 USE_SSL ?= 0
