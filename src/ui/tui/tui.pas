@@ -25,7 +25,7 @@ type
     FDimList: TWindowDim;
     FDimSep: TWindowDim;
     FDimStatus: TWindowDim;
-    FDimUI: TWindowDim;
+    FDimUA: TWindowDim;
     FItems: PRList;
     FPrintItems: Boolean;
     FScreenHeight: word;
@@ -40,7 +40,7 @@ type
     procedure DrawInfoBar;
     procedure DrawSeparator;
     procedure DrawStatus;
-    procedure DrawUIString;
+    procedure DrawUAString;
     procedure InitWindowDims;
   protected
     procedure NotifyUpdate; override;
@@ -186,6 +186,9 @@ var
   i: word;
   mc: PMailCap;
   prog: String;
+{$IFDEF USE_NCRT}
+  mouse_event: MEVENT;
+{$ENDIF}
 begin
   inherited Create;
 
@@ -261,12 +264,48 @@ begin
     end;
 {$ELSE}
     noecho;
+    mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON4_PRESSED or BUTTON4_RELEASED, nil);
     i := getch;
     echo;
-    if i = KEY_RESIZE then
-    begin
-      Redraw;
-      Continue;
+    case i of
+      KEY_MOUSE:
+      begin
+        getmouse(@mouse_event);
+        if mouse_event.x < FDimSep.LeftStart - 1 then
+        begin
+          if (mouse_event.bstate and BUTTON1_PRESSED = BUTTON1_PRESSED) or (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
+          begin
+            FCurrentItem := mouse_event.y - 1 + FDimUA.TopEnd;
+            FCurrentItem := FCurrentItem + FViewPort.FirstItem;
+            ScrollTo(FCurrentItem);
+          end
+          else if (mouse_event.bstate and BUTTON1_DOUBLE_CLICKED = BUTTON1_DOUBLE_CLICKED) or (mouse_event.bstate and BUTTON2_PRESSED = BUTTON2_PRESSED) or (mouse_event.bstate and BUTTON2_CLICKED = BUTTON2_CLICKED) then
+          begin
+            OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
+          end
+          else if (mouse_event.bstate and BUTTON4_PRESSED = BUTTON4_PRESSED) then
+          begin
+            ScrollUp;
+            Redraw;
+          end
+          else if mouse_event.bstate and BUTTON4_RELEASED = BUTTON4_RELEASED then
+          begin
+            FCurrentItem := FViewPort.FirstItem + FViewPort.PortHeight;
+            if FItems^.Count - 1 > FCurrentItem then
+            begin
+              Inc(FCurrentItem);
+            end;
+            ScrollTo(FCurrentItem);
+          end;
+        end;
+
+        Continue;
+      end;
+      KEY_RESIZE:
+      begin
+        Redraw;
+        Continue;
+      end;
     end;
 
     KeyChar := Chr(byte(i));
@@ -779,7 +818,7 @@ begin
 
   if SkinOptionFull then
   begin
-    Window(1, FDimUI.TopStart + FDimUI.TopEnd, ScreenWidth, ScreenHeight - FDimUI.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
+    Window(1, FDimUA.TopStart + FDimUA.TopEnd, ScreenWidth, ScreenHeight - FDimUA.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
   end
   else
   begin
@@ -1029,7 +1068,7 @@ begin
   else
   begin
     FViewPort.FirstItem := FViewPort.LastItem;
-    FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUI.TopEnd + 1);
+    FViewPort.LastItem := FViewPort.LastItem + (FDimList.TopEnd - 1) - (FDimUA.TopEnd + 1);
     FCurrentItem := FViewPort.FirstItem;
     FPrintItems := true;
   end;
@@ -1114,7 +1153,7 @@ begin
   DrawFeedList;
   GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
 {$ELSE}
-  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUI.TopEnd) + Ord(not FScrollingUp), 0);
+  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
 {$ENDIF}
 end;
 
@@ -1245,12 +1284,12 @@ begin
   ClrScr;
 end;
 
-procedure TTui.DrawUIString;
+procedure TTui.DrawUAString;
 var
   fw: word;
   ua: String;
 begin
-  Window(FDimUI.LeftStart, FDimUI.TopStart, FDimUI.LeftEnd, FDimUI.TopEnd);
+  Window(FDimUA.LeftStart, FDimUA.TopStart, FDimUA.LeftEnd, FDimUA.TopEnd);
   TextBackground(SkinColorTable.FUIBack);
   TextColor(SkinColorTable.FUIFore);
   ClrScr;
@@ -1310,13 +1349,13 @@ begin
   FDimStatus.LeftStart := Origin;
   FDimStatus.TopStart := ScreenHeight;
 
-  FDimUI.LeftEnd := ScreenWidth;
-  FDimUI.TopEnd := UIHeight;
-  FDimUI.LeftStart := Origin;
-  FDimUI.TopStart := Origin;
+  FDimUA.LeftEnd := ScreenWidth;
+  FDimUA.TopEnd := UIHeight;
+  FDimUA.LeftStart := Origin;
+  FDimUA.TopStart := Origin;
 
   FViewPort.FirstItem := FCurrentItem + 1;
-  FViewPort.LastItem := FDimInfoBar.TopStart - FDimUI.TopEnd - 1;
+  FViewPort.LastItem := FDimInfoBar.TopStart - FDimUA.TopEnd - 1;
   FViewPort.PortHeight := FViewPort.LastItem - 1;
 end;
 
@@ -1334,7 +1373,7 @@ begin
 
   DrawInfoBar;
   DrawStatus;
-  DrawUIString;
+  DrawUAString;
   ShowHelp;
 
   FScreenHeight := ScreenHeight;
