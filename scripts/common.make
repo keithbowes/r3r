@@ -330,6 +330,7 @@ endif # inWindows
 
 ifdef CPU_TARGET
 override PCFLAGS_BASE+=-P$(CPU_TARGET)
+override DEFS_EXTRA+=$(CPU_TARGET)
 endif
 
 ifdef OS_TARGET

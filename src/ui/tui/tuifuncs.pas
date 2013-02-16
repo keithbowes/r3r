@@ -27,7 +27,7 @@ procedure TuiEcho(s: String; const NewLine: Boolean; const flen: cardinal);
 { Shortcut procedures: }
 procedure TuiWrite(const s: String);
 procedure TuiWriteLn(const s: String);
-function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): integer;
+function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
 
 implementation
 
@@ -172,7 +172,7 @@ end;
 {$IFDEF HAS_WRAPTEXT}
 function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
 var
-  c, t: integer;
+  c, t: PtrUInt;
   Ret: String;
 begin
   Line := WrapText(Line, LineEnding, BreakChars, MaxCol);

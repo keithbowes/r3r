@@ -866,6 +866,7 @@ begin
       case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
         begin
+          Len := Length(PRSetting(SRec^.GetNth(i))^.ValueString);
           TuiEcho(PRSetting(SRec^.GetNth(i))^.ValueString, false, Width - Length(UTF8Decode(SetDesc)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
         end;
         TypeInteger:

@@ -8,6 +8,7 @@ include ../../scripts/common.make
 all:
 	-$(TOUCH) _info.pas
 	$(MAKE) info.pas
+	$(MAKE) info$(PPUEXT)
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
 	$(MAKE) rupdate.pas
@@ -44,4 +45,3 @@ info.pas: _info.pas ../../scripts/common.make
 		-e 's/@COMPILER@/$(COMPILER)/g' \
 		-e 's/@UI@/$(R3R_UI)/g' \
 		-e 's&@PREFIX@&$(prefix)&g' _info.pas > info.pas
-	$(MAKE) info$(PPUEXT)
