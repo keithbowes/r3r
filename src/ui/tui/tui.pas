@@ -168,13 +168,21 @@ end;
 function GetUserAgentInfo: String;
 var
   t: String;
+{$IFDEF USE_LIBEDIT}
+  rv: String;
+{$ENDIF}
 begin
   t := '';
 {$IFDEF USE_NCRT}
   t := t + StringReplace(StrPas(curses_version), ' ', '/', []) + ' ';
 {$ENDIF}
 {$IFDEF USE_READLINE}
+{$IFNDEF USE_LIBEDIT}
   t := t + 'readline/' + StrPas(rl_library_version) + ' ';
+{$ELSE}
+  WriteStr(rv, rl_readline_version);
+  t := t + 'libedit/' + rv;
+{$ENDIF}
 {$ENDIF}
 
   GetUserAgentInfo := t;
@@ -583,10 +591,11 @@ begin
   repeat
     ClrScr;
     TuiWrite(Feed);
-    if StrLen(rl_line_buffer) > 0 then
+    if rl_end > 0 then
     begin
       WriteStr(URI, rl_line_buffer);
       TuiWrite(URI);
+      GotoXY(rl_point + Length(Feed) + 1, 1);
     end;
     rl_callback_read_char;
   until rl_finished;
@@ -935,7 +944,7 @@ begin
         TextBackground(SkinColorTable.FOptionIndexBack);
         TextColor(SkinColorTable.FOptionIndexFore);
 
-        if StrLen(rl_line_buffer) > 0 then
+        if rl_end > 0 then
         begin
           WriteStr(SetDesc, rl_line_buffer);
           TuiWrite(SetDesc);
@@ -946,6 +955,8 @@ begin
           TuiWrite(SetDesc);
           InitDesc := '';
         end;
+
+        GoToXY(rl_point + Length(SettingToChangeReadLine) + 1, 1);
         rl_callback_read_char;
       until rl_option_finished;
 

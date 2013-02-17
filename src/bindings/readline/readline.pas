@@ -650,7 +650,7 @@ uses
   { True if this is real GNU readline.  }
       rl_gnu_readline_p : longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF};
   { Flags word encapsulating the current readline state.  }
-      {$IFNDEF USE_LIBEDIT} rl_readline_state : longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF}{$ENDIF};
+      {$IFNDEF USE_LIBEDIT} rl_readline_state : longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF};{$ENDIF}
   { Says which editing mode readline is currently using.  1 means emacs mode;
      0 means vi mode.  }
       rl_editing_mode : longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF};
