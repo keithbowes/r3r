@@ -33,6 +33,7 @@ type
 {$IFDEF SOCKETS_LIBCURL}
     FHandle: CURL;
     FList: PRStringList;
+    FTempList: PRStringList;
 {$ENDIF}
     FHost: String;
     FPort: String;
@@ -70,25 +71,60 @@ var
   FAbstractFeed: TFeed;
 
 {$IFDEF SOCKETS_LIBCURL}
+const
+  CURL_BUFFER_SIZE = 85;
+  CURL_MAX_BUFFER_SIZE = CURL_BUFFER_SIZE * 3;
+
 {$CALLING CDECL}
 function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
 var
-  i: byte;
+  i, j, k: PtrUInt;
   s: String;
+  t: String;
 begin
   s := StrPas(ptr);
+  t := '';
 
   repeat
-    i := Pos(#10, s);
-    if i > 0 then
+    with TRSock(UserData) do
     begin
-      PRStringList(UserData)^.Add(TrimRight(Copy(s, 1, i)));
-      Delete(s, 1, i);
-    end
-    else
-    begin
-      PRStringList(UserData)^.Add(s);
-      s := '';
+      i := Pos(#10, s);
+      if i > 0 then
+      begin
+        if FTempList^.Count > 0 then
+        begin
+          for j := 0 to FTempList^.Count - 1 do
+          begin
+            t := t + FTempList^.GetNth(j);
+            if Length(t) + Length(FTempList^.GetNth(j + 1)) > CURL_MAX_BUFFER_SIZE then
+            begin
+              k := Length(t) + 1;
+
+              repeat
+                Dec(k)
+              until (t[k] in [#0, #8, #9, #10, #13, #32]) or (k = 1);
+
+              if k > 1 then
+              begin
+                { blank spaces for RSS 3.0 }
+                FList^.Add('   ' + Copy(t, 1, k));
+                Delete(t, 1, k);
+              end;
+            end;
+          end;
+
+          FTempList^.Clear;
+          FTempList^.Add('');
+        end;
+        FList^.Add(t + Copy(s, 1, i));
+        Delete(s, 1, i);
+        t := '';
+      end
+      else
+      begin
+        FTempList^.Add(s);
+        s := '';
+      end;
     end;
   until Length(s) = 0;
 
@@ -158,11 +194,13 @@ begin
 
 {$IFDEF SOCKETS_LIBCURL}
   New(FList, Init);
+  New(FTempList, Init);
+
   FHandle := curl_easy_init;
   FError := FHandle = nil;
-  curl_easy_setopt(FHandle, CURLOPT_BUFFERSIZE, Pointer(255));
+  curl_easy_setopt(FHandle, CURLOPT_BUFFERSIZE, Pointer(CURL_BUFFER_SIZE));
   curl_easy_setopt(FHandle, CURLOPT_WRITEFUNCTION, @WriteData);
-  curl_easy_setopt(FHandle, CURLOPT_WRITEDATA, FList);
+  curl_easy_setopt(FHandle, CURLOPT_WRITEDATA, Self);
 {$ELSE}
   FError := false;
 {$ENDIF}
@@ -184,6 +222,11 @@ begin
   if Assigned(FList) then
   begin
     Dispose(FList, Done);
+  end;
+
+  if Assigned(FTempList) then
+  begin
+    Dispose(FTempList, Done);
   end;
 
   curl_easy_cleanup(FHandle);
@@ -226,7 +269,7 @@ begin
 {$IFDEF SOCKETS_LIBCURL}
   if FList^.Count > 0 then
   begin
-    GetLine := FList^.GetNth(0);
+    GetLine := TrimRight(FList^.GetNth(0));
     FList^.Delete(0);
   end
   else

@@ -1,15 +1,15 @@
 {$IFNDEF LIBCURL_MONOLITHIC}
 unit CurlVer;
 
-{$calling cdecl}
-
 interface
 
 uses
   CurlCore;
 
+{$include "curllib.inc"}
 {$ENDIF}
 
+{$cstrings-as-strings}
 {$IFNDEF LIBCURL_MONOLITHIC}
 {$DEFINE LIBCURL_INTERFACE}
 {$ENDIF}
@@ -24,7 +24,7 @@ var
   LIBCURL_VERSION_MAJOR, LIBCURL_VERSION_MINOR, LIBCURL_VERSION_PATCH: integer;
   LIBCURL_VERSION_NUM: integer;
 
-function curl_version:PChar;external 'curl' name 'curl_version';
+function curl_version:PChar;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_version';
 
 type
   CURLversion = (CURLVERSION_FIRST,CURLVERSION_SECOND,
@@ -71,7 +71,7 @@ const
   CURL_VERSION_TLSAUTH_SRP = 1 shl 14;
   CURL_VERSION_NTLM_WB = 1 shl 15;
 
-function curl_version_info(_para1:CURLversion):Pcurl_version_info_data;external 'curl' name 'curl_version_info';
+function curl_version_info(_para1:CURLversion):Pcurl_version_info_data;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_version_info';
 {$ENDIF}
 
 {$IFNDEF LIBCURL_MONOLITHIC}

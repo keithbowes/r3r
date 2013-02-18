@@ -596,6 +596,10 @@ begin
       WriteStr(URI, rl_line_buffer);
       TuiWrite(URI);
       GotoXY(rl_point + Length(Feed) + 1, 1);
+    end
+    else
+    begin
+      URI := '';
     end;
     rl_callback_read_char;
   until rl_finished;

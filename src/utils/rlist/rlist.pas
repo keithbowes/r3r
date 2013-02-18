@@ -360,10 +360,18 @@ var
   p: PChar;
 begin
   GetMem(p, Length(s) + 1);
-  p := StrPCopy(p, s);
-  StrToPChar := p;
 
-  FStrings^.Add(p);
+  if p <> nil then
+  begin
+    p := StrPCopy(p, s);
+    StrToPChar := p;
+
+    FStrings^.Add(p);
+  end
+  else
+  begin
+    StrToPChar := '';
+  end;
 end;
 
 end.

@@ -17,9 +17,9 @@ interface
     easy.h
 }
 
-{$calling cdecl}
-
 uses CurlCore;
+
+{$include "curllib.inc"}
 {$ENDIF}
 
   { Pointers to basic pascal types, inserted by h2pas conversion program.}
@@ -35,34 +35,34 @@ uses CurlCore;
 {$PACKRECORDS C}
 {$ENDIF}
 
-  function curl_easy_init:PCURL;external 'curl' name 'curl_easy_init';
+  function curl_easy_init:PCURL;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_init';
 
-  function curl_easy_setopt(curl:PCURL; option:integer; data:pointer):CURLcode;external 'curl' name 'curl_easy_setopt';
+  function curl_easy_setopt(curl:PCURL; option:integer; data:pointer):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_setopt';
 
-  function curl_easy_perform(curl:PCURL):CURLcode;external 'curl' name 'curl_easy_perform';
+  function curl_easy_perform(curl:PCURL):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_perform';
 
-  procedure curl_easy_cleanup(curl:PCURL);external 'curl' name 'curl_easy_cleanup';
+  procedure curl_easy_cleanup(curl:PCURL);external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_cleanup';
 
-  function curl_easy_getinfo(curl:PCURL; info:CURLINFO; data:pointer):CURLcode;external 'curl' name 'curl_easy_getinfo';
+  function curl_easy_getinfo(curl:PCURL; info:CURLINFO; data:pointer):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_getinfo';
 
-  function curl_easy_duphandle(curl:PCURL):PCURL;external 'curl' name 'curl_easy_duphandle';
-
-
-  procedure curl_easy_reset(curl:PCURL);external 'curl' name 'curl_easy_reset';
+  function curl_easy_duphandle(curl:PCURL):PCURL;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_duphandle';
 
 
-  function curl_easy_recv(curl:PCURL; buffer:pointer; buflen:size_t; n:Psize_t):CURLcode;external 'curl' name 'curl_easy_recv';
+  procedure curl_easy_reset(curl:PCURL);external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_reset';
 
 
-  function curl_easy_send(curl:PCURL; buffer:pointer; buflen:size_t; n:Psize_t):CURLcode;external 'curl' name 'curl_easy_send';
+  function curl_easy_recv(curl:PCURL; buffer:pointer; buflen:size_t; n:Psize_t):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_recv';
 
-    function curl_easy_escape(handle:PCURL; _string:Pchar; length:longint):PChar;external 'curl' name 'curl_easy_escape';
 
-    function curl_easy_unescape(handle:PCURL; _string:Pchar; length:longint; outlength:Plongint):PChar;external 'curl' name 'curl_easy_unescape';
+  function curl_easy_send(curl:PCURL; buffer:pointer; buflen:size_t; n:Psize_t):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_send';
 
-    function curl_easy_strerror(_para1:CURLcode):PChar;external 'curl' name 'curl_easy_strerror';
+    function curl_easy_escape(handle:PCURL; _string:Pchar; length:longint):PChar;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_escape';
 
-    function curl_easy_pause(handle:PCURL; bitmask:longint):CURLcode;external 'curl' name 'curl_easy_pause';
+    function curl_easy_unescape(handle:PCURL; _string:Pchar; length:longint; outlength:Plongint):PChar;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_unescape';
+
+    function curl_easy_strerror(_para1:CURLcode):PChar;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_strerror';
+
+    function curl_easy_pause(handle:PCURL; bitmask:longint):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_easy_pause';
 
 {$IFNDEF LIBCURL_MONOLITHIC}
 implementation

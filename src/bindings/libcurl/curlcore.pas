@@ -1,13 +1,12 @@
 {$IFNDEF LIBCURL_MONOLITHIC}
 unit CurlCore;
 
-{$calling cdecl}
-
 interface
 
 uses
   CurlSList;
 
+{$include "curllib.inc"}
 {$ENDIF}
 
 {
@@ -32,9 +31,6 @@ uses
   type
     PCURL  = ^CURL;
     CURL = pointer;
-
-const
-  HTTPPOST_FILENAME = 1 shl 0;
 
 type
     curl_progress_callback = function (clientp:pointer; dltotal:double; dlnow:double; ultotal:double; ulnow:double):longint;
@@ -755,14 +751,14 @@ type
         CURL_TIMECOND_IFUNMODSINCE,CURL_TIMECOND_LASTMOD,
         CURL_TIMECOND_LAST);
 
-    procedure curl_free(p:pointer);external 'curl' name 'curl_free';
+    procedure curl_free(p:pointer);external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_free';
 
-    function curl_global_init(flags:longint):CURLcode;external 'curl' name 'curl_global_init';
+    function curl_global_init(flags:longint):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_init';
 
     function curl_global_init_mem(flags:longint; m:curl_malloc_callback; f:curl_free_callback; r:curl_realloc_callback; s:curl_strdup_callback;
-               c:curl_calloc_callback):CURLcode;external 'curl' name 'curl_global_init_mem';
+               c:curl_calloc_callback):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_init_mem';
 
-    procedure curl_global_cleanup;external 'curl' name 'curl_global_cleanup';
+    procedure curl_global_cleanup;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_cleanup';
 
     type
       curl_certinfo = record
@@ -803,14 +799,14 @@ type
       CURLINFO_REDIRECT_TIME = CURLINFO_DOUBLE+19;
       CURLINFO_REDIRECT_COUNT = CURLINFO_LONG+20;
       CURLINFO_PRIVATE = CURLINFO_STRING+21;
-      CURLINFO_HTTP_CONNECTCODE = CURLINFO_LONG+22
-      ;CURLINFO_HTTPAUTH_AVAIL = CURLINFO_LONG+23;
+      CURLINFO_HTTP_CONNECTCODE = CURLINFO_LONG+22;
+      CURLINFO_HTTPAUTH_AVAIL = CURLINFO_LONG+23;
       CURLINFO_PROXYAUTH_AVAIL = CURLINFO_LONG+24;
       CURLINFO_OS_ERRNO = CURLINFO_LONG+25;
       CURLINFO_NUM_CONNECTS = CURLINFO_LONG+26;
       CURLINFO_SSL_ENGINES = CURLINFO_SLIST+27;
       CURLINFO_COOKIELIST = CURLINFO_SLIST+28;
-      URLINFO_LASTSOCKET = CURLINFO_LONG+29;
+      CURLINFO_LASTSOCKET = CURLINFO_LONG+29;
       CURLINFO_FTP_ENTRY_PATH = CURLINFO_STRING+30;
       CURLINFO_REDIRECT_URL = CURLINFO_STRING+31;
       CURLINFO_PRIMARY_IP = CURLINFO_STRING+32;
