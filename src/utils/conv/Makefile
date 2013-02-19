@@ -1,23 +1,14 @@
 include ../../../scripts/common.make
 
-override CFLAGS+=-I../../libr3r
-override LIBS+=-lcurl -llibr3r_shared
-override LDFLAGS+=-L../../libr3r
+UNIT_DIRS = po ../*  ../../bindings/* ../../libr3r ../../libr3r/*
 
-ifneq ($(USE_NLS),0)
-override CFLAGS+=-DUSE_NLS
-override LIBS+=-lintl
-endif
-
-CCLD ?= $(CC)
-
-all: r3r-conv$(TARGETEXEEXT)
+all: r3rconv$(PPUEXT)
 ifneq ($(USE_NLS),0)
 	cd po && $(MAKE) all
 endif
+	$(MOVE) r3rconv$(TARGETEXEEXT) r3r-conv$(TARGETEXEEXT)
 
-r3r-conv$(TARGETEXEEXT): atomwriter$(OEXT) esfwriter$(OEXT) r3r-conv$(OEXT) rss3writer$(OEXT) rsswriter$(OEXT)
-	$(CCLD) $(LDFLAGS) -o $(builddir)/$@ $^ $(LIBS)
+r3rconv$(PPUEXT): atomwriter$(PPUEXT) conv$(PPUEXT) esfwriter$(PPUEXT) rss3writer$(PPUEXT) rsswriter$(PPUEXT)
 
 install:
 	$(INSTALLEXE) r3r-conv$(TARGETEXEEXT) $(bindir)
@@ -30,9 +21,3 @@ uninstall:
 clean: _clean
 	$(DEL) r3r-conv$(TARGETEXEEXT)
 	cd po && $(MAKE) clean
-
-%$(OEXT): %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
-
-%.c: %.h
-	$(TOUCH) $@

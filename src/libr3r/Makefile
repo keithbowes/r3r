@@ -18,7 +18,6 @@ endif
 ifdef BUILD_SHARED
 ifneq ($(BUILD_SHARED),0)
 	$(MAKE) libr3r_shared$(PPUEXT) && $(TOUCH) libr3r_shared.pas
-	cd ../utils && $(MAKE) r3r-conv
 endif
 endif
 

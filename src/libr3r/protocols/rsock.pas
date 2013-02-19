@@ -32,8 +32,6 @@ type
     FFeedType: TFeedType;
 {$IFDEF SOCKETS_LIBCURL}
     FHandle: CURL;
-    FList: PRStringList;
-    FTempList: PRStringList;
 {$ENDIF}
     FHost: String;
     FPort: String;
@@ -46,6 +44,10 @@ type
 {$ENDIF}
 {$IFDEF SOCKETS_BSD}
     Sock: TSockWrap;
+{$ENDIF}
+{$IFDEF SOCKETS_LIBCURL}
+    FList: PRStringList;
+    FTempList: PRStringList;
 {$ENDIF}
 
     ShouldShow: Boolean;

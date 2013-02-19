@@ -6,6 +6,7 @@ all:
 	cd rstrings && $(MAKE) all
 	cd strtok && $(MAKE) all
 	cd rdate && $(MAKE) all
+	cd conv && $(MAKE) all
 	cd rprop && $(MAKE) all
 	cd mailcap && $(MAKE) unit
 
@@ -20,16 +21,9 @@ clean:
 	cd strtok && $(MAKE) clean
 
 install:
-ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
 	cd conv && $(MAKE) install
-endif
 	cd opml && $(MAKE) install
 
 uninstall:
 	cd conv && $(MAKE) uninstall
 	cd opml && $(MAKE) uninstall
-
-r3r-conv:
-ifneq ($(wildcard $(call programpath,$(basename $(CC)))),)
-	cd conv && $(MAKE) all
-endif

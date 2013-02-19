@@ -13,6 +13,7 @@ type
 function LongDateToTime(Time: String): TRDate;
 function ShortDateToTime(Time: String): TRDate;
 function TimeToString(Time: TRDate): String;
+function UnixToDate(const TS: real): String;
 
 {$IFNDEF USE_NLS}
 function _(s: PChar): String;
@@ -23,10 +24,8 @@ implementation
 uses
 {$IFDEF USE_NLS}
   LibIntl,
-{$ELSE}
-  SysUtils,
 {$ENDIF}
-  LibR3RStrings, StrTok;
+  LibR3RStrings, StrTok, SysUtils;
 
 function GetMonthAbbrev(const Month: String): String;
 var
@@ -200,6 +199,22 @@ begin
   end;
 
   TimeToString := Ret;
+end;
+
+function UnixToDate(const TS: real): String;
+const
+  SecondsPerDay = 24 * 60 * 60;
+var
+  DT: TDateTime;
+  Res: String;
+begin
+  Res := DateTimeToStr(TS / SecondsPerDay + EncodeDate(1970, 1, 1));
+  {$IFNDEF __GPC__}FormatSettings.{$ENDIF}DateSeparator := '-';
+  DT := StrToDateTime(Res);
+  Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
+  Res := TimeToString(ShortDateToTime(Res));
+
+  UnixToDate := Res;
 end;
 
 {$IFNDEF USE_NLS}

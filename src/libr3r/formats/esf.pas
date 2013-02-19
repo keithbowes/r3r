@@ -43,7 +43,6 @@ function TEsfFeed.UnixToDate(const TS: String): String;
 const
   SecondsPerDay = 24 * 60 * 60;
 var
-  DT: TDateTime;
   ErrPos: word;
   NTS: real;
   Res: String;
@@ -51,11 +50,7 @@ begin
   Val(TS, NTS, ErrPos);
   if ErrPos = 0 then
   begin
-    Res := DateTimeToStr(NTS / SecondsPerDay + EncodeDate(1970, 1, 1));
-    {$IFNDEF __GPC__}FormatSettings.{$ENDIF}DateSeparator := '-';
-    DT := StrToDateTime(Res);
-    Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
-    Res := TimeToString(ShortDateToTime(Res));
+    Res := RDate.UnixToDate(NTS);
   end
   else
   begin
