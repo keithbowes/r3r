@@ -49,7 +49,7 @@ begin
     end
     else if Name = 'date' then
     begin
-      Created := TimeToString(ShortDateToTime(Content));
+      Created := TimeToLongDate(ShortDateToTime(Content));
     end
     else if Name = 'identifier' then
     begin

@@ -154,7 +154,7 @@ begin
     else if Name = 'pubdate' then
     begin
       Created := Content;
-      Created := TimeToString(LongDateToTime(Created));
+      Created := TimeToLongDate(LongDateToTime(Created));
     end
     else if (Name = 'author') or (Name = 'managingeditor') then
     begin
@@ -167,7 +167,7 @@ begin
     else if Name = 'lastpubdate' then
     begin
       LastModified := Content;
-      LastModified := TimeToString(LongDateToTime(LastModified));
+      LastModified := TimeToLongDate(LongDateToTime(LastModified));
     end
     else if Name = 'language' then
     begin

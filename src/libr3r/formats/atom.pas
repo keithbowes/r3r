@@ -205,7 +205,7 @@ begin
     else if Name = 'published' then
     begin
       Created := Content;
-      Created := TimeToString(ShortDateToTime(Created));
+      Created := TimeToLongDate(ShortDateToTime(Created));
     end
     else if Name = 'email' then
     begin
@@ -235,7 +235,7 @@ begin
     else if Name = 'updated' then
     begin
       LastModified := Content;
-      LastModified := TimeToString(ShortDateToTime(LastModified));
+      LastModified := TimeToLongDate(ShortDateToTime(LastModified));
     end
     else if Name = 'rights' then
     begin

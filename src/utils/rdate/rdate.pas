@@ -10,9 +10,11 @@ type
     ZoneOffset: String;
   end;
 
+function DateToUnix(Time: TRDate): String;
 function LongDateToTime(Time: String): TRDate;
 function ShortDateToTime(Time: String): TRDate;
-function TimeToString(Time: TRDate): String;
+function TimeToLongDate(Time: TRDate): String;
+function TimeToShortDate(Time: TRDate): String;
 function UnixToDate(const TS: real): String;
 
 {$IFNDEF USE_NLS}
@@ -26,6 +28,9 @@ uses
   LibIntl,
 {$ENDIF}
   LibR3RStrings, StrTok, SysUtils;
+
+const
+  SecondsPerDay = 24 * 60 * 60;
 
 function GetMonthAbbrev(const Month: String): String;
 var
@@ -85,12 +90,93 @@ begin
   end;
 end;
 
+function GetMonthIndex(const Name: String): String;
+begin
+  if Name = Jan then
+  begin
+    GetMonthIndex := '01'
+  end
+  else if Name = Feb then
+  begin
+    GetMonthIndex := '02'
+  end
+  else if Name = Mar then
+  begin
+    GetMonthIndex := '03'
+  end
+  else if Name = Apr then
+  begin
+    GetMonthIndex := '04'
+  end
+  else if Name = May then
+  begin
+    GetMonthIndex := '05'
+  end
+  else if Name = Jun then
+  begin
+    GetMonthIndex := '06'
+  end
+  else if Name = Jul then
+  begin
+    GetMonthIndex := '07'
+  end
+  else if Name = Aug then
+  begin 
+    GetMonthIndex := '08'
+  end
+  else if Name = Sep then
+  begin
+    GetMonthIndex := '09'
+  end
+  else if Name = Oct then
+  begin
+    GetMonthIndex := '10'
+  end
+  else if Name = Nov then
+  begin
+    GetMonthIndex := '11'
+  end
+  else if Name = Dec then
+  begin
+    GetMonthIndex := '12'
+  end
+  else
+  begin
+    GetMonthIndex := Name;
+  end
+end;
+
+function DateToUnix(Time: TRDate): String;
+var
+  Day, Month, Year: word;
+  Hour, Millisecond, Minute, Second: word;
+  Res: String;
+  TS, TST: real;
+begin
+{$I-}
+  ReadStr(Time.Day, Day);
+  ReadStr(GetMonthIndex(Time.Month), Month);
+  ReadStr(Time.Year, Year);
+
+  ReadStr(Time.Hour, Hour);
+  ReadStr(Time.Millisecond, Millisecond);
+  ReadStr(Time.Minute, Minute);
+  ReadStr(Time.Second, Second);
+  {$I+}
+  TST := EncodeTime(Hour, Minute, Second, Millisecond);
+  TS := (EncodeDate(Year, Month, Day) + TST - EncodeDate(1970, 1, 1)) * SecondsPerDay;
+
+  WriteStr(Res, Trunc(TS));
+  DateToUnix := Res;
+end;
+
 function LongDateToTime(Time: String): TRDate;
 const
   WhitespaceChars = #0#8#9#10#13#32;
 var
   List: TStringsList;
   Tm: TRDate;
+  Start: byte;
   TP: String;
 begin
 {$IFDEF USE_NLS}
@@ -98,12 +184,22 @@ begin
 {$ENDIF}
   List := Split(Time, WhitespaceChars);
 
-  Tm.Day := List.Strings[1];
-  Tm.MonthAbbrev := _(PChar(List.Strings[2]));
-  Tm.Year := List.Strings[3];
-  Tm.ZoneOffset := List.Strings[5];
+  if List.Length = 5 then
+  begin
+    Start := 1;
+  end
+  else
+  begin
+    Start := 0
+  end;
 
-  TP := List.Strings[4];
+  Tm.Day := List.Strings[Start];
+  Tm.Month := List.Strings[Start + 1];
+  Tm.MonthAbbrev := _(PChar(List.Strings[Start + 1]));
+  Tm.Year := List.Strings[Start + 2];
+  Tm.ZoneOffset := List.Strings[Start + 4];
+
+  TP := List.Strings[Start + 3];
   Tm.Hour := Copy(TP, 1, 2);
   Delete(TP, 1, 3);
 
@@ -124,6 +220,11 @@ begin
 {$ENDIF}
 
   Sep := Pos('-', Time);
+  if Sep = 0 then
+  begin
+    Exit;
+  end;
+
   Tm.Year := Copy(Time, 1, Sep - 1);
   Delete(Time, 1, Sep);
 
@@ -171,7 +272,7 @@ begin
   ShortDateToTime := Tm;
 end;
 
-function TimeToString(Time: TRDate): String;
+function TimeToLongDate(Time: TRDate): String;
 var
   Ret: String;
 begin
@@ -198,12 +299,36 @@ begin
     end;
   end;
 
-  TimeToString := Ret;
+  TimeToLongDate := Ret;
+end;
+
+function TimeToShortDate(Time: TRDate): String;
+var
+  Ret: String;
+begin
+  with Time do
+  begin
+    Ret := Year + '-' + GetMonthIndex(Month) + '-' + Day;
+
+    if Hour <> '' then
+    begin
+      Ret := Ret + 'T' + Hour + ':' + Minute + ':' + Second;
+
+      if Length(ZoneOffset) > 0 then
+      begin
+        Ret := Ret + ZoneOffset;
+      end
+      else
+      begin
+        Ret := Ret + 'Z';
+      end;
+    end;
+  end;
+
+  TimeToShortDate := Ret;
 end;
 
 function UnixToDate(const TS: real): String;
-const
-  SecondsPerDay = 24 * 60 * 60;
 var
   DT: TDateTime;
   Res: String;
@@ -212,7 +337,7 @@ begin
   {$IFNDEF __GPC__}FormatSettings.{$ENDIF}DateSeparator := '-';
   DT := StrToDateTime(Res);
   Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
-  Res := TimeToString(ShortDateToTime(Res));
+  Res := TimeToLongDate(ShortDateToTime(Res));
 
   UnixToDate := Res;
 end;

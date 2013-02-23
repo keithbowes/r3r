@@ -25,6 +25,8 @@ implementation
 uses
 {$IFDEF SOCKETS_LIBCURL}
   CurlSList,
+{$ELSE}
+  SysUtils,
 {$ENDIF}
   RDate, RStrings;
 
@@ -78,29 +80,30 @@ begin
   FormatTime := UnixToDate(t);
 {$ELSE}
 var
-  ErrPos: byte;
-  NTS: real;
+  Date: TRDate;
 begin
+  Date := ShortDateToTime(InTime);
+  if Date.Year = '' then
+  begin
+    Date := LongDateToTime(InTime);
+    if Date.Year = '' then
+    begin
+      Exit
+    end
+  end;
+
   case DateFormat of
     dfShort:
     begin
-      FormatTime := TimeToString(ShortDateToTime(InTime));
+      FormatTime := TimeToShortDate(Date);
     end;
     dfLong:
     begin
-      FormatTime := TimeToString(LongDateToTime(InTime));
+      FormatTime := TimeToLongDate(Date);
     end;
     dfUnix:
     begin
-      Val(InTime, NTS, ErrPos);
-      if ErrPos = 0 then
-      begin
-        FormatTime := UnixToDate(NTS);
-      end
-      else
-      begin
-        FormatTime := '';
-      end;
+      FormatTime := DateToUnix(Date);
     end;
   end;
 {$ENDIF}

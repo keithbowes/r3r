@@ -65,7 +65,7 @@ begin
   else if FCurrentField = 'created' then
   begin
     Item.Created := Item.Created + Data;
-    Item.Created := TimeToString(ShortDateToTime(Item.Created));
+    Item.Created := TimeToLongDate(ShortDateToTime(Item.Created));
   end
   else if FCurrentField = 'creator' then
   begin
@@ -79,7 +79,7 @@ begin
   else if FCurrentField = 'last-modified' then
   begin
     Item.LastModified := Item.LastModified + Data;
-    Item.LastModified := TimeToString(ShortDateToTime(Item.LastModified));
+    Item.LastModified := TimeToLongDate(ShortDateToTime(Item.LastModified));
   end
   else if FCurrentField = 'language' then
   begin
