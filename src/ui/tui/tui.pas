@@ -599,7 +599,7 @@ begin
         URI := Copy(URI, 1, ScreenWidth - Length(Feed) - 3);
       end;
       TuiWrite(URI);
-      GotoXY(rl_point + Length(Feed) + 1, 1);
+      GotoXY(rl_point + Length(UTF8Decode(Feed)) + 1, 1);
     end
     else
     begin
@@ -978,7 +978,7 @@ begin
           InitDesc := '';
         end;
 
-        GoToXY(rl_point + Length(SettingToChangeReadLine) + 1, 1);
+        GoToXY(rl_point + Length(UTF8Decode(SettingToChangeReadLine)) + 1, 1);
         rl_callback_read_char;
       until rl_option_finished;
 
