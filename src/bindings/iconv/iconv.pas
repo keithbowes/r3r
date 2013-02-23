@@ -30,7 +30,7 @@ const
   IconvLib = '';
 {$ELSE}
   FuncPref = 'lib';
-{$IFDEF MSWINDOWS}
+{$IFNDEF MSWINDOWS}
   IconvLib = 'libiconv';
 {$ELSE}
   IconvLib = 'libiconv2';

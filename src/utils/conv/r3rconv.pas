@@ -2,16 +2,13 @@ program R3RConv;
 
 uses
   AtomWriter, EsfWriter, RssWriter, Rss3Writer,
-  Conv, ConvStrings, ItemCallbacks, LibR3R, SysUtils,
+  Conv, ConvStrings, LibR3R, SysUtils,
   {$IFDEF __GPC__}
   GPC
+  {$define OptArg OptionArgument}
   {$ELSE}
   GetOpts
   {$ENDIF};
-
-{$IFDEF __GPC__}
-{$define OptArg OptionArgument}
-{$ENDIF}
 
 var
   Feed: TLibR3R;
@@ -47,47 +44,47 @@ end;
 
 procedure ShowHelp(invok: String);
 begin
-	WriteLn(stderr, StringReplace(Usage, '%s', invok, []));
+  WriteLn(stderr, StringReplace(Usage, '%s', invok, []));
 end;
 
 procedure ProcParams;
 const
   OptString = 'hi:o:t:';
 var
-  i: char;
+  c: char;
   invok: String;
 begin
   invok := ParamStr(0);
   
   repeat
-		i := GetOpt(OptString);
-		if i <> EndOfOptions then
-		begin
-			case i of
-				'h':
+    c := GetOpt(OptString);
+    if c <> EndOfOptions then
+    begin
+      case c of
+        'h':
         begin
-					ShowHelp(invok);
-					Exit;
+          ShowHelp(invok);
+          Exit;
         end;
-				'i':
+        'i':
         begin
-					InFile := OptArg;
+          InFile := OptArg;
         end;
-				'o':
+        'o':
         begin
-					OutFile := OptArg;
+          OutFile := OptArg;
         end;
-				't':
+        't':
         begin
-					OutType := OptArg;
+          OutType := OptArg;
         end;
-      end;	
+      end;  
     end;
-	until i = EndOfOptions;
+  until c = EndOfOptions;
 
   if (InFile = '') and (OutType = '') then
   begin
-		ShowHelp(invok);
+    ShowHelp(invok);
     Exit;
   end;
 end;
@@ -97,8 +94,8 @@ begin
 
   Feed := TLibR3R.Create;
   Feed.RegisterItemCallback(ItemReceived);
-	Feed.RetrieveFeed(InFile);
-	Feed.Free;
+  Feed.RetrieveFeed(InFile);
+  Feed.Free;
 
   if OutType = 'rss' then
   begin

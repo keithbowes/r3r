@@ -51,7 +51,9 @@ var
   i: integer;
   s: String;
 begin
+  IsWriting := true;
   i := 0;
+
   while IsNext do
   begin
     Inc(i);

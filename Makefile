@@ -6,6 +6,7 @@ XZFLAGS = -c
 
 CSUM ?= $(call programpath,sha256sum)
 CSUMFLAGS ?=
+CSUMOUT ?= r3r-$(VERSION).sha256
 
 MAKEPKG ?= $(call programpath,makepkg)
 MAKEPKGFLAGS ?=
@@ -16,7 +17,7 @@ STRIPFLAGS ?=
 UPX ?= $(call programpath,upx)
 UPXFLAGS ?=
 
-sign = cd $(srcdir)/..; $(CSUM) $(CSUMFLAGS) $1 > $1.sha256
+sign = cd $(srcdir)/..; $(if $(wildcard $(srcdir)/../$(CSUMOUT)),$(CSUM) $(CSUMFLAGS) $1 >> $(CSUMOUT),$(CSUM) $(CSUMFLAGS) $1 > $(CSUMOUT))
 
 .PHONY: check
 

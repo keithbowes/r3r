@@ -14,6 +14,9 @@ endif
 ifneq ($(USE_IDN),0)
 	cd libidn && $(MAKE) all
 endif
+ifneq ($(USE_LIBIDN),1)
+	cd libidn2 && $(MAKE) all
+endif
 ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
 	cd libini && $(MAKE) all
 endif
@@ -33,6 +36,7 @@ clean:
 	cd iconv && $(MAKE) clean
 	cd libcurl && $(MAKE) clean
 	cd libidn && $(MAKE) clean
+	cd libidn2 && $(MAKE) clean
 	cd libini && $(MAKE) clean
 	cd pcre && $(MAKE) clean
 	cd readline && $(MAKE) clean

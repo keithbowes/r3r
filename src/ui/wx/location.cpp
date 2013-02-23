@@ -6,19 +6,26 @@
 
 #include "i18n.h"
 
+GoField * entry;
+
+void AddLocationHistory(const char * histent)
+{
+	entry->Insert(wxString(histent, wxConvUTF8), 0);
+}
+
 void CreateLocationBar(wxPanel * parent)
 {
   InitGettext();
   wxSizer * sizer = parent->GetSizer();
   wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
 
-  GoField * entry = new GoField(parent);
+  entry = new GoField(parent);
   entry->SetFocus();
   hbox->Add(entry, 1, wxALL | wxEXPAND, 5);
 
 	while (libr3r_history_is_next())
 	{
-		entry->Insert(wxString(libr3r_history_next(), wxConvUTF8), 0);
+		AddLocationHistory(libr3r_history_next());
 	}
 
   wxButton * button = new wxButton(parent, wxID_GO_BUTTON, _("Go"), wxDefaultPosition, wxDefaultSize);

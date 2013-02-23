@@ -3,6 +3,7 @@
 #include "feedlist.h"
 #include "frame.h"
 #include "libr3r.h"
+#include "location.h"
 #include "settings-main.h"
 #include "settings-subscriptions.h"
 #include "settingsentry.h"
@@ -177,7 +178,8 @@ void GoButtonEvents::OnClick(wxCommandEvent & event)
   wxButton * button = (wxButton * ) event.GetEventObject();
   wxComboBox * entry = (wxComboBox *) button->GetClientData();
   wxString feed = entry->GetValue();
-  ParseFeed((char *) (const char *) feed.mb_str());
+	AddLocationHistory(feed.mb_str());
+  ParseFeed((char *) (const char *) feed.c_str());
 }
 
 void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
@@ -190,7 +192,8 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
   {
     wxComboBox * entry = (wxComboBox *) event.GetEventObject();
     wxString feed = entry->GetValue();
-    ParseFeed((char *) (const char *) feed.mb_str());
+		AddLocationHistory(feed.mb_str());
+    ParseFeed((char *) (const char *) feed.c_str());
   }
 }
 

@@ -37,7 +37,7 @@ begin
 {$IFDEF MSWINDOWS}
     GetMem(Data, MAX_PATH);
     GetConsoleTitle(Data, MAX_PATH);
-    WriteStr(Res, Data);
+    WriteStr(Res, PChar(Data));
     FreeMem(Data);
 {$ELSE}
 {$IFDEF FPC_UNIX}

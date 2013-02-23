@@ -6,7 +6,6 @@ all:
 	cd rstrings && $(MAKE) all
 	cd strtok && $(MAKE) all
 	cd rdate && $(MAKE) all
-	cd conv && $(MAKE) all
 	cd rprop && $(MAKE) all
 	cd mailcap && $(MAKE) unit
 
@@ -27,3 +26,6 @@ install:
 uninstall:
 	cd conv && $(MAKE) uninstall
 	cd opml && $(MAKE) uninstall
+
+r3r-conv:
+	cd conv && $(MAKE) all

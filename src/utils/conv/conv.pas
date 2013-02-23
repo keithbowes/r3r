@@ -11,13 +11,14 @@ const
 {$ENDIF}
 
 type
+  TDateFormat = (dfLong, dfShort, dfUnix);
   PText = ^text;
 
 var
   OutFile: String;
 
 function GetFileHandle: PText;
-function FormatTime(InTime, OutFmt: String): String;
+function FormatTime(InTime: String; DateFormat: TDateFormat): String;
 
 implementation
 
@@ -35,21 +36,21 @@ var
 begin
   New(fh);
 
-	if OutFile = '' then
+  if OutFile = '' then
   begin
 {$IFNDEF __GPC__}
-		fh^ := stdout;
+    fh^ := stdout;
 {$ELSE}
     OutFile := 'feed.out';
 {$ENDIF}
   end;
 
-	if OutFile <> '' then
-	begin
+  if OutFile <> '' then
+  begin
     Assign(fh^, OutFile);
-		
-		if erste then
-		begin
+    
+    if erste then
+    begin
       Rewrite(fh^);
       erste := false;
       Close(fh^);
@@ -62,13 +63,13 @@ begin
   GetFileHandle := fh;
 end;
 
-function FormatTime(InTime, OutFmt: String): String;
+function FormatTime(InTime: String; DateFormat: TDateFormat): String;
 {$IFDEF SOCKETS_LIBCURL}
 var
   t: time_t;
 begin
-	t := curl_getdate(StrToPChar(InTime), nil);
-	if t = - 1 then
+  t := curl_getdate(StrToPChar(InTime), nil);
+  if t = - 1 then
   begin
     FormatTime := InTime; (* Unparsable date format *)
     Exit;
@@ -76,8 +77,32 @@ begin
 
   FormatTime := UnixToDate(t);
 {$ELSE}
+var
+  ErrPos: byte;
+  NTS: real;
 begin
-  FormatTime := InTime;
+  case DateFormat of
+    dfShort:
+    begin
+      FormatTime := TimeToString(ShortDateToTime(InTime));
+    end;
+    dfLong:
+    begin
+      FormatTime := TimeToString(LongDateToTime(InTime));
+    end;
+    dfUnix:
+    begin
+      Val(InTime, NTS, ErrPos);
+      if ErrPos = 0 then
+      begin
+        FormatTime := UnixToDate(NTS);
+      end
+      else
+      begin
+        FormatTime := '';
+      end;
+    end;
+  end;
 {$ENDIF}
 end;
 

@@ -594,6 +594,10 @@ begin
     if rl_end > 0 then
     begin
       WriteStr(URI, rl_line_buffer);
+      if Length(Feed + URI) >= ScreenWidth then
+      begin
+        URI := Copy(URI, 1, ScreenWidth - Length(Feed) - 3);
+      end;
       TuiWrite(URI);
       GotoXY(rl_point + Length(Feed) + 1, 1);
     end
@@ -879,8 +883,12 @@ begin
       case PRSetting(SRec^.GetNth(i))^.ValueType of
         TypeString:
         begin
-          Len := Length(PRSetting(SRec^.GetNth(i))^.ValueString);
-          TuiEcho(PRSetting(SRec^.GetNth(i))^.ValueString, false, Width - Length(UTF8Decode(SetDesc)) + Length(PRSetting(SRec^.GetNth(i))^.ValueString));
+          Width := Width - 5;
+          SetVal := TruncateString(PRSetting(SRec^.GetNth(i))^.ValueString);
+          Width := Width + 5;
+
+          Len := Length(SetVal);
+          TuiEcho(SetVal, false, Width - Length(UTF8Decode(SetDesc)) + Len);
         end;
         TypeInteger:
         begin
@@ -951,11 +959,21 @@ begin
         if rl_end > 0 then
         begin
           WriteStr(SetDesc, rl_line_buffer);
+          if Length(SettingToChangeReadLine + SetDesc) >= ScreenWidth then
+          begin
+            SetDesc := Copy(SetDesc, 1, ScreenWidth - Length(SettingToChangeReadLine) - 3);
+          end;
+
           TuiWrite(SetDesc);
         end
         else if InitDesc <> '' then
         begin
           SetDesc := InitDesc;
+          if Length(SettingToChangeReadLine + SetDesc) >= ScreenWidth then
+          begin
+            SetDesc := Copy(SetDesc, 1, ScreenWidth - Length(SettingToChangeReadLine) - 3);
+          end;
+
           TuiWrite(SetDesc);
           InitDesc := '';
         end;

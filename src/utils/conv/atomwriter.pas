@@ -17,23 +17,23 @@ var
   Created, Modified: String;
   fh: PText;
 begin
-	fh := GetFileHandle;
+  fh := GetFileHandle;
 
-	if erste then
-	begin
-		WriteLn(fh^, '<?xml version="1.0"?><feed version="1.0" xmlns="http://www.w3.org/2005/Atom" xml:lang="', Item.Language, '">');
+  if erste then
+  begin
+    WriteLn(fh^, '<?xml version="1.0"?><feed version="1.0" xmlns="http://www.w3.org/2005/Atom" xml:lang="', Item.Language, '">');
     erste := false;
   end;
 
-	if not IsTop then
+  if not IsTop then
   begin
-		WriteLn(fh^, '<entry xml:lang="', Item.Language, '">', LineEnding);
+    WriteLn(fh^, '<entry xml:lang="', Item.Language, '">', LineEnding);
   end;
 
-  Created := FormatTime(Item.Created, 'yyyy-mm-ddThh:nn:ssZ');
-  Modified := FormatTime(Item.LastModified, 'yyyy-mm-ddThh:nn:ssZ');
+  Created := FormatTime(Item.Created, dfShort);
+  Modified := FormatTime(Item.LastModified, dfShort);
 
-	WriteLn(fh^, '<title>', Item.Title, '</title>', LineEnding,
+  WriteLn(fh^, '<title>', Item.Title, '</title>', LineEnding,
     '<link rel="alternate" href="', Item.Link, '"/>', LineEnding,
     '<link rel="self" href="', Item.MySelf, '"/>', LineEnding,
     '<link rel="enclosure" href="', Item.Enclosure.URL, '"/>', LineEnding,
@@ -47,9 +47,9 @@ begin
     Item.Id, '</id>', LineEnding, '<copyright>',  Item.Copyright,
     '</copyright>', LineEnding);
 
-	if not IsTop then
+  if not IsTop then
   begin
-		WriteLn(fh^, '</entry>', LineEnding);
+    WriteLn(fh^, '</entry>', LineEnding);
   end;
 
   Close(fh^);
@@ -60,12 +60,12 @@ procedure CloseAtom;
 var
   fh: PText;
 begin
-	fh := GetFileHandle;
-	WriteLn(fh^, '</feed>');
-	
-	if OutFile = '' then
+  fh := GetFileHandle;
+  WriteLn(fh^, '</feed>');
+  
+  if OutFile = '' then
   begin
-		Close(fh^);
+    Close(fh^);
   end;
 
   Dispose(fh);
