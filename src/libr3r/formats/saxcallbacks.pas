@@ -10,10 +10,10 @@ uses
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 procedure ElementEnded(user_data: Pointer; name: PChar);
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: longint);
 
 {$IFDEF EXPAT_2_0}
-procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
+procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: longint);
 {$ELSE}
 {$IFDEF EXPAT_1_0}
 function UnknownEncodingDetected(encodingHandlerData:pointer; name:PChar; info:PXML_Encoding):integer;
@@ -121,7 +121,7 @@ begin
   end;
 end;
 
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: longint);
 var
   Elem: PXmlElement;
   enh: String;
@@ -144,7 +144,7 @@ begin
 end;
 
 {$IFDEF EXPAT_2_0}
-procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
+procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: longint);
 begin
 {$IFDEF USE_ICONV}
   SetProp('charset', StrToPChar('UTF-8'));

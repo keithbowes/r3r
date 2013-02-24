@@ -41,11 +41,9 @@ begin
     FreeMem(Data);
 {$ELSE}
 {$IFDEF FPC_UNIX}
-    try
-      ReadStr(GetEnvironmentVariable('WINDOWID'), WindowHandle);
-    except
-      WindowHandle := 0;
-    end;
+    {$I-}
+    ReadStr(GetEnvironmentVariable('WINDOWID'), WindowHandle);
+    {$I+}
 
     if WindowHandle <> 0 then
     begin
