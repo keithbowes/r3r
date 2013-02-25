@@ -125,8 +125,9 @@ begin
 {$IFDEF USE_LIBIDN2}
   Ret := StringReplace(Ret, '%i', 'libidn2/' + StrPas(IDN2_VERSION), [rfReplaceAll]);
 {$ELSE}
-  Ret := StringReplace(ret, '%i', '', [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%i', '', [rfReplaceAll]);
 {$ENDIF}
+  Ret := StringReplace(Ret, '%m', '@CPU@', [rfReplaceAll]);
 {$IFDEF SOCKETS_SYNAPSE}
   Ret := StringReplace(Ret, '%n', ' Synapse/' + SynapseRelease, [rfReplaceAll]);
 {$ELSE}
