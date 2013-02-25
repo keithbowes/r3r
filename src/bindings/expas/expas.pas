@@ -21,7 +21,6 @@ interface
 {$ENDIF}
 
 {$CALLING cdecl}
-{$MODE DELPHI}
 
 {
   Automatically converted by H2Pas 1.0.0 from xmlparse.h
@@ -695,7 +694,7 @@ type
   XML_Feature = record
     feature: XML_FeatureEnum;
     name: PXML_LChar;
-    value: longint;
+    value: integer;
   end;
 
   function XML_ExpatVersion: PXML_LChar; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ExpatVersion';

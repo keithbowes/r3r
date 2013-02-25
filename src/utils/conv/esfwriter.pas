@@ -28,7 +28,7 @@ begin
   end
   else
   begin
-    WriteLn(fh^, FormatTime(Trim(Item.Created), dfUnix), Tab, Trim(Item.Title), Tab, Trim(Item.Link));
+    WriteLn(fh^, Conv.FormatTime(Trim(Item.Created), dfUnix), Tab, Trim(Item.Title), Tab, Trim(Item.Link));
   end;
 
   if OutFile <> '' then
