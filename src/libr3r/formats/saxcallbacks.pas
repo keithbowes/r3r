@@ -154,8 +154,11 @@ end;
 {$ELSE}
 {$IFDEF EXPAT_1_0}
 function UnknownEncodingDetected(encodingHandlerData:pointer; name:PChar; info:PXML_Encoding):integer;
+var
+  Message: String;
 begin
-  CallMessageEventEx(TXmlFeed(encodingHandlerData), true, UnknownEncoding, StrPas(name));
+  WriteStr(Message, name);
+  CallMessageEventEx(TXmlFeed(encodingHandlerData), true, UnknownEncoding, Message);
 end;
 {$ENDIF}
 {$ENDIF}

@@ -107,9 +107,7 @@ end;
 
 function UserAgent: String;
 var
-{$IFDEF USE_PCRE}
-  Data: String;
-{$ENDIF}
+  Rep: String;
   Ret: String;
 begin
   Ret := Settings.GetString('user-agent');
@@ -118,12 +116,14 @@ begin
   Ret := StringReplace(Ret, '%a', AppName + '/' + AppVersion, [rfReplaceAll]);
   Ret := StringReplace(Ret, '%c', '@COMPILER@', [rfReplaceAll]);
 {$IFDEF EXPAT_2_0}
-  Ret := StringReplace(Ret, '%e', StringReplace(StrPas(XML_ExpatVersion), '_', '/', [rfReplaceAll]), [rfReplaceAll]);
+  WriteStr(Rep, XML_ExpatVersion);
+  Ret := StringReplace(Ret, '%e', StringReplace(Rep, '_', '/', [rfReplaceAll]), [rfReplaceAll]);
 {$ELSE}
   Ret := StringReplace(Ret, '%e', '', [rfReplaceAll]);
 {$ENDIF}
 {$IFDEF USE_LIBIDN2}
-  Ret := StringReplace(Ret, '%i', 'libidn2/' + StrPas(IDN2_VERSION), [rfReplaceAll]);
+  WriteStr(Rep, IDN2_VERSION);
+  Ret := StringReplace(Ret, '%i', 'libidn2/' + Rep, [rfReplaceAll]);
 {$ELSE}
   Ret := StringReplace(Ret, '%i', '', [rfReplaceAll]);
 {$ENDIF}
@@ -132,16 +132,17 @@ begin
   Ret := StringReplace(Ret, '%n', ' Synapse/' + SynapseRelease, [rfReplaceAll]);
 {$ELSE}
 {$IFDEF SOCKETS_LIBCURL}
-  Ret := StringReplace(Ret, '%n', StrPas(curl_version), [rfReplaceAll]);
+  WriteStr(Rep, curl_version);
+  Ret := StringReplace(Ret, '%n', Rep, [rfReplaceAll]);
 {$ELSE}
   Ret := StringReplace(Ret, '%n', '', [rfReplaceAll]);
 {$ENDIF}
 {$ENDIF}
   Ret := StringReplace(Ret, '%o', OS, [rfReplaceAll]);
 {$IFDEF USE_PCRE}
-  WriteStr(Data, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
-  Data := StringReplace(Data, '. ', ' ', [rfReplaceAll]);
-  Ret := StringReplace(Ret, '%p', Data, [rfReplaceAll]);
+  WriteStr(Rep, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
+  Rep := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%p', Rep, [rfReplaceAll]);
 {$ELSE}
   Ret := StringReplace(Ret, '%p', '', [rfReplaceAll]);
 {$ENDIF}

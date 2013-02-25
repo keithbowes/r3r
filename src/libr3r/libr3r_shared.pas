@@ -64,8 +64,11 @@ begin
 end;
 
 procedure libr3r_retrieve_feed(Lib: Pointer; Resource: PChar); cdecl;
+var
+  Res: String;
 begin
-  TLibR3R_Shared(Lib).RetrieveFeed(StrPas(Resource));
+  WriteStr(Res, Resource);
+  TLibR3R_Shared(Lib).RetrieveFeed(Res);
 end;
 
 procedure libr3r_on_item_parsed(Lib: Pointer; Proc: TParsedProc); cdecl;
@@ -177,24 +180,35 @@ begin
 end;
 
 procedure libr3r_set_user_agent_info(uainfo: PChar); cdecl;
+var
+  UA: String;
 begin
-  SetUserAgentInfo(StrPas(uainfo));
+  WriteStr(UA, uainfo);
+  SetUserAgentInfo(uainfo);
 end;
 
 procedure libr3r_register_setting(setting_name, setting_section: PChar; setting_value: Pointer; setting_type: word; descr: PChar); cdecl;
+var
+  Name, Pri, Section: String;
+  Value: String;
 begin
+  WriteStr(Name, setting_name);
+  WriteStr(Pri, descr);
+  WriteStr(Section, setting_section);
+
   case setting_type of
     TypeBoolean:
     begin
-      Settings.RegisterBoolean(StrPas(setting_name), StrPas(setting_section), PtrUInt(setting_value) <> 0, StrPas(descr));
+      Settings.RegisterBoolean(Name, Section, PtrUInt(setting_value) <> 0, Pri);
     end;
     TypeInteger:
     begin
-      Settings.RegisterInteger(StrPas(setting_name), StrPas(setting_section), integer(setting_value), StrPas(descr));
+      Settings.RegisterInteger(Name, Section, integer(setting_value), Pri);
     end;
     TypeString:
     begin
-      Settings.RegisterString(StrPas(setting_name), StrPas(setting_section), StrPas(setting_value), StrPas(descr));
+      WriteStr(Value, PChar(setting_value));
+      Settings.RegisterString(Name, Section, Value, Pri);
     end;
   end;
 end;
@@ -205,25 +219,29 @@ var
 begin
   RemoveDuplicatePChars := false;
 
-  SettingName := StrPas(setting_name);
+  WriteStr(SettingName, setting_name);
   Settings.Access(SettingName, SettingValue, SettingType, Count, SettingsMode);
   setting_name := StrToPChar(SettingName);
 end;
 
 procedure libr3r_access_subscriptions(Index, Mode: byte; var Subscription: PChar; var Count: word); cdecl;
+var
+  sub: String;
 begin
   RemoveDuplicatePChars := false;
   Count := Subscriptions^.Count;
 
+  WriteStr(sub, SubScription);
+
   if Mode = SubscriptionAdd then
   begin
-    Subscriptions^.Add(StrPas(Subscription));
+    Subscriptions^.Add(sub);
   end
   else if Mode = SubscriptionDelete then
   begin
     if (Index = 0) and (Subscription <> nil) then
     begin
-      Subscriptions^.DeleteString(StrPas(Subscription));
+      Subscriptions^.DeleteString(sub);
     end
     else
     begin
@@ -237,8 +255,11 @@ begin
 end;
 
 procedure libr3r_history_add(Entry: PChar); cdecl;
+var
+  Hent: String;
 begin
-  History^.Add(StrPas(Entry));
+  WriteStr(Hent, Entry);
+  History^.Add(Hent);
 end;
 
 function libr3r_history_is_next: integer; cdecl;

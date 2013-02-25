@@ -296,7 +296,7 @@ begin
 end;
 
 begin
-  v := StrPas(IDN2_VERSION);
+  WriteStr(v, IDN2_VERSION);
   major := vertoint;
   minor := vertoint;
   patch := vertoint;

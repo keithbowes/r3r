@@ -142,8 +142,11 @@ begin
 end;
 
 function _(msgid: PChar): String;
+var
+  Res: String;
 begin
-  _ := StrPas(gettext(msgid));
+  WriteStr(Res, gettext(msgid));
+  _ := Res;
 end;
 
 end.

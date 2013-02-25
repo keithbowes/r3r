@@ -167,18 +167,18 @@ end;
 
 function GetUserAgentInfo: String;
 var
-  t: String;
-{$IFDEF USE_LIBEDIT}
   rv: String;
-{$ENDIF}
+  t: String;
 begin
   t := '';
 {$IFDEF USE_NCRT}
-  t := t + StringReplace(StrPas(curses_version), ' ', '/', []) + ' ';
+  WriteStr(rv, curses_version);
+  t := t + StringReplace(rv, ' ', '/', []) + ' ';
 {$ENDIF}
 {$IFDEF USE_READLINE}
 {$IFNDEF USE_LIBEDIT}
-  t := t + 'readline/' + StrPas(rl_library_version) + ' ';
+  WriteStr(rv, rl_library_version);
+  t := t + 'readline/' + rv + ' ';
 {$ELSE}
   WriteStr(rv, rl_readline_version);
   t := t + 'libedit/' + rv;

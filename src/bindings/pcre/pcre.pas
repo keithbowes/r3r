@@ -387,11 +387,7 @@ begin
 end;
 
 begin
-{$IFNDEF __GPC__}
-  version := StrPas(pcre_version);
-{$ELSE}
   WriteStr(version, pcre_version);
-{$ENDIF}
 
   PCRE_MAJOR := versiontoint;
   PCRE_MINOR := versiontoint;

@@ -84,7 +84,7 @@ var
   s: String;
   t: String;
 begin
-  s := StrPas(ptr);
+  WriteStr(s, ptr);
   t := '';
 
   repeat
