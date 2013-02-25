@@ -9,6 +9,7 @@ override LIBS += -llibr3r_shared
 ifdef DEBUG
 override CXXFLAGS += -g
 else
+override LDFLAGS+=-s
 ifdef forWindows
 override LDFLAGS+=-mno-windows
 endif

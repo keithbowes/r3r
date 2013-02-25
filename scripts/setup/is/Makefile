@@ -14,4 +14,4 @@ setup.exe: r3r.iss
 
 r3r.iss: _r3r.iss
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
-		-e 's/@UI@/$(R3R_UI)/g $< > $@
+		-e 's/@UI@/$(R3R_UI)/g' $< > $@

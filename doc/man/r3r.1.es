@@ -1,4 +1,5 @@
 \" vi:ft=nroff
+.encoding iso-8859-1
 .TH R3R 1 "2011-12-25"
 
 .SH NOMBRE
@@ -8,7 +9,9 @@
 
 .P
  r3r [URL]
+.br
  r3r-conv -i archivo_entrado -t tipo_salido [-o archivo_salido]
+.br
  r3r_opml 0|1 [fuente [finalidad]]
 
 .SH DESCRIPCIÓN
@@ -22,17 +25,26 @@ R3R actualmente apoya los formatos RSS (0.9 a 2.0), RSS 3.0, Atom y ESF. Extract
 
 .P
 Tipos de HTTP:
+.br
  application/rdf+xml, application/rss+xml:  RSS (0.9 a 2.0)
+.br
  application/atom+xml: Atom
+.br
  text/x-rss, text/plain: RSS 3.0
+.br
  esf/text: ESF
 
 .P
 Extensiones de Archivos:
+.br
  .rss, .rdf: RSS (0.9 a 2.0)
+.br
  .r3, .rss3: RSS 3.0
+.br
  .atom: Atom
+.br
  .esf: ESF
+.br
 
 .P
 r3r-conv está utilizable para convertir entre formatos de fuentes.
@@ -41,13 +53,21 @@ r3r-conv está utilizable para convertir entre formatos de fuentes.
 
 .P
  config/r3r/r3r.ini
+.br
    Archivo de configuración.
+.br
  data/r3r/clav
+.br
    Asignaciones de teclas.
+.br
  data/r3r/history
+.br
    Historia de visitadas fuentes.
+.br
  data/r3r/subscriptions.txt
+.br
    URL-es a que estás subscribiendo.
+.br
    r3r_opml está utilizable para importar subscripciones de otros legadores de fuentes.
  
  

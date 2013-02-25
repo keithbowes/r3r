@@ -255,7 +255,7 @@ dist-arch:
 dist-inno_setup: OS_TARGET=win32
 dist-inno_setup: all
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-inno_setup
-	$(call sign,r3r-$(VERSION)-setup.exe)
+	$(call sign,r3r_$(R3R_UI)-$(VERSION)-setup.exe)
 
 # Cleaning rules
 clean:

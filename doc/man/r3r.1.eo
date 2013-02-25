@@ -1,4 +1,5 @@
 \" vi: ft=nroff
+.encoding utf-8
 .TH R3R 1 "2012-05-27"
 
 .SH NOMO
@@ -8,7 +9,9 @@
 
 .P
  r3r [URL]
+.br
  r3r-conv -i eniga_dosiero -t eliga_tipo [-o eliga_dosiero]
+.br
  r3r_opml 0|1 [celo [fonto]]
 
 .SH PRESKRIBO
@@ -22,16 +25,24 @@ R3R aktuale komprenas la fluo-formatojn RSS (0.9 ĝis 2.0), RSS 3.0, Atom kaj ES
 
 .P
 Enhavtipoj:
+.br
  application/rdf+xml, application/rss+xml. RSS (0.9 ĝis 2.0)
+.br
  application/atom+xml: Atom
+.br
  text/x-rss, text/plain: RSS 3.0
+.br
  esf/text: ESF
 
 .P
 Dosiersufiksoj:
+.br
  .rss, .rdf: RSS (0.9 ĝis 2.0)
+.br
  .r3, .rss3: RSS 3.0
+.br
  .atom: Atom
+.br
  .esf: ESF
  
 .P
@@ -41,14 +52,22 @@ Dosiersufiksoj:
 
 .P
  config/r3r/r3r.ini
+.br
    Agordo-dosiero.
+.br
  data/r3r/clav
+.br
    Klavaj asignoj (TUI).
+.br
  data/r3r/history
+.br
    Historio de vizititaj URL-oj.
+.br
  data/r3r/subscriptions.txt
-    URL-oj al kiuj vi abonas.
-    r3r_opml uzeblas por konverti OPML-dosieron el alia fluo-legilo por uzi ĝin en R3R.
+.br
+   URL-oj al kiuj vi abonas.
+.br
+   r3r_opml uzeblas por konverti OPML-dosieron el alia fluo-legilo por uzi ĝin en R3R.
  
 .SS Filtriloj
 
