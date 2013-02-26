@@ -81,7 +81,7 @@ uses
   , ReadLine, RStrings
 {$ENDIF};
 
-{$IFDEF USE_READLINE}
+{$IF DEFINED(USE_READLINE) and not DEFINED(USE_LIBEDIT)}
 var
   rl_finished, rl_option_finished: Boolean;
 
@@ -578,6 +578,9 @@ end;
 procedure TTui.GoURI;
 var
   URI: String;
+{$IFDEF USE_LIBEDIT}
+  p: PChar;
+{$ENDIF}
 begin
   DrawStatus;
 
@@ -586,6 +589,7 @@ begin
   TuiWrite(Feed);
   ReadLn(URI);
 {$ELSE}
+{$IFNDEF USE_LIBEDIT}
   rl_finished := false;
   rl_callback_handler_install('', read_chars);
   repeat
@@ -596,7 +600,7 @@ begin
       WriteStr(URI, rl_line_buffer);
       if Length(Feed + URI) >= ScreenWidth then
       begin
-        URI := Copy(URI, 1, ScreenWidth - Length(Feed) - 3);
+        URI := Copy(URI, 1, ScreenWidth - Length(UTF8Decode(Feed)) - 3);
       end;
       TuiWrite(URI);
       GotoXY(rl_point + Length(UTF8Decode(Feed)) + 1, 1);
@@ -608,6 +612,12 @@ begin
     rl_callback_read_char;
   until rl_finished;
   rl_callback_handler_remove;
+{$ELSE}
+  p := rl_read(StrToPChar(Feed));
+  WriteStr(URI, p);
+  rl_free(p);
+  Redraw;
+{$ENDIF}
 {$ENDIF}
 
   if URI <> '' then
@@ -800,7 +810,22 @@ var
 {$IFDEF USE_READLINE}
   Backup: PChar;
   InitDesc: String;
+{$IFDEF USE_LIBEDIT}
+  Prompt: PChar;
 {$ENDIF}
+{$ENDIF}
+
+procedure ClearOptions;
+begin
+  DrawUAString;
+  DrawFeedInfo;
+  if SkinOptionFull then
+  begin
+    Window(1, FDimUA.TopStart + FDimUA.TopEnd, ScreenWidth, ScreenHeight - FDimUA.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
+  end;
+
+  ClrScr;
+end;
 
 function TruncateString(const s: String): String;
 begin
@@ -832,17 +857,7 @@ var
 
 begin
   DrawFeedList;
-
-  if SkinOptionFull then
-  begin
-    Window(1, FDimUA.TopStart + FDimUA.TopEnd, ScreenWidth, ScreenHeight - FDimUA.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
-  end
-  else
-  begin
-    DrawFeedInfo;
-  end;
-
-  ClrScr;
+  ClearOptions;
 
   TextBackground(SkinColorTable.FOptionIndexBack);
   TextColor(SkinColorTable.FOptionIndexFore);
@@ -927,7 +942,9 @@ end;
 
 begin
 {$IFDEF USE_READLINE}
+{$IFNDEF USE_LIBEDIT}
   rl_callback_handler_install('', read_option_chars);
+{$ENDIF}
   Backup := StrToPChar(DataDir + '_options_history');
   write_history(Backup);
   clear_history;
@@ -946,7 +963,9 @@ begin
     repeat
       DrawStatus;
 {$IFDEF USE_READLINE}
+{$IFNDEF USE_LIBEDIT}
       rl_option_finished := false;
+
       repeat
         ClrScr;
         TextBackground(SkinColorTable.FOptionPromptBack);
@@ -978,9 +997,15 @@ begin
           InitDesc := '';
         end;
 
-        GoToXY(rl_point + Length(UTF8Decode(SettingToChangeReadLine)) + 1, 1);
+        GotoXY(rl_point + Length(UTF8Decode(SettingToChangeReadLine)) + 1, 1);
         rl_callback_read_char;
       until rl_option_finished;
+{$ELSE}
+      Prompt := rl_read(StrToPChar(SettingToChangeReadLine));
+      WriteStr(SetDesc, Prompt);
+      rl_free(Prompt);
+      TuiWrite(SetDesc);
+{$ENDIF}
 
       for Len := 0 to SRec^.Count - 1 do
       begin
@@ -1017,6 +1042,10 @@ begin
       if (Index >= 0) and (Index < HBound) and (Len <> 0) then
       begin
 {$IFDEF USE_READLINE}
+{$IFDEF USE_LIBEDIT}
+        ClearOptions;
+        DrawStatus;
+{$ENDIF}
         TuiWrite('(');
         case PRSetting(SRec^.GetNth(Index))^.ValueType of
           TypeString:
@@ -1078,7 +1107,9 @@ begin
   end;
   
 {$IFDEF USE_READLINE}
+{$IFNDEF USE_LIBEDIT}
   rl_callback_handler_remove;
+{$ENDIF}
   clear_history;
   read_history(Backup);
   WriteStr(InitDesc, Backup);
