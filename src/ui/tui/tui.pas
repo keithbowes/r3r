@@ -615,6 +615,7 @@ begin
 {$ELSE}
   p := rl_read(StrToPChar(Feed));
   WriteStr(URI, p);
+  add_history(p);
   rl_free(p);
   Redraw;
 {$ENDIF}

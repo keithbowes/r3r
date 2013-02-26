@@ -598,7 +598,7 @@ uses
   function rl_ding:longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_ding';
 
   function rl_alphabetic(_para1:longint):longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_alphabetic';
-  procedure rl_free(_para1:Pointer){$IFNDEF USE_LIBEDIT};external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_free'{$ENDIF};
+  procedure rl_free(_para1:Pointer){$IFNDEF USE_LIBEDIT};external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_free'{$ELSE}{$IFDEF UNIX};external 'c' name 'free'{$ENDIF}{$ENDIF};
 
   { Readline signal handling, from signals.c  }
   function rl_set_signals:longint;external {$IFDEF LINK_DYNAMIC}RlLib{$ENDIF} name 'rl_set_signals';
@@ -1031,11 +1031,12 @@ begin
   rl_readline_state := rl_readline_state and (not x);
 end;
 {$ELSE USE_LIBEDIT}
-
+{$IFNDEF UNIX}
 procedure rl_free(_para1: Pointer);
 begin
   _para1 := nil;
 end;
+{$ENDIF}
 {$ENDIF USE_LIBEDIT}
 
 {$INCLUDE "historyimpl.inc"}
