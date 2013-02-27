@@ -219,7 +219,7 @@ begin
   CheckInteger('cache-expiry', 'Display', 90, DescCacheExpiry);
   CheckBoolean('enable-mime-guess', 'Display', false, DescGuess);
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
-  CheckBoolean('load-subscriptions-on-startup', 'Display', false, LoadSubscriptions);
+  CheckBoolean('load-subscriptions-on-startup', 'Display', true, LoadSubscriptions);
   CheckBoolean('use-filters', 'Display', true, DescFilters);
 {$IFDEF USE_ICONV}
   CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);

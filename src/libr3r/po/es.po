@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-27 13:58-0500\n"
+"PO-Revision-Date: 2013-02-27 01:18-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -136,3 +136,22 @@ msgstr "Codificación desconocida"
 
 msgid "No Data"
 msgstr "Ningunos datos"
+
+msgid ""
+"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
+"rss"
+msgstr ""
+"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
+"rss"
+
+msgid "http://feeds.bbci.co.uk/news/rss.xml"
+msgstr "http://elmundo.feedsportal.com/elmundo/rss/portada.xml"
+
+msgid "http://rss.slashdot.org/Slashdot/slashdotatom"
+msgstr "http://elmundo.feedsportal.com/elmundo/rss/navegante.xml"
+
+msgid "http://www.reddit.com/.rss"
+msgstr "http://www.reddit.com/r/es/.rss"
+
+#~ msgid "https://github.com/keithbowes/r3r/commits/master.atom"
+#~ msgstr "https://github.com/keithbowes/r3r/commits/master.atom"

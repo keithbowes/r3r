@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-01-27 13:57-0500\n"
+"PO-Revision-Date: 2013-02-27 01:18-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -135,3 +135,19 @@ msgstr "Nekonata kodoprezento"
 
 msgid "No Data"
 msgstr "Neniuj datumoj"
+
+msgid ""
+"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
+"rss"
+msgstr ""
+"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
+"rss"
+
+msgid "http://feeds.bbci.co.uk/news/rss.xml"
+msgstr "http://neniammilitointerni.over-blog.com/rss-articles.xml"
+
+msgid "http://rss.slashdot.org/Slashdot/slashdotatom"
+msgstr "http://feeds.feedburner.com/e-planedo"
+
+msgid "http://www.reddit.com/.rss"
+msgstr "http://www.liberafolio.org/indekso/RSS"

@@ -11,6 +11,8 @@ var
   UnknownEncoding: String;
   NoData: String;
 
+  Subscription1, Subscription2, Subscription3, Subscription4: String;
+
 {$IFNDEF USE_NLS}
 function _(s: String): String;
 {$ENDIF}
@@ -42,6 +44,11 @@ begin
 
   UnknownEncoding := _('Unknown Encoding');
   NoData := _('No Data');
+
+  Subscription1 := _('http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/rss');
+  Subscription2 := _('http://feeds.bbci.co.uk/news/rss.xml');
+  Subscription3 := _('http://rss.slashdot.org/Slashdot/slashdotatom');
+  Subscription4 := _('http://www.reddit.com/.rss');
 end;
 
 {$IFNDEF USE_NLS}

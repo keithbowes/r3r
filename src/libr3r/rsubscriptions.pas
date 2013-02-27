@@ -23,7 +23,7 @@ var
 implementation
 
 uses
-  Dos, RSettings_Routines;
+  Dos, LibR3RStrings, RSettings_Routines;
 
 constructor TRSubscriptions.Init;
 var
@@ -48,6 +48,14 @@ begin
   begin
     ReadLn(FText, Line);
     Add(Line);
+  end;
+
+  if Count = 0 then
+  begin
+    Add(Subscription1);
+    Add(Subscription2);
+    Add(Subscription3);
+    Add(Subscription4);
   end;
 
   Close(FText);

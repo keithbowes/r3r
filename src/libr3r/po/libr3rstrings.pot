@@ -122,3 +122,15 @@ msgstr ""
 
 msgid "No Data"
 msgstr ""
+
+msgid "http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/rss"
+msgstr ""
+
+msgid "http://feeds.bbci.co.uk/news/rss.xml"
+msgstr ""
+
+msgid "http://rss.slashdot.org/Slashdot/slashdotatom"
+msgstr ""
+
+msgid "http://www.reddit.com/.rss"
+msgstr ""

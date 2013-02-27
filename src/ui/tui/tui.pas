@@ -822,7 +822,7 @@ begin
   DrawFeedInfo;
   if SkinOptionFull then
   begin
-    Window(1, FDimUA.TopStart + FDimUA.TopEnd, ScreenWidth, ScreenHeight - FDimUA.TopEnd - (FDimStatus.TopStart - FDimStatus.TopEnd));
+    Window(1, FDimUA.TopStart + FDimUA.TopEnd, ScreenWidth, ScreenHeight - (FDimStatus.TopStart - FDimStatus.TopEnd));
   end;
 
   ClrScr;
