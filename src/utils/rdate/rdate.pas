@@ -85,7 +85,7 @@ begin
     end;
     12:
     begin
-      GetMonthAbbrev := Dec;
+      GetMonthAbbrev := Decem;
     end;
   end;
 end;
@@ -136,7 +136,7 @@ begin
   begin
     GetMonthIndex := '11'
   end
-  else if Name = Dec then
+  else if Name = Decem then
   begin
     GetMonthIndex := '12'
   end

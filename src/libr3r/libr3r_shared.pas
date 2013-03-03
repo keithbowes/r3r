@@ -245,7 +245,7 @@ begin
     end
     else
     begin
-      Subscriptions^.DeleteIndex(Index);
+      Subscriptions^.Delete(Index);
     end
   end
   else if Mode = SubscriptionGet then

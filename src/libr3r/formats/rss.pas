@@ -12,8 +12,10 @@ const
 type
   TRssFeed = class(TXmlFeed)
   private
+    FIsRDF: Boolean;
     FLastCat: String;
     FLeftChannel: Boolean;
+    procedure HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
   protected
     function GetFormat: TFeedType; override;
   public
@@ -35,44 +37,14 @@ end;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
-  AFeed: TXmlFeed;
   Elem, Prev: TXmlElement;
-  IsRDF: Boolean;
 begin
   inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
   Prev := GetPreviousElement;
+  HandleNameSpace(Elem, Line, Item);
 
-  if Elem.NameSpace = DCNS then
-  begin
-    AFeed := TDCFeed.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
-    AFeed.Free;
-  end
-  else if Elem.NameSpace = AtomNS then
-  begin
-    AFeed := GetAtomFeed;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
-    AFeed.Free;
-  end
-  else if Elem.NameSpace = Mod_EnclosureNS then
-  begin
-    AFeed := TModEnclosure.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
-    AFeed.Free;
-  end
-  else
-  begin
-    IsRDF := Elem.NameSpace = RSS1NS;
-  end;
-
-  if not IsRDF then
+  if not FIsRDF then
   begin
     Item.Finished := ((Elem.Name = 'item') and ((Prev.Name = 'item')
       or FLeftChannel)) or (Line = SockEOF);
@@ -103,6 +75,7 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
+  HandleNameSpace(GetCurrentElement, '', CurrentItem);
   with GetCurrentElement, CurrentItem do
   begin 
     if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
@@ -153,8 +126,7 @@ begin
     end
     else if Name = 'pubdate' then
     begin
-      Created := Content;
-      Created := TimeToLongDate(LongDateToTime(Created));
+      Created := TimeToLongDate(LongDateToTime(Content));
     end
     else if (Name = 'author') or (Name = 'managingeditor') then
     begin
@@ -166,8 +138,7 @@ begin
     end
     else if Name = 'lastpubdate' then
     begin
-      LastModified := Content;
-      LastModified := TimeToLongDate(LongDateToTime(LastModified));
+      LastModified := TimeToLongDate(LongDateToTime(Content));
     end
     else if Name = 'language' then
     begin
@@ -185,6 +156,18 @@ begin
     end
     else if Name = 'channel' then
     begin
+      if Attributes^.Count > 0 then
+      begin
+        for Idx := 0 to Attributes^.Count - 1 do
+        begin
+          Attr := PXMLAttr(Attributes^.GetNth(Idx))^;
+          if (Attr.Name = 'about') and (Attr.NameSpace = RDFNS) then
+          begin
+            MySelf := Attr.Value;
+          end;
+        end;
+      end;
+
       FLeftChannel := true;
     end;
 
@@ -206,6 +189,41 @@ var
 begin
   Res := inherited GetCurrentElement;
   GetCurrentElement := Res;
+end;
+
+
+procedure TRssFeed.HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
+var
+  AFeed: TXmlFeed;
+begin
+  if Elem.NameSpace = DCNS then
+  begin
+    AFeed := TDCFeed.Create;
+    AFeed.Clone(FElemList);
+    AFeed.ParseLine(Line, Item);
+    AFeed.SendItem;
+    AFeed.Free;
+  end
+  else if Elem.NameSpace = AtomNS then
+  begin
+    AFeed := GetAtomFeed;
+    AFeed.Clone(FElemList);
+    AFeed.ParseLine(Line, Item);
+    AFeed.SendItem;
+    AFeed.Free;
+  end
+  else if Elem.NameSpace = Mod_EnclosureNS then
+  begin
+    AFeed := TModEnclosure.Create;
+    AFeed.Clone(FElemList);
+    AFeed.ParseLine(Line, Item);
+    AFeed.SendItem;
+    AFeed.Free;
+  end
+  else
+  begin
+    FIsRDF := Elem.NameSpace = RSS1NS;
+  end;
 end;
 
 end.

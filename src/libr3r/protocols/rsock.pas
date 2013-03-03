@@ -29,7 +29,6 @@ type
   protected
     FChunkedLength: integer;
     FError: Boolean;
-    FFeedType: TFeedType;
 {$IFDEF SOCKETS_LIBCURL}
     FHandle: CURL;
 {$ENDIF}
@@ -46,6 +45,7 @@ type
     Sock: TSockWrap;
 {$ENDIF}
 {$IFDEF SOCKETS_LIBCURL}
+    FFirst: Boolean;
     FList: PRStringList;
     FTempList: PRStringList;
 {$ENDIF}
@@ -95,6 +95,7 @@ begin
       begin
         if FTempList^.Count > 0 then
         begin
+          FFirst := true;
           for j := 0 to FTempList^.Count - 1 do
           begin
             t := t + FTempList^.GetNth(j);
@@ -108,9 +109,17 @@ begin
 
               if k > 1 then
               begin
-                { blank spaces for RSS 3.0 }
-                FList^.Add('   ' + Copy(t, 1, k));
-                Delete(t, 1, k);
+                if FFirst then
+                begin
+                  FList^.Add(Copy(t, 1, k));
+                  FFirst := false;
+                end
+                else
+                begin
+                  { blank spaces for RSS 3.0 }
+                  FList^.Add('   ' + Copy(t, 1, k));
+                  Delete(t, 1, k);
+                end;
               end;
             end;
           end;

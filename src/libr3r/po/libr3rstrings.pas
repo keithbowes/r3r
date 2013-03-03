@@ -6,7 +6,7 @@ var
   ErrorGetting: String;
   InvalidHeaders: String;
 
-  Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec: String;
+  Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Decem: String;
 
   UnknownEncoding: String;
   NoData: String;
@@ -40,7 +40,7 @@ begin
   Sep := _('Sep');
   Oct := _('Oct');
   Nov := _('Nov');
-  Dec := _('Dec');
+  Decem := _('Dec');
 
   UnknownEncoding := _('Unknown Encoding');
   NoData := _('No Data');

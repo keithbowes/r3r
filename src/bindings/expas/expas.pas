@@ -5,6 +5,10 @@ interface
 { $DEFINE LINK_DYNAMIC}
 
 {$IFDEF EXPAT_2_1}
+{$DEFINE EXPAT_2_0_1}
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0_1}
 {$DEFINE EXPAT_2_0}
 {$ENDIF}
 
@@ -34,8 +38,6 @@ interface
     xmlparse.h
 }
 
-Type
-  PPointer = ^pointer;
 {$IFDEF FPC}
 {$PACKRECORDS C}
 {$ENDIF}
@@ -350,7 +352,9 @@ type
        ,XML_ERROR_NOT_STANDALONE
        {$ENDIF}
        {$IFDEF EXPAT_2_0}
+       { Added in 1.95.4 }
        ,XML_ERROR_UNEXPECTED_STATE,XML_ERROR_DECLARED_IN_PE,
+       { Added in 1.95.5 }
        XML_ERROR_FEATURE_REQUIRES_XML_DTD,XML_ERROR_CHANGE_FEATURE_ONCE_PARSING,
        { Added in 1.95.7 }
        XML_ERROR_UNBOUND_PREFIX,
@@ -364,11 +368,7 @@ type
        XML_ERROR_RESERVED_NAMESPACE_URI
        {$ENDIF});
        
-  XML_Status = integer;
-  const
-     XML_STATUS_ERROR = 0;
-     XML_STATUS_OK = 1;
-     XML_STATUS_SUSPENDED = 2;
+  XML_Status = (XML_STATUS_ERROR, XML_STATUS_OK, XML_STATUS_SUSPENDED);
 
   procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetElementHandler';
 
@@ -535,9 +535,9 @@ type
     finalBuffer: XML_Bool;
   end;
 
-  function XML_StopParser(parser: XML_Parser; resumable: XML_Bool): XML_Status; external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_StopParser';
-  function XML_ResumeParser(parser: XML_Parser): XML_Status; external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ResumeParser';
-  procedure XML_GetParsingStatus(parser: XML_parser; var status: XML_ParsingStatus); external {$IFDEF LYNX_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetParsingStatus';
+  function XML_StopParser(parser: XML_Parser; resumable: XML_Bool): XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_StopParser';
+  function XML_ResumeParser(parser: XML_Parser): XML_Status; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ResumeParser';
+  procedure XML_GetParsingStatus(parser: XML_parser; var status: XML_ParsingStatus); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetParsingStatus';
 {$ENDIF}
 
 {$IFDEF EXPAT_1_1}
@@ -689,7 +689,8 @@ type
     XML_FEATURE_UNICODE_WCHAR_T, XML_FEATURE_DTD,
     XML_FEATURE_CONTEXT_BYTES, XML_FEATURE_MIN_SIZE,
     XML_FEATURE_SIZEOF_XML_CHAR, XML_FEATURE_SIZEOF_XML_LCHAR,
-    XML_FEATURE_NS, XML_FEATURE_LARGE_SIZE, XML_FEATURE_ATTR_INFO);
+    XML_FEATURE_NS{$IFDEF EXPAT_2_0_1}, XML_FEATURE_LARGE_SIZE{$ENDIF}
+    {$IFDEF EXPAT_2_1}, XML_FEATURE_ATTR_INFO{$ENDIF});
   PXML_Feature = ^XML_Feature;
   XML_Feature = record
     feature: XML_FeatureEnum;
@@ -707,6 +708,8 @@ implementation
 
 {$IFDEF EXPAT_1_0}
 function XML_GetUserData(parser: XML_Parser): Pointer;
+type
+  PPointer = ^Pointer;
 begin
   XML_GetUserData := PPointer(parser)^
 end;

@@ -189,6 +189,11 @@ begin
 end;
 
 constructor TTui.Create;
+{$IFDEF USE_NCRT}
+const
+  BUTTON_SCROLL_DOWN = REPORT_MOUSE_POSITION;
+  BUTTON_SCROLL_UP = BUTTON4_PRESSED;
+{$ENDIF}
 var
   KeyChar: char;
   i: word;
@@ -272,7 +277,7 @@ begin
     end;
 {$ELSE}
     noecho;
-    mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON4_PRESSED or BUTTON4_RELEASED, nil);
+    mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
     i := getch;
     echo;
     case i of
@@ -291,12 +296,7 @@ begin
           begin
             OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
           end
-          else if (mouse_event.bstate and BUTTON4_PRESSED = BUTTON4_PRESSED) then
-          begin
-            ScrollUp;
-            Redraw;
-          end
-          else if mouse_event.bstate and BUTTON4_RELEASED = BUTTON4_RELEASED then
+          else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
           begin
             FCurrentItem := FViewPort.FirstItem + FViewPort.PortHeight;
             if FItems^.Count - 1 > FCurrentItem then
@@ -304,7 +304,12 @@ begin
               Inc(FCurrentItem);
             end;
             ScrollTo(FCurrentItem);
-          end;
+          end
+          else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
+          begin
+            ScrollUp;
+            Redraw;
+          end
         end;
 
         Continue;
@@ -1257,7 +1262,7 @@ begin
         end
         else
         begin
-          Subscriptions^.DeleteIndex(Subscriptions^.IndexOf(My))
+          Subscriptions^.Delete(Subscriptions^.IndexOf(My))
         end
       end
     end

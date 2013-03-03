@@ -28,6 +28,9 @@ uses
 {$IFDEF USE_ICONV}
   Iconv, RProp, RStrings,
 {$ENDIF}
+{$IFNDEF EXPAT_2_0}
+  LibR3RStrings, RMessage,
+{$ENDIF}
   StrTok, SysUtils, Xml;
 
 procedure SplitName(const Name: String; var QName, NameSpace: String);

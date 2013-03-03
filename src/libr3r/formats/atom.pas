@@ -21,6 +21,7 @@ type
     FHasLongDesc: Boolean;
     FHasShortDesc: Boolean;
     FLeftFeed: Boolean;
+    procedure HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
     function GetAbsoluteURL(const URL: String): String;
   protected
     function GetFormat: TFeedType; override;
@@ -28,8 +29,6 @@ type
     constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     procedure SendItem; override;
-    function GetCurrentElement: TXmlElement; override;
-    function GetPreviousElement: TXmlElement; override;
   end;
 
 implementation
@@ -40,11 +39,9 @@ implementation
 
 uses
   DC, HttpCache, ItemCallbacks, RDate, RStrings, SockConsts
-
 {$IFDEF __GPC__}
   , SysUtils
 {$ENDIF}
-
 {$IFNDEF SOCKETS_NONE}  
   , RParseURL
 {$ENDIF};
@@ -59,28 +56,16 @@ begin
 end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem);
-var
-  AFeed: TXmlFeed;
 begin
   inherited ParseLine(Line, Item);
-
-  if GetCurrentElement.NameSpace = DCNS then
-  begin
-    AFeed := TDCFeed.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
-    AFeed.Free;
-  end;
+  HandleNameSpace(GetCurrentElement, Line, Item);
 
   Item.Finished := Line = SockEof;
-  
   if Item.Finished then
   begin
     CallItemCallback(Item);
     FLeftFeed := false;
   end;
-
 end;
 
 procedure TAtomFeed.SendItem;
@@ -88,6 +73,7 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
+  HandleNameSpace(GetCurrentElement, '', CurrentItem);
   with CurrentItem, GetCurrentElement do
   begin
     Language := Lang;
@@ -269,25 +255,23 @@ begin
   end;
 end;
 
-function TAtomFeed.GetCurrentElement: TXmlElement;
-var
-  Res: TXmlElement;
-begin
-  Res := inherited GetCurrentElement;
-  GetCurrentElement := Res;
-end;
-
-function TAtomFeed.GetPreviousElement: TXmlElement;
-var
-  Res: TXmlElement;
-begin
-  Res := inherited GetPreviousElement;
-  GetPreviousElement := Res;
-end;
-
 function TAtomFeed.GetFormat: TFeedType;
 begin
   GetFormat := ftAtom;
+end;
+
+procedure TAtomFeed.HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
+var
+  AFeed: TXmlFeed;
+begin
+  if Elem.NameSpace = DCNS then
+  begin
+    AFeed := TDCFeed.Create;
+    AFeed.Clone(FElemList);
+    AFeed.ParseLine(Line, Item);
+    AFeed.SendItem;
+    AFeed.Free;
+  end;
 end;
 
 function TAtomFeed.GetAbsoluteURL(const URL: String): String;

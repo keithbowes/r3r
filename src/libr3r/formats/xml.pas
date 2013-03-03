@@ -95,7 +95,7 @@ begin
   XML_SetXmlDeclHandler(FParser, XmlDeclarationReceived);
 {$ELSE}
 {$IFDEF EXPAT_1_0}
-  XML_SetUnknownEncodingHandler(parser, UnknownEncodingDetected, Self);
+  XML_SetUnknownEncodingHandler(FParser, UnknownEncodingDetected, Self);
 {$ENDIF}
 {$ENDIF}
   XML_SetUserData(FParser, Self);

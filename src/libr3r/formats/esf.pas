@@ -40,8 +40,6 @@ begin
 end;
 
 function TEsfFeed.UnixToDate(const TS: String): String;
-const
-  SecondsPerDay = 24 * 60 * 60;
 var
   ErrPos: word;
   NTS: real;

@@ -194,9 +194,9 @@ USE_NLS ?= 1
 USE_PCRE ?= 1
 
 ifdef forUnix
-EXPAT_VERSION ?= 2.0
+EXPAT_VERSION ?= 2.0.1
 else
-EXPAT_VERSION ?= 1.1
+EXPAT_VERSION ?= 1.2
 endif
 
 ifndef USE_GPC
@@ -241,6 +241,26 @@ ifneq ($(USE_EXPAT),0)
 override DEFS_EXTRA+=USE_EXPAT
 ifneq ($(EXPAT_VERSION),)
 override DEFS_EXTRA+=EXPAT_$(shell $(ECHO) $(EXPAT_VERSION) | $(SED) -e 's/\./_/g')
+endif
+
+ifneq ($(findstring EXPAT_2_1,$(DEFS_EXTRA)),)
+override DEFS_EXTRA+=EXPAT_2_0_1
+endif
+
+ifneq ($(findstring EXPAT_2_0_1,$(DEFS_EXTRA)),)
+override DEFS_EXTRA+=EXPAT_2_0
+endif
+
+ifneq ($(findstring EXPAT_2_0,$(DEFS_EXTRA)),)
+override DEFS_EXTRA+=EXPAT_1_2
+endif
+
+ifneq ($(findstring EXPAT_1_2,$(DEFS_EXTRA)),)
+override DEFS_EXTRA+=EXPAT_1_1
+endif
+
+ifneq ($(findstring EXPAT_1_1,$(DEFS_EXTRA)),)
+override DEFS_EXTRA+=EXPAT_1_0
 endif
 endif
 

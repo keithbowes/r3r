@@ -14,7 +14,6 @@ type
   public
     constructor Init;
     destructor Done;
-    procedure DeleteIndex(const Index: word);
   end;
 
 var
@@ -78,11 +77,6 @@ begin
 
   Close(FText);
   inherited Done;
-end;
-
-procedure TRSubscriptions.DeleteIndex(const Index: word);
-begin
-  Delete(Index);
 end;
 
 initialization
