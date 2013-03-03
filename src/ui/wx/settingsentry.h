@@ -4,8 +4,8 @@
 
 class SettingsEntry : public wxTextCtrl
 {
-  public:
-    SettingsEntry(wxWindow * parent, char * setting_name);
+	public:
+		SettingsEntry(wxWindow * parent, char * setting_name);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };

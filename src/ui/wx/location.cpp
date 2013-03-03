@@ -15,22 +15,22 @@ void AddLocationHistory(const char * histent)
 
 void CreateLocationBar(wxPanel * parent)
 {
-  InitGettext();
-  wxSizer * sizer = parent->GetSizer();
-  wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
+	InitGettext();
+	wxSizer * sizer = parent->GetSizer();
+	wxBoxSizer * hbox = new wxBoxSizer(wxHORIZONTAL);
 
-  entry = new GoField(parent);
-  entry->SetFocus();
-  hbox->Add(entry, 1, wxALL | wxEXPAND, 5);
+	entry = new GoField(parent);
+	entry->SetFocus();
+	hbox->Add(entry, 1, wxALL | wxEXPAND, 5);
 
 	while (libr3r_history_is_next())
 	{
 		AddLocationHistory(libr3r_history_next());
 	}
 
-  wxButton * button = new wxButton(parent, wxID_GO_BUTTON, _("Go"), wxDefaultPosition, wxDefaultSize);
-  hbox->Add(button, 0, wxALL, 5);
-  button->SetClientData(entry);
+	wxButton * button = new wxButton(parent, wxID_GO_BUTTON, _("Go"), wxDefaultPosition, wxDefaultSize);
+	hbox->Add(button, 0, wxALL, 5);
+	button->SetClientData(entry);
 
-  sizer->Add(hbox, 0, wxEXPAND);
+	sizer->Add(hbox, 0, wxEXPAND);
 }

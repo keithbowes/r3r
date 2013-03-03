@@ -2,8 +2,8 @@
 
 typedef struct
 {
-  wxListBox * box;
-  wxTextCtrl * entry;
+	wxListBox * box;
+	wxTextCtrl * entry;
 } SubscriptionData;
 
 void CreateSubscriptionsPage(wxTreebook * parent);

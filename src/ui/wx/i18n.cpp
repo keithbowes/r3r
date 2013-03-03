@@ -6,15 +6,15 @@
 void InitGettext()
 {
 #ifdef USE_NLS
-  int count;
-  char * name;
-  unsigned char type;
-  void * value;
+	int count;
+	char * name;
+	unsigned char type;
+	void * value;
 
-  name = (char *) "installed-prefix";
-  libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
+	name = (char *) "installed-prefix";
+	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
-  wxString localeDir, path, prefix;
+	wxString localeDir, path, prefix;
 
 	wxChar sep = wxFileName::GetPathSeparator();
 	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * 15);
@@ -26,9 +26,9 @@ void InitGettext()
 	prefix = wxString((const char *) value, wxConvUTF8);
 	free(spath);
 
-  localeDir = prefix + path;
+	localeDir = prefix + path;
 
-  wxLocale * locale = new wxLocale();
+	wxLocale * locale = new wxLocale();
 	int language = wxLANGUAGE_DEFAULT;
 	
 	/* Kludge for Windows */

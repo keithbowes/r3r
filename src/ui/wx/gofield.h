@@ -2,8 +2,8 @@
 
 class GoField : public wxComboBox
 {
-  public:
-    GoField(wxWindow * parent);
+	public:
+		GoField(wxWindow * parent);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };

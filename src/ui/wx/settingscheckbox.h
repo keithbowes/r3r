@@ -2,8 +2,8 @@
 
 class SettingsCheckBox : public wxCheckBox
 {
-  public:
-    SettingsCheckBox(wxWindow * parent, const wxString & label, char * setting_name);
+	public:
+		SettingsCheckBox(wxWindow * parent, const wxString & label, char * setting_name);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };

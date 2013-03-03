@@ -16,17 +16,17 @@ char * R3R::GetUserAgent()
 
 bool R3R::OnInit()
 {
-  InitGettext();
+	InitGettext();
 
-  RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
-  frame->Show(TRUE);
-  SetTopWindow(frame);
+	RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
+	frame->Show(TRUE);
+	SetTopWindow(frame);
 
 	char * ua = GetUserAgent();
 	libr3r_set_user_agent_info(ua);
 	free(ua);
 
-  LoadFeeds(argc, argv);
+	LoadFeeds(argc, argv);
 
-  return TRUE;
+	return TRUE;
 }

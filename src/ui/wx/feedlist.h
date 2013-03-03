@@ -2,25 +2,25 @@
 
 typedef struct
 {
-  char * type, * url;
+	char * type, * url;
 } enclosure_data;
 
 typedef struct
 {
-  bool isTopLevel;
+	bool isTopLevel;
 
-  char * contact;
-  char * desc;
-  char * link;
-  char * title;
-  char * self;
-  enclosure_data enclosure;
+	char * contact;
+	char * desc;
+	char * link;
+	char * title;
+	char * self;
+	enclosure_data enclosure;
 } ItemInfo;
 
 typedef struct
 {
-  void * lib;
-  char * res;
+	void * lib;
+	char * res;
 } FeedResource;
 
 void CreateFeedList(wxPanel * parent);

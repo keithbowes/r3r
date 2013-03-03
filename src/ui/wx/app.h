@@ -2,6 +2,6 @@
 
 class R3R : public wxApp
 {
-  char * GetUserAgent();
-  virtual bool OnInit();
+	char * GetUserAgent();
+	virtual bool OnInit();
 };

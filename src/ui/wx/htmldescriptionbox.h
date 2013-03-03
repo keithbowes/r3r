@@ -2,8 +2,8 @@
 
 class HtmlDescriptionBox : public wxHtmlWindow
 {
-  public:
-    HtmlDescriptionBox(wxWindow * parent);
+	public:
+		HtmlDescriptionBox(wxWindow * parent);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };

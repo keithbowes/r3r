@@ -17,8 +17,8 @@
 
 class SettingsDialog: public wxDialog
 {
-  public:
-    SettingsDialog(wxWindow * parent);
+	public:
+		SettingsDialog(wxWindow * parent);
 
-  DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };

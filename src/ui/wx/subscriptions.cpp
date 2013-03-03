@@ -7,75 +7,75 @@ Subscriptions * subs;
 
 Subscriptions::Subscriptions()
 {
-  m_current = 0;
-  subs = this;
+	m_current = 0;
+	subs = this;
 }
 
 void Subscriptions::Add(char * sub)
 {
-  unsigned int count;
-  libr3r_access_subscriptions(0, SUBSCRIPTIONS_ADD, &sub, &count);
+	unsigned int count;
+	libr3r_access_subscriptions(0, SUBSCRIPTIONS_ADD, &sub, &count);
 }
 
 void Subscriptions::Delete(char * sub)
 {
-  unsigned int count;
-  libr3r_access_subscriptions(0, SUBSCRIPTIONS_DELETE, &sub, &count);
+	unsigned int count;
+	libr3r_access_subscriptions(0, SUBSCRIPTIONS_DELETE, &sub, &count);
 }
 
 int Subscriptions::IndexOf(char * sub)
 {
-  bool is_found = false;
-  char * s;
-  int i = 0;
+	bool is_found = false;
+	char * s;
+	int i = 0;
 
-  m_current = 0;
-  while ((s = GetNext()))
-  {
-    i++;
-    if (sub && strcmp(sub, s) == 0)
-    {
-      is_found = true;
-      break;
-    }
-  }
+	m_current = 0;
+	while ((s = GetNext()))
+	{
+		i++;
+		if (sub && strcmp(sub, s) == 0)
+		{
+			is_found = true;
+			break;
+		}
+	}
 
-  if (is_found)
-  {
-    return i;
-  }
-  else
-  {
-    return -1;
-  }
+	if (is_found)
+	{
+		return i;
+	}
+	else
+	{
+		return -1;
+	}
 }
 
 char * Subscriptions::GetNext()
 {
-  char * ret;
-  unsigned int count = 0;
-  libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GETCOUNT, &ret, &count);
+	char * ret;
+	unsigned int count = 0;
+	libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GETCOUNT, &ret, &count);
 
-  if (count > 0)
-  {
-    count = 0;
-    libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
-  }
+	if (count > 0)
+	{
+		count = 0;
+		libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
+	}
 
-  if (m_current >= count)
-  {
-    m_current = 0;
-    ret = NULL;
-  }
-  else
-  {
-    m_current++;
-  }
+	if (m_current >= count)
+	{
+		m_current = 0;
+		ret = NULL;
+	}
+	else
+	{
+		m_current++;
+	}
 
-  return ret;
+	return ret;
 }
 
 Subscriptions * GetSubscriptionsObject()
 {
-  return subs;
+	return subs;
 }
