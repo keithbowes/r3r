@@ -29,6 +29,16 @@ do
       echo "HOST=$val" >> config.make;;
     --with-libiconv)
       echo "USE_LIBICONV=1" >> config.make;;
+    --with-regexp*)
+        case $val in
+            pcre)
+                lt=REGEXP_PCRE;;
+            regexpr)
+                lt=REGEXP_REGEXPR;;
+            *)
+                lt=
+        esac
+        echo "DEFS_REGEXP=$lt" >> config.make;;
     --with-settings*)
       case $val in
         ini)
@@ -77,8 +87,6 @@ do
       echo "NO_NCURSES=1" >> config.make;;
     --disable-nls)
       echo "USE_NLS=0" >> config.make;;
-    --disable-pcre)
-      echo "USE_PCRE=0" >> config.make;;
     --disable-readline)
       echo "USE_READLINE=0" >> config.make;;
     --disable-xml)
@@ -90,6 +98,7 @@ do
       echo -e "\t--prefix=PFX Where to install it [$PREFIX]"
       echo -e "\t--host=HOST Build for HOST (e.g. i386-win32)"
       echo -e "\t--with-libiconv Use GNU's libiconv library instead of the functionality built in to your OS.\n\t\tOnly works on Unix systems without the --disable-iconv option"
+      echo -e "\t--with-regexp=lib Use some library (pcre, regexpr) for regular-expression support"
       echo -e "\t--with-settings=database Type of settings database to use (ini|libini|registry)"
       echo -e "\t--with-sockets=lib Sockets library to use (bsd|curl|libcurl|none|synapse)"
       echo -e "\t--with-ssl Build with OpenSSL"
@@ -99,7 +108,6 @@ do
       echo -e "\t--disable-libidn Build without IDN support"
       echo -e "\t--disable-ncurses Disable the use of ncurses where used (Unix/FPC TUI only)"
       echo -e "\t--disable-nls Disable gettext support"
-      echo -e "\t--disable-pcre Disable PCRE support (regular expressions)"
       echo -e "\t--disable-readline Disable GNU Readline support (TUI only)"
       echo -e "\t--disable-xml Disable XML support"
       echo -e "\t--without-expat2 XML parsing via Expat 1 instead of Expat 2.\n\t\tOnly valid if --disable-xml wasn't specified"

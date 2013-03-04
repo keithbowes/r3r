@@ -161,9 +161,13 @@ USE_LIBIDN2
 USE_NLS
   Allow the use of gettext to enable NLS (native language support).
   Default: 1
-USE_PCRE
-  Allow the use of PCRE to allow more powerful text matching.
-  Default: 1
+DEFS_REGEXP
+  Allow the use of regular expressions to allow more powerful text matching.
+  Possible values:
+    * REGEXP_PCRE: Use the ubiquitous PCRE library for that.
+    * REGEXP_REGEXPR: Use the TRegExpr class for that.
+    * Any other value: Disable regular expressions
+  Default: REGEXP_PCRE
 USE_READLINE
   Use GNU readline to keep a history of visited URLs.
   Default: 1

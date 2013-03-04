@@ -46,6 +46,10 @@ uses
   
 {$IFDEF USE_PCRE}
   , Pcre
+{$ELSE}
+{$IFDEF USE_REGEXPR}
+  , RegExpr
+{$ENDIF}
 {$ENDIF};
 
 var
@@ -141,10 +145,15 @@ begin
   Ret := StringReplace(Ret, '%o', OS, [rfReplaceAll]);
 {$IFDEF USE_PCRE}
   WriteStr(Rep, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
-  Rep := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);
+  Ret := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%p', Rep, [rfReplaceAll]);
+{$ELSE}
+{$IFDEF USE_REGEXPR}
+  WriteStr(Rep, 'TRegExpr/', TRegExpr.VersionMajor, '.', TRegExpr.VersionMinor);
   Ret := StringReplace(Ret, '%p', Rep, [rfReplaceAll]);
 {$ELSE}
   Ret := StringReplace(Ret, '%p', '', [rfReplaceAll]);
+{$ENDIF}
 {$ENDIF}
 {$IFDEF USE_SSL}
   Ret := StringReplace(Ret, '%s', 'U', [rfReplaceAll]);

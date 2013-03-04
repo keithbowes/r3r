@@ -191,7 +191,7 @@ USE_ICONV ?= 1
 USE_IDN ?= 1
 USE_LIBIDN2 ?= 0
 USE_NLS ?= 1
-USE_PCRE ?= 1
+DEFS_REGEXP ?= REGEXP_PCRE
 
 ifdef forUnix
 EXPAT_VERSION ?= 2.0.1
@@ -272,8 +272,12 @@ ifneq ($(USE_LIBICONV),0)
 override DEFS_EXTRA+=USE_LIBICONV
 endif
 
-ifneq ($(USE_PCRE),0)
+ifeq ($(DEFS_REGEXP),REGEXP_PCRE)
 override DEFS_EXTRA+=USE_PCRE
+else
+ifeq ($(DEFS_REGEXP),REGEXP_REGEXPR)
+override DEFS_EXTRA+=USE_REGEXPR
+endif
 endif
 
 ifneq ($(USE_READLINE),0)

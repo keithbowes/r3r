@@ -125,11 +125,15 @@ endif
 ifneq ($(USE_NLS),0)
 	@$(ECHO) $(call checklib,intl)
 endif
-ifneq ($(USE_PCRE),0)
+ifeq ($(DEFS_REGEXP),REGEXP_PCRE)
 ifdef forWindows
 	@$(ECHO) $(call checklib,libpcre-0)
 else
 	@$(ECHO) $(call checklib,pcre)
+endif
+else
+ifeq ($(DEFS_REGEXP),REGEXP_REGEXPR)
+	@$(ECHO) $(call checkunit,RegExpr)
 endif
 endif
 ifneq ($(USE_READLINE),0)

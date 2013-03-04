@@ -12,6 +12,10 @@ implementation
 uses
 {$IFDEF USE_PCRE}
   PCRE, RStrings,
+{$ELSE}
+{$IFDEF USE_REGEXPR}
+  RegExpr,
+{$ENDIF}
 {$ENDIF}
   RSettings_Routines, SysUtils;
 
@@ -81,6 +85,24 @@ begin
 
         ShouldFilter := rc >= 0;
         pcre_free(re);
+{$ELSE}
+{$IFDEF USE_REGEXPR}
+        with TRegExpr.Create do
+        begin
+          ModifierI := Copy(FilterEntry, Length(FilterEntry), 1) = 'i';
+          if ModifierI then
+          begin
+            Delete(FilterEntry, Length(FilterEntry), 1);
+          end;
+          FilterEntry := Copy(FilterEntry, 2, Length(FilterEntry) - 2);
+
+          Expression := FilterEntry;
+          ShouldFilter := Exec(FieldValue);
+          Free;
+        end;
+{$ELSE}
+        ShouldFilter := false;
+{$ENDIF}
 {$ENDIF}
       end
       else
