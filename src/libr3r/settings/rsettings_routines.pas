@@ -22,12 +22,9 @@ implementation
 uses
   Dos, Info, RProp, RSettings_Strings, SysUtils;
 
-var
-  PrivName: String;
-
 function GetApplicationName: String;
 begin
-  GetApplicationName := LowerCase(PrivName);
+  GetApplicationName := LowerCase(AppName);
 end;
 
 function DataDir: String;
@@ -39,7 +36,7 @@ begin
   if Ret <> '' then
   begin
     CheckDir(Ret);
-    Ret := Ret + PathDelim + PrivName + PathDelim;
+    Ret := Ret + PathDelim + GetApplicationName + PathDelim;
   end
   else
   begin
@@ -59,7 +56,7 @@ begin
   if Ret <> '' then
   begin
     CheckDir(Ret);
-    Ret := Ret + PathDelim + PrivName;
+    Ret := Ret + PathDelim + GetApplicationName;
   end
   else
   begin
@@ -108,7 +105,7 @@ begin
   end;
   
   CheckDir(Ret);
-  Ret := Ret + PathDelim + PrivName + PathDelim;
+  Ret := Ret + PathDelim + GetApplicationName + PathDelim;
 {$ENDIF}
 
   CheckDir(Ret);
@@ -132,9 +129,5 @@ begin
 
   GetInstalledPrefix := Res
 end;
-
-initialization
-
-PrivName := LowerCase(AppName);
 
 end.

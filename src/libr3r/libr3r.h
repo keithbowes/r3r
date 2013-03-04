@@ -44,6 +44,8 @@ extern char * libr3r_get_settings_dir(void);
 extern char * libr3r_get_data_dir(void);
 extern char * libr3r_get_cache_dir(void);
 
+extern char * libr3r_get_version(void);
+
 #ifdef __cplusplus
  }
 #endif

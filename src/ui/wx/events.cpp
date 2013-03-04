@@ -209,7 +209,7 @@ void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
 {
 	wxString command, url, version;
 	url = wxString("http://r3r.sourceforge.net/check.php?v=", wxConvUTF8);
-	version = wxString(wxString(VERSION, wxConvUTF8));
+	version = wxString(wxString(libr3r_get_version(), wxConvUTF8));
 	command = url + version + wxString("&display=1", wxConvUTF8);
 
 	GoBrowser((char *) (const char *) command.mb_str());

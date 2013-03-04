@@ -2,7 +2,7 @@ WXFLAGS ?= --host=$(HOST)
 WX_CONFIG ?= wx-config $(WXFLAGS)
 CXX = $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
-						-DVERSION=\"$(VERSION)\" -I../../libr3r
+						-I../../libr3r
 override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
