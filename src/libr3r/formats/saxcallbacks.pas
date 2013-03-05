@@ -31,22 +31,22 @@ uses
 {$IFNDEF EXPAT_2_0}
   LibR3RStrings, RMessage,
 {$ENDIF}
-  StrTok, SysUtils, Xml;
+  SysUtils, Xml;
 
-procedure SplitName(const Name: String; var QName, NameSpace: String);
+procedure SplitName(const Name: String; var ElemName, NSURI: String);
 var
-  List: TStringsList;
+  Index: PtrUInt;
 begin
-  List := Split(Name, NameSpaceSeparator);
-  if List.Length = 2 then
+  Index := Pos(NameSpaceSeparator, Name);
+  if Index <> 0 then
   begin
-    NameSpace := List.Strings[0];
-    QName := List.Strings[1];
+    NSURI := Name[1..(Index - 1)];
+    ElemName := Name[(Index + 1)..Length(Name)];
   end
-  else if List.Length = 1 then
+  else
   begin
-    NameSpace := '';
-    QName := List.Strings[0];
+    ElemName := Name;
+    NSURI := '';
   end;
 end;
 
