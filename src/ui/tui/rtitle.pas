@@ -16,7 +16,7 @@ uses
 {$IFDEF FPC_UNIX}
   X, XLib, XUtil,
 {$ENDIF}
-  SysUtils
+  RSettings_Routines, SysUtils
 {$ENDIF};
 
 var
@@ -106,14 +106,14 @@ begin
   if (GetEnv('DISPLAY') <> '') and (GetEnv('XTERM_VERSION') = '') then
   begin
     SwapVectors;
-    Exec(FSearch('printf', GetEnv('PATH')), '\033]0;' + NewTitle + '\007');
+    Exec(GetInstalledPrefix + '/bin/r3r-settitle', NewTitle);
     SwapVectors;
   end;
 {$ELSE}
   if GetEnv('DISPLAY') <> '' then
   begin
     SwapVectors;
-    Exec(FSearch('printf', GetEnv('PATH')), '\033]0;' + NewTitle + '\007');
+    Exec(GetInstalledPrefix + '/bin/r3r-settitle', NewTitle);
     SwapVectors;
   end;
 {$ENDIF FPC_UNIX}

@@ -114,16 +114,25 @@ end;
 
 function GetInstalledPrefix: String;
 var
+  p: PChar;
   Res: String;
 begin
   Res := GetEnv('R3R_INSTALLED_PREFIX');
 
   if Res = '' then
   begin
-    WriteStr(Res, PChar(GetProp('installed-prefix')));
-    if Res = '' then
+    p := GetProp('installed-prefix');
+    if Assigned(p) then
     begin
-      Res := InstalledPrefix
+      WriteStr(Res, p);
+      if Res = '' then
+      begin
+        Res := InstalledPrefix
+      end
+    end
+    else
+    begin
+      Res := '';
     end
   end;
 

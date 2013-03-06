@@ -145,7 +145,7 @@ begin
   Ret := StringReplace(Ret, '%o', OS, [rfReplaceAll]);
 {$IFDEF USE_PCRE}
   WriteStr(Rep, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
-  Ret := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);
+  Rep := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);
   Ret := StringReplace(Ret, '%p', Rep, [rfReplaceAll]);
 {$ELSE}
 {$IFDEF USE_REGEXPR}

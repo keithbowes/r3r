@@ -10,11 +10,11 @@ all:
 	$(MAKE) info.pas
 	$(MAKE) info$(PPUEXT)
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
-	cd ../utils && $(MAKE) r3r-conv
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
 	$(MAKE) rupdate.pas
 endif
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
+	cd ../utils && $(MAKE) r3r-conv
 	$(MAKE) libr3r$(PPUEXT)
 ifdef BUILD_SHARED
 ifneq ($(BUILD_SHARED),0)

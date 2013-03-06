@@ -162,6 +162,7 @@ var
 begin
   WriteStr(Message, name);
   CallMessageEventEx(TXmlFeed(encodingHandlerData), true, UnknownEncoding, Message);
+  UnknownEncodingDetected := 0;
 end;
 {$ENDIF}
 {$ENDIF}

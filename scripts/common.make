@@ -193,7 +193,7 @@ USE_LIBIDN2 ?= 0
 USE_NLS ?= 1
 DEFS_REGEXP ?= REGEXP_PCRE
 
-ifdef forUnix
+ifndef USE_GPC
 EXPAT_VERSION ?= 2.0.1
 else
 EXPAT_VERSION ?= 1.2

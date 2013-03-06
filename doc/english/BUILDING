@@ -121,7 +121,8 @@ EXPAT_VERSION
   * 2.0
   * 2.0.1
   * 2.1
-  Default: 2.0.1 in Unix; 1.2 everywhere else
+  Default: 1.2 when building with GPC; 2.0.1 when building with
+  another compiler.
 NO_NCURSES
   Disable the use of ncurses <http://gnu.org/software/ncurses> for
   the TUI. It only makes sense in Free Pascal on Unix platforms.

@@ -368,7 +368,7 @@ type
        XML_ERROR_RESERVED_NAMESPACE_URI
        {$ENDIF});
        
-  XML_Status = (XML_STATUS_ERROR, XML_STATUS_OK, XML_STATUS_SUSPENDED);
+  XML_Status = (XML_STATUS_ERROR, XML_STATUS_OK{$IFDEF EXPAT_2_0}, XML_STATUS_SUSPENDED{$ENDIF});
 
   procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetElementHandler';
 
