@@ -132,7 +132,7 @@ begin
     end
     else
     begin
-      Res := '';
+      Res := InstalledPrefix;
     end
   end;
 

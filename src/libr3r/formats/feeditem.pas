@@ -1,7 +1,5 @@
 unit FeedItem;
 
-{$H+}
-
 interface
 
 uses
@@ -64,7 +62,7 @@ var
   EntNum: integer;
   EntStr: String;
   ErrPos: byte;
-  i: cardinal;
+  i: PtrUInt;
   InEnt, InHTML: Boolean;
   OutStr: String;
 begin
@@ -96,7 +94,7 @@ begin
     begin
       InHTML := false;
     end
-    else if InEnt  then
+    else if InEnt then
     begin
       if InStr[i] <> ';' then
       begin
@@ -107,6 +105,10 @@ begin
         if EntStr = 'amp' then
         begin
           EntStr := '&';
+        end
+        else if EntStr = 'apos' then
+        begin
+          EntStr := '''';
         end
         else if EntStr = 'gt' then
         begin

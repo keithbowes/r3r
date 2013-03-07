@@ -81,8 +81,8 @@ const
 function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
 var
   i, j, k: PtrUInt;
-  s: String;
-  t: String;
+  s: String{$IFDEF __GPC__}(CURL_BUFFER_SIZE){$ENDIF};
+  t: String{$IFDEF __GPC__}(CURL_MAX_BUFFER_SIZE){$ENDIF};
 begin
   WriteStr(s, ptr);
   t := '';
@@ -105,13 +105,21 @@ begin
 
               repeat
                 Dec(k)
-              until (t[k] in [#0, #8, #9, #10, #13, #32]) or (k = 1);
+              until (t[k] in [#0, #8, #9, #10, #13, #32, '&']) or (k = 1);
+
+              { Split before a character reference }
+              if t[k] = '&' then
+              begin
+                FFirst := true;
+                Dec(k)
+              end;
 
               if k > 1 then
               begin
                 if FFirst then
                 begin
                   FList^.Add(Copy(t, 1, k));
+                  Delete(t, 1, k);
                   FFirst := false;
                 end
                 else
@@ -125,7 +133,6 @@ begin
           end;
 
           FTempList^.Clear;
-          FTempList^.Add('');
         end;
         FList^.Add(t + Copy(s, 1, i));
         Delete(s, 1, i);
@@ -237,6 +244,7 @@ begin
 
   if Assigned(FTempList) then
   begin
+    FTempList^.Add(''); // Prevents a crash when destroying an empty list
     Dispose(FTempList, Done);
   end;
 

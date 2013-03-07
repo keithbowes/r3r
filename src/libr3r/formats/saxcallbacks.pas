@@ -1,7 +1,6 @@
 unit SaxCallbacks;
 
 {$CALLING cdecl}
-{$POINTERMATH ON}
 
 interface
 
@@ -40,8 +39,8 @@ begin
   Index := Pos(NameSpaceSeparator, Name);
   if Index <> 0 then
   begin
-    NSURI := Name[1..(Index - 1)];
-    ElemName := Name[(Index + 1)..Length(Name)];
+    NSURI := Name[1..Index - 1];
+    ElemName := Name[Index + 1..Length(Name)];
   end
   else
   begin
@@ -136,10 +135,6 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      if Length(Elem^.Content) <> 0 then
-      begin
-        Elem^.Content := Elem^.Content + ' ';
-      end;
       Elem^.Content := Elem^.Content + enh;
       SendItem;
     end;

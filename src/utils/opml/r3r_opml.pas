@@ -1,8 +1,5 @@
 program R3R_OPML;
 
-{$H+}
-{$POINTERMATH ON}
-
 uses
 {$IFDEF USE_EXPAT}
   Expas,

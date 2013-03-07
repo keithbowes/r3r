@@ -26,13 +26,14 @@ interface
 {$PACKRECORDS C}
 {$ENDIF}
 
-{ Remove if you're building for a target with this library }
-{$UNDEF LINK_DYNAMIC}
-
 {$IFDEF LINK_DYNAMIC}
 {$IFNDEF __GPC__}
 const
+{$IFDEF MSWINDOWS}
+  Idn2Lib = 'libidn2-0';
+{$ELSE}
   Idn2Lib = 'idn2';
+{$ENDIF}
 {$ELSE}
 {$DEFINE Idn2Lib 'idn2'}
 {$ENDIF}
@@ -208,11 +209,6 @@ const
 
 
 implementation
-
-{$IFDEF __GPC__}
-uses
-  Strings;
-{$ENDIF}
 
 function IDN2_VERSION: PChar;
 begin

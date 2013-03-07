@@ -1,7 +1,5 @@
 unit SockWrap;
 
-{$H+}
-
 interface
 
 {$CALLING cdecl}
