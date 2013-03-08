@@ -68,6 +68,7 @@ end;
 function FormatTime(InTime: String; DateFormat: TDateFormat): String;
 {$IFDEF SOCKETS_LIBCURL}
 var
+  Res: String;
   t: time_t;
 begin
   t := curl_getdate(StrToPChar(InTime), nil);
@@ -77,7 +78,21 @@ begin
     Exit;
   end;
 
-  FormatTime := UnixToDate(t);
+  case DateFormat of
+    dfUnix:
+    begin
+      WriteStr(Res, t);
+      FormatTime := Res;
+    end;
+    dfLong:
+    begin
+      FormatTime := UnixToDate(t);
+    end;
+    dfShort:
+    begin
+      FormatTime := TimeToShortDate(LongDateToTime(UnixToDate(t)));
+    end;
+  end;
 {$ELSE}
 var
   Date: TRDate;
@@ -88,6 +103,7 @@ begin
     Date := LongDateToTime(InTime);
     if Date.Year = '' then
     begin
+      FormatTime := InTime; (* Unparsable date format *)
       Exit
     end
   end;

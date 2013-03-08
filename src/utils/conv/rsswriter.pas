@@ -34,19 +34,20 @@ begin
   Created := FormatTime(Item.Created, dfLong);
   Modified := FormatTime(Item.LastModified, dfLong);
 
-  WriteLn(fh^, '<title>', Item.Title, '</title>', LineEnding, '<link>',
-    Item.Link, '</link>', LineEnding, '<description><![CDATA[', LineEnding,
-    Item.Description, LineEnding, ']]>', LineEnding, '</description>',
-    LineEnding, '<category>', Item.Subject, '</category>', LineEnding,
-    '<pubDate>', Created, '</pubDate>', LineEnding, '<lastPubDate>', Modified,
-    '</lastPubDate>', LineEnding, '<generator>', Item.Generator,
-    '</generator>', LineEnding, '<guid>', Item.Id, '</guid>', LineEnding,
-    '<language>', Item.Language, '</language>', LineEnding, '<copyright>',
-    Item.Copyright, '</copyright>', LineEnding, '<atom:link rel="self" href="',
-    Item.MySelf, '"/>', LineEnding, '<enclosure>', Item.Enclosure.URL,
-    '</enclosure>', LineEnding);
+  WriteLn(fh^, '<title><![CDATA[', Item.Title, ']]></title>', LineEnding,
+    '<link><![CDATA[', Item.Link, ']]></link>', LineEnding,
+    '<description><![CDATA[', LineEnding, Item.Description, LineEnding, ']]>',
+    LineEnding, '</description>', LineEnding, '<category><![CDATA[',
+    Item.Subject, ']]></category>', LineEnding, '<pubDate>', Created,
+    '</pubDate>', LineEnding, '<lastPubDate>', Modified, '</lastPubDate>',
+    LineEnding, '<generator><![CDATA[', Item.Generator, ']]></generator>',
+    LineEnding, '<guid><![CDATA[', Item.Id, ']]></guid>', LineEnding,
+    '<language>', Item.Language, '</language>', LineEnding,
+    '<copyright><![CDATA[', Item.Copyright, ']]></copyright>', LineEnding,
+    '<atom:link rel="self" href="', Item.MySelf, '"/>', LineEnding,
+    '<enclosure><![CDATA[', Item.Enclosure.URL, ']]></enclosure>', LineEnding);
 
-  if IsTop then
+  if not IsTop then
   begin
     WriteLn(fh^, '</item>', LineEnding);
   end;

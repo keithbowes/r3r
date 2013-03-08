@@ -26,7 +26,7 @@ begin
   begin
     WriteRss3(Item);
   end
-  else if OUtType = 'rss' then
+  else if OutType = 'rss' then
   begin
     WriteRss(Item, IsTopElem);
   end
