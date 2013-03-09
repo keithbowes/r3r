@@ -88,7 +88,7 @@ const
 
 type
 {$ifdef EXPAT_2_0}
-  XML_Bool = ByteBool;
+  XML_Bool = WordBool;
   XML_Index = PtrInt;
 {$ifndef __GPC__}
   size_t = PtrUInt;
@@ -620,7 +620,7 @@ type
   procedure XML_SetXmlDeclHandler(parser: XML_Parser; xmldecl: XML_XmlDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetXmlDeclHandler';
   procedure XML_SetEntityDeclHandler(parser: XML_Parser; handler: XML_EntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetXmlDeclHandler';
 
-  procedure XML_ParserCreate_MM(encoding: PXML_Char; memsuite: PXML_Memory_Handling_Suite; namespaceSeparator: PXML_Char); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreate_MM';
+  function  XML_ParserCreate_MM(encoding: PXML_Char; memsuite: PXML_Memory_Handling_Suite; namespaceSeparator: PXML_Char): XML_Parser; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreate_MM';
 {$ENDIF}
 
 

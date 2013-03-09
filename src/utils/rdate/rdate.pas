@@ -153,7 +153,7 @@ var
   Res: String;
   TS, TST: real;
 begin
-{$I-}
+  {$I-}
   ReadStr(Time.Day, Day);
   ReadStr(GetMonthIndex(Time.Month), Month);
   ReadStr(Time.Year, Year);
