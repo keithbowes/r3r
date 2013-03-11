@@ -23,7 +23,6 @@ type
     FIndirectHost: String;
     FLocal: TLocalFile;
     FPath: String;
-    FURL: String;
     function GetType: TFeedType;
   protected
     Cache: THttpCache;
@@ -34,6 +33,7 @@ type
     procedure SendHeaders;
     procedure InitCache;
   public
+    FURL: String;
     constructor Create(Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;

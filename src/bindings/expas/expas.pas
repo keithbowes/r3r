@@ -1,4 +1,5 @@
-unit expas;
+unit Expas;
+
 interface
 
 { $DEFINE EXPAT_2_0}
@@ -39,6 +40,7 @@ interface
 }
 
 {$IFDEF FPC}
+{$modeswitch classicprocvars}
 {$PACKRECORDS C}
 {$ENDIF}
 
@@ -621,6 +623,7 @@ type
   procedure XML_SetEntityDeclHandler(parser: XML_Parser; handler: XML_EntityDeclHandler); external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_SetXmlDeclHandler';
 
   function  XML_ParserCreate_MM(encoding: PXML_Char; memsuite: PXML_Memory_Handling_Suite; namespaceSeparator: PXML_Char): XML_Parser; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserCreate_MM';
+  function XML_ParserReset(parser: XML_Parser; encoding: PXML_Char): XML_Bool; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ParserReset';
 {$ENDIF}
 
 
@@ -702,6 +705,11 @@ type
   function XML_ExpatVersionInfo: XML_Expat_Version; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_ExpatVersionInfo';
 
   function XML_GetFeatureList: PXml_Feature; external {$IFDEF LINK_DYNAMIC}ExpatLib{$ENDIF} name 'XML_GetFeatureList';
+
+  function XML_MAJOR: integer;
+  function XML_MINOR: integer;
+  function XML_MICRO: integer;
+
 {$ENDIF}
 
 implementation
@@ -712,6 +720,24 @@ type
   PPointer = ^Pointer;
 begin
   XML_GetUserData := PPointer(parser)^
+end;
+{$ENDIF}
+
+{$IFDEF EXPAT_2_0}
+{ The exact opposite of what expat.h does :) }
+function XML_MAJOR: integer;
+begin
+  XML_MAJOR := XML_ExpatVersionInfo.major;
+end;
+
+function XML_MINOR: integer;
+begin
+  XML_MINOR := XML_ExpatVersionInfo.minor;
+end;
+
+function XML_MICRO: integer;
+begin
+  XML_MICRO := XML_ExpatVersionInfo.micro;
 end;
 {$ENDIF}
 

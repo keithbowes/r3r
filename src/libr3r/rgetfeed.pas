@@ -35,7 +35,7 @@ uses
   LibIdn2, LibIntl,
 {$ENDIF}
 {$ENDIF}
-  HttpCache, LibR3RStrings, RFilter, RSettings_Routines,
+  Http, HttpCache, LibR3RStrings, RFilter, RSettings_Routines,
   RStrings, SysUtils
 {$IFDEF __GPC__}
   , GPC
@@ -154,7 +154,7 @@ begin
     and not defined(__GPC__)} { Hack: Sock.Error is always true in GPC }
     if Assigned(Sock.Sock) and Sock.Error then
     begin
-      CallMessageEvent(Sock, true, ErrorGetting);
+      CallMessageEventEx(Sock, true, ErrorGetting, THttpSock(Sock).FURL);
       Break;
     end;
 {$ENDIF}
