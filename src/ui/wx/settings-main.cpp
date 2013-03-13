@@ -25,7 +25,7 @@ void CreateSettingsDialog(wxFrame * parent)
 	hbox->Add(view, 1, wxEXPAND | wxALL);
 
 	wxSizer * sizer = dlg->CreateButtonSizer(wxOK | wxCANCEL);
-	vbox->Add(sizer, 1, wxEXPAND| wxALL, 10);
+	vbox->Add(sizer, 1, wxEXPAND | wxALL);
 
 	CreateDisplayPage(view);
 	CreateHTTPPage(view);

@@ -38,6 +38,7 @@ BEGIN_EVENT_TABLE(SettingsDialog, wxDialog)
 	EVT_BUTTON(wxID_CANCEL, SettingsDialogEvents::OnCancel)
 	EVT_BUTTON(wxID_DELETE_SUBSCRIPTION, SubscriptionsEvents::OnDelete)
 	EVT_BUTTON(wxID_OK, SettingsDialogEvents::OnOK)
+	EVT_CLOSE(SettingsDialogEvents::OnClose)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(SettingsEntry, wxTextCtrl)

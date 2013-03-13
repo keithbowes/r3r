@@ -58,6 +58,7 @@ class SettingsDialogEvents: public wxWindow
 {
 	public:
 		void OnCancel(wxCommandEvent & event);
+		void OnClose(wxCloseEvent & event);
 		void OnOK(wxCommandEvent & event);
 };
 

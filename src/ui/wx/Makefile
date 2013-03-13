@@ -1,4 +1,7 @@
+ifneq ($(HOST),)
 WXFLAGS ?= --host=$(HOST)
+endif
+
 WX_CONFIG ?= wx-config $(WXFLAGS)
 CXX = $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \

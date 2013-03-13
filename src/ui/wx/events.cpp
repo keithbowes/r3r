@@ -293,9 +293,15 @@ void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
 	HideSettingsDialog();
 }
 
+void SettingsDialogEvents::OnClose(wxCloseEvent & event)
+{
+	wxDialog * dlg = GetSettingsDialog();
+	dlg->Show(FALSE);
+}
+
 void SettingsDialogEvents::OnOK(wxCommandEvent & event)
 {
-	char * name = (char *) malloc(255);
+	char * name;
 	int count;
 	unsigned char type;
 	void * value;

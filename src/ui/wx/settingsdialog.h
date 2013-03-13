@@ -8,7 +8,7 @@
 #endif
 
 #ifndef MOBILE
-#define HEIGHT 320
+#define HEIGHT 350
 #define WIDTH HEIGHT / 2 * 3 + 8
 #define DLGSIZE wxSize(WIDTH, HEIGHT)
 #else
