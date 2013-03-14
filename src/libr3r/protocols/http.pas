@@ -393,8 +393,8 @@ begin
   end;
 
   SendHeader('Accept-Encoding: ');
-  SendHeader('Connection: close');
   SendHeader('');
+  SendHeader('Connection: close');
 
 {$IFDEF SOCKETS_LIBCURL}
   curl_easy_setopt(FHandle, CURLOPT_HTTPHEADER, FHeaderList);

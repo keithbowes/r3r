@@ -245,11 +245,7 @@ function TRSock.GetLine: String;
 begin
 {$IFDEF SOCKETS_SYNAPSE}
   GetLine := Sock.RecvString(5000);
-{$IFDEF __GPC__}
-  FError := (Sock.LastError < 0) or (Sock.LastError > 2);
-{$ELSE}
   FError := Sock.LastError <> 0;
-{$ENDIF}
 {$ENDIF}
 
 {$IFDEF SOCKETS_LIBCURL}
@@ -295,7 +291,6 @@ begin
   
   with FAbstractFeed do
   begin
-    Item.Clear;
     repeat
       Line := GetLine;
 
