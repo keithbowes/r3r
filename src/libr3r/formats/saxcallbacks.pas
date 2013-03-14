@@ -9,7 +9,11 @@ uses
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 procedure ElementEnded(user_data: Pointer; name: PChar);
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+procedure {$IFDEF EXPAT_1_0}UnknownDataReceived{$ELSE}CharactersReceived{$ENDIF}(ctx: Pointer; ch: PChar; len: integer);
+
+{$IFDEF EXPAT_1_1}
+procedure CdataSectionLimit(userData: Pointer);
+{$ENDIF}
 
 {$IFDEF EXPAT_2_0}
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
@@ -123,23 +127,45 @@ begin
   end;
 end;
 
-procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+procedure {$IFDEF EXPAT_1_0}UnknownDataReceived{$ELSE}CharactersReceived{$ENDIF}(ctx: Pointer; ch: PChar; len: integer);
 var
   Elem: PXmlElement;
   enh: String;
+  loff: 0..1;
+{$IFDEF EXPAT_1_0}
+  clen, cpos: integer;
+  IsEntity: Boolean;
+{$ENDIF}
 begin
-  WriteStr(enh, ch[0..len - 1]);
+  loff := Ord(ch[len-1] = #9);
+  WriteStr(enh, ch[0..len - (loff + 1)]);
 
   with TXmlFeed(ctx) do
   begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
+
+{$IFDEF EXPAT_1_0}
+      cpos := Pos('&', Elem^.Content);
+      clen := Length(Elem^.Content);
+      IsEntity := cpos <> 0;
+      if (clen > 0) and (Elem^.Content[clen] <> ' ') and not IsEntity then
+      begin
+        Elem^.Content := Elem^.Content + ' ';
+      end;
+{$ENDIF}
       Elem^.Content := Elem^.Content + enh;
       SendItem;
     end;
   end;
 end;
+
+{$IFDEF EXPAT_1_1}
+procedure CdataSectionLimit(userData: Pointer);
+begin
+end;
+{$ENDIF}
 
 {$IFDEF EXPAT_2_0}
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);

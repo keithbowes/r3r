@@ -269,15 +269,16 @@ begin
 end;
 
 { Get the textual representation (without HTML) of the description. }
+{ StripHtml has to be called twice for RSS feeds:  once to decode the entities and then again to strip the decoded HTML. }
 function TFeedItem.DescriptionText: String;
 begin
-  DescriptionText := StripHtml(Description);
+  DescriptionText := StripHtml(StripHtml(Description));
 end;
 
 { Get the textual representation (without HTML) of the title. }
 function TFeedItem.TitleText: String;
 begin
-  TitleText := StripHtml(Title);
+  TitleText := StripHtml(StripHtml(Title));
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;

@@ -89,7 +89,14 @@ begin
 {$ENDIF}
 
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
+{$IFDEF EXPAT_1_0}
+  XML_SetDefaultHandler(FParser, UnknownDataReceived);
+{$IFDEF EXPAT_1_1}
+  XML_SetCdataSectionHandler(FParser, CdataSectionLimit, CdataSectionLimit);
+{$ENDIF}
+{$ELSE}
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
+{$ENDIF}
 
 {$IFDEF EXPAT_2_0}
   XML_SetXmlDeclHandler(FParser, XmlDeclarationReceived);

@@ -48,7 +48,8 @@ begin
     begin
       Item.Translate;
       cb(Item);
-      LastTitle := Item.Title
+      LastTitle := Item.Title;
+      Item.Clear;
     end
   end
 end;
