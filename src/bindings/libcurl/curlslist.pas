@@ -16,11 +16,11 @@ type
   end;
   time_t = PtrInt;
 
-function curl_slist_append(list:Pcurl_slist; data:Pchar):Pcurl_slist;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_slist_append';
+function curl_slist_append(list:Pcurl_slist; data:Pchar):Pcurl_slist;external CurlLib name 'curl_slist_append';
 
-procedure curl_slist_free_all(list:Pcurl_slist);external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_slist_free_all';
+procedure curl_slist_free_all(list:Pcurl_slist);external CurlLib name 'curl_slist_free_all';
 
-function curl_getdate(p:Pchar; unused:Pinteger):time_t;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_getdate';
+function curl_getdate(p:Pchar; unused:Pinteger):time_t;external CurlLib name 'curl_getdate';
 
 {$IFNDEF LIBCURL_MONOLITHIC}
 

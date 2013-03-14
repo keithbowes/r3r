@@ -105,7 +105,7 @@ end;
 procedure ElementEnded(user_data: Pointer; name: PChar);
 var
   Elem: PXmlElement;
-  Ename: STring;
+  Ename: String;
 begin
   with TXmlFeed(user_data) do
   begin
@@ -156,7 +156,7 @@ var
   Message: String;
 begin
   WriteStr(Message, name);
-  CallMessageEventEx(TXmlFeed(encodingHandlerData), true, UnknownEncoding, Message);
+  CallMessageEvent(TXmlFeed(encodingHandlerData), true, UnknownEncoding, Message);
   UnknownEncodingDetected := 0;
 end;
 {$ENDIF}

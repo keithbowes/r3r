@@ -5,7 +5,7 @@ interface
 {$INCLUDE "tuidefs.inc"}
 
 type
-  TSysCharSet = set of char;
+  TSysCharset = set of char;
 
 procedure FullScreen;
 
@@ -169,30 +169,6 @@ begin
   TuiEcho(s, true, 0);
 end;
 
-{$IFDEF HAS_WRAPTEXT}
-function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
-var
-  c, t: PtrUInt;
-  Ret: String;
-begin
-  Line := WrapText(Line, LineEnding, BreakChars, MaxCol);
-  Ret := Line;
-
-  c := Length(Line);
-  t := 0;
-  while (c <> 0) and (MaxRow > 1) do
-  begin
-    c := Pos(LineEnding, Line);
-    TuiWrite(Copy(Line, 1, c));
-
-    Delete(Line, 1, c);
-    Dec(MaxRow);
-    t := t + c;
-  end;
-
-  TuiWriteWrapped := Length(Ret) - t;
-end;
-{$ELSE}
 function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
 var
   DescLine: String;
@@ -224,6 +200,5 @@ begin
 
   TuiWriteWrapped := Remaining;
 end;
-{$ENDIF}
 
 end.

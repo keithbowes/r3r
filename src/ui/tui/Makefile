@@ -1,6 +1,6 @@
 EXEOUT=.
 UNIT_DIRS=po ../../libr3r ../../libr3r/* ../../bindings/* \
-					../../utils/* ../../wrappers/*
+					../../utils/*
 
 include ../../../scripts/common.make
 all:

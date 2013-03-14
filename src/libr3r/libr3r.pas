@@ -40,10 +40,6 @@ var
 
 implementation
 
-{$IFDEF SOCKETS_CURL}
-{$DEFINE SOCKETS_NONE}
-{$ENDIF}
-
 {$IFDEF SOCKETS_LIBCURL}
 {$DEFINE USE_SSL}
 {$ENDIF}
@@ -119,14 +115,6 @@ begin
 
   if Assigned(FSock) then
   begin
-{$IFDEF __GPC__}
-{$IFDEF SOCKETS_BSD}
-    if Prot <> 'file' then
-    begin
-      FSock.Sock.CloseSocket;
-    end;
-{$ENDIF}
-{$ENDIF}
 
     FSock.Free;
   end;

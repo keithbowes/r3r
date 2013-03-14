@@ -2,7 +2,7 @@ ifneq ($(USE_EXPAT),0)
 SAXCALLBACKS=saxcallbacks
 endif
 
-UNIT_DIRS=.. ../* ../../bindings/* ../../utils/* ../../wrappers/*
+UNIT_DIRS=.. ../* ../../bindings/* ../../utils/*
 UNITS=feeditem feed itemcallbacks nonxml esf rss3 $(SAXCALLBACKS) \
 			xml dc mod_enclosure atom rss
 

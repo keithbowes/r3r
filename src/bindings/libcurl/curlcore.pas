@@ -751,14 +751,14 @@ type
         CURL_TIMECOND_IFUNMODSINCE,CURL_TIMECOND_LASTMOD,
         CURL_TIMECOND_LAST);
 
-    procedure curl_free(p:pointer);external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_free';
+    procedure curl_free(p:pointer);external CurlLib name 'curl_free';
 
-    function curl_global_init(flags:longint):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_init';
+    function curl_global_init(flags:longint):CURLcode;external CurlLib name 'curl_global_init';
 
     function curl_global_init_mem(flags:longint; m:curl_malloc_callback; f:curl_free_callback; r:curl_realloc_callback; s:curl_strdup_callback;
-               c:curl_calloc_callback):CURLcode;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_init_mem';
+               c:curl_calloc_callback):CURLcode;external CurlLib name 'curl_global_init_mem';
 
-    procedure curl_global_cleanup;external {$IFDEF LINK_DYNAMIC}CurlLib{$ENDIF} name 'curl_global_cleanup';
+    procedure curl_global_cleanup;external CurlLib name 'curl_global_cleanup';
 
     type
       curl_certinfo = record

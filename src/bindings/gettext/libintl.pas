@@ -22,7 +22,6 @@ interface
 {$PACKRECORDS C}
 {$ENDIF}
 
-{ $DEFINE LINK_DYNAMIC}
 {$IFNDEF __GPC__}
 const
   IntlLib = 'intl';
@@ -32,15 +31,13 @@ const
 {$ENDIF}
 {$ENDIF}
 
-{$IFNDEF LINK_DYNAMIC}
-{$linklib libintl.a}
-{$ENDIF}
-
 {$IFDEF UNIX}
 {$linklib c}
 {$ELSE}
 {$IFDEF MSWINDOWS}
 {$linklib msvcrt}
+{$ELSE}
+{$WARNING You may need to link to a C library to get this to work}
 {$ENDIF}
 {$ENDIF}
 
@@ -72,44 +69,44 @@ const
   { Look up MSGID in the current default message catalog for the current
      LC_MESSAGES locale.  If not found, returns MSGID itself (the default
      text).   }
-  function gettext(__msgid:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function gettext(__msgid:Pchar):Pchar;external IntlLib;
 
   { Look up MSGID in the DOMAINNAME message catalog for the current
      LC_MESSAGES locale.   }
-  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external IntlLib;
 
-  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function __dgettext(__domainname:Pchar; __msgid:Pchar):Pchar;external IntlLib;
 
   { Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
      locale.   }
-  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external IntlLib;
 
-  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function __dcgettext(__domainname:Pchar; __msgid:Pchar; __category:longint):Pchar;external IntlLib;
 
   { Similar to `gettext' but select the plural form corresponding to the
      number N.   }
-  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function ngettext(__msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external IntlLib;
 
   { Similar to `dgettext' but select the plural form corresponding to the
      number N.   }
-  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function dngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal):Pchar;external IntlLib;
 
   { Similar to `dcgettext' but select the plural form corresponding to the
      number N.   }
-  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal; __category:longint):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function dcngettext(__domainname:Pchar; __msgid1:Pchar; __msgid2:Pchar; __n:cardinal; __category:longint):Pchar;external IntlLib;
 
   { Set the current default message catalog to DOMAINNAME.
      If DOMAINNAME is null, return the current default.
      If DOMAINNAME is "", reset to the default of "messages".   }
-  function textdomain(__domainname:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function textdomain(__domainname:Pchar):Pchar;external IntlLib;
 
   { Specify that the DOMAINNAME message catalog will be found
      in DIRNAME rather than in the system locale data base.   }
-  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function bindtextdomain(__domainname:Pchar; __dirname:Pchar):Pchar;external IntlLib;
 
   { Specify the character encoding in which the messages from the
      DOMAINNAME message catalog will be returned.   }
-  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external {$IFDEF LINK_DYNAMIC}IntlLib{$ENDIF};
+  function bind_textdomain_codeset(__domainname:Pchar; __codeset:Pchar):Pchar;external IntlLib;
 
 { Additions }
 const
@@ -132,9 +129,6 @@ function setlocale(category: LongInt; locale: PChar): PChar; external name 'setl
 function _(msgid: PChar): String;
 
 implementation
-
-uses
-  Strings;
 
 function __GNU_GETTEXT_SUPPORTED_REVISION(major : longint) : Boolean;
 begin

@@ -33,10 +33,6 @@ type
 
 implementation
 
-{$IFDEF SOCKETS_CURL}
-{$DEFINE SOCKETS_NONE}
-{$ENDIF}
-
 uses
   DC, HttpCache, ItemCallbacks, RDate, RStrings, SockConsts
 {$IFDEF __GPC__}

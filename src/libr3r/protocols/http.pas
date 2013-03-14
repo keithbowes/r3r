@@ -105,7 +105,7 @@ begin
       Val(Copy(RespList.Strings[0], 6, 3), FHttpVersion, ErrPos);
       if ErrPos <> 0 then
       begin
-        CallMessageEventEx(Self, true, InvalidHeaders, FURL);
+        CallMessageEvent(Self, true, InvalidHeaders, FURL);
         Break;
       end;
 
@@ -124,7 +124,7 @@ begin
 
       if Line = '' then
       begin
-        CallMessageEventEx(Self, true, InvalidHeaders, FURL);
+        CallMessageEvent(Self, true, InvalidHeaders, FURL);
         HeaderState := hsStarted;
       end;
 

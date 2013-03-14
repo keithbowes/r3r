@@ -28,10 +28,6 @@ dist-rpm:
 	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm \
 	 	$(curdir)/../../..
 
-dist-slackware:
-	$(MAKE) checkinstall TYPE=slackware VERSION=$(VERSION)
-	$(MOVE) $(srcdir)/../../r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-$(PKGRELEASE).tgz $(srcdir)/../../..
-
 dist-inno_setup:
 	cd is && $(MAKE) installer
 
@@ -50,7 +46,6 @@ clean: distclean
 distclean:
 	$(DEL) r3r.desktop
 	$(DEL) is/r3r.iss is/setup.exe
-	$(DEL) ../../PKGBUILD
 	$(DEL) ../../description-pak
 	$(DELTREE) ../../doc-pak
 

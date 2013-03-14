@@ -2,7 +2,6 @@
 unit LibIdn;
 
 {$CALLING cdecl}
-{ $DEFINE LINK_DYNAMIC}
 
 interface
 
@@ -63,17 +62,6 @@ const
 {$ENDIF}
 {$ENDIF}
 
-{$IFNDEF LINK_DYNAMIC}
-{$linklib libidn.a}
-{$IFDEF UNIX}
-{$linklib c}
-{$ELSE}
-{$IFDEF MSWINDOWS}
-{$linklib msvcrt}
-{$ENDIF}
-{$ENDIF}
-{$ENDIF}
-
 
 { idna.h --- Declarations for Internationalized Domain Name in Applications.
  * Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009  Simon Josefsson
@@ -119,19 +107,19 @@ const
 
    IDNA_ACE_PREFIX = 'xn--';
 
-function idna_strerror(rc:longint):Pchar;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_strerror(rc:longint):Pchar;external IdnLib;
 { Core functions  }
-function idna_to_ascii_4i(input:Puint32_t; inlen:size_t; output:Pchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_44i(input:Puint32_t; inlen:size_t; output:Puint32_t; outlen:Psize_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_ascii_4i(input:Puint32_t; inlen:size_t; output:Pchar; flags:longint):longint;external IdnLib;
+function idna_to_unicode_44i(input:Puint32_t; inlen:size_t; output:Puint32_t; outlen:Psize_t; flags:longint):longint;external IdnLib;
 { Wrappers that handle several labels  }
-function idna_to_ascii_4z(input:Puint32_t; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_ascii_8z(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_ascii_lz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_4z4z(input:Puint32_t; output:PPuint32_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_8z4z(input:Pchar; output:PPuint32_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_8z8z(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_8zlz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
-function idna_to_unicode_lzlz(input:Pchar; output:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}IdnLib{$ENDIF};
+function idna_to_ascii_4z(input:Puint32_t; output:PPchar; flags:longint):longint;external IdnLib;
+function idna_to_ascii_8z(input:Pchar; output:PPchar; flags:longint):longint;external IdnLib;
+function idna_to_ascii_lz(input:Pchar; output:PPchar; flags:longint):longint;external IdnLib;
+function idna_to_unicode_4z4z(input:Puint32_t; output:PPuint32_t; flags:longint):longint;external IdnLib;
+function idna_to_unicode_8z4z(input:Pchar; output:PPuint32_t; flags:longint):longint;external IdnLib;
+function idna_to_unicode_8z8z(input:Pchar; output:PPchar; flags:longint):longint;external IdnLib;
+function idna_to_unicode_8zlz(input:Pchar; output:PPchar; flags:longint):longint;external IdnLib;
+function idna_to_unicode_lzlz(input:Pchar; output:PPchar; flags:longint):longint;external IdnLib;
 
 implementation
 

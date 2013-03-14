@@ -5,7 +5,7 @@
 
 unit iconv;
 
-{ $DEFINE LINK_DYNAMIC}
+{ $DEFINE USE_LIBICONV}
 
 {$X+}
 
@@ -45,23 +45,6 @@ const
 {$ENDIF}
 {$ENDIF}
 
-{$IFNDEF USE_LIBICONV}
-{$undef LINK_DYNAMIC}
-{$ENDIF}
-
-{$IFDEF USE_LIBICONV}
-{$IFNDEF LINK_DYNAMIC}
-{$linklib libiconv.a}
-{$IFDEF UNIX}
-{$linklib c}
-{$ELSE}
-{$IFDEF MSWINDOWS}
-{$linklib msvcrt}
-{$ENDIF}
-{$ENDIF}
-{$ENDIF}
-{$ENDIF}
-
 { These aren't right, but I can't find their right values }
 const
   ICONV_IGNORE_NULL = 1;
@@ -87,9 +70,9 @@ type
 
 {$calling cdecl}
 
-function iconv_open(tocode, fromcode: PChar): iconv_t; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv_open';
-function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): size_t; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv';
-function iconv_close(cd: iconv_t): integer; external {$ifdef LINK_DYNAMIC}IconvLib{$ENDIF} name FuncPref+'iconv_close';
+function iconv_open(tocode, fromcode: PChar): iconv_t; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name FuncPref+'iconv_open';
+function iconv_convert(cd: iconv_t; inbuf: PPChar; inbytesleft: psize_t; outbuf: PPChar; outbytesleft: psize_t): size_t; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name FuncPref+'iconv';
+function iconv_close(cd: iconv_t): integer; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name FuncPref+'iconv_close';
 
 {$IFDEF USE_LIBICONV}
 { Extras not available in non-GNU versions of iconv }
@@ -103,8 +86,8 @@ const
 type
   piconv_allocation_t = iconv_t;
 
-function iconv_open_into(tocode, fromcode: PChar; resultp: piconv_allocation_t): integer; external {$IFDEF LINK_DYNAMIC}IconvLib{$ENDIF} name 'libiconv_open_into';
-function iconvctl(cd: iconv_t; request: integer; argument: Pointer): integer; external {$IFDEF LINK_DYNAMIC}IconvLib{$ENDIF} name 'libiconvctl';
+function iconv_open_into(tocode, fromcode: PChar; resultp: piconv_allocation_t): integer; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name 'libiconv_open_into';
+function iconvctl(cd: iconv_t; request: integer; argument: Pointer): integer; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name 'libiconvctl';
 {$ENDIF}
 
 {$IFDEF SOLARIS}

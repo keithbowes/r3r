@@ -15,10 +15,6 @@ uses
 {$ENDIF}
 {$ENDIF}
   
-{$IFDEF SOCKETS_BSD}
-  , SockWrap
-{$ENDIF}
-  
 {$IFDEF SOCKETS_LIBCURL}
   , CurlCore, CurlEasy, RList, RStrings
 {$ENDIF};
@@ -41,9 +37,6 @@ type
 {$IFDEF SOCKETS_SYNAPSE}
     Sock: TTCPBlockSocket;
 {$ENDIF}
-{$IFDEF SOCKETS_BSD}
-    Sock: TSockWrap;
-{$ENDIF}
 {$IFDEF SOCKETS_LIBCURL}
     FFirst: Boolean;
     FList: PRStringList;
@@ -61,10 +54,6 @@ type
   end;
 
 implementation
-
-{$IF DEFINED(SOCKETS_CURL) or DEFINED(SOCKETS_LIBCURL)}
-{$DEFINE SOCKETS_NONE}
-{$ENDIF}
 
 uses
   Atom, Esf, Rss, Rss3, SockConsts, SysUtils;
@@ -151,28 +140,6 @@ end;
 {$CALLING DEFAULT}
 {$ENDIF}
 
-
-{$IFNDEF SOCKETS_NONE}
-function CreateSocket:
-{$IFDEF SOCKETS_SYNAPSE}
-TTCPBlockSocket
-{$ENDIF}
-
-{$IFDEF SOCKETS_BSD}
-TSockWrap
-{$ENDIF};
-begin
-  
-{$IFDEF SOCKETS_SYNAPSE}
-  CreateSocket := TTCPBlockSocket.Create;
-{$ENDIF}
-
-{$IFDEF SOCKETS_BSD}
-  CreateSocket := TSockWrap.Create;
-{$ENDIF}
-end;
-{$ENDIF}
-
 procedure SetAbstractFeed(const FeedType: TFeedType);
 begin
   if not Assigned(FAbstractFeed) then
@@ -206,8 +173,8 @@ begin
   inherited Create;
 {$ENDIF}
 
-{$IFNDEF SOCKETS_NONE}
-  Sock := CreateSocket;
+{$IFDEF SOCKETS_SYNAPSE}
+  Sock := TTCPBlockSocket.Create;
 {$ENDIF}
 
 {$IFDEF SOCKETS_LIBCURL}
@@ -229,7 +196,7 @@ end;
 
 destructor TRSock.Destroy;
 begin
-{$IFNDEF SOCKETS_NONE}
+{$IFDEF SOCKETS_SYNAPSE}
   if Assigned(Sock) then
   begin
     Sock.Free;
@@ -276,7 +243,7 @@ end;
 
 function TRSock.GetLine: String;
 begin
-{$IFNDEF SOCKETS_NONE}
+{$IFDEF SOCKETS_SYNAPSE}
   GetLine := Sock.RecvString(5000);
 {$IFDEF __GPC__}
   FError := (Sock.LastError < 0) or (Sock.LastError > 2);
@@ -305,7 +272,7 @@ end;
 
 procedure TRSock.Execute;
 begin
-{$IFNDEF SOCKETS_NONE}
+{$IFDEF SOCKETS_SYNAPSE}
   Sock.Connect(FHost, FPort);
   Sock.ConvertLineEnd := true;
 {$ENDIF}

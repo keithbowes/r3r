@@ -1,6 +1,6 @@
 EXEOUT = .
 TARGET_DIRS = po settings protocols formats
-UNIT_DIRS = $(TARGET_DIRS) ../bindings/* ../utils/* ../wrappers/*
+UNIT_DIRS = $(TARGET_DIRS) ../bindings/* ../utils/*
 UNITS = info rfilter rgetfeed rhistory rmessage rparseurl rsubscriptions
 
 include ../../scripts/common.make

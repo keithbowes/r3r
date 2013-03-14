@@ -1,8 +1,6 @@
 
 unit PCRE;
 
-{ $DEFINE LINK_DYNAMIC}
-
 {$X+}
 
 {$IFDEF FPC}
@@ -12,7 +10,6 @@ unit PCRE;
 
 {$IFDEF VIRTUALPASCAL}
 {&cdecl+}
-{$DEFINE LINK_DYNAMIC}
 {$ENDIF}
 
 interface
@@ -90,17 +87,6 @@ const
 {$ELSE}
 {$IFNDEF PcreLib}
 {$DEFINE PcreLib 'pcre'}
-{$ENDIF}
-{$ENDIF}
-
-{$IFNDEF LINK_DYNAMIC}
-{$linklib libpcre.a}
-{$IFDEF UNIX}
-{$linklib c}
-{$ELSE}
-{$IFDEF MSWINDOWS}
-{$linklib msvcrt}
-{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 
@@ -283,10 +269,10 @@ type
 
 {$IFNDEF VIRTUALPASCAL}
 var
-  pcre_malloc: tmallocfunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-  pcre_free: tfreefunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-  pcre_stack_malloc: tmallocfunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
-  pcre_stack_free: tfreefunc; external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};
+  pcre_malloc: tmallocfunc; external PcreLib;
+  pcre_free: tfreefunc; external PcreLib;
+  pcre_stack_malloc: tmallocfunc; external PcreLib;
+  pcre_stack_free: tfreefunc; external PcreLib;
 {$ELSE}
 const
   pcre_malloc: tmallocfunc = new_malloc;
@@ -296,7 +282,7 @@ const
 {$ENDIF}
 
 var
-  pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external{$IFDEF LINK_DYNAMIC} PcreLib{$ENDIF};{$ENDIF}
+  pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external PcreLib{$ENDIF};
 
 {$IFNDEF VIRTUALPASCAL}
 {$DEFINE PCRE_IMPORT}

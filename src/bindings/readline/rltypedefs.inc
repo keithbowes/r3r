@@ -53,7 +53,6 @@ type
 {$ENDIF}
 
 { Let's setup the libraries}
-{ $DEFINE LINK_DYNAMIC}
 {$IFDEF USE_LIBEDIT}
 {$IFNDEF __GPC__}
 const
@@ -86,17 +85,6 @@ const
 {$IFNDEF RlLib}
 {$DEFINE RlLib 'readline'}
 {$DEFINE HistLib RlLib}
-{$ENDIF}
-{$ENDIF}
-{$ENDIF}
-
-{$IFNDEF LINK_DYNAMIC}
-{$linklib libreadline.a}
-{$IFDEF UNIX}
-{$linklib c}
-{$ELSE}
-{$IFDEF MSWINDOWS}
-{$linklib msvcrt}
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}

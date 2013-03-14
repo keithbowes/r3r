@@ -26,7 +26,6 @@ interface
 {$PACKRECORDS C}
 {$ENDIF}
 
-{$IFDEF LINK_DYNAMIC}
 {$IFNDEF __GPC__}
 const
 {$IFDEF MSWINDOWS}
@@ -36,14 +35,6 @@ const
 {$ENDIF}
 {$ELSE}
 {$DEFINE Idn2Lib 'idn2'}
-{$ENDIF}
-{$ELSE}
-{$IFNDEF __GPC__}
-{$LINKLIB libidn2.a}
-{$IFDEF WINDOWS}
-{$LINKLIB msvcrt}
-{$ENDIF}
-{$ENDIF}
 {$ENDIF}
 
 
@@ -116,19 +107,19 @@ const
   { IDNA2008 with UTF-8 encoded inputs.  }
 (* Const before type ignored *)
 
-  function idn2_lookup_u8(src:Puint8_t; lookupname:PPuint8_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_lookup_u8';
+  function idn2_lookup_u8(src:Puint8_t; lookupname:PPuint8_t; flags:longint):longint;external Idn2Lib name 'idn2_lookup_u8';
 
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function idn2_register_u8(ulabel:Puint8_t; alabel:Puint8_t; insertname:PPuint8_t; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_register_u8';
+  function idn2_register_u8(ulabel:Puint8_t; alabel:Puint8_t; insertname:PPuint8_t; flags:longint):longint;external Idn2Lib name 'idn2_register_u8';
 
   { IDNA2008 with locale encoded inputs.  }
 (* Const before type ignored *)
-  function idn2_lookup_ul(src:Pchar; lookupname:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_lookup_ul';
+  function idn2_lookup_ul(src:Pchar; lookupname:PPchar; flags:longint):longint;external Idn2Lib name 'idn2_lookup_ul';
 
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function idn2_register_ul(ulabel:Pchar; alabel:Pchar; insertname:PPchar; flags:longint):longint;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_register_ul';
+  function idn2_register_ul(ulabel:Pchar; alabel:Pchar; insertname:PPchar; flags:longint):longint;external Idn2Lib name 'idn2_register_ul';
 
   {*
    * idn2_rc:
@@ -196,16 +187,16 @@ const
   { Auxilliary functions.  }
 (* Const before type ignored *)
 
-  function idn2_strerror(rc:longint):PChar;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_strerror';
+  function idn2_strerror(rc:longint):PChar;external Idn2Lib name 'idn2_strerror';
 
 (* Const before type ignored *)
-  function idn2_strerror_name(rc:longint):PChar;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_strerror_name';
+  function idn2_strerror_name(rc:longint):PChar;external Idn2Lib name 'idn2_strerror_name';
 
 (* Const before type ignored *)
 (* Const before type ignored *)
-  function idn2_check_version(req_version:Pchar):PChar;external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_check_version';
+  function idn2_check_version(req_version:Pchar):PChar;external Idn2Lib name 'idn2_check_version';
 
-  procedure idn2_free(ptr:pointer);external {$IFDEF LINK_DYNAMIC}Idn2Lib{$ENDIF} name 'idn2_free';
+  procedure idn2_free(ptr:pointer);external Idn2Lib name 'idn2_free';
 
 
 implementation

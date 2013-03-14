@@ -8,9 +8,6 @@ CSUM ?= $(call programpath,sha256sum)
 CSUMFLAGS ?=
 CSUMOUT ?= r3r-$(VERSION).sha256
 
-MAKEPKG ?= $(call programpath,makepkg)
-MAKEPKGFLAGS ?=
-
 STRIP ?= $(call programpath,strip)
 STRIPFLAGS ?=
 
@@ -41,16 +38,6 @@ endif
 ifeq ($(DEFS_SOCKETS),SOCKETS_SYNAPSE)
 	@$(ECHO) $(call checkunit,BlckSock)
 else
-ifeq ($(DEFS_SOCKETS),SOCKETS_BSD)
-	@$(ECHO) $(call checkprog,$(notdir $(CC)))
-ifdef inWindows
-	@$(ECHO) $(call checklib,wsock32)
-else
-ifdef inUnix
-	@$(ECHO) $(call checklib,c)
-endif
-endif
-else
 ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
 	@$(ECHO) $(call checklib,curl)
 	@$(ECHO) $(call checkunit,CurlCore)
@@ -59,10 +46,7 @@ ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
 	@$(ECHO) $(call checkunit,CurlVer)
 else
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
-ifneq ($(DEFS_SOCKETS),SOCKETS_CURL)
 	$(error Unsupported sockets library)
-endif
-endif
 endif
 endif
 endif
@@ -240,21 +224,6 @@ dist-deb:
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm
 	$(call sign,r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm)
-
-dist-slackware:
-	cd $(srcdir)/scripts/setup && $(MAKE) dist-slackware
-	$(call sign,r3r-$(VERSION)_$(R3R_UI)-$(ARCH)-$(PKGRELEASE).tgz)
-
-dist-arch:
-	$(SED) -e 's/@ARCH@/$(CPU_TARGET)/g' -e 's/@UI@/$(R3R_UI)/g' \
-		-e 's/@VERSION@/$(subst -,_,$(VERSION))/g' $(srcdir)/scripts/setup/PKGBUILD.in > \
-		PKGBUILD
-	$(MAKEPKG) $(MAKEPKGFLAGS)
-	$(MOVE) r3r-$(subst -,_,$(VERSION))-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz $(srcdir)/..
-	$(call sign,r3r-$(subst -,_,$(VERSION))-$(R3R_UI)-$(CPU_TARGET).pkg.tar.gz)
-	$(RM) PKGBUILD
-	$(DELTREE) pkg
-	$(RM) r3r_opml$(TARGETEXEEXT)
 
 dist-inno_setup: OS_TARGET=win32
 dist-inno_setup: all

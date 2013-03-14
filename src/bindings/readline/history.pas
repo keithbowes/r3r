@@ -53,90 +53,90 @@ interface
   { Begin a session in which the history functions might be used.  This
      just initializes the interactive variables.  }
 
-  procedure using_history;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'using_history';
+  procedure using_history;external HistLib name 'using_history';
 
   { Return the current HISTORY_STATE of the history.  }
-  function history_get_history_state: PHISTORY_STATE;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_get_history_state';
+  function history_get_history_state: PHISTORY_STATE;external HistLib name 'history_get_history_state';
 
   { Set the state of the current history array to STATE.  }
-  procedure history_set_history_state(_para1:PHISTORY_STATE);external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_set_history_state';
+  procedure history_set_history_state(_para1:PHISTORY_STATE);external HistLib name 'history_set_history_state';
 
   { Manage the history list.  }
   { Place STRING at the end of the history list.
      The associated data field (if any) is set to NULL.  }
-  procedure add_history(_para1:Pchar);external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'add_history';
+  procedure add_history(_para1:Pchar);external HistLib name 'add_history';
 
   { Change the timestamp associated with the most recent history entry to
      STRING.  }
-  procedure add_history_time(_para1:Pchar);external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'add_history_time';
+  procedure add_history_time(_para1:Pchar);external HistLib name 'add_history_time';
 
   { A reasonably useless function, only here for completeness.  WHICH
      is the magic number that tells us which element to delete.  The
      elements are numbered from 0.  }
-  function remove_history(_para1:longint): PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'remove_history';
+  function remove_history(_para1:longint): PHIST_ENTRY;external HistLib name 'remove_history';
 
   { Free the history entry H and return any application-specific data
      associated with it.  }
-  function free_history_entry(_para1:PHIST_ENTRY):histdata_t;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'free_history_entry';
+  function free_history_entry(_para1:PHIST_ENTRY):histdata_t;external HistLib name 'free_history_entry';
 
   { Make the history entry at WHICH have LINE and DATA.  This returns
      the old entry so you can dispose of the data.  In the case of an
      invalid WHICH, a NULL pointer is returned.  }
-  function replace_history_entry(_para1:longint; _para2:Pchar; _para3:histdata_t): PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'replace_history_entry';
+  function replace_history_entry(_para1:longint; _para2:Pchar; _para3:histdata_t): PHIST_ENTRY;external HistLib name 'replace_history_entry';
 
   { Clear the history list and start over.  }
-  procedure clear_history;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'clear_history';
+  procedure clear_history;external HistLib name 'clear_history';
 
   { Stifle the history list, remembering only MAX number of entries.  }
-  procedure stifle_history(_para1:longint);external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'stifle_history';
+  procedure stifle_history(_para1:longint);external HistLib name 'stifle_history';
 
   { Stop stifling the history.  This returns the previous amount the
      history was stifled by.  The value is positive if the history was
      stifled, negative if it wasn't.  }
-  function unstifle_history:longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'unstifle_history';
+  function unstifle_history:longint;external HistLib name 'unstifle_history';
 
   { Return 1 if the history is stifled, 0 if it is not.  }
-  function history_is_stifled:longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_is_stifled';
+  function history_is_stifled:longint;external HistLib name 'history_is_stifled';
 
   { Information about the history list.  }
   { Return a NULL terminated array of HIST_ENTRY which is the current input
      history.  Element 0 of this list is the beginning of time.  If there
      is no history, return NULL.  }
-  function history_list: PPHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_list';
+  function history_list: PPHIST_ENTRY;external HistLib name 'history_list';
 
   { Returns the number which says what history element we are now
      looking at.   }
-  function where_history:longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'where_history';
+  function where_history:longint;external HistLib name 'where_history';
 
   { Return the history entry at the current position, as determined by
      history_offset.  If there is no entry there, return a NULL pointer.  }
-  function current_history: PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'current_history';
+  function current_history: PHIST_ENTRY;external HistLib name 'current_history';
 
   { Return the history entry which is logically at OFFSET in the history
      array.  OFFSET is relative to history_base.  }
-  function history_get(_para1:longint): PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_get';
+  function history_get(_para1:longint): PHIST_ENTRY;external HistLib name 'history_get';
 
   { Return the timestamp associated with the PHIST_ENTRY passed as an
      argument  }
-  function history_get_time(_para1:PHIST_ENTRY):time_t;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_get_time';
+  function history_get_time(_para1:PHIST_ENTRY):time_t;external HistLib name 'history_get_time';
 
   { Return the number of bytes that the primary history entries are using.
      This just adds up the lengths of the_history->lines.  }
-  function history_total_bytes:longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_total_bytes';
+  function history_total_bytes:longint;external HistLib name 'history_total_bytes';
 
   { Moving around the history list.  }
   { Set the position in the history list to POS.  }
-  function history_set_pos(_para1:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_set_pos';
+  function history_set_pos(_para1:longint):longint;external HistLib name 'history_set_pos';
 
   { Back up history_offset to the previous history entry, and return
      a pointer to that entry.  If there is no previous entry, return
      a NULL pointer.  }
-  function previous_history: PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'previous_history';
+  function previous_history: PHIST_ENTRY;external HistLib name 'previous_history';
 
   { Move history_offset forward to the next item in the input_history,
      and return the a pointer to that entry.  If there is no next entry,
      return a NULL pointer.  }
-  function next_history: PHIST_ENTRY;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'next_history';
+  function next_history: PHIST_ENTRY;external HistLib name 'next_history';
 
   { Searching the history list.  }
   { Search the history for STRING, starting at history_offset.
@@ -145,44 +145,44 @@ interface
      current_history () is the history entry, and the value of this function
      is the offset in the line of that history entry that the string was
      found in.  Otherwise, nothing is changed, and a -1 is returned.  }
-  function history_search(_para1:Pchar; _para2:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_search';
+  function history_search(_para1:Pchar; _para2:longint):longint;external HistLib name 'history_search';
 
   { Search the history for STRING, starting at history_offset.
      The search is anchored: matching lines must begin with string.
      DIRECTION is as in history_search().  }
-  function history_search_prefix(_para1:Pchar; _para2:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_search_prefix';
+  function history_search_prefix(_para1:Pchar; _para2:longint):longint;external HistLib name 'history_search_prefix';
 
   { Search for STRING in the history list, starting at POS, an
      absolute index into the list.  DIR, if negative, says to search
      backwards from POS, else forwards.
      Returns the absolute index of the history element where STRING
      was found, or -1 otherwise.  }
-  function history_search_pos(_para1:Pchar; _para2:longint; _para3:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_search_pos';
+  function history_search_pos(_para1:Pchar; _para2:longint; _para3:longint):longint;external HistLib name 'history_search_pos';
 
   { Managing the history file.  }
   { Add the contents of FILENAME to the history list, a line at a time.
      If FILENAME is NULL, then read from ~/.history.  Returns 0 if
      successful, or errno if not.  }
-  function read_history(_para1:Pchar):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'read_history';
+  function read_history(_para1:Pchar):longint;external HistLib name 'read_history';
 
   { Read a range of lines from FILENAME, adding them to the history list.
      Start reading at the FROM'th line and end at the TO'th.  If FROM
      is zero, start at the beginning.  If TO is less than FROM, read
      until the end of the file.  If FILENAME is NULL, then read from
      ~/.history.  Returns 0 if successful, or errno if not.  }
-  function read_history_range(_para1:Pchar; _para2:longint; _para3:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'read_history_range';
+  function read_history_range(_para1:Pchar; _para2:longint; _para3:longint):longint;external HistLib name 'read_history_range';
 
   { Write the current history to FILENAME.  If FILENAME is NULL,
      then write the history list to ~/.history.  Values returned
      are as in read_history ().   }
-  function write_history(_para1:Pchar):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'write_history';
+  function write_history(_para1:Pchar):longint;external HistLib name 'write_history';
 
   { Append NELEMENT entries to FILENAME.  The entries appended are from
      the end of the list minus NELEMENTs up to the end of the list.  }
-  function append_history(_para1:longint; _para2:Pchar):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'append_history';
+  function append_history(_para1:longint; _para2:Pchar):longint;external HistLib name 'append_history';
 
   { Truncate the history file, leaving only the last NLINES lines.  }
-  function history_truncate_file(_para1:Pchar; _para2:longint):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_truncate_file';
+  function history_truncate_file(_para1:Pchar; _para2:longint):longint;external HistLib name 'history_truncate_file';
 
   { History expansion.  }
   { Expand the string STRING, placing the result into OUTPUT, a pointer
@@ -197,12 +197,12 @@ interface
 
     If an error ocurred in expansion, then OUTPUT contains a descriptive
     error message.  }
-  function history_expand(_para1:Pchar; _para2:PPchar):longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_expand';
+  function history_expand(_para1:Pchar; _para2:PPchar):longint;external HistLib name 'history_expand';
 
   { Extract a string segment consisting of the FIRST through LAST
      arguments present in STRING.  Arguments are broken up as in
      the shell.  }
-  function history_arg_extract(_para1:longint; _para2:longint; _para3:Pchar):PChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_arg_extract';
+  function history_arg_extract(_para1:longint; _para2:longint; _para3:Pchar):PChar;external HistLib name 'history_arg_extract';
 
   { Return the text of the history event beginning at the current
      offset into STRING.  Pass STRING with PINDEX equal to the
@@ -210,30 +210,30 @@ interface
      DELIMITING_QUOTE is a character that is allowed to end the string
      specification for what to search for in addition to the normal
      characters `:', ` ', `\t', `\n', and sometimes `?'.  }
-  function get_history_event(_para1:Pchar; _para2:Plongint; _para3:longint):PChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'get_history_event';
+  function get_history_event(_para1:Pchar; _para2:Plongint; _para3:longint):PChar;external HistLib name 'get_history_event';
 
   { Return an array of tokens, much as the shell might.  The tokens are
      parsed out of STRING.  }
-  function history_tokenize(_para1:Pchar): PPChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF} name 'history_tokenize';
+  function history_tokenize(_para1:Pchar): PPChar;external HistLib name 'history_tokenize';
 
   { Exported history variables.  }
     var
-      history_base : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_length : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_max_entries : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_expansion_char : char;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_subst_char : char;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_word_delimiters : PChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_comment_char : char;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_no_expand_chars : PChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_search_delimiter_chars : PChar;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_quotes_inhibit_expansion : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      history_write_timestamps : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
-      max_input_history : longint;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
+      history_base : longint;external HistLib;
+      history_length : longint;external HistLib;
+      history_max_entries : longint;external HistLib;
+      history_expansion_char : char;external HistLib;
+      history_subst_char : char;external HistLib;
+      history_word_delimiters : PChar;external HistLib;
+      history_comment_char : char;external HistLib;
+      history_no_expand_chars : PChar;external HistLib;
+      history_search_delimiter_chars : PChar;external HistLib;
+      history_quotes_inhibit_expansion : longint;external HistLib;
+      history_write_timestamps : longint;external HistLib;
+      max_input_history : longint;external HistLib;
   { If set, this function is called to decide whether or not a particular
      history expansion should be treated as a special case for the calling
      application and not expanded.  }
-      history_inhibit_expansion_function : rl_linebuf_func_t;external {$IFDEF LINK_DYNAMIC}HistLib{$ENDIF};
+      history_inhibit_expansion_function : rl_linebuf_func_t;external HistLib;
 
 {$IFNDEF HISTORY_INCLUDE}
 implementation

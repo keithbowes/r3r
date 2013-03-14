@@ -74,11 +74,6 @@ DEFS_SETTINGS
   (The default depends on the compiler and OS.)
 DEFS_SOCKETS
   The sockets library to use:
-  * SOCKETS_BSD: Use the low-level BSD sockets wrapper
-    (*nix and Windows). Requires a C compiler. (Extremely buggy!)
-  * SOCKETS_CURL: Use cURL <http://curl.haxx.se/> to retrieve
-    the feeds. There are limitations, but it should be the most
-    portable solution.
   * SOCKETS_LIBCURL: Use libcurl (cURL's library) directly instead
     of having to invoke the cURL program. (Experimental!)
   * SOCKETS_NONE: Build without sockets support.

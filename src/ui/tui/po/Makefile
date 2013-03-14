@@ -1,6 +1,5 @@
 UNIT_DIRS = ../../../libr3r ../../../libr3r/* \
-						../../../bindings/* ../../../utils/* \
-						../../../wrappers/*
+						../../../bindings/* ../../../utils/*
 
 include ../../../../scripts/common.make
 

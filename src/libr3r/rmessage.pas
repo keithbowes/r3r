@@ -11,8 +11,7 @@ type
 {$ENDIF}
 
 procedure SetMessageObject(const Sender: TLibR3R);
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 
 implementation
 
@@ -24,12 +23,7 @@ begin
   MessageObject := Sender;
 end;
 
-procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName: String);
-begin
-  CallMessageEventEx(Sender, IsError, MessageName, '');
-end;
-
-procedure CallMessageEventEx(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(MessageObject) and
     Settings.GetBoolean('show-messages') then

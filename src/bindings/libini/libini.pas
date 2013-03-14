@@ -29,6 +29,8 @@ unit LibIni;
 {$ELSE}
 {$IFDEF MSWINDOWS}
 {$linklib msvcrt}
+{$ELSE}
+{$WARNING You may need to link to a C library to get this to work}
 {$ENDIF}
 {$ENDIF}
 
