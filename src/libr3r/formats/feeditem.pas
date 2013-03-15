@@ -48,9 +48,10 @@ function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEn
 
 implementation
 
-{$IFDEF USE_ICONV}
 uses
-  iconv, RProp, RSettings
+  SysUtils
+{$IFDEF USE_ICONV}
+  , iconv, RProp, RSettings
 
 {$IFDEF UNIX}
   , cwstring
@@ -93,6 +94,10 @@ begin
     else if InStr[i] = '>' then
     begin
       InHTML := false;
+      if not (InStr[i + 1] in ['.', ',', '!', '?', ';', ':']) then { It looks weird to have a space before a puncuation mark }
+      begin
+        OutStr := OutStr + ' ';
+      end;
     end
     else if InEnt then
     begin
@@ -135,12 +140,12 @@ begin
           end
           else
           begin
-            EntStr := #164 { random character for malformed numerical entity }
+            EntStr := '^' { malformed numerical entity }
           end
         end
         else { undefined entity, per the XML spec }
         begin
-          EntStr := #164; { random character for unknown named references }
+          EntStr := '?';
         end;
 
         OutStr :=  OutStr + EntStr; { random character for replacing numerical and named references }
@@ -150,6 +155,10 @@ begin
     end;
   end;
 
+  while Pos('  ', OutStr) <> 0 do
+  begin
+    OutStr := StringReplace(OutStr, '  ', ' ', [rfReplaceAll]);
+  end;
   StripHtml := OutStr;
 end;
 
