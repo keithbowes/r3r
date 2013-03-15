@@ -58,7 +58,7 @@ const
 {$ENDIF}
 {$ELSE}
 {$IFNDEF IdnLib}
-{$DEFINE IDnLib idn}
+{$DEFINE IDnLib 'idn'}
 {$ENDIF}
 {$ENDIF}
 

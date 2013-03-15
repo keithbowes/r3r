@@ -41,7 +41,7 @@ const
 {$DEFINE FuncPref 'lib'}
 {$ENDIF}
 {$IFNDEF IconvLib}
-{$DEFINE IconvLib iconv}
+{$DEFINE IconvLib 'iconv'}
 {$ENDIF}
 {$ENDIF}
 

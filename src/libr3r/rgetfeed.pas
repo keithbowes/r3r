@@ -124,6 +124,7 @@ end;
 initialization
 
 Item := TFeedItem.Create;
+Item.Clear;
 
 finalization
 

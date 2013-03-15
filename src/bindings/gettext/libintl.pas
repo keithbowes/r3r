@@ -27,7 +27,7 @@ const
   IntlLib = 'intl';
 {$ELSE}
 {$IFNDEF IntlLib}
-{$DEFINE IntlLib intl}
+{$DEFINE IntlLib 'intl'}
 {$ENDIF}
 {$ENDIF}
 
