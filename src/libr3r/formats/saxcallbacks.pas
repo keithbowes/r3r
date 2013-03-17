@@ -171,7 +171,7 @@ end;
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
 begin
 {$IFDEF USE_ICONV}
-  SetProp('charset', StrToPChar('UTF-8'));
+  SetProp('charset', StrToPCharAlloc('UTF-8'));
 {$ENDIF}
   TXmlFeed(userData).FEncoding := encoding;
 end;

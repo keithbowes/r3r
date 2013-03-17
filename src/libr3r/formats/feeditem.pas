@@ -55,8 +55,8 @@ uses
 
 {$IFDEF UNIX}
   , cwstring
-{$ENDIF};
 {$ENDIF}
+{$ENDIF};
 
 function StripHtml(const InStr: String): String;
 var

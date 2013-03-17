@@ -239,7 +239,7 @@ begin
   CheckString('for:mailto', 'Programs', '', DescMail);
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
-  SetProp('installed-prefix', StrToPChar(GetString('installed-prefix')));
+  SetProp('installed-prefix', StrToPCharAlloc(GetString('installed-prefix')));
 
   Dispose(mc, Done);
 end;

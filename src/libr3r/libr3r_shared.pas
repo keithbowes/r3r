@@ -40,7 +40,7 @@ procedure TLibR3R_Shared.HandleMessage(IsError: Boolean; MessageName, Extra: Str
 begin
   if Assigned(FMessageProc) then
   begin
-    FMessageProc(Ord(IsError), StrToPChar(MessageName), StrToPChar(Extra));
+    FMessageProc(Ord(IsError), StrToPCharAlloc(MessageName), StrToPCharAlloc(Extra));
   end;
 end;
 
@@ -93,79 +93,79 @@ begin
   begin
     if FieldName = 'title' then
     begin
-      libr3r_get_item_field := StrToPChar(Title);
+      libr3r_get_item_field := StrToPCharAlloc(Title);
     end
     else if FieldName = 'title-text' then
     begin
-      libr3r_get_item_field := StrToPChar(TitleText);
+      libr3r_get_item_field := StrToPCharAlloc(TitleText);
     end
     else if FieldName = 'link' then
     begin
-      libr3r_get_item_field := StrToPChar(Link);
+      libr3r_get_item_field := StrToPCharAlloc(Link);
     end
     else if FieldName = 'enclosure-url' then
     begin
-      libr3r_get_item_field := StrToPChar(Enclosure.URL);
+      libr3r_get_item_field := StrToPCharAlloc(Enclosure.URL);
     end
     else if FieldName = 'enclosure-type' then
     begin
-      libr3r_get_item_field := StrToPChar(Enclosure.MimeType);
+      libr3r_get_item_field := StrToPCharAlloc(Enclosure.MimeType);
     end
     else if FieldName = 'description' then
     begin
-      libr3r_get_item_field := StrToPChar(Description)
+      libr3r_get_item_field := StrToPCharAlloc(Description)
     end
     else if FieldName = 'description-text' then
     begin
-      libr3r_get_item_field := StrToPChar(DescriptionText)
+      libr3r_get_item_field := StrToPCharAlloc(DescriptionText)
     end
     else if FieldName = 'subject' then
     begin
-      libr3r_get_item_field := StrToPChar(Subject);
+      libr3r_get_item_field := StrToPCharAlloc(Subject);
     end
     else if FieldName = 'created' then
     begin
-      libr3r_get_item_field := StrToPChar(Created);
+      libr3r_get_item_field := StrToPCharAlloc(Created);
     end
     else if FieldName = 'contact-name' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact.Name);
+      libr3r_get_item_field := StrToPCharAlloc(Contact.Name);
     end
     else if FieldName = 'contact-email' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact.Email);
+      libr3r_get_item_field := StrToPCharAlloc(Contact.Email);
     end
     else if FieldName = 'contact-uri' then
     begin
-      libr3r_get_item_field := StrToPChar(Contact.URI);
+      libr3r_get_item_field := StrToPCharAlloc(Contact.URI);
     end
     else if FieldName = 'generator' then
     begin
-      libr3r_get_item_field := StrToPChar(Generator);
+      libr3r_get_item_field := StrToPCharAlloc(Generator);
     end
     else if FieldName = 'last-modified' then
     begin
-      libr3r_get_item_field := StrToPChar(LastModified);
+      libr3r_get_item_field := StrToPCharAlloc(LastModified);
     end
     else if FieldName = 'language' then
     begin
-      libr3r_get_item_field := StrToPChar(Language);
+      libr3r_get_item_field := StrToPCharAlloc(Language);
     end
     else if FieldName = 'id' then
     begin
-      libr3r_get_item_field := StrToPChar(Id);
+      libr3r_get_item_field := StrToPCharAlloc(Id);
     end
     else if FieldName = 'copyright' then
     begin
-      libr3r_get_item_field := StrToPChar(Copyright);
+      libr3r_get_item_field := StrToPCharAlloc(Copyright);
     end
     else if FieldName = 'uri' then
     begin
-      libr3r_get_item_field := StrToPChar(Uri);
+      libr3r_get_item_field := StrToPCharAlloc(Uri);
     end
     else if FieldName = 'myself' then
     begin
-      libr3r_get_item_field := StrToPChar(Myself);
+      libr3r_get_item_field := StrToPCharAlloc(Myself);
     end
     else
     begin
@@ -176,7 +176,7 @@ end;
 
 function libr3r_get_user_agent: PChar; cdecl;
 begin
-  libr3r_get_user_agent := StrToPChar(UserAgent);
+  libr3r_get_user_agent := StrToPCharAlloc(UserAgent);
 end;
 
 procedure libr3r_set_user_agent_info(uainfo: PChar); cdecl;
@@ -221,7 +221,7 @@ begin
 
   WriteStr(SettingName, setting_name);
   Settings.Access(SettingName, SettingValue, SettingType, Count, SettingsMode);
-  setting_name := StrToPChar(SettingName);
+  setting_name := StrToPCharAlloc(SettingName);
 end;
 
 procedure libr3r_access_subscriptions(Index, Mode: byte; var Subscription: PChar; var Count: word); cdecl;
@@ -231,7 +231,7 @@ begin
   RemoveDuplicatePChars := false;
   Count := Subscriptions^.Count;
 
-  WriteStr(sub, SubScription);
+  WriteStr(sub, Subscription);
 
   if Mode = SubscriptionAdd then
   begin
@@ -250,7 +250,7 @@ begin
   end
   else if Mode = SubscriptionGet then
   begin
-    Subscription := StrToPChar(Subscriptions^.GetNth(Index));
+    Subscription := StrToPCharAlloc(Subscriptions^.GetNth(Index));
   end;
 end;
 
@@ -269,22 +269,22 @@ end;
 
 function libr3r_history_next: PChar; cdecl;
 begin
-  libr3r_history_next := StrToPChar(History^.GetNext);
+  libr3r_history_next := StrToPCharAlloc(History^.GetNext);
 end;
 
 function libr3r_get_settings_dir: PChar; cdecl;
 begin
-  libr3r_get_settings_dir := StrToPChar(SettingsDir);
+  libr3r_get_settings_dir := StrToPCharAlloc(SettingsDir);
 end;
 
 function libr3r_get_data_dir: PChar; cdecl;
 begin
-  libr3r_get_data_dir := StrToPChar(DataDir);
+  libr3r_get_data_dir := StrToPCharAlloc(DataDir);
 end;
 
 function libr3r_get_cache_dir: PChar; cdecl;
 begin
-  libr3r_get_cache_dir := StrToPChar(CacheDir);
+  libr3r_get_cache_dir := StrToPCharAlloc(CacheDir);
 end;
 
 function libr3r_get_version: PChar; cdecl;

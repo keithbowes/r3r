@@ -31,6 +31,7 @@ const
 {$ENDIF}
 {$ENDIF}
 
+{$IFNDEF __GPC__}
 {$IFDEF UNIX}
 {$linklib c}
 {$ELSE}
@@ -38,6 +39,7 @@ const
 {$linklib msvcrt}
 {$ELSE}
 {$WARNING You may need to link to a C library to get this to work}
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 

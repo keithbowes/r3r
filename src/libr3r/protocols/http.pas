@@ -167,7 +167,7 @@ begin
           begin
             RespList := Split(Trim(RespList.Strings[i]), '=');
             Headers.Charset := Trim(RespList.Strings[1]);
-            SetProp('charset', StrToPChar(Headers.Charset));
+            SetProp('charset', StrToPCharAlloc(Headers.Charset));
             Break;
           end;
         end;
@@ -440,7 +440,7 @@ begin
     if not Assigned(FLocal) then
     begin
 {$IFDEF USE_ICONV}
-      SetProp('charset', {$IFNDEF __GPC__}PChar(Cache.GetEncoding){$ELSE}StrToPChar(Cache.GetEncoding){$ENDIF});
+      SetProp('charset', StrToPCharAlloc(Cache.GetEncoding));
 {$ENDIF}
       FLocal := GetLocalFile(FCacheDir + PathDelim + CacheFeedFile +
         '.' + Cache.GetFeedExtension(Headers.ContentType));

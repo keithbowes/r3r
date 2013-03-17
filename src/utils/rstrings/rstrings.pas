@@ -2,7 +2,8 @@ unit RStrings;
 
 interface
 
-function StrToPChar(const Str: String): PChar;
+function StrToPChar(const s: String): PChar;
+function StrToPCharAlloc(const s: String): PChar;
 function GetPChar(const N: cardinal): PChar;
 procedure SetPChar(const N: cardinal; const p: PChar);
 function GetPCharIndex(const p: PChar): longint;
@@ -38,25 +39,35 @@ begin
   Dispose(PChars, Done);
 end;
 
-function StrToPChar(const Str: String): PChar;
+function StrToPChar(const s: String): PChar;
+begin
+{$IFDEF __GPC__}
+  StrToPChar := String2CString(s);
+{$ELSE}
+  StrToPChar := PChar(s);
+{$ENDIF}
+end;
+
+function StrToPCharAlloc(const s: String): PChar;
 var
   Index: integer;
-  p, r: PChar;
+  r: PChar;
 begin
-  GetMem(r, Length(Str) + 1);
-  StrPCopy(r, Str);
+  GetMem(r, Length(s) + 1);
+  StrPCopy(r, s);
 
   PChars^.Add(r);
 
-  Index := GetPCharIndex(r);
-  if (Index <> - 1) and RemoveDuplicatePChars then
+  if RemoveDuplicatePChars then
   begin
-    p := PChars^.GetNth(Index);
-    PChars^.Delete(Index);
-    FreeMem(p);
+    Index := GetPCharIndex(r);
+    if Index <> - 1 then
+    begin
+      PChars^.Delete(Index);
+    end;
   end;
 
-  StrToPChar := r;
+  StrToPCharAlloc := r;
 end;
 
 function GetPChar(const N: cardinal): PChar;
