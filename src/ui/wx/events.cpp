@@ -179,7 +179,7 @@ void GoButtonEvents::OnClick(wxCommandEvent & event)
 	wxComboBox * entry = (wxComboBox *) button->GetClientData();
 	wxString feed = entry->GetValue();
 	AddLocationHistory(feed.mb_str());
-	ParseFeed((char *) (const char *) feed.c_str());
+	ParseFeed((char *) (const char *) feed.mb_str());
 }
 
 void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
@@ -193,7 +193,7 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
 		wxComboBox * entry = (wxComboBox *) event.GetEventObject();
 		wxString feed = entry->GetValue();
 		AddLocationHistory(feed.mb_str());
-		ParseFeed((char *) (const char *) feed.c_str());
+		ParseFeed((char *) (const char *) feed.mb_str());
 	}
 }
 

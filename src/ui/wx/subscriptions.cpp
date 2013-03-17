@@ -52,7 +52,7 @@ int Subscriptions::IndexOf(char * sub)
 
 char * Subscriptions::GetNext()
 {
-	char * ret;
+	char * ret = NULL;
 	unsigned int count = 0;
 	libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GETCOUNT, &ret, &count);
 

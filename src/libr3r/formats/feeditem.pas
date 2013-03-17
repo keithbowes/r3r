@@ -45,6 +45,7 @@ type
   end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
+function DecodeHtml(const InStr: String): String;
 
 implementation
 
@@ -58,7 +59,7 @@ uses
 {$ENDIF}
 {$ENDIF};
 
-function StripHtml(const InStr: String): String;
+function DecodeHtml(const InStr: String): String;
 var
   EntNum: integer;
   EntStr: String;
@@ -94,7 +95,7 @@ begin
     else if InStr[i] = '>' then
     begin
       InHTML := false;
-      if not (InStr[i + 1] in ['.', ',', '!', '?', ';', ':']) then { It looks weird to have a space before a puncuation mark }
+      if (i < Length(InStr)) and not (InStr[i + 1] in ['.', ',', '!', '?', ';', ':']) then { It looks weird to have a space before a puncuation mark }
       begin
         OutStr := OutStr + ' ';
       end;
@@ -154,7 +155,14 @@ begin
       end
     end;
   end;
+  DecodeHtml := OutStr;
+end;
 
+function StripHtml(const InStr: String): String;
+var
+  OutStr: String;
+begin
+  OutStr := DecodeHtml(InStr);
   while Pos('  ', OutStr) <> 0 do
   begin
     OutStr := StringReplace(OutStr, '  ', ' ', [rfReplaceAll]);
@@ -278,16 +286,15 @@ begin
 end;
 
 { Get the textual representation (without HTML) of the description. }
-{ StripHtml has to be called twice for RSS feeds:  once to decode the entities and then again to strip the decoded HTML. }
 function TFeedItem.DescriptionText: String;
 begin
-  DescriptionText := StripHtml(StripHtml(Description));
+  DescriptionText := StripHtml(Description);
 end;
 
 { Get the textual representation (without HTML) of the title. }
 function TFeedItem.TitleText: String;
 begin
-  TitleText := StripHtml(StripHtml(Title));
+  TitleText := StripHtml(Title);
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
