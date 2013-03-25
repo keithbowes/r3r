@@ -112,6 +112,7 @@ end;
 procedure TXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
 {$IFDEF USE_EXPAT}
 var
+  Converted: Boolean;
   pLine: PChar;
 {$ENDIF}
 begin
@@ -119,8 +120,13 @@ begin
   CurrentItem := Item;
 
 {$IFDEF USE_EXPAT}
-  pLine := DataToUTF8({$IFDEF __GPC__}Line{$ELSE}PChar(Line){$ENDIF}, FEncoding);
+  pLine := DataToUTF8(Line, FEncoding, Converted);
   XML_Parse(FParser, pLine, StrLen(pLine), XML_FALSE);
+
+  if Converted then
+  begin
+    FreeMem(pLine);
+  end;
 {$ENDIF}
 
   Item.Finished := true;

@@ -23,7 +23,7 @@ function UnknownEncodingDetected(encodingHandlerData:pointer; name:PChar; info:P
 {$ENDIF}
 {$ENDIF}
 
-function DataToUTF8(const InStr, Encoding: PChar): PChar;
+function DataToUTF8(const InStr: String; const Encoding: PChar; var Converted: Boolean): PChar;
 
 implementation
 
@@ -188,18 +188,19 @@ end;
 {$ENDIF}
 {$ENDIF}
 
-function DataToUTF8(const InStr, Encoding: PChar): PChar;
+function DataToUTF8(const InStr: String; const Encoding: PChar; var Converted: Boolean): PChar;
 var
 {$IFDEF USE_ICONV}
   cd: iconv_t;
 {$IFDEF USE_LIBICONV}
   i: integer;
 {$ENDIF}
-  inbytesleft, outbytesleft: size_t;
   inbuf, outbuf: PChar;
+  inbytesleft, outbytesleft: size_t;
 {$ENDIF}
   outstr: PChar;
 begin
+  Converted := false;
 {$IFDEF USE_ICONV}
   if (Encoding <> nil) and (StrIComp('UTF-8', Encoding) <> 0) then
   begin
@@ -212,12 +213,15 @@ begin
   {$ENDIF}
       if outstr <> nil then
       begin
-        inbytesleft := StrLen(InStr);
-        outbytesleft := 0;
+        Converted := true;
+        inbuf := StrToPChar(InStr);
+        inbytesleft := StrLen(inbuf) + 1;
+        outbytesleft := inbytesleft * 4;
+        GetMem(outstr, outbytesleft);
         outbuf := outstr;
         if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) = iconv_convert_error then
         begin
-          outstr := InStr;
+          outstr := StrToPChar(Instr);
         end;
       end;
     end;
@@ -225,10 +229,10 @@ begin
   end
   else
   begin
-    outstr := InStr;
+    outstr := StrToPChar(InStr);
   end;
 {$ELSE}
-  outstr := InStr;
+  outstr := StrToPChar(InStr);
 {$ENDIF}
   DataToUTF8 := outstr;
 end;
