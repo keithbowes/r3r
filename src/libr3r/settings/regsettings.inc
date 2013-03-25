@@ -292,7 +292,6 @@ end;
 procedure TRSettings.WriteRec;
 var
   ASetting: PRSetting;
-  Index: byte;
   i: byte;
 begin
   for i := 0 to FSettings^.Count - 1 do

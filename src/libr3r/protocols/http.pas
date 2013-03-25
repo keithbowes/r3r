@@ -405,9 +405,19 @@ procedure THttpSock.InitCache;
 var
   FullPath: String;
 begin
-  FullPath := FIndirectHost + FPath;
-  FullPath := CacheEncode(FullPath);
+  if not Settings.GetBoolean('use-proxy') then
+  begin
+    FullPath := FIndirectHost + FPath;
+  end
+  else
+  begin
+    FullPath := StringReplace(FPath, 'http://', '', []);
+{$IFDEF USE_SSL}
+    FullPath := StringReplace(FullPath, 'https://', '', []);
+{$ENDIF}
+  end;
 
+  FullPath := CacheEncode(FullPath);
   Cache := CreateCache(FullPath);
 end;
 
