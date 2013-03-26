@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-02-27 01:17-0500\n"
+"PO-Revision-Date: 2013-03-25 19:18-0400\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -146,7 +146,7 @@ msgstr ""
 "rss"
 
 msgid "http://feeds.bbci.co.uk/news/rss.xml"
-msgstr "http://tagesspiegel.feedsportal.com/c/33356/f/566373/index.rss"
+msgstr "http://www.spiegel.de/schlagzeilen/tops/index.rss"
 
 msgid "http://rss.slashdot.org/Slashdot/slashdotatom"
 msgstr "http://rss.golem.de/rss.php?feed=ATOM1.0"

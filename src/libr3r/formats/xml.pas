@@ -54,7 +54,7 @@ type
     destructor Destroy; override;
     procedure Clone(const List: PRList);
     function GetCurrentElement: TXmlElement; virtual;
-    function GetPreviousElement: TXmlElement; virtual;
+    function GetParentElement: TXmlElement; virtual;
     procedure SendItem; virtual;
   end;
 
@@ -195,9 +195,9 @@ begin
     begin
       FLastBase := Elem.Base;
     end
-    else if GetPreviousElement.Base <> '' then
+    else if GetParentElement.Base <> '' then
     begin
-      Elem.Base := GetPreviousElement.Base;
+      Elem.Base := GetParentElement.Base;
       FLastBase := Elem.Base;
     end
     else
@@ -209,9 +209,9 @@ begin
     begin
       FLastLang := Elem.Lang;
     end
-    else if GetPreviousElement.Lang <> '' then
+    else if GetParentElement.Lang <> '' then
     begin
-      Elem.Lang := GetPreviousElement.Lang;
+      Elem.Lang := GetParentElement.Lang;
       FLastLang := Elem.Lang;
     end
     else
@@ -223,7 +223,7 @@ begin
   GetCurrentElement := Elem;
 end;
 
-function TXmlFeed.GetPreviousElement: TXmlElement;
+function TXmlFeed.GetParentElement: TXmlElement;
 var
   i: cardinal;
   Res: TXmlElement;
@@ -234,10 +234,10 @@ begin
     repeat
       Res := PXmlElement(FElemList^.GetNth(FElemList^.Count - i))^;
       Inc(i);
-    until (Res.Depth = Depth - 1) or (i - 1 = FElemList^.Count);
+    until (Res.Depth + 1 = Depth - 1) or (i - 1 = FElemList^.Count);
   end;
 
-  GetPreviousElement := Res;
+  GetParentElement := Res;
 end;
 
 procedure TXmlFeed.SendItem;

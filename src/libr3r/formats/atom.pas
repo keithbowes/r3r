@@ -191,21 +191,21 @@ begin
     end
     else if Name = 'email' then
     begin
-      if GetPreviousElement.Name = 'author' then
+      if GetParentElement.Name = 'author' then
       begin
         Contact.Email := Content;
       end;
     end
     else if Name = 'name' then
     begin
-      if GetPreviousElement.Name = 'author' then
+      if GetParentElement.Name = 'author' then
       begin
         Contact.Name := Content;
       end;
     end
     else if Name = 'uri' then
     begin
-      if GetPreviousElement.Name = 'author' then
+      if GetParentElement.Name = 'author' then
       begin
         Contact.URI := Content;
       end;

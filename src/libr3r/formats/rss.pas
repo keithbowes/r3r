@@ -37,16 +37,16 @@ end;
 
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
-  Elem, Prev: TXmlElement;
+  Elem, Parent: TXmlElement;
 begin
   inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
-  Prev := GetPreviousElement;
+  Parent := GetParentElement;
   HandleNameSpace(Elem, Line, Item);
 
   if not FIsRDF then
   begin
-    Item.Finished := ((Elem.Name = 'item') and ((Prev.Name = 'item')
+    Item.Finished := ((Elem.Name = 'item') and ((Parent.Name = 'item')
       or FLeftChannel)) or (Line = SockEOF);
   end
   else
@@ -82,7 +82,7 @@ begin
   HandleNameSpace(GetCurrentElement, '', CurrentItem);
   with GetCurrentElement, CurrentItem do
   begin 
-    if (Name = 'title') and (GetPreviousElement.Name <> 'image') then
+    if (Name = 'title') and (GetParentElement.Name <> 'image') then
     begin
       Title := Content;
     end

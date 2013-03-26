@@ -123,6 +123,7 @@ begin
     if Elem^.Name <> '' then
     begin
       Dec(Depth);
+      Elem^.Name := '';
     end;
   end;
 end;
