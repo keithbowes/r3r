@@ -36,7 +36,7 @@ begin
         Attr := PXmlAttr(Attributes^.GetNth(i))^;
         if Attr.Name = 'resource' then
         begin
-          Enclosure.URL := Attr.Value;
+          Enclosure.URL := GetAbsoluteURL(Attr.Value);
         end
         else if Attr.Name = 'type' then
         begin

@@ -16,7 +16,7 @@ uses
   , RParseURL
 {$ENDIF};
 
-procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
+function GetFeed(var Resource: String): TURL;
 procedure ParseFeed(const Sock: TRSock);
 procedure SetFeedObject(const Lib: TLibR3R);
 
@@ -39,14 +39,15 @@ var
   FeedObj: TLibR3R;
   Item: TFeedItem;
 
-procedure GetFeed(var Resource: String; var Prot, Host, Port, Path, Para: String);
+function GetFeed(var Resource: String): TURL;
 {$IFDEF __GPC__}
 const
   PathDelim = DirSeparator;
 {$ENDIF}
 var
   ExplicitFile: Boolean;
-  Pass, User: String;
+  Prot: String;
+  Res: TURL;
 {$IF DEFINED(USE_IDN) or DEFINED(USE_LIBIDN2)}
   PHost: PChar;
 {$ENDIF}
@@ -69,19 +70,25 @@ begin
   else
   begin
 {$IFNDEF SOCKETS_NONE}
-    ParseURL(Resource, Prot, User, Pass, Host, Port, Path, Para);
+    Res := ParseURL(Resource);
 {$IFDEF USE_IDN}
-    idna_to_ascii_8z(StrToPChar(Host), @PHost, 0);
-    WriteStr(Host, PHost);
+    idna_to_ascii_8z(StrToPChar(Res.Host), @PHost, 0);
+    WriteStr(Res.Host, PHost);
 {$ELSE}
 {$IFDEF USE_LIBIDN2}
     setlocale(LC_ALL, '');
-    idn2_lookup_ul(StrToPChar(Host), @PHost, 0);
-    WriteStr(Host, PHost);
+    idn2_lookup_ul(StrToPChar(Res.Host), @PHost, 0);
+    WriteStr(Res.Host, PHost);
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
   end;
+
+  if Prot <> '' then
+  begin
+    Res.Protocol := Prot;
+  end;
+  GetFeed := Res;
 end;
 
 procedure ParseFeed(const Sock: TRSock);

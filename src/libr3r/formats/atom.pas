@@ -22,7 +22,6 @@ type
     FHasShortDesc: Boolean;
     FLeftFeed: Boolean;
     procedure HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
-    function GetAbsoluteURL(const URL: String): String;
   protected
     function GetFormat: TFeedType; override;
   public
@@ -121,6 +120,7 @@ begin
 
       with FAtomLink do
       begin
+        Href := GetAbsoluteURL(Href);
         if (Rel = 'alternate') or (Rel = '') then
         begin
           Link := Href;
@@ -207,7 +207,7 @@ begin
     begin
       if GetParentElement.Name = 'author' then
       begin
-        Contact.URI := Content;
+        Contact.URI := GetAbsoluteURL(Content);
       end;
     end
     else if Name = 'generator' then
@@ -268,58 +268,6 @@ begin
     AFeed.SendItem;
     AFeed.Free;
   end;
-end;
-
-function TAtomFeed.GetAbsoluteURL(const URL: String): String;
-var
-  Prot, User, Pass, Host, Port, Path, Para: String;
-  BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara: String;
-  Res: String;
-begin
-{$IFNDEF SOCKETS_NONE}
-  ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
-{$ENDIF}
-
-  { URL is absolute if it contains the host name;
-    it isn't if it doesn't }
-  if Pos(Host, URL) <> 0 then
-  begin
-    Res := URL;
-  end
-  else
-  begin
-{$IFNDEF SOCKETS_NONE}
-    ParseURL(GetCurrentElement.Base, BaseProt, BaseUser, BasePass, BaseHost, BasePort, BasePath, BasePara);
-{$ENDIF}
-    Res := BaseProt + '://';
-
-    if BaseUser <> '' then
-    begin
-      Res := Res + BaseUser;
-      if BasePass <> '' then
-      begin
-        Res := Res + ':' + BasePass;
-      end;
-
-      Res := Res + '@';
-    end;
-
-    Res := Res + BaseHost;
-    
-    if Port <> BasePort then
-    begin
-      Res := Res + ':' + BasePort;
-    end;
-
-    Res := Res + Path;
-
-    if Para <> '' then
-    begin
-      Res := Res + '?' + Para;
-    end;
-  end;
-
-  GetAbsoluteURL := Res;
 end;
 
 end.

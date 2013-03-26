@@ -69,7 +69,7 @@ begin
   begin
     Created := UnixToDate(FList.List[1]);
     Title := Trim(FList.List[2]);
-    Link := FList.List[3];
+    Link := GetAbsoluteURL(FList.List[3]);
     Id := Link;
   end;
 end;
@@ -88,6 +88,7 @@ begin
     else if FList.List[1] = 'link' then
     begin
       Link := FList.List[2];
+      FTopLink := Link;
     end
     else if FList.List[1] = 'contact' then
     begin

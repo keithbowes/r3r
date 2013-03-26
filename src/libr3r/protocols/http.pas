@@ -50,7 +50,7 @@ uses
 {$IFDEF USE_ICONV}
   RProp,
 {$ENDIF}
-  Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
+  Info, LibR3RStrings, RGetFeed, RMessage, RParseURL, RSettings,
   RStrings, StrTok, SysUtils;
 
 const
@@ -85,6 +85,7 @@ var
   InfoText: String;
   Line: String;
   RespList: TStringsList;
+  URL: TURL;
 begin
   Headers.Sniff := Settings.GetBoolean('enable-mime-guess');
   HeaderState := hsUnstarted;
@@ -190,8 +191,8 @@ begin
 {$ENDIF}
         ShouldShow := true;
 
-        GetFeed(HeaderValue, Prot, Host, Port, Path, Para);
-        Connect(Host, Port, Path, Para);
+        URL := GetFeed(HeaderValue);
+        Connect(URL.Host, URL.Port, URL.Path, URL.Search);
         Execute;
         ParseFeed(Self);
       end

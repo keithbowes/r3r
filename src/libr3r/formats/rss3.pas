@@ -57,6 +57,14 @@ begin
   else if FCurrentField = 'link' then
   begin
     Item.Link := Data;
+    if not FInHead then
+    begin
+      Item.Link := GetAbsoluteURL(Item.Link);
+    end
+    else
+    begin
+      FTopLink := Data;
+    end;
   end
   else if FCurrentField = 'subject' then
   begin

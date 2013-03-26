@@ -11,6 +11,7 @@ type
   TFeed = class
   protected
     function GetFormat: TFeedType; virtual; abstract;
+    function GetAbsoluteURL(const RelURL, BaseURL: String): String;
   public
     ShouldShow: Boolean;
     constructor Create;
@@ -21,7 +22,7 @@ type
 implementation
 
 uses
-  HttpCache, RSettings, SockConsts;
+  HttpCache, RParseURL, RSettings, SockConsts;
 
 constructor TFeed.Create;
 begin
@@ -77,6 +78,57 @@ begin
       end;
     end;
   end;
+end;
+
+function TFeed.GetAbsoluteURL(const RelURL, BaseURL: String): String;
+var
+  Base, Rel: TURL;
+  Res: String;
+begin
+{$IFNDEF SOCKETS_NONE}
+  Rel := ParseURL(RelURL);
+{$ENDIF}
+
+  { URL is absolute if it contains the host name;
+    it isn't if it doesn't }
+  if Pos(Rel.Host, RelURL) <> 0 then
+  begin
+    Res := RelURL;
+  end
+  else
+  begin
+{$IFNDEF SOCKETS_NONE}
+    Base := ParseURL(BaseUrl);
+{$ENDIF}
+    Res := Base.Protocol + '://';
+
+    if Base.User <> '' then
+    begin
+      Res := Res + Base.User;
+      if Base.Password <> '' then
+      begin
+        Res := Res + ':' + Base.Password;
+      end;
+
+      Res := Res + '@';
+    end;
+
+    Res := Res + Base.Host;
+    
+    if Rel.Port <> Base.Port then
+    begin
+      Res := Res + ':' + Base.Port;
+    end;
+
+    Res := Res + Rel.Path;
+
+    if Rel.Search <> '' then
+    begin
+      Res := Res + '?' + Rel.Search;
+    end;
+  end;
+
+  GetAbsoluteURL := Res;
 end;
 
 end.

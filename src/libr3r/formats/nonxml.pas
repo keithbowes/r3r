@@ -7,6 +7,9 @@ uses
 
 type
   TNonXmlFeed = class(TFeed)
+  protected
+    FTopLink: String;
+    function GetAbsoluteURL(const URL: String): String;
   public
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end; 
@@ -24,6 +27,11 @@ begin
 
   ShouldShow := (not ((Line = '') and (Line = LastLine))) and (Line <> SockEof);
   LastLine := Line;
+end;
+
+function TNonXmlFeed.GetAbsoluteURL(const URL: String): String;
+begin
+  GetAbsoluteURL := inherited GetAbsoluteURL(URL, FTopLink);
 end;
 
 end.

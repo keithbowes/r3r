@@ -62,7 +62,8 @@ var
 implementation
 
 uses
-  MailCap, RProp, RSettings_Routines, RSettings_Strings, RStrings
+  Dos, MailCap, RParseURL, RProp, RSettings_Routines,
+  RSettings_Strings, RStrings
 {$IFDEF SETTINGS_INI}
   , IniFiles
 {$ENDIF}
@@ -209,8 +210,31 @@ end;
 procedure TRSettings.InitRec;
 var
   mc: PMailCap;
+  Proxy, ProxyHost: String;
+  ProxyPort: word;
+  ProxyURL: TURL;
 begin
   New(mc, Init);
+
+  Proxy := GetEnv('http_proxy');
+  if Proxy = '' then
+  begin
+    Proxy := GetEnv('HTTP_PROXY');
+  end;
+
+  if Proxy <> '' then
+  begin
+    ProxyURL := ParseURL(Proxy);
+    WriteStr(ProxyHost, ProxyURL.Protocol, '://', ProxyURL.Host);
+    {$I-}
+    ReadStr(ProxyURL.Port, ProxyPort);
+    {$I+}
+  end
+  else
+  begin
+    ProxyHost := 'http://127.0.0.1';
+    ProxyPort := 8118;
+  end;
 
   CheckBoolean('show-messages', 'Display', true, DescMsg);
   CheckBoolean('display-feed-title-only', 'Display', false, DescDisplay);
@@ -225,9 +249,9 @@ begin
   CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);
 {$ENDIF}
 
-  CheckBoolean('use-proxy', 'HTTP', false, DescProxy);
-  CheckString('proxy-address', 'HTTP', '127.0.0.1', DescProxyAddress);
-  CheckInteger('proxy-port', 'HTTP', 8118, DescProxyPort);
+  CheckBoolean('use-proxy', 'HTTP', Proxy <> '', DescProxy);
+  CheckString('proxy-address', 'HTTP', ProxyHost, DescProxyAddress);
+  CheckInteger('proxy-port', 'HTTP', ProxyPort, DescProxyPort);
 
   CheckBoolean('use-custom-accept-types', 'HTTP Headers', false, DescUseTypes);
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);

@@ -48,7 +48,7 @@ uses
 {$IFNDEF SOCKETS_NONE}
   Http, RUpdate, 
 {$ENDIF}
-  LibR3RStrings, LocalFile, RGetFeed, RMessage;
+  LibR3RStrings, LocalFile, RGetFeed, RMessage, RParseURL;
 
 function GetSockType(const Resource, Prot, Host, Port, Path, Para: String): TRSock;
 begin
@@ -100,10 +100,10 @@ end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
 var
-  Prot, Host, Port, Path, Para: String;
+  URL: TURL;
 begin
-  GetFeed(Resource, Prot, Host, Port, Path, Para);
-  FSock := GetSockType(Resource, Prot, Host, Port, Path, Para);
+  URL := GetFeed(Resource);
+  FSock := GetSockType(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
 
   if FSock = nil then
   begin

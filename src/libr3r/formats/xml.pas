@@ -53,6 +53,7 @@ type
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
     procedure Clone(const List: PRList);
+    function GetAbsoluteURL(const URL: String): String;
     function GetCurrentElement: TXmlElement; virtual;
     function GetParentElement: TXmlElement; virtual;
     procedure SendItem; virtual;
@@ -177,6 +178,11 @@ begin
 {$IFNDEF __GPC__}
   inherited Destroy;
 {$ENDIF}
+end;
+
+function TXmlFeed.GetAbsoluteURL(const URL: String): String;
+begin
+  GetAbsoluteURL := inherited GetAbsoluteURL(URL, GetCurrentElement.Base);
 end;
 
 function TXmlFeed.GetCurrentElement: TXmlElement;

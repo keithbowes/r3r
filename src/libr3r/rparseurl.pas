@@ -2,31 +2,42 @@ unit RParseURL;
 
 interface
 
-function ParseURL(URL: String; var Protocol, User, Password, Host, Port, Path, Search: String): String;
+type
+  TURL = packed record
+    Protocol: String;
+    User: String;
+    Password: String;
+    Host: String;
+    Port: String;
+    Path: String;
+    Search: String;
+  end;
+
+function ParseURL(URL: String): TURL;
 
 implementation
 
-function ParseURL(URL: String; var Protocol, User, Password, Host, Port, Path, Search: String): String;
+function ParseURL(URL: String): TURL;
 const
   DefaultHost = 'localhost';
 var
   ErrPos, Index, Index2: byte;
-  Res: String;
+  Res: TURL;
 begin
-  Protocol := 'http';
-  Port := '80';
+  Res.Protocol := 'http';
+  Res.Port := '80';
 
   Index := Pos('?', URL);
   if Index <> 0 then
   begin
-    Search := Copy(URL, Index + 1, Length(URL) - Index);
+    Res.Search := Copy(URL, Index + 1, Length(URL) - Index);
     Delete(URL, Index, Length(URL) - Index + 1);
   end;
 
   Index := Pos('://', URL);
   if Index <> 0 then
   begin
-    Protocol := Copy(URL, 1, Index - 1);
+    Res.Protocol := Copy(URL, 1, Index - 1);
     Delete(URL, 1, Index + 2);
   end;
 
@@ -36,12 +47,12 @@ begin
     Index2 := Pos(':', URL);
     if (Index2 <> 0) and (Index2 < Index) then
     begin
-      User := Copy(URL, 1, Index2 - 1);
-      Password := Copy(URL, Index2 + 1, Index - Index2 - 1);
+      Res.User := Copy(URL, 1, Index2 - 1);
+      Res.Password := Copy(URL, Index2 + 1, Index - Index2 - 1);
     end
     else
     begin
-      User := Copy(URL, 1, Index - 1);
+      Res.User := Copy(URL, 1, Index - 1);
     end;
 
     Delete(URL, 1, Index);
@@ -50,35 +61,29 @@ begin
   Index := Pos('/', URL);
   if Index <> 0 then
   begin
-    Host := Copy(URL, 1, Index - 1);
-    Path := Copy(URL, Index, Length(URL) - Index + 1);
+    Res.Host := Copy(URL, 1, Index - 1);
+    Res.Path := Copy(URL, Index, Length(URL) - Index + 1);
 
-    if (Pos('.', Host) = 0) and (Host <> DefaultHost) then
+    if (Pos('.', Res.Host) = 0) and (Pos(DefaultHost, Res.Host) = 0) then
     begin
-      Path := '/' + Host + Path;
-      Host := DefaultHost;
+      Res.Path := '/' + Res.Host + Res.Path;
+      Res.Host := DefaultHost;
     end;
 
     URL := '';
   end;
 
-  Index := Pos(':', Host);
+  Index := Pos(':', Res.Host);
   if Index <> 0 then
   begin
-    Port := Copy(Host, Index + 1, Length(Host) - Index);
-    Delete(Host, Index, Length(Host) - Index + 1);
+    Res.Port := Copy(Res.Host, Index + 1, Length(Res.Host) - Index);
+    Delete(Res.Host, Index, Length(Res.Host) - Index + 1);
 
-    Val(Port, Index2, ErrPos);
+    Val(Res.Port, Index2, ErrPos);
     if ErrPos <> 0 then
     begin
-      Protocol := Port;
+      Res.Protocol := Res.Port;
     end;
-  end;
-  
-  Res := Path;
-  if Search <> '' then
-  begin
-    Res := Res + '?' + Search;
   end;
 
   ParseURL := Res;

@@ -92,7 +92,7 @@ begin
     end
     else if Name = 'link' then
     begin
-      Link := Trim(Content);
+      Link := GetAbsoluteURL(Trim(Content));
     end
     else if Name = 'enclosure' then
     begin
@@ -103,7 +103,7 @@ begin
           Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
           if Attr.Name = 'url' then
           begin
-            Enclosure.URL := Attr.Value;
+            Enclosure.URL := GetAbsoluteURL(Attr.Value);
           end;
         end;
 
