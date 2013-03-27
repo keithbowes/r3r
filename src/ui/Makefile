@@ -11,4 +11,4 @@ install:
 
 uninstall:
 	cd $(R3R_UI) && $(MAKE) uninstall
-	$(DEL) $(incdir)/libr3r.h
+	$(DEL) $(wildcard $(incdir)/libr3r.h)

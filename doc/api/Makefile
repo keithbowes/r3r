@@ -16,7 +16,7 @@ index.html: libr3r.pas.xml ../../src/libr3r/formats/feeditem.pas \
 
 clean:
 	$(RM) $(wildcard *.html)
-	$(DELTREE) feeditem itemcallbacks libr3r rmessage rsettings rsubscriptions
+	$(DELTREE) $(wildcard feeditem itemcallbacks libr3r rmessage rsettings rsubscriptions)
 
 install: all
 	$(MKDIR) $(docdir)
@@ -24,4 +24,4 @@ install: all
 	$(foreach file, $(wildcard */*.html), $(MKDIR) $(docdir)/$(dir $(file)); $(INSTALL) $(file) $(docdir)/$(file);  )
 
 uninstall:
-	$(DELTREE) $(docdir)
+	$(DELTREE) $(wildcard $(docdir))

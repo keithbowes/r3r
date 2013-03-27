@@ -44,10 +44,10 @@ checkinstall:
 clean: distclean
 
 distclean:
-	$(DEL) r3r.desktop
-	$(DEL) is/r3r.iss is/setup.exe
-	$(DEL) ../../description-pak
-	$(DELTREE) ../../doc-pak
+	$(DEL) $(wildcard r3r.desktop)
+	$(DEL) $(wildcard is/r3r.iss is/setup.exe)
+	$(DEL) $(wildcard ../../description-pak)
+	$(DELTREE) $(wildcard ../../doc-pak)
 
 r3r.desktop: r3r.desktop.in
 	-$(SED) -e 's|@bindir@|$(bindir)|g' -e 's|@icondir@|$(icondir)|g' $< > $@

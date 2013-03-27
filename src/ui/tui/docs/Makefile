@@ -5,4 +5,4 @@ install:
 	$(INSTALL) $(wildcard *.html) $(docdir)
 
 uninstall:
-	$(DEL) $(addprefix $(docdir),$(wildcard *.html))
+	$(DEL) $(wildcard $(addprefix $(docdir),$(wildcard *.html)))

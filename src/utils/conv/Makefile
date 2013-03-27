@@ -15,9 +15,9 @@ install:
 	cd po && $(MAKE) install
 
 uninstall:
-	$(RM) $(bindir)/r3r-conv$(TARGETEXEEXT)
+	$(RM) $(wildcard $(bindir)/r3r-conv$(TARGETEXEEXT))
 	cd po && $(MAKE) uninstall
 
 clean: _clean
-	$(DEL) r3r-conv$(TARGETEXEEXT)
+	$(DEL) $(wildcard r3r-conv$(TARGETEXEEXT))
 	cd po && $(MAKE) clean

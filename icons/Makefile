@@ -14,12 +14,12 @@ r3r.res: r3r.rc
 	-$(WINDRES) $(WINDRESFLAGS) -i $< -o $@
 
 clean:
-	$(DEL) r3r.ico r3r.res
+	$(DEL) $(wildcard r3r.ico r3r.res)
 
 install:
 	$(MKDIR) $(icondir)
 	-$(INSTALL) r3r.ico r3r.png $(icondir)
 
 uninstall:
-	$(RM) $(icondir)/r3r.png $(icondir)/r3r.ico
+	$(RM) $(wildcard $(icondir)/r3r.png $(icondir)/r3r.ico)
 

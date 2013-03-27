@@ -48,6 +48,16 @@ begin
   StringReplace := s;
 end;
 
+procedure DeleteFile(const fn: String);
+var
+  f: text;
+begin
+  Assign(f, fn);
+  Rewrite(f);
+  Close(f);
+  Erase(f);
+end;
+
 {$IFNDEF MSWINDOWS}
 {$INCLUDE "mailcapdriver.inc"}
 {$ELSE}
@@ -74,21 +84,35 @@ var
 begin
   dl := GetEnv('MAILCAP_DOWNLOADER');
   dop := GetEnv('MAILCAP_DOWNLOADER_OPTIONS');
-  fl := GetEnv('TMP') + '/dl';
+  fl := GetEnv('MAILCAP_TEMP_FILE');
+
+  if Length(fl) = 0 then
+  begin
+    fl := GetEnv('TMP') + '/dl';
+  end;
 
   if Length(dl) = 0 then
   begin
     dl := 'wget';
-    dop := '-O ' + fl;
+    if Length(dop) = 0 then
+    begin
+      dop := '-q -O ' + fl;
+    end;
   end;
-  Exec(dl, dop + ' ' + param);
+
+  SwapVectors;
+  DeleteFile(fl);
+  Exec(FSearch(dl, GetEnv('PATH')), dop + ' ' + param);
+  SwapVectors;
 
   prog := GetProg(mtype);
   StripPost(prog);
 
   expstart := Pos(' ', prog);
   prog := Copy(prog, 1, expstart - 1);
-  Exec(FSearch(prog, GetEnv('PATH')), dl);
+  SwapVectors;
+  Exec(FSearch(prog, GetEnv('PATH')), fl);
+  SwapVectors;
 
   ExecProg := DosExitCode;
 end;

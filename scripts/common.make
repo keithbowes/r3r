@@ -123,7 +123,7 @@ ifneq ($(call programpath,$(notdir $(SHELL))),)
 checklib=$(shell $(ECHO) "Checking for -l$(1)... "; $(ECHO) 'program Check; {$$linklib $(1)} begin end.' > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "ok=1; export ok" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "ok=0; export ok" > status.sh); fi;)
 checkprog=$(shell $(ECHO) "Checking for $(1)\'s path... "; if test -z $(shell $(ECHO) $(call programpath,$(1))); then ($(ECHO) "not found"; $(ECHO) "ok=0; export ok" > status.sh); else $(ECHO) $(call programpath,$(1)); fi;)
 checkunit=$(shell $(ECHO) "Checking for unit $(1)... "; $(ECHO) "program Check; uses $(1); begin end." > check.pas; $(PC) $(PCFLAGS) check.pas > /dev/null 2>&1; if test $$? -eq 0; then ($(ECHO) "yes"; if test ! -f status.sh; then $(ECHO) "ok=1; export ok" > status.sh; fi); else ($(ECHO) "no"; $(ECHO) "ok=0; export ok" > status.sh); fi;)
-success=$(shell source ./status.sh; if test $$ok -eq 1; then $(ECHO) "You can safely build now"; else $(ECHO) "You\'re missing some requirements\; can\'t build"; fi; $(RM) status.sh)
+success=$(shell source ./status.sh; if test $$ok -eq 1; then $(ECHO) "You can safely build now"; else $(ECHO) "You\'re missing some requirements\; can\'t build"; fi; $(RM) $(wildcard status.sh))
 else
 checklib=$(shell $(ECHO) "Testing -l$(1)..."; $(ECHO) "program Check; {$$linklib} begin end." > check.pas" > check.pas; $(PC) $(PCFLAGS) check.pas)
 checkprog=$($shell $(ECHO) "Checking for $(1)'s path; $(ECHO) $(call programpath,$(1)))

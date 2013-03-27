@@ -7,7 +7,7 @@ all: r3r_opml$(PPUEXT)
 
 clean:
 	cd po && $(MAKE) clean
-	$(DEL) $(EXEOUT)/r3r_opml$(TARGETEXEEXT)
+	$(DEL) $(wildcard $(EXEOUT)/r3r_opml$(TARGETEXEEXT))
 
 install:
 	cd po && $(MAKE) install
@@ -15,4 +15,4 @@ install:
 
 uninstall:
 	cd po && $(MAKE) uninstall
-	$(DEL) $(bindir)/r3r_opml$(TARGETEXEEXT)
+	$(DEL) $(wildcard $(bindir)/r3r_opml$(TARGETEXEEXT))

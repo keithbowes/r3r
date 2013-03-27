@@ -169,13 +169,13 @@ uninstall:
 	cd $(srcdir)/doc && $(MAKE) uninstall
 	cd $(srcdir)/icons && $(MAKE) uninstall
 	cd $(srcdir)/src && $(MAKE) uninstall
-	$(DEL) $(bindir)/r3r
-	$(foreach ui,$(uis),$(DEL) $(bindir)/r3r-$(ui)$(TARGETEXEEXT); )
-	$(DEL) $(bindir)/r3r-settitle
-	-$(RMDIR) $(bindir)
-	$(RM) $(appdir)/r3r.desktop
-	$(DELTREE) $(rdatadir)
-	-$(RMDIR) $(prefix)
+	$(DEL) $(wildcard $(bindir)/r3r)
+	$(foreach ui,$(uis),$(DEL) $(wildcard $(bindir)/r3r-$(ui)$(TARGETEXEEXT)); )
+	$(DEL) $(wildcard $(bindir)/r3r-settitle)
+	-$(RMDIR) $(wildcard $(bindir))
+	$(RM) $(wildcard $(appdir)/r3r.desktop)
+	$(DELTREE) $(wildcard $(rdatadir))
+	-$(RMDIR) $(wildcard $(prefix))
 
 # Distribution rules
 dist-build:
@@ -205,7 +205,7 @@ endif
 	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
 		$(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.xz
-	$(DELTREE) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)
+	$(DELTREE) $(wildcard $(srcdir)/../r3r-$(VERSION)-$(PLATFORM))
 	$(call sign,r3r-$(VERSION)-$(PLATFORM).tar.xz)
 
 dist-src: clean
@@ -214,7 +214,7 @@ dist-src: clean
 	-$(COPY) -rf * ../r3r-$(VERSION)
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
 		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
-	$(DELTREE) ../r3r-$(VERSION)
+	$(DELTREE) $(wildcard ../r3r-$(VERSION))
 	$(call sign,r3r-$(VERSION)-src.tar.xz)
 
 dist-deb:
@@ -236,6 +236,6 @@ clean:
 	cd $(srcdir)/icons && $(MAKE) clean
 	cd $(srcdir)/scripts/setup && $(MAKE) clean
 	cd $(srcdir)/src && $(MAKE) clean
-	$(DEL) config.make
-	$(DEL) description-pak
-	$(foreach ui,$(uis),$(DEL) $(builddir)/r3r-$(ui)$(TARGETEXEEXT); )
+	$(DEL) $(wildcard config.make)
+	$(DEL) $(wildcard description-pak)
+	$(foreach ui,$(uis),$(DEL) $(wildcard $(builddir)/r3r-$(ui)$(TARGETEXEEXT)); )

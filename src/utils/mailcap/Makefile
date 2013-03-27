@@ -9,4 +9,4 @@ prog: example$(PPUEXT)
 unit: mailcap$(PPUEXT)
 
 clean:
-	$(RM) example$(EXEXT)
+	$(RM) $(wildcard example$(EXEXT))

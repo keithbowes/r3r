@@ -6,4 +6,4 @@ install:
 	$(INSTALL) $(wildcard *.skin) $(skindir)
 
 uninstall:
-	$(DELTREE) $(skindir)
+	$(DELTREE) $(wildcard $(skindir))

@@ -437,7 +437,7 @@ begin
       prog := mc^.GetProg(TFeedITem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType);
       if Prog <> '' then
       begin
-        mc^.ExecProg(mc^.GetProg(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType), TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
+        mc^.ExecProg(TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.MimeType, TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Enclosure.URL);
       end;
       SwapVectors;
       Dispose(mc, Done);
