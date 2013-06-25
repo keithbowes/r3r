@@ -29,12 +29,12 @@ implementation
 
 uses
 {$IFDEF USE_ICONV}
-  Iconv, RProp, RStrings,
+  Iconv, RProp,
 {$ENDIF}
 {$IFNDEF EXPAT_2_0}
   LibR3RStrings, RMessage,
 {$ENDIF}
-  SysUtils, Xml;
+  RStrings, SysUtils, Xml;
 
 procedure SplitName(const Name: String; var ElemName, NSURI: String);
 var

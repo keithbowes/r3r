@@ -209,7 +209,7 @@ begin
   inbuf := FieldValue;
 {$ENDIF}
   inbytesleft := Length(FieldValue) + 1;
-  outbytesleft := 0;
+  outbytesleft := inbytesleft;
   GetMem(outstr, outbytesleft);
   if outstr <> nil then
   begin

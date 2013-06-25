@@ -8,12 +8,9 @@ unit RGetFeed;
 interface
 
 uses
-  LibR3R, RSock
+  LibR3R, RParseURL, RSock
 {$IFDEF SOCKETS_SYNAPSE}
   , Http, RMessage
-{$ENDIF}
-{$IFNDEF SOCKETS_NONE}
-  , RParseURL
 {$ENDIF};
 
 function GetFeed(var Resource: String): TURL;
