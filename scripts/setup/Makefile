@@ -36,7 +36,7 @@ checkinstall:
 	cd ../.. && $(CHECKINSTALL) --default --type=$(TYPE) \
 		--install=no --pkgname=r3r --pkgversion="$(VERSION)_$(R3R_UI)" \
 		--pkgarch=$(ARCH) --pkgrelease=$(PKGRELEASE) \
-		--pkggroup="Networking/News" --pkglicense=none --nodoc \
+		--pkggroup="Networking/News" --pkglicense=BSD --nodoc \
 		--deldesc=yes --deldoc=yes --delspec=yes --backup=no \
 		--pkgsource=$(curdir)/../.. \
 		--maintainer=zooplah@users.sourceforge.net

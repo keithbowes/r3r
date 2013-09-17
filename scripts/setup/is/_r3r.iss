@@ -90,10 +90,10 @@ Name: "{group}\R3R"; FileName: "{app}\bin\r3r-@UI@.exe"; IconFilename: "{app}\sh
 Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 
 [Languages]
-Name: "de"; MessagesFile: "compiler:Languages\German.isl"
-Name: "en"; MessagesFile: "compiler:Default.isl"
-Name: "eo"; MessagesFile: "scripts/setup/is/Esperanto.isl"
-Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"
+Name: "de"; MessagesFile: "compiler:Languages\German.isl"; LicenseFile: "doc/deutsch/LIZENZ"
+Name: "en"; MessagesFile: "compiler:Default.isl"; LicenseFile: "doc/english/LICENSE"
+Name: "eo"; MessagesFile: "scripts/setup/is/Esperanto.isl"; LicenseFile: "doc/english/PERMESILO"
+Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "doc/español/LICENCIA"
 
 [CustomMessages]
 de.CreateDesktopIcons=Erstellen &Desktop-Ikonen

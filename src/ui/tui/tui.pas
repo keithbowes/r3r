@@ -712,7 +712,7 @@ begin
         TuiWrite(StatusText);
       end;
 
-      WriteStr(ItemText, FCurrentItem, StringReplace(StringReplace(NextPrevLink, '%1', GetBoundKey(DownKey), []), '%2', GetBoundKey(UpKey), []));
+      WriteStr(ItemText, FCurrentItem, OutOf, FItems^.Count, StringReplace(StringReplace(NextPrevLink, '%1', GetBoundKey(DownKey), []), '%2', GetBoundKey(UpKey), []));
       DrawFeedInfo;
       PrintField(ItemNo, ItemText);
       PrintField(ItemTitle, Title);

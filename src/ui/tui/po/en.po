@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2013-02-01 00:54-0500\n"
+"PO-Revision-Date: 2013-09-15 15:44-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -40,6 +40,10 @@ msgstr "%s:quit the program"
 #: tuistrings:itemno
 msgid "Item number: "
 msgstr "Item number: "
+
+#: tuistrings:outof
+msgid "/"
+msgstr " of "
 
 #: tuistrings:itemtitle
 msgid "Title: "

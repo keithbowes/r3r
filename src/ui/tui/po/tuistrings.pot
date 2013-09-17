@@ -26,6 +26,10 @@ msgstr ""
 msgid "Item number: "
 msgstr ""
 
+#: tuistrings:outof
+msgid "/"
+msgstr ""
+
 #: tuistrings:itemtitle
 msgid "Title: "
 msgstr ""

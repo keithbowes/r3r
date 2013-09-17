@@ -11,6 +11,7 @@ var
   Help: String;
 
   ItemNo: String;
+  OutOf: String;
 
   ItemTitle: String;
   ItemSubject: String;
@@ -74,6 +75,7 @@ begin
   Help := _('%s:help');
 
   ItemNo := _('Item number: ');
+  OutOf := _('/');
 
   ItemTitle := _('Title: ');
   ItemSubject := _('Subject: ');

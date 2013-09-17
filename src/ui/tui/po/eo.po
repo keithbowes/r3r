@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2013-02-01 00:55-0500\n"
+"PO-Revision-Date: 2013-09-15 15:45-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -37,6 +37,10 @@ msgstr "%s:eliri el la programo"
 #: tuistrings:itemno
 msgid "Item number: "
 msgstr "Era numero: "
+
+#: tuistrings:outof
+msgid "/"
+msgstr " el "
 
 #: tuistrings:itemtitle
 msgid "Title: "
