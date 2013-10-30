@@ -27,11 +27,15 @@ clean: _clean
 	$(DEL) $(wildcard info.pas)
 	$(DEL) $(wildcard $(TARGETSHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT))
 	
-install:
+install: install-header install-lib
 	cd po && $(MAKE) install
-	$(MKDIR) $(libdir)
+
+install-header:
 	$(MKDIR) $(incdir)
 	$(INSTALL) libr3r.h $(incdir)
+
+install-lib:
+	$(MKDIR) $(libdir)
 	-$(INSTALLEXE) $(TARGETSHAREDLIBPREFIX)libr3r_shared$(TARGETSHAREDLIBEXT) $(libdir)
 	-ldconfig
 

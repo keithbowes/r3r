@@ -5,6 +5,8 @@ CHECKINSTALL ?= $(call programpath,checkinstall)
 RPMSOURCEDIR ?= ~/rpmbuild
 PKGDIR ?= $(RPMSOURCEDIR)/RPMS/$(ARCH)
 
+CITARGET ?= "make install-prog"
+
 include ../common.make
 curdir = $(PWD)
 
@@ -19,12 +21,12 @@ ifndef MAKING_PACKAGE
 endif
 
 dist-deb:
-	$(MAKE) checkinstall TYPE=debian VERSION=$(VERSION)
+	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=debian VERSION=$(VERSION)
 	$(MOVE) $(srcdir)/../../r3r_0-$(PKGRELEASE)_$(ARCH).deb \
 		$(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb
 
 dist-rpm:
-	$(MAKE) checkinstall TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
+	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
 	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm \
 	 	$(curdir)/../../..
 
@@ -39,7 +41,8 @@ checkinstall:
 		--pkggroup="Networking/News" --pkglicense=BSD --nodoc \
 		--deldesc=yes --deldoc=yes --delspec=yes --backup=no \
 		--pkgsource=$(curdir)/../.. \
-		--maintainer=zooplah@users.sourceforge.net
+		--maintainer=zooplah@users.sourceforge.net \
+		$(CITARGET)
 
 clean: distclean
 

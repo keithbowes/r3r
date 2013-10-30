@@ -35,7 +35,7 @@ Name: "wx"; Description: "{cm:wxDesc}"; Types: full custom
 #endif
 
 [Files]
-Source: "r3r-@UI@.exe"; DestDir: "{app}\bin"; AfterInstall: UnzipComp('core-dlls', '20120202'); Components: prog
+Source: "r3r-@UI@.exe"; DestDir: "{app}\bin"; Components: prog
 Source: "icons\r3r.ico"; DestDir: "{app}\share\icons"; Components: prog
 Source: "src\utils\opml\*.bat"; DestDir: "{app}\bin"; Components: prog
 Source: "src\utils\conv\r3r-conv.exe"; DestDir: "{app}\bin"; Components: prog
@@ -74,10 +74,14 @@ Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"; Components:
 
 #ifdef R3R_WX
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"; Components: prog
+#ifndef USE_IT_DOWNLOAD
 Source: "../wxwidgets/*.dll"; DestDir: "{app}\bin"; Components: wx
 #endif
+#endif
 
+#ifndef USE_IT_DOWNLOAD
 Source: "../core-dlls/*.dll"; DestDir: "{app}\bin"; Components: lib
+#endif
 
 ;Source: "scripts/setup/is/LEERME.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
 ;Source: "scripts/setup/is/LEGUMIN.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
@@ -147,37 +151,47 @@ procedure InitializeWizard;
 begin
 #ifdef USE_IT_DOWNLOAD
   ITD_Init;
+  ITD_DownloadAfter(wpReady);
 #endif
 end;
 
-procedure UnzipComp(Name, Version: String);
+procedure CurPageChanged(CurPageID: Integer);
+begin
+#ifdef USE_IT_DOWNLOAD
+  if CurPageId = wpReady then
+  begin
+    if IsComponentSelected('lib') then
+    begin
+      GetFile('Core DLLs/20120422', 'intl.dll');
+      GetFile('Core DLLs/20120422', 'libexpat-1.dll');
+      GetFile('Core DLLs/20120422', 'libiconv2.dll');
+      GetFile('Core DLLs/20120422', 'libidn-11.dll');
+      GetFile('Core DLLs/20120422', 'libpcre-0.dll');
+      GetFile('Core DLLs/20120422', 'readline5.dll');
+    end
+#ifdef R3R_WX
+    else if IsComponentSelected('wx') then
+    begin
+      GetFile('wxWidgets DLLs/3.0.0', 'wxbase300u_gcc_custom.dll')
+      GetFile('wxWidgets DLLs/3.0.0', 'wxmsw300u_core_gcc_custom.dll')
+      GetFile('wxWidgets DLLs/3.0.0', 'wxmsw300u_html_gcc_custom.dll')
+    end
+#endif
+  end
+#endif
+end;
+
+procedure GetFile(DName, FName: String);
 var
-  App, Tmp: String;
-  files, fs: Variant;
-  FullName, loc, rem, post: String;
+  App: String;
+  rem, post: String;
 begin
 #ifdef USE_IT_DOWNLOAD
   App := ExpandConstant('{app}');
-  Tmp := ExpandConstant('{tmp}');
 
-  FullName := Name + ' -' + Version;
-  loc := Tmp + '\' + FullName;
-  rem := 'http://sourceforge.net/projects/r3r/files/' + Name + '/' +  FullName + '.zip/download';
-  post := App + '\bin';
+  rem := 'http://sourceforge.net/projects/r3r/files/R3R%202.x%20for%20Windows/' + DName + '/' +  FName + '/download';
+  post := App + '\bin\' + FName;
 
-  if MsgBox('Download ' +  FullName + '?', mbConfirmation, MB_YESNO) = IDYES then
-  begin
-    ITD_DownloadFile(rem, loc);
-    fs := CreateOleObject('Shell.Application');
-    if fs <> nil then
-    begin
-      files := fs.NameSpace(loc).Items;
-      if files <> nil then
-      begin
-        CreateDir(post);
-        fs.NameSpace(post).CopyHere(files);
-      end;
-    end;
-  end;
+  ITD_AddFile(rem, post)
 #endif
 end;

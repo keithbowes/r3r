@@ -25,7 +25,7 @@ all build: docs
 	cd $(srcdir)/src && $(MAKE)
 	$(MOVE) $(srcdir)/src/ui/$(R3R_UI)/r3r$(TARGETEXEEXT) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT)
 
-check:
+_configure:
 ifdef USE_FPC
 	@$(ECHO) $(call checkprog,fpc)
 else
@@ -136,12 +136,22 @@ endif
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install:
-	$(MKDIR) $(bindir)
+install: install-docs install-header install-lib
+
+install-docs:
 	cd $(srcdir)/doc && $(MAKE) install
+
+install-header:
+	cd src && $(MAKE) install-header
+
+install-lib:
+	cd src && $(MAKE) install-lib
+
+install-prog:
+	$(MKDIR) $(bindir)
 	cd $(srcdir)/icons && $(MAKE) install
 	cd $(srcdir)/scripts/setup && $(MAKE) install
-	cd $(srcdir)/src && $(MAKE) install
+	cd $(srcdir)/src/libr3r/po && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)
 ifeq ($(R3R_UI),tui)
@@ -218,12 +228,30 @@ dist-src: clean
 	$(call sign,r3r-$(VERSION)-src.tar.xz)
 
 dist-deb:
-	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb CITARGET="$(CITARGET)"
 	$(call sign,r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb)
 
+dist-deb-dev:
+	$(MAKE) dist-deb CITARGET="$(MAKE) install-header" R3R_UI=dev
+
+dist-deb-docs:
+	$(MAKE) dist-deb CITARGET="$(MAKE) install-docs" R3R_UI=docs
+
+dist-deb-shared:
+	$(MAKE) dist-deb CITARGET="$(MAKE) install-lib" R3R_UI=shared
+
 dist-rpm:
-	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm
+	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm CITARGET="$(CITARGET)"
 	$(call sign,r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm)
+
+dist-rpm-dev:
+	$(MAKE) dist-rpm CITARGET="$(MAKE) install-header" R3R_UI=devel
+
+dist-rpm-docs:
+	$(MAKE) dist-rpm CITARGET="$(MAKE) install-docs" R3R_UI=docs
+
+dist-rpm-shared:
+	$(MAKE) dist-rpm CITARGET="$(MAKE) install-lib" R3R_UI=shared
 
 dist-inno_setup: OS_TARGET=win32
 dist-inno_setup: all

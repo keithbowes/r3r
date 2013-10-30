@@ -129,5 +129,5 @@ then
       $srcdir/scripts/common.make > $builddir/scripts/common.make
   fi
 
-  make check
+  make _configure
 fi
