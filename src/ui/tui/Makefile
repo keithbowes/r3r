@@ -13,7 +13,7 @@ endif
 
 clean:
 	cd po && $(MAKE) clean
-	$(DEL) $(wildcard *.or) $(wildcard *.res)
+	$(RM) $(wildcard *.or) $(wildcard *.res)
 
 install:
 	cd docs && $(MAKE) install

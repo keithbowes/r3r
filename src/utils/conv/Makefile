@@ -6,7 +6,7 @@ all: r3rconv$(PPUEXT)
 ifneq ($(USE_NLS),0)
 	cd po && $(MAKE) all
 endif
-	$(MOVE) r3rconv$(TARGETEXEEXT) r3r-conv$(TARGETEXEEXT)
+	$(MV) r3rconv$(TARGETEXEEXT) r3r-conv$(TARGETEXEEXT)
 
 r3rconv$(PPUEXT): atomwriter$(PPUEXT) conv$(PPUEXT) esfwriter$(PPUEXT) rss3writer$(PPUEXT) rsswriter$(PPUEXT)
 
@@ -19,5 +19,5 @@ uninstall:
 	cd po && $(MAKE) uninstall
 
 clean: _clean
-	$(DEL) $(wildcard r3r-conv$(TARGETEXEEXT))
+	$(RM) $(wildcard r3r-conv$(TARGETEXEEXT))
 	cd po && $(MAKE) clean

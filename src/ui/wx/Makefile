@@ -47,7 +47,7 @@ endif
 
 clean:
 	cd po && $(MAKE) clean
-	$(DEL) $(wildcard r3r$(EXEEXT))
+	$(RM) $(wildcard r3r$(EXEEXT))
 
 install:
 	cd po && $(MAKE) install

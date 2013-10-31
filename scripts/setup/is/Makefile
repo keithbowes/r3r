@@ -10,7 +10,7 @@ all installer: uptmpl setup.exe
 
 setup.exe: r3r.iss
 	$(ISCC) $<
-	$(MOVE) $@  $(srcdir)/../../../../r3r_$(R3R_UI)-$(VERSION)-$@
+	$(MV) $@  $(srcdir)/../../../../r3r_$(R3R_UI)-$(VERSION)-$@
 
 r3r.iss: _r3r.iss
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \

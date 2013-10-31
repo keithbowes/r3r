@@ -12,7 +12,7 @@ install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_tui.mo;)
 
 uninstall:
-	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_tui.mo)
+	$(RM) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_tui.mo)
 
 %.mo: %.po tuistrings.pot
 	-$(MSGMERGE) -Uq $< tuistrings.pot

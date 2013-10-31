@@ -47,8 +47,8 @@ endif #OS_TARGET
 
 # Now what programs
 CUT ?= $(call programpath,cut)
-DELTREE ?= $(call programpath,rm) -fr
-MOVE ?= mv -f
+RMRF ?= $(call programpath,rm) -fr
+MV ?= mv -f
 PWD ?= $(call programpath,pwd)
 RM ?= $(call programpath,rm) -f
 RMDIR ?= $(call programpath,rmdir)
@@ -60,11 +60,11 @@ LN ?= $(call programpath,ln) -sf
 GIT ?= $(call programpath,git)
 
 ifndef inDOS
-COPY ?= $(call programpath,cp)
+CP ?= $(call programpath,cp)
 ECHO ?= $(call programpath,echo)
 INSTALLPROG ?= $(call programpath,install)
 else
-COPY ?= copy
+CP ?= copy
 ECHO ?= $(call programpath,gecho)
 INSTALLPROG ?= $(call programpath,ginstall)
 endif
@@ -72,10 +72,6 @@ endif
 INSTALL=$(INSTALLPROG) -m 644
 INSTALLEXE=$(INSTALLPROG) -m 755
 MKDIR=$(INSTALLPROG) -d -m 755
-
-CP=$(COPY)
-DEL=$(RM)
-MV=$(MOVE)
 
 # General prefixes and suffixes
 GPDEXT ?= *.gpd # GNU Pascal
@@ -350,7 +346,6 @@ endif # inWindows
 
 ifdef CPU_TARGET
 override PCFLAGS_BASE+=-P$(CPU_TARGET)
-override DEFS_EXTRA+=$(CPU_TARGET)
 endif
 
 ifdef OS_TARGET
@@ -472,11 +467,11 @@ endif
 all: _all
 
 _clean:
-	$(DEL) $(wildcard *$(GPDEXT))
-	$(DEL) $(wildcard *$(OEXT))
-	$(DEL) $(wildcard *$(PPUEXT))
-	$(DEL) $(wildcard *$(STATICLIBEXT))
-	$(DEL) $(wildcard *.mo) $(wildcard *.po~)
+	$(RM) $(wildcard *$(GPDEXT))
+	$(RM) $(wildcard *$(OEXT))
+	$(RM) $(wildcard *$(PPUEXT))
+	$(RM) $(wildcard *$(STATICLIBEXT))
+	$(RM) $(wildcard *.mo) $(wildcard *.po~)
 
 cleanbuild:
 ifneq ($(BUILDDIR),$(SRCDIR))

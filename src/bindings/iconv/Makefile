@@ -9,4 +9,4 @@ prog: test$(PPUEXT)
 unit: iconv$(PPUEXT)
 
 clean:
-	$(DEL) $(wildcard test$(TARGETEXEEXT))
+	$(RM) $(wildcard test$(TARGETEXEEXT))

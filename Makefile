@@ -23,7 +23,7 @@ include scripts/common.make
 all build: docs
 	cd $(srcdir)/icons && $(MAKE)
 	cd $(srcdir)/src && $(MAKE)
-	$(MOVE) $(srcdir)/src/ui/$(R3R_UI)/r3r$(TARGETEXEEXT) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT)
+	$(MV) $(srcdir)/src/ui/$(R3R_UI)/r3r$(TARGETEXEEXT) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT)
 
 _configure:
 ifdef USE_FPC
@@ -130,13 +130,13 @@ endif
 ifdef forWindows
 	@$(ECHO) $(call checkprog,png2ico)
 endif
-	-@$(DEL) $(wildcard *check*)
+	-@$(RM) $(wildcard *check*)
 	@$(ECHO) $(call success)
 
 check_clean: _clean
 	$(RM) $(wildcard check.pas check$(TARGETEXEEXT) check$(OEXT) check$(PPUEXT))
 
-install: install-docs install-header install-lib
+install: install-docs install-header install-lib install-prog
 
 install-docs:
 	cd $(srcdir)/doc && $(MAKE) install
@@ -179,12 +179,12 @@ uninstall:
 	cd $(srcdir)/doc && $(MAKE) uninstall
 	cd $(srcdir)/icons && $(MAKE) uninstall
 	cd $(srcdir)/src && $(MAKE) uninstall
-	$(DEL) $(wildcard $(bindir)/r3r)
-	$(foreach ui,$(uis),$(DEL) $(wildcard $(bindir)/r3r-$(ui)$(TARGETEXEEXT)); )
-	$(DEL) $(wildcard $(bindir)/r3r-settitle)
+	$(RM) $(wildcard $(bindir)/r3r)
+	$(foreach ui,$(uis),$(RM) $(wildcard $(bindir)/r3r-$(ui)$(TARGETEXEEXT)); )
+	$(RM) $(wildcard $(bindir)/r3r-settitle)
 	-$(RMDIR) $(wildcard $(bindir))
 	$(RM) $(wildcard $(appdir)/r3r.desktop)
-	$(DELTREE) $(wildcard $(rdatadir))
+	$(RMRF) $(wildcard $(rdatadir))
 	-$(RMDIR) $(wildcard $(prefix))
 
 # Distribution rules
@@ -206,25 +206,25 @@ endif
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib
 	$(INSTALLEXE) $(srcdir)/src/libr3r/$(SHAREDLIBPREFIX)libr3r_shared$(SHAREDLIBEXT) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/lib
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/include
-	$(COPY) $(srcdir)/src/ui/wx/libr3r.h $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/include
+	$(CP) $(srcdir)/src/ui/wx/libr3r.h $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/include
 	$(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/icons
-	$(COPY) $(srcdir)/icons/r3r.png  $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/icons
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/libr3r/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/libr3r/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/libr3r.mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/tui/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/tui/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_tui.mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/wx/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/ui/wx/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_wx.mo;)
-	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(COPY) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
+	$(CP) $(srcdir)/icons/r3r.png  $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/icons
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/libr3r/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(CP) $(srcdir)/src/libr3r/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/libr3r.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/tui/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(CP) $(srcdir)/src/ui/tui/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_tui.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/ui/wx/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(CP) $(srcdir)/src/ui/wx/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_wx.mo;)
+	$(foreach l, $(subst .mo,,$(notdir $(wildcard $(srcdir)/src/utils/opml/po/*.mo))), $(MKDIR) $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES; $(CP) $(srcdir)/src/utils/opml/po/$l.mo $(srcdir)/../r3r-$(VERSION)-$(PLATFORM)/share/locale/$l/LC_MESSAGES/r3r_opml.mo;)
 	$(PAX) $(PAXFLAGS) ../r3r-$(VERSION)-$(PLATFORM) | \
 		$(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-$(PLATFORM).tar.xz
-	$(DELTREE) $(wildcard $(srcdir)/../r3r-$(VERSION)-$(PLATFORM))
+	$(RMRF) $(wildcard $(srcdir)/../r3r-$(VERSION)-$(PLATFORM))
 	$(call sign,r3r-$(VERSION)-$(PLATFORM).tar.xz)
 
 dist-src: clean
 	cd $(srcdir)
 	-$(MKDIR) ../r3r-$(VERSION)
-	-$(COPY) -rf * ../r3r-$(VERSION)
+	-$(CP) -rf * ../r3r-$(VERSION)
 	cd .. && $(PAX) $(PAXFLAGS) r3r-$(VERSION) | \
 		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
-	$(DELTREE) $(wildcard ../r3r-$(VERSION))
+	$(RMRF) $(wildcard ../r3r-$(VERSION))
 	$(call sign,r3r-$(VERSION)-src.tar.xz)
 
 dist-deb:
@@ -264,6 +264,6 @@ clean:
 	cd $(srcdir)/icons && $(MAKE) clean
 	cd $(srcdir)/scripts/setup && $(MAKE) clean
 	cd $(srcdir)/src && $(MAKE) clean
-	$(DEL) $(wildcard config.make)
-	$(DEL) $(wildcard description-pak)
-	$(foreach ui,$(uis),$(DEL) $(wildcard $(builddir)/r3r-$(ui)$(TARGETEXEEXT)); )
+	$(RM) $(wildcard config.make)
+	$(RM) $(wildcard description-pak)
+	$(foreach ui,$(uis),$(RM) $(wildcard $(builddir)/r3r-$(ui)$(TARGETEXEEXT)); )

@@ -22,12 +22,12 @@ endif
 
 dist-deb:
 	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=debian VERSION=$(VERSION)
-	$(MOVE) $(srcdir)/../../r3r_0-$(PKGRELEASE)_$(ARCH).deb \
+	$(MV) $(srcdir)/../../r3r_0-$(PKGRELEASE)_$(ARCH).deb \
 		$(srcdir)/../../../r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb
 
 dist-rpm:
 	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
-	$(MOVE) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm \
+	$(MV) $(PKGDIR)/r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm \
 	 	$(curdir)/../../..
 
 dist-inno_setup:
@@ -47,10 +47,10 @@ checkinstall:
 clean: distclean
 
 distclean:
-	$(DEL) $(wildcard r3r.desktop)
-	$(DEL) $(wildcard is/r3r.iss is/setup.exe)
-	$(DEL) $(wildcard ../../description-pak)
-	$(DELTREE) $(wildcard ../../doc-pak)
+	$(RM) $(wildcard r3r.desktop)
+	$(RM) $(wildcard is/r3r.iss is/setup.exe)
+	$(RM) $(wildcard ../../description-pak)
+	$(RMRF) $(wildcard ../../doc-pak)
 
 r3r.desktop: r3r.desktop.in
 	-$(SED) -e 's|@bindir@|$(bindir)|g' -e 's|@icondir@|$(icondir)|g' $< > $@

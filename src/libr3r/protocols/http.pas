@@ -371,6 +371,7 @@ begin
   CacheHeader := Cache.GetCacheHeader;
 
   SendHeader(Method + ' ' + FPath + ' HTTP/1.1');
+  SendHeader('Connection: close');
   SendHeader('Host: ' + FIndirectHost);
   SendHeader('User-Agent: ' + UserAgent);
 
@@ -390,12 +391,11 @@ begin
   end
   else
   begin
-    SendHeader('Accept: text/plain, application/atom+xml, application/rdf+xml, application/xml;q=0.5');
+    SendHeader('Accept: text/plain, esf/text, application/atom+xml, application/rdf+xml;q=0.7, application/rss+xml;q=0.6, application/xml;q=0.5, text/xml;q=0.5');
   end;
 
   SendHeader('Accept-Encoding: ');
   SendHeader('');
-  SendHeader('Connection: close');
 
 {$IFDEF SOCKETS_LIBCURL}
   curl_easy_setopt(FHandle, CURLOPT_HTTPHEADER, FHeaderList);

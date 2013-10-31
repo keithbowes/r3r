@@ -14,7 +14,7 @@ r3r.res: r3r.rc
 	-$(WINDRES) $(WINDRESFLAGS) -i $< -o $@
 
 clean:
-	$(DEL) $(wildcard r3r.ico r3r.res)
+	$(RM) $(wildcard r3r.ico r3r.res)
 
 install:
 	$(MKDIR) $(icondir)

@@ -11,7 +11,7 @@ install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_wx.mo;)
 
 uninstall:
-	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_wx.mo)
+	$(RM) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_wx.mo)
 
 %.mo: %.po
 	-$(MSGFMT) $(MSGFMTFLAGS) -o $@ $<

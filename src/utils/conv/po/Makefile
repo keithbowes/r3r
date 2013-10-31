@@ -8,7 +8,7 @@ install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/r3r_conv.mo;)
 
 uninstall:
-	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_conv.mo)
+	$(RM) $(wildcard $(localedir)/*/LC_MESSAGES/r3r_conv.mo)
 
 r3r_conv.pot: convstrings.pas
 	-$(XGETTEXT) -k_ -o $@ $^

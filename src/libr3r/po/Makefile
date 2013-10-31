@@ -11,7 +11,7 @@ install:
 	-$(foreach l, $(LINGUAS), $(MKDIR) $(localedir)/$l; $(MKDIR) $(localedir)/$l/LC_MESSAGES; $(INSTALL) $l.mo $(localedir)/$l/LC_MESSAGES/libr3r.mo;)
 
 uninstall:
-	$(DEL) $(wildcard $(localedir)/*/LC_MESSAGES/libr3r.mo)
+	$(RM) $(wildcard $(localedir)/*/LC_MESSAGES/libr3r.mo)
 
 %.mo: %.po libr3rstrings.pot
 ifneq ($(USE_NLS),0)
