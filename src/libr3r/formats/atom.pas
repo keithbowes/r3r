@@ -33,7 +33,7 @@ type
 implementation
 
 uses
-  DC, HttpCache, ItemCallbacks, RDate, RStrings, SockConsts
+  DC, ItemCallbacks, RDate, RStrings, SockConsts
 {$IFDEF __GPC__}
   , SysUtils
 {$ENDIF}
@@ -242,11 +242,6 @@ begin
     begin
       FLeftFeed := false;
       CallItemCallBack(CurrentItem);
-
-      if (Id <> '') and Assigned(CurrentCache) then
-      begin
-        CurrentCache.WriteData(Id, cdtIds);
-      end;
     end;
   end;
 end;

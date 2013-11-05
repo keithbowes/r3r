@@ -27,7 +27,7 @@ type
 implementation
 
 uses
-  Atom, DC, HttpCache, ItemCallbacks, Mod_Enclosure, RDate,
+  Atom, DC, ItemCallbacks, Mod_Enclosure, RDate,
   RStrings, SockConsts, SysUtils;
 
 function GetAtomFeed: TAtomFeed;
@@ -182,11 +182,6 @@ begin
       Title := DecodeHtml(Title);
 {$ENDIF}
       CallItemCallback(CurrentItem);
-
-      if (Id <> '') and Assigned(CurrentCache) then
-      begin
-        CurrentCache.WriteData(Id, cdtIds);
-      end;
     end;
   end;
 end;

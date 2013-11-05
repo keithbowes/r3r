@@ -80,7 +80,6 @@ var
   FH: PtrInt;
   HeaderName, HeaderValue: String;
   HeaderState: THeaderState;
-  Host, Para, Path, Port, Prot: String;
   i: byte;
   InfoText: String;
   Line: String;

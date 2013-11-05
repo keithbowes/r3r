@@ -18,7 +18,7 @@ implementation
 {$H-}
 
 uses
-  RFilter, RProp, RSettings;
+  HttpCache, RFilter, RProp, RSettings;
 
 procedure RegisterItemCallback(const cb: TItemCallback);
 begin
@@ -42,6 +42,11 @@ begin
     if Settings.GetBoolean('use-filters') then
     begin
       FilterItem(Item);
+    end;
+
+    if (Item.Id <> '') and Assigned(CurrentCache) then
+    begin
+      CurrentCache.WriteData(Item.Id, cdtIds);
     end;
 
     if (Item.Title <> '') and (Item.Title <> LastTitle) then
