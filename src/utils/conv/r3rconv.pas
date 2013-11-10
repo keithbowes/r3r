@@ -92,17 +92,20 @@ end;
 begin
   ProcParams;
 
-  Feed := TLibR3R.Create;
-  Feed.RegisterItemCallback(ItemReceived);
-  Feed.RetrieveFeed(InFile);
-  Feed.Free;
+  if (InFile <> '') and (OutFile <> '') then
+  begin
+    Feed := TLibR3R.Create;
+    Feed.RegisterItemCallback(ItemReceived);
+    Feed.RetrieveFeed(InFile);
+    Feed.Free;
 
-  if OutType = 'rss' then
-  begin
-    CloseRss;
-  end
-  else if OutType = 'atom' then
-  begin
-    CloseAtom;
+    if OutType = 'rss' then
+    begin
+      CloseRss;
+    end
+    else if OutType = 'atom' then
+    begin
+      CloseAtom;
+    end;
   end;
 end.

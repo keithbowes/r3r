@@ -151,6 +151,7 @@ install-prog:
 	$(MKDIR) $(bindir)
 	cd $(srcdir)/icons && $(MAKE) install
 	cd $(srcdir)/scripts/setup && $(MAKE) install
+	cd $(srcdir)/src && $(MAKE) install-prog
 	cd $(srcdir)/src/libr3r/po && $(MAKE) install
 	$(INSTALLEXE) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT) $(bindir)
 	$(INSTALLEXE) $(srcdir)/r3r $(bindir)

@@ -90,13 +90,10 @@ begin
 {$ENDIF}
 
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
-{$IFDEF EXPAT_1_0}
-  XML_SetDefaultHandler(FParser, UnknownDataReceived);
+  XML_SetCharacterDataHandler(FParser, CharactersReceived);
+
 {$IFDEF EXPAT_1_1}
   XML_SetCdataSectionHandler(FParser, CdataSectionLimit, CdataSectionLimit);
-{$ENDIF}
-{$ELSE}
-  XML_SetCharacterDataHandler(FParser, CharactersReceived);
 {$ENDIF}
 
 {$IFDEF EXPAT_2_0}
@@ -118,6 +115,7 @@ var
 {$ENDIF}
 begin
   inherited ParseLine(Line, Item);
+  Item.AllowsHTML := true;
   CurrentItem := Item;
 
 {$IFDEF USE_EXPAT}

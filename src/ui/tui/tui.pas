@@ -284,32 +284,35 @@ begin
       KEY_MOUSE:
       begin
         getmouse(@mouse_event);
-        if mouse_event.x < FDimSep.LeftStart - 1 then
+        if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) then
         begin
-          if (mouse_event.bstate and BUTTON1_PRESSED = BUTTON1_PRESSED) or (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
+          if mouse_event.x < FDimSep.LeftStart - 1 then
           begin
-            FCurrentItem := mouse_event.y - 1 + FDimUA.TopEnd;
-            FCurrentItem := FCurrentItem + FViewPort.FirstItem;
-            ScrollTo(FCurrentItem);
-          end
-          else if (mouse_event.bstate and BUTTON1_DOUBLE_CLICKED = BUTTON1_DOUBLE_CLICKED) or (mouse_event.bstate and BUTTON2_PRESSED = BUTTON2_PRESSED) or (mouse_event.bstate and BUTTON2_CLICKED = BUTTON2_CLICKED) then
-          begin
-            OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
-          end
-          else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
-          begin
-            FCurrentItem := FViewPort.FirstItem + FViewPort.PortHeight;
-            if FItems^.Count - 1 > FCurrentItem then
+            if (mouse_event.bstate and BUTTON1_PRESSED = BUTTON1_PRESSED) or (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
             begin
-              Inc(FCurrentItem);
-            end;
-            ScrollTo(FCurrentItem);
-          end
-          else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
-          begin
-            ScrollUp;
-            Redraw;
-          end
+              FCurrentItem := mouse_event.y - 1 + FDimUA.TopEnd;
+              FCurrentItem := FCurrentItem + FViewPort.FirstItem;
+              ScrollTo(FCurrentItem);
+            end
+            else if (mouse_event.bstate and BUTTON1_DOUBLE_CLICKED = BUTTON1_DOUBLE_CLICKED) or (mouse_event.bstate and BUTTON2_PRESSED = BUTTON2_PRESSED) or (mouse_event.bstate and BUTTON2_CLICKED = BUTTON2_CLICKED) then
+            begin
+              OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
+            end
+            else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
+            begin
+              FCurrentItem := FViewPort.FirstItem + FViewPort.PortHeight;
+              if FItems^.Count - 1 > FCurrentItem then
+              begin
+                Inc(FCurrentItem);
+              end;
+              ScrollTo(FCurrentItem);
+            end
+            else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
+            begin
+              ScrollUp;
+              Redraw;
+            end
+          end;
         end;
 
         Continue;

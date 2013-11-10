@@ -56,10 +56,8 @@ begin
 
   if Item.Finished then
   begin
-{$IFDEF EXPAT_1_0}
     Item.Description := DecodeHtml(Item.Description);
     Item.Title := DecodeHtml(Item.Title);
-{$ENDIF}
     CallItemCallback(Item);
     
     if FLeftChannel then
@@ -177,10 +175,8 @@ begin
 
     if Name = 'item' then
     begin
-{$IFDEF EXPAT_1_0}
       Description := DecodeHtml(Description);
       Title := DecodeHtml(Title);
-{$ENDIF}
       CallItemCallback(CurrentItem);
     end;
   end;

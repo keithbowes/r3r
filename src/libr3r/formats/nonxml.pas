@@ -24,6 +24,7 @@ const
   LastLine: String = '';
 begin
   inherited ParseLine(Line, Item);
+  Item.AllowsHTML := false;
 
   ShouldShow := (not ((Line = '') and (Line = LastLine))) and (Line <> SockEof);
   LastLine := Line;

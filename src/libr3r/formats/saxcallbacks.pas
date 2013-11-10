@@ -9,7 +9,7 @@ uses
 
 procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 procedure ElementEnded(user_data: Pointer; name: PChar);
-procedure {$IFDEF EXPAT_1_0}UnknownDataReceived{$ELSE}CharactersReceived{$ENDIF}(ctx: Pointer; ch: PChar; len: integer);
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 
 {$IFDEF EXPAT_1_1}
 procedure CdataSectionLimit(userData: Pointer);
@@ -128,18 +128,39 @@ begin
   end;
 end;
 
-procedure {$IFDEF EXPAT_1_0}UnknownDataReceived{$ELSE}CharactersReceived{$ENDIF}(ctx: Pointer; ch: PChar; len: integer);
+procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
+const
+  Stage: 1..2 = 1;
 var
   Elem: PXmlElement;
   enh: String;
   loff: 0..1;
-{$IFDEF EXPAT_1_0}
-  clen, cpos: integer;
-  IsEntity: Boolean;
-{$ENDIF}
+  nl: Boolean;
 begin
   loff := Ord(ch[len-1] = #9);
+  nl := true;
   WriteStr(enh, ch[0..len - (loff + 1)]);
+
+  { De-expand entities that cause problems with embedded HTML }
+  if len = 1 then
+  begin
+    nl := false;
+    Stage := 2;
+    case enh[1] of
+      '&':
+      begin
+        enh := '&amp;'
+      end;
+      '>':
+      begin
+        enh := '&gt;';
+      end;
+      '<':
+      begin
+        enh := '&lt;';
+      end;
+    end;
+  end;
 
   with TXmlFeed(ctx) do
   begin
@@ -147,15 +168,15 @@ begin
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
 
-{$IFDEF EXPAT_1_0}
-      cpos := Pos('&', Elem^.Content);
-      clen := Length(Elem^.Content);
-      IsEntity := cpos <> 0;
-      if (clen > 0) and (Elem^.Content[clen] <> ' ') and not IsEntity then
+      nl := nl and (Length(Elem^.Content) > 0);
+      if nl then
       begin
-        Elem^.Content := Elem^.Content + ' ';
+        if Stage = 1 then
+        begin
+          Elem^.Content := Elem^.Content + ' ';
+        end;
+        Stage := 1;
       end;
-{$ENDIF}
       Elem^.Content := Elem^.Content + enh;
       SendItem;
     end;
@@ -222,7 +243,7 @@ begin
         outbuf := outstr;
         if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) = iconv_convert_error then
         begin
-          outstr := StrToPChar(Instr);
+          outstr := StrToPChar(InStr);
         end;
       end;
     end;

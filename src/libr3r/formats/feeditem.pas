@@ -34,6 +34,7 @@ type
     Myself: String;
     Enclosure: TEnclosure;
 
+    AllowsHTML: Boolean;
     Finished: Boolean;
 
     constructor Create;
@@ -95,7 +96,9 @@ begin
     else if InStr[i] = '>' then
     begin
       InHTML := false;
-      if (i < Length(InStr)) and not (InStr[i + 1] in ['.', ',', '!', '?', ';', ':']) then { It looks weird to have a space before a puncuation mark }
+      if (Length(OutStr) > 0) and (i < Length(InStr)) and
+        { It looks weird to have a space before a puncuation mark }
+        not (InStr[i + 1] in ['.', ',', '!', '?', ';', ':']) then
       begin
         OutStr := OutStr + ' ';
       end;
@@ -288,13 +291,27 @@ end;
 { Get the textual representation (without HTML) of the description. }
 function TFeedItem.DescriptionText: String;
 begin
-  DescriptionText := StripHtml(Description);
+  if not AllowsHTML then
+  begin
+    DescriptionText := Description;
+  end
+  else
+  begin
+    DescriptionText := StripHtml(Description);
+  end;
 end;
 
 { Get the textual representation (without HTML) of the title. }
 function TFeedItem.TitleText: String;
 begin
-  TitleText := StripHtml(Title);
+  if not AllowsHTML then
+  begin
+    TitleText := Title;
+  end
+  else
+  begin
+    TitleText := StripHtml(Title);
+  end;
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;

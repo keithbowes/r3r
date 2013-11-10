@@ -74,8 +74,7 @@ DEFS_SETTINGS
   (The default depends on the compiler and OS.)
 DEFS_SOCKETS
   The sockets library to use:
-  * SOCKETS_LIBCURL: Use libcurl (cURL's library) directly instead
-    of having to invoke the cURL program. (Experimental!)
+  * SOCKETS_LIBCURL: Use libcurl (cURL's library). (Experimental!)
   * SOCKETS_NONE: Build without sockets support.
   * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal)
     <http://synapse.ararat.cz>.
@@ -100,10 +99,11 @@ The configure script:
 The project includes a home-grown configure script, which:
 1. Writes default macros (environment variables) to a config.make
    file in the current directory.
-2. Calls make check to insure that everything is in order.
+2. Calls make _configure to insure that everything is in order.
 (It is not an autotools configure script.  You can attempt a compile
-even if make check fails.  When using GPC make check will always
-succeed because the gp utility always returns a success exit code.)
+even if make check fails.  When using GPC make _configure will
+always succeed because the gp utility always returns a success exit
+code.)
 
 Enabling/disabling features:
 You can use the configure script or set the make environment
@@ -169,8 +169,8 @@ USE_READLINE
   Default: 1
 USE_SSL
   Allow secure HTTP connections via SSL.
-  Note: It only works with the Synapse and (undertested) cURL
-  sockets backends (see the DEFS_SOCKETS variable above).
+  Note: It only works with the Synapse and libcurl sockets backend
+  (see the DEFS_SOCKETS variable above).
   Default: 0
 
 Out-of-source builds:

@@ -36,9 +36,6 @@ uses
   DC, ItemCallbacks, RDate, RStrings, SockConsts
 {$IFDEF __GPC__}
   , SysUtils
-{$ENDIF}
-{$IFNDEF SOCKETS_NONE}  
-  , RParseURL
 {$ENDIF};
 
 constructor TAtomFeed.Create;

@@ -10,16 +10,18 @@ clean:
 	cd libr3r && $(MAKE) clean
 	cd ui && $(MAKE) clean
 
-install:
+install: install-prog
 	cd libr3r && $(MAKE) install
-	cd ui && $(MAKE) install
-	cd utils && $(MAKE) install
 
 install-header:
 	cd libr3r && $(MAKE) install-header
 
 install-lib:
 	cd libr3r && $(MAKE) install-lib
+
+install-prog:
+	cd ui && $(MAKE) install
+	cd utils && $(MAKE) install
 
 uninstall:
 	cd libr3r && $(MAKE) uninstall
