@@ -73,6 +73,12 @@ begin
     if Name = 'title' then
     begin
       Title := Content;
+{$IFDEF EXPAT_1_1}
+      if not inCdataSection then
+      begin
+        Title := DecodeHtml(Title);
+      end;
+{$ENDIF}
     end
     else if (Name = 'subtitle') or (Name = 'summary') then
     begin
@@ -92,6 +98,12 @@ begin
 
       Description := Content;
       FHasLongDesc := true;
+{$IFDEF EXPAT_1_1}
+      if not inCdataSection then
+      begin
+        Description := DecodeHtml(Description);
+      end;
+{$ENDIF}
     end
     else if Name = 'link' then
     begin

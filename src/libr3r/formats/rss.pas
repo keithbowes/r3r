@@ -56,8 +56,6 @@ begin
 
   if Item.Finished then
   begin
-    Item.Description := DecodeHtml(Item.Description);
-    Item.Title := DecodeHtml(Item.Title);
     CallItemCallback(Item);
     
     if FLeftChannel then
@@ -82,11 +80,11 @@ begin
   begin 
     if (Name = 'title') and (GetParentElement.Name <> 'image') then
     begin
-      Title := Content;
+      Title := DecodeHtml(Content);
     end
     else if Name = 'description' then
     begin
-      Description := Content;
+      Description := DecodeHtml(Content);
     end
     else if Name = 'link' then
     begin
@@ -175,8 +173,6 @@ begin
 
     if Name = 'item' then
     begin
-      Description := DecodeHtml(Description);
-      Title := DecodeHtml(Title);
       CallItemCallback(CurrentItem);
     end;
   end;

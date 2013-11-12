@@ -67,6 +67,9 @@ begin
     SplitName(attr, Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
     Elem^.Depth := Depth;
+{$IFDEF EXPAT_1_1}
+    Elem^.InCdataSection := false;
+{$ENDIF}
 
     if Assigned(attrs) then
     begin
@@ -185,7 +188,17 @@ end;
 
 {$IFDEF EXPAT_1_1}
 procedure CdataSectionLimit(userData: Pointer);
+var
+  Elem: PXmlElement;
 begin
+  with TXmlFeed(userData) do
+  begin
+    if FElemList^.Count > 0 then
+    begin
+      Elem := FElemList^.GetNth(FElemList^.Count - 1);
+      Elem^.InCdataSection := not Elem^.InCdataSection;
+    end;
+  end;
 end;
 {$ENDIF}
 

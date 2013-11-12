@@ -31,6 +31,9 @@ type
     Base: String;
     Lang: String;
     Depth: cardinal;
+{$IFDEF EXPAT_1_1}
+    InCdataSection: Boolean;
+{$ENDIF}
   end;
 
   TXmlFeed = class(TFeed)
