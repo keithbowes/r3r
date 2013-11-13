@@ -230,7 +230,7 @@ dist-src: clean
 
 dist-deb:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb CITARGET="$(CITARGET)"
-	$(call sign,r3r-$(VERSION)-$(R3R_UI)-$(PKGRELEASE)_$(ARCH).deb)
+	$(call sign,r3r-$(R3R_UI)_$(VERSION)-$(PKGRELEASE)_$(ARCH).deb)
 
 dist-deb-dev:
 	$(MAKE) dist-deb CITARGET="$(MAKE) install-header" R3R_UI=dev
@@ -238,18 +238,24 @@ dist-deb-dev:
 dist-deb-docs:
 	$(MAKE) dist-deb CITARGET="$(MAKE) install-docs" R3R_UI=docs
 
+dist-deb-prog:
+	$(MAKE) dist-deb CITARGET="$(MAKE) install-prog" R3R_UI=$(R3R_UI)
+
 dist-deb-shared:
 	$(MAKE) dist-deb CITARGET="$(MAKE) install-lib" R3R_UI=shared
 
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm CITARGET="$(CITARGET)"
-	$(call sign,r3r-$(subst -,_,$(VERSION)_$(R3R_UI))-$(PKGRELEASE).$(ARCH).rpm)
+	$(call sign,r3r_$(R3R_UI)-$(subst -,_,$(VERSION))-$(PKGRELEASE).$(ARCH).rpm)
 
 dist-rpm-dev:
 	$(MAKE) dist-rpm CITARGET="$(MAKE) install-header" R3R_UI=devel
 
 dist-rpm-docs:
 	$(MAKE) dist-rpm CITARGET="$(MAKE) install-docs" R3R_UI=docs
+
+dist-rpm-prog:
+	$(MAKE) dist-rpm CITARGET="$(MAKE) install-prog" R3R_UI=$(R3R_UI)
 
 dist-rpm-shared:
 	$(MAKE) dist-rpm CITARGET="$(MAKE) install-lib" R3R_UI=shared

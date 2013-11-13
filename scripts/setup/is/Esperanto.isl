@@ -43,6 +43,10 @@ LastErrorMessage=%1.%n%nEraro %2: %3
 SetupFileMissing=La dosiero %1 malaperis el la instala dosierujo. Bonvolu korekti la problemo aŭ akiri novan ekzempleron de la programo.
 SetupFileCorrupt=La instalaj dosieroj estas koruptaj. Bonvolu akiri novan ekzempleron de la programo.
 SetupFileCorruptOrWrongVer=La instalaj dosieroj estas koruptaj, aŭ estas malkongruaj kun tiu eldono. Bonvolu korekti la problemon aŭ akiri novan ekzempleron de la programo.
+InvalidParameter=Nevalida parametro donita en la komandlinio:%n%n%1
+SetupAlreadyRunning=La instalilo jam plenumiĝas.
+WindowsVersionNotSupported=La programo ne estas plenumebla en la eldono de Vindozo, kiun vi uzas.
+WindowsServicePackRequired=La programo postulas duuman flikaĵon eldonon %2 aŭ poste de %1.
 NotOnThisPlatform=Tiu programo malsukcesos en %1.
 OnlyOnThisPlatform=Tiu programo devas plenumi en %1.
 OnlyOnTheseArchitectures=Tiu programo nur povas instaliĝi en eldonoj de Vindozo destinitaj por la sekvaj arkitekturoj:%n%n%1
@@ -134,6 +138,8 @@ SelectDirLabel3=Instalilo instalos [name] en la jena dosierujo.
 SelectDirBrowseLabel=Por daŭrigi klaku "Sekva". Se vi volas elekti alian dosierujon, klaki "Foliumi".
 DiskSpaceMBLabel=Minimume [mb] megabajtoj da neuzata spaco estas bezonata.
 ToUNCPathname=Instalilo ne povas instali al UNC dosiernomo. Se vi provas instali al reto, vi bezonos diskon por retaj servoj.
+CannotInstallToNetworkDrive=La instalilo ne povas instali en retan diskaparaton.
+CannotInstallToUNCPath=La instalilo ne povas instali en UNC-vojon.
 InvalidPath=Vi devas tajpi kompleta vojo kun disknomo; ekzemple:%n%nC:\APP%n%naŭ UNC vojo en la demandilo:%n%n\\server\share
 InvalidDrive=La disko aŭ UNC ago, kiun vi elektis, ne ekzistas aŭ ne estas atingebla. Bonvolu elekti alian.
 DiskSpaceWarningTitle=Nesufiĉa Disko-spaco
@@ -193,6 +199,11 @@ WizardPreparing=Pretigi la instalilon
 PreparingDesc=Instalilo pretigas instali [name] en via komputilo.
 PreviousInstallNotCompleted=La instalado/malinstalado de antaŭa programo ne finis. Vi bezonos restartigi vian komputilon por fini tiun instaladon.%n%nPost restartigo, la instalado de [name] finiĝos.
 CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Nuligi" por ĉesi.
+ApplicationsFound=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn.
+ApplicationsFound2=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn. Post instalado la instalilo provos restarigi la programojn.
+CloseApplications=&Aŭtomate haltigi la programojn
+DontCloseApplications=&Ne haltigi la programojn
+ErrorCloseApplications=La instalilo ne povis haltigi ĉiujn programojn. Estas rekomendite, ke vi haltigas la programojn , kiuj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo antaŭ ol vi daŭrigas.
 
 ; *** "Installing" wizard page
 WizardInstalling=Instalanta
@@ -225,6 +236,7 @@ SetupAborted=Instalilo ne finis.%n%nBonvolu korekti la problemon kaj refoje prov
 EntryAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio, aŭ "Abort" por nuligi la instaladon.
 
 ; *** Installation status messages
+StatusClosingApplications=Haltiganta programojn...
 StatusCreateDirs=Kreanta la dosierujojn...
 StatusExtractFiles=Elpakanta la dosierojn...
 StatusCreateIcons=Kreanta la simbolajn ligilojn...
@@ -233,6 +245,7 @@ StatusCreateRegistryEntries=Kreanta registrejajn enskribojn...
 StatusRegisterFiles=Registranta la dosierojn...
 StatusSavingUninstall=Metanta malinstaladajn informojn al memoro...
 StatusRunProgram=Plenumiganta programojn...
+StatusRestartingApplications=Restartiganta programojn...
 StatusRollback=Foriganta ŝanĝojn...
 
 ; *** Misc. errors
@@ -296,6 +309,10 @@ SharedFileLocationLabel=Loko:
 WizardUninstalling=Malinstala Stato
 StatusUninstalling=Malinstalanta %1...
 
+; *** Shutdown block reasons
+ShutdownBlockReasonInstallingApp=Instalanta je %1.
+ShutdownBlockReasonUninstallingApp=Malinstalanta je %1.
+
 ; The custom messages below aren't used by Setup itself, but if you make
 ; use of them in your scripts, you'll want to translate them.
 
@@ -310,5 +327,8 @@ UninstallProgram=Malinstali %1
 LaunchProgram=Plenumigi %1
 AssocFileExtension=&Asocii %1 kun la dosiersufikso %2
 AssocingFileExtension=Asocianta %1 kun la dosiersufikso %2...
+AutoStartProgramGroupDescription=Starto:
+AutoStartProgram=Aŭtomate startigi je %l
+AddonHostProgramNotFound=%1 ne troveblis en la dosierujo elektita.%n%nĈu senkonsidere daŭri?
 
 ; vi:ft=dosini:spl=eo
