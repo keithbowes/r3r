@@ -163,7 +163,7 @@ var
 begin
   App := ExpandConstant('{app}');
 
-  rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=hivelocity';
+  rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=auto';
   post := App + '\bin\' + FName;
 
   ITD_AddFile(rem, post)

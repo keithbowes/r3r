@@ -1,4 +1,4 @@
-; *** Inno Setup eldonon 5.1.11+ Esperanto messages ***
+; *** Inno Setup version 5.1.1+ Esperanto messages ***
 ; Language: Esperanto
 ; Name: Hans Engel
 ; Email: celsus.software@gmail.com
@@ -26,7 +26,7 @@ LanguageCodePage=65001
 SetupAppTitle=Instalilo
 SetupWindowTitle=Instalilo - %1
 UninstallAppTitle=Malinstalilo
-UninstallAppFullTitle=%1 Malinstalilo
+UninstallAppFullTitle=Malinstalilo de %1
 
 ; *** Misc. common
 InformationTitle=Informoj
@@ -34,28 +34,28 @@ ConfirmTitle=Konfirmi
 ErrorTitle=Eraro
 
 ; *** SetupLdr messages
-SetupLdrStartupMessage=Tiu instalos %1. Ĉu volas daŭrigi?
-LdrCannotCreateTemp=Ne eblas krei provizoran dosieron. La instalilo ĉesos.
-LdrCannotExecTemp=Ne eblas plenumigi dosieron en la provizora dosierujo. Instalilo ĉesos.
+SetupLdrStartupMessage=Tiu instalos je %1. Ĉu volas daŭrigi?
+LdrCannotCreateTemp=Ne eblas krei provizoran dosieron. La instalilo haltos.
+LdrCannotExecTemp=Ne eblas plenumigi dosieron en la provizora dosierujo. Instalilo haltos.
 
 ; *** Startup error messages
 LastErrorMessage=%1.%n%nEraro %2: %3
-SetupFileMissing=La dosiero %1 malaperis el la instala dosierujo. Bonvolu korekti la problemo aŭ akiri novan ekzempleron de la programo.
+SetupFileMissing=La dosiero %1 malaperis el la instala dosierujo. Bonvolu korekti la problemon aŭ akiri novan ekzempleron de la programo.
 SetupFileCorrupt=La instalaj dosieroj estas koruptaj. Bonvolu akiri novan ekzempleron de la programo.
 SetupFileCorruptOrWrongVer=La instalaj dosieroj estas koruptaj, aŭ estas malkongruaj kun tiu eldono. Bonvolu korekti la problemon aŭ akiri novan ekzempleron de la programo.
 InvalidParameter=Nevalida parametro donita en la komandlinio:%n%n%1
 SetupAlreadyRunning=La instalilo jam plenumiĝas.
 WindowsVersionNotSupported=La programo ne estas plenumebla en la eldono de Vindozo, kiun vi uzas.
-WindowsServicePackRequired=La programo postulas duuman flikaĵon eldonon %2 aŭ poste de %1.
+WindowsServicePackRequired=La programo postulas ĝisdatigan pakaĵon eldonon %2 aŭ poste de %1.
 NotOnThisPlatform=Tiu programo malsukcesos en %1.
 OnlyOnThisPlatform=Tiu programo devas plenumi en %1.
 OnlyOnTheseArchitectures=Tiu programo nur povas instaliĝi en eldonoj de Vindozo destinitaj por la sekvaj arkitekturoj:%n%n%1
-MissingWOW64APIs=La eldono de Vindozo, kiun vi uzas,  ne inkluzivas funkciadon devigatan de Instalilo por fari 64-bitan instaladon. Por korekti tiun problemon, bonvolu instali Servicopakon %1.
-WinVersionTooLowError=Tiu programo bezonas %1 eldonon %2 aŭ pli malfruan.
-WinVersionTooHighError=Tiu programo ne povas instaliĝi de %1 eldono %2 aŭ pli malfrua.
+MissingWOW64APIs=La eldono de Vindozo, kiun vi uzas, ne inkluzivas funkciadon devigatan de Instalilo por fari 64-bitan instaladon. Por korekti tiun problemon, bonvolu instali la ĝisdatigan pakaĵon %1.
+WinVersionTooLowError=Tiu programo bezonas je %1 eldono %2 aŭ poste.
+WinVersionTooHighError=Tiu programo ne povas instaliĝi de %1 eldono %2 aŭ poste.
 AdminPrivilegesRequired=Vi devas ensaluti kiel administranton dum instali tiun programon.
 PowerUserPrivilegesRequired=Vi devas ensaluti kiel administranton aŭ kiel membron de la grupon "Power Users" dum instali tiun programon.
-SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Nuligi" por ĉesi.
+SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Nuligi" por haltigi.
 UninstallAppRunningError=Malinstalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazoj de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Nuligi" por Ĉesi.
 
 ; *** Misc. errors
@@ -91,7 +91,7 @@ SelectLanguageTitle=Elekti Instalan Lingvon
 SelectLanguageLabel=Elekti la lingvon por uzi dum la instalado:
 
 ; *** Common wizard text
-ClickNext=Klaki "Sekva" por daŭrigi, aŭ "Nuligi" por ĉesi.
+ClickNext=Klaki "Sekva" por daŭrigi, aŭ "Nuligi" por haltigi.
 BeveledLabel=
 BrowseDialogTitle=Foliumi Por Dosierujo
 BrowseDialogLabel=Elektu dosierujon el la listo suba, tiam klaku OK.
@@ -99,7 +99,7 @@ NewFolderName=Nova Dosierujo
 
 ; *** "Welcome" wizard page
 WelcomeLabel1=Bonvenon al la [name]-Instalilo
-WelcomeLabel2=Tio instalos [name/ver] en via komputilo.%n%nEstas rekomendita ke vi fermu ĉiujn aliajn fenestrojn.
+WelcomeLabel2=Tio instalos je [name/ver] en via komputilo.%n%nEstas rekomendita ke vi fermu ĉiujn aliajn fenestrojn.
 
 ; *** "Password" wizard page
 WizardPassword=Pasvorto
@@ -134,7 +134,7 @@ UserInfoNameRequired=Vi devas tajpi nomon.
 ; *** "Select Destination Location" wizard page
 WizardSelectDir=Elekto postulas lokon
 SelectDirDesc=Kie [name] instaliĝos?
-SelectDirLabel3=Instalilo instalos [name] en la jena dosierujo.
+SelectDirLabel3=Instalilo instalos je [name] en la jena dosierujo.
 SelectDirBrowseLabel=Por daŭrigi klaku "Sekva". Se vi volas elekti alian dosierujon, klaki "Foliumi".
 DiskSpaceMBLabel=Minimume [mb] megabajtoj da neuzata spaco estas bezonata.
 ToUNCPathname=Instalilo ne povas instali al UNC dosiernomo. Se vi provas instali al reto, vi bezonos diskon por retaj servoj.
@@ -169,7 +169,7 @@ ComponentsDiskSpaceMBLabel=Nuna elektaĵo bezonas minimume [mb] megabajtojn da d
 ; *** "Select Additional Tasks" wizard page
 WizardSelectTasks=Elekti Aldonajn Taskojn
 SelectTasksDesc=Kiuj aldonaj taskoj funkciis?
-SelectTasksLabel2=Elekti aldonajn taskojn, kiuj vi volas la instalilon plenumigi dum instali [name], tiam klaki "Sekva".
+SelectTasksLabel2=Elekti aldonajn taskojn, kiuj vi volas la instalilon plenumigi dum instali je [name], tiam klaki "Sekva".
 
 ; *** "Select Start Menu Folder" wizard page
 WizardSelectProgramGroup=Elekti starto-menuon Dosierujon
@@ -184,7 +184,7 @@ NoProgramGroupCheck2=&Malfari kreadon de starto-menua dosierujo
 
 ; *** "Ready to Install" wizard page
 WizardReady=Preta por instali
-ReadyLabel1=Instalilo estas nun preta por komenci instali [name] en via komputilo.
+ReadyLabel1=Instalilo estas nun preta por komenci instali je [name] en via komputilo.
 ReadyLabel2a=Klaki "Instali" por daŭrigi la instalilon, aŭ klaki "Antaŭen" se vi volas inspekti aŭ ŝanĝi iun agordaĵon.
 ReadyLabel2b=Klaki "Instali" por daŭrigi la instalilon.
 ReadyMemoUserInfo=Uzanto-informoj:
@@ -196,9 +196,9 @@ ReadyMemoTasks=Aldonaj taskoj:
 
 ; *** "Preparing to Install" wizard page
 WizardPreparing=Pretigi la instalilon
-PreparingDesc=Instalilo pretigas instali [name] en via komputilo.
+PreparingDesc=Instalilo pretigas instali je [name] en via komputilo.
 PreviousInstallNotCompleted=La instalado/malinstalado de antaŭa programo ne finis. Vi bezonos restartigi vian komputilon por fini tiun instaladon.%n%nPost restartigo, la instalado de [name] finiĝos.
-CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Nuligi" por ĉesi.
+CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Nuligi" por halti.
 ApplicationsFound=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn.
 ApplicationsFound2=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn. Post instalado la instalilo provos restarigi la programojn.
 CloseApplications=&Aŭtomate haltigi la programojn
@@ -207,7 +207,7 @@ ErrorCloseApplications=La instalilo ne povis haltigi ĉiujn programojn. Estas re
 
 ; *** "Installing" wizard page
 WizardInstalling=Instalanta
-InstallingLabel=Bonvolu atendi dum Instalilo instalas [name] en via komputilo.
+InstallingLabel=Bonvolu atendi dum Instalilo instalas je [name] en via komputilo.
 
 ; *** "Setup Completed" wizard page
 FinishedHeadingLabel=Finis la instaladon de [name]
@@ -220,9 +220,9 @@ ShowReadmeCheck=Jes, mi volas legi la dosieron README.
 YesRadio=&Jes, restartigi la komputilon nun
 NoRadio=&Ne, mi restartigos la komputilon pli malfrue
 ; used for example as 'Run MyProg.exe'
-RunEntryExec=Plenumigi %1
+RunEntryExec=Plenumigi je %1
 ; used for example as 'View Readme.txt'
-RunEntryShellExec=Legi %1
+RunEntryShellExec=Legi je %1
 
 ; *** "Setup Needs the Next Disk" stuff
 ChangeDiskTitle=Instalilo Bezonas la Sekvan Disko
@@ -292,14 +292,14 @@ UninstallNotFound=Dosiero "%1" ne ekzistas. Ne povas malinstali.
 UninstallOpenError=Dosiero "%1" ne eblas malfermiĝi. Ne povas malinstali
 UninstallUnsupportedVer=La malinstalilo rekordo de efikado "%1" estas en formo ne nerekonita per ĉi tiu eldono de la malinstalilo. Ne povas malinstali
 UninstallUnknownEntry=Nekonata enskribo (%1) renkontiĝis en la malinstalilo
-ConfirmUninstall=Ĉu certas vi, ke vi volas tute forigi %1 kaj ĉiujn el ĝiaj komponantoj?
+ConfirmUninstall=Ĉu certas vi, ke vi volas tute forigi je %1 kaj ĉiujn el ĝiaj komponantoj?
 UninstallOnlyOnWin64=Tiu instalilo povas malinstali nur en 64-bita Vindozo.
 OnlyAdminCanUninstall=Tiu instalilo povas malinstali nur per uzanto kun administradaj privilegioj.
 UninstallStatusLabel=Bonvolu atendi dum %1 foriĝas de via komputilo.
 UninstalledAll=%1 estis sukcesplene forigita de via komputilo.
-UninstalledMost=%1 malinstalado finiĝis.%n%nIuj komponantoj ne eblis foriĝintaj. Tiuj povas foriĝintaj permane.
+UninstalledMost=Malinstalado de %1 finiĝis.%n%nIuj komponantoj ne eblis foriĝintaj. Tiuj povas foriĝintaj permane.
 UninstalledAndNeedsRestart=Por finigi la malinstaladon de %1, vi devas restartigi la komputilon.%n%nĈu vi volas restartigi nun?
-UninstallDataCorrupted="%1" dosiero estas korupta. Ne eblas malinstali
+UninstallDataCorrupted=La dosiero %1 estas korupta. Ne eblas malinstali
 
 ; *** Uninstallation phase messages
 ConfirmDeleteSharedFileTitle=Forigi Kunuzata Dosiero?
@@ -323,9 +323,9 @@ AdditionalIcons=Aldonaj piktogramoj:
 CreateDesktopIcon=Krei &labortablan piktogramon
 CreateQuickLaunchIcon=Krei piktogramon por &rapida plenumiĝo
 ProgramOnTheWeb=%1 en la Interreto
-UninstallProgram=Malinstali %1
-LaunchProgram=Plenumigi %1
-AssocFileExtension=&Asocii %1 kun la dosiersufikso %2
+UninstallProgram=Malinstali je %1
+LaunchProgram=Plenumigi je %1
+AssocFileExtension=&Asocii je %1 kun la dosiersufikso %2
 AssocingFileExtension=Asocianta %1 kun la dosiersufikso %2...
 AutoStartProgramGroupDescription=Starto:
 AutoStartProgram=Aŭtomate startigi je %l
