@@ -277,7 +277,9 @@ begin
     end;
 {$ELSE}
     noecho;
+    {$R-}
     mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
+    {$R+}
     i := getch;
     echo;
     case i of
