@@ -31,8 +31,6 @@ begin
 end;
 
 procedure CallItemCallback(Item: TFeedItem);
-const
-  LastTitle: String = '';
 var
   cb: TItemCallback;
 begin
@@ -49,13 +47,9 @@ begin
       CurrentCache.WriteData(Item.Id, cdtIds);
     end;
 
-    if (Item.Title <> '') and (Item.Title <> LastTitle) then
-    begin
-      Item.Translate;
-      cb(Item);
-      LastTitle := Item.Title;
-      Item.Clear;
-    end
+    Item.Translate;
+    cb(Item);
+    Item.Clear;
   end
 end;
 

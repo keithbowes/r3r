@@ -83,12 +83,12 @@ foo
 .SH TUI
 
 .P
-TUI estas la plej maturiĝinta fasado (kian mi plej uzas). Ĝi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informaj pri la klavoj.
+TUI estas la plej maturiĝinta fasado (kian mi plej uzas). Ĝi montras la erojn en la maldekstra kadro kaj gravaj datumoj pri la aktuala ero en la dekstra kadro. Vi povas navigi la erojn per la kutimaj klavoj. Premu la klavon h ene de la programo por pliaj informoj pri la klavoj.
 
 .SH GUI
 
 .P
-GUI nur montras, kiel uzi la dinamikan bibliotekon en aliaj programlingvoj. Ĝi montras liston de eroj en lista fenestraĵo. Elekti eron montras ĝian priskribon en aparta fenestraĵo. Vi povas administri abonojn en la agordo-dialogujo.
+GUI nur montras, kiel uzi la dinamikan bibliotekon en aliaj programlingvoj. Ĝi montras liston da eroj en lista fenestraĵo. Elekti eron montras ĝian priskribon en aparta fenestraĵo. Vi povas administri abonojn en la agordo-dialogujo.
 
 .SH HTML
 

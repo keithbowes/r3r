@@ -15,7 +15,6 @@ uses
 
 function GetFeed(var Resource: String): TURL;
 procedure ParseFeed(const Sock: TRSock);
-procedure SetFeedObject(const Lib: TLibR3R);
 
 implementation
 
@@ -33,7 +32,6 @@ uses
 {$ENDIF};
 
 var
-  FeedObj: TLibR3R;
   Item: TFeedItem;
 
 function GetFeed(var Resource: String): TURL;
@@ -118,11 +116,6 @@ begin
       end;
     end;
   end;
-end;
-
-procedure SetFeedObject(const Lib: TLibR3R);
-begin
-  FeedObj := Lib;
 end;
 
 initialization

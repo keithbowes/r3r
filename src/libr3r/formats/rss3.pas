@@ -143,10 +143,10 @@ begin
       FillItem(Item);
     end;
   end
-  else
+  else if FCurrentField <> '' then
   begin
     CallItemCallback(Item);
-    ShouldShow := Item.Title <> '';
+    FCurrentField := '';
     FInHead := false;
   end;
 

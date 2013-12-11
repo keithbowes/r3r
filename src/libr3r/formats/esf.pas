@@ -149,10 +149,6 @@ begin
       Item.Finished := false;
       FLineType := ltMeta;
     end
-    else if FList.Count = 1 then
-    begin
-      Item.Finished := true;
-    end;
   end;
 
   if Item.Finished then
@@ -160,6 +156,7 @@ begin
     CallItemCallback(Item);
   end;
 
+  Item.Clear;
   inherited ParseLine(Line, Item);
 end;
 

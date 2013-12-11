@@ -124,7 +124,6 @@ end;
 
 procedure TLibR3R.Parse;
 begin
-  SetFeedObject(Self);
   SetMessageObject(Self);
   ParseFeed(FSock);
 end;

@@ -20,14 +20,11 @@ uses
   SockConsts;
 
 procedure TNonXmlFeed.ParseLine(Line: String; var Item: TFeedItem);
-const
-  LastLine: String = '';
 begin
   inherited ParseLine(Line, Item);
   Item.AllowsHTML := false;
 
-  ShouldShow := (not ((Line = '') and (Line = LastLine))) and (Line <> SockEof);
-  LastLine := Line;
+  ShouldShow := (Line <> '') and (Line <> SockEof);
 end;
 
 function TNonXmlFeed.GetAbsoluteURL(const URL: String): String;

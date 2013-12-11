@@ -179,7 +179,7 @@ begin
   inherited Create;
 {$ENDIF}
 
-  Finished := false;
+  Clear;
 end;
 
 destructor TFeedItem.Destroy;
@@ -285,7 +285,7 @@ begin
   Enclosure.MimeType := '';
   Enclosure.URL := '';
 
-  Finished := false;
+  Finished := true;
 end;
 
 { Get the textual representation (without HTML) of the description. }

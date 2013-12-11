@@ -181,7 +181,11 @@ begin
         Stage := 1;
       end;
       Elem^.Content := Elem^.Content + enh;
-      SendItem;
+
+      if enh <> '  ' then
+      begin
+        SendItem;
+      end;
     end;
   end;
 end;
