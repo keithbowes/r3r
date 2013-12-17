@@ -100,9 +100,9 @@ begin
       end;
     end;
 
-    Inc(Depth);
     if Elem^.Name <> '' then
     begin
+      Inc(Depth);
       FElemList^.Add(Elem);
       SendItem;
     end;
@@ -181,11 +181,7 @@ begin
         Stage := 1;
       end;
       Elem^.Content := Elem^.Content + enh;
-
-      if enh <> '  ' then
-      begin
-        SendItem;
-      end;
+      SendItem;
     end;
   end;
 end;

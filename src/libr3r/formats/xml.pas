@@ -42,6 +42,8 @@ type
     FNthElem: cardinal;
     FLastBase: String;
     FLastLang: String;
+  protected
+    FItemSent: Boolean;
   public
     CurrentItem: TFeedItem;
     Depth: cardinal;

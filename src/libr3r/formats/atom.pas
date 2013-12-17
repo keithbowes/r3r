@@ -247,10 +247,15 @@ begin
       Id := '';
     end;
 
-    if (Name = 'entry') then
+    if (Name = 'entry') and not FItemSent then
     begin
       FLeftFeed := false;
+      FItemSent := true;
       CallItemCallBack(CurrentItem);
+    end
+    else
+    begin
+      FItemSent := false;
     end;
   end;
 end;

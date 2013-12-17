@@ -54,16 +54,13 @@ begin
     Item.Finished := (Elem.Name = 'item') or (Line = SockEOF);
   end;
 
-  if Item.Finished then
+  if Item.Finished and not FItemSent then
   begin
     Item.Description := DecodeHtml(Item.Description);
     Item.Title := DecodeHtml(Item.Title);
     CallItemCallback(Item);
     
-    if FLeftChannel then
-    begin
-      FLeftChannel := false;
-    end;
+    FLeftChannel := false;
   end;
 end;
 
@@ -173,11 +170,16 @@ begin
       FLeftChannel := true;
     end;
 
-    if Name = 'item' then
+    if (Name = 'item') and not FItemSent then
     begin
       Description := DecodeHtml(Description);
       Title := DecodeHtml(Title);
       CallItemCallback(CurrentItem);
+      FItemSent := true;
+    end
+    else
+    begin
+      FItemSent := false;
     end;
   end;
 end;
