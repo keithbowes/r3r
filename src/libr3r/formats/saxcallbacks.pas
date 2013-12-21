@@ -12,7 +12,8 @@ procedure ElementEnded(user_data: Pointer; name: PChar);
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 
 {$IFDEF EXPAT_1_1}
-procedure CdataSectionLimit(userData: Pointer);
+procedure CdataSectionEnd(userData: Pointer);
+procedure CdataSectionStart(userData: Pointer);
 {$ENDIF}
 
 {$IFDEF EXPAT_2_0}
@@ -187,7 +188,7 @@ begin
 end;
 
 {$IFDEF EXPAT_1_1}
-procedure CdataSectionLimit(userData: Pointer);
+procedure CdataSectionEnd(userData: Pointer);
 var
   Elem: PXmlElement;
 begin
@@ -196,7 +197,23 @@ begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.InCdataSection := not Elem^.InCdataSection;
+      Elem^.InCdataSection := false;
+      SendItem;
+    end;
+  end;
+end;
+
+procedure CdataSectionStart(userData: Pointer);
+var
+  Elem: PXmlElement;
+begin
+  with TXmlFeed(userData) do
+  begin
+    if FElemList^.Count > 0 then
+    begin
+      Elem := FElemList^.GetNth(FElemList^.Count - 1);
+      Elem^.InCdataSection := true;
+      SendItem;
     end;
   end;
 end;

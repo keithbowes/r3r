@@ -98,7 +98,7 @@ begin
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
 
 {$IFDEF EXPAT_1_1}
-  XML_SetCdataSectionHandler(FParser, CdataSectionLimit, CdataSectionLimit);
+  XML_SetCdataSectionHandler(FParser, CdataSectionStart, CdataSectionEnd);
 {$ENDIF}
 
 {$IFDEF EXPAT_2_0}

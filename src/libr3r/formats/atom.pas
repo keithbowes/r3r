@@ -48,13 +48,24 @@ begin
 end;
 
 procedure TAtomFeed.ParseLine(Line: String; var Item: TFeedItem);
+var
+  Elem: TXmlElement;
 begin
   inherited ParseLine(Line, Item);
-  HandleNameSpace(GetCurrentElement, Line, Item);
+  Elem := GetCurrentElement;
+  HandleNameSpace(Elem, Line, Item);
 
   Item.Finished := Line = SockEof;
   if Item.Finished then
   begin
+{$IFDEF EXPAT_1_1}
+    if not Elem.inCdataSection then
+    begin
+      Item.Description := DecodeHtml(Item.Description);
+      Item.Title := DecodeHtml(Item.Title);
+    end;
+  {$ENDIF}
+
     CallItemCallback(Item);
     FLeftFeed := false;
   end;
@@ -73,12 +84,6 @@ begin
     if Name = 'title' then
     begin
       Title := Content;
-{$IFDEF EXPAT_1_1}
-      if not inCdataSection then
-      begin
-        Title := DecodeHtml(Title);
-      end;
-{$ENDIF}
     end
     else if (Name = 'subtitle') or (Name = 'summary') then
     begin
@@ -98,12 +103,6 @@ begin
 
       Description := Content;
       FHasLongDesc := true;
-{$IFDEF EXPAT_1_1}
-      if not inCdataSection then
-      begin
-        Description := DecodeHtml(Description);
-      end;
-{$ENDIF}
     end
     else if Name = 'link' then
     begin
@@ -251,6 +250,13 @@ begin
     begin
       FLeftFeed := false;
       FItemSent := true;
+{$IFDEF EXPAT_1_1}
+      if not inCdataSection then
+      begin
+        Description := DecodeHtml(Description);
+        Title := DecodeHtml(Title);
+      end;
+{$ENDIF}
       CallItemCallBack(CurrentItem);
     end
     else
