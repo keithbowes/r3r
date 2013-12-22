@@ -282,7 +282,7 @@ const
 {$ENDIF}
 
 var
-  pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external PcreLib{$ENDIF};
+  pcre_callout: function(block: ppcre_callout_block): integer; {$IFNDEF VIRTUALPASCAL}external PcreLib;{$ENDIF}
 
 {$IFNDEF VIRTUALPASCAL}
 {$DEFINE PCRE_IMPORT}
@@ -373,7 +373,11 @@ begin
 end;
 
 begin
+{$IFNDEF VIRTUALPASCAL}
   WriteStr(version, pcre_version);
+{$ELSE}
+  version := StrPas(pcre_version);
+{$ENDIF}
 
   PCRE_MAJOR := versiontoint;
   PCRE_MINOR := versiontoint;

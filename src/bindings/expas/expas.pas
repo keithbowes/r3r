@@ -16,8 +16,13 @@ interface
 {$DEFINE EXPAT_1_2}
 {$ENDIF}
 
+
 {$IFDEF EXPAT_1_2}
 {$DEFINE EXPAT_1_1}
+{ Exactly 1.2; use features of this version that were removed in 2.0+ }
+{$IFNDEF EXPAT_2_0}
+{$DEFINE EXPAT_1_2_EXACT}
+{$ENDIF}
 {$ENDIF}
 
 {$IFDEF EXPAT_1_1}
@@ -189,7 +194,7 @@ type
 {$IFDEF EXPAT_1_2}
   { This is called for the start of the DOCTYPE declaration when the
   name of the DOCTYPE is encountered.  }
-     XML_StartDoctypeDeclHandler = procedure (userData:pointer; doctypeName:PXML_Char);
+     XML_StartDoctypeDeclHandler = procedure (userData:pointer; doctypeName:PXML_Char{$IFDEF EXPAT_2_0}; pubid, sysid: PXML_Char; has_internal_subset: integer{$ENDIF});
   { This is called for the start of the DOCTYPE declaration when the
   closing > is encountered, but after processing any external subset.  }
 
@@ -211,7 +216,7 @@ type
      XML_NotationDeclHandler = procedure (userData:pointer; notationName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char);
 {$ENDIF}
 
-{$IFDEF EXPAT_1_2}
+{$IFDEF EXPAT_1_2_EXACT}
      XML_ExternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char);
 
      XML_InternalParsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; replacementText:PXML_Char; replacementTextLength:integer);
@@ -394,7 +399,7 @@ type
   procedure XML_SetNotationDeclHandler(parser:XML_Parser; handler:XML_NotationDeclHandler); external ExpatLib name 'XML_SetNotationDeclHandler';
 {$ENDIF}
 
-{$IFDEF EXPAT_1_2}
+{$IFDEF EXPAT_1_2_EXACT}
   procedure XML_SetExternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_ExternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetExternalParsedEntityDeclHandler';
 
   procedure XML_SetInternalParsedEntityDeclHandler(parser:XML_Parser; handler:XML_InternalParsedEntityDeclHandler); external ExpatLib name 'XML_SetInternalParsedEntityDeclHandler';
@@ -527,7 +532,7 @@ type
 
   function XML_StopParser(parser: XML_Parser; resumable: XML_Bool): XML_Status; external ExpatLib name 'XML_StopParser';
   function XML_ResumeParser(parser: XML_Parser): XML_Status; external ExpatLib name 'XML_ResumeParser';
-  procedure XML_GetParsingStatus(parser: XML_parser; var status: XML_ParsingStatus); external ExpatLib name 'XML_GetParsingStatus';
+  procedure XML_GetParsingStatus(parser: XML_Parser; var status: XML_ParsingStatus); external ExpatLib name 'XML_GetParsingStatus';
 {$ENDIF}
 
 {$IFDEF EXPAT_1_1}

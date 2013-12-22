@@ -37,26 +37,26 @@
 
 
 { Imported PCRE functions }
-function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: PByte): ppcre;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: PByte): ppcre;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
+function pcre_compile(pattern: PChar; options: integer; errptr: PPChar; erroffest: PInteger; tableptr: PByte): ppcre;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_compile2(pattern: PChar; options: integer; errocedptr: integer; errptr: PPChar; erroffest: PInteger; tableptr: PByte): ppcre;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_study(code: ppcre; options: integer; errptr: PPChar): ppcre_extra;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffest, options: integer; ovector: PInteger; ovecsize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
 function pcre_dfa_exec(code: ppcre; extra: ppcre_extra; subject: PChar; length, startoffset, options: integer; overctor: PInteger; ovecsize: integer; workspace: PInteger; wscount: integer): integer;{$IFDEF PCRE_IMPORT}
- external PcreLib{$ENDIF};
+ external PcreLib;{$ENDIF}
 
-function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_get_stringnumber(code: ppcre; name: PChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-procedure pcre_free_substring(stringptr: PChar);{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-procedure pcre_free_substring_list(stringptr: PPChar);{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
+function pcre_copy_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname, buffer: PChar; buffersize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_copy_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; buffer: PChar; buffersize: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_get_named_substring(code: ppcre; subject: PChar; ovector: PInteger; stringcount: integer; stringname: PChar; stringptr: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_get_stringnumber(code: ppcre; name: PChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_get_stringtable_entries(code: ppcre; name: PChar; first, last: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_get_substring(subject: PChar; ovector: PInteger; stringcount, stringnumber: integer; stringptr: PPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_get_substring_list(subject: PChar; ovector: PInteger; stringcount: integer; listptr: PPPChar): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+procedure pcre_free_substring(stringptr: PChar);{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+procedure pcre_free_substring_list(stringptr: PPChar);{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
 
-function pcre_maketables: byte;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
+function pcre_maketables: byte;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
 
-function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_refcount(code: ppcre; adjust: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_config(what: integer; where: Pointer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
-function pcre_version: PChar;{$IFDEF PCRE_IMPORT} external  PcreLib{$ENDIF};
+function pcre_fullinfo(code: ppcre; extra: ppcre_extra; what: integer; where: Pointer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_refcount(code: ppcre; adjust: integer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_config(what: integer; where: Pointer): integer;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
+function pcre_version: PChar;{$IFDEF PCRE_IMPORT} external  PcreLib;{$ENDIF}
