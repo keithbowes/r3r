@@ -56,7 +56,7 @@ type
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
     procedure Clone(const List: PRList);
-    function GetAbsoluteURL(const URL: String): String;
+    function GetAbsoluteURL(const URL: String): String;{$IFDEF __GPC__} override;{$ENDIF}
     function GetCurrentElement: TXmlElement; virtual;
     function GetParentElement: TXmlElement; virtual;
     procedure SendItem; virtual;

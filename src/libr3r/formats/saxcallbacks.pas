@@ -145,7 +145,7 @@ begin
   WriteStr(enh, ch[0..len - (loff + 1)]);
 
   { De-expand entities that cause problems with embedded HTML }
-  if len = 1 then
+  if (len = 1) and (Length(enh) > 0) then
   begin
     nl := false;
     Stage := 2;

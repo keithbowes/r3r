@@ -11,11 +11,11 @@ type
   TFeed = class
   protected
     function GetFormat: TFeedType; virtual; abstract;
-    function GetAbsoluteURL(const RelURL, BaseURL: String): String;
   public
     ShouldShow: Boolean;
     constructor Create;
     destructor Destroy; {$IFNDEF __GPC__}override{$ELSE}virtual{$ENDIF};
+    function GetAbsoluteURL(const RelURL, BaseURL: String): String;
     procedure ParseLine(Line: String; var Item: TFeedItem); virtual;
   end; 
 
