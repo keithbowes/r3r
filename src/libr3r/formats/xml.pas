@@ -45,8 +45,8 @@ type
   protected
     FItemSent: Boolean;
   public
-    CurrentItem: TFeedItem;
-    Depth: cardinal;
+    FCurrentItem: TFeedItem;
+    FDepth: cardinal;
     FElemList: PRList;
     FElems: cardinal;
     FEncoding: PChar;
@@ -70,7 +70,7 @@ uses
 {$IFDEF USE_EXPAT}
   SaxCallbacks,
 {$ENDIF}
-   LibR3RStrings, RSettings, RStrings, SysUtils;
+   ItemCallbacks, LibR3RStrings, RSettings, RStrings, SysUtils;
 
 constructor TXmlFeed.Create;
 {$IFDEF USE_EXPAT}
@@ -82,8 +82,8 @@ begin
   inherited Create;
 {$ENDIF}
   New(FElemList, Init);
-  Depth := 0;
   FCloned := false;
+  FDepth := 0;
   FNthElem := 0;
 
 {$IFDEF USE_EXPAT}
@@ -121,7 +121,7 @@ var
 begin
   inherited ParseLine(Line, Item);
   Item.AllowsHTML := true;
-  CurrentItem := Item;
+  FCurrentItem := Item;
 
 {$IFDEF USE_EXPAT}
   pLine := DataToUTF8(Line, FEncoding, Converted);
@@ -243,7 +243,7 @@ begin
     repeat
       Res := PXmlElement(FElemList^.GetNth(FElemList^.Count - i))^;
       Inc(i);
-    until (Res.Depth + 1 = Depth - 1) or (i - 1 = FElemList^.Count);
+    until (Res.Depth + 1 = FDepth - 1) or (i - 1 = FElemList^.Count);
   end;
 
   GetParentElement := Res;
@@ -251,6 +251,18 @@ end;
 
 procedure TXmlFeed.SendItem;
 begin
+  with FCurrentItem do
+  begin
+{$IFDEF EXPAT_1_1}
+    if not GetCurrentElement.inCdataSection then
+    begin
+      Description := DecodeHtml(Description);
+      Title := DecodeHtml(Title);
+    end;
+{$ENDIF}
+    CallItemCallBack(FCurrentItem);
+    FItemSent := true;
+  end;
 end;
 
 end.

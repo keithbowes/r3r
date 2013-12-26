@@ -33,7 +33,7 @@ type
 implementation
 
 uses
-  DC, ItemCallbacks, RDate, RStrings, SockConsts
+  DC, RDate, RStrings, SockConsts
 {$IFDEF __GPC__}
   , SysUtils
 {$ENDIF};
@@ -58,16 +58,7 @@ begin
   Item.Finished := Line = SockEof;
   if Item.Finished then
   begin
-{$IFDEF EXPAT_1_1}
-    if not Elem.inCdataSection then
-    begin
-      Item.Description := DecodeHtml(Item.Description);
-      Item.Title := DecodeHtml(Item.Title);
-    end;
-  {$ENDIF}
-
-    CallItemCallback(Item);
-    FLeftFeed := false;
+    inherited SendItem;
   end;
 end;
 
@@ -76,8 +67,8 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
-  HandleNameSpace(GetCurrentElement, '', CurrentItem);
-  with CurrentItem, GetCurrentElement do
+  HandleNameSpace(GetCurrentElement, '', FCurrentItem);
+  with FCurrentItem, GetCurrentElement do
   begin
     Language := Lang;
 
@@ -249,15 +240,7 @@ begin
     if (Name = 'entry') and not FItemSent then
     begin
       FLeftFeed := false;
-      FItemSent := true;
-{$IFDEF EXPAT_1_1}
-      if not inCdataSection then
-      begin
-        Description := DecodeHtml(Description);
-        Title := DecodeHtml(Title);
-      end;
-{$ENDIF}
-      CallItemCallBack(CurrentItem);
+      inherited SendItem;
     end
     else
     begin

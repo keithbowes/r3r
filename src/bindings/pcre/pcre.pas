@@ -211,8 +211,6 @@ var
     type
       real_pcre = record
           { declaration; the definition is private }
-          { but I must know the size of the allocated memory}
-          magic_number, size: cardinal;
         end;
 
       ppcre = ^real_pcre;
@@ -318,7 +316,7 @@ begin
 {$IFDEF VIRTUALPASCAL}
     FreeMem(p, 0)
 {$ELSE}
-    FreeMem(p, p^.size)
+    FreeMem(p)
 {$ENDIF}
   end;
 

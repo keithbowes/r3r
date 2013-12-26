@@ -67,7 +67,7 @@ begin
     WriteStr(attr, name);
     SplitName(attr, Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
-    Elem^.Depth := Depth;
+    Elem^.Depth := FDepth;
 {$IFDEF EXPAT_1_1}
     Elem^.InCdataSection := false;
 {$ENDIF}
@@ -103,7 +103,7 @@ begin
 
     if Elem^.Name <> '' then
     begin
-      Inc(Depth);
+      Inc(FDepth);
       FElemList^.Add(Elem);
       SendItem;
     end;
@@ -126,7 +126,7 @@ begin
 
     if Elem^.Name <> '' then
     begin
-      Dec(Depth);
+      Dec(FDepth);
       Elem^.Name := '';
     end;
   end;

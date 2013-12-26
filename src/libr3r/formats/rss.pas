@@ -27,7 +27,7 @@ type
 implementation
 
 uses
-  Atom, DC, ItemCallbacks, Mod_Enclosure, RDate,
+  Atom, DC, Mod_Enclosure, RDate,
   RStrings, SockConsts, SysUtils;
 
 function GetAtomFeed: TAtomFeed;
@@ -56,10 +56,7 @@ begin
 
   if Item.Finished and not FItemSent then
   begin
-    Item.Description := DecodeHtml(Item.Description);
-    Item.Title := DecodeHtml(Item.Title);
-    CallItemCallback(Item);
-    
+    inherited SendItem; 
     FLeftChannel := false;
   end;
 end;
@@ -74,8 +71,8 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
-  HandleNameSpace(GetCurrentElement, '', CurrentItem);
-  with GetCurrentElement, CurrentItem do
+  HandleNameSpace(GetCurrentElement, '', FCurrentItem);
+  with GetCurrentElement, FCurrentItem do
   begin 
     if (Name = 'title') and (GetParentElement.Name <> 'image') then
     begin
@@ -172,10 +169,7 @@ begin
 
     if (Name = 'item') and not FItemSent then
     begin
-      Description := DecodeHtml(Description);
-      Title := DecodeHtml(Title);
-      CallItemCallback(CurrentItem);
-      FItemSent := true;
+      inherited SendItem;
     end
     else
     begin
