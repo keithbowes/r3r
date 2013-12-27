@@ -230,6 +230,9 @@ begin
   Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
   Settings.RegisterBoolean('wrap-descriptions', 'Display', true, WrapDescriptions);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
+{$IFDEF USE_ICONV}
+  Settings.RegisterString('display-encoding', 'Display', 'UTF-8', DescEnc);
+{$ENDIF}
 
 {$IFDEF __GPC__}
   CRTInit;

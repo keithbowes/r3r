@@ -35,17 +35,8 @@ void CreateDisplayPage(wxTreebook * parent)
 	SettingsCheckBox * subCheck = new SettingsCheckBox(panel, _("&Load subscriptions on startup"), (char *) "load-subscriptions-on-startup");
 	vbox->Add(subCheck, 1);
 
-	wxStaticLine * sep1 = new wxStaticLine(panel);
-	vbox->Add(sep1, 1, wxEXPAND);
-
 	wxBoxSizer * encBox = new wxBoxSizer(wxHORIZONTAL);
 	vbox->Add(encBox, 1, wxEXPAND | wxALL, 5);
-
-	wxStaticText * encText = new wxStaticText(panel, wxID_ANY, _("&Display encoding: "));
-	encBox->Add(encText, 0);
-
-	SettingsEntry *charsetEntry = new SettingsEntry(panel, (char *) "display-encoding");
-	encBox->Add(charsetEntry, 1);
 
 	parent->AddPage(panel, _("Display"));
 }

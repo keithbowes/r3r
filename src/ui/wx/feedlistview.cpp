@@ -14,7 +14,7 @@ FeedListView::~FeedListView()
 void FeedListView::ResizeColumns()
 {
 	int h, w;
-	if(this)
+	if (this)
 	{
 		GetClientSize(&w, &h);
 

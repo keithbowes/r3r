@@ -335,7 +335,7 @@ void SettingsEntryEvents::OnChange(wxCommandEvent & event)
 		switch (elem->GetType())
 		{
 			case TYPE_INTEGER:
-				elem->SetValue((void *) atoi(text.mb_str()));
+				elem->SetValue((void *) (long) atoi(text.mb_str()));
 				break;
 			case TYPE_STRING:
 				char * val = strdup(text.mb_str());

@@ -12,9 +12,6 @@ var
   DescCheck: String;
   DescWarn: String;
   DescFilters: String;
-{$IFDEF USE_ICONV}
-  DescEncoding: String;
-{$ENDIF}
   LoadSubscriptions: String;
   DescProxy: String;
   DescProxyAddress: String;
@@ -52,9 +49,6 @@ begin
   DescCheck := _('Check for updates');
   DescWarn := _('Warn about missing data');
   DescFilters := _('Enable item filters');
-{$IFDEF USE_ICONV}
-  DescEncoding := _('Display character encoding');
-{$ENDIF}
   LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');
   DescProxyAddress := _('Proxy address');

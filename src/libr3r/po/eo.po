@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-02-27 01:18-0500\n"
+"PO-Revision-Date: 2013-12-26 18:57-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -83,9 +83,6 @@ msgstr "Kontroli promociojn"
 
 msgid "Enable item filters"
 msgstr "Aktivigi filtri erojn"
-
-msgid "Display character encoding"
-msgstr "Ekrana kodoprezento"
 
 msgid "Load subscriptions on startup"
 msgstr "Ŝargi abonojn dum plenumiĝo"

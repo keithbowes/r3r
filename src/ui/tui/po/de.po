@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2013-09-15 15:45-0400\n"
+"PO-Revision-Date: 2013-12-26 19:20-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -122,13 +122,17 @@ msgstr "Falsch"
 msgid "TRUE"
 msgstr "Wahr"
 
-#: tuistrings:skintouse
-msgid "Skin to use"
-msgstr "Skin benutzen"
+#: tuistrings:descenc
+msgid "Display character encoding"
+msgstr "Die Zeichencodierung des Bildschirms"
 
 #: tuistrings:errorseconds
 msgid "Seconds to wait after an error"
 msgstr "Sekunden um nach einem Fehler warten"
+
+#: tuistrings:skintouse
+msgid "Skin to use"
+msgstr "Skin benutzen"
 
 #: tuistrings:usage
 msgid "Usage: %s [URL]"

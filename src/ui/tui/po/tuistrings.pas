@@ -41,8 +41,11 @@ var
   FalseString: String;
   TrueString: String;
 
-  SkinToUse: String;
+{$IFDEF USE_ICONV}
+  DescEnc: String;
+{$ENDIF}
   ErrorSeconds: String;
+  SkinToUse: String;
 
   Usage: String;
 
@@ -105,8 +108,11 @@ begin
   FalseString := _('FALSE');
   TrueString := _('TRUE');
 
-  SkinToUse := _('Skin to use');
+{$IFDEF USE_ICONV}
+  DescEnc := _('Display character encoding');
+{$ENDIF}
   ErrorSeconds := _('Seconds to wait after an error');
+  SkinToUse := _('Skin to use');
 
   Usage := _('Usage: %s [URL]');
 

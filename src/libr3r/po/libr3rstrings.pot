@@ -72,9 +72,6 @@ msgstr ""
 msgid "Enable item filters"
 msgstr ""
 
-msgid "Display character encoding"
-msgstr ""
-
 msgid "Load subscriptions on startup"
 msgstr ""
 

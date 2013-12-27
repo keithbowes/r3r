@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-27 12:06-0500\n"
-"PO-Revision-Date: 2013-01-27 12:12-0500\n"
+"POT-Creation-Date: 2013-12-26 21:23-0500\n"
+"PO-Revision-Date: 2013-12-26 21:24-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: \n"
@@ -34,11 +34,11 @@ msgstr "&Abonarse"
 msgid "&View Enclosure..."
 msgstr "&Ver el archivo incluso..."
 
-#: ../events.cpp:202
+#: ../events.cpp:205
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../events.cpp:252
+#: ../events.cpp:255
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
@@ -66,7 +66,7 @@ msgstr "Tema"
 msgid "Date Created"
 msgstr "Fecha Creado"
 
-#: ../location.cpp:24
+#: ../location.cpp:31
 msgid "Go"
 msgstr "Ir"
 
@@ -142,11 +142,7 @@ msgstr "&Notifiqueme de cambios"
 msgid "&Load subscriptions on startup"
 msgstr "Cargar &suscripciones a rodando"
 
-#: ../settings-display.cpp:44
-msgid "&Display encoding: "
-msgstr "Codificación &para mostrar: "
-
-#: ../settings-display.cpp:50
+#: ../settings-display.cpp:41
 msgid "Display"
 msgstr "Visualización"
 

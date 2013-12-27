@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-03-25 19:18-0400\n"
+"PO-Revision-Date: 2013-12-26 18:57-0500\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -86,9 +86,6 @@ msgstr "Check for updates"
 
 msgid "Enable item filters"
 msgstr "Enable item filters"
-
-msgid "Display character encoding"
-msgstr "Display character encoding"
 
 msgid "Load subscriptions on startup"
 msgstr "Load subscriptions on startup"

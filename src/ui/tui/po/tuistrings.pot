@@ -110,12 +110,16 @@ msgstr ""
 msgid "TRUE"
 msgstr ""
 
-#: tuistrings:skintouse
-msgid "Skin to use"
+#: tuistrings:descenc
+msgid "Display character encoding"
 msgstr ""
 
 #: tuistrings:errorseconds
 msgid "Seconds to wait after an error"
+msgstr ""
+
+#: tuistrings:skintouse
+msgid "Skin to use"
 msgstr ""
 
 #: tuistrings:usage

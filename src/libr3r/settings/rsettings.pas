@@ -245,9 +245,6 @@ begin
   CheckBoolean('check-for-updates', 'Display', false, DescCheck);
   CheckBoolean('load-subscriptions-on-startup', 'Display', true, LoadSubscriptions);
   CheckBoolean('use-filters', 'Display', true, DescFilters);
-{$IFDEF USE_ICONV}
-  CheckString('display-encoding', 'Display', 'UTF-8', DescEncoding);
-{$ENDIF}
 
   CheckBoolean('use-proxy', 'HTTP', Proxy <> '', DescProxy);
   CheckString('proxy-address', 'HTTP', ProxyHost, DescProxyAddress);
