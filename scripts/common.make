@@ -315,7 +315,7 @@ endif # USE_FPC
 endif # COMPILER_OVERRIDE
 
 ifdef USE_FPC
-override COMPILER=FPC $(shell $(PC) -iW)
+override COMPILER=FPC $(shell $(PC) -iW -P$(CPU_TARGET) -T$(OS_TARGET))
 PLATFORM=$(shell $(PC) -iTP)-$(shell $(PC) -iTO)
 
 DEFFLAG=-d
