@@ -133,7 +133,7 @@ begin
 
     if FList.Count > 2 then
     begin
-      if FLineType = ltMeta then
+      if (FLineType = ltMeta) and ShouldShow then
       begin
         CallItemCallback(Item);
         Item.Clear;
@@ -151,7 +151,7 @@ begin
     end
   end;
 
-  if Item.Finished then
+  if (Item.Finished) and ShouldShow then
   begin
     CallItemCallback(Item);
   end;

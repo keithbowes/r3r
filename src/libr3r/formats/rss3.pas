@@ -145,7 +145,10 @@ begin
   end
   else if FCurrentField <> '' then
   begin
-    CallItemCallback(Item);
+    if ShouldShow then
+    begin
+      CallItemCallback(Item);
+    end;
     FCurrentField := '';
     FInHead := false;
   end;

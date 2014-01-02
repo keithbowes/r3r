@@ -370,7 +370,6 @@ begin
   CacheHeader := Cache.GetCacheHeader;
 
   SendHeader(Method + ' ' + FPath + ' HTTP/1.1');
-  SendHeader('Connection: close');
   SendHeader('Host: ' + FIndirectHost);
   SendHeader('User-Agent: ' + UserAgent);
 
@@ -394,6 +393,7 @@ begin
   end;
 
   SendHeader('Accept-Encoding: ');
+  SendHeader('Connection: close');
   SendHeader('');
 
 {$IFDEF SOCKETS_LIBCURL}

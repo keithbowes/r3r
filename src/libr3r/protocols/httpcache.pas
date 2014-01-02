@@ -156,8 +156,14 @@ begin
       end;
     end;
 
-
-    GetCacheHeader := CacheHeader + ': ' + InfoList.Strings[1];
+    if CacheHeader <> '' then
+    begin
+      GetCacheHeader := CacheHeader + ': ' + InfoList.Strings[1];
+    end
+    else
+    begin
+      GetCacheHeader := ''
+    end
   end
   else
   begin

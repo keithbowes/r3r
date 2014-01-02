@@ -260,7 +260,10 @@ begin
       Title := DecodeHtml(Title);
     end;
 {$ENDIF}
-    CallItemCallBack(FCurrentItem);
+    if ShouldShow then
+    begin
+      CallItemCallBack(FCurrentItem);
+    end;
     FItemSent := true;
   end;
 end;
