@@ -57,6 +57,7 @@ begin
     end;
   end;
   
+  ShouldShow := false;
   inherited ParseLine(Line, Item);
 end;
 

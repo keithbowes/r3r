@@ -20,7 +20,6 @@ type
     function GetFormat: TFeedType; override;
   public
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
-    function GetCurrentElement: TXmlElement; override;
     procedure SendItem; override;
   end;
 
@@ -177,15 +176,6 @@ begin
     end;
   end;
 end;
-
-function TRssFeed.GetCurrentElement: TXmlElement;
-var
-  Res: TXmlElement;
-begin
-  Res := inherited GetCurrentElement;
-  GetCurrentElement := Res;
-end;
-
 
 procedure TRssFeed.HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
 var
