@@ -111,6 +111,9 @@ msgstr ""
 msgid "Where the program is installed"
 msgstr ""
 
+msgid "Update channel"
+msgstr ""
+
 msgid "Cannot create directory %s. Perhaps you should try to create it manually."
 msgstr ""
 

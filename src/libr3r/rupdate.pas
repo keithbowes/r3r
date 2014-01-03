@@ -15,11 +15,11 @@ type
 implementation
 
 uses
-  Info;
+  Info, RSettings;
 
 constructor TRUpdate.Create;
 begin
-  inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=' + AppVersion);
+  inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=' + AppVersion + '&channel=' + Settings.GetString('update-channel'));
   Method := 'HEAD';
 
   Execute;

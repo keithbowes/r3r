@@ -261,6 +261,7 @@ begin
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
   SetProp('installed-prefix', StrToPCharAlloc(GetString('installed-prefix')));
+  CheckString('update-channel', 'System', 'release', DescChannel);
 
   Dispose(mc, Done);
 end;

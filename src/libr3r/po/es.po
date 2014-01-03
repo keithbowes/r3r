@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2013-12-26 18:57-0500\n"
+"PO-Revision-Date: 2014-01-02 22:22-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -85,7 +85,7 @@ msgid "Enable item filters"
 msgstr "Usar filtras de entradas"
 
 msgid "Load subscriptions on startup"
-msgstr "Muéstreme las subscripciones de ejecución"
+msgstr "Muéstreme las suscripciones de ejecución"
 
 msgid "Use a proxy?"
 msgstr "¿Usar una procura?"
@@ -109,19 +109,22 @@ msgid "Custom accept languages"
 msgstr "Idiomas proprios"
 
 msgid "User Agent"
-msgstr "Agento de usuario"
+msgstr "Agente de usuario"
 
 msgid "Browser"
 msgstr "Navegador de web"
 
 msgid "Email client"
-msgstr "Cliento de mensajes electrónicos"
+msgstr "Cliente de mensajes electrónicos"
 
 msgid "Media player"
 msgstr "Legador de multimedia"
 
 msgid "Where the program is installed"
 msgstr "Dónde el programa es instalado"
+
+msgid "Update channel"
+msgstr "Canal de actualización"
 
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."

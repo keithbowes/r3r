@@ -25,6 +25,7 @@ var
   DescMail: String;
   DescMedia: String;
   DescPrefix: String;
+  DescChannel: String;
   NoDir: String;
 
 {$IFNDEF USE_NLS}
@@ -62,6 +63,7 @@ begin
   DescMail := _('Email client');
   DescMedia := _('Media player');
   DescPrefix := _('Where the program is installed');
+  DescChannel := _('Update channel');
 
   NoDir := _('Cannot create directory %s. Perhaps you should try to create it manually.');
 end;
