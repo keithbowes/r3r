@@ -3,7 +3,7 @@
 ; Syntax errors in it_download.iss currently.
 ; Maybe this can be implemented in the future.
 #ifdef USE_IT_DOWNLOAD
-#include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','')
+#include ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader', 'ScriptPath', '')
 #endif
 
 #define R3R_@UI@
@@ -148,10 +148,24 @@ Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "instal
 
 [Code]
 procedure InitializeWizard;
+#ifdef USE_IT_DOWNLOAD
+var
+  LanguageFileName: String;
+#endif
 begin
 #ifdef USE_IT_DOWNLOAD
+  LanguageFileName := 'itd_' + ExpandConstant('{language}') + '.ini'; 
+
   ITD_Init;
   ITD_DownloadAfter(wpInstalling);
+
+  if not ITD_LoadStrings(LanguageFileName) then
+  begin
+    if not ITD_LoadStrings(ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader',' InstallPath', '') + '/languages/' + LanguageFileName) then
+    begin
+      // Seriously?
+    end;
+  end;
 #endif
 end;
 

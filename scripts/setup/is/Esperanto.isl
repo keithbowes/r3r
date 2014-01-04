@@ -55,8 +55,8 @@ WinVersionTooLowError=Tiu programo bezonas je %1 eldono %2 aŭ poste.
 WinVersionTooHighError=Tiu programo ne povas instaliĝi de %1 eldono %2 aŭ poste.
 AdminPrivilegesRequired=Vi devas ensaluti kiel administranton dum instali tiun programon.
 PowerUserPrivilegesRequired=Vi devas ensaluti kiel administranton aŭ kiel membron de la grupon "Power Users" dum instali tiun programon.
-SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Nuligi" por haltigi.
-UninstallAppRunningError=Malinstalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazoj de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Nuligi" por Ĉesi.
+SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Rezigni" por haltigi.
+UninstallAppRunningError=Malinstalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazoj de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Rezigni" por Ĉesi.
 
 ; *** Misc. errors
 ErrorCreatingDir=Instalilo ne povis krei la dosierujon "%1"
@@ -76,7 +76,7 @@ ButtonBack=< &Antaŭen
 ButtonNext=&Sekva >
 ButtonInstall=&Instali
 ButtonOK=&Bone
-ButtonCancel=N&uligi
+ButtonCancel=&Rezigni
 ButtonYes=&Jes
 ButtonYesToAll=Jes al &Ĉio
 ButtonNo=&Ne
@@ -91,7 +91,7 @@ SelectLanguageTitle=Elekti Instalan Lingvon
 SelectLanguageLabel=Elekti la lingvon por uzi dum la instalado:
 
 ; *** Common wizard text
-ClickNext=Klaki "Sekva" por daŭrigi, aŭ "Nuligi" por haltigi.
+ClickNext=Klaki "Sekva" por daŭrigi, aŭ "Rezigni" por haltigi.
 BeveledLabel=
 BrowseDialogTitle=Foliumi Por Dosierujo
 BrowseDialogLabel=Elektu dosierujon el la listo suba, tiam klaku OK.
@@ -198,7 +198,7 @@ ReadyMemoTasks=Aldonaj taskoj:
 WizardPreparing=Pretigi la instalilon
 PreparingDesc=Instalilo pretigas instali je [name] en via komputilo.
 PreviousInstallNotCompleted=La instalado/malinstalado de antaŭa programo ne finis. Vi bezonos restartigi vian komputilon por fini tiun instaladon.%n%nPost restartigo, la instalado de [name] finiĝos.
-CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Nuligi" por halti.
+CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Rezigni" por halti.
 ApplicationsFound=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn.
 ApplicationsFound2=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn. Post instalado la instalilo provos restarigi la programojn.
 CloseApplications=&Aŭtomate haltigi la programojn
@@ -233,7 +233,7 @@ SelectDirectoryLabel=Bonvolu difini la lokon de la sekva disko.
 
 ; *** Installation phase messages
 SetupAborted=Instalilo ne finis.%n%nBonvolu korekti la problemon kaj refoje provi la instalilon.
-EntryAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio, aŭ "Abort" por nuligi la instaladon.
+EntryAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio, aŭ "Abort" por haltigi la instaladon.
 
 ; *** Installation status messages
 StatusClosingApplications=Haltiganta programojn...
@@ -264,11 +264,11 @@ ErrorRegWriteKey=Eraro skribanta registrejan ŝlosilon:%n%1\%2
 ErrorIniEntry=Eraro krei INI-enskribon en la dosiero "%1".
 
 ; *** File copying errors
-FileAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por preterlasi la dosieron (malrekomendita), aŭ "Abort" por nuligi la instaladon.
-FileAbortRetryIgnore2=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio (malrekomendita), aŭ "Abort" por nuligi la instaladon.
+FileAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por preterlasi la dosieron (malrekomendita), aŭ "Abort" por haltigi la instaladon.
+FileAbortRetryIgnore2=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio (malrekomendita), aŭ "Abort" por haltigi la instaladon.
 SourceIsCorrupted=La dosiero estas korupta
 SourceDoesntExist=La dosiero "%1" ne ekzistas
-ExistingFileReadOnly=La jama dosiero estas nurlega.%n%nKlaki "Retry" por forigi tiun atributon kaj provi denove, "Ignore" por preterlasi la dosieron, aŭ "Abort" por nuligi la instaladon.
+ExistingFileReadOnly=La jama dosiero estas nurlega.%n%nKlaki "Retry" por forigi tiun atributon kaj provi denove, "Ignore" por preterlasi la dosieron, aŭ "Abort" por haltigi la instaladon.
 ErrorReadingExistingDest=Eraro okazis dum legi la jaman dosieron:
 FileExists=La dosiero jam ekzistas.%n%nĈu vi volas, ke la instalalilo anstataŭigi ĝin?
 ExistingFileNewer=La jama dosiero estas pli nova ol la instalota. Oni rekomendas, ke vi tenas la jaman dosieron.%n%nĈu volas vi teni la jaman dosieron?

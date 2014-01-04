@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-02 22:13-0500\n"
+"PO-Revision-Date: 2014-01-03 00:08-0500\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -124,7 +124,7 @@ msgid "Where the program is installed"
 msgstr "Wo das Programm installiert ist"
 
 msgid "Update channel"
-msgstr "UpdateKanal"
+msgstr "Update-Kanal"
 
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."
