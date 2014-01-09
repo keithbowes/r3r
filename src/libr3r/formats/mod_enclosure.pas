@@ -24,7 +24,6 @@ var
   Elem: TXmlElement;
   i: PtrUInt;
 begin
-  ShouldShow := false;
   inherited ParseLine(Line, Item);
   Elem := GetCurrentElement;
 

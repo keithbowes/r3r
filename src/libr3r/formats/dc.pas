@@ -33,7 +33,14 @@ begin
     end
     else if Name = 'subject' then
     begin
-      Subject := Content;
+      if Subject = '' then
+      begin
+        Subject := Content;
+      end
+      else if Content <> '' then
+      begin
+        Subject := Subject + ', ' + Content;
+      end;
     end
     else if Name = 'description' then
     begin
@@ -57,7 +64,6 @@ begin
     end;
   end;
   
-  ShouldShow := false;
   inherited ParseLine(Line, Item);
 end;
 

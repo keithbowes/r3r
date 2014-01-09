@@ -147,7 +147,6 @@ begin
     else if Name = 'guid' then
     begin
       Id := Content;
-      Uri := Id;
     end
     else if Name = 'channel' then
     begin
@@ -168,6 +167,23 @@ begin
 
     if (Name = 'item') and not FItemSent then
     begin
+      if (Id = '') and (Attributes^.Count > 0) then
+      begin
+        for Idx := 0 to Attributes^.Count - 1 do
+        begin
+          Attr := PXMLAttr(Attributes^.GetNth(Idx))^;
+          if (Attr.Name = 'about') and (Attr.NameSpace = RDFNS) then
+          begin
+            Id := Attr.Value;
+          end;
+        end;
+      end;
+
+      if Uri = '' then
+      begin
+        Uri := Id;
+      end;
+
       inherited SendItem;
     end
     else
@@ -186,7 +202,6 @@ begin
     AFeed := TDCFeed.Create;
     AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
     AFeed.Free;
   end
   else if Elem.NameSpace = AtomNS then
@@ -194,7 +209,6 @@ begin
     AFeed := GetAtomFeed;
     AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
     AFeed.Free;
   end
   else if Elem.NameSpace = Mod_EnclosureNS then
@@ -202,7 +216,6 @@ begin
     AFeed := TModEnclosure.Create;
     AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
     AFeed.Free;
   end
   else

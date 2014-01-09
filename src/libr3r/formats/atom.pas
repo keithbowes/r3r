@@ -263,7 +263,6 @@ begin
     AFeed := TDCFeed.Create;
     AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
     AFeed.Free;
   end;
 end;
