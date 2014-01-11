@@ -19,7 +19,7 @@ uses
 
 constructor TRUpdate.Create;
 begin
-  inherited Create('r3r.sourceforge.net', '80', '/check.php', 'v=' + AppVersion + '&channel=' + Settings.GetString('update-channel'));
+  inherited Create('http', 'r3r.sourceforge.net', '80', '/check.php', 'v=' + AppVersion + '&channel=' + Settings.GetString('update-channel'));
   Method := 'HEAD';
 
   Execute;

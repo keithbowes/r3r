@@ -28,13 +28,13 @@ type
     Cache: THttpCache;
     Headers: THeaders;
     Method: String;
-    procedure Connect(Host, Port, Path, Search: String);
+    procedure Connect(Prot, Host, Port, Path, Search: String);
     procedure SendHeader(Name: String);
     procedure SendHeaders;
     procedure InitCache;
   public
     FURL: String;
-    constructor Create(Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create(Prot, Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     destructor Destroy; override;
@@ -191,7 +191,7 @@ begin
         ShouldShow := true;
 
         URL := GetFeed(HeaderValue);
-        Connect(URL.Host, URL.Port, URL.Path, URL.Search);
+        Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
         Execute;
         ParseFeed(Self);
       end
@@ -260,10 +260,10 @@ begin
   end;
 end;
 
-constructor THttpSock.Create(Host, Port, Path, Search: String);
+constructor THttpSock.Create(Prot, Host, Port, Path, Search: String);
 begin
   inherited Create(Host, Port);
-  Connect(Host, Port, Path, Search);
+  Connect(Prot, Host, Port, Path, Search);
   InitCache;
 
   Method := 'GET';
@@ -275,7 +275,7 @@ begin
 {$ENDIF}
 end;
 
-procedure THttpSock.Connect(Host, Port, Path, Search: String);
+procedure THttpSock.Connect(Prot, Host, Port, Path, Search: String);
 var
   UseProxy: Boolean;
 begin
@@ -307,13 +307,14 @@ begin
   FCachable := true;
   Headers.ContentType := ftUnset;
   FPath := Path;
+  DomainSet(FIndirectHost, Port);
 
   if Search <> '' then
   begin
     FPath := FPath + '?' + Search
   end;
 
-  FURL := 'http://' + FIndirectHost + FPath;
+  FURL := Prot + '://' + FIndirectHost + FPath;
 
 {$IFNDEF SOCKETS_LIBCURL}
   if UseProxy then

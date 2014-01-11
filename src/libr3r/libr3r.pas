@@ -63,7 +63,7 @@ begin
 {$ENDIF}
   then
   begin
-    GetSockType := THttpSock.Create(Host, Port, Path, Para);
+    GetSockType := THttpSock.Create(Prot, Host, Port, Path, Para);
   end
 {$ENDIF}
   else
@@ -105,21 +105,18 @@ begin
   URL := GetFeed(Resource);
   FSock := GetSockType(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
 
-  if FSock = nil then
+  if FSock <> nil then
   begin
-    Exit;
+    FSock.Execute;
+    Parse;
+
+    if Assigned(FSock) then
+    begin
+      FSock.Free;
+    end;
+
+    History^.Add(Resource);
   end;
-
-  FSock.Execute;
-  Parse;
-
-  if Assigned(FSock) then
-  begin
-
-    FSock.Free;
-  end;
-
-  History^.Add(Resource);
 end;
 
 procedure TLibR3R.Parse;

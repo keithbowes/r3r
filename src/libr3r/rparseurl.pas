@@ -25,7 +25,6 @@ var
   Res: TURL;
 begin
   Res.Protocol := 'http';
-  Res.Port := '80';
 
   Index := Pos('?', URL);
   if Index <> 0 then
@@ -83,6 +82,22 @@ begin
     if ErrPos <> 0 then
     begin
       Res.Protocol := Res.Port;
+    end;
+  end;
+
+  if Res.Port = '' then
+  begin
+    if Res.Protocol = 'http' then
+    begin
+      Res.Port := '80';
+    end
+    else if Res.Protocol = 'https' then
+    begin
+      Res.Port := '443';
+    end
+    else
+    begin
+      Res.Port := '0';
     end;
   end;
 
