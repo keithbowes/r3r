@@ -12,6 +12,9 @@ uses
   , CurlCore, CurlEasy, CurlSList
 {$ENDIF};
 
+const
+  MaxRedirects = 10; // Should be configurable?
+
 type
   THttpSock = class(TRSock)
   private
@@ -23,6 +26,7 @@ type
     FIndirectHost: String;
     FLocal: TLocalFile;
     FPath: String;
+    FRedirects: 0..MaxRedirects;
     function GetType: TFeedType;
   protected
     Cache: THttpCache;
@@ -188,12 +192,20 @@ begin
 {$ELSE}
         curl_easy_cleanup(FHandle);
 {$ENDIF}
-        ShouldShow := true;
+        if FRedirects < MaxRedirects then
+        begin
+          Inc(FRedirects);
+          ShouldShow := true;
 
-        URL := GetFeed(HeaderValue);
-        Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
-        Execute;
-        ParseFeed(Self);
+          URL := GetFeed(HeaderValue);
+          Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
+          Execute;
+          ParseFeed(Self);
+        end
+        else
+        begin
+          CallMessageEvent(Self, true, TooManyRedirects, FURL);
+        end;
       end
       else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
       begin
@@ -268,6 +280,7 @@ begin
 
   Method := 'GET';
   FChunkedLength := 0;
+  FRedirects := 0;
 
 {$IFDEF SOCKETS_LIBCURL}
   curl_easy_setopt(FHandle, CURLOPT_HEADER, Pointer(1));

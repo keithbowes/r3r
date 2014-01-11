@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-02 22:13-0500\n"
+"PO-Revision-Date: 2014-01-11 16:40-0500\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -21,11 +21,8 @@ msgstr "Couldn't retrieve the feed."
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "The web server doesn't exist or sent invalid information."
 
-msgid "There is missing data in this feed.  Some of it was recovered."
-msgstr "There is missing data in this feed.  Some of it was recovered."
-
-msgid "Unsupported compression scheme."
-msgstr "Unsupported compression scheme."
+msgid "The redirect limit has been reached."
+msgstr "The redirect limit has been reached."
 
 msgid "Jan"
 msgstr "Jan"

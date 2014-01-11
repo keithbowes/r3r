@@ -10,7 +10,6 @@ var
   DescCacheExpiry: String;
   DescGuess: String;
   DescCheck: String;
-  DescWarn: String;
   DescFilters: String;
   LoadSubscriptions: String;
   DescProxy: String;
@@ -48,7 +47,6 @@ begin
   DescCacheExpiry := _('Keep cached feeds for these amount of days');
   DescGuess := _('Guess the type of feed');
   DescCheck := _('Check for updates');
-  DescWarn := _('Warn about missing data');
   DescFilters := _('Enable item filters');
   LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');

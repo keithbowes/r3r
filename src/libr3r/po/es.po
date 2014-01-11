@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-02 22:22-0500\n"
+"PO-Revision-Date: 2014-01-11 16:40-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -18,11 +18,8 @@ msgstr "No podía recuperar el fuente."
 msgid "The web server doesn't exist or sent invalid information."
 msgstr "El servidor web no exista o mandó información inválido."
 
-msgid "There is missing data in this feed.  Some of it was recovered."
-msgstr "Dato falto en el fuente. Cualquier fui encontré."
-
-msgid "Unsupported compression scheme."
-msgstr "No apoyo ese esquema de compresión."
+msgid "The redirect limit has been reached."
+msgstr "Se ha alcanzado el límite de redirección."
 
 msgid "Jan"
 msgstr "ene"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-03 00:08-0500\n"
+"PO-Revision-Date: 2014-01-11 16:40-0500\n"
 "Last-Translator: \n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -16,13 +16,10 @@ msgstr "Ich könnte nicht das Feed erlangen."
 
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."
-msgstr "Der Web-server existiert nich oder gesendet ungültigen Informationen."
+msgstr "Der Web-server existiert nicht oder gesendet ungültigen Informationen."
 
-msgid "There is missing data in this feed.  Some of it was recovered."
-msgstr "Es gibt fehlenden Daten in der Feed. Etwas aus es währe gefunden."
-
-msgid "Unsupported compression scheme."
-msgstr "Ich verstehe nicht den Kompression-Typ."
+msgid "The redirect limit has been reached."
+msgstr "Die Umleitungbegrenzung wurde erreicht."
 
 msgid "Jan"
 msgstr "Jan"

@@ -6,10 +6,7 @@ msgstr ""
 msgid "The web server doesn't exist or sent invalid information."
 msgstr ""
 
-msgid "There is missing data in this feed.  Some of it was recovered."
-msgstr ""
-
-msgid "Unsupported compression scheme."
+msgid "The redirect limit has been reached."
 msgstr ""
 
 msgid "Jan"

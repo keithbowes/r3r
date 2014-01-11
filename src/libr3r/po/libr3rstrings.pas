@@ -5,6 +5,7 @@ interface
 var
   ErrorGetting: String;
   InvalidHeaders: String;
+  TooManyRedirects: String;
 
   Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Decem: String;
 
@@ -28,6 +29,7 @@ procedure InitStrings;
 begin
   ErrorGetting := _('Couldn''t retrieve the feed.');
   InvalidHeaders := _('The web server doesn''t exist or sent invalid information.');
+  TooManyRedirects := _('The redirect limit has been reached.');
 
   Jan := _('Jan');
   Feb := _('Feb');
