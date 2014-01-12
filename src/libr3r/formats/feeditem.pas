@@ -2,9 +2,6 @@ unit FeedItem;
 
 interface
 
-uses
-  StrTok;
-
 type
   TAuthor = record
     Email: String;
@@ -62,17 +59,13 @@ uses
 
 function DecodeHtml(const InStr: String): String;
 var
-  EntNum: integer;
-  EntStr: String;
   ErrPos: byte;
   i: PtrUInt;
-  InEnt, InHTML: Boolean;
+  InHTML: Boolean;
   OutStr: String;
 begin
-  EntStr := '';
   OutStr := '';
 
-  InEnt := false;
   InHTML := false;
 
   for i := 1 to Length(InStr) do
@@ -81,15 +74,9 @@ begin
     begin
       InHTML := true;
     end
-    else if not InHTML and (InStr[i] = '&') and
-      { if the next character is whitespace, it's not an entity }
-      not (InStr[i + 1] in [#0, #8, #9, #10, #13, #32]) then
-    begin
-      InEnt := true;
-    end
-    { This has to go here so that > and ; don't get counted
+    { This has to go here so that > doesn't get counted
       as part of the text. }
-    else if (not InEnt) and (not InHTML) then
+    else if not InHTML then
     begin
       OutStr := OutStr + InStr[i];
     end
@@ -103,60 +90,6 @@ begin
         OutStr := OutStr + ' ';
       end;
     end
-    else if InEnt then
-    begin
-      if InStr[i] <> ';' then
-      begin
-        EntStr := EntStr + InStr[i];
-      end
-      else
-      begin
-        if EntStr = 'amp' then
-        begin
-          EntStr := '&';
-        end
-        else if EntStr = 'apos' then
-        begin
-          EntStr := '''';
-        end
-        else if EntStr = 'gt' then
-        begin
-          EntStr := '>';
-        end
-        else if EntStr = 'lt' then
-        begin
-          EntStr := '<';
-        end
-        else if EntStr = 'quot' then
-        begin
-          EntStr := '"';
-        end
-        else if Copy(EntStr, 1, 1) = '#' then { numerical entity }
-        begin
-          Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
-          if (ErrPos = 0)
-          {$IFDEF __GPC__}
-            and (EntNum < 256)
-          {$ENDIF}
-            then
-          begin
-            EntStr := WideChar(EntNum)
-          end
-          else
-          begin
-            EntStr := '^' { malformed numerical entity }
-          end
-        end
-        else { undefined entity, per the XML spec }
-        begin
-          EntStr := '?';
-        end;
-
-        OutStr :=  OutStr + EntStr; { random character for replacing numerical and named references }
-        EntStr := '';
-        InEnt := false;
-      end
-    end;
   end;
   DecodeHtml := OutStr;
 end;

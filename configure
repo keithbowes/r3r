@@ -87,8 +87,8 @@ do
       echo "USE_READLINE=0" >> config.make;;
     --disable-xml)
       echo "USE_EXPAT=0" >> config.make;;
-    --without-expat2)
-      echo "EXPAT_2=0" >> confning.make;;
+    --expat-version*)
+        echo "EXPAT_VERSION=$val" >> config.make;;
     --help)
       echo "Available options:"
       echo -e "\t--prefix=PFX Where to install it [$PREFIX]"
@@ -106,7 +106,7 @@ do
       echo -e "\t--disable-nls Disable gettext support"
       echo -e "\t--disable-readline Disable GNU Readline support (TUI only)"
       echo -e "\t--disable-xml Disable XML support"
-      echo -e "\t--without-expat2 XML parsing via Expat 1 instead of Expat 2.\n\t\tOnly valid if --disable-xml wasn't specified"
+      echo -e "\t--expat-version The version of Expat to use (1.0, 1.1, 1.2, 2.0, 2.1).\n\t\tOnly valid if --disable-xml wasn't specified"
       echo -e "\t--help This help"
       exit;;
     *)

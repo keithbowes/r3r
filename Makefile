@@ -85,11 +85,7 @@ endif
 endif
 ifneq ($(USE_EXPAT),0)
 ifdef forWindows
-ifneq ($(EXPAT_2),0)
 	@$(ECHO) $(call checklib,libexpat-1)
-else
-	@$(ECHO) $(call checklib,expat)
-endif
 else
 	@$(ECHO) $(call checklib,expat)
 endif

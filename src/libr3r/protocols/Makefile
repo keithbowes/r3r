@@ -1,7 +1,7 @@
 UNIT_DIRS=.. ../* ../../bindings/* ../../utils/*
 
 ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
-REMOTE_PROTOCOLS=headers http
+REMOTE_PROTOCOLS=headers httpcache http
 endif
 
 UNITS = rsock localfile $(REMOTE_PROTOCOLS)

@@ -11,11 +11,6 @@ procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
 procedure ElementEnded(user_data: Pointer; name: PChar);
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
 
-{$IFDEF EXPAT_1_1}
-procedure CdataSectionEnd(userData: Pointer);
-procedure CdataSectionStart(userData: Pointer);
-{$ENDIF}
-
 {$IFDEF EXPAT_2_0}
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
 {$ELSE}
@@ -68,9 +63,6 @@ begin
     SplitName(attr, Elem^.Name, Elem^.NameSpace);
     Elem^.Content := '';
     Elem^.Depth := FDepth;
-{$IFDEF EXPAT_1_1}
-    Elem^.InCdataSection := false;
-{$ENDIF}
 
     if Assigned(attrs) then
     begin
@@ -145,27 +137,6 @@ begin
   nl := true;
   WriteStr(enh, ch[0..len - (loff + 1)]);
 
-  { De-expand entities that cause problems with embedded HTML }
-  if (len = 1) and (Length(enh) > 0) then
-  begin
-    nl := false;
-    Stage := 2;
-    case enh[1] of
-      '&':
-      begin
-        enh := '&amp;'
-      end;
-      '>':
-      begin
-        enh := '&gt;';
-      end;
-      '<':
-      begin
-        enh := '&lt;';
-      end;
-    end;
-  end;
-
   with TXmlFeed(ctx) do
   begin
     if FElemList^.Count > 0 then
@@ -186,38 +157,6 @@ begin
     end;
   end;
 end;
-
-{$IFDEF EXPAT_1_1}
-procedure CdataSectionEnd(userData: Pointer);
-var
-  Elem: PXmlElement;
-begin
-  with TXmlFeed(userData) do
-  begin
-    if FElemList^.Count > 0 then
-    begin
-      Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.InCdataSection := false;
-      SendItem;
-    end;
-  end;
-end;
-
-procedure CdataSectionStart(userData: Pointer);
-var
-  Elem: PXmlElement;
-begin
-  with TXmlFeed(userData) do
-  begin
-    if FElemList^.Count > 0 then
-    begin
-      Elem := FElemList^.GetNth(FElemList^.Count - 1);
-      Elem^.InCdataSection := true;
-      SendItem;
-    end;
-  end;
-end;
-{$ENDIF}
 
 {$IFDEF EXPAT_2_0}
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);

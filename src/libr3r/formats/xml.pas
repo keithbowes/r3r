@@ -31,9 +31,6 @@ type
     Base: String;
     Lang: String;
     Depth: cardinal;
-{$IFDEF EXPAT_1_1}
-    InCdataSection: Boolean;
-{$ENDIF}
   end;
 
   TXmlFeed = class(TFeed)
@@ -96,10 +93,6 @@ begin
 
   XML_SetElementHandler(FParser, ElementStarted, ElementEnded);
   XML_SetCharacterDataHandler(FParser, CharactersReceived);
-
-{$IFDEF EXPAT_1_1}
-  XML_SetCdataSectionHandler(FParser, CdataSectionStart, CdataSectionEnd);
-{$ENDIF}
 
 {$IFDEF EXPAT_2_0}
   XML_SetXmlDeclHandler(FParser, XmlDeclarationReceived);
@@ -253,13 +246,6 @@ procedure TXmlFeed.SendItem;
 begin
   with FCurrentItem do
   begin
-{$IFDEF EXPAT_1_1}
-    if not GetCurrentElement.inCdataSection then
-    begin
-      Description := DecodeHtml(Description);
-      Title := DecodeHtml(Title);
-    end;
-{$ENDIF}
     if ShouldShow then
     begin
       CallItemCallBack(FCurrentItem);
