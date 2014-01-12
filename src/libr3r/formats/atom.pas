@@ -67,6 +67,11 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
+  if GetCurrentElement.NameSpace <> AtomNS then
+  begin
+    Exit;
+  end;
+
   HandleNameSpace(GetCurrentElement, '', FCurrentItem);
   with FCurrentItem, GetCurrentElement do
   begin

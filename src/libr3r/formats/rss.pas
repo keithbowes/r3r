@@ -70,6 +70,11 @@ var
   Attr: TXmlAttr;
   Idx: PtrUInt;
 begin
+  if (GetCurrentElement.NameSpace <> RSS1NS) and (GetCurrentElement.NameSpace <> '') then
+  begin
+    Exit;
+  end;
+
   HandleNameSpace(GetCurrentElement, '', FCurrentItem);
   with GetCurrentElement, FCurrentItem do
   begin 
