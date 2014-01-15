@@ -3,6 +3,7 @@
 ; Syntax errors in it_download.iss currently.
 ; Maybe this can be implemented in the future.
 #ifdef USE_IT_DOWNLOAD
+#define ITDRoot ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader', 'InstallPath', '')
 #include ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader', 'ScriptPath', '')
 #endif
 
@@ -81,6 +82,9 @@ Source: "../wxwidgets/*.dll"; DestDir: "{app}\bin"; Components: wx
 
 #ifndef USE_IT_DOWNLOAD
 Source: "../core-dlls/*.dll"; DestDir: "{app}\bin"; Components: lib
+#else
+Source: "{#ITDROOT}\languages\*.ini"; Flags: dontcopy
+Source: "scripts\setup\is\*.ini"; Flags: dontcopy
 #endif
 
 ;Source: "scripts/setup/is/LEERME.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
@@ -157,15 +161,14 @@ begin
   LanguageFileName := 'itd_' + ExpandConstant('{language}') + '.ini'; 
 
   ITD_Init;
-  ITD_DownloadAfter(wpInstalling);
 
-  if not ITD_LoadStrings(LanguageFileName) then
-  begin
-    if not ITD_LoadStrings(ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader',' InstallPath', '') + '/languages/' + LanguageFileName) then
-    begin
-      // Seriously?
-    end;
+  try
+    ExtractTemporaryFile(LanguageFileName);
+    ITD_LoadStrings(ExpandConstant('{tmp}') + '\' + LanguageFileName);
+  except
   end;
+
+  ITD_DownloadAfter(wpInstalling);
 #endif
 end;
 
