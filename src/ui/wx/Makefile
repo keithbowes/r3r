@@ -25,7 +25,7 @@ endif
 CXXEXT = .cpp
 HEXT = .h
 
-objects = app desc events feedlist feedlistthread feedlistview \
+objects = app desc events feedlist feedlistview \
 					frame gofield htmldescriptionbox i18n location menu settings-display \
 					settings-headers settings-http settings-main \
 					settings-programs settings-subscriptions \

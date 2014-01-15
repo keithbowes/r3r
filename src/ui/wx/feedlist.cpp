@@ -1,5 +1,4 @@
 #include "feedlist.h"
-#include "feedlistthread.h"
 #include "libr3r.h"
 #include "subscriptions.h"
 
@@ -154,33 +153,7 @@ void ParseFeed(char * res)
 	FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
 	resource->lib = rlib;
 	resource->res = res;
-
-#ifdef wxUSE_THREADS
-	FeedListThread * thread = new FeedListThread(wxTHREAD_JOINABLE);
-	thread->SetEntryData(resource);
-
-	if (wxTHREAD_NO_ERROR == thread->Create())
-	{
-		thread->Run();
-	}
-	else
-	{
-		ParseFeedThread(resource);
-		return;
-	}
-
-	if (thread->IsDetached())
-	{
-		thread->Delete();
-	}
-	else
-	{
-		thread->Wait();
-		delete thread;
-	}
-#else
 	ParseFeedThread(resource);
-#endif
 }
 
 void LoadFeeds(int argc, wxChar ** argv)
