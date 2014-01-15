@@ -33,6 +33,8 @@ end;
 procedure CallItemCallback(Item: TFeedItem);
 var
   cb: TItemCallback;
+  HideItems: Boolean;
+  ShouldShow: Boolean = true;
 begin
   cb := TItemCallback(GetProp('item-callback'));
   if Assigned(cb) then
@@ -44,12 +46,27 @@ begin
 
     if (Item.Id <> '') and Assigned(CurrentCache) then
     begin
+      HideItems := Settings.GetBoolean('hide-cached-feed-items');
+      HideItems := HideItems or Settings.GetBoolean('display-feed-title-only');
       CurrentCache.WriteData(Item.Id, cdtIds);
+
+      if (CurrentCache.GetIdsList^.Count > 0) and
+        (CurrentCache.GetIdsList^.IndexOf(Item.Id) <> -1) and HideItems then
+      begin
+        Item.Clear;
+        ShouldShow := false;
+      end;
+
+      { Needed so that feed items will get displayed before they're cached }
+      Item.Id := '';
     end;
 
-    Item.Translate;
-    cb(Item);
-    Item.Clear;
+    if ShouldShow then
+    begin
+      Item.Translate;
+      cb(Item);
+      Item.Clear;
+    end
   end
 end;
 
