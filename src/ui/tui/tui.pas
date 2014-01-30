@@ -518,7 +518,7 @@ begin
 
   if Extra <> '' then
   begin
-    TuiWrite('(' + Extra + ')');
+    TuiWrite(' (' + Extra + ')');
   end;
 
   if IsError then

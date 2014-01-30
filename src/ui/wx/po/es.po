@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-26 21:23-0500\n"
-"PO-Revision-Date: 2014-01-14 20:08-0500\n"
+"PO-Revision-Date: 2014-01-15 20:11-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -80,7 +80,7 @@ msgstr "&Salir"
 
 #: ../menu.cpp:31
 msgid "&Load Subscriptions"
-msgstr "&Cargar Subscripciones"
+msgstr "&Cargar Suscripciones"
 
 #: ../menu.cpp:32
 msgid "&Refresh"
@@ -136,7 +136,7 @@ msgstr "&Conjeturar el tipos de fuentes"
 
 #: ../settings-display.cpp:32
 msgid "&Notify of updates"
-msgstr "&Notifiqueme de cambios"
+msgstr "Me &notifique sobre actualizaciones"
 
 #: ../settings-display.cpp:35
 msgid "&Load subscriptions on startup"
@@ -216,7 +216,7 @@ msgstr "&Agregar"
 
 #: ../settings-subscriptions.cpp:58
 msgid "Subscriptions"
-msgstr "Subscripciones"
+msgstr "Suscripciones"
 
 #: ../settingsdialog.cpp:6
 msgid "Settings"

@@ -65,15 +65,17 @@ end;
 procedure TAtomFeed.SendItem;
 var
   Attr: TXmlAttr;
+  Elem: TXmlElement;
   Idx: PtrUInt;
 begin
-  if GetCurrentElement.NameSpace <> AtomNS then
+  Elem := GetCurrentElement;
+  if (Elem.NameSpace <> AtomNS) or (Elem.Name = '') then
   begin
     Exit;
   end;
 
-  HandleNameSpace(GetCurrentElement, '', FCurrentItem);
-  with FCurrentItem, GetCurrentElement do
+  HandleNameSpace(Elem, '', FCurrentItem);
+  with Elem, FCurrentItem do
   begin
     Language := Lang;
 
@@ -242,14 +244,10 @@ begin
       Id := '';
     end;
 
-    if (Name = 'entry') and not FItemSent then
+    if Name = 'entry' then
     begin
       FLeftFeed := false;
       inherited SendItem;
-    end
-    else
-    begin
-      FItemSent := false;
     end;
   end;
 end;

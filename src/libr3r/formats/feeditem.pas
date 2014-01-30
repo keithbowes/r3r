@@ -32,6 +32,7 @@ type
     Enclosure: TEnclosure;
 
     AllowsHTML: Boolean;
+    Filtered: Boolean;
     Finished: Boolean;
 
     constructor Create;
@@ -59,7 +60,6 @@ uses
 
 function DecodeHtml(const InStr: String): String;
 var
-  ErrPos: byte;
   i: PtrUInt;
   InHTML: Boolean;
   OutStr: String;
@@ -97,12 +97,19 @@ end;
 function StripHtml(const InStr: String): String;
 var
   OutStr: String;
+
+procedure ReplChar(const s: String; const c: char);
+begin
+  while Pos(s, OutStr) <> 0 do
+  begin
+    OutStr := StringReplace(OutStr, s, c, [rfReplaceAll]);
+  end;
+end;
+
 begin
   OutStr := DecodeHtml(InStr);
-  while Pos('  ', OutStr) <> 0 do
-  begin
-    OutStr := StringReplace(OutStr, '  ', ' ', [rfReplaceAll]);
-  end;
+  ReplChar(#9, ' ');
+  ReplChar('  ', ' ');
   StripHtml := OutStr;
 end;
 
@@ -218,6 +225,7 @@ begin
   Enclosure.MimeType := '';
   Enclosure.URL := '';
 
+  Filtered := false;
   Finished := true;
 end;
 

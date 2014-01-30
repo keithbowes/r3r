@@ -125,34 +125,23 @@ begin
 end;
 
 procedure CharactersReceived(ctx: Pointer; ch: PChar; len: integer);
-const
-  Stage: 1..2 = 1;
 var
   Elem: PXmlElement;
   enh: String;
-  loff: 0..1;
-  nl: Boolean;
 begin
-  loff := Ord(ch[len-1] = #9);
-  nl := true;
-  WriteStr(enh, ch[0..len - (loff + 1)]);
+  WriteStr(enh, ch[0..len-1]);
 
   with TXmlFeed(ctx) do
   begin
     if FElemList^.Count > 0 then
     begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
-
-      nl := nl and (Length(Elem^.Content) > 0);
-      if nl then
-      begin
-        if Stage = 1 then
-        begin
-          Elem^.Content := Elem^.Content + ' ';
-        end;
-        Stage := 1;
-      end;
       Elem^.Content := Elem^.Content + enh;
+      { Handle new lines }
+      if ch[len] = #0 then
+      begin
+        Elem^.Content := Elem^.Content + ' ';
+      end;
       SendItem;
     end;
   end;

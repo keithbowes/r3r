@@ -24,8 +24,6 @@ var
   ErrPos, Index, Index2: byte;
   Res: TURL;
 begin
-  Res.Protocol := 'http';
-
   Index := Pos('?', URL);
   if Index <> 0 then
   begin
@@ -38,6 +36,10 @@ begin
   begin
     Res.Protocol := Copy(URL, 1, Index - 1);
     Delete(URL, 1, Index + 2);
+  end
+  else
+  begin
+    Res.Path := URL
   end;
 
   Index := Pos('@', URL);
@@ -70,6 +72,15 @@ begin
     end;
 
     URL := '';
+  end
+  else
+  begin
+    Res.Host := URL;
+  end;
+
+  if Pos('/', Res.Path) <> 1 then
+  begin
+    Res.Path := '/' + Res.Path;
   end;
 
   Index := Pos(':', Res.Host);

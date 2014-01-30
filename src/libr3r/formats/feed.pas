@@ -42,6 +42,11 @@ end;
 
 procedure TFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
+  if Assigned(CurrentCache) and (Line <> SockEof) then
+  begin
+    CurrentCache.Info^.HeaderRec.ContentType := GetFormat;
+    CurrentCache.WriteData(Line, cdtFeed);
+  end;
 end;
 
 function TFeed.GetAbsoluteURL(const RelURL, BaseURL: String): String;
@@ -53,9 +58,9 @@ begin
   Rel := ParseURL(RelURL);
 {$ENDIF}
 
-  { URL is absolute if it contains the host name;
+  { URL is absolute if it contains a protocol;
     it isn't if it doesn't }
-  if Pos(Rel.Host, RelURL) <> 0 then
+  if Pos(Rel.Protocol, RelURL) <> 0 then
   begin
     Res := RelURL;
   end

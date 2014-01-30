@@ -1,11 +1,7 @@
 ; vim:nospell
 
-; Syntax errors in it_download.iss currently.
-; Maybe this can be implemented in the future.
-#ifdef USE_IT_DOWNLOAD
 #define ITDRoot ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader', 'InstallPath', '')
 #include ReadReg(HKEY_LOCAL_MACHINE, 'Software\Sherlock Software\InnoTools\Downloader', 'ScriptPath', '')
-#endif
 
 #define R3R_@UI@
 
@@ -75,22 +71,11 @@ Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"; Components:
 
 #ifdef R3R_WX
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"; Components: prog
-#ifndef USE_IT_DOWNLOAD
 Source: "../wxwidgets/*.dll"; DestDir: "{app}\bin"; Components: wx
 #endif
-#endif
 
-#ifndef USE_IT_DOWNLOAD
-Source: "../core-dlls/*.dll"; DestDir: "{app}\bin"; Components: lib
-#else
 Source: "{#ITDROOT}\languages\*.ini"; Flags: dontcopy
 Source: "scripts\setup\is\*.ini"; Flags: dontcopy
-#endif
-
-;Source: "scripts/setup/is/LEERME.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
-;Source: "scripts/setup/is/LEGUMIN.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
-;Source: "scripts/setup/is/LESENMICH.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
-;Source: "scripts/setup/is/README.TXT"; DestDir: "{app}\share\r3r\docs"; Components: prog
 
 [Icons]
 Name: "{userdesktop}\R3R"; FileName: "{app}\bin\r3r-@UI@.exe"; IconFilename: "{app}\share\icons\r3r.ico"; Tasks: desktopicon
@@ -109,16 +94,6 @@ en.CreateDesktopIcons=Create &desktop icons
 eo.CreateDesktopIcons=Krei &labortablajn piktogramojn
 es.CreateDesktopIcons=Crear pictogramas de &escritorio
 
-de.readme=LESENMICH.TXT
-en.readme=README.TXT
-eo.readme=LEGUMIN.TXT
-es.readme=LEERME.TXT
-
-de.viewreadme=Die LESENMICH-Datei sehen
-en.viewreadme=View the README file
-eo.viewreadme=Vidi la LEGUMIN-dosieron
-es.viewreadme=Ver el archivo de LEERME
-
 de.libdesc=Kernbibliotheke
 en.libdesc=Core Libraries
 eo.libdesc=Kernaj bibliotekoj
@@ -129,7 +104,7 @@ en.intldesc=Translations
 eo.intldesc=Tradukoj
 es.intldesc=Traducciones
 
-de.devdesc=Entwickler Dateien
+de.devdesc=Entwickler-Dateien
 en.devdesc=Developer Files
 eo.devdesc=Programistaj dosieroj
 es.devdesc=Archivos para desarrollo de programas propios
@@ -147,51 +122,38 @@ Root: HKCU; Subkey: "Software\R3R"; Flags: uninsdeletekey
 Root: HKCU; SubKey: "Software\R3R\Display"; ValueType: string; ValueName: "display-encoding"; ValueData: "ISO-8859-1"; Flags: createvalueifdoesntexist
 Root: HKCU; SubKey: "Software\R3R\System"; ValueType: string; ValueName: "installed-prefix"; ValueData: "{app}"
 
-;[Run]
-;FileName: "{app}\share\r3r\docs\{cm:readme}"; Description: "{cm:viewreadme}"; Verb: "open"; Flags: postinstall shellexec
-
 [Code]
 procedure InitializeWizard;
-#ifdef USE_IT_DOWNLOAD
 var
   LanguageFileName: String;
-#endif
 begin
-#ifdef USE_IT_DOWNLOAD
-  LanguageFileName := 'itd_' + ExpandConstant('{language}') + '.ini'; 
-
   ITD_Init;
 
   try
+    LanguageFileName := 'itd_' + ExpandConstant('{language}') + '.ini';
     ExtractTemporaryFile(LanguageFileName);
     ITD_LoadStrings(ExpandConstant('{tmp}') + '\' + LanguageFileName);
   except
   end;
 
   ITD_DownloadAfter(wpInstalling);
-#endif
 end;
 
 procedure GetFile(DName, FName: String);
-#ifdef USE_IT_DOWNLOAD
 var
-  App: String;
-  rem, post: String;
+  post, rem: String;
 begin
-  App := ExpandConstant('{app}');
+  try
+    post := ExpandConstant('{app}') + '\bin\' + FName;
+    rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows%20(32-bit)/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=auto';
 
-  rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows%20(32-bit)/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=auto';
-  post := App + '\bin\' + FName;
-
-  ITD_AddFile(rem, post)
-#else
-begin
-#endif
+    ITD_AddFile(rem, post)
+  except
+  end;
 end;
 
 procedure CurPageChanged(CurPageID: Integer);
 begin
-#ifdef USE_IT_DOWNLOAD
   if CurPageId = wpReady then
   begin
     if IsComponentSelected('lib') then
@@ -212,5 +174,4 @@ begin
     end
 #endif
   end
-#endif
 end;

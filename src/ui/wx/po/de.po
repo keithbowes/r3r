@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-12-26 21:23-0500\n"
-"PO-Revision-Date: 2014-01-14 20:08-0500\n"
+"PO-Revision-Date: 2014-01-15 20:06-0500\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -47,7 +47,7 @@ msgstr "[Keine]"
 
 #: ../feedlist.cpp:98
 msgid "An update is available."
-msgstr "Ein Aktual ist verfügbar."
+msgstr "Eine Aktualisierung ist verfügbar."
 
 #: ../feedlist.cpp:113
 msgid "Feed Title"
@@ -215,7 +215,7 @@ msgstr "&Hinzufügen"
 
 #: ../settings-subscriptions.cpp:58
 msgid "Subscriptions"
-msgstr "Abbonements"
+msgstr "Abonnements"
 
 #: ../settingsdialog.cpp:6
 msgid "Settings"

@@ -39,8 +39,6 @@ type
     FNthElem: cardinal;
     FLastBase: String;
     FLastLang: String;
-  protected
-    FItemSent: Boolean;
   public
     FCurrentItem: TFeedItem;
     FDepth: cardinal;
@@ -145,7 +143,7 @@ var
 begin
 {$IFDEF USE_EXPAT}
   XML_Parse(FParser, '', 0, XML_TRUE);
-  Xml_ParserFree(FParser);
+  XML_ParserFree(FParser);
 {$ENDIF}
 
   if not FCloned then
@@ -250,7 +248,7 @@ begin
     begin
       CallItemCallBack(FCurrentItem);
     end;
-    FItemSent := true;
+    PXmlElement(FElemList^.GetNth(FElemList^.Count ))^.Name := '';
   end;
 end;
 

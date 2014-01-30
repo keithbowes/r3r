@@ -1,1 +1,0 @@
-Zu benutzen dies Programm, Sie werden erhalten müssen die Pakete core und (für einen GUI) wxWidgets aus der selber Setzen wie das Programm. Legen in einem System-Weg (wie C:\WINDOWS\system32 oder wo das Programm ist, wie C:\Program Files\R3R 2.0\bin).  Wenn diese Pakete sind schon installiert, tun nichts.  Nach installieren Sie werden sehr selten ihnen aktualisieren müssen.

@@ -113,7 +113,7 @@ WizardLicense=Permesilo
 LicenseLabel=Bonvolu legi la sekvajn gravajn informojn antaŭ ol daŭri.
 LicenseLabel3=Bonvolu legi la jenan permesilon. Vi devas akcepti a kondiĉojn de tio antaŭ instali.
 LicenseAccepted=Mi &akceptas la permesilon
-LicenseNotAccepted=Mi &rifuzas la permesilon
+LicenseNotAccepted=Mi &malakceptas la permesilon
 
 ; *** "Information" wizard pages
 WizardInfoBefore=Informoj

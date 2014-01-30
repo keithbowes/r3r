@@ -15,7 +15,8 @@ index.html: libr3r.pas.xml ../../src/libr3r/formats/feeditem.pas \
 		--descr=libr3r.pas.xml --package=LibR3R --format=html
 
 clean:
-	$(RM) $(wildcard *.html)
+	$(RM) $(wildcard *.css *.html *.png)
+	$(RM) $(wildcard tree.xml)
 	$(RMRF) $(wildcard feeditem itemcallbacks libr3r rmessage rsettings rsubscriptions)
 
 install: all

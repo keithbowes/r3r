@@ -11,7 +11,7 @@ uses
 {$IFDEF SOCKETS_SYNAPSE}
   , BlckSock
 {$IFDEF USE_SSL}
-  ,ssl_openssl
+  , ssl_openssl
 {$ENDIF}
 {$ENDIF}
   
@@ -21,7 +21,6 @@ uses
 
 type
   TRSock = class
-  private
   protected
     FChunkedLength: integer;
     FError: Boolean;
@@ -29,8 +28,10 @@ type
     FHandle: CURL;
 {$ENDIF}
     FHost: String;
+{$IFDEF USE_SSL}
+    FIsSecure: Boolean;
+{$ENDIF}
     FPort: String;
-    FShouldShow: Boolean;
     FUseChunked: Boolean;
     FeedType: TFeedType;
   public
@@ -191,7 +192,10 @@ begin
 {$ENDIF}
 
   DomainSet(Host, Port);
-  FShouldShow := true;
+{$IFDEF USE_SSL}
+  FIsSecure := false;
+{$ENDIF}
+  ShouldShow := true;
 end;
 
 destructor TRSock.Destroy;
@@ -271,6 +275,12 @@ begin
 {$IFDEF SOCKETS_SYNAPSE}
   Sock.Connect(FHost, FPort);
   Sock.ConvertLineEnd := true;
+{$IFDEF USE_SSL}
+  if FIsSecure then
+  begin
+    Sock.SSLDoConnect;
+  end;
+{$ENDIF}
 {$ENDIF}
 end;
 

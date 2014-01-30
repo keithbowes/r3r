@@ -111,8 +111,6 @@ procedure TRss3Feed.ParseLine(Line: String; var Item: TFeedItem);
 var
   SepPos: word;
 begin
-  inherited ParseLine(Line, Item);
-
   if GetProp('shortstring') = nil then
   begin
     FLastLine := Line;
@@ -154,6 +152,7 @@ begin
   end;
 
   FLastLine := Line;
+  inherited ParseLine(Line, Item);
 end;
 
 end.

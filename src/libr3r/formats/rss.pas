@@ -53,7 +53,7 @@ begin
     Item.Finished := (Elem.Name = 'item') or (Line = SockEOF);
   end;
 
-  if Item.Finished and not FItemSent then
+  if Item.Finished then
   begin
     inherited SendItem; 
     FLeftChannel := false;
@@ -68,15 +68,18 @@ end;
 procedure TRssFeed.SendItem;
 var
   Attr: TXmlAttr;
+  Elem: TXmlElement;
   Idx: PtrUInt;
 begin
-  if (GetCurrentElement.NameSpace <> RSS1NS) and (GetCurrentElement.NameSpace <> '') then
+  Elem := GetCurrentElement;
+  if ((Elem.NameSpace <> RSS1NS) and (Elem.NameSpace <> '') or
+    (Elem.Name = '')) then
   begin
     Exit;
   end;
 
-  HandleNameSpace(GetCurrentElement, '', FCurrentItem);
-  with GetCurrentElement, FCurrentItem do
+  HandleNameSpace(Elem, '', FCurrentItem);
+  with Elem, FCurrentItem do
   begin 
     if (Name = 'title') and (GetParentElement.Name <> 'image') then
     begin
@@ -170,7 +173,7 @@ begin
       FLeftChannel := true;
     end;
 
-    if (Name = 'item') and not FItemSent then
+    if Name = 'item' then
     begin
       if (Id = '') and (Attributes^.Count > 0) then
       begin
@@ -190,10 +193,6 @@ begin
       end;
 
       inherited SendItem;
-    end
-    else
-    begin
-      FItemSent := false;
     end;
   end;
 end;

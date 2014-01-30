@@ -99,7 +99,7 @@ begin
 {$IFDEF SOCKETS_SYNAPSE}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
-      CallMessageEvent(Sock, true, ErrorGetting, THttpSock(Sock).FURL);
+      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, THttpSock(Sock).FURL);
       Break;
     end;
 {$ENDIF}

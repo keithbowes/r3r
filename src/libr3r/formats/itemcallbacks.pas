@@ -43,6 +43,7 @@ begin
     begin
       FilterItem(Item);
     end;
+    ShouldShow := not Item.Filtered;
 
     if (Item.Id <> '') and Assigned(CurrentCache) then
     begin

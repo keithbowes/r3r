@@ -225,14 +225,14 @@ begin
   if Proxy <> '' then
   begin
     ProxyURL := ParseURL(Proxy);
-    WriteStr(ProxyHost, ProxyURL.Protocol, '://', ProxyURL.Host);
+    WriteStr(ProxyHost, ProxyURL.Host);
     {$I-}
     ReadStr(ProxyURL.Port, ProxyPort);
     {$I+}
   end
   else
   begin
-    ProxyHost := 'http://127.0.0.1';
+    ProxyHost := '127.0.0.1';
     ProxyPort := 8118;
   end;
 

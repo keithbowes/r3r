@@ -120,6 +120,7 @@ begin
     Close(AFile);
   end;
 
+  Item.Filtered := ShouldFilter;
   ChDir(CurDir);
 end;
 

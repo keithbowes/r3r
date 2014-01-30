@@ -198,9 +198,13 @@ begin
           ShouldShow := true;
 
           URL := GetFeed(HeaderValue);
+{$IFDEF USE_SSL}
+          FIsSecure := URL.Protocol = 'https';
+{$ENDIF}
           Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
           Execute;
           ParseFeed(Self);
+          ShouldShow := false;
         end
         else
         begin
@@ -280,6 +284,9 @@ begin
 
   Method := 'GET';
   FChunkedLength := 0;
+{$IFDEF USE_SSL}
+  FIsSecure := Prot = 'https';
+{$ENDIF}
   FRedirects := 0;
 
 {$IFDEF SOCKETS_LIBCURL}
@@ -290,21 +297,11 @@ end;
 
 procedure THttpSock.Connect(Prot, Host, Port, Path, Search: String);
 var
+  OrigPort: String;
   UseProxy: Boolean;
 begin
   FIndirectHost := Host;
-
-{$IFNDEF SOCKETS_LIBCURL}
-  if (Port <> '80')
-{$IFDEF USE_SSL}
-  and (Port <> '443')
-{$ENDIF}
-  then
-  begin
-    FIndirectHost := FIndirectHost + ':' + Port;
-  end;
-{$ENDIF}
-
+  OrigPort := Port;
   UseProxy := Settings.GetBoolean('use-proxy');
   if UseProxy then
   begin
@@ -320,14 +317,23 @@ begin
   FCachable := true;
   Headers.ContentType := ftUnset;
   FPath := Path;
-  DomainSet(FIndirectHost, Port);
+  DomainSet(Host, Port);
 
   if Search <> '' then
   begin
     FPath := FPath + '?' + Search
   end;
 
-  FURL := Prot + '://' + FIndirectHost + FPath;
+  FURL := Prot + '://' + FIndirectHost;
+  if (OrigPort <> '80')
+{$IFDEF USE_SSL}
+  and (OrigPort <> '443')
+{$ENDIF}
+  then
+  begin
+    FURL := FURL + ':' + OrigPort;
+  end;
+  FURL := FURL + Path;
 
 {$IFNDEF SOCKETS_LIBCURL}
   if UseProxy then
@@ -449,7 +455,10 @@ begin
 
   if Headers.Status = 200 then
   begin
-    Res := inherited ParseItem(Item);
+    if ShouldShow then
+    begin
+      Res := inherited ParseItem(Item);
+    end;
   end
   else if (Headers.Status = 304) and not Settings.GetBoolean('hide-cached-feeds') then
   begin

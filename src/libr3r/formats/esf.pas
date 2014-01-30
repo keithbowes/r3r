@@ -133,8 +133,9 @@ begin
 
     if FList.Count > 2 then
     begin
-      if (FLineType = ltMeta) and ShouldShow then
+      if FLineType = ltMeta then
       begin
+        ShouldShow := true;
         CallItemCallback(Item);
         Item.Clear;
       end;
@@ -151,12 +152,16 @@ begin
     end
   end;
 
-  if (Item.Finished) and ShouldShow then
+  if Item.Finished then
   begin
     CallItemCallback(Item);
   end;
 
-  Item.Clear;
+  if FLineType = ltData then
+  begin
+    Item.Clear;
+  end;
+
   inherited ParseLine(Line, Item);
 end;
 

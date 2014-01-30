@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-11 16:40-0500\n"
+"PO-Revision-Date: 2014-01-15 20:04-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
