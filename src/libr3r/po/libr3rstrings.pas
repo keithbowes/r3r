@@ -11,6 +11,7 @@ var
 
   UnknownEncoding: String;
   NoData: String;
+  SSLError: String;
 
   Subscription1, Subscription2, Subscription3, Subscription4: String;
 
@@ -46,6 +47,7 @@ begin
 
   UnknownEncoding := _('Unknown Encoding');
   NoData := _('No Data');
+  SSLError := _('Couldn''t initialize an SSL connection');
 
   Subscription1 := _('http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/rss');
   Subscription2 := _('http://feeds.bbci.co.uk/news/rss.xml');

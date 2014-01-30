@@ -37,7 +37,6 @@ type
     procedure SendHeaders;
     procedure InitCache;
   public
-    FURL: String;
     constructor Create(Prot, Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;

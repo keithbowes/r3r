@@ -37,9 +37,9 @@ else
 ifneq ($(findstring win,$(OS_TARGET)),)
 forDOS=1
 forWindows=1
-endif #inWindows
-endif #inOS2
-endif #inDOS
+endif #forWindows
+endif #forOS2
+endif #forDOS
 endif #Solaris
 endif #*BSD
 endif #Linux
@@ -208,7 +208,7 @@ endif
 
 USE_LIBEDIT ?= 0
 USE_LIBICONV ?= 0
-USE_SSL ?= 0
+USE_SSL ?= 1
 
 ifneq ($(USE_NLS),0)
 override DEFS_EXTRA+=USE_NLS
@@ -232,7 +232,7 @@ endif
 ifneq ($(USE_EXPAT),0)
 override DEFS_EXTRA+=USE_EXPAT
 ifneq ($(EXPAT_VERSION),)
-override DEFS_EXTRA+=EXPAT_$(shell $(ECHO) $(EXPAT_VERSION) | $(SED) -e 's/\./_/g')
+override DEFS_EXTRA+=EXPAT_$(subst .,_,$(EXPAT_VERSION))
 endif
 
 ifneq ($(findstring EXPAT_2_1,$(DEFS_EXTRA)),)

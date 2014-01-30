@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-11 16:40-0500\n"
+"PO-Revision-Date: 2014-01-30 10:42-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -108,6 +108,9 @@ msgstr "Idiomas proprios"
 msgid "User Agent"
 msgstr "Agente de usuario"
 
+msgid "Verify the server's SSL certificate"
+msgstr "Comprobar el certificado de SSL del servidor"
+
 msgid "Browser"
 msgstr "Navegador de web"
 
@@ -133,6 +136,9 @@ msgstr "Codificación desconocida"
 
 msgid "No Data"
 msgstr "Ningunos datos"
+
+msgid "Couldn't initialize an SSL connection"
+msgstr "No se pudo inicializar una conexión de SSL"
 
 msgid ""
 "http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"

@@ -10,7 +10,7 @@ interface
 uses
   LibR3R, RParseURL, RSock
 {$IFDEF SOCKETS_SYNAPSE}
-  , Http, RMessage
+  , RMessage
 {$ENDIF};
 
 function GetFeed(var Resource: String): TURL;
@@ -99,7 +99,7 @@ begin
 {$IFDEF SOCKETS_SYNAPSE}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
-      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, THttpSock(Sock).FURL);
+      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, TRSock(Sock).FURL);
       Break;
     end;
 {$ENDIF}

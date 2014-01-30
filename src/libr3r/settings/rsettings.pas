@@ -256,6 +256,8 @@ begin
   CheckString('accept-langs', 'HTTP Headers', '', DescLang);
   CheckString('user-agent', 'HTTP Headers', '%a (%o; %m; %c; %s; %u) %n %i %e %p %w', DescUserAgent);
 
+  CheckBoolean('ssl-verify', 'SSL', false, DescSSLVerify);
+
   CheckString('for:http', 'Programs', Cap2Doze(mc^.GetProg('text/html')), DescBrowser);
   CheckString('for:mailto', 'Programs', '', DescMail);
 

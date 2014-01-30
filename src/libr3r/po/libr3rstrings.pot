@@ -96,6 +96,9 @@ msgstr ""
 msgid "User Agent"
 msgstr ""
 
+msgid "Verify the server's SSL certificate"
+msgstr ""
+
 msgid "Browser"
 msgstr ""
 
@@ -118,6 +121,9 @@ msgid "Unknown Encoding"
 msgstr ""
 
 msgid "No Data"
+msgstr ""
+
+msgid "Couldn't initialize an SSL connection"
 msgstr ""
 
 msgid "http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/rss"

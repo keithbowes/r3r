@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-15 20:04-0500\n"
+"PO-Revision-Date: 2014-01-30 13:18-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -108,6 +108,9 @@ msgstr "Propraj lingvoj"
 msgid "User Agent"
 msgstr "Identeco de la legilo"
 
+msgid "Verify the server's SSL certificate"
+msgstr "Kontroli la SSL-atestilon de la servilo"
+
 msgid "Browser"
 msgstr "TTT-legilo"
 
@@ -132,6 +135,9 @@ msgstr "Nekonata kodoprezento"
 
 msgid "No Data"
 msgstr "Neniuj datumoj"
+
+msgid "Couldn't initialize an SSL connection"
+msgstr "Ne eblis startigi SSL-konekton"
 
 msgid ""
 "http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"

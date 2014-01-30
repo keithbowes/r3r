@@ -20,6 +20,7 @@ var
   DescUseLang: String;
   DescLang: String;
   DescUserAgent: String;
+  DescSSLVerify: String;
   DescBrowser: String;
   DescMail: String;
   DescMedia: String;
@@ -57,6 +58,7 @@ begin
   DescUseLang := _('Use custom accept languages?');
   DescLang := _('Custom accept languages');
   DescUserAgent := _('User Agent');
+  DescSSLVerify := _('Verify the server''s SSL certificate');
   DescBrowser := _('Browser');
   DescMail := _('Email client');
   DescMedia := _('Media player');

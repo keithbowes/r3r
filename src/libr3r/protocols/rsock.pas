@@ -44,6 +44,7 @@ type
     FTempList: PRStringList;
 {$ENDIF}
 
+    FURL: String;
     ShouldShow: Boolean;
     constructor Create(Host, Port: String);
     destructor Destroy; {$IFNDEF __GPC__}override;{$ELSE}virtual;{$ENDIF}
@@ -57,7 +58,8 @@ type
 implementation
 
 uses
-  Atom, Esf, Rss, Rss3, SockConsts, SysUtils;
+  Atom, Esf, Rss, Rss3,
+  LibR3RStrings, RMessage, RSettings, SockConsts, SysUtils;
 
 var
   FAbstractFeed: TFeed;
@@ -279,6 +281,11 @@ begin
   if FIsSecure then
   begin
     Sock.SSLDoConnect;
+    if Sock.LastError <> 0 then
+    begin
+      CallMessageEvent(Self, true, SSLError, FURL);
+    end;
+    Sock.SSL.VerifyCert := Settings.GetBoolean('ssl-verify');
   end;
 {$ENDIF}
 {$ENDIF}
