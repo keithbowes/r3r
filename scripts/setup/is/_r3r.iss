@@ -20,7 +20,7 @@ OutputDir=scripts\setup\is
 SourceDir=..\..\..
 
 [Tasks]
-Name: desktopicon; Description: "{cm:CreateDesktopIcons}"
+Name: desktopicon; Description: "{cm:CreateDesktopIcon}"
 
 [Components]
 Name: "prog"; Description: "R3R (@UI@)"; Types: full compact custom; Flags: fixed
@@ -71,7 +71,6 @@ Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"; Components:
 
 #ifdef R3R_WX
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"; Components: prog
-Source: "../wxwidgets/*.dll"; DestDir: "{app}\bin"; Components: wx
 #endif
 
 Source: "{#ITDROOT}\languages\*.ini"; Flags: dontcopy
@@ -89,11 +88,6 @@ Name: "eo"; MessagesFile: "scripts/setup/is/Esperanto.isl"; LicenseFile: "doc/es
 Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "doc/espanol/LICENCIA"
 
 [CustomMessages]
-de.CreateDesktopIcons=Erstellen &Desktop-Ikonen
-en.CreateDesktopIcons=Create &desktop icons
-eo.CreateDesktopIcons=Krei &labortablajn piktogramojn
-es.CreateDesktopIcons=Crear pictogramas de &escritorio
-
 de.libdesc=Kernbibliotheke
 en.libdesc=Core Libraries
 eo.libdesc=Kernaj bibliotekoj
