@@ -32,6 +32,7 @@ function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: 
 implementation
 
 uses
+  TuiStrings,
 {$IFDEF USE_ICONV}
   iconv, RSettings, RStrings, SysUtils, 
 {$ENDIF}
@@ -172,18 +173,20 @@ end;
 function TuiWriteWrapped(Line: String; BreakChars: TSysCharset; MaxCol, MaxRow: integer): PtrInt;
 var
   DescLine: String;
-  Len: word;
+  Len, LenOff: word;
   OrigLen: PtrUInt;
   Remaining: PtrInt;
 begin
+  LenOff := Length(ItemDesc);
   OrigLen := Length(Line);
   repeat
-    Len := MaxCol;
+    Len := MaxCol - LenOff;
     if Length(Line) > Len then
     begin
       repeat
         Dec(Len)
       until (Len = 1) or (Line[Len] in BreakChars);
+      LenOff := 0;
     end;
 
     if Len = 1 then

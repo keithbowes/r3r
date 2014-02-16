@@ -365,6 +365,7 @@ PLATFORM=$(shell $(GPC) -dumpmachine)
 
 PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
 						 --extended-syntax \
+						 --pointer-checking --stack-checking \
 						 --unit-destination-path=$(builddir)\
 						 -DFree=Destroy -DPtrUInt=PtrWord \
 						 -DWideChar=Chr -DTrimRight=wTrimRight\
@@ -376,12 +377,9 @@ DIRFLAG=--unit-path=
 PPUEXT=.gpi
 
 ifdef DEBUG
-PCFLAGS_DEBUG=--pointer-checking --progress-messages \
-	--stack-checking -ggdb3
+PCFLAGS_DEBUG=--progress-messages -ggdb3
 else
-PCFLAGS_DEBUG=--no-io-checking --no-pointer-checking \
-							--no-range-checking --no-stack-checking \
-							--no-warning
+PCFLAGS_DEBUG=--no-warning
 endif # DEBUG
 
 # Let's get the proper LDFLAGS

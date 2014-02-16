@@ -49,6 +49,7 @@ type
     function QueryItemNumber: Boolean;
     procedure GoItem;
     procedure OpenProg(Sett, Link: String);
+    procedure SetCursorPos;
     procedure SetOptions;
     procedure GoDonate;
     procedure ScrollDown;
@@ -502,24 +503,33 @@ begin
 end;
 
 procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);
+var
+  Message: String;
 begin
   DrawStatus;
 
   if IsError then
   begin
-    TuiWrite(ErrorError)
+    Message := ErrorError
   end
   else
   begin
-    TuiWrite(ErrorWarning);
+    Message := ErrorWarning
   end;
 
-  TuiWrite(': ' + MessageName);
+  Message := Message + ': ' + MessageName;
 
   if Extra <> '' then
   begin
-    TuiWrite(' (' + Extra + ')');
+    Message := Message + ' (' + Extra + ')'
   end;
+
+  if Length(Message) > FDimStatus.LeftEnd - FDimStatus.LeftStart then
+  begin
+    Message := Message[FDimStatus.LeftStart..FDimStatus.LeftEnd-4] + '...';
+  end;
+
+  TuiWrite(Message);
 
   if IsError then
   begin
@@ -733,6 +743,7 @@ begin
       Desc := Description;
       if (Desc <> '') and (FreeLines > 1) then
       begin
+        TuiWrite(ItemDesc);
         TextBackground(SkinColorTable.FDescBack);
         TextColor(SkinColorTable.FDescFore);
 
@@ -810,6 +821,16 @@ begin
     SwapVectors;
     Redraw;
   end
+end;
+
+procedure TTui.SetCursorPos;
+begin
+{$IFNDEF USE_NCRT}
+  DrawFeedList;
+  GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
+{$ELSE}
+  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
+{$ENDIF}
 end;
 
 procedure TTui.SetOptions;
@@ -1172,6 +1193,7 @@ begin
     Inc(FCurrentItem);
   end;
   FScrollingUp := FViewPort.LastItem = FItems^.Count;
+  SetCursorPos;
 end;
 
 procedure TTui.ScrollUp;
@@ -1227,13 +1249,7 @@ begin
   end;
 
   FPrintItems := false;
-
-{$IFNDEF USE_NCRT}
-  DrawFeedList;
-  GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
-{$ELSE}
-  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
-{$ENDIF}
+  SetCursorPos;
 end;
 
 procedure TTui.LoadSubscriptions;

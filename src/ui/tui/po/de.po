@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2013-12-26 19:20-0500\n"
+"PO-Revision-Date: 2014-02-14 21:46-0500\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -45,6 +45,10 @@ msgstr " von "
 #: tuistrings:itemtitle
 msgid "Title: "
 msgstr "Titel: "
+
+#: tuistrings:itemdesc
+msgid "Description: "
+msgstr "Beschreibung: "
 
 #: tuistrings:itemsubject
 msgid "Subject: "

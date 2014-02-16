@@ -34,6 +34,10 @@ msgstr ""
 msgid "Title: "
 msgstr ""
 
+#: tuistrings:itemdesc
+msgid "Description: "
+msgstr ""
+
 #: tuistrings:itemsubject
 msgid "Subject: "
 msgstr ""

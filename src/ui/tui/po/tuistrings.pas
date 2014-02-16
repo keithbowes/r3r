@@ -14,6 +14,7 @@ var
   OutOf: String;
 
   ItemTitle: String;
+  ItemDesc: String;
   ItemSubject: String;
   ItemCreated: String;
   ItemEmail: String;
@@ -81,6 +82,7 @@ begin
   OutOf := _('/');
 
   ItemTitle := _('Title: ');
+  ItemDesc := _('Description: ');
   ItemSubject := _('Subject: ');
   ItemCreated := _('Created: ');
   ItemEmail := _('Email address: ');
