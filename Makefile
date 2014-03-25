@@ -226,7 +226,7 @@ dist-src: clean
 
 dist-deb:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb CITARGET="$(CITARGET)"
-	$(call sign,r3r-$(R3R_UI)_$(VERSION)-$(PKGRELEASE)_$(ARCH).deb)
+	$(call sign,r3r-$(R3R_UI)$(subst _,-,$(SSL))_$(VERSION)-$(PKGRELEASE)_$(ARCH).deb)
 
 dist-deb-dev:
 	$(MAKE) dist-deb CITARGET="$(MAKE) install-header" R3R_UI=dev
@@ -242,7 +242,7 @@ dist-deb-shared:
 
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm CITARGET="$(CITARGET)"
-	$(call sign,r3r_$(R3R_UI)-$(subst -,_,$(VERSION))-$(PKGRELEASE).$(ARCH).rpm)
+	$(call sign,r3r_$(R3R_UI)$(SSL)-$(subst -,_,$(VERSION))-$(PKGRELEASE).$(ARCH).rpm)
 
 dist-rpm-dev:
 	$(MAKE) dist-rpm CITARGET="$(MAKE) install-header" R3R_UI=devel

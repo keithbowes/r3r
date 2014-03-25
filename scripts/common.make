@@ -209,6 +209,7 @@ endif
 USE_LIBEDIT ?= 0
 USE_LIBICONV ?= 0
 USE_SSL ?= 1
+SSL=$(if $(findstring $(USE_SSL),0),_nossl,$(if $(findstring $(USE_SSL),1),_ssl,))
 
 ifneq ($(USE_NLS),0)
 override DEFS_EXTRA+=USE_NLS
