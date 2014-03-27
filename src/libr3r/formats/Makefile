@@ -3,7 +3,7 @@ SAXCALLBACKS=saxcallbacks
 endif
 
 UNIT_DIRS=.. ../* ../../bindings/* ../../utils/*
-UNITS=feeditem feed itemcallbacks nonxml esf rss3 $(SAXCALLBACKS) \
+UNITS=html4ent feeditem feed itemcallbacks nonxml esf rss3 $(SAXCALLBACKS) \
 			xml dc mod_enclosure atom rss
 
 include ../../../scripts/common.make

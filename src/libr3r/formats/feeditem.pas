@@ -49,7 +49,7 @@ function DecodeHtml(const InStr: String): String;
 implementation
 
 uses
-  SysUtils
+  Html4Ent, SysUtils
 {$IFDEF USE_ICONV}
   , iconv, RProp, RSettings
 
@@ -129,7 +129,12 @@ begin
         begin
           EntStr := '"'
         end
-        else if EntStr[1] = '#' then
+        else
+        begin
+          EntStr := Html4EntDecode(EntStr)
+        end;
+        
+        if EntStr[1] = '#' then
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
           if (ErrPos = 0)
@@ -145,7 +150,7 @@ begin
             EntStr := '^' { malformed numerical entity }
           end
         end
-        else { undefined entity, per the XML spec }
+        else if Length(EntStr) <> 1 then { undefined entity, per the XML spec }
         begin
           EntStr := '?'
         end;
