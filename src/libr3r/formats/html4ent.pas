@@ -380,7 +380,7 @@ begin
   else if InStr = 'uArr' then OutStr := '#8657' { upwards double arrow, U+21D1 ISOamsa }
   else if InStr = 'rArr' then OutStr := '#8658' { rightwards double arrow,
                                      U+21D2 ISOtech }
-{ ISO 10646 does not say this is the 'implies' character but does not have 
+{ ISO 10646 does not say this is the 'implies' character but does not have
      another character with this function so ?
      rArr can be used for 'implies' as ISOtech suggests }
   else if InStr = 'dArr' then OutStr := '#8659' { downwards double arrow, U+21D3 ISOamsa }
@@ -433,9 +433,9 @@ begin
                                      U+2265 ISOtech }
   else if InStr = 'sub' then OutStr := '#8834' { subset of, U+2282 ISOtech }
   else if InStr = 'sup' then OutStr := '#8835' { superset of, U+2283 ISOtech }
-{ note that nsup, 'not a superset of, U+2283' is not covered by the Symbol 
+{ note that nsup, 'not a superset of, U+2283' is not covered by the Symbol
      font encoding and is not included. Should it be, for symmetry?
-     It is in ISOamsn  } 
+     It is in ISOamsn  }
   else if InStr = 'nsub' then OutStr := '#8836' { not a subset of, U+2284 ISOamsn }
   else if InStr = 'sube' then OutStr := '#8838' { subset of or equal to, U+2286 ISOtech }
   else if InStr = 'supe' then OutStr := '#8839' { superset of or equal to,
@@ -458,11 +458,11 @@ begin
   else if InStr = 'rfloor' then OutStr := '#8971' { right floor, U+230B ISOamsc  }
   else if InStr = 'lang' then OutStr := '#9001' { left-pointing angle bracket = bra,
                                      U+2329 ISOtech }
-{ lang is NOT the same character as U+003C 'less than' 
+{ lang is NOT the same character as U+003C 'less than'
      or U+2039 'single left-pointing angle quotation mark' }
   else if InStr = 'rang' then OutStr := '#9002' { right-pointing angle bracket = ket,
                                      U+232A ISOtech }
-{ rang is NOT the same character as U+003E 'greater than' 
+{ rang is NOT the same character as U+003E 'greater than'
      or U+203A 'single right-pointing angle quotation mark' }
 
 { Geometric Shapes }

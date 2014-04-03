@@ -129,20 +129,15 @@ begin
     if outstr <> nil then
     begin
       outbuf := outstr;
-      if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> iconv_convert_error then
+      if (iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) <> iconv_convert_error)
+        and (outbytesleft = 0) then
       begin
         WriteStr(s, outstr);
       end;
       FreeMem(outstr);
     end;
-{$IFDEF USE_LIBICONV}
     iconv_close(cd);
   end;
-{$ELSE}
-  end;
-
-  iconv_close(cd);
-{$ENDIF}
 {$ENDIF}
 end;
 

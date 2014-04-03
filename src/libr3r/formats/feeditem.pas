@@ -133,7 +133,7 @@ begin
         begin
           EntStr := Html4EntDecode(EntStr)
         end;
-        
+
         if EntStr[1] = '#' then
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);

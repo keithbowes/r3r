@@ -147,7 +147,7 @@ begin
     begin
       if Items <= FViewPort.PortHeight then
       begin
-        Title := AItem.TitleText;
+        Title := AItem.Title;
         WriteStr(LenStr, Items);
         if Length(Title) > (FDimList.LeftEnd - 3 - Length(LenStr)) then
         begin
@@ -526,7 +526,7 @@ begin
 
   if Length(Message) > FDimStatus.LeftEnd - FDimStatus.LeftStart then
   begin
-    Message := Message[FDimStatus.LeftStart..FDimStatus.LeftEnd-4] + '...';
+    Message := Message[FDimStatus.LeftStart..FDimStatus.LeftEnd - 4] + '...';
   end;
 
   TuiWrite(Message);
@@ -538,9 +538,18 @@ begin
 end;
 
 procedure TTui.RetrieveFeed(Resource: String);
+var
+  Message: String;
 begin
   DrawStatus;
-  TuiWrite(StringReplace(Retrieving, '%s', Resource, []));
+  Message := StringReplace(Retrieving, '%s', Resource, []);
+
+  if Length(Message) > FDimStatus.LeftEnd - FDimStatus.LeftStart then
+  begin
+    Message := Message[FDimStatus.LeftStart..FDimStatus.LeftEnd - 4] + '...'
+  end;
+
+  TuiWrite(Message);
 
   DrawFeedList;
   ClrScr;
