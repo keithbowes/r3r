@@ -1,6 +1,6 @@
 Minimal dependencies:
 * A Pascal Compiler (Free Pascal
-  <http://www.freepascal.org/> [2.4 or higher] is recommended.
+  <http://www.freepascal.org/> [2.6 or higher] is recommended.
   GNU Pascal <http://gnu-pascal.de/> will compile it, but the
   binary is much more crash-prone (See the file gnu-pascal for more
   information).  Patches for other compilers are welcome).

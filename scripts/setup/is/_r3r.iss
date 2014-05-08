@@ -27,6 +27,7 @@ Name: "prog"; Description: "R3R (@UI@)"; Types: full compact custom; Flags: fixe
 Name: "lib"; Description: "{cm:LibDesc}"; Types: full custom
 Name: "i18n"; Description: "{cm:IntlDesc}"; Types: full custom
 Name: "dev"; Description: "{cm:DevDesc}"; Types: full custom
+Name: "ssl"; Description: "{cm:SSLDesc}"; Types: full
 #ifdef R3R_WX
 Name: "wx"; Description: "{cm:wxDesc}"; Types: full custom
 #endif
@@ -73,7 +74,7 @@ Source: "src/ui/tui/skins/*.skin"; DestDir: "{app}\share\r3r\skins"; Components:
 Source: "icons\r3r.png"; DestDir: "{app}\share\icons"; Components: prog
 #endif
 
-Source: "{#ITDROOT}\languages\*.ini"; Flags: dontcopy
+Source: "{#ITDRoot}\languages\*.ini"; Flags: dontcopy
 Source: "scripts\setup\is\*.ini"; Flags: dontcopy
 
 [Icons]
@@ -102,6 +103,11 @@ de.devdesc=Entwickler-Dateien
 en.devdesc=Developer Files
 eo.devdesc=Programistaj dosieroj
 es.devdesc=Archivos para desarrollo de programas propios
+
+de.ssldesc=OpenSSL-Bibliotheke
+en.ssldesc=OpenSSL Libraries
+eo.ssldesc=OpenSSL-bibliotekoj
+es.ssldesc=Bibliotecas para OpenSSL
 
 #ifdef R3R_WX
 de.wxdesc=wxWidgets-Bibliotheke
@@ -139,7 +145,7 @@ var
 begin
   try
     post := ExpandConstant('{app}') + '\bin\' + FName;
-    rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows%20(32-bit)/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=auto';
+    rem := 'http://downloads.sourceforge.net/project/r3r/R3R%202.x%20for%20Windows/' + DName + '/' +  FName + '?r=&ts=0&use_mirror=auto';
 
     ITD_AddFile(rem, post)
   except
@@ -157,13 +163,20 @@ begin
       GetFile('Core%20DLLs/20120422', 'libiconv2.dll');
       GetFile('Core%20DLLs/20120422', 'libidn-11.dll');
       GetFile('Core%20DLLs/20120422', 'libpcre-0.dll');
-      GetFile('Core%20DLLs/20120422', 'readline5.dll');
-    end
-#ifdef R3R_WX
-    else if IsComponentSelected('wx') then
+      GetFile('Core%20DLLs/20120422', 'readline5.dll')
+    end;
+
+    if IsComponentSelected('ssl') then
     begin
-      GetFile('wxWidgets%20DLLs/3.0.0', 'wxbase300u_gcc_custom.dll')
-      GetFile('wxWidgets%20DLLs/3.0.0', 'wxmsw300u_core_gcc_custom.dll')
+      GetFile('OpenSSL%20DLLs/0.9.8h', 'libeay32.dll');
+      GetFile('OpenSSL%20DLLs/0.9.8h', 'libssl32.dll')
+    end;
+
+#ifdef R3R_WX
+    if IsComponentSelected('wx') then
+    begin
+      GetFile('wxWidgets%20DLLs/3.0.0', 'wxbase300u_gcc_custom.dll');
+      GetFile('wxWidgets%20DLLs/3.0.0', 'wxmsw300u_core_gcc_custom.dll');
       GetFile('wxWidgets%20DLLs/3.0.0', 'wxmsw300u_html_gcc_custom.dll')
     end
 #endif
