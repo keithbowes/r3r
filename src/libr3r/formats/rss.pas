@@ -175,6 +175,8 @@ begin
 
     if Name = 'item' then
     begin
+      inherited SendItem;
+
       if (Id = '') and (Attributes^.Count > 0) then
       begin
         for Idx := 0 to Attributes^.Count - 1 do
@@ -191,8 +193,6 @@ begin
       begin
         Uri := Id;
       end;
-
-      inherited SendItem;
     end;
   end;
 end;
