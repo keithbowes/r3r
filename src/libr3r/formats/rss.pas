@@ -118,12 +118,15 @@ begin
 
       if FLastCat <> Content then
       begin
-        if Subject <> ''then
+        if Subject = '' then
         begin
-          Subject := Subject + ', ';
+          Subject := Content
+        end
+        else if Content <> '' then
+        begin
+          Subject := Content + ', ' + Subject;
         end;
 
-        Subject := Subject + Content;
         FLastCat := Content
       end;
     end
