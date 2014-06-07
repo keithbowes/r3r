@@ -116,7 +116,10 @@ begin
 
 {$IFDEF USE_EXPAT}
   pLine := DataToUTF8(Line, FEncoding, Converted);
-  XML_Parse(FParser, pLine, StrLen(pLine), XML_FALSE);
+  if StrLen(pLine) > 0 then
+  begin
+    XML_Parse(FParser, pLine, StrLen(pLine), XML_FALSE);
+  end;
 
   if Converted then
   begin
