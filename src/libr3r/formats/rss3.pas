@@ -16,7 +16,7 @@ type
     procedure FillItem(var Item: TFeedItem);
     function GetFormat: TFeedType; override;
   public
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 

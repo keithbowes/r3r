@@ -23,7 +23,7 @@ type
     procedure ParseDataLine(var Item: TFeedItem);
     procedure ParseMetaLine(var Item: TFeedItem);
   public
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end;
 

@@ -49,7 +49,7 @@ begin
   NoData := _('No Data');
   SSLError := _('Couldn''t initialize an SSL connection');
 
-  Subscription1 := _('http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/rss');
+  Subscription1 := _('https://github.com/keithbowes/r3r/releases.atom');
   Subscription2 := _('http://feeds.bbci.co.uk/news/rss.xml');
   Subscription3 := _('http://rss.slashdot.org/Slashdot/slashdotatom');
   Subscription4 := _('http://www.reddit.com/.rss');

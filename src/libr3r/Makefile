@@ -10,9 +10,6 @@ all:
 	$(MAKE) info.pas
 	$(MAKE) info$(PPUEXT)
 	$(foreach dir,$(TARGET_DIRS),cd $(dir) && $(MAKE) all && cd ..;)
-ifneq ($(DEFS_SOCKETS),SOCKETS_NONE)
-	$(MAKE) rupdate.pas
-endif
 	$(MAKE) $(addsuffix $(PPUEXT),$(UNITS))
 	cd ../utils && $(MAKE) r3r-conv
 	$(MAKE) libr3r$(PPUEXT)
@@ -46,7 +43,5 @@ uninstall:
 
 info.pas: _info.pas ../../scripts/common.make
 	$(SED) -e 's/@VERSION@/$(VERSION)/g' \
-		-e 's/@COMPILER@/$(COMPILER)/g' \
 		-e 's/@CPU@/$(CPU_TARGET)/g' \
-		-e 's/@UI@/$(R3R_UI)/g' \
 		-e 's&@PREFIX@&$(prefix)&g' _info.pas > info.pas

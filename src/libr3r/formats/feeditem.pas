@@ -36,7 +36,7 @@ type
     Finished: Boolean;
 
     constructor Create;
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
+    destructor Destroy; override;
     function DescriptionText: String;
     function TitleText: String;
     procedure Translate;
@@ -137,11 +137,7 @@ begin
         if EntStr[1] = '#' then
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
-          if (ErrPos = 0)
-          {$IFDEF __GPC__}
-            and (EntNum < 256)
-          {$ENDIF}
-            then
+          if (ErrPos = 0) then
           begin
             EntStr := WideChar(EntNum)
           end
@@ -185,18 +181,13 @@ end;
 
 constructor TFeedItem.Create;
 begin
-{$IFNDEF __GPC__}
   inherited Create;
-{$ENDIF}
-
   Clear;
 end;
 
 destructor TFeedItem.Destroy;
 begin
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure TFeedItem.Translate;
@@ -216,11 +207,7 @@ var
   outbuf, outstr: PChar;
 begin
   if FieldValue = '' then Exit;
-{$IFNDEF __GPC__}
   inbuf := PChar(FieldValue);
-{$ELSE}
-  inbuf := FieldValue;
-{$ENDIF}
   inbytesleft := Length(FieldValue) + 1;
   outbytesleft := inbytesleft;
   GetMem(outstr, outbytesleft);
@@ -239,11 +226,7 @@ end;
 begin
 {$IFDEF USE_ICONV}
   incharset := GetProp('charset');
-{$IFNDEF __GPC__}
   outcharset := PChar(String((Settings.GetString('display-encoding'))));
-{$ELSE}
-  outcharset := Settings.GetString('display-encoding');
-{$ENDIF}
 
   if incharset = nil then
   begin

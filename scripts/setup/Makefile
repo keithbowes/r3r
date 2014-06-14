@@ -20,11 +20,6 @@ ifndef MAKING_PACKAGE
 	-update-desktop-database
 endif
 
-dist-deb:
-	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=debian VERSION=$(VERSION)
-	$(MV) $(srcdir)/../../r3r-$(R3R_UI)$(subst _,-,$(SSL))_$(VERSION)-$(PKGRELEASE)_$(ARCH).deb \
-		$(srcdir)/../../..
-
 dist-rpm:
 	$(MAKE) checkinstall CITARGET="$(CITARGET)" TYPE=rpm VERSION="$(subst -,_,$(VERSION))"
 	$(MV) $(PKGDIR)/r3r_$(R3R_UI)$(SSL)-$(subst -,_,$(VERSION))-$(PKGRELEASE).$(ARCH).rpm \
@@ -42,7 +37,7 @@ checkinstall:
 		--pkggroup="Networking/News" --pkglicense=BSD --nodoc \
 		--deldesc=yes --deldoc=yes --delspec=yes --backup=no \
 		--pkgsource=$(curdir)/../.. \
-		--maintainer=zooplah@users.sourceforge.net \
+		--maintainer=zooplah@gmail.com \
 		$(CITARGET)
 
 clean: distclean

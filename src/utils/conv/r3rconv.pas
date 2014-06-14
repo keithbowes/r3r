@@ -3,12 +3,7 @@ program R3RConv;
 uses
   AtomWriter, EsfWriter, RssWriter, Rss3Writer,
   Conv, ConvStrings, LibR3R, SysUtils,
-  {$IFDEF __GPC__}
-  GPC
-  {$define OptArg OptionArgument}
-  {$ELSE}
-  GetOpts
-  {$ENDIF};
+  GetOpts;
 
 var
   Feed: TLibR3R;

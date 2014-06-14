@@ -1,9 +1,5 @@
 Minimal dependencies:
-* A Pascal Compiler (Free Pascal
-  <http://www.freepascal.org/> [2.6 or higher] is recommended.
-  GNU Pascal <http://gnu-pascal.de/> will compile it, but the
-  binary is much more crash-prone (See the file gnu-pascal for more
-  information).  Patches for other compilers are welcome).
+* Free Pascal <http://www.freepascal.org/> [2.6 or higher]
 * Unix tools (preferably, the GNU versions):
   * Those included with Free Pascal plus:
     * cut
@@ -33,9 +29,6 @@ Optional dependencies (see below for how to enable/disable):
 * For a GUI:
   * a C++ compiler; I'm only testing in GCC <http://gcc.gnu.org/>
   * wxWidgets <http://wxwidgets.org/>
-
-If building with GNU Pascal, please read the file gnu-pascal
-for its extra requirements.
 
 After you have the dependencies, open a shell in the root source
 directory and do:
@@ -78,8 +71,7 @@ DEFS_SOCKETS
   * SOCKETS_NONE: Build without sockets support.
   * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal)
     <http://synapse.ararat.cz>.
-  (Currently the default is SOCKETS_LIBCURL with GNU Pascal and
-   SOCKETS_SYNAPSE with Free Pascal.)
+  (Currently SOCKETS_SYNAPSE is the default.)
 DESTDIR
   Where to install the software.
 PCFLAGS_DEBUG
@@ -90,10 +82,6 @@ R3R_UI
   The user interface to use.  Look in the ./src/ui directory for
   available user interfaces.  The default varies, depending on
   multiple factors.
-USE_FPC
-  Use Free Pascal to compile (recommended).
-USE_GPC
-  Use GNU Pascal to compile.
 
 The configure script:
 The project includes a home-grown configure script, which:
@@ -101,9 +89,7 @@ The project includes a home-grown configure script, which:
    file in the current directory.
 2. Calls make _configure to insure that everything is in order.
 (It is not an autotools configure script.  You can attempt a compile
-even if make check fails.  When using GPC make _configure will
-always succeed because the gp utility always returns a success exit
-code.)
+even if make check fails.)
 
 Enabling/disabling features:
 You can use the configure script or set the make environment
@@ -116,8 +102,7 @@ EXPAT_VERSION
   * 2.0
   * 2.0.1
   * 2.1
-  Default: 1.2 when building with GPC; 2.0.1 when building with
-  another compiler.
+  Default: 2.0.1.
 NO_NCURSES
   Disable the use of ncurses <http://gnu.org/software/ncurses> for
   the TUI. It only makes sense in Free Pascal on Unix platforms.
@@ -133,8 +118,6 @@ USE_EXPAT
   Default: 1
 USE_ICONV
   Allow the use of iconv to convert between character encodings.
-  Note: It's very handy on Windows and on GPC builds on all
-  operating systems, as they don't handle Unicode very well.
   Default: 1
 USE_IDN
   Allow the use of the libidn library to decode IDN (web addresses

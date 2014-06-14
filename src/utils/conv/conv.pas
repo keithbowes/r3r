@@ -2,14 +2,6 @@ unit Conv;
 
 interface
 
-{$IFDEF __GPC__}
-uses
-  GPC;
-
-const
-  LineEnding = NewLine;
-{$ENDIF}
-
 type
   TDateFormat = (dfLong, dfShort, dfUnix);
   PText = ^text;
@@ -40,11 +32,7 @@ begin
 
   if OutFile = '' then
   begin
-{$IFNDEF __GPC__}
     fh^ := stdout;
-{$ELSE}
-    OutFile := 'feed.out';
-{$ENDIF}
   end;
 
   if OutFile <> '' then

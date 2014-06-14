@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2014-02-14 21:46-0500\n"
+"PO-Revision-Date: 2014-06-14 08:20-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
@@ -93,10 +93,6 @@ msgstr "Option zu ändern (wählen oder tippen eine Zahl; 0 zu beenden): "
 #: tuistrings:newvalue
 msgid "New Value: "
 msgstr "Neue Wert: "
-
-#: tuistrings:updateavailable
-msgid "A new version is available from http://sourceforge.net/projects/r3r"
-msgstr "Eine neue Version von http://sourceforge.net/projects/r3r verfügbar"
 
 #: tuistrings:itemencl
 msgid "Enclosure: "

@@ -6,7 +6,6 @@ enum
 							everything alphabetical. */
 	wxID_ADD_SUBSCRIPTION,
 	wxID_BROWSE,
-	wxID_CHECK_UPDATES,
 	wxID_CONTACT_BUTTON,
 	wxID_DELETE_SUBSCRIPTION,
 	wxID_DONATE,

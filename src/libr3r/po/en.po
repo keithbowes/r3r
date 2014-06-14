@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-30 10:38-0500\n"
+"PO-Revision-Date: 2014-06-14 08:22-0400\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -78,9 +78,6 @@ msgstr "Keep cached feeds for these amount of days"
 msgid "Guess the type of feed"
 msgstr "Guess the type of feed"
 
-msgid "Check for updates"
-msgstr "Check for updates"
-
 msgid "Enable item filters"
 msgstr "Enable item filters"
 
@@ -126,9 +123,6 @@ msgstr "Media player"
 msgid "Where the program is installed"
 msgstr "Where the program is installed"
 
-msgid "Update channel"
-msgstr "Update channel"
-
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."
 msgstr ""
@@ -143,12 +137,8 @@ msgstr "No Data"
 msgid "Couldn't initialize an SSL connection"
 msgstr "Couldn't initialize an SSL connection"
 
-msgid ""
-"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
-"rss"
-msgstr ""
-"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
-"rss"
+msgid "https://github.com/keithbowes/r3r/releases.atom"
+msgstr "https://github.com/keithbowes/r3r/releases.atom"
 
 msgid "http://feeds.bbci.co.uk/news/rss.xml"
 msgstr "http://feeds.bbci.co.uk/news/rss.xml"

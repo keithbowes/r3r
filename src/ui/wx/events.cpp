@@ -205,16 +205,6 @@ void MenuEvents::OnAbout(wxCommandEvent & WXUNUSED(event))
 	wxMessageBox(wxString(user_agent, wxConvUTF8), _("About R3R"), wxOK | wxICON_INFORMATION);
 }
 
-void MenuEvents::OnCheckUpdates(wxCommandEvent & WXUNUSED(event))
-{
-	wxString command, url, version;
-	url = wxString("http://r3r.sourceforge.net/check.php?v=", wxConvUTF8);
-	version = wxString(wxString(libr3r_get_version(), wxConvUTF8));
-	command = url + version + wxString("&display=1", wxConvUTF8);
-
-	GoBrowser((char *) (const char *) command.mb_str());
-}
-
 void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
 {
 	GoBrowser((char *) "http://sourceforge.net/donate/index.php?group_id=90897");

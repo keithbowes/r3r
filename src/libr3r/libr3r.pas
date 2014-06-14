@@ -22,12 +22,10 @@ type
   private
     FSock: TRSock;
   protected
-    procedure NotifyUpdate; virtual;
-    procedure DoUpdate;
     procedure Parse;
   public
     constructor Create;
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
+    destructor Destroy; override;
     procedure RetrieveFeed(Resource: String); virtual;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
     procedure RegisterItemCallback(const cb: TItemCallback);
@@ -46,7 +44,7 @@ implementation
 
 uses
 {$IFNDEF SOCKETS_NONE}
-  Http, RUpdate, 
+  Http,
 {$ENDIF}
   LibR3RStrings, LocalFile, RGetFeed, RMessage, RParseURL;
 
@@ -72,30 +70,14 @@ begin
   end;
 end;
 
-{$IFNDEF SOCKETS_NONE}
-function GetUpdateObject: TRUpdate;
-begin
-  GetUpdateObject := TRUpdate.Create;
-end;
-{$ENDIF}
-
 constructor TLibR3R.Create;
 begin
-{$IFNDEF __GPC__}
   inherited Create;
-{$ENDIF}
-
-  if Settings.GetBoolean('check-for-updates') then
-  begin
-    DoUpdate;
-  end;
 end;
 
 destructor TLibR3R.Destroy;
 begin
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
@@ -129,33 +111,9 @@ procedure TLibR3R.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
 end;
 
-procedure TLibR3R.NotifyUpdate;
-begin
-end;
-
 procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback);
 begin
   ItemCallbacks.RegisterItemCallback(cb);
-end;
-
-procedure TLibR3R.DoUpdate;
-{$IFNDEF SOCKETS_NONE}
-var
-  Up: TRUpdate;
-begin
-  Up := GetUpdateObject;
-  with Up do
-  begin
-    if Available then
-    begin
-      NotifyUpdate;
-    end;
-
-    Free;
-  end;
-{$ELSE}
-begin
-{$ENDIF}
 end;
 
 initialization

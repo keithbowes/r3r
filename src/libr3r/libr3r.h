@@ -13,7 +13,6 @@
 
 typedef void (TMessageProc) (unsigned short int is_error, char * message_name, char * extra);
 typedef void (TParsedProc) (void * item);
-typedef void (TUpdateProc) ();
 
 #ifdef __cplusplus
  extern "C" {
@@ -25,7 +24,6 @@ extern void libr3r_free (void * lib);
 extern void libr3r_retrieve_feed(void * lib, char * resource);
 extern void libr3r_on_item_parsed(void * lib, TParsedProc proc);
 extern void libr3r_on_message_received(void * lib, TMessageProc proc);
-extern void libr3r_on_update(void * lib, TUpdateProc proc);
 
 extern void * libr3r_get_item_field(void * item, char * field_name);
 extern char * libr3r_get_user_agent(void);

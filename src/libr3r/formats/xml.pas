@@ -49,11 +49,11 @@ type
 {$IFDEF USE_EXPAT}
     FParser: XML_PARSER;
 {$ENDIF}
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
     procedure Clone(const List: PRList);
-    function GetAbsoluteURL(const URL: String): String;{$IFDEF __GPC__} override;{$ENDIF}
+    function GetAbsoluteURL(const URL: String): String;
     function GetCurrentElement: TXmlElement; virtual;
     function GetParentElement: TXmlElement; virtual;
     procedure SendItem; virtual;
@@ -73,9 +73,8 @@ var
   Encoding: PChar;
 {$ENDIF}
 begin
-{$IFNDEF __GPC__}
   inherited Create;
-{$ENDIF}
+
   New(FElemList, Init);
   FCloned := false;
   FDepth := 0;
@@ -172,9 +171,7 @@ begin
     end;
   end;
 
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 function TXmlFeed.GetAbsoluteURL(const URL: String): String;

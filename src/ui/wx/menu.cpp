@@ -39,7 +39,6 @@ void CreateMenus(wxFrame * parent)
 	wxMenu * menuHelp = new wxMenu;
 	menuHelp->Append(wxID_DONATE, _("&Donate"));
 	menuHelp->AppendSeparator();
-	menuHelp->Append(wxID_CHECK_UPDATES, _("&Check for updates"));
 	menuHelp->Append(wxID_ABOUT, _("&About"));
 
 	/* Attach menus to the menu bar */

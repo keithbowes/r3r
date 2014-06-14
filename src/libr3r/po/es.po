@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-01-30 10:42-0500\n"
+"PO-Revision-Date: 2014-06-14 08:22-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -75,9 +75,6 @@ msgstr "Tener entradas ocultadas no actualizadas por eso número de días"
 msgid "Guess the type of feed"
 msgstr "Conjeturar el tipos de fuentes"
 
-msgid "Check for updates"
-msgstr "Comprobar nueves versiones"
-
 msgid "Enable item filters"
 msgstr "Usar filtras de entradas"
 
@@ -123,9 +120,6 @@ msgstr "Legador de multimedia"
 msgid "Where the program is installed"
 msgstr "Dónde el programa es instalado"
 
-msgid "Update channel"
-msgstr "Canal de actualización"
-
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."
 msgstr ""
@@ -140,12 +134,8 @@ msgstr "Ningunos datos"
 msgid "Couldn't initialize an SSL connection"
 msgstr "No se pudo inicializar una conexión de SSL"
 
-msgid ""
-"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
-"rss"
-msgstr ""
-"http://sourceforge.net/api/file/index/project-id/90897/mtime/desc/limit/20/"
-"rss"
+msgid "https://github.com/keithbowes/r3r/releases.atom"
+msgstr "https://github.com/keithbowes/r3r/releases.atom"
 
 msgid "http://feeds.bbci.co.uk/news/rss.xml"
 msgstr "http://elmundo.feedsportal.com/elmundo/rss/portada.xml"

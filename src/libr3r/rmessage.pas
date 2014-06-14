@@ -5,11 +5,6 @@ interface
 uses
   LibR3R, RSock;
 
-{$IFDEF __GPC__}
-type
-  TObject = Pointer;
-{$ENDIF}
-
 procedure SetMessageObject(const Sender: TLibR3R);
 procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
 
@@ -30,12 +25,10 @@ begin
   begin
     MessageObject.HandleMessage(IsError, MessageName, Extra);
 
-{$IFNDEF __GPC__}
     if Sender is TRSock then
     begin
       (Sender as TRSock).ShouldShow := false;
     end;
-{$ENDIF}
   end;
 end;
 

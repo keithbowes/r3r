@@ -26,14 +26,7 @@ all build: docs
 	$(MV) $(srcdir)/src/ui/$(R3R_UI)/r3r$(TARGETEXEEXT) $(builddir)/r3r-$(R3R_UI)$(TARGETEXEEXT)
 
 _configure:
-ifdef USE_FPC
 	@$(ECHO) $(call checkprog,fpc)
-else
-ifdef USE_GPC
-	@$(ECHO) $(call checkprog,gpc)
-	@$(ECHO) $(call checkprog,gp)
-endif
-endif
 	@$(ECHO) $(call checkunit,SysUtils)
 ifeq ($(DEFS_SOCKETS),SOCKETS_SYNAPSE)
 	@$(ECHO) $(call checkunit,BlckSock)
@@ -223,22 +216,6 @@ dist-src: clean
 		$(XZ) $(XZFLAGS) > r3r-$(VERSION)-src.tar.xz
 	$(RMRF) $(wildcard ../r3r-$(VERSION))
 	$(call sign,r3r-$(VERSION)-src.tar.xz)
-
-dist-deb:
-	cd $(srcdir)/scripts/setup && $(MAKE) dist-deb CITARGET="$(CITARGET)"
-	$(call sign,r3r-$(R3R_UI)$(subst _,-,$(SSL))_$(VERSION)-$(PKGRELEASE)_$(ARCH).deb)
-
-dist-deb-dev:
-	$(MAKE) dist-deb CITARGET="$(MAKE) install-header" R3R_UI=dev
-
-dist-deb-docs:
-	$(MAKE) dist-deb CITARGET="$(MAKE) install-docs" R3R_UI=docs
-
-dist-deb-prog:
-	$(MAKE) dist-deb CITARGET="$(MAKE) install-prog" R3R_UI=$(R3R_UI)
-
-dist-deb-shared:
-	$(MAKE) dist-deb CITARGET="$(MAKE) install-lib" R3R_UI=shared
 
 dist-rpm:
 	cd $(srcdir)/scripts/setup && $(MAKE) dist-rpm CITARGET="$(CITARGET)"

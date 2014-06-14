@@ -26,19 +26,12 @@ uses
   LibIdn2, LibIntl,
 {$ENDIF}
 {$ENDIF}
-  HttpCache, LibR3RStrings, RFilter, RStrings, SysUtils
-{$IFDEF __GPC__}
-  , GPC
-{$ENDIF};
+  HttpCache, LibR3RStrings, RFilter, RStrings, SysUtils;
 
 var
   Item: TFeedItem;
 
 function GetFeed(var Resource: String): TURL;
-{$IFDEF __GPC__}
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
 var
   ExplicitFile: Boolean;
   Prot: String;

@@ -39,7 +39,6 @@ class MenuEvents : public wxWindow
 {
 	public:
 		void OnAbout(wxCommandEvent & event);
-		void OnCheckUpdates(wxCommandEvent & event);
 		void OnDonate(wxCommandEvent & event);
 		void OnLoadSubscriptions(wxCommandEvent & event);
 		void OnOpen(wxCommandEvent & event);

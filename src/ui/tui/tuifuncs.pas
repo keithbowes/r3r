@@ -51,9 +51,6 @@ end;
 {$IFNDEF HAS_SCREENHEIGHTWIDTH}
 function ScreenHeight: word;
 begin
-{$IFDEF __GPC__}
-  ScreenHeight := ScreenSize.Y;
-{$ELSE}
 {$IFDEF USE_NCRT}
   refresh;
   doupdate;
@@ -61,14 +58,10 @@ begin
 {$ELSE}
   ScreenHeight := 25;
 {$ENDIF USE_NCRT}
-{$ENDIF __GPC__}
 end;
 
 function ScreenWidth: word;
 begin
-{$IFDEF __GPC__}
-  ScreenWidth := ScreenSize.X;
-{$ELSE}
 {$IFDEF USE_NCRT}
   refresh;
   doupdate;
@@ -76,7 +69,6 @@ begin
 {$ELSE}
   ScreenWidth := 80;
 {$ENDIF USE_NCRT}
-{$ENDIF __GPC__}
 end;
 {$ENDIF HAS_SCREENHEIGHTWIDTH}
 

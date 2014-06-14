@@ -8,7 +8,7 @@ uses
 type
   TRHtml = class(TLibR3R)
   public
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     destructor Destroy; override;
   end;
 
@@ -110,10 +110,7 @@ end;
 destructor TRHtml.Destroy;
 begin
   WriteLn(HTMLFooter);
-
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 end.

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-26 21:23-0500\n"
-"PO-Revision-Date: 2014-01-14 20:08-0500\n"
+"POT-Creation-Date: 2014-06-14 08:16-0400\n"
+"PO-Revision-Date: 2014-06-14 08:17-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "Language: eo\n"
@@ -41,27 +41,23 @@ msgstr "Pri R3R"
 msgid "Open a file"
 msgstr "Malfermi dosieron"
 
-#: ../feedlist.cpp:21
+#: ../feedlist.cpp:20
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:98
-msgid "An update is available."
-msgstr "Promocio haveblas."
-
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:104
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:116
+#: ../feedlist.cpp:107
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:119
+#: ../feedlist.cpp:110
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:122
+#: ../feedlist.cpp:113
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -94,22 +90,18 @@ msgid "&Donate"
 msgstr "&Monhelpi"
 
 #: ../menu.cpp:42
-msgid "&Check for updates"
-msgstr "&Kontroli promociojn"
-
-#: ../menu.cpp:43
 msgid "&About"
 msgstr "&Pri"
 
-#: ../menu.cpp:47
+#: ../menu.cpp:46
 msgid "&File"
 msgstr "&Dosiero"
 
-#: ../menu.cpp:48
+#: ../menu.cpp:47
 msgid "&Tools"
 msgstr "&Ilrimedoj"
 
-#: ../menu.cpp:49
+#: ../menu.cpp:48
 msgid "&Help"
 msgstr "&Helpo"
 
@@ -134,14 +126,10 @@ msgid "&Guess the file types of feeds"
 msgstr "Diveni &la dosiertipojn de fluoj"
 
 #: ../settings-display.cpp:32
-msgid "&Notify of updates"
-msgstr "&Sciigi pri promocioj min"
-
-#: ../settings-display.cpp:35
 msgid "&Load subscriptions on startup"
 msgstr "Ŝargi &abonojn dum plenumiĝo"
 
-#: ../settings-display.cpp:41
+#: ../settings-display.cpp:38
 msgid "Display"
 msgstr "Montro"
 

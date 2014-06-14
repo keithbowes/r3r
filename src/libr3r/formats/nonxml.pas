@@ -10,7 +10,7 @@ type
   protected
     FTopLink: String;
   public
-    function GetAbsoluteURL(const URL: String): String;{$IFDEF __GPC__} override;{$ENDIF}
+    function GetAbsoluteURL(const URL: String): String;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
   end; 
 

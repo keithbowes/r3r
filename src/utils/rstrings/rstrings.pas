@@ -41,11 +41,7 @@ end;
 
 function StrToPChar(const s: String): PChar;
 begin
-{$IFDEF __GPC__}
-  StrToPChar := String2CString(s);
-{$ELSE}
   StrToPChar := PChar(s);
-{$ENDIF}
 end;
 
 function StrToPCharAlloc(const s: String): PChar;

@@ -14,7 +14,7 @@ type
   public
     ShouldShow: Boolean;
     constructor Create;
-    destructor Destroy; {$IFNDEF __GPC__}override{$ELSE}virtual{$ENDIF};
+    destructor Destroy; override;
     function GetAbsoluteURL(const RelURL, BaseURL: String): String;
     procedure ParseLine(Line: String; var Item: TFeedItem); virtual;
   end; 
@@ -26,18 +26,13 @@ uses
 
 constructor TFeed.Create;
 begin
-{$IFNDEF __GPC__}
   inherited Create;
-{$ENDIF}
-
   ShouldShow := true;
 end;
 
 destructor TFeed.Destroy;
 begin
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure TFeed.ParseLine(Line: String; var Item: TFeedItem);

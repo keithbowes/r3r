@@ -14,17 +14,13 @@ implementation
 
 uses
   RSettings, SysUtils
-{$IFDEF __GPC__}
-  , GPC
+{$IF DEFINED(FPC) and DEFINED(UNIX)}
+  , BaseUnix
 {$ELSE}
-  {$IF DEFINED(FPC) and DEFINED(UNIX)}
-    , BaseUnix
+  {$IFDEF MSWINDOWS}
+    , Windows
   {$ELSE}
-    {$IFDEF MSWINDOWS}
-      , Windows
-    {$ELSE}
-      , Dos
-    {$ENDIF}
+    , Dos
   {$ENDIF}
 {$ENDIF}
 
@@ -60,44 +56,39 @@ var
   Name, Version: String;
   Data: Pointer;
 begin
-{$IFDEF __GPC__}
-  Name := SystemInfo.OSName;
-  Version := SystemInfo.OSRelease;
+{$IFDEF UNIX}
+  GetMem(Data, SizeOf(UtsName));
+  FpUname(PUtsName(Data)^);
+  Name := PUtsName(Data)^.SysName;
+  Version := PUtsName(Data)^.Release;
+  FreeMem(Data);
 {$ELSE}
-  {$IF DEFINED(FPC) and DEFINED(UNIX)}
-    GetMem(Data, SizeOf(UtsName));
-    FpUname(PUtsName(Data)^);
-    Name := PUtsName(Data)^.SysName;
-    Version := PUtsName(Data)^.Release;
-    FreeMem(Data);
-  {$ELSE}
-    {$IFDEF MSWINDOWS}
-      New(LPOSVERSIONINFO(Data));
-      with OSVERSIONINFO(Data^) do
-      begin
-        dwOSVersionInfoSize := SizeOf(OSVERSIONINFO);
-        GetVersionEx(Data);
-        case dwPlatformId of
-          VER_PLATFORM_WIN32_NT:
-          begin
-            Name := 'Windows NT';
-          end;
-          VER_PLATFORM_WIN32_WINDOWS:
-          begin
-            Name := 'Windows';
-          end;
-          VER_PLATFORM_WIN32s:
-          begin
-            Name := 'Win32s';
-          end;
+  {$IFDEF MSWINDOWS}
+    New(LPOSVERSIONINFO(Data));
+    with OSVERSIONINFO(Data^) do
+    begin
+      dwOSVersionInfoSize := SizeOf(OSVERSIONINFO);
+      GetVersionEx(Data);
+      case dwPlatformId of
+        VER_PLATFORM_WIN32_NT:
+        begin
+          Name := 'Windows NT';
         end;
-        WriteStr(Version, dwMajorVersion, '.', dwMinorVersion);
+        VER_PLATFORM_WIN32_WINDOWS:
+        begin
+          Name := 'Windows';
+        end;
+        VER_PLATFORM_WIN32s:
+        begin
+          Name := 'Win32s';
+        end;
       end;
-      Dispose(LPOSVERSIONINFO(Data));
-    {$ELSE}
-      Name := 'DOS';
-      WriteStr(Version, Lo(DosVersion), '.', Hi(DosVersion));
-    {$ENDIF}
+      WriteStr(Version, dwMajorVersion, '.', dwMinorVersion);
+    end;
+    Dispose(LPOSVERSIONINFO(Data));
+  {$ELSE}
+    Name := 'DOS';
+    WriteStr(Version, Lo(DosVersion), '.', Hi(DosVersion));
   {$ENDIF}
 {$ENDIF}
 
@@ -118,7 +109,6 @@ begin
 
   { Interpret escape sequences }
   Ret := StringReplace(Ret, '%a', AppName + '/' + AppVersion, [rfReplaceAll]);
-  Ret := StringReplace(Ret, '%c', '@COMPILER@', [rfReplaceAll]);
 {$IFDEF EXPAT_2_0}
   WriteStr(Rep, XML_ExpatVersion);
   Ret := StringReplace(Ret, '%e', StringReplace(Rep, '_', '/', [rfReplaceAll]), [rfReplaceAll]);
@@ -160,7 +150,6 @@ begin
 {$ELSE}
   Ret := StringReplace(Ret, '%s', 'I', [rfReplaceAll]);
 {$ENDIF}
-  Ret := StringReplace(Ret, '%u', '@UI@', [rfReplaceAll]);
   Ret := StringReplace(Ret, '%w', UserAgentInfo, [rfReplaceAll]);
 
   { Remove unknown formatting chars }

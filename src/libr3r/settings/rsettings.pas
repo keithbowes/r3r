@@ -42,7 +42,7 @@ type
     function IndexOf(const Name: String): TRSetIndex;
   public
     constructor Create;
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
+    destructor Destroy; override;
     procedure Enumerate(var Settings: PRList; var Count: TRSetIndex);
     function GetBoolean(const Setting: String): Boolean;
     function GetInteger(const Setting: String): integer;
@@ -242,7 +242,6 @@ begin
   CheckBoolean('hide-cached-feed-items', 'Display', true, DescHideItems);
   CheckInteger('cache-expiry', 'Display', 90, DescCacheExpiry);
   CheckBoolean('enable-mime-guess', 'Display', false, DescGuess);
-  CheckBoolean('check-for-updates', 'Display', false, DescCheck);
   CheckBoolean('load-subscriptions-on-startup', 'Display', true, LoadSubscriptions);
   CheckBoolean('use-filters', 'Display', true, DescFilters);
 
@@ -254,7 +253,7 @@ begin
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false, DescUseLang);
   CheckString('accept-langs', 'HTTP Headers', '', DescLang);
-  CheckString('user-agent', 'HTTP Headers', '%a (%o; %m; %c; %s; %u) %n %i %e %p %w', DescUserAgent);
+  CheckString('user-agent', 'HTTP Headers', '%a (%o; %m; %s) %n %i %e %p %w', DescUserAgent);
 
   CheckBoolean('ssl-verify', 'SSL', false, DescSSLVerify);
 
@@ -263,7 +262,6 @@ begin
 
   CheckString('installed-prefix', 'System', GetInstalledPrefix, DescPrefix);
   SetProp('installed-prefix', StrToPCharAlloc(GetString('installed-prefix')));
-  CheckString('update-channel', 'System', 'release', DescChannel);
 
   Dispose(mc, Done);
 end;

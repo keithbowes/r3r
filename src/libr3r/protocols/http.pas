@@ -37,7 +37,7 @@ type
     procedure SendHeaders;
     procedure InitCache;
   public
-    constructor Create(Prot, Host, Port, Path, Search: String); {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create(Prot, Host, Port, Path, Search: String);
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     destructor Destroy; override;
@@ -47,9 +47,6 @@ type
 implementation
 
 uses
-{$IFDEF __GPC__}
-  GPC,
-{$ENDIF}
 {$IFDEF USE_ICONV}
   RProp,
 {$ENDIF}
@@ -59,9 +56,6 @@ uses
 const
   Tab = #9;
   WhitespaceChars = #0#8#9#10#13#32;
-{$IFDEF __GPC__}
-  PathDelim = DirSeparator;
-{$ENDIF}
 
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
@@ -357,9 +351,7 @@ begin
   end;
 {$ENDIF}
 
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure THttpSock.Execute;

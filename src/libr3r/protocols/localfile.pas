@@ -11,7 +11,7 @@ type
     FFileHandle: Text;
     FFileName: String;
   public
-    constructor Create(Filename: String); {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create(Filename: String);
     destructor Destroy; override;
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
@@ -32,10 +32,7 @@ end;
 destructor TLocalFile.Destroy;
 begin
   Close(FFileHandle);
-
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure TLocalFile.Execute;
@@ -46,24 +43,11 @@ end;
 
 function TLocalFile.GetLine: String;
 var
-  Res: String{$IFDEF __GPC__}(255){$ENDIF};
+  Res: String;
 begin
   if not Eof(FFileHandle) then
   begin
-{$IFNDEF __GPC__}
     ReadLn(FFileHandle, Res);
-{$ELSE}
-    if not Eoln(FFileHandle) then
-    begin
-      Read(FFileHandle, Res);
-    end
-    else
-    begin
-      ReadLn(FFileHandle, Res);
-    end;
-
-    SetProp('shortstring', Self);
-{$ENDIF}
   end
   else
   begin

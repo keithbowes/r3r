@@ -47,7 +47,6 @@ begin
   DescHideItems := _('Hide cached feed items');
   DescCacheExpiry := _('Keep cached feeds for these amount of days');
   DescGuess := _('Guess the type of feed');
-  DescCheck := _('Check for updates');
   DescFilters := _('Enable item filters');
   LoadSubscriptions := _('Load subscriptions on startup');
   DescProxy := _('Use a proxy?');
@@ -63,7 +62,6 @@ begin
   DescMail := _('Email client');
   DescMedia := _('Media player');
   DescPrefix := _('Where the program is installed');
-  DescChannel := _('Update channel');
 
   NoDir := _('Cannot create directory %s. Perhaps you should try to create it manually.');
 end;

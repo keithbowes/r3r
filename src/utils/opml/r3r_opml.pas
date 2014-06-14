@@ -138,7 +138,7 @@ begin
   begin
     ReadLn(fi, s);
 {$IFDEF USE_EXPAT}
-    XML_Parse(Parser, {$IFNDEF __GPC__}PChar(s){$ELSE}s{$ENDIF}, Length(s), XML_FALSE);
+    XML_Parse(Parser, PChar(s), Length(s), XML_FALSE);
 {$ENDIF}
   end;
 
@@ -164,7 +164,7 @@ begin
   LocaleDir := ExpandFileName(ExtractFileDir(ParamStr(0)) + '/../share/locale');
   setlocale(LC_ALL, '');
   textdomain('r3r_opml');
-  bindtextdomain('r3r_opml', {$IFNDEF __GPC__}PChar(LocaleDir){$ELSE}LocaleDir{$ENDIF});
+  bindtextdomain('r3r_opml', PChar(LocaleDir));
 {$ENDIF}
 
   Opt := ParamStr(1);

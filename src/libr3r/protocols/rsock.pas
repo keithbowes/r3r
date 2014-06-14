@@ -47,7 +47,7 @@ type
     FURL: String;
     ShouldShow: Boolean;
     constructor Create(Host, Port: String);
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ELSE}virtual;{$ENDIF}
+    destructor Destroy; override; 
     procedure DomainSet(Host, Port: String);
     procedure Execute; virtual;
     function GetLine: String; virtual;
@@ -73,8 +73,8 @@ const
 function WriteData(ptr: PChar; size, nmemb: size_t; UserData: Pointer): size_t;
 var
   i, j, k: PtrUInt;
-  s: String{$IFDEF __GPC__}(CURL_BUFFER_SIZE){$ENDIF};
-  t: String{$IFDEF __GPC__}(CURL_MAX_BUFFER_SIZE){$ENDIF};
+  s: String;
+  t: String;
 begin
   WriteStr(s, ptr);
   t := '';
@@ -172,9 +172,7 @@ end;
 
 constructor TRSock.Create(Host, Port: String);
 begin
-{$IFNDEF __GPC__}
   inherited Create;
-{$ENDIF}
 
 {$IFDEF SOCKETS_SYNAPSE}
   Sock := TTCPBlockSocket.Create;
@@ -227,12 +225,10 @@ begin
   FAbstractFeed.Free;
   FAbstractFeed := nil;
 
-{$IFNDEF __GPC__}
   if Self.ClassName <> 'TLocalFile' then
   begin
     inherited Destroy;
   end;
-{$ENDIF}
 end;
 
 procedure TRSock.DomainSet(Host, Port: String);

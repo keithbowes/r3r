@@ -82,10 +82,6 @@ msgstr ""
 msgid "New Value: "
 msgstr ""
 
-#: tuistrings:updateavailable
-msgid "A new version is available from http://sourceforge.net/projects/r3r"
-msgstr ""
-
 #: tuistrings:itemencl
 msgid "Enclosure: "
 msgstr ""

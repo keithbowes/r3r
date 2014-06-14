@@ -32,8 +32,6 @@ var
   SettingToChangeReadLine: String;
   NewValue: String;
 
-  UpdateAvailable: String;
-
   ActivateLink: String;
   NextPrevLink: String;
 
@@ -99,8 +97,6 @@ begin
   SettingToChange := _('Option to change (number or empty to exit): ');
   SettingToChangeReadLine := _('Option to change (select or enter a number; 0 exits): ');
   NewValue := _('New Value: ');
-
-  UpdateAvailable := _('A new version is available from http://sourceforge.net/projects/r3r');
 
   ActivateLink := _(' (Press enter to open in your web browser)');
   NextPrevLink := _(' (Press %1 for the next item or %2 for the previous item)');

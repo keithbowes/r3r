@@ -25,7 +25,7 @@ type
   protected
     function GetFormat: TFeedType; override;
   public
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     procedure SendItem; override;
   end;
@@ -33,10 +33,7 @@ type
 implementation
 
 uses
-  DC, RDate, RStrings, SockConsts
-{$IFDEF __GPC__}
-  , SysUtils
-{$ENDIF};
+  DC, RDate, RStrings, SockConsts;
 
 constructor TAtomFeed.Create;
 begin

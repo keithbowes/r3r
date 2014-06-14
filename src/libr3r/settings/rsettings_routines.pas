@@ -2,14 +2,6 @@ unit RSettings_Routines;
 
 interface
 
-{$IFDEF __GPC__}
-uses
-  GPC;
-
-const
-  PathDelim = DirSeparator;
-{$ENDIF}
-
 function CacheDir: String;
 procedure CheckDir(const Dir: String);
 function DataDir: String;

@@ -38,7 +38,7 @@ type
   public
     Info: PCacheInfo;
     constructor Create(const Url: String);
-    destructor Destroy; {$IFNDEF __GPC__}override;{$ENDIF}
+    destructor Destroy; override;
     function GetCacheHeader: String;
     function GetEncoding: String;
     function GetFeedExtension(FeedType: TFeedType): String;
@@ -56,9 +56,6 @@ var
 implementation
 
 uses
-{$IFDEF __GPC__}
-  GPC,
-{$ENDIF}
   LibR3RStrings, RSettings, RSettings_Routines, StrTok;
 
 function CacheEncode(const URL: String): String;
@@ -111,9 +108,7 @@ begin
   Dispose(FIdsList, Done);
   Dispose(Info);
 
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 function THttpCache.GetCacheHeader: String;

@@ -74,7 +74,6 @@ INSTALLEXE=$(INSTALLPROG) -m 755
 MKDIR=$(INSTALLPROG) -d -m 755
 
 # General prefixes and suffixes
-GPDEXT ?= *.gpd # GNU Pascal
 OEXT ?= .o # .obj in Delphi
 PPUEXT ?= .ppu
 STATICLIBEXT = .a
@@ -191,11 +190,7 @@ DEFS_REGEXP ?= REGEXP_PCRE
 
 EXPAT_VERSION ?= 2.0.1
 
-ifndef USE_GPC
 USE_READLINE ?= 1
-else
-USE_READLINE = 0
-endif
 
 NO_NCURSES ?= 0
 
@@ -285,40 +280,9 @@ ifneq ($(USE_SSL),0)
 override DEFS_EXTRA+=USE_SSL
 endif
 
-ifneq ($(or $(USE_GPC),$(USE_FPC)),)
-COMPILER_OVERRIDE=1
-endif
-
 R3R_UI ?= tui
 
-ifdef COMPILER_OVERRIDE
-ifdef USE_FPC
 PC=$(call programpath,fpc)
-else
-ifdef USE_GPC
-PC=$(call programpath,gp)
-CC=$(call programpath,gpc)
-endif # USE_GPC
-endif # USE_FPC
-else
-PC=$(call programpath,fpc)
-ifeq ($(findstring fpc,$(PC)),fpc)
-USE_FPC=1
-else
-PC=$(call programpath,gp)
-CC=$(call programpath,gpc)
-ifeq ($(findstring gp,$(PC)),gp)
-USE_GPC=1
-else
-$(error No Pascal compiler detected)
-endif # USE_GPC
-endif # USE_FPC
-endif # COMPILER_OVERRIDE
-
-ifdef USE_FPC
-override COMPILER=FPC $(shell $(PC) -iW -P$(CPU_TARGET) -T$(OS_TARGET))
-PLATFORM=$(shell $(PC) -iTP)-$(shell $(PC) -iTO)
-
 DEFFLAG=-d
 PCFLAGS_BASE=-Mclass -Mclassicprocvars -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
 
@@ -354,86 +318,6 @@ override PCFLAGS_BASE+=-T$(OS_TARGET)
 endif
 
 BUILD_SHARED ?= 1
-export USE_FPC
-else
-ifdef USE_GPC
-GPC=$(call programpath,gpc)
-ifneq ($(HOST),)
-override GPC := $(subst gpc,$(HOST)-gpc,$(GPC))
-endif
-override COMPILER=GPC $(shell $(GPC) -dumpversion)
-PLATFORM=$(shell $(GPC) -dumpmachine)
-
-PCFLAGS_BASE=--cstrings-as-strings --no-write-clip-strings \
-						 --extended-syntax \
-						 --pointer-checking --stack-checking \
-						 --unit-destination-path=$(builddir)\
-						 -DFree=Destroy -DPtrUInt=PtrWord \
-						 -DWideChar=Chr -DTrimRight=wTrimRight\
-						 -DNO_SUPPORTS_UNICODE $(LDFLAGS)
-DEFFLAG=-D
-DEFS_SETTINGS ?= SETTINGS_LIBINI
-DEFS_SOCKETS ?= SOCKETS_LIBCURL
-DIRFLAG=--unit-path=
-PPUEXT=.gpi
-
-ifdef DEBUG
-PCFLAGS_DEBUG=--progress-messages -ggdb3
-else
-PCFLAGS_DEBUG=--no-warning
-endif # DEBUG
-
-# Let's get the proper LDFLAGS
-ifeq ($(DEFS_SOCKETS),SOCKETS_LIBCURL)
-override LDFLAGS+=-lcurl
-endif
-
-ifneq ($(SETTINGS_LIBINI),0)
-override LDFLAGS+=-lini
-endif
-
-ifneq ($(USE_EXPAT),0)
-ifeq ($(ExpatLib),)
-override LDFLAGS+=-lexpat
-else
-override LDFLAGS+=-l$(ExpatLib)
-endif
-endif
-
-# glibc's implementation of iconv seems to not work well in GPC
-ifneq ($(USE_ICONV),0)
-$(warning Using libiconv. You may need to define USE_ICONV=0 or install libiconv.)
-override DEFS_EXTRA+=USE_LIBICONV
-ifndef forDOS
-override LDFLAGS+=-liconv
-else
-override LDFLAGS+=-llibiconv
-endif
-endif
-
-ifneq ($(USE_IDN),0)
-override LDFLAGS+=-lidn
-endif
-
-ifneq ($(USE_LIBIDN2),0)
-override LDFLAGS+=-lidn2
-endif
-
-ifneq ($(USE_NLS),0)
-override LDFLAGS+=-lintl
-endif
-
-ifneq ($(USE_PCRE),0)
-ifeq ($(PcreLib),)
-override LDFLAGS+=-lpcre
-else
-override LDFLAGS+=-l$(PcreLib)
-endif
-endif
-
-export USE_GPC
-endif # USE_GPC
-endif # USE_FPC
 
 ifeq ($(DEFS_SETTINGS),SETTINGS_LIBINI)
 override DEFS_EXTRA+=INI_ADD_EXTRAS
@@ -444,9 +328,14 @@ HOST ?= $(PLATFORM)
 ifneq ($(HOST),)
 CPU_TARGET ?= $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 1)
 OS_TARGET ?= $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 3)
-ifeq ($(OS_TARGET),)
-override OS_TARGET = $(shell $(ECHO) $(HOST) | $(CUT) -d '-' -f 2)
 endif
+
+ifeq ($(CPU_TARGET),)
+override CPU_TARGET = $(shell $(PC) -iTP)
+endif
+
+ifeq ($(OS_TARGET),)
+override OS_TARGET = $(shell $(PC) -iTO)
 endif
 
 ARCH ?= $(CPU_TARGET)
@@ -466,7 +355,6 @@ endif
 all: _all
 
 _clean:
-	$(RM) $(wildcard *$(GPDEXT))
 	$(RM) $(wildcard *$(OEXT))
 	$(RM) $(wildcard *$(PPUEXT))
 	$(RM) $(wildcard *$(STATICLIBEXT))

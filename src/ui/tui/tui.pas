@@ -43,7 +43,6 @@ type
     procedure DrawUAString;
     procedure InitWindowDims;
   protected
-    procedure NotifyUpdate; override;
     procedure ShowHelp;
     procedure GoURI;
     function QueryItemNumber: Boolean;
@@ -59,7 +58,7 @@ type
     procedure AddDeleteSubscription;
     procedure PrintFeedItems;
   public
-    constructor Create; {$IFDEF __GPC__}override;{$ENDIF}
+    constructor Create;
     destructor Destroy; override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
     procedure RetrieveFeed(Resource: String); override;
@@ -234,10 +233,6 @@ begin
 {$IFDEF USE_ICONV}
   Settings.RegisterString('display-encoding', 'Display', 'UTF-8', DescEnc);
 {$ENDIF}
-
-{$IFDEF __GPC__}
-  CRTInit;
-{$ENDIF __GPC__}
 
   Draw;
   SetNewTitle(AppName);
@@ -497,9 +492,7 @@ begin
     EndWin;
   end;
 
-{$IFNDEF __GPC__}
   inherited Destroy;
-{$ENDIF}
 end;
 
 procedure TTui.HandleMessage(IsError: Boolean; MessageName, Extra: String);
@@ -561,12 +554,6 @@ begin
     Redraw;
     FPrintItems := false;
   end;
-end;
-
-procedure TTui.NotifyUpdate;
-begin
-  DrawStatus;
-  TuiWrite(UpdateAvailable);
 end;
 
 procedure TTui.ShowHelp;
@@ -814,9 +801,7 @@ begin
     end
     else
     begin
-{$IFNDEF __GPC__}
       Link := '"' + Link + '"';
-{$ENDIF}
     end;
 
     { Windows puts the path in quotes, which Exec() doesn't like }

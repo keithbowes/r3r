@@ -92,14 +92,6 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 	wxMessageBox(wxString(message_name, wxConvUTF8), wxString(extra,wxConvUTF8), wxOK | error_type);
 }
 
-void update_available()
-{
-	if (wxMessageBox(_("An update is available."), wxT(""), wxOK | wxCANCEL) == wxOK)
-	{
-		GoBrowser((char *) "http://sourceforge.net/projects/r3r");
-	}
-}
-
 void CreateFeedList(wxPanel * parent)
 {
 	InitGettext();
@@ -126,7 +118,6 @@ void CreateFeedList(wxPanel * parent)
 	rlib = libr3r_create();
 	libr3r_on_item_parsed(rlib, &item_parsed);
 	libr3r_on_message_received(rlib, &message_received);
-	libr3r_on_update(rlib, &update_available);
 
 	feedList->SetClientData(rlib);
 }

@@ -334,7 +334,7 @@ var
   Res: String;
 begin
   Res := DateTimeToStr(TS / SecondsPerDay + EncodeDate(1970, 1, 1));
-  {$IFNDEF __GPC__}FormatSettings.{$ENDIF}DateSeparator := '-';
+  FormatSettings.DateSeparator := '-';
   DT := StrToDateTime(Res);
   Res := FormatDateTime('YYYY-MM-dd"T"hh:nn:ss', DT);
   Res := TimeToLongDate(ShortDateToTime(Res));

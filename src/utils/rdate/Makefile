@@ -5,5 +5,5 @@ include ../../../scripts/common.make
 all: libr3rstrings rdate$(PPUEXT)
 
 libr3rstrings:
-	cd ../../libr3r && $(MAKE) info.pas rupdate.pas
+	cd ../../libr3r && $(MAKE) info.pas
 	cd ../../libr3r/po && $(MAKE)
