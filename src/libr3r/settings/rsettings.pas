@@ -253,7 +253,7 @@ begin
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);
   CheckBoolean('use-custom-accept-langs', 'HTTP Headers', false, DescUseLang);
   CheckString('accept-langs', 'HTTP Headers', '', DescLang);
-  CheckString('user-agent', 'HTTP Headers', '%a (%o; %m; %s) %n %i %e %p %w', DescUserAgent);
+  CheckString('user-agent', 'HTTP Headers', '%a (%o; %m; %s) %n %l %i %e', DescUserAgent);
 
   CheckBoolean('ssl-verify', 'SSL', false, DescSSLVerify);
 

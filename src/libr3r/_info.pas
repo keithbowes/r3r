@@ -30,6 +30,9 @@ uses
 
 {$IFDEF SOCKETS_SYNAPSE}
   , BlckSock
+{$IFDEF USE_SSL}
+  , DynLibs, ssl_openssl_lib
+{$ENDIF}
 {$ENDIF}
   
 {$IFDEF SOCKETS_LIBCURL}
@@ -51,9 +54,8 @@ uses
 var
   UserAgentInfo: String;
 
-function Os: String;
+procedure GetOS(var Name, Version: String);
 var
-  Name, Version: String;
   Data: Pointer;
 begin
 {$IFDEF UNIX}
@@ -91,8 +93,6 @@ begin
     WriteStr(Version, Lo(DosVersion), '.', Hi(DosVersion));
   {$ENDIF}
 {$ENDIF}
-
-  OS := Name + ' ' + Version;
 end;
 
 procedure SetUserAgentInfo(const uainfo: String);
@@ -101,7 +101,22 @@ begin
 end;
 
 function UserAgent: String;
+{$IF DEFINED (SOCKETS_SYNAPSE) and DEFINED(USE_SSL)}
+type
+  ProcTempl = function(Typ: integer): PChar; cdecl;
+const
+  SSLEAY_VERSION = 0;
+  SSLEAY_CFLAGS = 2;
+  SSLEAY_BUILT_ON = 3;
+  SSLEAY_PLATFORM = 4;
+  SSLEAY_DIR = 5;
 var
+  Lib: TLibHandle;
+  Proc: ProcTempl;
+{$ELSE}
+var
+{$ENDIF}
+  OSName, OSVersion: String;
   Rep: String;
   Ret: String;
 begin
@@ -123,6 +138,25 @@ begin
 {$ENDIF}
   Ret := StringReplace(Ret, '%m', '@CPU@', [rfReplaceAll]);
 {$IFDEF SOCKETS_SYNAPSE}
+{$IFDEF USE_SSL}
+  Lib := LoadLibrary(DLLUtilName);
+  if Lib <> NilHandle then
+  begin
+    Proc := ProcTempl(GetProcAddress(Lib, 'SSLeay_version'));
+    if Assigned(Proc) then
+    begin
+      Rep := Proc(SSLEAY_VERSION);
+
+      Rep := StringReplace(Rep, ' ', '/', []);
+      Rep := StringReplace(Rep, ' ', ' (', []);
+      Rep := Rep + ')';
+      Ret := StringReplace(Ret, '%l', Rep, [rfReplaceAll]);
+    end;
+
+    FreeLibrary(Lib);
+  end;
+
+{$ENDIF}
   Ret := StringReplace(Ret, '%n', ' Synapse/' + SynapseRelease, [rfReplaceAll]);
 {$ELSE}
 {$IFDEF SOCKETS_LIBCURL}
@@ -132,7 +166,9 @@ begin
   Ret := StringReplace(Ret, '%n', '', [rfReplaceAll]);
 {$ENDIF}
 {$ENDIF}
-  Ret := StringReplace(Ret, '%o', OS, [rfReplaceAll]);
+  GetOS(OSName, OSVersion);
+  Ret := StringReplace(Ret, '%o', OSName, [rfReplaceAll]);
+  Ret := StringReplace(Ret, '%O', OSName + ' ' + OSVersion, [rfReplaceAll]);
 {$IFDEF USE_PCRE}
   WriteStr(Rep, 'PCRE/', PCRE_MAJOR, '.', PCRE_MINOR, '.', PCRE_PRERELEASE, ' (', PCRE_DATE, ')');
   Rep := StringReplace(Rep, '. ', ' ', [rfReplaceAll]);

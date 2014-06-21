@@ -282,7 +282,8 @@ endif
 
 R3R_UI ?= tui
 
-PC=$(call programpath,fpc)
+FPC ?= $(call programpath,fpc)
+PC=$(FPC)
 DEFFLAG=-d
 PCFLAGS_BASE=-Mclass -Mclassicprocvars -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
 
