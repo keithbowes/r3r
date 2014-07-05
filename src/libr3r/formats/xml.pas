@@ -248,7 +248,10 @@ begin
     begin
       CallItemCallBack(FCurrentItem);
     end;
-    PXmlElement(FElemList^.GetNth(FElemList^.Count ))^.Name := '';
+    if FElemList^.Count > 0 then
+    begin
+      PXmlElement(FElemList^.GetNth(FElemList^.Count))^.Name := '';
+    end;
   end;
 end;
 
