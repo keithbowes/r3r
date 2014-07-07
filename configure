@@ -54,6 +54,8 @@ do
       echo "DEFS_SETTINGS=$st" >> config.make;;
     --with-sockets*)
       case $val in
+        libcurl)
+            st=SOCKETS_LIBCURL;;
         none)
           st=SOCKETS_NONE;;
         synapse)

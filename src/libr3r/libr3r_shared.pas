@@ -10,7 +10,7 @@ const
 
 type
   TMessageProc = procedure(IsError: byte; MessageName, Extra: PChar); cdecl;
-  TParsedProc = procedure(Item: Pointer); cdecl;
+  TParsedProc = procedure(Item: Pointer; Data: Pointer); cdecl;
 
   TLibR3R_Shared = class(TLibR3R)
   private
@@ -26,9 +26,9 @@ type
 var
   CurProc: TParsedProc;
 
-procedure ItemReceived(const Item: TFeedItem);
+procedure ItemReceived(const Item: TFeedItem; const Data: Pointer);
 begin
-  CurProc(Item);
+  CurProc(Item, Data);
 end;
 
 { Implemetation of the helper class }
@@ -59,9 +59,9 @@ begin
   TLibR3R_Shared(Lib).RetrieveFeed(Res);
 end;
 
-procedure libr3r_on_item_parsed(Lib: Pointer; Proc: TParsedProc); cdecl;
+procedure libr3r_on_item_parsed(Lib: Pointer; Proc: TParsedProc; Data: Pointer); cdecl;
 begin
-  TLibR3R_Shared(Lib).RegisterItemCallback(ItemReceived);
+  TLibR3R_Shared(Lib).RegisterItemCallback(ItemReceived, Data);
   CurProc := Proc;
 end;
 

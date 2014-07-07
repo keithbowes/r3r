@@ -20,10 +20,10 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
 	wxBoxSizer * vbox = new wxBoxSizer(wxVERTICAL);
 	panel->SetSizer(vbox);
 
-#ifdef wxUSE_PNG
+#if wxUSE_LIBPNG
 	wxString path, prefix;
 	wxChar sep = wxFileName::GetPathSeparator();
-	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * MAX_PATH);
+	wxChar * spath = (wxChar *) malloc(sizeof(wxChar) * FILENAME_MAX);
 	wxStrcpy(spath, wxString(sep));
 	wxStrcat(spath, wxT("share"));
 	wxStrcat(spath, wxString(sep));

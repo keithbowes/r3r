@@ -6,9 +6,14 @@ uses
   FeedItem;
 
 type
-  TItemCallback = procedure(const Item: TFeedItem);
+  PItemCallbackInfo = ^TItemCallbackInfo;
+  TItemCallback = procedure(const Item: TFeedItem; const Data: Pointer);
+  TItemCallbackInfo = record
+    Callback: TItemCallback;
+    Data: Pointer;
+  end;
 
-procedure RegisterItemCallback(const cb: TItemCallback);
+procedure RegisterItemCallback(const cb: TItemCallback; const Data: Pointer);
 procedure FreeItemCallback;
 procedure CallItemCallback(Item: TFeedItem);
 
@@ -20,24 +25,40 @@ implementation
 uses
   HttpCache, RFilter, RProp, RSettings;
 
-procedure RegisterItemCallback(const cb: TItemCallback);
+procedure RegisterItemCallback(const cb: TItemCallback; const Data: Pointer);
+var
+  ci: PItemCallbackInfo;
 begin
-  SetProp('item-callback', @cb);
+  if Assigned(GetProp('item-callback')) then
+  begin
+    FreeItemCallback;
+  end;
+
+  New(ci);
+  ci^.Callback := cb;
+  ci^.Data := Data;
+  SetProp('item-callback', ci);
 end;
 
 procedure FreeItemCallback;
+var
+  ci: PItemCallbackInfo;
 begin
-  RemoveProp('item-callback');
+  ci := GetProp('item-callback');
+  if Assigned(ci) then
+  begin
+    Dispose(ci);
+  end;
 end;
 
 procedure CallItemCallback(Item: TFeedItem);
 var
-  cb: TItemCallback;
+  ci: PItemCallbackInfo;
   HideItems: Boolean;
   ShouldShow: Boolean = true;
 begin
-  cb := TItemCallback(GetProp('item-callback'));
-  if Assigned(cb) then
+  ci := GetProp('item-callback');
+  if Assigned(ci) then
   begin
     if Settings.GetBoolean('use-filters') then
     begin
@@ -65,7 +86,7 @@ begin
     if ShouldShow then
     begin
       Item.Translate;
-      cb(Item);
+      ci^.Callback(Item, ci^.Data);
       Item.Clear;
     end
   end

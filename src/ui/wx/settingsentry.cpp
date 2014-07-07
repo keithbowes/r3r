@@ -14,7 +14,7 @@ SettingsEntry::SettingsEntry(wxWindow * parent, char * setting_name) :
 	switch (type)
 	{
 		case TYPE_INTEGER:
-			text = (char *) malloc(257);
+			text = (char *) malloc(6);
 			sprintf(text, "%ld", (long) value);
 			break;
 		case TYPE_STRING:

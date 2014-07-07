@@ -26,7 +26,7 @@ void normalize_field_value(char ** field_value)
 	}
 }
 
-void item_parsed(void * item)
+void item_parsed(void * item, void * data)
 {
 	static long itemIndex = 0;
 	char * created = (char *) libr3r_get_item_field(item, (char *) "created");
@@ -116,7 +116,7 @@ void CreateFeedList(wxPanel * parent)
 	sizer->Add(feedList, 2, wxEXPAND, 10);
 
 	rlib = libr3r_create();
-	libr3r_on_item_parsed(rlib, &item_parsed);
+	libr3r_on_item_parsed(rlib, &item_parsed, NULL);
 	libr3r_on_message_received(rlib, &message_received);
 
 	feedList->SetClientData(rlib);

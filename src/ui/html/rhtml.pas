@@ -27,7 +27,7 @@ const
   Sep2 = ':';
   DescPre = ': ';
 
-procedure RetrieveItem(const Item: TFeedItem);
+procedure RetrieveItem(const Item: TFeedItem; const Data: Pointer);
 begin
   Write(PreElement);
 
@@ -82,10 +82,10 @@ end;
 
 constructor TRHtml.Create;
 var
-  i: cardinal;
+  i: PtrUInt;
 begin
   inherited Create;
-  RegisterItemCallback(RetrieveItem);
+  RegisterItemCallback(RetrieveItem, nil);
 
   WriteLn(HTMLProlog);
   WriteLn(StringReplace(HTMLHeader, '%ua', UserAgent, [rfReplaceAll]));

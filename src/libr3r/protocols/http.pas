@@ -60,11 +60,6 @@ const
 type
   THeaderState = (hsUnstarted, hsStarted, hsFinished);
 
-function CreateCache(const Path: String): THttpCache;
-begin
-  CreateCache := THttpCache.Create(Path);
-end;
-
 function GetLocalFile(const Resource: String): TLocalFile;
 begin
   GetLocalFile := TLocalFile.Create(Resource);
@@ -429,7 +424,7 @@ begin
   end;
 
   FullPath := CacheEncode(FullPath);
-  Cache := CreateCache(FullPath);
+  Cache := THttpCache.Create(FullPath);
 end;
 
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;

@@ -112,24 +112,16 @@ end;
 {$calling default}
 {$ENDIF}
 
-var
-  obj: TTui;
-
-function CreateFeedItem: TFeedItem;
-begin
-  CreateFeedItem := TFeedItem.Create;
-end;
-
-procedure ItemReceived(const Item: TFeedItem);
+procedure ItemReceived(const Item: TFeedItem; const Data: Pointer);
 var
   AItem: TFeedItem;
   Items: PtrUInt;
   LenStr: String;
   Title: String;
 begin
-  with obj do
+  with TTui(Data) do
   begin
-    AItem := CreateFeedItem;
+    AItem := TFeedItem.Create;
     AItem.Title := Item.TitleText;
     AItem.Subject := Item.Subject;
     AItem.Created := Item.Created;
@@ -224,9 +216,8 @@ begin
   FPrintItems := false;
   FScrollingUp := false;
 
-  RegisterItemCallback(ItemReceived);
+  RegisterItemCallback(ItemReceived, Self);
   SetUserAgentInfo(GetUserAgentInfo);
-  obj := Self;
   Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
   Settings.RegisterBoolean('wrap-descriptions', 'Display', true, WrapDescriptions);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);

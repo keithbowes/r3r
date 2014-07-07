@@ -28,7 +28,7 @@ type
     destructor Destroy; override;
     procedure RetrieveFeed(Resource: String); virtual;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
-    procedure RegisterItemCallback(const cb: TItemCallback);
+    procedure RegisterItemCallback(const cb: TItemCallback; const Data: Pointer);
   end;
 
 var
@@ -77,6 +77,7 @@ end;
 
 destructor TLibR3R.Destroy;
 begin
+  FreeItemCallback;
   inherited Destroy;
 end;
 
@@ -111,9 +112,9 @@ procedure TLibR3R.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
 end;
 
-procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback);
+procedure TLibR3R.RegisterItemCallback(const cb: TItemCallback; const Data: Pointer);
 begin
-  ItemCallbacks.RegisterItemCallback(cb);
+  ItemCallbacks.RegisterItemCallback(cb, Data);
 end;
 
 initialization

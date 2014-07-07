@@ -200,7 +200,7 @@ begin
         TypeString:
         begin
           StrVal := GetString(SettingName);
-          SettingValue := StrToPChar(StrVal);
+          SettingValue := StrToPCharAlloc(StrVal);
         end;
       end;
     end;

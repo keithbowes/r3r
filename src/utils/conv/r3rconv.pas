@@ -11,7 +11,7 @@ var
   IsTopElem: Boolean;
   OutType: String;
 
-procedure ItemReceived(const Item: TFeedItem);
+procedure ItemReceived(const Item: TFeedItem; const Data: Pointer);
 begin
   if OutType = 'esf' then
   begin
@@ -90,7 +90,7 @@ begin
   if (InFile <> '') and (OutFile <> '') then
   begin
     Feed := TLibR3R.Create;
-    Feed.RegisterItemCallback(ItemReceived);
+    Feed.RegisterItemCallback(ItemReceived, nil);
     Feed.RetrieveFeed(InFile);
     Feed.Free;
 

@@ -18,9 +18,20 @@ void FeedListView::ResizeColumns()
 	{
 		GetClientSize(&w, &h);
 
-		SetColumnWidth(0, w / 5);
-		SetColumnWidth(1, w / 3);
-		SetColumnWidth(2, w / 5);
-		SetColumnWidth(3, w / 4);
+		if (w > 4)
+		{
+			int wdate, wfeed, witem, wsubj;
+			wdate = w / 4;
+			wfeed = w / 5;
+			wsubj = w / 5;
+			witem = w - (wdate + wfeed + wsubj);
+
+			SetColumnWidth(0, wfeed);
+			SetColumnWidth(1, witem);
+			SetColumnWidth(2, wsubj);
+			SetColumnWidth(3, wdate);
+
+			FitInside();
+		}
 	}
 }
