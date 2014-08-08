@@ -149,7 +149,10 @@ begin
 
       Rep := StringReplace(Rep, ' ', '/', []);
       Rep := StringReplace(Rep, ' ', ' (', []);
-      Rep := Rep + ')';
+      if Pos('(', Rep) <> 0 then
+      begin
+        Rep := Rep + ')';
+      end;
       Ret := StringReplace(Ret, '%l', Rep, [rfReplaceAll]);
     end;
 
