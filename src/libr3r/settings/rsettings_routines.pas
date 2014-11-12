@@ -28,13 +28,26 @@ begin
   if Ret <> '' then
   begin
     CheckDir(Ret);
-    Ret := Ret + PathDelim + GetApplicationName + PathDelim;
+    Ret := Ret + PathDelim + GetApplicationName;
   end
   else
   begin
-    Ret := SettingsDir;
+    Ret := GetEnv('HOME');
+    if Ret <> '' then
+    begin
+      Ret := Ret + PathDelim + '.local';
+      CheckDir(Ret);
+      Ret := Ret + PathDelim + 'share';
+      CheckDir(Ret);
+      Ret := Ret + PathDelim + GetApplicationName;
+    end
+    else
+    begin
+      Ret := SettingsDir;
+    end
   end;
 
+  Ret := Ret + PathDelim;
   CheckDir(Ret);
   DataDir := Ret;
 end;
@@ -52,7 +65,18 @@ begin
   end
   else
   begin
-    Ret := SettingsDir + 'cache';
+    Ret := GetEnv('HOME');
+    if Ret <> '' then
+    begin
+      Ret := Ret + PathDelim + '.cache';
+      CheckDir(Ret);
+      Ret := Ret + PathDelim + GetApplicationName;
+      CheckDir(Ret);
+    end
+    else
+    begin
+      Ret := SettingsDir + 'cache';
+    end
   end;
 
   Ret := Ret + PathDelim;
