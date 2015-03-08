@@ -55,7 +55,7 @@ WinVersionTooLowError=Tiu programo bezonas je %1 eldono %2 aŭ poste.
 WinVersionTooHighError=Tiu programo ne povas instaliĝi de %1 eldono %2 aŭ poste.
 AdminPrivilegesRequired=Vi devas ensaluti kiel administranton dum instali tiun programon.
 PowerUserPrivilegesRequired=Vi devas ensaluti kiel administranton aŭ kiel membron de la grupon "Power Users" dum instali tiun programon.
-SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Rezigni" por haltigi.
+SetupAppRunningError=Instalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazojn de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Rezigni" por ĉesigi.
 UninstallAppRunningError=Malinstalilo malkovris ke %1 estas plenumanta.%n%nBonvolu fermi ĉiujn okazoj de ĝi nun, tiam klaki "Bone" por daŭrigi, aŭ "Rezigni" por Ĉesi.
 
 ; *** Misc. errors
@@ -72,7 +72,7 @@ AboutSetupNote=
 TranslatorNote=Tradukis de celsus.software@gmail.com.
 
 ; *** Buttons
-ButtonBack=< &Antaŭen
+ButtonBack=< &Malantaŭen
 ButtonNext=&Sekva >
 ButtonInstall=&Instali
 ButtonOK=&Bone
@@ -91,7 +91,7 @@ SelectLanguageTitle=Elekti Instalan Lingvon
 SelectLanguageLabel=Elekti la lingvon por uzi dum la instalado:
 
 ; *** Common wizard text
-ClickNext=Klaki "Sekva" por daŭrigi, aŭ "Rezigni" por haltigi.
+ClickNext=Klaki sur "Sekva" por daŭrigi, aŭ "Rezigni" por ĉesigi.
 BeveledLabel=
 BrowseDialogTitle=Foliumi Por Dosierujo
 BrowseDialogLabel=Elektu dosierujon el la listo suba, tiam klaku OK.
@@ -155,7 +155,7 @@ DirDoesntExist=La dosierujo:%n%n%1%n%nne ekzistas. Ĉu volas vi, ke la dosierujo
 ; *** "Select Components" wizard page
 WizardSelectComponents=Elekti Komponantojn
 SelectComponentsDesc=Kiuj komponantoj instaliĝos?
-SelectComponentsLabel2=Elekti la komponantojn, kiujn vi volas instali; malelekti la komponantojn, kiujn vi ne volas instali. Klaki "Sekva" kiam vi esta preta por daŭrigi.
+SelectComponentsLabel2=Elekti la komponantojn, kiujn vi volas instali; malelekti la komponantojn, kiujn vi ne volas instali. Klaki sur "Sekva" kiam vi esta preta por daŭrigi.
 FullInstallation=Kompleta instalaĵo
 ; if possible don't translate 'Compact' as 'Minimala  (I mean 'Minimala  in your language)
 CompactInstallation=Kompakta instalaĵo
@@ -185,8 +185,8 @@ NoProgramGroupCheck2=&Malfari kreadon de starto-menua dosierujo
 ; *** "Ready to Install" wizard page
 WizardReady=Preta por instali
 ReadyLabel1=Instalilo estas nun preta por komenci instali je [name] en via komputilo.
-ReadyLabel2a=Klaki "Instali" por daŭrigi la instalilon, aŭ klaki "Antaŭen" se vi volas inspekti aŭ ŝanĝi iun agordaĵon.
-ReadyLabel2b=Klaki "Instali" por daŭrigi la instalilon.
+ReadyLabel2a=Klaki sur "Instali" por daŭrigi la instalilon, aŭ klaki "Antaŭen" se vi volas inspekti aŭ ŝanĝi iun agordaĵon.
+ReadyLabel2b=Klaki sur "Instali" por daŭrigi la instalilon.
 ReadyMemoUserInfo=Uzanto-informoj:
 ReadyMemoDir=Elektita loko:
 ReadyMemoType=Instalo-tipo:
@@ -199,11 +199,11 @@ WizardPreparing=Pretigi la instalilon
 PreparingDesc=Instalilo pretigas instali je [name] en via komputilo.
 PreviousInstallNotCompleted=La instalado/malinstalado de antaŭa programo ne finis. Vi bezonos restartigi vian komputilon por fini tiun instaladon.%n%nPost restartigo, la instalado de [name] finiĝos.
 CannotContinue=Instalilo ne povas daŭrigi. Bonvolu klaki "Rezigni" por halti.
-ApplicationsFound=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn.
-ApplicationsFound2=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate haltigi tiujn programojn. Post instalado la instalilo provos restarigi la programojn.
-CloseApplications=&Aŭtomate haltigi la programojn
-DontCloseApplications=&Ne haltigi la programojn
-ErrorCloseApplications=La instalilo ne povis haltigi ĉiujn programojn. Estas rekomendite, ke vi haltigas la programojn , kiuj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo antaŭ ol vi daŭrigas.
+ApplicationsFound=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate ĉesigi tiujn programojn.
+ApplicationsFound2=La jenaj programoj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo. Estas rekomendinde permesi al la instalilo aŭtomate ĉesigi tiujn programojn. Post instalado la instalilo provos restarigi la programojn.
+CloseApplications=&Aŭtomate ĉesigi la programojn
+DontCloseApplications=&Ne ĉesigi la programojn
+ErrorCloseApplications=La instalilo ne povis ĉesigi ĉiujn programojn. Estas rekomendite, ke vi ĉesigas la programojn , kiuj uzas dosierojn, kiuj devas esti ĝisdatigitaj de la instalilo antaŭ ol vi daŭrigas.
 
 ; *** "Installing" wizard page
 WizardInstalling=Instalanta
@@ -213,7 +213,7 @@ InstallingLabel=Bonvolu atendi dum Instalilo instalas je [name] en via komputilo
 FinishedHeadingLabel=Finis la instaladon de [name]
 FinishedLabelNoIcons=Finis la instaladon de [name] en via komputilo.
 FinishedLabel=Finis la instaladon de [name] en via komputilo. La programo povas plenumiĝos per klakado de la instalitaj piktogramoj.
-ClickFinish=Klaki "Fini" por fini la instaladon.
+ClickFinish=Klaki sur "Fini" por fini la instaladon.
 FinishedRestartLabel=Por finigi la instaladon de [name], Instalilo devas restartigi vian komputilon. Ĉu volas vi restartigi nun?
 FinishedRestartMessage=Por finigi la instaladon de [name], Instalilo devas restartigi vian komputilon.%n%nĈu volas vi restartigi nun?
 ShowReadmeCheck=Jes, mi volas legi la dosieron README.
@@ -233,10 +233,10 @@ SelectDirectoryLabel=Bonvolu difini la lokon de la sekva disko.
 
 ; *** Installation phase messages
 SetupAborted=Instalilo ne finis.%n%nBonvolu korekti la problemon kaj refoje provi la instalilon.
-EntryAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio, aŭ "Abort" por haltigi la instaladon.
+EntryAbortRetryIgnore=Klaki sur "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio, aŭ "Abort" por ĉesigi la instaladon.
 
 ; *** Installation status messages
-StatusClosingApplications=Haltiganta programojn...
+StatusClosingApplications=Ĉesiganta programojn...
 StatusCreateDirs=Kreanta la dosierujojn...
 StatusExtractFiles=Elpakanta la dosierojn...
 StatusCreateIcons=Kreanta la simbolajn ligilojn...
@@ -264,11 +264,11 @@ ErrorRegWriteKey=Eraro skribanta registrejan ŝlosilon:%n%1\%2
 ErrorIniEntry=Eraro krei INI-enskribon en la dosiero "%1".
 
 ; *** File copying errors
-FileAbortRetryIgnore=Klaki "Retry" por provi denove, "Ignore" por preterlasi la dosieron (malrekomendita), aŭ "Abort" por haltigi la instaladon.
-FileAbortRetryIgnore2=Klaki "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio (malrekomendita), aŭ "Abort" por haltigi la instaladon.
+FileAbortRetryIgnore=Klaki sur "Retry" por provi denove, "Ignore" por preterlasi la dosieron (malrekomendita), aŭ "Abort" por ĉesigi la instaladon.
+FileAbortRetryIgnore2=Klaki sur "Retry" por provi denove, "Ignore" por daŭrigi malgraŭ tio (malrekomendita), aŭ "Abort" por ĉesigi la instaladon.
 SourceIsCorrupted=La dosiero estas korupta
 SourceDoesntExist=La dosiero "%1" ne ekzistas
-ExistingFileReadOnly=La jama dosiero estas nurlega.%n%nKlaki "Retry" por forigi tiun atributon kaj provi denove, "Ignore" por preterlasi la dosieron, aŭ "Abort" por haltigi la instaladon.
+ExistingFileReadOnly=La jama dosiero estas nurlega.%n%nKlaki sur "Retry" por forigi tiun atributon kaj provi denove, "Ignore" por preterlasi la dosieron, aŭ "Abort" por ĉesigi la instaladon.
 ErrorReadingExistingDest=Eraro okazis dum legi la jaman dosieron:
 FileExists=La dosiero jam ekzistas.%n%nĈu vi volas, ke la instalalilo anstataŭigi ĝin?
 ExistingFileNewer=La jama dosiero estas pli nova ol la instalota. Oni rekomendas, ke vi tenas la jaman dosieron.%n%nĈu volas vi teni la jaman dosieron?
