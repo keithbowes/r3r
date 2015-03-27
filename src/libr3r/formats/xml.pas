@@ -35,11 +35,11 @@ type
 
   TXmlFeed = class(TFeed)
   private
-    FCloned: Boolean;
     FNthElem: cardinal;
     FLastBase: String;
     FLastLang: String;
   public
+    FCloned: Boolean;
     FCurrentItem: TFeedItem;
     FDepth: cardinal;
     FElemList: PRList;

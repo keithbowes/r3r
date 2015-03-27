@@ -29,11 +29,6 @@ uses
   Atom, DC, Mod_Enclosure, RDate,
   RStrings, SockConsts, SysUtils;
 
-function GetAtomFeed: TAtomFeed;
-begin
-  GetAtomFeed := TAtomFeed.Create;
-end;
-
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
   Elem, Parent: TXmlElement;
@@ -72,13 +67,13 @@ var
   Idx: PtrUInt;
 begin
   Elem := GetCurrentElement;
+  HandleNameSpace(Elem, '', FCurrentItem);
   if ((Elem.NameSpace <> RSS1NS) and (Elem.NameSpace <> '') or
     (Elem.Name = '')) then
   begin
     Exit;
   end;
 
-  HandleNameSpace(Elem, '', FCurrentItem);
   with Elem, FCurrentItem do
   begin 
     if (Name = 'title') and (GetParentElement.Name <> 'image') then
@@ -213,9 +208,10 @@ begin
   end
   else if Elem.NameSpace = AtomNS then
   begin
-    AFeed := GetAtomFeed;
+    AFeed := TAtomFeed.Create;
     AFeed.Clone(FElemList);
     AFeed.ParseLine(Line, Item);
+    AFeed.SendItem;
     AFeed.Free;
   end
   else if Elem.NameSpace = Mod_EnclosureNS then

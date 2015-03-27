@@ -53,7 +53,7 @@ begin
   HandleNameSpace(Elem, Line, Item);
 
   Item.Finished := Line = SockEof;
-  if Item.Finished then
+  if Item.Finished and not FCloned then
   begin
     inherited SendItem;
   end;
@@ -66,12 +66,12 @@ var
   Idx: PtrUInt;
 begin
   Elem := GetCurrentElement;
+  HandleNameSpace(Elem, '', FCurrentItem);
   if (Elem.NameSpace <> AtomNS) or (Elem.Name = '') then
   begin
     Exit;
   end;
 
-  HandleNameSpace(Elem, '', FCurrentItem);
   with Elem, FCurrentItem do
   begin
     Language := Lang;
