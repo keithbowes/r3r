@@ -23,7 +23,7 @@ function UTF8Decode(const s: String): String;
 {$ENDIF}
 
 procedure TuiConvertCodeSet(var s: String);
-procedure TuiEcho(s: String; const NewLine: Boolean; const flen: cardinal);
+procedure TuiEcho(s: String; const NewLine: Boolean; const flen: PtrUInt);
 { Shortcut procedures: }
 procedure TuiWrite(const s: String);
 procedure TuiWriteLn(const s: String);
@@ -133,7 +133,7 @@ begin
 {$ENDIF}
 end;
 
-procedure TuiEcho(s: String; const NewLine: Boolean; const flen: cardinal);
+procedure TuiEcho(s: String; const NewLine: Boolean; const flen: PtrUInt);
 begin
   TuiConvertCodeset(s);
 

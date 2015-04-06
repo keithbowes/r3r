@@ -19,7 +19,7 @@ type
   TTui = class(TLibR3R)
   private
     FCanStart: Boolean;
-    FCurrentItem: cardinal;
+    FCurrentItem: PtrUInt;
     FDimInfo: TWindowDim;
     FDimInfoBar: TWindowDim;
     FDimList: TWindowDim;
@@ -461,7 +461,7 @@ end;
 
 destructor TTui.Destroy;
 var
-  i: cardinal;
+  i: PtrUInt;
   p: TFeedItem;
 begin
   if Assigned(FItems) then
@@ -641,7 +641,7 @@ end;
 function TTui.QueryItemNumber: Boolean;
 var
   ErrPos: word;
-  iNo: cardinal;
+  iNo: PtrUInt;
   No: String;
 begin
   DrawStatus;

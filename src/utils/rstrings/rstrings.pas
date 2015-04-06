@@ -4,8 +4,8 @@ interface
 
 function StrToPChar(const s: String): PChar;
 function StrToPCharAlloc(const s: String): PChar;
-function GetPChar(const N: cardinal): PChar;
-procedure SetPChar(const N: cardinal; const p: PChar);
+function GetPChar(const N: PtrUInt): PChar;
+procedure SetPChar(const N: PtrUInt; const p: PChar);
 function GetPCharIndex(const p: PChar): longint;
 
 var
@@ -26,7 +26,7 @@ end;
 
 procedure FreePChars;
 var
-  i: cardinal;
+  i: PtrUInt;
 begin
   if PChars^.Count > 0 then
   begin
@@ -66,12 +66,12 @@ begin
   StrToPCharAlloc := r;
 end;
 
-function GetPChar(const N: cardinal): PChar;
+function GetPChar(const N: PtrUInt): PChar;
 begin
   GetPChar := PChars^.GetNth(N);
 end;
 
-procedure SetPChar(const N: cardinal; const p: PChar);
+procedure SetPChar(const N: PtrUInt; const p: PChar);
 begin
   PChars^.Delete(N);
   PChars^.Insert(p, N);

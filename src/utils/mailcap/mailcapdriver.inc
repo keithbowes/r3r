@@ -18,7 +18,7 @@ function Trim(const s: String): String;
 const
   WhiteSpace: set of char = [#0, #8, #9, #10, #13, #32];
 var
-  i, j: cardinal;
+  i, j: PtrUInt;
   Leading, Trailing: Boolean;
   t: String;
 begin
