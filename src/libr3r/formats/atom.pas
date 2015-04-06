@@ -53,7 +53,7 @@ begin
   HandleNameSpace(Elem, Line, Item);
 
   Item.Finished := Line = SockEof;
-  if Item.Finished and not FCloned then
+  if Item.Finished and (Elem.NameSpace = AtomNS) then
   begin
     inherited SendItem;
   end;
@@ -260,10 +260,7 @@ var
 begin
   if Elem.NameSpace = DCNS then
   begin
-    AFeed := TDCFeed.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.Free;
+    ParseForeignfeed(Line, Item, TDCFeed);
   end;
 end;
 

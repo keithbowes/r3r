@@ -8,6 +8,7 @@ uses
 const
   RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
   RSS1NS = 'http://purl.org/rss/1.0/';
+  RSS2NS = '';
 
 type
   TRssFeed = class(TXmlFeed)
@@ -48,7 +49,7 @@ begin
     Item.Finished := (Elem.Name = 'item') or (Line = SockEOF);
   end;
 
-  if Item.Finished then
+  if Item.Finished and ((Elem.NameSpace = RSS1NS) or (Elem.NameSpace = RSS2NS)) then
   begin
     inherited SendItem; 
     FLeftChannel := false;
@@ -68,7 +69,7 @@ var
 begin
   Elem := GetCurrentElement;
   HandleNameSpace(Elem, '', FCurrentItem);
-  if ((Elem.NameSpace <> RSS1NS) and (Elem.NameSpace <> '') or
+  if ((Elem.NameSpace <> RSS1NS) and (Elem.NameSpace <> RSS2NS) or
     (Elem.Name = '')) then
   begin
     Exit;
@@ -201,25 +202,15 @@ var
 begin
   if Elem.NameSpace = DCNS then
   begin
-    AFeed := TDCFeed.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.Free;
+    ParseForeignFeed(Line, Item, TDCFeed);
   end
   else if Elem.NameSpace = AtomNS then
   begin
-    AFeed := TAtomFeed.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.SendItem;
-    AFeed.Free;
+    ParseForeignFeed(Line, Item, TAtomFeed);
   end
   else if Elem.NameSpace = Mod_EnclosureNS then
   begin
-    AFeed := TModEnclosure.Create;
-    AFeed.Clone(FElemList);
-    AFeed.ParseLine(Line, Item);
-    AFeed.Free;
+    ParseForeignFeed(Line, Item, TModEnclosure);
   end
   else
   begin

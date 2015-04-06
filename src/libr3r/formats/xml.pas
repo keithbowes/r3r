@@ -30,29 +30,31 @@ type
     Content: String;
     Base: String;
     Lang: String;
-    Depth: cardinal;
+    Depth: PtrUInt;
   end;
+
+  TXmlFeed = class;
+  TForeignXmlCLass = class of TXmlFeed;
 
   TXmlFeed = class(TFeed)
   private
-    FNthElem: cardinal;
+    FElems: PtrUint;
+    FForeignFeed: TXmlFeed;
     FLastBase: String;
     FLastLang: String;
-  public
-    FCloned: Boolean;
-    FCurrentItem: TFeedItem;
-    FDepth: cardinal;
-    FElemList: PRList;
-    FElems: cardinal;
-    FEncoding: PChar;
-    FItemFinished: Boolean;
 {$IFDEF USE_EXPAT}
     FParser: XML_PARSER;
 {$ENDIF}
+  protected
+    FCurrentItem: TFeedItem;
+    procedure ParseForeignFeed(const Line: String; var Item: TFeedItem; const FeedClass: TForeignXmlClass);
+  public
+    FDepth: PtrUInt;
+    FElemList: PRList;
+    FEncoding: PChar;
     constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     destructor Destroy; override;
-    procedure Clone(const List: PRList);
     function GetAbsoluteURL(const URL: String): String;
     function GetCurrentElement: TXmlElement; virtual;
     function GetParentElement: TXmlElement; virtual;
@@ -76,9 +78,7 @@ begin
   inherited Create;
 
   New(FElemList, Init);
-  FCloned := false;
   FDepth := 0;
-  FNthElem := 0;
 
 {$IFDEF USE_EXPAT}
   Encoding := {$IFDEF USE_ICONV}'UTF-8'{$ELSE}nil{$ENDIF};
@@ -129,14 +129,6 @@ begin
   Item.Finished := true;
 end;
 
-{ Clones an element.  This is necessary for namespace support. }
-procedure TXmlFeed.Clone(const List: PRList);
-begin
-  Dispose(FElemList, Done);
-  Move(List, FElemList, SizeOf(List));
-  FCloned := true;
-end;
-
 destructor TXmlFeed.Destroy;
 var
   i, j: PtrUInt;
@@ -148,27 +140,29 @@ begin
   XML_ParserFree(FParser);
 {$ENDIF}
 
-  if not FCloned then
+  if FElemList^.Count > 0 then
   begin
-    if FElemList^.Count > 0 then
+    for i := 0 to FElemList^.Count - 1 do
     begin
-      for i := 0 to FElemList^.Count - 1 do
+      p := FElemList^.GetNth(i);
+      if p^.Attributes^.Count > 0 then
       begin
-        p := FElemList^.GetNth(i);
-        if p^.Attributes^.Count > 0 then
+        for j := 0 to p^.Attributes^.Count - 1 do
         begin
-          for j := 0 to p^.Attributes^.Count - 1 do
-          begin
-            q := p^.Attributes^.GetNth(j);
-            Dispose(q);
-          end;
+          q := p^.Attributes^.GetNth(j);
+          Dispose(q);
         end;
-        Dispose(p^.Attributes, Done);
-        Dispose(p);
       end;
-
-      Dispose(FElemList, Done);
+      Dispose(p^.Attributes, Done);
+      Dispose(p);
     end;
+
+    Dispose(FElemList, Done);
+  end;
+
+  if Assigned(FForeignFeed) then
+  begin
+    FForeignFeed.Free;
   end;
 
   inherited Destroy;
@@ -181,16 +175,13 @@ end;
 
 function TXmlFeed.GetCurrentElement: TXmlElement;
 var
+  ElemCount: PtrUInt;
   Elem: TXmlElement;
 begin
-  if FElemList^.Count > 0 then
+  ElemCount := FElemList^.Count;
+  if ElemCount > 0 then
   begin
-    FNthElem := FElemList^.Count;
-  end;
-
-  if FNthElem > 0 then
-  begin
-    Elem := PXmlElement(FElemList^.GetNth(FNthElem))^;
+    Elem := PXmlElement(FElemList^.GetNth(ElemCount))^;
     if Elem.Base <> '' then
     begin
       FLastBase := Elem.Base;
@@ -225,7 +216,7 @@ end;
 
 function TXmlFeed.GetParentElement: TXmlElement;
 var
-  i: cardinal;
+  i: PtrUInt;
   Res: TXmlElement;
 begin
   if FElemList^.Count > 0 then
@@ -253,6 +244,22 @@ begin
       PXmlElement(FElemList^.GetNth(FElemList^.Count))^.Name := '';
     end;
   end;
+end;
+
+procedure TXmlFeed.ParseForeignFeed(const Line: String; var Item: TFeedItem; const FeedClass: TForeignXmlClass);
+begin
+  if not Assigned(FForeignFeed) then
+  begin
+    FForeignFeed := FeedClass.Create;
+  end;
+
+  if not (FForeignFeed is FeedClass) then
+  begin
+    FForeignFeed.Free;
+    FForeignFeed := FeedClass.Create;
+  end;
+
+  (FForeignFeed as FeedClass).ParseLine(Line, Item);
 end;
 
 end.
