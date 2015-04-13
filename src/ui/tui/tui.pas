@@ -814,7 +814,14 @@ begin
   DrawFeedList;
   GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
 {$ELSE}
-  move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
+  if FCurrentItem > FViewPort.FirstItem then
+  begin
+    move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
+  end
+  else
+  begin
+    move(FCurrentItem - FViewPort.FirstItem + (FDimList.TopStart - FDimUA.TopEND), 0);
+  end;
 {$ENDIF}
 end;
 

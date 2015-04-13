@@ -219,7 +219,7 @@ var
   i: PtrUInt;
   Res: TXmlElement;
 begin
-  if FElemList^.Count > 0 then
+  if (FElemList^.Count > 0) and (FDepth > 0) then
   begin
     i := 0;
     repeat
