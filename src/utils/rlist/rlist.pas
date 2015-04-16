@@ -16,7 +16,7 @@ type
   PRList = ^TRList;
   TRList = object
   private
-    FCount: word;
+    FCount: PtrUInt;
     FElem: PRListNode;
     FFirst: PRListNode;
     FHasFirst: Boolean;
@@ -27,12 +27,12 @@ type
     constructor Init;
     destructor Done;
     procedure Add(Data: Pointer);
-    procedure Insert(Data: Pointer; Index: word);
-    procedure Delete(N: word);
+    procedure Insert(Data: Pointer; Index: PtrUInt);
+    procedure Delete(N: PtrUInt);
     procedure DeleteObject(Data: Pointer);
     procedure Clear;
-    function Count: word;
-    function GetNth(N: word): Pointer;
+    function Count: PtrUInt;
+    function GetNth(N: PtrUInt): Pointer;
     function IndexOf(Data: Pointer): integer;
   end;
 
@@ -45,9 +45,9 @@ type
     constructor Init;
     destructor Done;
     procedure Add(Data: String);
-    procedure Insert(Data: String; Index: word);
+    procedure Insert(Data: String; Index: PtrUInt);
     procedure DeleteString(Data: String);
-    function GetNth(N: word): String;
+    function GetNth(N: PtrUInt): String;
     function IndexOf(Data: String): integer;
   end;
 
@@ -96,7 +96,7 @@ begin
   Inc(FCount);
 end;
 
-procedure TRList.Insert(Data: Pointer; Index: word);
+procedure TRList.Insert(Data: Pointer; Index: PtrUInt);
 var
   l, m, o: PRListNode;
   p: Pointer;
@@ -133,7 +133,7 @@ begin
   end;
 end;
 
-procedure TRList.Delete(N: word);
+procedure TRList.Delete(N: PtrUInt);
 var
   l, m: PRListNode;
   p: Pointer;
@@ -181,14 +181,14 @@ begin
   end;
 end;
 
-function TRList.Count: word;
+function TRList.Count: PtrUInt;
 begin
   Count := FCount;
 end;
 
-function TRList.GetNth(N: word): Pointer;
+function TRList.GetNth(N: PtrUInt): Pointer;
 var
-  i: word;
+  i: PtrUInt;
   Tmp: PRListNode;
 begin
   i := 0;
@@ -283,7 +283,7 @@ end;
 
 destructor TRStringList.Done;
 var
-  i: word;
+  i: PtrUInt;
   p: Pointer;
 begin
   if FStrings^.Count > 0 then
@@ -304,7 +304,7 @@ begin
   inherited Add(StrToPChar(Data));
 end;
 
-procedure TRStringList.Insert(Data: String; Index: word);
+procedure TRStringList.Insert(Data: String; Index: PtrUInt);
 begin
   inherited Insert(StrToPChar(Data), Index);
 end;
@@ -321,7 +321,7 @@ begin
   end;
 end;
 
-function TRStringList.GetNth(N: word): String;
+function TRStringList.GetNth(N: PtrUInt): String;
 var
   p: PChar;
   Res: String;
@@ -333,7 +333,7 @@ end;
 
 function TRStringList.IndexOf(Data: String): integer;
 var
-  i, Len: word;
+  i, Len: PtrUInt;
   p: PChar;
 begin
   i := 0;

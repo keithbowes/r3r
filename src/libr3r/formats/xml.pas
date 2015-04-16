@@ -156,8 +156,6 @@ begin
       Dispose(p^.Attributes, Done);
       Dispose(p);
     end;
-
-    Dispose(FElemList, Done);
   end;
 
   if Assigned(FForeignFeed) then
@@ -165,6 +163,7 @@ begin
     FForeignFeed.Free;
   end;
 
+  Dispose(FElemList, Done);
   inherited Destroy;
 end;
 

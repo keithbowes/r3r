@@ -294,6 +294,9 @@ endif
 DIRFLAG=-Fu
 ifdef DEBUG
 PCFLAGS_DEBUG=-Ci -Co -Cr -gh -gl
+ifneq ($(call programpath,valgrind),)
+override PCFLAGS_DEBUG+=-gv
+endif
 
 ifneq ($(R3R_UI),wx)
 PCFLAGS_DEBUG += -Ct

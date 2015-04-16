@@ -6,7 +6,7 @@ function StrToPChar(const s: String): PChar;
 function StrToPCharAlloc(const s: String): PChar;
 function GetPChar(const N: PtrUInt): PChar;
 procedure SetPChar(const N: PtrUInt; const p: PChar);
-function GetPCharIndex(const p: PChar): longint;
+function GetPCharIndex(const p: PChar): PtrInt;
 
 var
   RemoveDuplicatePChars: Boolean;
@@ -46,7 +46,7 @@ end;
 
 function StrToPCharAlloc(const s: String): PChar;
 var
-  Index: integer;
+  Index: PtrInt;
   r: PChar;
 begin
   GetMem(r, Length(s) + 1);
@@ -77,9 +77,9 @@ begin
   PChars^.Insert(p, N);
 end;
 
-function GetPCharIndex(const p: PChar): longint;
+function GetPCharIndex(const p: PChar): PtrInt;
 var
-  i, Len: longint;
+  i, Len: PtrInt;
 begin
   i := 0;
   Len := PChars^.Count;
