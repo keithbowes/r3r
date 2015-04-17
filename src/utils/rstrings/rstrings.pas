@@ -87,16 +87,22 @@ end;
 function GetPCharIndex(const p: PChar): PtrInt;
 var
   i, Len: PtrInt;
+  Found: Boolean;
 begin
-  i := 0;
   Len := PChars^.Count;
+  i := Len - 1;
 ;
-  while (i < Len) and (StrComp(p, PChars^.GetNth(i)) <> 0) do
+  Found := false;
+  while (i >= 0) and not Found do
   begin
-    Inc(i);
+    Found := StrComp(p, PChars^.GetNth(i)) = 0;
+    if not Found then
+    begin
+      Dec(i);
+    end
   end;
 
-  if i + 1 <> Len then
+  if Found then
   begin
     GetPCharIndex := i;
   end
