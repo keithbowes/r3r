@@ -151,7 +151,6 @@ end;
 procedure XmlDeclarationReceived(userData: Pointer; version, encoding: PChar; standalone: integer);
 begin
 {$IFDEF USE_ICONV}
-  RemoveDuplicatePChars := false;
   SetProp('charset', StrToPCharAlloc('UTF-8'));
 {$ENDIF}
   TXmlFeed(userData).FEncoding := encoding;

@@ -44,6 +44,7 @@ end;
 function libr3r_create: Pointer; cdecl;
 begin
   libr3r_create := TLibR3R_Shared.Create;
+  RemoveDuplicatePChars := false;
 end;
 
 procedure libr3r_free(Lib: Pointer); cdecl;
@@ -200,8 +201,6 @@ procedure libr3r_access_settings(var setting_name: PChar; var SettingValue: Poin
 var
   SettingName: ShortString;
 begin
-  RemoveDuplicatePChars := false;
-
   WriteStr(SettingName, setting_name);
   Settings.Access(SettingName, SettingValue, SettingType, Count, SettingsMode);
   setting_name := StrToPCharAlloc(SettingName);
@@ -211,7 +210,6 @@ procedure libr3r_access_subscriptions(Index, Mode: byte; var Subscription: PChar
 var
   sub: String;
 begin
-  RemoveDuplicatePChars := false;
   Count := Subscriptions^.Count;
 
   WriteStr(sub, Subscription);

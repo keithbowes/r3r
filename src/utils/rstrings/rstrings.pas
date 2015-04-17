@@ -52,15 +52,22 @@ begin
   GetMem(r, Length(s) + 1);
   StrPCopy(r, s);
 
-  PChars^.Add(r);
-
   if RemoveDuplicatePChars then
   begin
     Index := GetPCharIndex(r);
-    if Index <> - 1 then
+    if Index < 1 then
     begin
-      PChars^.Delete(Index);
+      PChars^.Add(r);
+    end
+    else
+    begin
+      Dispose(r);
+      r := PChars^.GetNth(Index);
     end;
+  end
+  else
+  begin
+    PChars^.Add(r);
   end;
 
   StrToPCharAlloc := r;
