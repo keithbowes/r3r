@@ -12,11 +12,14 @@ void FillSubscriptionsListBox(wxListBox * box)
 	wxString * str;
 	Subscriptions * subs = new Subscriptions();
 	
-	while ((s = subs->GetNext()))
+	while ((s = subs->GetNext()) != NULL)
 	{
-		str = new wxString(s, wxConvUTF8);
-		box->InsertItems(1, str, i);
-		i++;
+		if (strlen(s) > 0)
+		{
+			str = new wxString(s, wxConvUTF8);
+			box->InsertItems(1, str, i);
+			i++;
+		}
 	}
 }
 

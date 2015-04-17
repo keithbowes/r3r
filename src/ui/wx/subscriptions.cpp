@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 
 #include "libr3r.h"
@@ -60,6 +61,15 @@ char * Subscriptions::GetNext()
 	{
 		count = 0;
 		libr3r_access_subscriptions(m_current, SUBSCRIPTIONS_GET, &ret, &count);
+
+		char sub[5];
+		strncpy(sub, ret, 4);
+		sub[5] = '\0';
+
+		if (strcmp((char *) sub, "http") != 0)
+		{
+			ret = (char *) "";
+		}
 	}
 
 	if (m_current >= count)
