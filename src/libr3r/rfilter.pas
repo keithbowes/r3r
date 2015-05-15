@@ -113,6 +113,7 @@ begin
       if ShouldFilter then
       begin
         Item.Clear;
+        Item.Filtered := true;
         Break;
       end;
     end;
@@ -120,12 +121,12 @@ begin
     Close(AFile);
   end;
 
-  Item.Filtered := ShouldFilter;
   ChDir(CurDir);
 end;
 
 procedure FilterItem(var Item: TFeedItem);
 begin
+  Item.Filtered := false;
   FilterField(Item, 'title');
   FilterField(Item, 'description');
   FilterField(Item, 'subject');
