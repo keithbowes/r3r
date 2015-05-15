@@ -110,7 +110,7 @@ var
 {$ENDIF}
 begin
   inherited ParseLine(Line, Item);
-  Item.AllowsHTML := true;
+  Item.AllowsHTML := GetFormat = ftRss;
   FCurrentItem := Item;
 
 {$IFDEF USE_EXPAT}
