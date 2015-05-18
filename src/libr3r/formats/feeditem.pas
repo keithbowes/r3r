@@ -44,7 +44,6 @@ type
   end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
-function DecodeHtml(const InStr: String): String;
 
 implementation
 
@@ -79,7 +78,7 @@ begin
     begin
       InHTML := true;
     end
-    else if not InHTML and (InStr[i] = '&') and
+    else if (InStr[i] = '&') and
       { if the next character is whitespace, it's not an entity }
       not (InStr[i + 1] in [#0, #9, #10, #13, #32]) then
     begin
@@ -103,38 +102,15 @@ begin
     end
     else if InEnt then
     begin
-      if InStr[i] <> ';' then
+      if (InStr[i] <> ';') and not (InStr[i] in [#0, #9, #10, #13, #32]) then
       begin
         EntStr := EntStr + InStr[i]
       end
       else
       begin
-        if EntStr = 'amp' then
-        begin
-          EntStr := '&'
-        end
-        else if EntStr = 'apos' then
-        begin
-          EntStr := ''''
-        end
-        else if EntStr = 'gt' then
-        begin
-          EntStr := '>'
-        end
-        else if EntStr = 'lt' then
-        begin
-          EntStr := '<'
-        end
-        else if EntStr = 'quot' then
-        begin
-          EntStr := '"'
-        end
-        else
-        begin
-          EntStr := Html4EntDecode(EntStr)
-        end;
+        EntStr := Html4EntDecode(EntStr);
 
-        if EntStr[1] = '#' then
+        if (Length(EntStr) > 0) and (EntStr[1] = '#') then
         begin
           Val(Copy(EntStr, 2, Length(EntStr) - 1), EntNum, ErrPos);
           if (ErrPos = 0) then
@@ -148,16 +124,25 @@ begin
         end
         else if Length(EntStr) <> 1 then { undefined entity, per the XML spec }
         begin
-          EntStr := '?'
+          EntStr := '?' { random character for replacing numerical and named references }
+        end
+        else
+        begin
+          EntStr := '&' + EntStr { re-prepend an ampersand to non-entities }
         end;
 
-        OutStr := OutStr + EntStr; { random character for replacing numerical and named references }
+        OutStr := OutStr + EntStr;
         EntStr := '';
         InEnt := false
       end
     end
   end;
-  DecodeHtml := OutStr;
+
+  if EntStr <> '' then
+  begin
+    EntStr := '&' + EntStr;
+  end;
+  DecodeHtml := OutStr + EntStr;
 end;
 
 function StripHtml(const InStr: String): String;

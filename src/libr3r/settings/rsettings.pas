@@ -62,8 +62,8 @@ var
 implementation
 
 uses
-  Dos, MailCap, RParseURL, RProp, RSettings_Routines,
-  RSettings_Strings, RStrings
+  Dos, MailCap, RProp, RSettings_Routines,
+  RSettings_Strings, RStrings, URIParser
 {$IFDEF SETTINGS_INI}
   , IniFiles
 {$ENDIF}
@@ -211,8 +211,7 @@ procedure TRSettings.InitRec;
 var
   mc: PMailCap;
   Proxy, ProxyHost: String;
-  ProxyPort: word;
-  ProxyURL: TURL;
+  ProxyURL: TURI;
 begin
   New(mc, Init);
 
@@ -224,16 +223,13 @@ begin
 
   if Proxy <> '' then
   begin
-    ProxyURL := ParseURL(Proxy);
+    ProxyURL := ParseURI(Proxy);
     WriteStr(ProxyHost, ProxyURL.Host);
-    {$I-}
-    ReadStr(ProxyURL.Port, ProxyPort);
-    {$I+}
   end
   else
   begin
     ProxyHost := '127.0.0.1';
-    ProxyPort := 8118;
+    ProxyURL.Port := 8118;
   end;
 
   CheckBoolean('show-messages', 'Display', true, DescMsg);
@@ -247,7 +243,7 @@ begin
 
   CheckBoolean('use-proxy', 'HTTP', Proxy <> '', DescProxy);
   CheckString('proxy-address', 'HTTP', ProxyHost, DescProxyAddress);
-  CheckInteger('proxy-port', 'HTTP', ProxyPort, DescProxyPort);
+  CheckInteger('proxy-port', 'HTTP', ProxyURL.Port, DescProxyPort);
 
   CheckBoolean('use-custom-accept-types', 'HTTP Headers', false, DescUseTypes);
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);

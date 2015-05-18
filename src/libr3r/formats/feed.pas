@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  HttpCache, RParseURL, RSettings, SockConsts;
+  HttpCache, RSettings, SockConsts, URIParser;
 
 constructor TFeed.Create;
 begin
@@ -46,29 +46,30 @@ end;
 
 function TFeed.GetAbsoluteURL(const RelURL, BaseURL: String): String;
 var
-  Base, Rel: TURL;
+  Base, Rel: TURI;
+  Port: String;
   Res: String;
 begin
 {$IFNDEF SOCKETS_NONE}
-  Rel := ParseURL(RelURL);
+  Rel := ParseURI(RelURL);
 {$ENDIF}
 
   { URL is absolute if it contains a protocol;
     it isn't if it doesn't }
-  if Pos(Rel.Protocol, RelURL) <> 0 then
+  if (Pos(Rel.Protocol, RelURL) <> 0) or (BaseURL = '') then
   begin
     Res := RelURL;
   end
   else
   begin
 {$IFNDEF SOCKETS_NONE}
-    Base := ParseURL(BaseUrl);
+    Base := ParseURI(BaseUrl);
 {$ENDIF}
     Res := Base.Protocol + '://';
 
-    if Base.User <> '' then
+    if Base.Username <> '' then
     begin
-      Res := Res + Base.User;
+      Res := Res + Base.Username;
       if Base.Password <> '' then
       begin
         Res := Res + ':' + Base.Password;
@@ -81,14 +82,15 @@ begin
     
     if Rel.Port <> Base.Port then
     begin
-      Res := Res + ':' + Base.Port;
+      WriteStr(Port, Base.Port);
+      Res := Res + ':' + Port;
     end;
 
-    Res := Res + Rel.Path;
+    Res := Res + Rel.Path + Rel.Document;
 
-    if Rel.Search <> '' then
+    if Rel.Params <> '' then
     begin
-      Res := Res + '?' + Rel.Search;
+      Res := Res + '?' + Rel.Params;
     end;
   end;
 

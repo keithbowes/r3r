@@ -32,12 +32,12 @@ type
     Cache: THttpCache;
     Headers: THeaders;
     Method: String;
-    procedure Connect(Prot, Host, Port, Path, Search: String);
+    procedure Connect(Prot, Host: String; Port: word; Path, Search: String);
     procedure SendHeader(Name: String);
     procedure SendHeaders;
     procedure InitCache;
   public
-    constructor Create(Prot, Host, Port, Path, Search: String);
+    constructor Create(Prot, Host: String; Port: word; Path, Search: String);
     procedure Execute; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     destructor Destroy; override;
@@ -50,8 +50,8 @@ uses
 {$IFDEF USE_ICONV}
   RProp,
 {$ENDIF}
-  Info, LibR3RStrings, RGetFeed, RMessage, RParseURL, RSettings,
-  RStrings, StrTok, SysUtils;
+  Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
+  RStrings, StrTok, SysUtils, URIParser;
 
 const
   Tab = #9;
@@ -76,7 +76,7 @@ var
   InfoText: String;
   Line: String;
   RespList: TStringsList;
-  URL: TURL;
+  URL: TURI;
 begin
   Headers.Sniff := Settings.GetBoolean('enable-mime-guess');
   HeaderState := hsUnstarted;
@@ -189,7 +189,7 @@ begin
 {$IFDEF USE_SSL}
           FIsSecure := URL.Protocol = 'https';
 {$ENDIF}
-          Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
+          Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Params);
           Execute;
           ParseFeed(Self);
           ShouldShow := false;
@@ -264,7 +264,7 @@ begin
   end;
 end;
 
-constructor THttpSock.Create(Prot, Host, Port, Path, Search: String);
+constructor THttpSock.Create(Prot, Host: String; Port: word; Path, Search: String);
 begin
   inherited Create(Host, Port);
   Connect(Prot, Host, Port, Path, Search);
@@ -283,9 +283,10 @@ begin
 {$ENDIF}
 end;
 
-procedure THttpSock.Connect(Prot, Host, Port, Path, Search: String);
+procedure THttpSock.Connect(Prot, Host: String; Port: word; Path, Search: String);
 var
-  OrigPort: String;
+  OrigPort: word;
+  SPort: String;
   UseProxy: Boolean;
 begin
   FIndirectHost := Host;
@@ -295,7 +296,7 @@ begin
   begin
 {$IFNDEF SOCKETS_LIBCURL}
     Host := Settings.GetString('proxy-address');
-    WriteStr(Port, Settings.GetInteger('proxy-port'));
+    Port := Settings.GetInteger('proxy-port');
 {$ELSE}
     curl_easy_setopt(FHandle, CURLOPT_PROXY, StrToPChar(Settings.GetString('proxy-address')));
     curl_easy_setopt(FHandle, CURLOPT_PROXYPORT, Pointer(Settings.GetInteger('proxy-port')));
@@ -313,13 +314,14 @@ begin
   end;
 
   FURL := Prot + '://' + FIndirectHost;
-  if (OrigPort <> '80')
+  if (OrigPort <> 80)
 {$IFDEF USE_SSL}
-  and (OrigPort <> '443')
+  and (OrigPort <> 443)
 {$ENDIF}
   then
   begin
-    FURL := FURL + ':' + OrigPort;
+    WriteStr(SPort, OrigPort);
+    FURL := FURL + ':' + SPort;
   end;
   FURL := FURL + Path;
 

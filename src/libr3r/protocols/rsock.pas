@@ -21,6 +21,9 @@ uses
 
 type
   TRSock = class
+  private
+    FAbstractFeed: TFeed;
+    procedure SetAbstractFeed(const FeedType: TFeedType);
   protected
     FChunkedLength: integer;
     FError: Boolean;
@@ -31,7 +34,7 @@ type
 {$IFDEF USE_SSL}
     FIsSecure: Boolean;
 {$ENDIF}
-    FPort: String;
+    FPort: word;
     FUseChunked: Boolean;
     FeedType: TFeedType;
   public
@@ -46,9 +49,9 @@ type
 
     FURL: String;
     ShouldShow: Boolean;
-    constructor Create(Host, Port: String);
+    constructor Create(Host: String; Port: word);
     destructor Destroy; override; 
-    procedure DomainSet(Host, Port: String);
+    procedure DomainSet(Host: String; Port: word);
     procedure Execute; virtual;
     function GetLine: String; virtual;
     function ParseItem(var Item: TFeedItem): Boolean; virtual;
@@ -60,9 +63,6 @@ implementation
 uses
   Atom, Esf, Rss, Rss3,
   LibR3RStrings, RMessage, RSettings, SockConsts, SysUtils;
-
-var
-  FAbstractFeed: TFeed;
 
 {$IFDEF SOCKETS_LIBCURL}
 const
@@ -143,7 +143,7 @@ end;
 {$CALLING DEFAULT}
 {$ENDIF}
 
-procedure SetAbstractFeed(const FeedType: TFeedType);
+procedure TRSock.SetAbstractFeed(const FeedType: TFeedType);
 begin
   if not Assigned(FAbstractFeed) then
   begin
@@ -170,7 +170,7 @@ begin
   end;
 end;
 
-constructor TRSock.Create(Host, Port: String);
+constructor TRSock.Create(Host: String; Port: word);
 begin
   inherited Create;
 
@@ -231,7 +231,7 @@ begin
   end;
 end;
 
-procedure TRSock.DomainSet(Host, Port: String);
+procedure TRSock.DomainSet(Host: String; Port: word);
 begin
   FHost := Host;
   FPort := Port;
@@ -269,9 +269,12 @@ begin
 end;
 
 procedure TRSock.Execute;
+var
+  Port: String;
 begin
 {$IFDEF SOCKETS_SYNAPSE}
-  Sock.Connect(FHost, FPort);
+  WriteStr(Port, FPort);
+  Sock.Connect(FHost, Port);
   Sock.ConvertLineEnd := true;
 {$IFDEF USE_SSL}
   if FIsSecure then

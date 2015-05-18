@@ -11,15 +11,17 @@ const
   RSS2NS = '';
 
 type
+  TRssVersion = (rvRss0, rvRss1, rvRss2);
   TRssFeed = class(TXmlFeed)
   private
-    FIsRDF: Boolean;
     FLastCat: String;
     FLeftChannel: Boolean;
+    FRssVersion: TRssVersion;
     procedure HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
   protected
     function GetFormat: TFeedType; override;
   public
+    constructor Create;
     procedure ParseLine(Line: String; var Item: TFeedItem); override;
     procedure SendItem; override;
   end;
@@ -30,6 +32,12 @@ uses
   Atom, DC, Mod_Enclosure, RDate,
   RStrings, SockConsts, SysUtils;
 
+constructor TRssFeed.Create;
+begin
+  inherited Create;
+  FRssVersion := rvRss1;
+end;
+
 procedure TRssFeed.ParseLine(Line: String; var Item: TFeedItem);
 var
   Elem, Parent: TXmlElement;
@@ -39,7 +47,7 @@ begin
   Parent := GetParentElement;
   HandleNameSpace(Elem, Line, Item);
 
-  if not FIsRDF then
+  if FRssVersion <> rvRss1 then
   begin
     Item.Finished := ((Elem.Name = 'item') and ((Parent.Name = 'item')
       or FLeftChannel)) or (Line = SockEOF);
@@ -85,9 +93,13 @@ begin
     begin
       Description := Content;
     end
-    else if Name = 'link' then
+    else if (Name = 'link') and (GetParentElement.Name <> 'image') then
     begin
       Link := GetAbsoluteURL(Trim(Content));
+      if (FRssVersion = rvRss0) and (Id = '') and (Link <> ':///') and (GetParentElement.Name <> 'channel') then
+      begin
+        Id := Link
+      end
     end
     else if Name = 'enclosure' then
     begin
@@ -170,6 +182,27 @@ begin
       end;
 
       FLeftChannel := true;
+    end
+    else if Name = 'rss' then
+    begin
+      if Attributes^.Count > 0 then
+      begin
+        for Idx := 0 to Attributes^.Count - 1 do
+        begin
+          Attr := PXmlAttr(Attributes^.GetNth(Idx))^;
+          if Attr.Name = 'version' then
+          begin
+            if Pos('0.9', Attr.Value) = 1 then
+            begin
+              FRssVersion := rvRss0;
+            end
+            else if Pos('2.', Attr.Value) = 1 then
+            begin
+              FRssVersion := rvRss2;
+            end
+          end;
+        end;
+      end;
     end;
 
     if Name = 'item' then
@@ -212,10 +245,6 @@ begin
   begin
     ParseForeignFeed(Line, Item, TModEnclosure);
   end
-  else
-  begin
-    FIsRDF := Elem.NameSpace = RSS1NS;
-  end;
 end;
 
 end.

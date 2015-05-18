@@ -46,9 +46,9 @@ uses
 {$IFNDEF SOCKETS_NONE}
   Http,
 {$ENDIF}
-  LibR3RStrings, LocalFile, RGetFeed, RMessage, RParseURL;
+  LibR3RStrings, LocalFile, RGetFeed, RMessage, URIParser;
 
-function GetSockType(const Resource, Prot, Host, Port, Path, Para: String): TRSock;
+function GetSockType(const Resource, Prot, Host: String; Port: word; const Path, Para: String): TRSock;
 begin
   if Prot = 'file' then
   begin
@@ -61,6 +61,19 @@ begin
 {$ENDIF}
   then
   begin
+    if Port = 0 then
+    begin
+      if Prot = 'http' then
+      begin
+        Port := 80
+      end
+      {$IFDEF USE_SSL}
+      else if Prot = 'https' then
+      begin
+        Port := 443
+      end
+      {$ENDIF}
+    end;
     GetSockType := THttpSock.Create(Prot, Host, Port, Path, Para);
   end
 {$ENDIF}
@@ -83,10 +96,10 @@ end;
 
 procedure TLibR3R.RetrieveFeed(Resource: String);
 var
-  URL: TURL;
+  URL: TURI;
 begin
   URL := GetFeed(Resource);
-  FSock := GetSockType(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Search);
+  FSock := GetSockType(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path + URL.Document, URL.Params);
 
   if FSock <> nil then
   begin

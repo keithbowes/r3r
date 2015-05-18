@@ -8,12 +8,12 @@ unit RGetFeed;
 interface
 
 uses
-  LibR3R, RParseURL, RSock
+  LibR3R, RSock, URIParser
 {$IFDEF SOCKETS_SYNAPSE}
   , RMessage
 {$ENDIF};
 
-function GetFeed(var Resource: String): TURL;
+function GetFeed(var Resource: String): TURI;
 procedure ParseFeed(const Sock: TRSock);
 
 implementation
@@ -31,11 +31,11 @@ uses
 var
   Item: TFeedItem;
 
-function GetFeed(var Resource: String): TURL;
+function GetFeed(var Resource: String): TURI;
 var
   ExplicitFile: Boolean;
   Prot: String;
-  Res: TURL;
+  Res: TURI;
 {$IF DEFINED(USE_IDN) or DEFINED(USE_LIBIDN2)}
   PHost: PChar;
 {$ENDIF}
@@ -58,7 +58,7 @@ begin
   else
   begin
 {$IFNDEF SOCKETS_NONE}
-    Res := ParseURL(Resource);
+    Res := ParseURI(Resource);
 {$IFDEF USE_IDN}
     idna_to_ascii_8z(StrToPChar(Res.Host), @PHost, 0);
     WriteStr(Res.Host, PHost);
@@ -92,7 +92,7 @@ begin
 {$IFDEF SOCKETS_SYNAPSE}
     if Assigned(Sock.Sock) and Sock.Error then
     begin
-      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, TRSock(Sock).FURL);
+      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, Sock.FURL);
       Break;
     end;
 {$ENDIF}
