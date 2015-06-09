@@ -133,8 +133,13 @@ begin
 
   InfoList := Split(InfoText, Tab);
 
-  Val(InfoList.Strings[0], CacheType, ErrPos);
-  if (ErrPos = 0) and (TCacheType(CacheType) <> ctNone) then
+  try
+    ReadStr(InfoList.Strings[0], CacheType);
+  except
+    CacheType := Ord(ctNone);
+  end;
+
+  if TCacheType(CacheType) <> ctNone then
   begin
     case TCacheType(CacheType) of
       ctEtag:
