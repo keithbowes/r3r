@@ -114,7 +114,7 @@ end;
 function THttpCache.GetCacheHeader: String;
 var
   CacheHeader: String;
-  CacheType, ErrPos: byte;
+  CacheType: byte;
   FileOpen: Boolean;
   InfoList: TStringsList;
   InfoText: String;

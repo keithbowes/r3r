@@ -292,8 +292,8 @@ end;
 
 function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
-  ErrPos: word;
-  Len: word;
+  ErrPos: byte;
+  Len: PtrUInt;
   Line, Tmp: String;
 begin
   ShouldShow := true;
@@ -319,7 +319,10 @@ begin
         end
         else if Tmp <> '' then
         begin
-          Val('$' + Tmp, Len, ErrPos);
+          try
+            Val('$' + Tmp, Len, ErrPos);
+          except
+          end;
 
           if ErrPos = 0 then
           begin
