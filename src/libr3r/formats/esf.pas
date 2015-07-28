@@ -30,7 +30,7 @@ type
 implementation
 
 uses
-  ItemCallbacks, RDate, RStrings, SysUtils;
+  ItemCallbacks, RDate, RStrings, SockConsts, SysUtils;
 
 constructor TEsfFeed.Create;
 begin
@@ -103,7 +103,6 @@ var
   len: byte;
   tmp: String;
 begin
-  Item.Finished := false;
   tmp := Line;
 
   if Pos('#', Line) <> 1 then
@@ -142,19 +141,20 @@ begin
 
       ParseDataLine(Item);
       FLineType := ltData;
-      Item.Finished := true;
+      CallItemCallback(Item);
     end
     else if FList.Count = 2 then
     begin
       ParseMetaLine(Item);
-      Item.Finished := false;
       FLineType := ltMeta;
     end
-  end;
-
-  if Item.Finished then
-  begin
-    CallItemCallback(Item);
+    else if Line = SockEof then
+    begin
+      if FLineType = ltMeta then
+      begin
+        CallItemCallback(Item);
+      end;
+    end;
   end;
 
   if FLineType = ltData then
