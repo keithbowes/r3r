@@ -148,12 +148,9 @@ begin
       ParseMetaLine(Item);
       FLineType := ltMeta;
     end
-    else if Line = SockEof then
+    else if (FLineType = ltMeta) and (Line = SockEof) then
     begin
-      if FLineType = ltMeta then
-      begin
-        CallItemCallback(Item);
-      end;
+      CallItemCallback(Item);
     end;
   end;
 

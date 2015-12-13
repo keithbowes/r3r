@@ -10,7 +10,7 @@
 .P
  r3r [URL]
 .br
- r3r-conv -i Eingabedatei -t Ausgabetype [-o Ausgabedatei]
+ r3r-conv -i Eingabedatei -t Ausgabetyp [-o Ausgabedatei]
 .br
  r3r_opml 0|1 [Quelle [Ziel]]
 
