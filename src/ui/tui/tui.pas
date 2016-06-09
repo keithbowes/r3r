@@ -292,17 +292,19 @@ begin
             end
             else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
             begin
-              FCurrentItem := FViewPort.FirstItem + FViewPort.PortHeight;
-              if FItems^.Count - 1 > FCurrentItem then
+              if FItems^.Count > FCurrentItem then
               begin
                 Inc(FCurrentItem);
+                ScrollTo(FCurrentItem);
               end;
-              ScrollTo(FCurrentItem);
             end
             else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
             begin
-              ScrollUp;
-              Redraw;
+              if FCurrentItem > 1 then
+              begin
+                Dec(FCurrentItem);
+                ScrollTo(FCurrentItem);
+              end
             end
           end;
         end;
