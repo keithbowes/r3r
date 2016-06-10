@@ -47,11 +47,8 @@ type
 implementation
 
 uses
-{$IFDEF USE_ICONV}
-  RProp,
-{$ENDIF}
-  Info, LibR3RStrings, RGetFeed, RMessage, RSettings,
-  RStrings, StrTok, SysUtils, URIParser;
+  Info, LibR3R, LibR3RStrings, RGetFeed, RProp, RMessage, RSettings,
+  RStrings, StrTok, SysUtils;
 
 const
   Tab = #9;
@@ -76,7 +73,6 @@ var
   InfoText: String;
   Line: String;
   RespList: TStringsList;
-  URL: TURI;
 begin
   Headers.Sniff := Settings.GetBoolean('enable-mime-guess');
   HeaderState := hsUnstarted;
@@ -97,7 +93,7 @@ begin
       Val(Copy(RespList.Strings[0], 6, 3), FHttpVersion, ErrPos);
       if ErrPos <> 0 then
       begin
-        CallMessageEvent(Self, true, InvalidHeaders, FURL);
+        CallMessageEvent(Self, true, InvalidHeaders, FURI);
         Break;
       end;
 
@@ -116,7 +112,7 @@ begin
 
       if Line = '' then
       begin
-        CallMessageEvent(Self, true, InvalidHeaders, FURL);
+        CallMessageEvent(Self, true, InvalidHeaders, FURI);
         HeaderState := hsStarted;
       end;
 
@@ -185,18 +181,14 @@ begin
           Inc(FRedirects);
           ShouldShow := true;
 
-          URL := GetFeed(HeaderValue);
 {$IFDEF USE_SSL}
-          FIsSecure := URL.Protocol = 'https';
 {$ENDIF}
-          Connect(URL.Protocol, URL.Host, URL.Port, URL.Path, URL.Params);
-          Execute;
-          ParseFeed(Self);
+          TLibR3R(GetObjectProp(Self, 'lib')).QueueURI(HeaderValue);
           ShouldShow := false;
         end
         else
         begin
-          CallMessageEvent(Self, true, TooManyRedirects, FURL);
+          CallMessageEvent(Self, true, TooManyRedirects, FURI);
         end;
       end
       else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
@@ -313,7 +305,7 @@ begin
     FPath := FPath + '?' + Search
   end;
 
-  FURL := Prot + '://' + FIndirectHost;
+  FURI := Prot + '://' + FIndirectHost;
   if (OrigPort <> 80)
 {$IFDEF USE_SSL}
   and (OrigPort <> 443)
@@ -321,19 +313,19 @@ begin
   then
   begin
     WriteStr(SPort, OrigPort);
-    FURL := FURL + ':' + SPort;
+    FURI := FURI + ':' + SPort;
   end;
-  FURL := FURL + Path;
+  FURI := FURI + Path;
 
 {$IFNDEF SOCKETS_LIBCURL}
   if UseProxy then
   begin
-    FPath := FURL;
+    FPath := FURI;
   end;
 {$ENDIF}
 
 {$IFDEF SOCKETS_LIBCURL}
-  curl_easy_setopt(FHandle, CURLOPT_URL, StrToPChar(FURL));
+  curl_easy_setopt(FHandle, CURLOPT_URL, StrToPChar(FURI));
 {$ENDIF}
 end;
 
@@ -432,7 +424,6 @@ end;
 function THttpSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   Ext: String;
-  Res: Boolean;
 begin
   if Headers.Status = 0 then
   begin
@@ -445,7 +436,7 @@ begin
   begin
     if ShouldShow then
     begin
-      Res := inherited ParseItem(Item);
+      Result := inherited ParseItem(Item);
     end;
   end
   else if (Headers.Status = 304) and not Settings.GetBoolean('hide-cached-feeds') then
@@ -454,7 +445,7 @@ begin
     Ext := Cache.GetFeedExtension(Headers.ContentType);
     if Ext = 'unknown' then
     begin
-      ParseItem := true;
+      Result := true;
       Exit;
     end;
 
@@ -468,21 +459,19 @@ begin
       FLocal.Execute;
     end;
 
-    Res := FLocal.ParseItem(Item);
+    Result := FLocal.ParseItem(Item);
 
-    if Res then
+    if Result then
     begin
       FLocal.Free;
     end;
 
-    ShouldShow := not Res;
+    ShouldShow := not Result;
   end
   else
   begin
-    Res := true;
+    Result := true;
   end;
-
-  ParseItem := Res
 end;
 
 function THttpSock.GetType: TFeedType;

@@ -21,6 +21,8 @@ typedef void (TParsedProc) (void * item, void * data);
 extern void * libr3r_create(void);
 extern void libr3r_free (void * lib);
 
+extern int libr3r_retrieve_chunk(void * lib);
+extern void libr3r_queue_uri(void * lib, char * resource);
 extern void libr3r_retrieve_feed(void * lib, char * resource);
 extern void libr3r_on_item_parsed(void * lib, TParsedProc proc, void * data);
 extern void libr3r_on_message_received(void * lib, TMessageProc proc);

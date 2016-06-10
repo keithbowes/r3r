@@ -11,6 +11,7 @@ uses
 
 const
   AddKey = 'a';
+  AbortKey = 'z';
   DonateKey = 'd';
   DownKey = 'j';
   EmailKey = 'c';
@@ -31,6 +32,8 @@ const
   ShellKey = '!';
   SubScriptionsKey = '-';
   UpKey = 'k';
+
+{ For differences between ncurses's getch and CRT's ReadKey }
 {$IFNDEF USE_NCRT}
   DownArrow = Chr(80);
   EndKey = Chr(79);
@@ -40,7 +43,6 @@ const
   RightArrow = Chr(77);
   UpArrow = Chr(72);
 {$ELSE}
-  { For differences between ncurses's getch and CRT's ReadKey }
   DownArrow = Chr(byte(KEY_DOWN));
   EndKey = Chr(byte(KEY_END));
   HomeKey = Chr(byte(KEY_HOME));

@@ -2,10 +2,13 @@ unit Tui;
 
 interface
 
+{$INCLUDE "tuidefs.inc"}
+
 uses
   LibR3R, RList;
 
 type
+  TProcessingStatus = (psUnstarted, psUnfinished, psFinished);
   TViewport = record
     FirstItem, LastItem: word;
     PortHeight: word;
@@ -28,10 +31,15 @@ type
     FDimUA: TWindowDim;
     FItems: PRList;
     FPrintItems: Boolean;
+    FProcessingStatus: TProcessingStatus;
     FScreenHeight: word;
     FScreenWidth: word;
     FScrollingUp: Boolean;
     FViewPort: TViewport;
+{$IFDEF USE_NCRT}
+    FGotched: Boolean;
+    FOnRelease: Boolean;
+{$ENDIF}
     procedure Draw;
     procedure Redraw;
     procedure RedrawConditional;
@@ -57,16 +65,15 @@ type
     procedure LoadSubscriptions;
     procedure AddDeleteSubscription;
     procedure PrintFeedItems;
+    procedure PrintTitle(Title: String; const Index: PtrUInt);
   public
     constructor Create;
     destructor Destroy; override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
-    procedure RetrieveFeed(Resource: String); override;
+    procedure QueueURI(Resource: String);
   end;
 
 implementation
-
-{$INCLUDE "tuidefs.inc"}
 
 uses
   Dos, Info, Mailcap, RKeys, RSettings_Routines, RTitle, Skin,
@@ -116,7 +123,6 @@ procedure ItemReceived(const Item: TFeedItem; const Data: Pointer);
 var
   AItem: TFeedItem;
   Items: PtrUInt;
-  LenStr: String;
   Title: String;
 begin
   with TTui(Data) do
@@ -136,22 +142,10 @@ begin
 
     if Settings.GetBoolean('show-incoming-items') then
     begin
-      if Items <= FViewPort.PortHeight then
+      if Items <= FViewPort.FirstItem + FViewPort.PortHeight then
       begin
         Title := AItem.Title;
-        WriteStr(LenStr, Items);
-        if Length(Title) > (FDimList.LeftEnd - 3 - Length(LenStr)) then
-        begin
-          Title := Copy(Title, 1, FDimList.LeftEnd - 3 - Length(LenStr)) + '...'
-        end;
-
-        TextBackground(SkinColorTable.FIndexBack);
-        TextColor(SkinColorTable.FIndexFore);
-        Write(Items, ': ');
-
-        TextBackground(SkinColorTable.FTitleBack);
-        TextColor(SkinColorTable.FTitleFore);
-        TuiWriteLn(Title);
+        PrintTitle(Title, Items);
       end;
     end;
   end;
@@ -214,11 +208,17 @@ begin
   New(FItems, Init);
   FCurrentItem := 1;
   FPrintItems := false;
+  FProcessingStatus := psUnstarted;
   FScrollingUp := false;
+
+{$IFDEF USE_NCRT}
+  FGotched := false;
+  FOnRelease := false;
+{$ENDIF}
 
   RegisterItemCallback(ItemReceived, Self);
   SetUserAgentInfo(GetUserAgentInfo);
-  Settings.RegisterBoolean('show-incoming-items', 'Display', false, ShowIncomingItems);
+  Settings.RegisterBoolean('show-incoming-items', 'Display', true, ShowIncomingItems);
   Settings.RegisterBoolean('wrap-descriptions', 'Display', true, WrapDescriptions);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
 {$IFDEF USE_ICONV}
@@ -236,7 +236,7 @@ begin
       begin
         FPrintItems := true;
       end;
-      RetrieveFeed(ParamStr(i));
+      QueueURI(ParamStr(i));
     end;
   end
   else if Settings.GetBoolean('load-subscriptions-on-startup') then
@@ -252,80 +252,119 @@ begin
 {$ENDIF}
 
   repeat
-{$IFNDEF USE_NCRT}
-    KeyChar := ReadKey;
+{$IFDEF USE_NCRT}
+  noecho;
 
-    if KeyChar <> NullKey then
-    begin
-      { Case insensitivity a la other programs }
-      KeyChar := LowerCase(KeyChar);
+  { Send a key so that the mouse and resizing will work }
+  if not FGotched then
+  begin
+    ungetch(Ord(HomeKey));
+    FGotched := true;
+  end;
+{$ENDIF}
+    if KeyPressed then
+      begin
+{$IFNDEF USE_NCRT}
+      KeyChar := ReadKey;
+
+      if KeyChar <> NullKey then
+      begin
+        { Case insensitivity a la other programs }
+        KeyChar := LowerCase(KeyChar);
+      end
+      else
+      begin
+        { Read the scan code of control characters }
+        KeyChar := ReadKey;
+      end;
+  {$ELSE}
+      {$R-}
+      mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
+      {$R+}
+      i := getch;
+      echo;
+      case i of
+        KEY_MOUSE:
+        begin
+          getmouse(@mouse_event);
+          if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) then
+          begin
+            if mouse_event.x < FDimSep.LeftStart - 1 then
+            begin
+              if (mouse_event.bstate and BUTTON1_PRESSED = BUTTON1_PRESSED) or (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
+              begin
+                FCurrentItem := mouse_event.y - 1 + FDimUA.TopEnd;
+                FCurrentItem := FCurrentItem + FViewPort.FirstItem;
+                FOnRelease := true;
+                ScrollTo(FCurrentItem);
+              end
+              else if (mouse_event.bstate and BUTTON1_DOUBLE_CLICKED = BUTTON1_DOUBLE_CLICKED) or (mouse_event.bstate and BUTTON2_PRESSED = BUTTON2_PRESSED) or (mouse_event.bstate and BUTTON2_CLICKED = BUTTON2_CLICKED) then
+              begin
+                OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
+              end
+              else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
+              begin
+                if (FItems^.Count > FCurrentItem) and not FOnRelease then
+                begin
+                  Inc(FCurrentItem);
+                end;
+
+                ScrollTo(FCurrentItem);
+                FOnRelease := false;
+              end
+              else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
+              begin
+                if FCurrentItem > 1 then
+                begin
+                  Dec(FCurrentItem);
+                  ScrollTo(FCurrentItem);
+                end;
+              end
+            end;
+          end;
+
+          Continue;
+        end;
+        KEY_RESIZE:
+        begin
+          Redraw;
+          Continue;
+        end;
+      end;
+
+      KeyChar := Chr(byte(i));
+      if i < 256 then
+      begin
+        { Case insensitivity a la other programs }
+        KeyChar := LowerCase(KeyChar);
+      end;
+{$ENDIF}
     end
     else
     begin
-      { Read the scan code of control characters }
-      KeyChar := ReadKey;
-    end;
-{$ELSE}
-    noecho;
-    {$R-}
-    mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
-    {$R+}
-    i := getch;
-    echo;
-    case i of
-      KEY_MOUSE:
+      if FProcessingStatus = psUnfinished then
       begin
-        getmouse(@mouse_event);
-        if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) then
+        if RetrieveChunk then
         begin
-          if mouse_event.x < FDimSep.LeftStart - 1 then
-          begin
-            if (mouse_event.bstate and BUTTON1_PRESSED = BUTTON1_PRESSED) or (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
-            begin
-              FCurrentItem := mouse_event.y - 1 + FDimUA.TopEnd;
-              FCurrentItem := FCurrentItem + FViewPort.FirstItem;
-              ScrollTo(FCurrentItem);
-            end
-            else if (mouse_event.bstate and BUTTON1_DOUBLE_CLICKED = BUTTON1_DOUBLE_CLICKED) or (mouse_event.bstate and BUTTON2_PRESSED = BUTTON2_PRESSED) or (mouse_event.bstate and BUTTON2_CLICKED = BUTTON2_CLICKED) then
-            begin
-              OpenProg('for:http', TFeedItem(FItems^.GetNth(FCurrentItem - 1)).Link);
-            end
-            else if mouse_event.bstate and BUTTON_SCROLL_DOWN = BUTTON_SCROLL_DOWN then
-            begin
-              if FItems^.Count > FCurrentItem then
-              begin
-                Inc(FCurrentItem);
-                ScrollTo(FCurrentItem);
-              end;
-            end
-            else if mouse_event.bstate and BUTTON_SCROLL_UP = BUTTON_SCROLL_UP then
-            begin
-              if FCurrentItem > 1 then
-              begin
-                Dec(FCurrentItem);
-                ScrollTo(FCurrentItem);
-              end
-            end
-          end;
+          FProcessingStatus := psUnfinished;
+        end
+        else
+        begin
+          FProcessingStatus := psFinished;
         end;
-
-        Continue;
-      end;
-      KEY_RESIZE:
+      end
+      else if FPRocessingStatus = psFinished then
       begin
+        FProcessingStatus := psUnstarted;
+
         Redraw;
-        Continue;
+        ShowHelp;
+        ScrollTo(FCurrentItem);
       end;
-    end;
 
-    KeyChar := Chr(byte(i));
-    if i < 256 then
-    begin
-      { Case insensitivity a la other programs }
-      KeyChar := LowerCase(KeyChar);
+      KeyChar := NullKey;
     end;
-{$ENDIF}
-
+ 
     if KeyChar = GetBoundKey(GoKey) then
     begin
       GoURI;
@@ -360,6 +399,12 @@ begin
       begin
         ScrollTo(FCurrentItem);
       end;
+
+      { So when scrolling during downloading feeds, the feed list will display correctly }
+      if FProcessingStatus = psUnfinished then
+      begin
+        Redraw;
+      end;
     end
     else if (KeyChar = UpArrow) or (KeyChar = GetBoundKey(UpKey)) then
     begin
@@ -373,6 +418,12 @@ begin
       end;
 
       ScrollTo(FCurrentItem);
+
+      { So when scrolling during downloading feeds, the feed list will display correctly }
+      if FProcessingStatus = psUnfinished then
+      begin
+        Redraw;
+      end;
     end
     else if KeyChar = GetBoundKey(RefreshKey) then
     begin
@@ -457,6 +508,11 @@ begin
       SwapVectors;
       ClrScr;
       Redraw;
+    end
+    else if KeyChar = GetBoundKey(AbortKey) then
+    begin
+      UnqueueURI;
+      ScrollTo(FCurrentItem);
     end;
   until KeyChar = GetBoundKey(QuitKey);
 end;
@@ -523,7 +579,7 @@ begin
   end;
 end;
 
-procedure TTui.RetrieveFeed(Resource: String);
+procedure TTui.QueueURI(Resource: String);
 var
   Message: String;
 begin
@@ -536,17 +592,18 @@ begin
   end;
 
   TuiWrite(Message);
+  inherited QueueURI(Resource);
 
-  DrawFeedList;
-  ClrScr;
-  GoToXY(1, 1);
-  inherited RetrieveFeed(Resource);
-
-  if FPrintItems then
+  if RetrieveChunk then
   begin
-    Redraw;
-    FPrintItems := false;
+    FProcessingStatus := psUnfinished;
+  end
+  else
+  begin
+    FProcessingStatus := psFinished;
   end;
+
+  FPrintItems := false;
 end;
 
 procedure TTui.ShowHelp;
@@ -636,7 +693,7 @@ begin
   if URI <> '' then
   begin
     FPrintItems := true;
-    RetrieveFeed(URI);
+    QueueURI(URI);
   end;
 end;
 
@@ -812,19 +869,7 @@ end;
 
 procedure TTui.SetCursorPos;
 begin
-{$IFNDEF USE_NCRT}
-  DrawFeedList;
   GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
-{$ELSE}
-  if FCurrentItem > FViewPort.FirstItem then
-  begin
-    move(FCurrentItem - FViewPort.FirstItem - 1 + (FDimList.TopStart - FDimUA.TopEnd) + Ord(not FScrollingUp), 0);
-  end
-  else
-  begin
-    move(FCurrentItem - FViewPort.FirstItem + (FDimList.TopStart - FDimUA.TopEND), 0);
-  end;
-{$ENDIF}
 end;
 
 procedure TTui.SetOptions;
@@ -1258,7 +1303,7 @@ begin
       begin
         FPrintItems := true;
       end;
-      RetrieveFeed(Subscriptions^.GetNth(FeedIndex));
+      QueueURI(Subscriptions^.GetNth(FeedIndex));
     end;
   end;
 end;
@@ -1293,12 +1338,10 @@ end;
 
 procedure TTui.PrintFeedItems;
 var
-  i: word;
+  i: PtrUInt;
   Item: TFeedItem;
-  LenStr: String;
   Title: String;
 begin
-  DrawFeedList;
   ClrScr;
   GotoXY(1, 1);
 
@@ -1308,19 +1351,7 @@ begin
     if Item <> nil then
     begin
       Title := Item.Title;
-      WriteStr(LenStr, i);
-      if Length(Title) > FDimList.LeftEnd - Length(LenStr) - 3 then
-      begin
-        Title := Copy(Title, 1, FDimList.LeftEnd - Length(LenStr) - 6) + '...';
-      end;
-
-      TextBackground(SkinColorTable.FIndexBack);
-      TextColor(SkinColorTable.FIndexFore);
-      Write(i, ': ');
-
-      TextBackground(SkinColorTable.FTitleBack);
-      TextColor(SkinColorTable.FTitleFore);
-      TuiWriteLn(Title);
+      PrintTitle(Title, i);
     end
     else
     begin
@@ -1329,6 +1360,25 @@ begin
   end;
 
   GoItem;
+end;
+    
+procedure TTui.PrintTitle(Title: String; const Index: PtrUInt);
+var
+  LenStr: String;
+begin
+    WriteStr(LenStr, Index);
+    if Length(Title) > FDimList.LeftEnd - Length(LenStr) - 3 then
+    begin
+      Title := Copy(Title, 1, FDimList.LeftEnd - Length(LenStr) - 6) + '...';
+    end;
+
+    TextBackground(SkinColorTable.FIndexBack);
+    TextColor(SkinColorTable.FIndexFore);
+    Write(Index, ': ');
+
+    TextBackground(SkinColorTable.FTitleBack);
+    TextColor(SkinColorTable.FTitleFore);
+    TuiWriteLn(Title);
 end;
 
 procedure TTui.DrawFeedInfo;

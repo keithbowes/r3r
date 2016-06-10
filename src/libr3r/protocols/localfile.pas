@@ -9,7 +9,6 @@ type
   TLocalFile = class(TRSock)
   private
     FFileHandle: Text;
-    FFileName: String;
   public
     constructor Create(Filename: String);
     destructor Destroy; override;
@@ -25,7 +24,7 @@ uses
 
 constructor TLocalFile.Create(FileName: String);
 begin
-  FFileName := FileName;
+  FURI := FileName;
   ShouldShow := true;
 end;
 
@@ -37,7 +36,7 @@ end;
 
 procedure TLocalFile.Execute;
 begin
-  Assign(FFileHandle, FFileName);
+  Assign(FFileHandle, FURI);
   Reset(FFileHandle);
 end;
 
@@ -61,7 +60,7 @@ function TLocalFile.ParseItem(var Item: TFeedItem): Boolean;
 var
   FileExt: String;
 begin
-  FileExt := ExtractFileExt(FFileName);
+  FileExt := ExtractFileExt(FURI);
 
   if FileExt = '.esf' then
   begin

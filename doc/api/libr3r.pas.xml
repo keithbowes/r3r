@@ -38,19 +38,29 @@
           Disconnects from the address, clears used memory, etc.  This should be called indirectly via the Free procedure.
         </descr>
       </element>
-      <element name="TLibR3R.Parse">
-        <descr>
-          Parses the feed at the connected address, and calls the item callback.
-        </descr>
+      <element name="TLibR3R.QueueURI">
+          <descr>
+              Add a URI (e.g. a local or remote file) to the queue.
+          </descr>
+      </element>
+      <element name="TLibR3R.UnqueueURI">
+          <descr>
+              Removes the current URI from the queue.  Useful for stopping processing the current feed.
+          </descr>
+      </element>
+      <element name="TLibR3R.RetrieveChunk">
+          <descr>
+              Retrieves a chunk of data from the feed.  Returns whether there was data received.  The chunk data itself is sent to the function specified by <link id="TLibR3R.RegisterItemCallback">RegisterItemCallback</link>.
+          </descr>
       </element>
       <element name="TLibR3R.RetrieveFeed">
         <descr>
-          Retrieves a new feed.
+            Retrieves a new feed. Internally, it just puts the feed into <link id="TLibR3R.QueueURI">the queue</link> and calls <link id="TLibR3R.RetrieveChunk">RetrieveChunk</link> in a loop until there's no more data to receive.
         </descr>
       </element>
       <element name="TLibR3R.HandleMessage">
         <descr>
-          A virtual method that must be overridden and given code which will handle any messages LibR3R generates.  It's the same as setting the <link id="TLibR3R.OnMessage">OnMessage</link> event.
+          A virtual method to which any warnings or errors are sent.  A UI may override it to handle those messages.
         </descr>
       </element>
       <element name="TLibR3R.RegisterItemCallback">

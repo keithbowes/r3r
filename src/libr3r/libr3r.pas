@@ -3,7 +3,7 @@ unit LibR3R;
 interface
 
 uses
-  FeedItem, ItemCallbacks, RHistory, RSettings, RSock, RSubscriptions;
+  FeedItem, ItemCallbacks, RHistory, RList, RSettings, RSock, RSubscriptions;
 
 const
   SettingsRead = RSettings.SettingsRead;
@@ -20,13 +20,15 @@ type
 
   TLibR3R = class
   private
-    FSock: TRSock;
-  protected
-    procedure Parse;
+    FSocketList: PRList;
+    function AddSocket(const Resource, Prot, Host: String; Port: word; const Path, Para: String): Boolean;
   public
     constructor Create;
     destructor Destroy; override;
-    procedure RetrieveFeed(Resource: String); virtual;
+    procedure QueueURI(Resource: String);
+    procedure UnqueueURI;
+    function RetrieveChunk: Boolean;
+    procedure RetrieveFeed(Resource: String);
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); virtual;
     procedure RegisterItemCallback(const cb: TItemCallback; const Data: Pointer);
   end;
@@ -46,13 +48,15 @@ uses
 {$IFNDEF SOCKETS_NONE}
   Http,
 {$ENDIF}
-  LibR3RStrings, LocalFile, RGetFeed, RMessage, URIParser;
+  LibR3RStrings, LocalFile, RGetFeed, RMessage, RProp, URIParser;
 
-function GetSockType(const Resource, Prot, Host: String; Port: word; const Path, Para: String): TRSock;
+function TLibR3R.AddSocket(const Resource, Prot, Host: String; Port: word; const Path, Para: String): Boolean;
+var
+  Sock: TRSock;
 begin
   if Prot = 'file' then
   begin
-    GetSockType := TLocalFile.Create(Resource);
+    Sock := TLocalFile.Create(Resource);
   end
 {$IFNDEF SOCKETS_NONE}
   else if (Prot = 'http')
@@ -74,51 +78,127 @@ begin
       end
       {$ENDIF}
     end;
-    GetSockType := THttpSock.Create(Prot, Host, Port, Path, Para);
+    Sock := THttpSock.Create(Prot, Host, Port, Path, Para);
   end
 {$ENDIF}
   else
   begin
-    GetSockType := nil;
+    Sock := nil;
+  end;
+
+  Result := Sock <> nil;
+  if Result then
+  begin
+    SetObjectProp(Sock, 'lib', Self);
+    FSocketList^.Add(Sock);
   end;
 end;
 
 constructor TLibR3R.Create;
 begin
   inherited Create;
+  New(FSocketList, Init);
 end;
 
 destructor TLibR3R.Destroy;
+var
+  i: PtrUInt;
 begin
+  { This should normally be handled by RetrieveChunk, but if the program is exited during parsing,
+    there will be unfreed objects. }
+  if FSocketList^.Count > 0 then
+  begin
+    for i := 0 to FSocketList^.Count - 1 do
+    begin
+      TRSock(FSocketList^.GetNth(i)).Free;
+    end;
+  end;
+
   FreeItemCallback;
+  Dispose(FSocketList, Done);
   inherited Destroy;
 end;
 
-procedure TLibR3R.RetrieveFeed(Resource: String);
+procedure TLibR3R.QueueURI(Resource: String);
 var
+  Sock: TRSock;
   URL: TURI;
 begin
   URL := GetFeed(Resource);
-  FSock := GetSockType(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path + URL.Document, URL.Params);
-
-  if FSock <> nil then
+  if not AddSocket(Resource, URL.Protocol, URL.Host, URL.Port, URL.Path + URL.Document, URL.Params) then
   begin
-    FSock.Execute;
-    Parse;
+    HandleMessage(true, ErrorGetting, Resource);
+  end;
 
-    if Assigned(FSock) then
+  if FSocketList^.Count > 0 then
+  begin
+    Sock := TRSock(FSocketList^.GetNth(FSocketList^.Count - 1));
+    if Sock <> nil then
     begin
-      FSock.Free;
-    end;
+      Sock.Execute;
+      History^.Add(Resource);
+    end
+  end;
 
-    History^.Add(Resource);
+  SetMessageObject(Self);
+end;
+
+procedure TLibR3R.UnqueueURI;
+var
+  Sock: TRSock;
+begin
+  if FSocketList^.Count > 0 then
+  begin
+    Sock := TRSock(FSocketList^.GetNth(0));
+{$IFDEF SOCKETS_SYNAPSE}
+    if (Sock is THttpSock) then
+    begin
+      Sock.Sock.CloseSocket;
+    end;
+{$ENDIF}
+    Sock.Free;
+    FSocketList^.Delete(0);
   end;
 end;
 
-procedure TLibR3R.Parse;
+function TLibR3R.RetrieveChunk: Boolean;
+var
+  Sock: TRSock = nil;
 begin
-  SetMessageObject(Self);
-  ParseFeed(FSock);
+  if FSocketList^.Count > 0 then
+  begin
+    Sock := TRSock(FSocketList^.GetNth(0))
+  end;
+
+  if Sock <> nil then
+  begin
+    Result := ContinueParsing(Sock);
+    if not Result then
+    begin
+      if FSocketList^.Count > 0 then
+      begin
+        Sock.Free;
+        FSocketList^.Delete(0);
+
+        { Start parsing the next feed in the queue, if any }
+        if FSocketList^.Count > 0 then
+        begin
+          Result := true;;
+        end;
+      end;
+    end;
+  end;
+end;
+
+procedure TLibR3R.RetrieveFeed(Resource: String);
+begin
+  QueueURI(Resource);
+  if TRSock(FSocketList^.GetNth(0)) <> nil then
+  begin
+    while RetrieveChunk do
+    begin
+    end;
+  end;
 end;
 
 procedure TLibR3R.HandleMessage(IsError: Boolean; MessageName, Extra: String);

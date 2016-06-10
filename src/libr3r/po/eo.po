@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-06-14 08:22-0400\n"
+"PO-Revision-Date: 2016-06-11 00:47-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -12,7 +12,7 @@ msgstr ""
 
 #: libr3rstrings:errorgetting
 msgid "Couldn't retrieve the feed."
-msgstr "Ne povis atingi la fluon."
+msgstr "Ne eblis atingi la fluon."
 
 #: libr3rstrings:invalidheaders
 msgid "The web server doesn't exist or sent invalid information."

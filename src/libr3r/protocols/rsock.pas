@@ -47,7 +47,7 @@ type
     FTempList: PRStringList;
 {$ENDIF}
 
-    FURL: String;
+    FURI: String;
     ShouldShow: Boolean;
     constructor Create(Host: String; Port: word);
     destructor Destroy; override; 
@@ -282,7 +282,7 @@ begin
     Sock.SSLDoConnect;
     if Sock.LastError <> 0 then
     begin
-      CallMessageEvent(Self, true, SSLError, FURL);
+      CallMessageEvent(Self, true, SSLError, FURI);
     end;
     Sock.SSL.VerifyCert := Settings.GetBoolean('ssl-verify');
   end;
@@ -295,6 +295,8 @@ var
   ErrPos: byte;
   Len: PtrUInt;
   Line, Tmp: String;
+  { Calling this for each line really hurts performance, so reading up to 10 lines per call seems like a fair compromise. }
+  ParsedLines: 0..10 = 0;
 begin
   ShouldShow := true;
   SetAbstractFeed(FeedType);
@@ -312,32 +314,40 @@ begin
 
       if FUseChunked then
       begin
-        Tmp := Trim(Line);
-        if FChunkedLength > 0 then
-        begin
-          Dec(FChunkedLength, Length(Line) + 2);
-        end
-        else if Tmp <> '' then
-        begin
-          try
-            Val('$' + Tmp, Len, ErrPos);
-          except
-          end;
-
-          if ErrPos = 0 then
+        repeat
+          Tmp := Trim(Line);
+          if FChunkedLength > 0 then
           begin
-            FChunkedLength := Len + 1;
-            Continue;
+            Dec(FChunkedLength, Length(Line) + 2);
+          end
+          else if Tmp <> '' then
+          begin
+            try
+              Val('$' + Tmp, Len, ErrPos);
+            except
+            end;
+
+            if ErrPos = 0 then
+            begin
+              FChunkedLength := Len + 1;
+              Line := GetLine;
+              Continue;
+            end;
           end;
-        end;
+        until true;
       end;
 
+      { FPC generates an ERangeCheckError for some reason }
+      {$R-}
+      Inc(ParsedLines);
+      {$R+}
+
       ParseLine(Line, Item);
-    until Item.Finished;
+    until (ParsedLines = 10) or (Item.Finished);
   end;
 
   ShouldShow := ShouldShow and FAbstractFeed.ShouldShow;
-  ParseItem := Line = SockEof;
+  ParseItem := Line <> SockEof;
 end;
 
 function TRSock.Error: Boolean;

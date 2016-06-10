@@ -52,6 +52,19 @@ begin
   TLibR3R_Shared(Lib).Free;
 end;
 
+function libr3r_retrieve_chunk(Lib: Pointer): integer; cdecl;
+begin
+  Result := Ord(TLibR3R_Shared(Lib).RetrieveChunk);
+end;
+
+procedure libr3r_queue_uri(Lib: Pointer; Resource: PChar);
+var
+  Res: String;
+begin
+  WriteStr(Res, Resource);
+  TLibR3R_Shared(Lib).QueueURI(Res);
+end;
+
 procedure libr3r_retrieve_feed(Lib: Pointer; Resource: PChar); cdecl;
 var
   Res: String;

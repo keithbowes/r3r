@@ -13,8 +13,8 @@ uses
   , RMessage
 {$ENDIF};
 
+function ContinueParsing(const Sock: TRSock): Boolean;
 function GetFeed(var Resource: String): TURI;
-procedure ParseFeed(const Sock: TRSock);
 
 implementation
 
@@ -31,11 +31,37 @@ uses
 var
   Item: TFeedItem;
 
+function ContinueParsing(const Sock: TRSock): Boolean;
+var
+  UseFilters: Boolean;
+begin
+{$IFDEF SOCKETS_SYNAPSE}
+  if Assigned(Sock.Sock) and Sock.Error then
+  begin
+    CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, Sock.FURI);
+    Result := false;
+    Exit;
+  end;
+{$ENDIF}
+
+  Result := Sock.ParseItem(Item);
+
+  if Sock.ShouldShow then
+  begin
+    Item.Translate;
+
+    UseFilters := Settings.GetBoolean('use-filters');
+    if UseFilters then
+    begin
+      FilterItem(Item);
+    end;
+  end;
+end;
+
 function GetFeed(var Resource: String): TURI;
 var
   ExplicitFile: Boolean;
   Prot: String;
-  Res: TURI;
 {$IF DEFINED(USE_IDN) or DEFINED(USE_LIBIDN2)}
   PHost: PChar;
 {$ENDIF}
@@ -58,15 +84,15 @@ begin
   else
   begin
 {$IFNDEF SOCKETS_NONE}
-    Res := ParseURI(Resource);
+    Result := ParseURI(Resource);
 {$IFDEF USE_IDN}
-    idna_to_ascii_8z(StrToPChar(Res.Host), @PHost, 0);
-    WriteStr(Res.Host, PHost);
+    idna_to_ascii_8z(StrToPChar(Result.Host), @PHost, 0);
+    WriteStr(Result.Host, PHost);
 {$ELSE}
 {$IFDEF USE_LIBIDN2}
     setlocale(LC_ALL, '');
-    idn2_lookup_ul(StrToPChar(Res.Host), @PHost, 0);
-    WriteStr(Res.Host, PHost);
+    idn2_lookup_ul(StrToPChar(Result.Host), @PHost, 0);
+    WriteStr(Result.Host, PHost);
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
@@ -74,40 +100,7 @@ begin
 
   if Prot <> '' then
   begin
-    Res.Protocol := Prot;
-  end;
-  GetFeed := Res;
-end;
-
-procedure ParseFeed(const Sock: TRSock);
-var
-  Finished: Boolean;
-  UseFilters: Boolean;
-begin
-  Finished := false;
-  UseFilters := Settings.GetBoolean('use-filters');
-
-  while not Finished do
-  begin
-{$IFDEF SOCKETS_SYNAPSE}
-    if Assigned(Sock.Sock) and Sock.Error then
-    begin
-      CallMessageEvent(Sock, true, ErrorGetting + ' ' + Sock.Sock.GetErrorDescEx, Sock.FURL);
-      Break;
-    end;
-{$ENDIF}
-
-    Finished := Sock.ParseItem(Item);
-
-    if Sock.ShouldShow then
-    begin
-      Item.Translate;
-
-      if UseFilters then
-      begin
-        FilterItem(Item);
-      end;
-    end;
+    Result.Protocol := Prot;
   end;
 end;
 
