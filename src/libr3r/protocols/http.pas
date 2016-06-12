@@ -79,7 +79,7 @@ begin
 
   while (HeaderState <> hsFinished) do
   begin
-    Line := Trim(GetLine);
+    Line := GetLine;
 
     if (Line = '') and (HeaderState = hsStarted) then
     begin
@@ -108,7 +108,7 @@ begin
     begin
       ColonIndex := Pos(':', Line);
       HeaderName := LowerCase(Copy(Line, 1, ColonIndex - 1));
-      HeaderValue := Trim(Copy(Line, ColonIndex + 1, Length(Line) - ColonIndex));
+      HeaderValue := TrimLeft(Copy(Line, ColonIndex + 1, Length(Line) - ColonIndex));
 
       if Line = '' then
       begin
@@ -191,7 +191,7 @@ begin
           CallMessageEvent(Self, true, TooManyRedirects, FURI);
         end;
       end
-      else if (HeaderName = 'transfer-encoding') and (Pos('chunked', HeaderValue) <> 0) then
+      else if (HeaderName = 'transfer-encoding') and (Pos('chunked', LowerCase(HeaderValue)) <> 0) then
       begin
         FUseChunked := true;
       end

@@ -275,7 +275,6 @@ begin
 {$IFDEF SOCKETS_SYNAPSE}
   WriteStr(Port, FPort);
   Sock.Connect(FHost, Port);
-  Sock.ConvertLineEnd := true;
 {$IFDEF USE_SSL}
   if FIsSecure then
   begin
@@ -293,8 +292,7 @@ end;
 function TRSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   ErrPos: byte;
-  Len: PtrUInt;
-  Line, Tmp: String;
+  Line: String;
   { Calling this for each line really hurts performance, so reading up to 10 lines per call seems like a fair compromise. }
   ParsedLines: 0..10 = 0;
 begin
@@ -314,35 +312,23 @@ begin
 
       if FUseChunked then
       begin
-        repeat
-          Tmp := Trim(Line);
-          if FChunkedLength > 0 then
+        if FChunkedLength > 0 then
+        begin
+          Dec(FChunkedLength, Length(Line));
+        end
+        else
+        begin
+          Val('$' + Line[1..Pos(';', Line) - 1], FChunkedLength, ErrPos);
+          if ErrPos = 0 then
           begin
-            Dec(FChunkedLength, Length(Line) + 2);
-          end
-          else if Tmp <> '' then
-          begin
-            try
-              Val('$' + Tmp, Len, ErrPos);
-            except
-            end;
-
-            if ErrPos = 0 then
-            begin
-              FChunkedLength := Len + 1;
-              Line := GetLine;
-              Continue;
-            end;
+            FUseChunked := FChunkedLength <> 0;
+            Exit(true);
           end;
-        until true;
+        end;
       end;
 
-      { FPC generates an ERangeCheckError for some reason }
-      try
-        Inc(ParsedLines);
-      finally
-        ParseLine(Line, Item);
-      end;
+      Inc(ParsedLines);
+      ParseLine(Line, Item);
     until (ParsedLines = 10) or (Item.Finished);
   end;
 
