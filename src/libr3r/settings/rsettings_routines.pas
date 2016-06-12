@@ -2,10 +2,10 @@ unit RSettings_Routines;
 
 interface
 
-function CacheDir: String;
+function GetCacheDir: String;
 procedure CheckDir(const Dir: String);
-function DataDir: String;
-function SettingsDir: String;
+function GetDataDir: String;
+function GetSettingsDir: String;
 
 function GetInstalledPrefix: String;
 
@@ -16,73 +16,66 @@ uses
 
 function GetApplicationName: String;
 begin
-  GetApplicationName := LowerCase(AppName);
+  Result := LowerCase(AppName);
 end;
 
-function DataDir: String;
-var
-  Ret: String;
+function GetDataDir: String;
 begin
-  Ret := GetEnv('XDG_DATA_HOME');
+  Result := GetEnv('XDG_DATA_HOME');
 
-  if Ret <> '' then
+  if Result <> '' then
   begin
-    CheckDir(Ret);
-    Ret := Ret + PathDelim + GetApplicationName;
+    CheckDir(Result);
+    Result += PathDelim + GetApplicationName;
   end
   else
   begin
-    Ret := GetEnv('HOME');
-    if Ret <> '' then
+    Result := GetEnv('HOME');
+    if Result <> '' then
     begin
-      Ret := Ret + PathDelim + '.local';
-      CheckDir(Ret);
-      Ret := Ret + PathDelim + 'share';
-      CheckDir(Ret);
-      Ret := Ret + PathDelim + GetApplicationName;
+      Result += PathDelim + '.local';
+      CheckDir(Result);
+      Result += PathDelim + 'share';
+      CheckDir(Result);
+      Result += PathDelim + GetApplicationName;
     end
     else
     begin
-      Ret := SettingsDir;
+      Result := GetSettingsDir;
     end
   end;
 
-  Ret := Ret + PathDelim;
-  CheckDir(Ret);
-  DataDir := Ret;
+  Result += PathDelim;
+  CheckDir(Result);
 end;
 
-function CacheDir: String;
-var
-  Ret: String;
+function GetCacheDir: String;
 begin
-  Ret := GetEnv('XDG_CACHE_HOME');
+  Result := GetEnv('XDG_CACHE_HOME');
 
-  if Ret <> '' then
+  if Result <> '' then
   begin
-    CheckDir(Ret);
-    Ret := Ret + PathDelim + GetApplicationName;
+    CheckDir(Result);
+    Result += PathDelim + GetApplicationName;
   end
   else
   begin
-    Ret := GetEnv('HOME');
-    if Ret <> '' then
+    Result := GetEnv('HOME');
+    if Result <> '' then
     begin
-      Ret := Ret + PathDelim + '.cache';
-      CheckDir(Ret);
-      Ret := Ret + PathDelim + GetApplicationName;
-      CheckDir(Ret);
+      Result += PathDelim + '.cache';
+      CheckDir(Result);
+      Result += PathDelim + GetApplicationName;
+      CheckDir(Result);
     end
     else
     begin
-      Ret := SettingsDir + 'cache';
+      Result := GetSettingsDir + 'cache';
     end
   end;
 
-  Ret := Ret + PathDelim;
-  CheckDir(Ret);
-
-  CacheDir := Ret;
+  Result += PathDelim;
+  CheckDir(Result);
 end;
 
 procedure CheckDir(const Dir: String);
@@ -91,68 +84,61 @@ begin
   begin
     if not CreateDir(Dir) then
     begin
-      WriteLn(StringReplace(NoDir, '%s', Dir, []));
-      Halt(Random(256));
+      raise Exception.Create(StringReplace(NoDir, '%s', Dir, []));
     end;
   end;
 end;
 
-function SettingsDir: String;
-var
-  Ret: String;
+function GetSettingsDir: String;
 begin
 {$IFDEF FPC}
   OnGetApplicationName := GetApplicationName;
-  Ret := GetAppConfigDir(false);
+  Result := GetAppConfigDir(false);
 {$ELSE}
-  Ret := GetEnv('XDG_CONFIG_HOME');
+  Result := GetEnv('XDG_CONFIG_HOME');
 
-  if Ret = '' then
+  if Result = '' then
   begin
-    Ret := GetEnv('HOME');
+    Result := GetEnv('HOME');
 
-    if Ret = '' then
+    if Result = '' then
     begin
-      Ret := GetEnv('USERPROFILE');
+      Result := GetEnv('USERPROFILE');
     end;
-    CheckDir(Ret);
+    CheckDir(Result);
 
-    Ret := Ret + PathDelim +  '.config';
+    Result +/ PathDelim +  '.config';
   end;
   
-  CheckDir(Ret);
-  Ret := Ret + PathDelim + GetApplicationName + PathDelim;
+  CheckDir(Result);
+  Result += PathDelim + GetApplicationName + PathDelim;
 {$ENDIF}
 
-  CheckDir(Ret);
-  SettingsDir := Ret;
+  CheckDir(Result);
 end;
 
 function GetInstalledPrefix: String;
 var
   p: PChar;
-  Res: String;
 begin
-  Res := GetEnv('R3R_INSTALLED_PREFIX');
+  Result := GetEnv('R3R_INSTALLED_PREFIX');
 
-  if Res = '' then
+  if Result = '' then
   begin
     p := GetProp('installed-prefix');
     if Assigned(p) then
     begin
-      WriteStr(Res, p);
-      if Res = '' then
+      WriteStr(Result, p);
+      if Result = '' then
       begin
-        Res := InstalledPrefix
+        Result := InstalledPrefix
       end
     end
     else
     begin
-      Res := InstalledPrefix;
+      Result := InstalledPrefix;
     end
   end;
-
-  GetInstalledPrefix := Res
 end;
 
 end.

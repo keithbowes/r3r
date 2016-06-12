@@ -38,7 +38,7 @@ type
     procedure InitCache;
   public
     constructor Create(Prot, Host: String; Port: word; Path, Search: String);
-    procedure Execute; override;
+    procedure Open; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     destructor Destroy; override;
     procedure GetHeaders;
@@ -343,9 +343,9 @@ begin
   inherited Destroy;
 end;
 
-procedure THttpSock.Execute;
+procedure THttpSock.Open;
 begin
-  inherited Execute;
+  inherited Open;
   SendHeaders;
 
 {$IFDEF SOCKETS_LIBCURL}
@@ -429,6 +429,8 @@ begin
   begin
     GetHeaders;
   end;
+  
+  SetObjectProp(Item, 'cache', Cache);
 
   FeedType := Headers.ContentType;
 
@@ -441,7 +443,6 @@ begin
   end
   else if (Headers.Status = 304) and not Settings.GetBoolean('hide-cached-feeds') then
   begin
-    CurrentCache := nil;
     Ext := Cache.GetFeedExtension(Headers.ContentType);
     if Ext = 'unknown' then
     begin
@@ -454,9 +455,9 @@ begin
 {$IFDEF USE_ICONV}
       SetProp('charset', StrToPCharAlloc(Cache.GetEncoding));
 {$ENDIF}
-      FLocal := GetLocalFile(FCacheDir + PathDelim + CacheFeedFile +
+      FLocal := GetLocalFile(Cache.CacheDir + PathDelim + CacheFeedFile +
         '.' + Cache.GetFeedExtension(Headers.ContentType));
-      FLocal.Execute;
+      FLocal.Open;
     end;
 
     Result := FLocal.ParseItem(Item);

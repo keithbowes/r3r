@@ -36,7 +36,7 @@ var
 {$ENDIF}
 begin
   CurDir := GetCurrentDir;
-  ChDir(DataDir);
+  ChDir(GetDataDir);
 
   EntryFile := FieldName + '.filter';
   if FileExists(EntryFile) then

@@ -12,7 +12,7 @@ type
   public
     constructor Create(Filename: String);
     destructor Destroy; override;
-    procedure Execute; override;
+    procedure Open; override;
     function ParseItem(var Item: TFeedItem): Boolean; override;
     function GetLine: String; override;
   end;
@@ -34,7 +34,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TLocalFile.Execute;
+procedure TLocalFile.Open;
 begin
   Assign(FFileHandle, FURI);
   Reset(FFileHandle);

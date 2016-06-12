@@ -41,18 +41,18 @@ begin
     FreeMem(Data);
 {$ELSE}
 {$IFDEF FPC_UNIX}
-    {$I-}
+    try
     ReadStr(GetEnvironmentVariable('WINDOWID'), WindowHandle);
-    {$I+}
-
-    if WindowHandle <> 0 then
-    begin
-      WindowDisplay := XOpenDisplay(nil);
-      GetMem(Data, SizeOf(TXTextProperty));
-      XGetWMName(WindowDisplay, WindowHandle, Data);
-      XCloseDisplay(WindowDisplay);
-      WriteStr(Res, PChar(PXTextProperty(Data)^.value));
-      FreeMem(Data);
+    finally
+      if WindowHandle <> 0 then
+      begin
+        WindowDisplay := XOpenDisplay(nil);
+        GetMem(Data, SizeOf(TXTextProperty));
+        XGetWMName(WindowDisplay, WindowHandle, Data);
+        XCloseDisplay(WindowDisplay);
+        WriteStr(Res, PChar(PXTextProperty(Data)^.value));
+        FreeMem(Data);
+      end;
     end;
 {$ELSE}
     Data := nil;

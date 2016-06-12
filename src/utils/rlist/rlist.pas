@@ -194,7 +194,7 @@ begin
   i := 0;
   Tmp := FFirst;
 
-  if N >= FCount then
+  if (N >= FCount) and (FCount > 0) then
   begin
     N := FCount - 1;
   end;

@@ -89,6 +89,12 @@ begin
   Result := Sock <> nil;
   if Result then
   begin
+    if FSocketList^.Count = 0 then
+    begin
+      Dispose(FSocketList, Done);
+      New(FSocketList, Init);
+    end;
+
     SetObjectProp(Sock, 'lib', Self);
     FSocketList^.Add(Sock);
   end;
@@ -135,7 +141,7 @@ begin
     Sock := TRSock(FSocketList^.GetNth(FSocketList^.Count - 1));
     if Sock <> nil then
     begin
-      Sock.Execute;
+      Sock.Open;
       History^.Add(Resource);
     end
   end;
@@ -158,6 +164,11 @@ begin
 {$ENDIF}
     Sock.Free;
     FSocketList^.Delete(0);
+  end
+  else
+  begin
+    { Add an empty URI so that the proper events will fire }
+    QueueURI('file://');
   end;
 end;
 
@@ -183,10 +194,14 @@ begin
         { Start parsing the next feed in the queue, if any }
         if FSocketList^.Count > 0 then
         begin
-          Result := true;;
+          Result := true;
         end;
       end;
     end;
+  end
+  else
+  begin
+    Result := false;
   end;
 end;
 

@@ -54,10 +54,13 @@ end;
 procedure CallItemCallback(Item: TFeedItem);
 var
   ci: PItemCallbackInfo;
+  CurrentCache: THttpCache;
   HideItems: Boolean;
   ShouldShow: Boolean = true;
 begin
   ci := GetProp('item-callback');
+  CurrentCache := THTtpCache(GetObjectProp(Item, 'cache'));
+
   if Assigned(ci) then
   begin
     if Settings.GetBoolean('use-filters') then

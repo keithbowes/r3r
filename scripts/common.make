@@ -285,7 +285,7 @@ R3R_UI ?= tui
 FPC ?= $(call programpath,fpc)
 PC=$(FPC)
 DEFFLAG=-d
-PCFLAGS_BASE=-Mclass -Mclassicprocvars -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
+PCFLAGS_BASE=-Mclass -Mclassicprocvars -Sc -Sh -FE$(EXEOUT) -FU$(builddir) -Fu$(builddir)
 
 ifdef forWindows
 override PCFLAGS_BASE+=-WR

@@ -52,17 +52,22 @@ begin
   TLibR3R_Shared(Lib).Free;
 end;
 
-function libr3r_retrieve_chunk(Lib: Pointer): integer; cdecl;
-begin
-  Result := Ord(TLibR3R_Shared(Lib).RetrieveChunk);
-end;
-
 procedure libr3r_queue_uri(Lib: Pointer; Resource: PChar);
 var
   Res: String;
 begin
   WriteStr(Res, Resource);
   TLibR3R_Shared(Lib).QueueURI(Res);
+end;
+
+procedure libr3r_unqueue_uri(Lib: Pointer);
+begin
+  TLibR3R_Shared(Lib).UnqueueURI;
+end;
+
+function libr3r_retrieve_chunk(Lib: Pointer): integer; cdecl;
+begin
+  Result := Ord(TLibR3R_Shared(Lib).RetrieveChunk);
 end;
 
 procedure libr3r_retrieve_feed(Lib: Pointer; Resource: PChar); cdecl;
@@ -268,17 +273,17 @@ end;
 
 function libr3r_get_settings_dir: PChar; cdecl;
 begin
-  libr3r_get_settings_dir := StrToPCharAlloc(SettingsDir);
+  libr3r_get_settings_dir := StrToPCharAlloc(GetSettingsDir);
 end;
 
 function libr3r_get_data_dir: PChar; cdecl;
 begin
-  libr3r_get_data_dir := StrToPCharAlloc(DataDir);
+  libr3r_get_data_dir := StrToPCharAlloc(GetDataDir);
 end;
 
 function libr3r_get_cache_dir: PChar; cdecl;
 begin
-  libr3r_get_cache_dir := StrToPCharAlloc(CacheDir);
+  libr3r_get_cache_dir := StrToPCharAlloc(GetCacheDir);
 end;
 
 function libr3r_get_version: PChar; cdecl;
@@ -287,7 +292,9 @@ begin
 end;
 
 exports
-  libr3r_create, libr3r_free, libr3r_retrieve_feed,
+  libr3r_create, libr3r_free,
+  libr3r_queue_uri, libr3r_unqueue_uri,
+  libr3r_retrieve_chunk, libr3r_retrieve_feed,
   libr3r_on_item_parsed, libr3r_on_message_received,
   libr3r_get_item_field,
   libr3r_get_user_agent, libr3r_set_user_agent_info,

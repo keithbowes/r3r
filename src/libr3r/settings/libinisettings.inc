@@ -9,7 +9,7 @@ end;
 
 constructor TRSettings.Create;
 begin
-  IniFile := ini_open(StrToPChar(SettingsDir + 'r3r.ini'), 'w', ';');
+  IniFile := ini_open(StrToPChar(GetSettingsDir + 'r3r.ini'), 'w', ';');
   New(FSettings, Init);
   InitRec;
 end;

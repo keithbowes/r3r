@@ -67,7 +67,7 @@ var
   Res: char;
   s: String;
 begin
-  bindfile := DataDir + 'clav';
+  bindfile := GetDataDir + 'clav';
   Res := Key;
 
   if FileExists(bindfile) then

@@ -28,7 +28,7 @@ constructor TRHistory.Init;
 var
   tf: String;
 begin
-  tf := DataDir + 'history';
+  tf := GetDataDir + 'history';
   Assign(FFile, tf);
 
   if not FileExists(tf) then

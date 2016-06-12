@@ -8,7 +8,7 @@ uses
   LibR3R, RList;
 
 type
-  TProcessingStatus = (psUnstarted, psUnfinished, psFinished);
+  TProcessingStatus = (psUnstarted, psStarted, psFinished);
   TViewport = record
     FirstItem, LastItem: word;
     PortHeight: word;
@@ -278,11 +278,13 @@ begin
         KeyChar := ReadKey;
       end;
   {$ELSE}
-      {$R-}
-      mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
-      {$R+}
-      i := getch;
-      echo;
+      try
+        mousemask(BUTTON1_PRESSED or BUTTON1_CLICKED or BUTTON1_DOUBLE_CLICKED or BUTTON2_PRESSED or BUTTON2_CLICKED or BUTTON_SCROLL_DOWN or BUTTON_SCROLL_UP, nil);
+      finally
+        i := getch;
+        echo;
+      end;
+
       case i of
         KEY_MOUSE:
         begin
@@ -342,11 +344,11 @@ begin
     end
     else
     begin
-      if FProcessingStatus = psUnfinished then
+      if FProcessingStatus = psStarted then
       begin
         if RetrieveChunk then
         begin
-          FProcessingStatus := psUnfinished;
+          FProcessingStatus := psStarted;
         end
         else
         begin
@@ -401,7 +403,7 @@ begin
       end;
 
       { So when scrolling during downloading feeds, the feed list will display correctly }
-      if FProcessingStatus = psUnfinished then
+      if Settings.GetBoolean('show-incoming-items') and (FProcessingStatus = psStarted) then
       begin
         Redraw;
       end;
@@ -420,7 +422,7 @@ begin
       ScrollTo(FCurrentItem);
 
       { So when scrolling during downloading feeds, the feed list will display correctly }
-      if FProcessingStatus = psUnfinished then
+      if Settings.GetBoolean('show-incoming-items') and (FProcessingStatus = psStarted) then
       begin
         Redraw;
       end;
@@ -512,7 +514,11 @@ begin
     else if KeyChar = GetBoundKey(AbortKey) then
     begin
       UnqueueURI;
-      ScrollTo(FCurrentItem);
+
+      if Settings.GetBoolean('show-incoming-items') then
+      begin
+        ScrollTo(FCurrentItem);
+      end;
     end;
   until KeyChar = GetBoundKey(QuitKey);
 end;
@@ -596,7 +602,7 @@ begin
 
   if RetrieveChunk then
   begin
-    FProcessingStatus := psUnfinished;
+    FProcessingStatus := psStarted;
   end
   else
   begin
@@ -869,7 +875,11 @@ end;
 
 procedure TTui.SetCursorPos;
 begin
-  GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
+  try
+    GotoXY(1, FCurrentItem - FViewPort.FirstItem + Ord(not FScrollingUp));
+  except
+    GotoXY(1, 1);
+  end;
 end;
 
 procedure TTui.SetOptions;
@@ -1019,7 +1029,7 @@ begin
 {$IFNDEF USE_LIBEDIT}
   rl_callback_handler_install('', read_option_chars);
 {$ENDIF}
-  Backup := StrToPChar(DataDir + '_options_history');
+  Backup := StrToPChar(GetDataDir + '_options_history');
   write_history(Backup);
   clear_history;
 {$ENDIF}
@@ -1177,7 +1187,11 @@ begin
     until (Len = 0) or (Index < 0) or (SetDesc = GetBoundKey(QuitKey));
 
     Redraw;
-    GoItem;
+
+    if Settings.GetBoolean('show-incoming-items') then
+    begin
+      GoItem;
+    end;
   end;
   
 {$IFDEF USE_READLINE}
@@ -1262,6 +1276,14 @@ end;
 
 procedure TTui.ScrollTo(n: word);
 begin
+  { Don't allow scrolling through items during loading if that feature is disabled }
+  if not Settings.GetBoolean('show-incoming-items') and (FProcessingStatus = psStarted) then
+  begin
+    DrawFeedList;
+    GotoXY(1, 1);
+    Exit;
+  end;
+
   RedrawConditional;
 
   if (n <= FViewPort.FirstItem) and (n > 0) then

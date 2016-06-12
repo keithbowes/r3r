@@ -29,6 +29,7 @@ type
 
   THttpCache = class
   private
+    FCacheDir: String;
     FCurrentDir: String;
     FIdsList: PRStringList;
     FRootCacheDir: String;
@@ -45,13 +46,10 @@ type
     procedure Invalidate;
     procedure WriteData(const Data: String; DataType: TCacheDataType);
     function GetIdsList: PRStringList;
+    property CacheDir: String read FCacheDir;
   end;
 
 function CacheEncode(const URL: String): String;
-
-var
-  CurrentCache: THttpCache;
-  FCacheDir: String;
 
 implementation
 
@@ -78,7 +76,7 @@ begin
   Info^.CacheParam := NoData;
 
   FCurrentDir := GetCurrentDir;
-  FRootCacheDir := CacheDir;
+  FRootCacheDir := GetCacheDir;
   CheckDir(FRootCacheDir);
 
   FCacheDir := FRootCacheDir  + Url;
@@ -98,7 +96,6 @@ begin
     Close(IdsFile);
   end;
 
-  CurrentCache := Self;
   ChDir(FCurrentDir);
 end;
 

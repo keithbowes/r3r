@@ -121,7 +121,7 @@ begin
   begin
     if not GetSkinFrom(GetInstalledPrefix + PathDelim + 'share' + PathDelim + LowerCase(AppName)) then
     begin
-      GetSkinFrom(DataDir);
+      GetSkinFrom(GetDataDir);
     end;
   end;
 

@@ -21,7 +21,7 @@ end;
 
 constructor TRSettings.Create;
 begin
-  IniFile := TIniFile.Create(SettingsDir + 'r3r.ini');
+  IniFile := TIniFile.Create(GetSettingsDir + 'r3r.ini');
   New(FSettings, Init);
 
   InitRec;

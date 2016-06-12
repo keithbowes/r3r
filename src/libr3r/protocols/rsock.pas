@@ -52,7 +52,7 @@ type
     constructor Create(Host: String; Port: word);
     destructor Destroy; override; 
     procedure DomainSet(Host: String; Port: word);
-    procedure Execute; virtual;
+    procedure Open; virtual;
     function GetLine: String; virtual;
     function ParseItem(var Item: TFeedItem): Boolean; virtual;
     function Error: Boolean;
@@ -268,7 +268,7 @@ begin
   end;
 end;
 
-procedure TRSock.Execute;
+procedure TRSock.Open;
 var
   Port: String;
 begin
@@ -338,11 +338,11 @@ begin
       end;
 
       { FPC generates an ERangeCheckError for some reason }
-      {$R-}
-      Inc(ParsedLines);
-      {$R+}
-
-      ParseLine(Line, Item);
+      try
+        Inc(ParsedLines);
+      finally
+        ParseLine(Line, Item);
+      end;
     until (ParsedLines = 10) or (Item.Finished);
   end;
 

@@ -150,24 +150,30 @@ function DateToUnix(Time: TRDate): String;
 var
   Day, Month, Year: word;
   Hour, Millisecond, Minute, Second: word;
-  Res: String;
   TS, TST: real;
 begin
-  {$I-}
-  ReadStr(Time.Day, Day);
-  ReadStr(GetMonthIndex(Time.Month), Month);
-  ReadStr(Time.Year, Year);
+  try
+    ReadStr(Time.Day, Day);
+    ReadStr(GetMonthIndex(Time.Month), Month);
+    ReadStr(Time.Year, Year);
 
-  ReadStr(Time.Hour, Hour);
-  ReadStr(Time.Millisecond, Millisecond);
-  ReadStr(Time.Minute, Minute);
-  ReadStr(Time.Second, Second);
-  {$I+}
-  TST := EncodeTime(Hour, Minute, Second, Millisecond);
-  TS := (EncodeDate(Year, Month, Day) + TST - EncodeDate(1970, 1, 1)) * SecondsPerDay;
-
-  WriteStr(Res, Trunc(TS));
-  DateToUnix := Res;
+    ReadStr(Time.Hour, Hour);
+    ReadStr(Time.Millisecond, Millisecond);
+    ReadStr(Time.Minute, Minute);
+    ReadStr(Time.Second, Second);
+  finally
+    try
+      try
+        TST := EncodeTime(Hour, Minute, Second, Millisecond);
+        TS := (EncodeDate(Year, Month, Day) + TST - EncodeDate(1970, 1, 1)) * SecondsPerDay;
+      except
+        TS := 0;
+        TST := 0;
+      end;
+    finally
+      WriteStr(Result, Trunc(TS));
+    end;
+  end;
 end;
 
 function LongDateToTime(Time: String): TRDate;
