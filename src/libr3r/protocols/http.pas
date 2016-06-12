@@ -438,8 +438,9 @@ begin
   begin
     GetHeaders;
   end;
-
+  
   FeedType := Headers.ContentType;
+  Item.Cache := Cache;
 
   if Headers.Status = 200 then
   begin

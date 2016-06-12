@@ -22,7 +22,7 @@ type
 implementation
 
 uses
-  HttpCache, RSettings, SockConsts, URIParser;
+  HttpCache, RProp, RSettings, SockConsts, SysUtils, URIParser;
 
 constructor TFeed.Create;
 begin
@@ -37,6 +37,7 @@ end;
 
 procedure TFeed.ParseLine(Line: String; var Item: TFeedItem);
 begin
+  CurrentCache := THttpCache(Item.Cache);
   if Assigned(CurrentCache) and (Line <> SockEof) then
   begin
     CurrentCache.Info^.HeaderRec.ContentType := GetFormat;

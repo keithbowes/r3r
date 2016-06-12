@@ -58,6 +58,8 @@ var
   ShouldShow: Boolean = true;
 begin
   ci := GetProp('item-callback');
+  CurrentCache := THttpCache(Item.Cache);
+
   if Assigned(ci) then
   begin
     if Settings.GetBoolean('use-filters') then

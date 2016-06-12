@@ -26,7 +26,7 @@ uses
   LibIdn2, LibIntl,
 {$ENDIF}
 {$ENDIF}
-  HttpCache, LibR3RStrings, RFilter, RStrings, SysUtils;
+  LibR3RStrings, RFilter, RStrings, SysUtils;
 
 var
   Item: TFeedItem;
