@@ -194,24 +194,31 @@ begin
   i := 0;
   Tmp := FFirst;
 
-  if (N >= FCount) and (FCount > 0) then
+  if (FCount > 0) then
   begin
-    N := FCount - 1;
-  end;
-
-  for i := 1 to N do
-  begin
-    if (Tmp <> nil) and (Tmp^.Next <> nil) then
+    if N >= FCount then
     begin
-      Tmp := Tmp^.Next;
-    end
-    else
-    begin
-      Break;
+      N := FCount - 1;
     end;
-  end;
 
-  GetNth := Tmp^.Data;
+    for i := 1 to N do
+    begin
+      if (Tmp <> nil) and (Tmp^.Next <> nil) then
+      begin
+        Tmp := Tmp^.Next;
+      end
+      else
+      begin
+        Break;
+      end;
+    end;
+
+    GetNth := Tmp^.Data;
+  end
+  else
+  begin
+    GetNth := nil;
+  end;
 end;
 
 function TRList.IndexOf(Data: Pointer): integer;

@@ -59,7 +59,7 @@ var
   ShouldShow: Boolean = true;
 begin
   ci := GetProp('item-callback');
-  CurrentCache := THTtpCache(GetObjectProp(Item, 'cache'));
+  CurrentCache := THttpCache(Item.Cache);
 
   if Assigned(ci) then
   begin

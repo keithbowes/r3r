@@ -430,9 +430,8 @@ begin
     GetHeaders;
   end;
   
-  SetObjectProp(Item, 'cache', Cache);
-
   FeedType := Headers.ContentType;
+  Item.Cache := Cache;
 
   if Headers.Status = 200 then
   begin

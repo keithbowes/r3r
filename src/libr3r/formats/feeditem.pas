@@ -32,6 +32,7 @@ type
     Enclosure: TEnclosure;
 
     AllowsHTML: Boolean;
+    Cache: TObject;
     Filtered: Boolean;
     Finished: Boolean;
 
