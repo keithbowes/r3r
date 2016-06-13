@@ -17,6 +17,8 @@ type
     FMessageProc: TMessageProc;
     FParsedProc: TParsedProc;
   public
+    constructor Create;
+    destructor Destroy; override;
     procedure HandleMessage(IsError: Boolean; MessageName, Extra: String); override;
 
     property MessageProc: TMessageProc write FMessageProc;
@@ -25,6 +27,7 @@ type
 
 var
   CurProc: TParsedProc;
+  Lib: TLibR3R_Shared;
 
 procedure ItemReceived(const Item: TFeedItem; const Data: Pointer);
 begin
@@ -32,6 +35,17 @@ begin
 end;
 
 { Implemetation of the helper class }
+constructor TLibR3R_Shared.Create;
+begin
+  inherited Create;
+  RemoveDuplicatePChars := false;
+end;
+
+destructor TLibR3R_Shared.Destroy;
+begin
+  inherited Destroy;
+end;
+
 procedure TLibR3R_Shared.HandleMessage(IsError: Boolean; MessageName, Extra: String);
 begin
   if Assigned(FMessageProc) then
@@ -43,50 +57,50 @@ end;
 { Public exported functions }
 function libr3r_create: Pointer; cdecl;
 begin
-  libr3r_create := TLibR3R_Shared.Create;
-  RemoveDuplicatePChars := false;
+  Lib := TLibR3R_Shared.Create;
+  libr3r_create := nil;
 end;
 
-procedure libr3r_free(Lib: Pointer); cdecl;
+procedure libr3r_free; cdecl;
 begin
-  TLibR3R_Shared(Lib).Free;
+  Lib.Free;
 end;
 
-procedure libr3r_queue_uri(Lib: Pointer; Resource: PChar);
+procedure libr3r_queue_uri(Resource: PChar); cdecl;
 var
   Res: String;
 begin
   WriteStr(Res, Resource);
-  TLibR3R_Shared(Lib).QueueURI(Res);
+  Lib.QueueURI(Res);
 end;
 
-procedure libr3r_unqueue_uri(Lib: Pointer);
+procedure libr3r_unqueue_uri; cdecl;
 begin
-  TLibR3R_Shared(Lib).UnqueueURI;
+  Lib.UnqueueURI;
 end;
 
-function libr3r_retrieve_chunk(Lib: Pointer): integer; cdecl;
+function libr3r_retrieve_chunk: integer; cdecl;
 begin
-  Result := Ord(TLibR3R_Shared(Lib).RetrieveChunk);
+  Result := Ord(Lib.RetrieveChunk);
 end;
 
-procedure libr3r_retrieve_feed(Lib: Pointer; Resource: PChar); cdecl;
+procedure libr3r_retrieve_feed(Resource: PChar); cdecl;
 var
   Res: String;
 begin
   WriteStr(Res, Resource);
-  TLibR3R_Shared(Lib).RetrieveFeed(Res);
+  Lib.RetrieveFeed(Res);
 end;
 
-procedure libr3r_on_item_parsed(Lib: Pointer; Proc: TParsedProc; Data: Pointer); cdecl;
+procedure libr3r_on_item_parsed(Proc: TParsedProc; Data: Pointer); cdecl;
 begin
-  TLibR3R_Shared(Lib).RegisterItemCallback(ItemReceived, Data);
+  Lib.RegisterItemCallback(ItemReceived, Data);
   CurProc := Proc;
 end;
 
-procedure libr3r_on_message_received(Lib: Pointer; Proc: TMessageProc); cdecl;
+procedure libr3r_on_message_received(Proc: TMessageProc); cdecl;
 begin
-  TLibR3R_Shared(Lib).MessageProc := Proc;
+  Lib.MessageProc := Proc;
 end;
 
 function libr3r_get_item_field(Item: Pointer; FieldName: PChar): Pointer; cdecl;
@@ -165,9 +179,13 @@ begin
     begin
       libr3r_get_item_field := StrToPCharAlloc(Uri);
     end
-    else if FieldName = 'myself' then
+    else if FieldName = 'self' then
     begin
       libr3r_get_item_field := StrToPCharAlloc(Myself);
+    end
+    else if FieldName = 'finished' then
+    begin
+      libr3r_get_item_field := Pointer(PtrInt(Finished));
     end
     else
     begin

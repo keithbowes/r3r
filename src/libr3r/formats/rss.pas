@@ -1,9 +1,9 @@
-unit Rss;
+unit RSS;
 
 interface
 
 uses
-  Feed, FeedItem, Xml;
+  Feed, FeedItem, XML;
 
 const
   RDFNS = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';

@@ -26,18 +26,18 @@ begin
   if Result <> '' then
   begin
     CheckDir(Result);
-    Result += PathDelim + GetApplicationName;
+    Result := Result + PathDelim + GetApplicationName;
   end
   else
   begin
     Result := GetEnv('HOME');
     if Result <> '' then
     begin
-      Result += PathDelim + '.local';
+      Result := Result + PathDelim + '.local';
       CheckDir(Result);
-      Result += PathDelim + 'share';
+      Result := Result + PathDelim + 'share';
       CheckDir(Result);
-      Result += PathDelim + GetApplicationName;
+      Result := Result + PathDelim + GetApplicationName;
     end
     else
     begin
@@ -45,7 +45,7 @@ begin
     end
   end;
 
-  Result += PathDelim;
+  Result := Result + PathDelim;
   CheckDir(Result);
 end;
 
@@ -56,16 +56,16 @@ begin
   if Result <> '' then
   begin
     CheckDir(Result);
-    Result += PathDelim + GetApplicationName;
+    Result := Result + PathDelim + GetApplicationName;
   end
   else
   begin
     Result := GetEnv('HOME');
     if Result <> '' then
     begin
-      Result += PathDelim + '.cache';
+      Result := Result + PathDelim + '.cache';
       CheckDir(Result);
-      Result += PathDelim + GetApplicationName;
+      Result := Result + PathDelim + GetApplicationName;
       CheckDir(Result);
     end
     else
@@ -74,7 +74,7 @@ begin
     end
   end;
 
-  Result += PathDelim;
+  Result := Result + PathDelim;
   CheckDir(Result);
 end;
 
@@ -107,11 +107,11 @@ begin
     end;
     CheckDir(Result);
 
-    Result +/ PathDelim +  '.config';
+    Result := Result + PathDelim + '.config';
   end;
   
   CheckDir(Result);
-  Result += PathDelim + GetApplicationName + PathDelim;
+  Result := Result + PathDelim + GetApplicationName + PathDelim;
 {$ENDIF}
 
   CheckDir(Result);

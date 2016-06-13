@@ -1,4 +1,4 @@
-unit Xml;
+unit XML;
 
 interface
 

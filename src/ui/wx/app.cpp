@@ -26,7 +26,7 @@ bool R3R::OnInit()
 	libr3r_set_user_agent_info(ua);
 	free(ua);
 
-	LoadFeeds(argc, argv);
+	GetFeedList()->Load();
 
 	return TRUE;
 }

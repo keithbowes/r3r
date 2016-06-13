@@ -40,7 +40,8 @@ RFrame::RFrame(const wxString & title, const wxPoint & pos, const wxSize & size)
 	
 	CreateMenus(this);
 
-	CreateFeedList(panel);
+	GetFeedList()->CreateView(panel);
+
 	CreateDescriptionBox(panel);
 	CreateLocationBar(panel);
 

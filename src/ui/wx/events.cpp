@@ -107,7 +107,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
 	HtmlDescriptionBox * html = (HtmlDescriptionBox *) box->GetClientData();
 	html->SetPage(wxString(info->desc, wxConvUTF8));
 
-	wxFrame * win = (wxFrame *) GetFeedList()->GetParent()->GetParent();
+	wxFrame * win = (wxFrame *) GetFeedListView()->GetParent()->GetParent();
 	win->SetStatusText(wxString(info->link, wxConvUTF8), 0);
 
 	wxButton * contact = GetContactButton();
@@ -161,6 +161,7 @@ void FrameEvents::OnClose(wxCloseEvent & event)
 {
 	delete GetDescriptionBox();
 	delete GetFeedList();
+	delete GetFeedListView();
 	delete GetSubscriptionsObject();
 
 	HideSettingsDialog();
@@ -169,7 +170,7 @@ void FrameEvents::OnClose(wxCloseEvent & event)
 
 void FrameEvents::OnSize(wxSizeEvent & event)
 {
-	GetFeedList()->ResizeColumns();
+	GetFeedListView()->ResizeColumns();
 	event.Skip();
 }
 
@@ -179,7 +180,7 @@ void GoButtonEvents::OnClick(wxCommandEvent & event)
 	wxComboBox * entry = (wxComboBox *) button->GetClientData();
 	wxString feed = entry->GetValue();
 	AddLocationHistory(feed.mb_str());
-	ParseFeed((char *) (const char *) feed.mb_str());
+	GetFeedList()->Add((char *) (const char *) feed.mb_str());
 }
 
 void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
@@ -193,7 +194,7 @@ void GoFieldEvents::OnKeyDown(wxKeyEvent & event)
 		wxComboBox * entry = (wxComboBox *) event.GetEventObject();
 		wxString feed = entry->GetValue();
 		AddLocationHistory(feed.mb_str());
-		ParseFeed((char *) (const char *) feed.mb_str());
+		GetFeedList()->Add((char *) (const char *) feed.mb_str());
 	}
 }
 
@@ -212,10 +213,8 @@ void MenuEvents::OnDonate(wxCommandEvent & WXUNUSED(event))
 
 void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 {
-	char *s;
-	Subscriptions * subs = GetSubscriptionsObject();
 	wxWindow * obj = (wxWindow *) event.GetEventObject();
-	wxMenuItem * item;
+	wxMenuItem * item = NULL;
 	
 	if (obj->IsKindOf(CLASSINFO(wxMenu)))
 	{
@@ -234,10 +233,7 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 		item->Enable(FALSE);
 	}
 
-	while((s = subs->GetNext()) != NULL)
-	{
-		ParseFeed(s);
-	}
+	GetFeedList()->LoadSubscriptions();
 }
 
 void MenuEvents::OnOpen(wxCommandEvent & event)
@@ -247,7 +243,7 @@ void MenuEvents::OnOpen(wxCommandEvent & event)
 	if (openFileDialog->ShowModal() == wxID_OK)
 	{
 		wxString fileName = openFileDialog->GetPath();
-		ParseFeed((char *) (const char *) fileName.mb_str());
+		GetFeedList()->Add((char *) (const char *) fileName.mb_str());
 	}
 }
 
@@ -258,9 +254,8 @@ void MenuEvents::OnQuit(wxCommandEvent & WXUNUSED(event))
 
 void MenuEvents::OnRefresh(wxCommandEvent & WXUNUSED(event))
 {
-	FeedListView * view = GetFeedList();
-	view->DeleteAllItems();
-	LoadFeeds(get_argc(), get_argv());
+	GetFeedListView()->DeleteAllItems();
+	GetFeedList()->Load();
 }
 
 void MenuEvents::OnSettings(wxCommandEvent & WXUNUSED(event))

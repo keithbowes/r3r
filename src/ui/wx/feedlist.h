@@ -23,15 +23,19 @@ typedef struct
 	char * res;
 } FeedResource;
 
-void CreateFeedList(wxPanel * parent);
-FeedListView * GetFeedList();
-void ResizeColumns(FeedListView * list);
-void CleanupFeedList();
-void ParseFeed(char * res);
-void * ParseFeedThread(void * resource);
-void LoadFeeds(int argc, wxChar ** argv);
+class FeedList
+{
+	public:
+		FeedList();
+		virtual ~FeedList();
+		wxListView * CreateView(wxPanel * parent);
+		void Add(char * feed, bool now = TRUE);
+		void Parse();
+		void Load();
+		void LoadSubscriptions();
+};
+
+FeedList * GetFeedList();
+FeedListView * GetFeedListView();
 
 void GoBrowser(char * link);
-
-int get_argc();
-wxChar ** get_argv();

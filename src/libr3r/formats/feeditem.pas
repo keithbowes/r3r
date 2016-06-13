@@ -58,7 +58,7 @@ uses
 {$ENDIF}
 {$ENDIF};
 
-function DecodeHtml(const InStr: String): String;
+function DecodeHTML(const InStr: String): String;
 var
   i: PtrUInt;
   EntNum: integer;
@@ -143,10 +143,10 @@ begin
   begin
     EntStr := '&' + EntStr;
   end;
-  DecodeHtml := OutStr + EntStr;
+  DecodeHTML := OutStr + EntStr;
 end;
 
-function StripHtml(const InStr: String): String;
+function StripHTML(const InStr: String): String;
 var
   OutStr: String;
 
@@ -159,10 +159,10 @@ begin
 end;
 
 begin
-  OutStr := DecodeHtml(InStr);
+  OutStr := DecodeHTML(InStr);
   ReplChar(#9, ' ');
   ReplChar('  ', ' ');
-  StripHtml := OutStr;
+  StripHTML := OutStr;
 end;
 
 constructor TFeedItem.Create;
@@ -277,7 +277,7 @@ begin
   end
   else
   begin
-    DescriptionText := StripHtml(Description);
+    DescriptionText := StripHTML(Description);
   end;
 end;
 
@@ -290,17 +290,16 @@ begin
   end
   else
   begin
-    TitleText := StripHtml(Title);
+    TitleText := StripHTML(Title);
   end;
 end;
 
 function CreateEmailRecord(EmailStr: String; const Delim: String; const OffsetEnd: word): TAuthor;
 var
   BegName: cardinal;
-  Rec: TAuthor;
 begin
   BegName := Pos(Delim, EmailStr);
-  with Rec do
+  with Result do
   begin
     if BegName <> 0 then
     begin
@@ -312,8 +311,6 @@ begin
       Email := EmailStr;
     end;
   end;
-
-  CreateEmailRecord := Rec;
 end;
 
 end.

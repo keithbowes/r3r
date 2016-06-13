@@ -4,12 +4,9 @@
 
 #include "i18n.h"
 
-void * rlib;
-FeedListView * feedList;
-bool topItem = false;
-
-int rargc;
-wxChar ** rargv;
+FeedList * feedList;
+FeedListView * feedListView;
+bool topItem = TRUE;
 
 void normalize_field_value(char ** field_value)
 {
@@ -42,7 +39,7 @@ void item_parsed(void * item, void * data)
 	info->link = (char *) libr3r_get_item_field(item, (char *) "link");
 	info->title = title;
 	info->contact = (char *) libr3r_get_item_field(item, (char *) "contact-email");
-	info->self = (char *) libr3r_get_item_field(item, (char *) "myself");
+	info->self = (char *) libr3r_get_item_field(item, (char *) "self");
 	info->enclosure.type = (char *) libr3r_get_item_field(item, (char *) "enclosure-type");
 	info->enclosure.url = (char *) libr3r_get_item_field(item, (char *) "enclosure-url");
 
@@ -54,20 +51,20 @@ void item_parsed(void * item, void * data)
 
 	if (topItem)
 	{
-		feedList->InsertItem(listItem);
+		feedListView->InsertItem(listItem);
 
 		listItem.SetColumn(1);
 		listItem.SetText(wxT(""));
-		feedList->SetItem(listItem);
+		feedListView->SetItem(listItem);
 	}
 	else
 	{
 		listItem.SetText(wxT(""));
-		feedList->InsertItem(listItem);
+		feedListView->InsertItem(listItem);
 
 		listItem.SetColumn(1);
 		listItem.SetText(wxString(title, wxConvUTF8));
-		feedList->SetItem(listItem);
+		feedListView->SetItem(listItem);
 
 		normalize_field_value(&created);
 		normalize_field_value(&subject);
@@ -75,13 +72,13 @@ void item_parsed(void * item, void * data)
 
 	listItem.SetColumn(2);
 	listItem.SetText(wxString(subject, wxConvUTF8));
-	feedList->SetItem(listItem);
+	feedListView->SetItem(listItem);
 
 	listItem.SetColumn(3);
 	listItem.SetText(wxString(created, wxConvUTF8));
-	feedList->SetItem(listItem);
+	feedListView->SetItem(listItem);
 
-	topItem = false;
+	topItem = (bool) libr3r_get_item_field(item, (char *) "finished");
 	itemIndex++;
 }
 
@@ -92,85 +89,106 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 	wxMessageBox(wxString(message_name, wxConvUTF8), wxString(extra,wxConvUTF8), wxOK | error_type);
 }
 
-void CreateFeedList(wxPanel * parent)
+FeedList::FeedList()
+{
+	libr3r_create();
+	libr3r_on_item_parsed(&item_parsed, NULL);
+	libr3r_on_message_received(&message_received);
+}
+
+FeedList::~FeedList()
+{
+	libr3r_free();
+}
+
+FeedList * GetFeedList()
+{
+	if (feedList)
+	{
+		return feedList;
+	}
+
+	return new FeedList();
+}
+
+FeedListView * GetFeedListView()
+{
+	return feedListView;
+}
+
+wxListView * FeedList::CreateView(wxPanel * parent)
 {
 	InitGettext();
 
 	wxListItem listItem;
 	wxSizer * sizer = parent->GetSizer();
 
-	feedList = new FeedListView(parent, -1, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
+	feedListView = new FeedListView(parent, -1, wxDefaultPosition, wxDefaultSize, wxLC_REPORT | wxLC_SINGLE_SEL);
 
 	listItem.SetText(_("Feed Title"));
-	feedList->InsertColumn(0, listItem);
+	feedListView->InsertColumn(0, listItem);
 
 	listItem.SetText(_("Item Title"));
-	feedList->InsertColumn(1, listItem);
+	feedListView->InsertColumn(1, listItem);
 
 	listItem.SetText(_("Subject"));
-	feedList->InsertColumn(2, listItem);
+	feedListView->InsertColumn(2, listItem);
 
 	listItem.SetText(_("Date Created"));
-	feedList->InsertColumn(3, listItem);
+	feedListView->InsertColumn(3, listItem);
 
-	sizer->Add(feedList, 2, wxEXPAND, 10);
-
-	rlib = libr3r_create();
-	libr3r_on_item_parsed(rlib, &item_parsed, NULL);
-	libr3r_on_message_received(rlib, &message_received);
-
-	feedList->SetClientData(rlib);
+	sizer->Add(feedListView, 2, wxEXPAND, 10);
+	return feedListView;
 }
 
-FeedListView * GetFeedList()
+void FeedList::Add(char * feed, bool now)
 {
-	return feedList;
+	libr3r_queue_uri(feed);
+
+	if (now)
+	{
+		Parse();
+	}
 }
 
-void * ParseFeedThread(void * resource)
+void FeedList::Parse()
 {
-	FeedResource * res = (FeedResource *) resource;
-
-	topItem = true;
-
-	libr3r_retrieve_feed(res->lib, res->res);
-	free(res);
-
-	return NULL;
+	while (libr3r_retrieve_chunk())
+	{
+		wxApp::GetInstance()->Yield();
+	}
 }
 
-void ParseFeed(char * res)
+void FeedList::Load()
 {
-	FeedResource * resource = (FeedResource *) malloc(sizeof(FeedResource));
-	resource->lib = rlib;
-	resource->res = res;
-	ParseFeedThread(resource);
-}
-
-void LoadFeeds(int argc, wxChar ** argv)
-{
-	char * name, * s;
 	int count;
+	char * name;
 	unsigned char type;
 	void * value;
 	name = (char *) "load-subscriptions-on-startup";
 	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
-	rargc = argc;
-	rargv = argv;
-
-	if (argc > 1)
+	if (wxApp::GetInstance()->argc > 1)
 	{
-		ParseFeed((char *) (const char *) wxString(argv[1], wxConvUTF8).mb_str());
+		Add((char *) (const char *) wxApp::GetInstance()->argv[1]);
 	}
 	else if ((bool) value)
 	{
-		Subscriptions * subs = GetSubscriptionsObject();
-		while ((s = subs->GetNext()) != NULL)
-		{
-			ParseFeed(s);
-		}
+		LoadSubscriptions();
 	}
+}
+
+void FeedList::LoadSubscriptions()
+{
+	char * s;
+
+	Subscriptions * subs = GetSubscriptionsObject();
+	while (NULL != (s = subs->GetNext()))
+	{
+		Add(s, FALSE);
+	} 
+
+	Parse();
 }
 
 void GoBrowser(char * url)
@@ -201,14 +219,4 @@ void GoBrowser(char * url)
 	}
 
 	wxExecute(command);
-}
-
-int get_argc()
-{
-	return rargc;
-}
-
-wxChar ** get_argv()
-{
-	return rargv;
 }

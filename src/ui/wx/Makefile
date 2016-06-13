@@ -3,13 +3,13 @@ WXFLAGS ?= --host=$(HOST)
 endif
 
 WX_CONFIG ?= wx-config $(WXFLAGS)
-CXX = $(shell $(WX_CONFIG) --cxx)
+CXX ?= $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
 						-I../../libr3r
 override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
-ifdef DEBUG
+ifeq ($(DEBUG),1)
 override CXXFLAGS += -g
 else
 override LDFLAGS+=-s

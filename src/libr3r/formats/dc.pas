@@ -5,7 +5,7 @@ unit DC;
 interface
 
 uses
-  Feed, FeedItem, Xml;
+  Feed, FeedItem, XML;
 
 const
   DCNS = 'http://purl.org/dc/elements/1.1/';
