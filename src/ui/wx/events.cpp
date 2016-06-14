@@ -157,7 +157,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
 	}
 }
 
-void FrameEvents::OnClose(wxCloseEvent & event)
+void FrameEvents::OnClose(wxCloseEvent & WXUNUSED(event))
 {
 	delete GetDescriptionBox();
 	delete GetFeedList();
@@ -236,7 +236,7 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 	GetFeedList()->LoadSubscriptions();
 }
 
-void MenuEvents::OnOpen(wxCommandEvent & event)
+void MenuEvents::OnOpen(wxCommandEvent & WXUNUSED(event))
 {
 	wxString filter = _("Atom") + wxString("|*.atom;*.xml|", wxConvUTF8) +
 		_("ESF") + wxString("|*.esf|", wxConvUTF8) +
@@ -280,18 +280,18 @@ void SettingsCheckBoxEvents::OnClick(wxCommandEvent & event)
 	elem->SetValue((void *) is_checked);
 }
 
-void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
+void SettingsDialogEvents::OnCancel(wxCommandEvent & WXUNUSED(event))
 {
 	HideSettingsDialog();
 }
 
-void SettingsDialogEvents::OnClose(wxCloseEvent & event)
+void SettingsDialogEvents::OnClose(wxCloseEvent & WXUNUSED(event))
 {
 	wxDialog * dlg = GetSettingsDialog();
 	dlg->Show(false);
 }
 
-void SettingsDialogEvents::OnOK(wxCommandEvent & event)
+void SettingsDialogEvents::OnOK(wxCommandEvent & WXUNUSED(event))
 {
 	char * name;
 	int count;
