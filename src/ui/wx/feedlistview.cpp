@@ -11,27 +11,21 @@ FeedListView::~FeedListView()
 	libr3r_free(GetClientData());
 }
 
-void FeedListView::ResizeColumns()
+void FeedListView::ResizeColumns(int w)
 {
-	int h, w;
-	if (this)
+	if (w > 4)
 	{
-		GetClientSize(&w, &h);
+		int wdate, wfeed, witem, wsubj;
+		wdate = w / 4;
+		wfeed = w / 5;
+		wsubj = w / 5;
+		witem = w - (wdate + wfeed + wsubj);
 
-		if (w > 4)
-		{
-			int wdate, wfeed, witem, wsubj;
-			wdate = w / 4;
-			wfeed = w / 5;
-			wsubj = w / 5;
-			witem = w - (wdate + wfeed + wsubj);
+		SetColumnWidth(0, wfeed);
+		SetColumnWidth(1, witem);
+		SetColumnWidth(2, wsubj);
+		SetColumnWidth(3, wdate);
 
-			SetColumnWidth(0, wfeed);
-			SetColumnWidth(1, witem);
-			SetColumnWidth(2, wsubj);
-			SetColumnWidth(3, wdate);
-
-			FitInside();
-		}
+		FitInside();
 	}
 }

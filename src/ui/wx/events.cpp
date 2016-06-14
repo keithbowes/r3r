@@ -169,7 +169,7 @@ void FrameEvents::OnClose(wxCloseEvent & event)
 
 void FrameEvents::OnSize(wxSizeEvent & event)
 {
-	GetFeedList()->ResizeColumns();
+	GetFeedList()->ResizeColumns(event.GetSize().GetWidth());
 	event.Skip();
 }
 
