@@ -5,11 +5,8 @@ FeedListView::FeedListView(wxWindow * parent, wxWindowID id, const wxPoint & pos
 {
 }
 
-void FeedListView::ResizeColumns()
+void FeedListView::ResizeColumns(int w)
 {
-	int h, w;
-	GetClientSize(&w, &h);
-
 	if (w > 4)
 	{
 		int wdate, wfeed, witem, wsubj;
