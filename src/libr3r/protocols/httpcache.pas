@@ -179,6 +179,7 @@ end;
 
 procedure THttpCache.Invalidate;
 begin
+  CheckDir(FCacheDir);
   ChDir(FCacheDir);
 
   InvalidateFile(CacheFeedFile + '.atom');

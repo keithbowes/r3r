@@ -13,6 +13,7 @@ type
     Etag: String;
     Expires: String;
     LastModified: String;
+    Message: String;
     Sniff: Boolean;
     Status: word;
   end;

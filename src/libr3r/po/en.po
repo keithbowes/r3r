@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-06-14 08:22-0400\n"
+"PO-Revision-Date: 2016-06-13 19:34-0400\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -23,6 +23,15 @@ msgstr "The web server doesn't exist or sent invalid information."
 
 msgid "The redirect limit has been reached."
 msgstr "The redirect limit has been reached."
+
+msgid "Client error."
+msgstr "Client error."
+
+msgid "Server error."
+msgstr "Server error."
+
+msgid "The server sent a message while processing the request."
+msgstr "The server sent a message while processing the request."
 
 msgid "Jan"
 msgstr "Jan"

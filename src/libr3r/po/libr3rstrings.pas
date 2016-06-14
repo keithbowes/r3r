@@ -7,6 +7,11 @@ var
   InvalidHeaders: String;
   TooManyRedirects: String;
 
+  ClientError: String;
+  ServerError: String;
+
+  InformationalResponse: String;
+
   Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Decem: String;
 
   UnknownEncoding: String;
@@ -31,6 +36,11 @@ begin
   ErrorGetting := _('Couldn''t retrieve the feed.');
   InvalidHeaders := _('The web server doesn''t exist or sent invalid information.');
   TooManyRedirects := _('The redirect limit has been reached.');
+
+  ClientError := _('Client error.');
+  ServerError := _('Server error.');
+
+  InformationalResponse := _('The server sent a message while processing the request.');
 
   Jan := _('Jan');
   Feb := _('Feb');
