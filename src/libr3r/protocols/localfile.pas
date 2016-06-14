@@ -24,6 +24,7 @@ uses
 
 constructor TLocalFile.Create(FileName: String);
 begin
+  FChunkedLength := -1;
   FURI := FileName;
   ShouldShow := true;
 end;

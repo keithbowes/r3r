@@ -56,6 +56,7 @@ type
     function GetLine: String; virtual;
     function ParseItem(var Item: TFeedItem): Boolean; virtual;
     function Error: Boolean;
+    property ChunkedLength: integer read FChunkedLength;
   end;
 
 implementation
@@ -171,6 +172,8 @@ begin
       FAbstractFeed := nil;
     end;
   end;
+
+  FAbstractFeed.Sock := Self;
 end;
 
 constructor TRSock.Create(Host: String; Port: word);
@@ -239,6 +242,7 @@ begin
   FHost := Host;
   FPort := Port;
   FUseChunked := false;
+  FChunkedLength := -1;
 
 {$IFDEF SOCKETS_LIBCURL}
   curl_easy_setopt(FHandle, CURLOPT_URL, StrToPChar(Host));
@@ -308,6 +312,11 @@ begin
     ParseItem := true;
     Exit;
   end;
+
+  if Assigned(Sock) then
+  begin
+    Sock.ConvertLineEnd := not FUseChunked;
+  end;
   
   with FAbstractFeed do
   begin
@@ -325,7 +334,8 @@ begin
           Val('$' + Line[1..Pos(';', Line) - 1], FChunkedLength, ErrPos);
           if ErrPos = 0 then
           begin
-            Exit(FChunkedLength <> 0);
+            FUseChunked := FChunkedLength <> 0;
+            Exit(true);
           end;
         end;
       end;

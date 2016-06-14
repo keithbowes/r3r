@@ -13,6 +13,7 @@ type
     function GetFormat: TFeedType; virtual; abstract;
   public
     ShouldShow: Boolean;
+    Sock: TObject;
     constructor Create;
     destructor Destroy; override;
     function GetAbsoluteURL(const RelURL, BaseURL: String): String;

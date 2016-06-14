@@ -34,7 +34,7 @@ type
   end;
 
   TXmlFeed = class;
-  TForeignXmlCLass = class of TXmlFeed;
+  TForeignXmlClass = class of TXmlFeed;
 
   TXmlFeed = class(TFeed)
   private
