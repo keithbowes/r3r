@@ -47,7 +47,7 @@ wxDialog * GetSettingsDialog()
 void ShowSettingsDialog()
 {
 	GetSettingsDialog();
-	dlg->Show(TRUE);
+	dlg->Show(true);
 	dlg->Centre();
 }
 

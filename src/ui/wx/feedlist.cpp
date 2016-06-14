@@ -6,7 +6,7 @@
 
 FeedList * feedList;
 FeedListView * feedListView;
-bool topItem = TRUE;
+bool topItem = true;
 
 void normalize_field_value(char ** field_value)
 {
@@ -179,7 +179,7 @@ void FeedList::LoadSubscriptions()
 	Subscriptions * subs = GetSubscriptionsObject();
 	while (NULL != (s = subs->GetNext()))
 	{
-		Add(s, FALSE);
+		Add(s, false);
 	} 
 
 	Parse();

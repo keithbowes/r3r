@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 13:09-0400\n"
+"POT-Creation-Date: 2016-06-14 14:27-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,6 +38,30 @@ msgid "About R3R"
 msgstr ""
 
 #: ../events.cpp:241
+msgid "Atom"
+msgstr ""
+
+#: ../events.cpp:242
+msgid "ESF"
+msgstr ""
+
+#: ../events.cpp:243
+msgid "Generic XML"
+msgstr ""
+
+#: ../events.cpp:244
+msgid "RSS 1.0"
+msgstr ""
+
+#: ../events.cpp:245
+msgid "RSS 2.0"
+msgstr ""
+
+#: ../events.cpp:246
+msgid "RSS 3.0"
+msgstr ""
+
+#: ../events.cpp:248
 msgid "Open a file"
 msgstr ""
 

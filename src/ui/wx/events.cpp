@@ -230,7 +230,7 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 
 	if (item)
 	{
-		item->Enable(FALSE);
+		item->Enable(false);
 	}
 
 	GetFeedList()->LoadSubscriptions();
@@ -238,7 +238,14 @@ void MenuEvents::OnLoadSubscriptions(wxCommandEvent & event)
 
 void MenuEvents::OnOpen(wxCommandEvent & event)
 {
-	wxFileDialog * openFileDialog = new wxFileDialog(this, _("Open a file"));
+	wxString filter = _("Atom") + wxString("|*.atom;*.xml|", wxConvUTF8) +
+		_("ESF") + wxString("|*.esf|", wxConvUTF8) +
+		_("Generic XML") + wxString("|*.xml|", wxConvUTF8) +
+		_("RSS 1.0") + wxString("|*.rdf;*.rss;*.xml|", wxConvUTF8) +
+		_("RSS 2.0") + wxString("|*.rss;*.xml|", wxConvUTF8) +
+		_("RSS 3.0") + wxString("|*.r3;*.rss3", wxConvUTF8); 
+
+	wxFileDialog * openFileDialog = new wxFileDialog(this, _("Open a file"), wxEmptyString, wxEmptyString, filter);
 
 	if (openFileDialog->ShowModal() == wxID_OK)
 	{
@@ -249,7 +256,7 @@ void MenuEvents::OnOpen(wxCommandEvent & event)
 
 void MenuEvents::OnQuit(wxCommandEvent & WXUNUSED(event))
 {
-	Close(TRUE);
+	Close(true);
 }
 
 void MenuEvents::OnRefresh(wxCommandEvent & WXUNUSED(event))
@@ -281,7 +288,7 @@ void SettingsDialogEvents::OnCancel(wxCommandEvent & event)
 void SettingsDialogEvents::OnClose(wxCloseEvent & event)
 {
 	wxDialog * dlg = GetSettingsDialog();
-	dlg->Show(FALSE);
+	dlg->Show(false);
 }
 
 void SettingsDialogEvents::OnOK(wxCommandEvent & event)
@@ -392,6 +399,7 @@ void SubscriptionsEvents::OnDelete(wxCommandEvent & event)
 void HtmlBoxEvents::OnHover(wxHtmlCellEvent & event)
 {
 	wxHtmlCell * theCell = event.GetCell();
+
 	wxHtmlLinkInfo * theLink = theCell->GetLink();
 	wxFrame * win = (wxFrame *) GetFeedListView()->GetParent()->GetParent();
 
@@ -415,14 +423,14 @@ void HtmlBoxEvents::OnLink(wxHtmlLinkEvent & event)
 	void * value;
 
 	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
-	if ((bool) value)
-	{
-		GoBrowser(event.GetLinkInfo().GetHref().char_str());
-	}
-	else
+	if (!(bool) value)
 	{
 		wxHtmlWindow * htmlBox = (wxHtmlWindow *) GetDescriptionBox()->GetClientData();
 		htmlBox->LoadPage(event.GetLinkInfo().GetHref());
+	}
+	else
+	{
+		GoBrowser(event.GetLinkInfo().GetHref().char_str());
 	}
 }
 

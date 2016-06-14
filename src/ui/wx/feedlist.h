@@ -28,7 +28,7 @@ class FeedList
 	public:
 		FeedList();
 		wxListView * CreateView(wxPanel * parent);
-		void Add(char * feed, bool now = TRUE);
+		void Add(char * feed, bool now = true);
 		void Parse();
 		void Load();
 		void LoadSubscriptions();
