@@ -394,9 +394,41 @@ void SubscriptionsEvents::OnDelete(wxCommandEvent & event)
 	}
 }
 
+void HtmlBoxEvents::OnHover(wxHtmlCellEvent & event)
+{
+	wxHtmlCell * theCell = event.GetCell();
+	wxHtmlLinkInfo * theLink = theCell->GetLink();
+	wxFrame * win = (wxFrame *) GetFeedList()->GetParent()->GetParent();
+
+	if (theLink)
+	{
+		win->SetStatusText(theLink->GetHref(), 0);
+	}
+	else
+	{
+		long selectedIndex = GetFeedList()->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+		ItemInfo * info = (ItemInfo *) GetFeedList()->GetItemData(selectedIndex);
+		win->SetStatusText(wxString(info->link, wxConvUTF8), 0);
+	}
+}
+
 void HtmlBoxEvents::OnLink(wxHtmlLinkEvent & event)
 {
-	GoBrowser(event.GetLinkInfo().GetHref().char_str());
+	int count;
+	char * name = (char *) "use-external-browser";
+	unsigned char type;
+	void * value;
+
+	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
+	if ((bool) value)
+	{
+		GoBrowser(event.GetLinkInfo().GetHref().char_str());
+	}
+	else
+	{
+		wxHtmlWindow * htmlBox = (wxHtmlWindow *) GetDescriptionBox()->GetClientData();
+		htmlBox->LoadPage(event.GetLinkInfo().GetHref());
+	}
 }
 
 #include "eventtables.h"

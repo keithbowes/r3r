@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 08:16-0400\n"
-"PO-Revision-Date: 2014-06-14 08:17-0400\n"
+"POT-Creation-Date: 2016-06-14 13:07-0400\n"
+"PO-Revision-Date: 2016-06-14 13:29-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Esperanto\n"
 "Language: eo\n"
@@ -33,31 +33,31 @@ msgstr "&Aboni"
 msgid "&View Enclosure..."
 msgstr "&Vidi la emetaĵon..."
 
-#: ../events.cpp:205
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Pri R3R"
 
-#: ../events.cpp:255
+#: ../events.cpp:241
 msgid "Open a file"
 msgstr "Malfermi dosieron"
 
-#: ../feedlist.cpp:20
+#: ../feedlist.cpp:17
 msgid "[None]"
 msgstr "[Neniu]"
 
-#: ../feedlist.cpp:104
+#: ../feedlist.cpp:122
 msgid "Feed Title"
 msgstr "Flua titolo"
 
-#: ../feedlist.cpp:107
+#: ../feedlist.cpp:125
 msgid "Item Title"
 msgstr "Era titolo"
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:128
 msgid "Subject"
 msgstr "Temo"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:131
 msgid "Date Created"
 msgstr "Dato kreita"
 
@@ -177,31 +177,40 @@ msgstr "Idento de la legilo: "
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../settings-programs.cpp:15
+#: ../settings-programs.cpp:19
 msgid "&Browser"
 msgstr "&TTT-legilo"
 
-#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+#: ../settings-programs.cpp:25 ../settings-programs.cpp:46
 msgid "&Browse..."
 msgstr "&Foliumi..."
 
-#: ../settings-programs.cpp:25
+#: ../settings-programs.cpp:32 ../settings-programs.cpp:34
+msgid "Use an external browser for opening links in the description box"
+msgstr ""
+"Uzi eksteran TTT-legilon por malfermi ligilojn en la priskribo-fenestraĵon"
+
+#: ../settings-programs.cpp:33
+msgid "&Use an external browser"
+msgstr "&Uzi eksteran TTT-legilon"
+
+#: ../settings-programs.cpp:40
 msgid "&Mail Client"
 msgstr "&Retpoŝtilo"
 
-#: ../settings-programs.cpp:35
+#: ../settings-programs.cpp:50
 msgid "Programs"
 msgstr "Programoj"
 
-#: ../settings-subscriptions.cpp:46
+#: ../settings-subscriptions.cpp:49
 msgid "&Delete"
 msgstr "&Forigi"
 
-#: ../settings-subscriptions.cpp:50
+#: ../settings-subscriptions.cpp:53
 msgid "&Add"
 msgstr "&Aldoni"
 
-#: ../settings-subscriptions.cpp:58
+#: ../settings-subscriptions.cpp:61
 msgid "Subscriptions"
 msgstr "Abonoj"
 

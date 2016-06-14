@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 08:16-0400\n"
-"PO-Revision-Date: 2014-06-14 08:16-0400\n"
+"POT-Creation-Date: 2016-06-14 13:07-0400\n"
+"PO-Revision-Date: 2016-06-14 13:32-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -33,31 +33,31 @@ msgstr "&Abonnieren"
 msgid "&View Enclosure..."
 msgstr "&Sehen die Beilage..."
 
-#: ../events.cpp:205
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Über R3R"
 
-#: ../events.cpp:255
+#: ../events.cpp:241
 msgid "Open a file"
 msgstr "Öffnen eine Datei"
 
-#: ../feedlist.cpp:20
+#: ../feedlist.cpp:17
 msgid "[None]"
 msgstr "[Keine]"
 
-#: ../feedlist.cpp:104
+#: ../feedlist.cpp:122
 msgid "Feed Title"
 msgstr "Feed-Titel"
 
-#: ../feedlist.cpp:107
+#: ../feedlist.cpp:125
 msgid "Item Title"
 msgstr "Item-Titel"
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:128
 msgid "Subject"
 msgstr "Themen"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:131
 msgid "Date Created"
 msgstr "Datum der es erstellt wurde"
 
@@ -177,31 +177,39 @@ msgstr "&Benutzeragent"
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../settings-programs.cpp:15
+#: ../settings-programs.cpp:19
 msgid "&Browser"
-msgstr "&Browser"
+msgstr "B&rowser"
 
-#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+#: ../settings-programs.cpp:25 ../settings-programs.cpp:46
 msgid "&Browse..."
 msgstr "&Blättern..."
 
-#: ../settings-programs.cpp:25
+#: ../settings-programs.cpp:32 ../settings-programs.cpp:34
+msgid "Use an external browser for opening links in the description box"
+msgstr "Ein externer Browser verwenden, um Links ins Beschreibungssteuerelement zu öffnen"
+
+#: ../settings-programs.cpp:33
+msgid "&Use an external browser"
+msgstr "Ein &externer Browser verwenden"
+
+#: ../settings-programs.cpp:40
 msgid "&Mail Client"
 msgstr "Mail-Client"
 
-#: ../settings-programs.cpp:35
+#: ../settings-programs.cpp:50
 msgid "Programs"
 msgstr "Programms"
 
-#: ../settings-subscriptions.cpp:46
+#: ../settings-subscriptions.cpp:49
 msgid "&Delete"
 msgstr "&Entfernen"
 
-#: ../settings-subscriptions.cpp:50
+#: ../settings-subscriptions.cpp:53
 msgid "&Add"
 msgstr "&Hinzufügen"
 
-#: ../settings-subscriptions.cpp:58
+#: ../settings-subscriptions.cpp:61
 msgid "Subscriptions"
 msgstr "Abonnements"
 

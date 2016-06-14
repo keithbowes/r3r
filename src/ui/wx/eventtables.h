@@ -45,5 +45,6 @@ BEGIN_EVENT_TABLE(SettingsEntry, wxTextCtrl)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(HtmlDescriptionBox, wxHtmlWindow)
+	EVT_HTML_CELL_HOVER(wxID_ANY, HtmlBoxEvents::OnHover)
 	EVT_HTML_LINK_CLICKED(wxID_ANY, HtmlBoxEvents::OnLink)
 END_EVENT_TABLE()
