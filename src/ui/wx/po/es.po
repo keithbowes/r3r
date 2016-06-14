@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 08:16-0400\n"
-"PO-Revision-Date: 2014-06-14 08:17-0400\n"
+"POT-Creation-Date: 2016-06-14 13:07-0400\n"
+"PO-Revision-Date: 2016-06-14 13:25-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -34,31 +34,31 @@ msgstr "&Abonarse"
 msgid "&View Enclosure..."
 msgstr "&Ver el archivo incluso..."
 
-#: ../events.cpp:205
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr "Sobre R3R"
 
-#: ../events.cpp:255
+#: ../events.cpp:241
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
-#: ../feedlist.cpp:20
+#: ../feedlist.cpp:17
 msgid "[None]"
 msgstr "[Ningún]"
 
-#: ../feedlist.cpp:104
+#: ../feedlist.cpp:122
 msgid "Feed Title"
 msgstr "Título Fuente"
 
-#: ../feedlist.cpp:107
+#: ../feedlist.cpp:125
 msgid "Item Title"
 msgstr "Título de Entrada"
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:128
 msgid "Subject"
 msgstr "Tema"
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:131
 msgid "Date Created"
 msgstr "Fecha Creado"
 
@@ -178,31 +178,39 @@ msgstr "El agento del &usuario: "
 msgid "HTTP"
 msgstr "HTTP"
 
-#: ../settings-programs.cpp:15
+#: ../settings-programs.cpp:19
 msgid "&Browser"
 msgstr "&Navegador"
 
-#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+#: ../settings-programs.cpp:25 ../settings-programs.cpp:46
 msgid "&Browse..."
 msgstr "&Hojear..."
 
-#: ../settings-programs.cpp:25
+#: ../settings-programs.cpp:32 ../settings-programs.cpp:34
+msgid "Use an external browser for opening links in the description box"
+msgstr "Usar un navegador exterior para abrir enlaces en la artilugio de descripción"
+
+#: ../settings-programs.cpp:33
+msgid "&Use an external browser"
+msgstr "&Usar un navegador exterior"
+
+#: ../settings-programs.cpp:40
 msgid "&Mail Client"
 msgstr "&Cliente de mensajes electrónicos"
 
-#: ../settings-programs.cpp:35
+#: ../settings-programs.cpp:50
 msgid "Programs"
 msgstr "Programas"
 
-#: ../settings-subscriptions.cpp:46
+#: ../settings-subscriptions.cpp:49
 msgid "&Delete"
 msgstr "A&lejar"
 
-#: ../settings-subscriptions.cpp:50
+#: ../settings-subscriptions.cpp:53
 msgid "&Add"
 msgstr "&Agregar"
 
-#: ../settings-subscriptions.cpp:58
+#: ../settings-subscriptions.cpp:61
 msgid "Subscriptions"
 msgstr "Suscripciones"
 

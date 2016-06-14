@@ -55,17 +55,6 @@ begin
 end;
 
 { Public exported functions }
-function libr3r_create: Pointer; cdecl;
-begin
-  Lib := TLibR3R_Shared.Create;
-  libr3r_create := nil;
-end;
-
-procedure libr3r_free; cdecl;
-begin
-  Lib.Free;
-end;
-
 procedure libr3r_queue_uri(Resource: PChar); cdecl;
 var
   Res: String;
@@ -310,7 +299,6 @@ begin
 end;
 
 exports
-  libr3r_create, libr3r_free,
   libr3r_queue_uri, libr3r_unqueue_uri,
   libr3r_retrieve_chunk, libr3r_retrieve_feed,
   libr3r_on_item_parsed, libr3r_on_message_received,
@@ -321,5 +309,13 @@ exports
   libr3r_history_add, libr3r_history_is_next, libr3r_history_next,
   libr3r_get_settings_dir, libr3r_get_data_dir, libr3r_get_cache_dir,
   libr3r_get_version;
+
+initialization
+
+Lib := TLibR3R_Shared.Create;
+
+finalization
+
+Lib.Free;
 
 end.

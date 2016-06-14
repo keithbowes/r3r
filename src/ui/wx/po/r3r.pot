@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 08:16-0400\n"
+"POT-Creation-Date: 2016-06-14 13:09-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,31 +33,31 @@ msgstr ""
 msgid "&View Enclosure..."
 msgstr ""
 
-#: ../events.cpp:205
+#: ../events.cpp:206
 msgid "About R3R"
 msgstr ""
 
-#: ../events.cpp:255
+#: ../events.cpp:241
 msgid "Open a file"
 msgstr ""
 
-#: ../feedlist.cpp:20
+#: ../feedlist.cpp:17
 msgid "[None]"
 msgstr ""
 
-#: ../feedlist.cpp:104
+#: ../feedlist.cpp:122
 msgid "Feed Title"
 msgstr ""
 
-#: ../feedlist.cpp:107
+#: ../feedlist.cpp:125
 msgid "Item Title"
 msgstr ""
 
-#: ../feedlist.cpp:110
+#: ../feedlist.cpp:128
 msgid "Subject"
 msgstr ""
 
-#: ../feedlist.cpp:113
+#: ../feedlist.cpp:131
 msgid "Date Created"
 msgstr ""
 
@@ -177,31 +177,39 @@ msgstr ""
 msgid "HTTP"
 msgstr ""
 
-#: ../settings-programs.cpp:15
+#: ../settings-programs.cpp:19
 msgid "&Browser"
 msgstr ""
 
-#: ../settings-programs.cpp:21 ../settings-programs.cpp:31
+#: ../settings-programs.cpp:25 ../settings-programs.cpp:46
 msgid "&Browse..."
 msgstr ""
 
-#: ../settings-programs.cpp:25
+#: ../settings-programs.cpp:32 ../settings-programs.cpp:34
+msgid "Use an external browser for opening links in the description box"
+msgstr ""
+
+#: ../settings-programs.cpp:33
+msgid "&Use an external browser"
+msgstr ""
+
+#: ../settings-programs.cpp:40
 msgid "&Mail Client"
 msgstr ""
 
-#: ../settings-programs.cpp:35
+#: ../settings-programs.cpp:50
 msgid "Programs"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:46
+#: ../settings-subscriptions.cpp:49
 msgid "&Delete"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:50
+#: ../settings-subscriptions.cpp:53
 msgid "&Add"
 msgstr ""
 
-#: ../settings-subscriptions.cpp:58
+#: ../settings-subscriptions.cpp:61
 msgid "Subscriptions"
 msgstr ""
 

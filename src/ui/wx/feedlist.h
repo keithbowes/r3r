@@ -27,7 +27,6 @@ class FeedList
 {
 	public:
 		FeedList();
-		virtual ~FeedList();
 		wxListView * CreateView(wxPanel * parent);
 		void Add(char * feed, bool now = TRUE);
 		void Parse();

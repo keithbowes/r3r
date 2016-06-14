@@ -18,9 +18,6 @@ typedef void (TParsedProc) (void * item, void * data);
  extern "C" {
 #endif
 
-extern void * libr3r_create(void);
-extern void libr3r_free(void);
-
 extern void libr3r_queue_uri(char * resource);
 extern void libr3r_unqueue_uri(void);
 

@@ -91,14 +91,8 @@ void message_received(unsigned short int is_error, char * message_name, char * e
 
 FeedList::FeedList()
 {
-	libr3r_create();
 	libr3r_on_item_parsed(&item_parsed, NULL);
 	libr3r_on_message_received(&message_received);
-}
-
-FeedList::~FeedList()
-{
-	libr3r_free();
 }
 
 FeedList * GetFeedList()

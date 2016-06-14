@@ -78,5 +78,6 @@ class SubscriptionsEvents: public wxWindow
 class HtmlBoxEvents : public wxEvtHandler
 {
 	public:
+		void OnHover(wxHtmlCellEvent & event);
 		void OnLink(wxHtmlLinkEvent & event);
 };

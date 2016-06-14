@@ -54,6 +54,13 @@ DEBUG
   Create a debug build (for developers and testers only).
 DEFS_EXTRA
   Extra defines to send to the compiler.
+DEFS_REGEXP
+  Allow the use of regular expressions to allow more powerful text matching.
+  Possible values:
+    * REGEXP_PCRE: Use the ubiquitous PCRE library for that.
+    * REGEXP_REGEXPR: Use the TRegExpr class for that.
+    * Any other value: Disable regular expressions
+  Default: REGEXP_PCRE
 DEFS_SETTINGS
   The type of settings to use:
   * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
@@ -95,7 +102,7 @@ Enabling/disabling features:
 You can use the configure script or set the make environment
 variables manually (0 to disable; 1 to enable):
 EXPAT_VERSION
-  The version of Expat to use. Valid values:
+  The version of Expat to use (only valid with USE_EXPAT). Valid values:
   * 1.0
   * 1.1
   * 1.2
@@ -140,13 +147,6 @@ USE_LIBIDN2
 USE_NLS
   Allow the use of gettext to enable NLS (native language support).
   Default: 1
-DEFS_REGEXP
-  Allow the use of regular expressions to allow more powerful text matching.
-  Possible values:
-    * REGEXP_PCRE: Use the ubiquitous PCRE library for that.
-    * REGEXP_REGEXPR: Use the TRegExpr class for that.
-    * Any other value: Disable regular expressions
-  Default: REGEXP_PCRE
 USE_READLINE
   Use GNU readline to keep a history of visited URLs.
   Default: 1

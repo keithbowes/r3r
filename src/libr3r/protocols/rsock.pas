@@ -173,7 +173,10 @@ begin
     end;
   end;
 
-  FAbstractFeed.Sock := Self;
+  if Assigned(FAbstractFeed) then
+  begin
+    FAbstractFeed.Sock := Self;
+  end;
 end;
 
 constructor TRSock.Create(Host: String; Port: word);
