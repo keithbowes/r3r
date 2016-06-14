@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2014-06-14 08:22-0400\n"
+"PO-Revision-Date: 2016-06-13 20:00-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -20,6 +20,15 @@ msgstr "El servidor web no exista o mandó información inválido."
 
 msgid "The redirect limit has been reached."
 msgstr "Se ha alcanzado el límite de redirección."
+
+msgid "Client error."
+msgstr "Error del client."
+
+msgid "Server error."
+msgstr "Error del servador."
+
+msgid "The server sent a message while processing the request."
+msgstr "El servador envié una mensaje durante procesar la petición."
 
 msgid "Jan"
 msgstr "ene"

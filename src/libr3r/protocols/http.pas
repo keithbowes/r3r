@@ -98,6 +98,7 @@ begin
       end;
 
       Val(RespList.Strings[1], Headers.Status, ErrPos);
+      Headers.Message := Line[(Pos(RespList.Strings[1], Line) + 4)..Length(Line)];
 
       if Headers.Status = 200 then
       begin
@@ -425,6 +426,8 @@ function THttpSock.ParseItem(var Item: TFeedItem): Boolean;
 var
   Ext: String;
 begin
+  Result := false;
+
   if Headers.Status = 0 then
   begin
     GetHeaders;
@@ -433,14 +436,16 @@ begin
   FeedType := Headers.ContentType;
   Item.Cache := Cache;
 
-  if Headers.Status = 200 then
+  { Successs }
+  if Headers.Status div 100 = 2 then
   begin
     if ShouldShow then
     begin
       Result := inherited ParseItem(Item);
     end;
   end
-  else if (Headers.Status = 304) and not Settings.GetBoolean('hide-cached-feeds') then
+  { Redirection }
+  else if (Headers.Status div 100 = 3) and not Settings.GetBoolean('hide-cached-feeds') then
   begin
     Ext := Cache.GetFeedExtension(Headers.ContentType);
     if Ext = 'unknown' then
@@ -468,8 +473,20 @@ begin
 
     ShouldShow := not Result;
   end
-  else
+  { Client error }
+  else if Headers.Status div 100 = 4 then
   begin
+    CallMessageEvent(Self, true, ClientError, Headers.Message);
+  end
+  { Server error }
+  else if Headers.Status div 100 = 5 then
+  begin
+    CallMessageEvent(Self, true, ServerError, Headers.Message);
+  end
+  { Informational message }
+  else if Headers.Status div 100 = 1 then
+  begin
+    CallMessageEvent(Self, false, InformationalResponse, Headers.Message);
     Result := true;
   end;
 end;

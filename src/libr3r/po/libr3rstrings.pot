@@ -9,6 +9,15 @@ msgstr ""
 msgid "The redirect limit has been reached."
 msgstr ""
 
+msgid "Client error."
+msgstr ""
+
+msgid "Server error."
+msgstr ""
+
+msgid "The server sent a message while processing the request."
+msgstr ""
+
 msgid "Jan"
 msgstr ""
 

@@ -64,8 +64,11 @@ uses
   Atom, Esf, Rss, Rss3,
   LibR3RStrings, RMessage, RSettings, SockConsts, SysUtils;
 
-{$IFDEF SOCKETS_LIBCURL}
 const
+{$IFDEF SOCKETS_SYNAPSE}
+  TimeoutMilliseconds = 5000;
+{$ENDIF}
+{$IFDEF SOCKETS_LIBCURL}
   CURL_BUFFER_SIZE = 85;
   CURL_MAX_BUFFER_SIZE = CURL_BUFFER_SIZE * 3;
 
@@ -246,7 +249,7 @@ end;
 function TRSock.GetLine: String;
 begin
 {$IFDEF SOCKETS_SYNAPSE}
-  GetLine := Sock.RecvString(5000);
+  GetLine := Sock.RecvString(TimeoutMilliseconds);
   FError := Sock.LastError <> 0;
 {$ENDIF}
 
@@ -274,6 +277,7 @@ var
 begin
 {$IFDEF SOCKETS_SYNAPSE}
   WriteStr(Port, FPort);
+  //Sock.SetTimeout(TimeoutMilliseconds);
   Sock.Connect(FHost, Port);
 {$IFDEF USE_SSL}
   if FIsSecure then
@@ -321,8 +325,7 @@ begin
           Val('$' + Line[1..Pos(';', Line) - 1], FChunkedLength, ErrPos);
           if ErrPos = 0 then
           begin
-            FUseChunked := FChunkedLength <> 0;
-            Exit(true);
+            Exit(FChunkedLength <> 0);
           end;
         end;
       end;
