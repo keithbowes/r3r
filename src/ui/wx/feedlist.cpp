@@ -162,9 +162,14 @@ void FeedList::Load()
 	name = (char *) "load-subscriptions-on-startup";
 	libr3r_access_settings(&name, &value, &type, &count, SETTINGS_READ);
 
-	if (wxApp::GetInstance()->argc > 1)
+	int argc;
+	if ((argc = wxApp::GetInstance()->argc) > 1)
 	{
-		Add((char *) (const char *) wxApp::GetInstance()->argv[1]);
+		int i;
+		for (i = 1; i < argc; i++)
+		{
+			Add((char *) (const char *) wxString(wxApp::GetInstance()->argv[i]).mb_str());
+		}
 	}
 	else if ((bool) value)
 	{

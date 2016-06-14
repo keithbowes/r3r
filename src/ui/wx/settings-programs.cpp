@@ -29,7 +29,7 @@ void CreateProgramsPage(wxTreebook * parent)
 	wxBoxSizer * extbrowBox = new wxBoxSizer(wxHORIZONTAL);
 	vbox->Add(extbrowBox);
 
-	libr3r_register_setting((char *) "use-external-browser", (char *) "Programs", (void *) false, TYPE_BOOLEAN, (char *) _("Use an external browser for opening links in the description box"));
+	libr3r_register_setting((char *) "use-external-browser", (char *) "Programs", (void *) false, TYPE_BOOLEAN, (char *) (const char *) wxString(_("Use an external browser for opening links in the description box")).mb_str());
 	SettingsCheckBox *extbrowCheck = new SettingsCheckBox(panel, _("&Use an external browser"), (char *) "use-external-browser");
 	extbrowCheck->SetToolTip(_("Use an external browser for opening links in the description box"));
 	extbrowBox->Add(extbrowCheck, 1, wxEXPAND | wxALL, 5);
