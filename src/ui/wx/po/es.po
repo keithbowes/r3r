@@ -1,5 +1,5 @@
 # Spanish translations for r package
-# Traducciones al espa駉l para el paquete r.
+# Traducciones al espa帽ol para el paquete r.
 # Copyright (C) 2009 THE r'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the r package.
 # Keith Bowes <keith@localhost>, 2009.
@@ -14,7 +14,7 @@ msgstr ""
 "Language-Team: Spanish\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -48,7 +48,7 @@ msgstr "ESF"
 
 #: ../events.cpp:243
 msgid "Generic XML"
-msgstr "XML gen閞ico"
+msgstr "XML gen茅rico"
 
 #: ../events.cpp:244
 msgid "RSS 1.0"
@@ -68,15 +68,15 @@ msgstr "Abrir un archivo"
 
 #: ../feedlist.cpp:17
 msgid "[None]"
-msgstr "[Ning鷑]"
+msgstr "[Ning煤n]"
 
 #: ../feedlist.cpp:122
 msgid "Feed Title"
-msgstr "T韙ulo Fuente"
+msgstr "T铆tulo Fuente"
 
 #: ../feedlist.cpp:125
 msgid "Item Title"
-msgstr "T韙ulo de Entrada"
+msgstr "T铆tulo de Entrada"
 
 #: ../feedlist.cpp:128
 msgid "Subject"
@@ -108,7 +108,7 @@ msgstr "&Refrescar"
 
 #: ../menu.cpp:34
 msgid "&Settings..."
-msgstr "&Configuraci髇..."
+msgstr "&Configuraci贸n..."
 
 #: ../menu.cpp:40
 msgid "&Donate"
@@ -136,7 +136,7 @@ msgstr "Mostrar &mensajes del dorso"
 
 #: ../settings-display.cpp:20
 msgid "Show &feed titles only"
-msgstr "Mostrar &t韙ulos fuentes solamente"
+msgstr "Mostrar &t铆tulos fuentes solamente"
 
 #: ../settings-display.cpp:23
 msgid "Hide &cached feeds"
@@ -156,7 +156,7 @@ msgstr "Cargar &suscripciones a rodando"
 
 #: ../settings-display.cpp:38
 msgid "Display"
-msgstr "Visualizaci髇"
+msgstr "Visualizaci贸n"
 
 #: ../settings-headers.cpp:15
 msgid "Accept &Types: "
@@ -184,7 +184,7 @@ msgstr "Cabezas de HTTP"
 
 #: ../settings-http.cpp:18
 msgid "Proxy &Address: "
-msgstr "&Direcci髇 de Procura: "
+msgstr "&Direcci贸n de Procura: "
 
 #: ../settings-http.cpp:24
 msgid "&Proxy Port: "
@@ -213,7 +213,7 @@ msgstr "&Hojear..."
 #: ../settings-programs.cpp:32 ../settings-programs.cpp:34
 msgid "Use an external browser for opening links in the description box"
 msgstr ""
-"Usar un navegador exterior para abrir enlaces en la artilugio de descripci髇"
+"Usar un navegador exterior para abrir enlaces en la artilugio de descripci贸n"
 
 #: ../settings-programs.cpp:33
 msgid "&Use an external browser"
@@ -221,7 +221,7 @@ msgstr "&Usar un navegador exterior"
 
 #: ../settings-programs.cpp:40
 msgid "&Mail Client"
-msgstr "&Cliente de mensajes electr髇icos"
+msgstr "&Cliente de mensajes electr贸nicos"
 
 #: ../settings-programs.cpp:50
 msgid "Programs"
@@ -241,4 +241,4 @@ msgstr "Suscripciones"
 
 #: ../settingsdialog.cpp:6
 msgid "Settings"
-msgstr "Configuraci髇"
+msgstr "Configuraci贸n"
