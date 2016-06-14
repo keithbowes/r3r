@@ -19,7 +19,7 @@ bool R3R::OnInit()
 	InitGettext();
 
 	RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
-	frame->Show(TRUE);
+	frame->Show(true);
 	SetTopWindow(frame);
 
 	char * ua = GetUserAgent();
@@ -28,5 +28,5 @@ bool R3R::OnInit()
 
 	LoadFeeds(argc, argv);
 
-	return TRUE;
+	return true;
 }

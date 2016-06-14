@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: r 3r\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-14 13:07-0400\n"
-"PO-Revision-Date: 2016-06-14 13:25-0400\n"
+"POT-Creation-Date: 2016-06-14 14:27-0400\n"
+"PO-Revision-Date: 2016-06-14 14:29-0400\n"
 "Last-Translator: Keith Bowes <keith@localhost>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -39,6 +39,30 @@ msgid "About R3R"
 msgstr "Sobre R3R"
 
 #: ../events.cpp:241
+msgid "Atom"
+msgstr "Atom"
+
+#: ../events.cpp:242
+msgid "ESF"
+msgstr "ESF"
+
+#: ../events.cpp:243
+msgid "Generic XML"
+msgstr "XML genérico"
+
+#: ../events.cpp:244
+msgid "RSS 1.0"
+msgstr "RSS 1.0"
+
+#: ../events.cpp:245
+msgid "RSS 2.0"
+msgstr "RSS 2.0"
+
+#: ../events.cpp:246
+msgid "RSS 3.0"
+msgstr "RSS 3.0"
+
+#: ../events.cpp:248
 msgid "Open a file"
 msgstr "Abrir un archivo"
 
@@ -188,7 +212,8 @@ msgstr "&Hojear..."
 
 #: ../settings-programs.cpp:32 ../settings-programs.cpp:34
 msgid "Use an external browser for opening links in the description box"
-msgstr "Usar un navegador exterior para abrir enlaces en la artilugio de descripción"
+msgstr ""
+"Usar un navegador exterior para abrir enlaces en la artilugio de descripción"
 
 #: ../settings-programs.cpp:33
 msgid "&Use an external browser"
