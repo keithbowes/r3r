@@ -44,7 +44,7 @@ const
   UpArrow = Chr(72);
 {$ELSE}
   DownArrow = Chr(byte(KEY_DOWN));
-  EndKey = Chr(byte(KEY_END));
+  EndKey = WideChar(KEY_END);
   HomeKey = Chr(byte(KEY_HOME));
   PageDownKey = Chr(byte(KEY_NPAGE));
   PageUpKey = Chr(byte(KEY_PPAGE));

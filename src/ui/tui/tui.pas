@@ -289,7 +289,8 @@ begin
         KEY_MOUSE:
         begin
           getmouse(@mouse_event);
-          if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) then
+          { Allow the mouse to work to feed view }
+          if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) and (mouse_event.y >= FDimList.TopStart - 1) and (mouse_event.y < FDimInfoBar.TopStart) then
           begin
             if mouse_event.x < FDimSep.LeftStart - 1 then
             begin
@@ -322,15 +323,44 @@ begin
                   ScrollTo(FCurrentItem);
                 end;
               end
+            end
+            else
+            begin
+              ScrollTo(FCurrentItem);
             end;
+          end
+          { Allow the mouse to work in the info bar }
+          else if (mouse_event.y = FDimInfoBar.TopStart - 1) and (mouse_event.bstate and BUTTON1_CLICKED = BUTTON1_CLICKED) then
+          begin
+            if mouse_event.x < ScreenWidth div 5 then
+            begin
+              ungetch(Ord(GetBoundKey(QuitKey)));
+            end
+            else if mouse_event.x < ScreenWidth div 5 * 2 then
+            begin
+              GoURI;
+            end
+            else if mouse_event.x < ScreenWidth div 5 * 3 then
+            begin
+              SetOptions;
+            end
+            else if mouse_event.x < ScreenWidth div 5 * 4 then
+            begin
+              GoDonate;
+            end
+            else
+            begin
+              ungetch(Ord(GetBoundKey(HelpKey)));
+            end;
+          end
+          else
+          begin
+            ScrollTo(FCurrentItem);
           end;
-
-          Continue;
         end;
         KEY_RESIZE:
         begin
           Redraw;
-          Continue;
         end;
       end;
 
@@ -360,7 +390,6 @@ begin
         FProcessingStatus := psUnstarted;
 
         Redraw;
-        ShowHelp;
         ScrollTo(FCurrentItem);
       end;
 
@@ -613,22 +642,26 @@ begin
 end;
 
 procedure TTui.ShowHelp;
-const
-  OptSep = '     ';
 var
-  Opts: String;
+  OptNum: 1..6 = 1;
 
 procedure AddOption(opt: String);
 begin
-  if Length(Opts) + Length(OptSep) + Length(opt) < ScreenWidth then
-  begin
-    if Opts <> '' then
-    begin
-      Opts := Opts + OptSep;
-    end;
+  Window(FDimInfoBar.LeftStart + ScreenWidth div 5 * (OptNum - 1), FDimInfoBar.TopStart, ScreenWidth div 5 * OptNum, FDimInfoBar.TopEnd);
+  TextBackground(SkinColorTable.FInfoBarBack);
+  TextColor(SkinColorTable.FInfoBarFore);
 
-    Opts := Opts + opt;
+  if (ScreenWidth > 20) and (Length(opt) > ScreenWidth div 5) then
+  begin
+    opt := opt[1..ScreenWidth div 5 - 4];
+  end
+  else if ScreenWidth < 20 then
+  begin
+    opt := '';
   end;
+
+  TuiWrite(opt);
+  Inc(OptNum);
 end;
 
 function ReplaceKey(const s: String; const c: char): String;
@@ -637,8 +670,6 @@ begin
 end;
 
 begin
-  Opts := '';
-
   DrawInfoBar;
 
   AddOption(ReplaceKey(Quit, 'q'));
@@ -646,8 +677,6 @@ begin
   AddOption(ReplaceKey(Options, 'o'));
   AddOption(ReplaceKey(Donate, 'd'));
   AddOption(ReplaceKey(Help, '?'));
-
-  TuiWrite(Opts);
 end;
 
 procedure TTui.GoURI;
@@ -1532,7 +1561,6 @@ begin
   DrawFeedList;
   ClrScr;
 
-  DrawInfoBar;
   DrawStatus;
   DrawUAString;
   ShowHelp;
