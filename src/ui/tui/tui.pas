@@ -21,6 +21,7 @@ type
 
   TTui = class(TLibR3R)
   private
+    FCanAdjustDims: Boolean;
     FCanStart: Boolean;
     FCurrentItem: PtrUInt;
     FDimInfo: TWindowDim;
@@ -83,7 +84,7 @@ uses
 {$ELSE}
   , nCrt, nCurses
 {$ENDIF USE_NCRT}
-  
+
 {$IFDEF USE_READLINE}
   , ReadLine, RStrings
 {$ENDIF};
@@ -206,6 +207,7 @@ begin
   FCanStart := true;
 
   New(FItems, Init);
+  FCanAdjustDims := true;
   FCurrentItem := 1;
   FPrintItems := false;
   FProcessingStatus := psUnstarted;
@@ -290,7 +292,7 @@ begin
         begin
           getmouse(@mouse_event);
           { Allow the mouse to work to feed view }
-          if (FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem)) and (mouse_event.y >= FDimList.TopStart - 1) and (mouse_event.y < FDimInfoBar.TopStart) then
+          if ((FViewPort.LastItem >= FViewPort.PortHeight) or ((FViewPort.LastItem < FViewPort.PortHeight) and ((mouse_event.y - 1 + FDimUA.TopEnd) <= FViewPort.LastItem))) and (mouse_event.y >= FDimList.TopStart - 1) and (mouse_event.y < FDimList.TopEnd) then
           begin
             if mouse_event.x < FDimSep.LeftStart - 1 then
             begin
@@ -320,8 +322,9 @@ begin
                 if FCurrentItem > 1 then
                 begin
                   Dec(FCurrentItem);
-                  ScrollTo(FCurrentItem);
                 end;
+
+                ScrollTo(FCurrentItem);
               end
             end
             else
@@ -355,7 +358,14 @@ begin
           end
           else
           begin
-            ScrollTo(FCurrentItem);
+            if mouse_event.y <> FDimInfoBar.TopStart - 1 then
+            begin
+              ScrollTo(FCurrentItem);
+            end
+            else
+            begin
+              ungetch(Ord(GetBoundKey(QuitKey)));
+            end;
           end;
         end;
         KEY_RESIZE:
@@ -395,7 +405,7 @@ begin
 
       KeyChar := NullKey;
     end;
- 
+
     if KeyChar = GetBoundKey(GoKey) then
     begin
       GoURI;
@@ -719,6 +729,7 @@ begin
 {$ELSE}
   p := rl_read(StrToPChar(Feed));
   WriteStr(URI, p);
+  URI := TrimRight(URI);
   add_history(p);
   rl_free(p);
   Redraw;
@@ -979,7 +990,7 @@ begin
   TextBackground(SkinColorTable.FOptionDescBack);
   TextColor(SkinColorTable.FOptionDescFore);
   TuiEcho(OptionDesc, false, NumLen + Length(OptionDesc));
-  
+
   TextBackground(SkinColorTable.FOptionValueBack);
   TextColor(SkinColorTable.FOptionValueFore);
   TuiEcho(OptionVal, true, Width - Length(OptionDesc) div 2 + 3 + NumLen);
@@ -1068,6 +1079,8 @@ begin
   begin
     Width := Width div 2;
   end;
+
+  FCanAdjustDims := false;
 
   DisplayOptions;
 
@@ -1222,7 +1235,7 @@ begin
       GoItem;
     end;
   end;
-  
+
 {$IFDEF USE_READLINE}
 {$IFNDEF USE_LIBEDIT}
   rl_callback_handler_remove;
@@ -1412,7 +1425,7 @@ begin
 
   GoItem;
 end;
-    
+
 procedure TTui.PrintTitle(Title: String; const Index: PtrUInt);
 var
   LenStr: String;
@@ -1514,39 +1527,44 @@ begin
 end;
 
 begin
-  FDimInfo.LeftEnd := ScreenWidth;
-  FDimInfo.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
-  FDimInfo.LeftStart := Half(ScreenWidth) + SepBarWidth;
-  FDimInfo.TopStart := UIHeight + SingleLine;
+  if FCanAdjustDims then
+  begin
+    FDimInfo.LeftEnd := ScreenWidth;
+    FDimInfo.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
+    FDimInfo.LeftStart := Half(ScreenWidth) + SepBarWidth;
+    FDimInfo.TopStart := UIHeight + SingleLine;
 
-  FDimInfoBar.LeftEnd := ScreenWidth;
-  FDimInfoBar.TopEnd := ScreenHeight - StatusHeight;
-  FDimInfoBar.LeftStart := Origin;
-  FDimInfoBar.TopStart := ScreenHeight - StatusHeight - (InfoBarHeight - SingleLine);
+    FDimInfoBar.LeftEnd := ScreenWidth;
+    FDimInfoBar.TopEnd := ScreenHeight - StatusHeight;
+    FDimInfoBar.LeftStart := Origin;
+    FDimInfoBar.TopStart := ScreenHeight - StatusHeight - (InfoBarHeight - SingleLine);
 
-  FDimList.LeftEnd := Half(ScreenWidth) - SepBarWidth;
-  FDimList.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
-  FDimList.LeftStart := Origin;
-  FDimList.TopStart := UIHeight + SingleLine;
+    FDimList.LeftEnd := Half(ScreenWidth) - SepBarWidth;
+    FDimList.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
+    FDimList.LeftStart := Origin;
+    FDimList.TopStart := UIHeight + SingleLine;
 
-  FDimSep.LeftEnd := Half(ScreenWidth);
-  FDimSep.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
-  FDimSep.LeftStart := Half(ScreenWidth);
-  FDimSep.TopStart := UIHeight + SepBarWidth;
+    FDimSep.LeftEnd := Half(ScreenWidth);
+    FDimSep.TopEnd := ScreenHeight - (InfoBarHeight + StatusHeight);
+    FDimSep.LeftStart := Half(ScreenWidth);
+    FDimSep.TopStart := UIHeight + SepBarWidth;
 
-  FDimStatus.LeftEnd := ScreenWidth;
-  FDimStatus.TopEnd := ScreenHeight;
-  FDimStatus.LeftStart := Origin;
-  FDimStatus.TopStart := ScreenHeight;
+    FDimStatus.LeftEnd := ScreenWidth;
+    FDimStatus.TopEnd := ScreenHeight;
+    FDimStatus.LeftStart := Origin;
+    FDimStatus.TopStart := ScreenHeight;
 
-  FDimUA.LeftEnd := ScreenWidth;
-  FDimUA.TopEnd := UIHeight;
-  FDimUA.LeftStart := Origin;
-  FDimUA.TopStart := Origin;
+    FDimUA.LeftEnd := ScreenWidth;
+    FDimUA.TopEnd := UIHeight;
+    FDimUA.LeftStart := Origin;
+    FDimUA.TopStart := Origin;
 
-  FViewPort.FirstItem := FCurrentItem + 1;
-  FViewPort.LastItem := FDimInfoBar.TopStart - FDimUA.TopEnd - 1;
-  FViewPort.PortHeight := FViewPort.LastItem - 1;
+    FViewPort.FirstItem := FCurrentItem + 1;
+    FViewPort.LastItem := FDimInfoBar.TopStart - FDimUA.TopEnd - 1;
+    FViewPort.PortHeight := FViewPort.LastItem - 1;
+  end;
+
+  FCanAdjustDims := true;
 end;
 
 procedure TTui.Draw;
