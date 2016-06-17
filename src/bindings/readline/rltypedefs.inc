@@ -3,11 +3,6 @@ type
 	Plongint = ^longint;
 	PPChar = ^PChar;
 
-	TFunction = function: longint;
-	VFunction = procedure;
-	CPFunction = function: PChar;
-	CPPFunction = function: PPChar;
-
 	rl_command_func_t = function(_para1, _para2: longint): longint;
 
 	rl_compentry_func_t = function(_para1: PChar; _para2: longint): PChar;

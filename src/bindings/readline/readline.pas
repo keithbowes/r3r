@@ -910,8 +910,8 @@ uses
   const
     READERR = -(2);
   { Definitions available for use by readline clients.  }
-    RL_PROMPT_START_IGNORE = '\001';
-    RL_PROMPT_END_IGNORE = '\002';
+    RL_PROMPT_START_IGNORE = Chr(1);
+    RL_PROMPT_END_IGNORE = Chr(2);
   { Possible values for do_replace argument to rl_filename_quoting_function,
      called by rl_complete_internal.  }
     NO_MATCH = 0;
