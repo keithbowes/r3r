@@ -10,7 +10,7 @@ override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
 ifeq ($(DEBUG),1)
-override CXXFLAGS += -g
+override CXXFLAGS += -D__WXDEBUG__ -g
 else
 override LDFLAGS+=-s
 ifdef forWindows
