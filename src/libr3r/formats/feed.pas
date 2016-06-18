@@ -43,7 +43,7 @@ begin
   CurrentCache := THttpCache(Item.Cache);
   if Assigned(CurrentCache) and (Line <> SockEof) then
   begin
-    CurrentCache.Info^.HeaderRec.ContentType := GetFormat;
+    CurrentCache.Info.HeaderRec.ContentType := GetFormat;
     CurrentCache.WriteData(Line, cdtFeed);
   end;
 end;
