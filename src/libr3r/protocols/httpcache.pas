@@ -25,7 +25,6 @@ type
     FeedData: String;
     HeaderRec: THeaders;
   end;
-  PCacheInfo = ^TCacheInfo;
 
   THttpCache = class
   private
@@ -36,7 +35,7 @@ type
     procedure WriteRawData(Data, CacheFile: String; const Overwrite: Boolean);
     procedure Clean;
   public
-    Info: PCacheInfo;
+    Info: TCacheInfo;
     constructor Create(const Url: String);
     destructor Destroy; override;
     function GetCacheHeader: String;
@@ -74,8 +73,7 @@ var
 begin
   New(FIdsList, Init);
 
-  New(Info);
-  Info^.CacheParam := NoData;
+  Info.CacheParam := NoData;
 
   FCurrentDir := GetCurrentDir;
   FRootCacheDir := CacheDir;
@@ -106,7 +104,6 @@ destructor THttpCache.Destroy;
 begin
   Clean;
   Dispose(FIdsList, Done);
-  Dispose(Info);
 
   inherited Destroy;
 end;
@@ -200,7 +197,7 @@ begin
   case DataType of
     cdtFeed:
     begin
-      Ext := GetFeedExtension(Info^.HeaderRec.ContentType);
+      Ext := GetFeedExtension(Info.HeaderRec.ContentType);
       if Ext <> 'unknown' then
       begin
         WriteRawData(Data, CacheFeedFile + '.' + Ext, false);

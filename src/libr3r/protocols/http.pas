@@ -210,27 +210,27 @@ begin
         if FHttpVersion >= 1.1 then
         begin
           Headers.Etag := HeaderValue;
-          Cache.Info^.CacheType := ctEtag;
-          Cache.Info^.CacheParam := HeaderValue
+          Cache.Info.CacheType := ctEtag;
+          Cache.Info.CacheParam := HeaderValue
         end
       end
       else if HeaderName = 'expires' then
       begin
         Headers.Expires := HeaderValue;
 
-        if (Cache.Info^.CacheType <> ctEtag) and (Cache.Info^.CacheType <> ctLastModified) then
+        if (Cache.Info.CacheType <> ctEtag) and (Cache.Info.CacheType <> ctLastModified) then
         begin
-          Cache.Info^.CacheType := ctExpires;
-          Cache.Info^.CacheParam := HeaderValue
+          Cache.Info.CacheType := ctExpires;
+          Cache.Info.CacheParam := HeaderValue
         end
       end
       else if HeaderName = 'last-modified' then
       begin
-        if Cache.Info^.CacheType <> ctEtag then
+        if Cache.Info.CacheType <> ctEtag then
         begin
           Headers.LastModified := HeaderValue;
-          Cache.Info^.CacheType := ctLastModified;
-          Cache.Info^.CacheParam := HeaderValue
+          Cache.Info.CacheType := ctLastModified;
+          Cache.Info.CacheParam := HeaderValue
         end;
       end
       else if (HeaderName = 'cache-control') and ((LowerCase(HeaderValue) = 'max-age=0') or (HeaderValue = '0')) then
@@ -256,11 +256,11 @@ begin
     Headers.ContentType := GetType;
   end;
 
-  Cache.Info^.HeaderRec := Headers;
+  Cache.Info.HeaderRec := Headers;
 
   if FCachable and (Headers.Status = 200) then
   begin
-    WriteStr(InfoText, Ord(Cache.Info^.CacheType), Tab, Cache.Info^.CacheParam, Tab, Ord(Cache.Info^.HeaderRec.ContentType), Tab, Headers.Charset);
+    WriteStr(InfoText, Ord(Cache.Info.CacheType), Tab, Cache.Info.CacheParam, Tab, Ord(Cache.Info.HeaderRec.ContentType), Tab, Headers.Charset);
     Cache.WriteData(InfoText, cdtInfo);
   end;
 end;
