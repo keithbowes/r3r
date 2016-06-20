@@ -50,13 +50,20 @@ void DescriptionBoxEvents::OnEnclosure(wxCommandEvent & event)
 	wxButton * enclosure_button = (wxButton *) event.GetEventObject();
 	enclosure = (enclosure_data *) (enclosure_button->GetClientData());
 
-	if (!wxGetEnv(wxT("SESSION_MANAGER"), NULL))
-		return;
-
 	wxMimeTypesManager * mgr = new wxMimeTypesManager();
-	mp = mgr->GetFileTypeFromMimeType(wxString(enclosure->type, wxConvUTF8))->GetOpenCommand(wxString(enclosure->url, wxConvUTF8));
-	mp.Replace(wxT("%1"), wxString(enclosure->url, wxConvUTF8));
+	wxFileType * ft = mgr->GetFileTypeFromMimeType(wxString(enclosure->type, wxConvUTF8));
+	if (!ft)
+	{
+		return;
+	}
 
+	mp = ft->GetOpenCommand(wxString(enclosure->url, wxConvUTF8));
+	if (!mp)
+	{
+		return;
+	}
+
+	mp.Replace(wxT("%1"), wxString(enclosure->url, wxConvUTF8));
 	if (wxNOT_FOUND == mp.Find(wxString(enclosure->url, wxConvUTF8)))
 	{
 		cl = mp + wxString(wxT(" ")) + wxString(enclosure->url, wxConvUTF8);
@@ -146,7 +153,7 @@ void FeedListViewEvents::OnSelect(wxListEvent & event)
 	}
 
 	wxButton * enclosure_button = GetEnclosureButton();
-	if (wxGetEnv(wxT("SESSION_MANAGER"), NULL) && strlen(info->enclosure.url) > 0)
+	if (strlen(info->enclosure.url) > 0)
 	{
 		enclosure_button->SetClientData(&(info->enclosure));
 		enclosure_button->Enable();
