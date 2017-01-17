@@ -138,7 +138,7 @@ begin
       Elem := FElemList^.GetNth(FElemList^.Count - 1);
       Elem^.Content := Elem^.Content + enh;
       { Handle new lines }
-      if (ch[len] = #0) and (TRSock(Sock).ChunkedLength <> 0) then
+      if (ch[len] = #0) and (not Assigned(Sock) or (TRSock(Sock).ChunkedLength <> 0)) then
       begin
         Elem^.Content := Elem^.Content + ' ';
       end;
