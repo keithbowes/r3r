@@ -2,15 +2,20 @@ ifneq ($(HOST),)
 WXFLAGS ?= --host=$(HOST)
 endif
 
+ifneq ($(DEBUG),1)
 WX_CONFIG ?= wx-config $(WXFLAGS)
-CXX = $(shell $(WX_CONFIG) --cxx)
+else
+WX_CONFIG ?= $(if $(shell wx-config --cxx --debug 2>/dev/null),wx-config --debug $(WXFLAGS),wx-config $(WXFLAGS))
+endif
+
+CXX ?= $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
 						-I../../libr3r
 override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
 ifeq ($(DEBUG),1)
-override CXXFLAGS += -D__WXDEBUG__ -g
+override CXXFLAGS += -g
 else
 override LDFLAGS+=-s
 ifdef forWindows
