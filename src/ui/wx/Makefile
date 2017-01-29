@@ -10,7 +10,7 @@ endif
 
 CXX ?= $(shell $(WX_CONFIG) --cxx)
 override CXXFLAGS += $(shell $(WX_CONFIG) --cxxflags) -Wall \
-						-I../../libr3r
+	-I../../libr3r
 override LDFLAGS += $(shell $(WX_CONFIG) --libs) -L../../libr3r
 override LIBS += -llibr3r_shared
 
@@ -31,11 +31,11 @@ CXXEXT = .cpp
 HEXT = .h
 
 objects = app desc events feedlist feedlistview \
-					frame gofield htmldescriptionbox i18n location menu settings-display \
-					settings-headers settings-http settings-main \
-					settings-programs settings-subscriptions \
-					settingscheckbox settingsdialog settingsentry \
-					settingslist subscriptions
+	  frame gofield htmldescriptionbox i18n location menu settings-display \
+	  settings-headers settings-http settings-main \
+	  settings-programs settings-subscriptions \
+	  settingscheckbox settingsdialog settingsentry \
+	  settingslist subscriptions
 
 include ../../../scripts/common.make
 
