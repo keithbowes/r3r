@@ -19,7 +19,7 @@ Por munti en unikseca operaciumo, estas facile:
 5b. Por instali en la hejman dosierujon:
     gmake install PREFIX=$HOME
 
-Por the grafika fasado:
+Por la grafika fasado:
 1a. Instali la bibliotekon wxWidgets (ekz-e en Mandrivo/Magejo: sudo urpmi lib[64]wxgtku2.8-devel)
 1b. Se ne disponebla en via operaciumo:
     cd ..
@@ -38,4 +38,4 @@ Por the grafika fasado:
     gmake R3R_UI=wx
     [sudo -E] gmake install R3R_UI=wx [PREFIX=$HOME]
 
-En Vindozo la procedo estas simila sed pli malsimpla, ĉar Vindozo ne havas tian medion. Vi devas tial instali uniksecan tavalon ekz-e http://cygwin.com/ aŭ http://mingw.org/wiki/msys.
+En Vindozo la procedo estas simila sed pli malsimpla, ĉar Vindozo ne havas tian medion. Vi devas tial instali uniksecan tavolon ekz-e http://cygwin.com/ aŭ http://mingw.org/wiki/msys.
