@@ -87,8 +87,8 @@ PCFLAGS_EXTRA
   Extra options to send to the compiler.
 R3R_UI
   The user interface to use.  Look in the ./src/ui directory for
-  available user interfaces.  The default varies, depending on
-  multiple factors.
+  available user interfaces.
+  Default: tui
 
 The configure script:
 The project includes a home-grown configure script, which:
@@ -136,8 +136,8 @@ USE_LIBEDIT
   when a screen library is used (as is in the TUI).
   Default: 0
 USE_LIBICONV
-  Enable the use of GNU libiconv <http://gnu.org/software/libiconv>
-  instead of the built-in iconv.  Only valid when USE_ICONV is also
+  Enable the use of GNU libiconv <http://gnu.org/software/libiconv> instead of
+  the operating system's native iconv.  Only valid when USE_ICONV is also
   defined.
   Default: 0 for Unix platforms; 1 for non-Unix platforms
 USE_LIBIDN2
@@ -149,12 +149,13 @@ USE_NLS
   Default: 1
 USE_READLINE
   Use GNU readline to keep a history of visited URLs.
+  This is only valid when R3R_UI=tui.
   Default: 1
 USE_SSL
   Allow secure HTTP connections via SSL.
   Note: It only works with the Synapse and libcurl sockets backend
   (see the DEFS_SOCKETS variable above).
-  Default: 0
+  Default: 1
 
 Out-of-source builds:
 The configure script will do that for you.  If you're not using the
