@@ -12,7 +12,7 @@
 .br
  r3r-conv -i archivo_entrado -t tipo_salido [-o archivo_salido]
 .br
- r3r_opml 0|1 [fuente [finalidad]]
+ r3r_opml [finalidad]
 
 .SH DESCRIPCIÓN
 .P
@@ -64,11 +64,11 @@ r3r-conv está utilizable para convertir entre formatos de fuentes.
 .br
    Historia de visitadas fuentes.
 .br
- data/r3r/subscriptions.txt
+ data/r3r/abos.opml
 .br
    URL-es a que estás subscribiendo.
 .br
-   r3r_opml está utilizable para importar subscripciones de otros legadores de fuentes.
+   r3r_opml está utilizable para convertir el antiguo archivo subscriptions.txt a abos.opml.
  
  
 .SS Filtradores 

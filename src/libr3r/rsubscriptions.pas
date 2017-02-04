@@ -3,17 +3,27 @@ unit RSubscriptions;
 interface
 
 uses
-  RList;
+  DOM, RList;
 
 type
   PRSubscriptions = ^TRSubscriptions;
-  TRSubscriptions = object(TRStringList)
+  TRSubscriptions = object
   private
+    FBodyElem: TDOMNode;
+    FDocument: TXMLDocument;
+    FElems: TDOMNodeList;
     FFile: String;
-    FText: text;
+    FList: PRList;
   public
     constructor Init;
     destructor Done;
+    procedure Add(const url: DOMString; title: DOMString = '');
+    function Count: PtrUint;
+    procedure Delete(const index: PtrUInt);
+    procedure DeleteString(const s: DOMString);
+    procedure GetInfo(const index: PtrUInt; out url, name: DOMString);
+    function GetNth(const index: PtrUInt): DOMString;
+    function IndexOf(const s: DOMString): PtrInt;
   end;
 
 var
@@ -22,61 +32,115 @@ var
 implementation
 
 uses
-  Dos, LibR3RStrings, RSettings_Routines;
+  LibR3RStrings, RSettings_Routines, SysUtils, XMLRead, XMLWrite;
 
 constructor TRSubscriptions.Init;
 var
-  f: SearchRec;
-  Line: String;
+  Elem: TDOMElement;
 begin
-  inherited Init;
-  FFile := GetDataDir + 'subscriptions.txt';
+  New(FList, Init);
 
-  Assign(FText, FFile);
+  FFile := GetDataDir + 'abos.opml';
+  try
+    ReadXMLFile(FDocument, FFile);
+  except
+    try
+      FDocument := TXMLDocument.Create;
+      Elem := FDocument.CreateElement('opml');
+      FDocument.AppendChild(Elem);
+      FList^.Add(Elem);
 
-  FindFirst(FFile, AnyFile, f);
-  if DosError <> 0 then
-  begin
-    Rewrite(FText);
+      Elem := FDocument.CreateElement('head');
+      FDocument.DocumentElement.AppendChild(Elem);
+      FList^.Add(Elem);
+
+      Elem := FDocument.CreateElement('body');
+      FDocument.DocumentElement.AppendChild(Elem);
+      FList^.Add(Elem);
+    except
+    end;
   end;
-  FindClose(f);
-
-  Reset(FText);
-
-  while not Eof(FText) do
-  begin
-    ReadLn(FText, Line);
-    Add(Line);
-  end;
+  
+  FBodyElem := FDocument.GetElementsByTagName('body')[0];
+  FElems := TDOMElement(FBodyElem).GetElementsByTagName('outline');
+  WriteLn(FElems.Length);
 
   if Count = 0 then
   begin
-    Add(Subscription1);
-    Add(Subscription2);
-    Add(Subscription3);
-    Add(Subscription4);
+    Add(DOMString(Subscription1));
+    Add(DOMString(Subscription2));
+    Add(DOMString(Subscription3));
+    Add(DOMString(Subscription4));
   end;
-
-  Close(FText);
 end;
 
 destructor TRSubscriptions.Done;
-var
-  i: word;
 begin
-  Assign(FText, FFile);
-  Rewrite(FText);
+  WriteXMLFile(FDocument, FFile);
+  FDocument.Free;
+  Dispose(FList, Done);
+end;
 
-  if Count > 0 then
+procedure TRSubscriptions.Add(const url: DOMString; title: DOMString = '');
+var
+  FElem: TDOMELement;
+begin
+  if title = '' then
   begin
-    for i := 0 to Count - 1 do
+    title := url;
+  end;
+  FElem := FDocument.CreateElement('outline');
+  FElem.SetAttribute('text', title);
+  FElem.SetAttribute('type', 'rss');
+  FElem.SetAttribute('xmlUrl', url);
+  FBodyElem.AppendChild(FElem);
+  FList^.Add(FElem);
+end;
+  
+function TRSubscriptions.Count: PtrUint;
+begin
+  Result := FElems.Length;
+end;
+
+procedure TRSubscriptions.Delete(const index: PtrUInt);
+begin
+  FBodyElem.RemoveChild(FElems[index]);
+end;
+
+procedure TRSubscriptions.DeleteString(const s: DOMString);
+begin
+  Delete(IndexOf(s));
+end;
+
+procedure TRSubscriptions.GetInfo(const index: PtrUInt; out url, name: DOMString);
+begin
+  with TDOMElement(FElems[index]) do
+  begin
+    url := GetAttribute('xmlUrl');
+    name := GetAttribute('text');
+  end;
+end;
+
+function TRSubscriptions.GetNth(const index: PtrUInt): DOMString;
+var
+  name: DOMString;
+begin
+  GetInfo(index, Result, name);
+end;
+
+function TRSubscriptions.IndexOf(const s: DOMString): PtrInt;
+var
+  i: PtrUInt;
+begin
+  if Count > 0 then
+  for i := 0 to Count - 1 do
+  begin
+    if TDOMElement(FElems[i]).GetAttribute('xmUrl') = s then
     begin
-      WriteLn(FText, GetNth(i));
+      Result := i;
+      Break;
     end;
   end;
-
-  Close(FText);
-  inherited Done;
 end;
 
 initialization

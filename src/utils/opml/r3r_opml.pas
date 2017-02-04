@@ -1,186 +1,83 @@
 program R3R_OPML;
 
 uses
-{$IFDEF USE_EXPAT}
-  Expas,
-{$ENDIF}
-{$IFDEF USE_NLS}
-  LibIntl,
-{$ENDIF}
-  SysUtils;
+  DOM, RegExpr, RList, XMLWrite;
 
 const
-  DefOPML = 'subscriptionList.opml';
+  DefOPML = 'abos.opml';
   DefText = 'subscriptions.txt';
   Tab = #9;
 
 var
-  InName, OutName: String;
-{$IFDEF USE_NLS}
-  LocaleDir: String;
-{$ENDIF}
-  Opt: String;
-
-{$IFNDEF USE_NLS}
-function _(s: String): String;
-begin
-  _ := s;
-end;
-{$ENDIF}
-
-procedure DoExport;
-var
-  fi, fo: text;
+  BodyElem, Elem, HeadElem, OPMLElem: TDOMElement;
+  Comment: TDOMComment;
+  f: text;
+  List: PRList;
+  OPML: TXMLDocument;
+  OutName: String;
+  re: TRegExpr;
   s: String;
 
-procedure WritePre;
 begin
-  WriteLn(fo, '<opml version="2.0">');
-  WriteLn(fo, Tab + '<head>');
-  WriteLn(fo, Tab + Tab + '<title>' + _('Feed List') + '</title>');
-  WriteLn(fo, Tab + '</head>');
-  WriteLn(fo, Tab + '<body>');
-end;
-
-procedure WritePost;
-begin
-  WriteLn(fo, Tab + '</body>');
-  WriteLn(fo, '</opml>');
-end;
-
-begin
-  if InName = '' then
-  begin
-    InName := DefText;
-  end;
-
+  OutName := ParamStr(1);
   if OutName = '' then
   begin
     OutName := DefOPML;
   end;
 
-  Assign(fi, InName);
-  Assign(fo, OutName);
-  Reset(fi);
-  Rewrite(fo);
+  New(List, Init);
+  OPML := TXMLDocument.Create;
 
-  WritePre;
-  while not EOF(fi) do
+  Assign(f, DefText);
+  Reset(f);
+
+  OPMLElem := OPML.CreateElement('opml');
+  OPMLElem.SetAttribute('version', '2.0');
+
+  HeadElem := OPML.CreateElement('head');
+  OPMLElem.AppendChild(HeadElem);
+
+  BodyElem := OPML.CreateElement('body');
+
+  while not Eof(f) do
   begin
-    ReadLn(fi, s);
-    WriteLn(fo, Tab + Tab + '<outline type="rss" text="' + _('Feed from ') + s + '" xmlUrl="' + s + '"/>');
-  end;
-  WritePost;
-
-  Close(fo);
-  Close(fi);
-end;
-
-{$CALLING cdecl}
-{$IFDEF USE_EXPAT}
-procedure ElementStarted(user_data: Pointer; name: PChar; attrs: PPXML_Char);
-var
-  attr, n: String;
-  fo: text;
-begin
-  WriteStr(n, name);
-  Assign(fo, OutName);
-  Append(fo);
-
-  while (Assigned(attrs^)) do
-  begin
-    WriteStr(attr, attrs^);
-
-    if (n = 'outline') and (attr = 'xmlUrl') then
+    ReadLn(f, s);
+    if Length(s) = 0 then
     begin
-      WriteLn(fo, (attrs + 1)^);
+      Continue
+    end
+    else if Pos('#', s) = 1 then
+    begin
+      re := TRegExpr.Create('^#+');
+      s := re.Replace(s, '', false);
+      re.Free;
+
+      Comment := OPML.CreateComment(s);
+      BodyElem.AppendChild(Comment);
+      List^.Add(Comment);
+    end
+    else
+    begin
+      Elem := OPML.CreateElement('outline');
+      Elem.SetAttribute('text', s);
+      Elem.SetAttribute('type', 'rss');
+      Elem.SetAttribute('xmlUrl', s);
+      BodyElem.AppendChild(Elem);
+      List^.Add(Elem);
     end;
-
-    Inc(attrs, 2);
   end;
-  
-  Close(fo);
-end;
-{$ENDIF}
-{$CALLING default}
+  Close(f);
 
-procedure DoImport;
-var
-  fi, fo: text;
-{$IFDEF USE_EXPAT}
-  Parser: XML_PARSER;
-{$ENDIF}
-  s: String;
-begin
-  if InName = '' then
-  begin
-    InName := DefOPML;
-  end;
+  OPMLELem.AppendChild(BodyElem);
 
-  if OutName = '' then
-  begin
-    OutName := DefText;
-  end;
+  OPML.AppendChild(OPMLElem);
+  WriteXMLFile(OPML, OutName);
 
-{$IFDEF USE_EXPAT}
-  Parser := XML_ParserCreate(nil);
-  XML_SetElementHandler(Parser, ElementStarted, nil);
-{$ENDIF}
+  HeadElem.Free;
 
-  Assign(fo, OutName);
-  Rewrite(fo);
-  Close(fo);
+  Dispose(List, Done);
+  BodyElem.Free;
 
-  Assign(fi, InName);
-  Reset(fi);
-
-  while not EOF(fi) do
-  begin
-    ReadLn(fi, s);
-{$IFDEF USE_EXPAT}
-    XML_Parse(Parser, PChar(s), Length(s), XML_FALSE);
-{$ENDIF}
-  end;
-
-{$IFDEF USE_EXPAT}
-  XML_Parse(Parser, '', 0, XML_TRUE);
-  XML_ParserFree(Parser);
-{$ENDIF}
-
-  Close(fi);
-end;
-
-procedure ShowUsage;
-begin
-  WriteLn(_('Usage: r3r_opml option [source [destination]]'));
-  WriteLn(_('Option is one of:'));
-  WriteLn(Tab + _('0: export subscriptions to an OPML file'));
-  WriteLn(Tab + _('1: import subscriptions from an OPML file'));
-  WriteLn;
-end;
-
-begin
-{$IFDEF USE_NLS}
-  LocaleDir := ExpandFileName(ExtractFileDir(ParamStr(0)) + '/../share/locale');
-  setlocale(LC_ALL, '');
-  textdomain('r3r_opml');
-  bindtextdomain('r3r_opml', PChar(LocaleDir));
-{$ENDIF}
-
-  Opt := ParamStr(1);
-  InName := ParamStr(2);
-  OutName := ParamStr(3);
-
-  if Opt = '0' then
-  begin
-    DoExport;
-  end
-  else if Opt = '1' then
-  begin
-    DoImport;
-  end
-  else
-  begin
-    ShowUsage;
-  end;
+  OPMLElem.Free;
+  OPML.Free;
 end.

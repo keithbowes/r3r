@@ -86,7 +86,7 @@ Name: "{group}\Uninstall"; FileName: "{uninstallexe}"
 Name: "de"; MessagesFile: "compiler:Languages\German.isl"; LicenseFile: "doc/deutsch/LIZENZ"
 Name: "en"; MessagesFile: "compiler:Default.isl"; LicenseFile: "doc/english/LICENSE"
 Name: "eo"; MessagesFile: "scripts/setup/is/Esperanto.isl"; LicenseFile: "doc/esperanto/PERMESILO"
-Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "doc/espanol/LICENCIA"
+Name: "es"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "doc/español/LICENCIA"
 
 [CustomMessages]
 de.libdesc=Kernbibliotheke

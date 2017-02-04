@@ -12,7 +12,7 @@
 .br
  r3r-conv -i eniga_dosiero -t eliga_tipo [-o eliga_dosiero]
 .br
- r3r_opml 0|1 [celo [fonto]]
+ r3r_opml [celo]
 
 .SH PRESKRIBO
 .P
@@ -63,11 +63,11 @@ Dosiersufiksoj:
 .br
    Historio de vizititaj URL-oj.
 .br
- data/r3r/subscriptions.txt
+ data/r3r/abos.opml
 .br
    URL-oj al kiuj vi abonas.
 .br
-   r3r_opml uzeblas por konverti OPML-dosieron el alia fluo-legilo por uzi ĝin en R3R.
+   r3r_opml uzeblas por konverti la malnovan dosieron subscriptions.txt al abos.opml.
  
 .SS Filtriloj
 

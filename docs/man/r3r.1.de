@@ -12,7 +12,7 @@
 .br
  r3r-conv -i Eingabedatei -t Ausgabetyp [-o Ausgabedatei]
 .br
- r3r_opml 0|1 [Quelle [Ziel]]
+ r3r_opml [Ziel]
 
 .SH BESCHREIBUNG
 .P
@@ -63,11 +63,11 @@ r3r-conv kann zwischen Feed-Formate konvertieren.
 .br
    Geschichte des besuchten URLs.
 .br
- data/r3r/subscriptions.txt
+ data/r3r/abos.opml
 .br
    URLs, die Sie Abonnements haben.
 .br
-   r3r_opml kann eine OPML-Datei aus einem anderen Feed-Leser importieren.
+   r3r_opml kann von die alte subscriptions.txt zu abos.opml konvertieren.
  
  
 .SS Filtere
