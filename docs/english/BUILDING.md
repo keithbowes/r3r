@@ -64,11 +64,11 @@ Helpful environment variables:
 =DEFS\_SETTINGS=
     The type of settings to use:
 
-    * SETTINGS\_INI: Use the Delphi/Free Pascal TIniFile class
+    * SETTINGS_INI: Use the Delphi/Free Pascal TIniFile class
       to read/write the settings to a .ini file.
-    * SETTINGS\_LIBINI: Use libini
+    * SETTINGS_LIBINI: Use libini
       to read/write settings to a .ini file.
-    * SETTINGS\_REG: Use the Delphi/Free Pascal TRegistry class to
+    * SETTINGS_REG: Use the Delphi/Free Pascal TRegistry class to
       read/write the settings to the registry (or to
       GetAppConfigDir(false)/reg.xml on non-Windows versions of
       Free Pascal).
@@ -77,17 +77,21 @@ Helpful environment variables:
 =DEFS\_SOCKETS=
     The sockets library to use:
 
-    * SOCKETS\_LIBCURL: Use libcurl (cURL's library). (Experimental!)
-    * SOCKETS\_NONE: Build without sockets support.
-    * SOCKETS\_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal).
+    * SOCKETS_LIBCURL: Use libcurl (cURL's library). (Experimental!)
+    * SOCKETS_NONE: Build without sockets support.
+    * SOCKETS_SYNAPSE: Use Ararat Synapse (Delphi and Free Pascal).
 
-    (Currently SOCKETS\_SYNAPSE is the default.)
+    (Currently SOCKETS_SYNAPSE is the default.)
+
 =DESTDIR=
     Where to install the software.
+
 =PCFLAGS\_DEBUG
     The compiler's debugging options.
+
 =PCFLAGS\_EXTRA=
     Extra options to send to the compiler.
+
 =R3R\_UI=
     The user interface to use.  Look in the ./src/ui directory for
     available user interfaces.

@@ -47,6 +47,7 @@ begin
     try
       FDocument := TXMLDocument.Create;
       Elem := FDocument.CreateElement('opml');
+      Elem.SetAttribute('version', '2.0');
       FDocument.AppendChild(Elem);
       FList^.Add(Elem);
 
@@ -63,14 +64,13 @@ begin
   
   FBodyElem := FDocument.GetElementsByTagName('body')[0];
   FElems := TDOMElement(FBodyElem).GetElementsByTagName('outline');
-  WriteLn(FElems.Length);
 
   if Count = 0 then
   begin
-    Add(DOMString(Subscription1));
-    Add(DOMString(Subscription2));
-    Add(DOMString(Subscription3));
-    Add(DOMString(Subscription4));
+    Add(Subscription1);
+    Add(Subscription2);
+    Add(Subscription3);
+    Add(Subscription4);
   end;
 end;
 

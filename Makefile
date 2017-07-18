@@ -128,7 +128,7 @@ check_clean: _clean
 install: install-docs install-header install-lib install-prog
 
 install-docs:
-	cd $(srcdir)/doc && $(MAKE) install
+	cd $(srcdir)/docs && $(MAKE) install
 
 install-header:
 	cd src && $(MAKE) install-header
@@ -158,15 +158,15 @@ install-strip: install
 
 # Documentation rules
 docs:
-	cd $(srcdir)/doc && $(MAKE)
+	cd $(srcdir)/docs && $(MAKE)
 
 dist-docs: docs
-	$(PAX) $(PAXFLAGS) doc/api | $(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-api.tar.xz
+	$(PAX) $(PAXFLAGS) docs/api | $(XZ) $(XZFLAGS) > ../r3r-$(VERSION)-api.tar.xz
 	$(call sign,r3r-$(VERSION)-api.tar.xz)
 
 # Uninstallation rules
 uninstall:
-	cd $(srcdir)/doc && $(MAKE) uninstall
+	cd $(srcdir)/docs && $(MAKE) uninstall
 	cd $(srcdir)/icons && $(MAKE) uninstall
 	cd $(srcdir)/src && $(MAKE) uninstall
 	$(RM) $(wildcard $(bindir)/r3r)
@@ -240,7 +240,7 @@ dist-inno_setup: all
 
 # Cleaning rules
 clean:
-	cd $(srcdir)/doc && $(MAKE) clean
+	cd $(srcdir)/docs && $(MAKE) clean
 	cd $(srcdir)/icons && $(MAKE) clean
 	cd $(srcdir)/scripts/setup && $(MAKE) clean
 	cd $(srcdir)/src && $(MAKE) clean

@@ -334,6 +334,7 @@ begin
         end
         else
         begin
+          { Don't try to convert any parameters }
           Val('$' + Line[1..Pos(';', Line) - 1], FChunkedLength, ErrPos);
           if ErrPos = 0 then
           begin

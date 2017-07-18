@@ -182,8 +182,6 @@ begin
           Inc(FRedirects);
           ShouldShow := true;
 
-{$IFDEF USE_SSL}
-{$ENDIF}
           TLibR3R(GetObjectProp(Self, 'lib')).QueueURI(HeaderValue);
           ShouldShow := false;
         end

@@ -30,7 +30,7 @@ type
 implementation
 
 uses
-  ItemCallbacks, RDate, RStrings, SockConsts, SysUtils;
+  ItemCallbacks, RDate, RSock, RStrings, SockConsts, SysUtils;
 
 constructor TEsfFeed.Create;
 begin

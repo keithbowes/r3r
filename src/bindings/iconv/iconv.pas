@@ -90,17 +90,23 @@ function iconv_open_into(tocode, fromcode: PChar; resultp: piconv_allocation_t):
 function iconvctl(cd: iconv_t; request: integer; argument: Pointer): integer; external {$IFDEF USE_LIBICONV}IconvLib{$ENDIF} name 'libiconvctl';
 {$ENDIF}
 
+{ iconvstr is a convenience function in Solaris.  Please use the more portable iconp instead. }
 {$IFDEF SOLARIS}
 function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t; var outarray: PChar; var outlen: size_t; flags: integer): size_t; external name 'iconvstr';
 {$ENDIF}
 
 {$calling default}
 
+{ The minimum number of bytes a character in charset enc takes }
 function iconv_bytesperchar(enc: String): byte;
+
 function iconv_convert_error: size_t;
 
-{$IFNDEF SOLARIS}
-function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t; var outarray: PChar; var outlen: size_t; flags: integer): size_t;
+{ Convenience function to use iconv and convert to a Pascal string } 
+function iconp(const instr, fromcode, tocode: PChar): String;
+{$IFNDEF __GPC__}
+{ GPC doesn't support function overloading }
+function iconp(const instr, fromcode, tocode: String): String;
 {$ENDIF}
 
 implementation
@@ -111,7 +117,6 @@ uses
 function iconv_bytesperchar(enc: String): byte;
 var
   i: byte;
-  Ret: byte;
 begin
   for i := 1 to Length(enc) do
   begin
@@ -119,21 +124,19 @@ begin
   end;
 
   if (Pos('ISO-8859', enc) = 1) or (Pos('WINDOWS', enc) = 1) or
-    (enc = 'ASCII') or (enc = 'UTF-8') then
+    (Pos('ASCII', enc) <> 0) or (enc = 'UTF-8') then
   begin
-    Ret := 1;
+    iconv_bytesperchar := 1;
   end
   else if (Pos('EUC', enc) = 1) or (Pos('KOI', enc) = 1) or
     (enc = 'UTF-16') then
   begin
-    Ret := 2;
+    iconv_bytesperchar := 2;
   end
   else
   begin
-    Ret := 4;
+    iconv_bytesperchar := 4;
   end;
-
-  iconv_bytesperchar := Ret;
 end;
 
 function iconv_convert_error: size_t;
@@ -150,55 +153,45 @@ begin
   iconv_convert_error := cr.s;
 end;
 
-{$IFNDEF SOLARIS}
-function iconvstr(tocode, fromcode: PChar; var inarray: PChar; var inlen: size_t; var outarray: PChar; var outlen: size_t; flags: integer): size_t;
+function iconp(const instr, fromcode, tocode: PChar): String;
 var
   cd: iconv_t;
-  outbuf: PChar;
-  trueinlen: size_t;
-  Res: integer;
-  sfrom, sto: String;
 {$IFDEF USE_LIBICONV}
   i: integer;
 {$ENDIF}
+  inbuf, outbuf, outstr: PChar;
+  inbytesleft, outbytesleft: size_t;
 begin
-  if inlen = 0 then
-  begin
-    inlen := StrLen(inarray) + 1;
-  end;
-  trueinlen := inlen;
-
-  WriteStr(sfrom, fromcode);
-  WriteStr(sto, tocode);
-  outlen := inlen div iconv_bytesperchar(sfrom) * iconv_bytesperchar(sto);
   cd := iconv_open(tocode, fromcode);
-
   if cd <> iconv_t(-1) then
   begin
 {$IFDEF USE_LIBICONV}
-    if flags and ICONV_REPLACE_INVALID = ICONV_REPLACE_INVALID then
-    begin
-      i := 1;
-      iconvctl(cd, ICONV_SET_DISCARD_ILSEQ, @i);
-      iconvctl(cd, ICONV_SET_TRANSLITERATE, @i);
-    end;
-{$ELSE}
-    flags := 0;
+    i := 1;
+    iconvctl(cd, ICONV_SET_TRANSLITERATE, @i);
 {$ENDIF}
-    outbuf := outarray;
-    Res := iconv_convert(cd, @inarray, @inlen, @outbuf, @outlen);
-    iconv_close(cd);
-    if trueinlen > outlen then
+    inbuf := instr;
+    inbytesleft := StrLen(inbuf) + 1;
+    outbytesleft := inbytesleft * iconv_bytesperchar(tocode);
+    
+    GetMem(outstr, outbytesleft);
+    outbuf := outstr;
+    if iconv_convert(cd, @inbuf, @inbytesleft, @outbuf, @outbytesleft) = iconv_convert_error then
     begin
-      outarray[trueinlen - outlen] := #0;
+      WriteStr(iconp, instr);
+    end
+    else
+    begin
+      WriteStr(iconp, outstr);
     end;
-  end
-  else
-  begin
-    Res := iconv_convert_error;
+    iconv_close(cd);
+    FreeMem(outstr);
   end;
+end;
 
-  iconvstr := Res;
+{$IFNDEF __GPC__}
+function iconp(const instr, fromcode, tocode: String): String;
+begin
+  iconp := iconp(PChar(instr), PChar(fromcode), PChar(tocode));
 end;
 {$ENDIF}
 
