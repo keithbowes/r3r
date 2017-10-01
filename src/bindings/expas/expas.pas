@@ -1,8 +1,44 @@
+{
+                            __  __            _
+                         ___\ \/ /_ __   __ _| |_
+                        / _ \\  /| '_ \ / _` | __|
+                       |  __//  \| |_) | (_| | |_
+                        \___/_/\_\ .__/ \__,_|\__|
+                                 |_| XML parser
+
+   Copyright (c) 1997-2000 Thai Open Source Software Center Ltd
+   Copyright (c) 2000-2017 Expat development team
+   Licensed under the MIT license:
+
+   Permission is  hereby granted,  free of charge,  to any  person obtaining
+   a  copy  of  this  software   and  associated  documentation  files  (the
+   "Software"),  to  deal in  the  Software  without restriction,  including
+   without  limitation the  rights  to use,  copy,  modify, merge,  publish,
+   distribute, sublicense, and/or sell copies of the Software, and to permit
+   persons  to whom  the Software  is  furnished to  do so,  subject to  the
+   following conditions:
+
+   The above copyright  notice and this permission notice  shall be included
+   in all copies or substantial portions of the Software.
+
+   THE  SOFTWARE  IS  PROVIDED  "AS  IS",  WITHOUT  WARRANTY  OF  ANY  KIND,
+   EXPRESS  OR IMPLIED,  INCLUDING  BUT  NOT LIMITED  TO  THE WARRANTIES  OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+   NO EVENT SHALL THE AUTHORS OR  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+   DAMAGES OR  OTHER LIABILITY, WHETHER  IN AN  ACTION OF CONTRACT,  TORT OR
+   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+   USE OR OTHER DEALINGS IN THE SOFTWARE.
+}
+
 unit Expas;
 
 interface
 
 { $DEFINE EXPAT_1_2}
+
+{$IFDEF EXPAT_2_2_1}
+{$DEFINE EXPAT_2_1}
+{$ENDIF}
 
 {$IFDEF EXPAT_2_1}
 {$DEFINE EXPAT_2_0_1}
@@ -15,7 +51,6 @@ interface
 {$IFDEF EXPAT_2_0}
 {$DEFINE EXPAT_1_2}
 {$ENDIF}
-
 
 {$IFDEF EXPAT_1_2}
 {$DEFINE EXPAT_1_1}
@@ -131,7 +166,7 @@ const
 
 type
   PPXML_Char = ^PXML_Char;
-     
+
   { Constructs a new parser; encoding is the encoding specified by the external
   protocol or null if there is none specified.  }
 
@@ -173,7 +208,7 @@ type
 
      XML_EndCdataSectionHandler = procedure (userData:pointer);
 {$ENDIF}
-     
+
 {$IFDEF EXPAT_1_0}
   { This is called for any characters in the XML document for
   which there is no applicable handler.  This includes both
@@ -207,9 +242,13 @@ type
   The entityName, systemId and notationName arguments will never be null.
   The other arguments may be.  }
 
-     XML_UnparsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char; 
+     XML_UnparsedEntityDeclHandler = procedure (userData:pointer; entityName:PXML_Char; base:PXML_Char; systemId:PXML_Char; publicId:PXML_Char;
                    notationName:PXML_Char);
-  { This is called for a declaration of notation.
+  { OBSOLETE -- OBSOLETE -- OBSOLETE
+  This handler has been superseded by the EntityDeclHandler
+  above.  It is provided here for backward compatibility.
+
+  This is called for a declaration of notation.
   The base argument is whatever was set by XML_SetBase.
   The notationName will never be null.  The other arguments can be.  }
 
@@ -286,25 +325,25 @@ type
   When the parser is finished with the encoding, then if release is not null,
   it will call release passing it the data member;
   once release has been called, the convert function will not be called again.
-  
+
   Expat places certain restrictions on the encodings that are supported
   using this mechanism.
-  
+
   1. Every ASCII character that can appear in a well-formed XML document,
   other than the characters
-  
+
     $@\^`~
-  
+
   must be represented by a single byte, and that byte must be the
   same byte that represents that character in ASCII.
-  
+
   2. No character may require more than 4 bytes to encode.
-  
+
   3. All characters encoded must have Unicode scalar values <= 0xFFFF,
   (ie characters that would be encoded by surrogates in UTF-16
   are  not allowed).  Note that this restriction doesn't apply to
   the built-in support for UTF-8 and UTF-16.
-  
+
   4. No Unicode character may be encoded by more than one distinct sequence
   of bytes.  }
 
@@ -361,8 +400,12 @@ type
        { Added in 2.0 }
        XML_ERROR_RESERVED_PREFIX_XML,XML_ERROR_RESERVED_PREFIX_XMLNS,
        XML_ERROR_RESERVED_NAMESPACE_URI
+       {$IFDEF EXPAT_2_2_1}
+       { Added in 2.2.1 }
+       ,XML_ERROR_INVALID_ARGUMENT
+       {$ENDIF}
        {$ENDIF});
-       
+
   XML_Status = (XML_STATUS_ERROR, XML_STATUS_OK{$IFDEF EXPAT_2_0}, XML_STATUS_SUSPENDED{$ENDIF});
 
   procedure XML_SetElementHandler(parser:XML_Parser; startEl:XML_StartElementHandler; endEl:XML_EndElementHandler); external ExpatLib name 'XML_SetElementHandler';
@@ -475,7 +518,8 @@ type
   this value will be passed through as the base argument to the
   XML_ExternalEntityRefHandler, XML_NotationDeclHandler
   and XML_UnparsedEntityDeclHandler. The base argument will be copied.
-  Returns zero if out of memory, non-zero otherwise.  }
+  Returns zero if out of memory, non-zero otherwise.
+  Note: If parser = nil, returns XML_ERROR_INVALID_ARGUMENT.  }
   function XML_SetBase(parser:XML_Parser; base:PXML_Char):XML_Status; external ExpatLib name 'XML_SetBase';
 
   function XML_GetBase(parser:XML_Parser):PXML_Char; external ExpatLib name 'XML_GetBase';
@@ -486,15 +530,16 @@ type
   to the XML_StartElementHandler that were specified in the start-tag
   rather than defaulted. Each attribute/value pair counts as 2; thus
   this correspondds to an index into the atts array passed to the
-  XML_StartElementHandler.  }
+  XML_StartElementHandler.  Returns -1 if parser = nil.   }
   function XML_GetSpecifiedAttributeCount(parser:XML_Parser):integer; external ExpatLib name 'XML_GetSpecifiedAttributeCount';
 {$ENDIF}
 
 {$IFDEF EXPAT_1_2}
   { Returns the index of the ID attribute passed in the last call to
-  XML_StartElementHandler, or -1 if there is no ID attribute.  Each
-  attribute/value pair counts as 2; thus this correspondds to an index
-  into the atts array passed to the XML_StartElementHandler.  }
+   XML_StartElementHandler, or -1 if there is no ID attribute or
+   parser = nil.  Each attribute/value pair counts as 2; thus this
+   correspondds to an index into the atts array passed to the
+   XML_StartElementHandler.  }
   function XML_GetIdAttributeIndex(parser:XML_Parser):integer; external ExpatLib name 'XML_GetIdAttributeIndex';
 {$ENDIF}
 
@@ -574,12 +619,18 @@ type
   the library has been compiled without support for parameter entity
   parsing (ie without XML_DTD being defined), then
   XML_SetParamEntityParsing will return 0 if parsing of parameter
-  entities is requested; otherwise it will return non-zero.  }
+  entities is requested; otherwise it will return non-zero.
+  Note: If parser = nil, the function will do nothing and return 0.  }
 
   function XML_SetParamEntityParsing(parser:XML_Parser; parsing:XML_ParamEntityParsing):integer; external ExpatLib name 'XML_SetParamEntityParsing';
 {$ENDIF}
 
 {$IFDEF EXPAT_2_1}
+  { Sets the hash salt to use for internal hash calculations.
+   Helps in preventing DoS attacks based on predicting hash
+   function behavior. This must be called before parsing is started.
+   Returns 1 if successful, 0 when called after parsing has started.
+   Note: If parser == NULL, the function will do nothing and return 0.  }
   function XML_SetHashSalt(parser:XML_Parser; hash_salt: cardinal):integer; external ExpatLib name 'XML_SetHashSalt';
 {$ENDIF}
 
@@ -619,19 +670,29 @@ type
   function XML_ParserReset(parser: XML_Parser; encoding: PXML_Char): XML_Bool; external ExpatLib name 'XML_ParserReset';
 {$ENDIF}
 
-
   { If XML_Parse or XML_ParseBuffer have returned 0, then XML_GetErrorCode
   returns information about the error.  }
   function XML_GetErrorCode(parser: XML_Parser): XML_Error; external ExpatLib name 'XML_GetErrorCode';
 
 {$IFDEF EXPAT_1_0}
-  { These functions return information about the current parse location.
-  They may be called when XML_Parse or XML_ParseBuffer return 0;
-  in this case the location is the location of the character at which
-  the error was detected.
-  They may also be called from any other callback called to report
-  some parse event; in this the location is the location of the first
-  of the sequence of characters that generated the event.  }
+   { These functions return information about the current parse
+   location.  They may be called from any callback called to report
+   some parse event; in this case the location is the location of the
+   first of the sequence of characters that generated the event.  When
+   called from callbacks generated by declarations in the document
+   prologue, the location identified isn't as neatly defined, but will
+   be within the relevant markup.  When called outside of the callback
+   functions, the position indicated will be just past the last parse
+   event (regardless of whether there was an associated callback).
+
+   They may also be called after returning from a call to XML_Parse
+   or XML_ParseBuffer.  If the return value is XML_STATUS_ERROR then
+   the location is the location of the character at which the error
+   was detected; otherwise the location is the location of the last
+   parse event, as described above.
+
+   Note: XML_GetCurrentLineNumber and XML_GetCurrentColumnNumber return 0 to indicate an error.
+   Note: XML_GetCurrentByteIndex returns -1 to indicate an error. }
 
   function XML_GetCurrentLineNumber(parser:XML_Parser):XML_Size; external ExpatLib name 'XML_GetCurrentLineNumber';
 
@@ -670,7 +731,7 @@ const
   { For backwards compatibility with previous versions.  }
   XML_GetErrorLineNumber: function(parser:XML_Parser):XML_Size   = XML_GetCurrentLineNumber;
   XML_GetErrorColumnNumber: function(parser:XML_Parser):XML_Size = XML_GetCurrentColumnNumber;
-  XML_GetErrorByteIndex: function(parser:XML_Parser):XML_Index   = XML_GetCurrentByteIndex;   
+  XML_GetErrorByteIndex: function(parser:XML_Parser):XML_Index   = XML_GetCurrentByteIndex;
 {$ENDIF}
 
 {$IFDEF EXPAT_2_0}
