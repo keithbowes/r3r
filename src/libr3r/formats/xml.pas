@@ -38,7 +38,6 @@ type
 
   TXmlFeed = class(TFeed)
   private
-    FElems: PtrUint;
     FForeignFeed: TXmlFeed;
     FLastBase: String;
     FLastLang: String;

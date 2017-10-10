@@ -255,8 +255,6 @@ begin
 end;
 
 procedure TAtomFeed.HandleNameSpace(const Elem: TXmlElement; Line: String; Item: TFeedItem);
-var
-  AFeed: TXmlFeed;
 begin
   if Elem.NameSpace = DCNS then
   begin

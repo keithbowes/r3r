@@ -254,7 +254,7 @@ void MenuEvents::OnOpen(wxCommandEvent & WXUNUSED(event))
 		_("Generic XML") + wxString("|*.xml|", wxConvUTF8) +
 		_("RSS 1.0") + wxString("|*.rdf;*.rss;*.xml|", wxConvUTF8) +
 		_("RSS 2.0") + wxString("|*.rss;*.xml|", wxConvUTF8) +
-		_("RSS 3.0") + wxString("|*.r3;*.rss3", wxConvUTF8); 
+		_("RSS 3.0") + wxString("|*.r3;*.rss3", wxConvUTF8);
 
 	wxFileDialog * openFileDialog = new wxFileDialog(this, _("Open a file"), wxEmptyString, wxEmptyString, filter);
 

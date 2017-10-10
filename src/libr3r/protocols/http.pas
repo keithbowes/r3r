@@ -441,7 +441,7 @@ begin
   begin
     GetHeaders;
   end;
-  
+ 
   FeedType := Headers.ContentType;
   Item.Cache := Cache;
 
