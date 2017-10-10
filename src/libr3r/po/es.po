@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2016-06-13 20:00-0400\n"
+"PO-Revision-Date: 2017-10-10 15:00-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Spanish <es@li.org>\n"
 "Language: es\n"
@@ -147,10 +147,10 @@ msgid "https://github.com/keithbowes/r3r/releases.atom"
 msgstr "https://github.com/keithbowes/r3r/releases.atom"
 
 msgid "http://feeds.bbci.co.uk/news/rss.xml"
-msgstr "http://elmundo.feedsportal.com/elmundo/rss/portada.xml"
+msgstr "http://e03-elmundo.uecdn.es/rss/portada.xml"
 
 msgid "http://rss.slashdot.org/Slashdot/slashdotatom"
-msgstr "http://elmundo.feedsportal.com/elmundo/rss/navegante.xml"
+msgstr "http://feeds.feedburner.com/tecnomag"
 
 msgid "http://www.reddit.com/.rss"
 msgstr "http://www.reddit.com/r/es/.rss"
