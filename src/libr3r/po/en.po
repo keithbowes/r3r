@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2016-06-13 19:34-0400\n"
+"PO-Revision-Date: 2018-07-01 13:05-0400\n"
 "Last-Translator: \n"
 "Language-Team: English <en@li.org>\n"
 "Language: en\n"
@@ -131,6 +131,9 @@ msgstr "Media player"
 
 msgid "Where the program is installed"
 msgstr "Where the program is installed"
+
+msgid "Logging enabled"
+msgstr "Logging enabled"
 
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."

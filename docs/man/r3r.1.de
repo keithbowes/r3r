@@ -99,7 +99,7 @@ Man kann die HTML-UI auch benutzen. Rufend sie, sie schriebt eine HTML-Webseite 
 .SH "Dokumentation für Entwickler"
 
 .P
-Bitte suchen in Verzeichnis in ./doc des Quelltexts für Informationen über Zusammenbauen, Entwicklung, Schreibend einigen Oberflächen, usw.
+Bitte suchen in Verzeichnis in ./docs des Quelltexts für Informationen über Zusammenbauen, Entwicklung, Schreibend einigen Oberflächen, usw.
 
 .SH AUTOR
   Keith Bowes

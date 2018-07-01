@@ -244,6 +244,7 @@ begin
   CheckBoolean('use-proxy', 'HTTP', Proxy <> '', DescProxy);
   CheckString('proxy-address', 'HTTP', ProxyHost, DescProxyAddress);
   CheckInteger('proxy-port', 'HTTP', ProxyURL.Port, DescProxyPort);
+  CheckBoolean('logging', 'HTTP', false, DescLog);
 
   CheckBoolean('use-custom-accept-types', 'HTTP Headers', false, DescUseTypes);
   CheckString('accept-types', 'HTTP Headers', '', DescTypes);

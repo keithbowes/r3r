@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.2.4\n"
-"PO-Revision-Date: 2017-02-04 20:20-0500\n"
+"PO-Revision-Date: 2018-07-01 13:06-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -128,6 +128,9 @@ msgstr "Sondosiera legilo"
 
 msgid "Where the program is installed"
 msgstr "Kie la programo estas instalita"
+
+msgid "Logging enabled"
+msgstr "Aktivigi protokoladon"
 
 msgid ""
 "Cannot create directory %s. Perhaps you should try to create it manually."

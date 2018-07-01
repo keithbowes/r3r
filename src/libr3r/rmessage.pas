@@ -10,6 +10,9 @@ procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName, Extra
 
 implementation
 
+uses
+  RSettings_Routines, SysUtils;
+
 var
   MessageObject: TLibR3R;
 
@@ -19,6 +22,10 @@ begin
 end;
 
 procedure CallMessageEvent(Sender: TObject; IsError: Boolean; MessageName, Extra: String);
+var
+  f: text;
+  LogFile: String;
+  s: String;
 begin
   if Assigned(MessageObject) and
     Settings.GetBoolean('show-messages') then
@@ -29,6 +36,23 @@ begin
     begin
       (Sender as TRSock).ShouldShow := false;
     end;
+  end;
+
+  if Settings.GetBoolean('logging') then
+  begin
+    LogFile := GetCacheDir + 'r3r.log';
+    WriteStr(s, '[', Ord(IsError), '] ', MessageName, ' (', Extra, ')');
+
+    Assign(f, LogFile); 
+
+    if not FileExists(LogFile) then
+    begin
+      Rewrite(f);
+    end;
+
+    Append(f);
+    WriteLn(f, s);
+    Close(f);
   end;
 end;
 

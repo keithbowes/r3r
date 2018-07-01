@@ -100,7 +100,7 @@ Puede usar también la interfaz de HTML. Durante invocación escribe los contenido
 .SH "Documentación para programadores"
 
 .P
-Por favor mirar en las subcarpetas en ./doc de la fuente de código para información pertinente sobre construyendo, desarrollando, escribiendo tus proprias interfaces, etc.
+Por favor mirar en las subcarpetas en ./docs de la fuente de código para información pertinente sobre construyendo, desarrollando, escribiendo tus proprias interfaces, etc.
 
 .SH AUTOR
   Keith Bowes
