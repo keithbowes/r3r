@@ -8,7 +8,7 @@ Minimal dependencies:
       * [sed](http://sed.sourceforge.net/)
       * test
       * touch
-* (Windows only) [png2ico](http://www.winterdrache.de/freeware/png2ico/)
+* (Windows only) [png2ico](http://www.winterdrache.de/freeware/png2ico/) (alternatively, if you already have ImageMagick installed, you can define the environment variable `PNG2ICO=convert`)
 
 Optional dependencies (see below for how to enable/disable):
 

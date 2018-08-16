@@ -1,7 +1,7 @@
 Por munti en unikseca operaciumo, estas facile:
 
-1. Instali fpc-on (ekz-e per apt-get, pkg_add, urpmi ktp)
-2. Instali git-on (nenecesa) kaj svn-on
+1. Instali fpc-on (ekz-e per apt-get, dnf, pkg\_add ktp)
+2. Instali git-on kaj svn-on
 3. Instali gmake-on (make-on de GNU)
 4. Install la retan bibliotekon Synapse:
 
@@ -19,7 +19,7 @@ Por munti en unikseca operaciumo, estas facile:
 
 5. Instali R3R (vidu malsupre por kiel atingi la fontotekstojn per svn)
 
-    git clone https://github.com/keithbowes/r3r.git
+    git clone https://gitlab.com/keithbowes/r3r.git
 
     cd r3r
 
@@ -27,31 +27,27 @@ Por munti en unikseca operaciumo, estas facile:
 
     sudo -E gmake install
 
-    a. Se vi preferas uzi svn-on anstataŭ git-on:
+    a. Por instali en la hejman dosierujon:
 
-        svn co https://github.com/keithbowes/r3r/trunk r3r
-
-    b. Por instali en la hejman dosierujon:
-
-        gmake install PREFIX=$HOME</kdb>
+        gmake install PREFIX=$HOME
 
 Por la grafika fasado:
 
 1. 
-    a. Instali la bibliotekon wxWidgets (ekz-e en Mandrivo/Magejo: sudo urpmi lib[64]wxgtku2.8-devel)
+    a. Instali la bibliotekon wxWidgets (ekz-e en Mandrivo/Magejo: sudo dnf lib64wxgtku3.0-devel)
     b. Se ne disponebla en via operaciumo:
 
         cd ..
 
-        svn checkout https://svn.wxwidgets.org/svn/wx/wxWidgets/trunk wxWidgets
+        git clone https://github.com/wxWidgets/wxWidgets
 
         cd wxWidgets
 
-        mkdir obj
+        mkdir build
 
-        cd obj
+        cd build
 
-        ../configure --with-unicode --prefix=/usr/local
+        ../configure --prefix=/usr/local
 
         gmake
 
