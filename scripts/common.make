@@ -61,10 +61,12 @@ GIT ?= $(call programpath,git)
 
 ifndef inDOS
 CP ?= $(call programpath,cp)
+CPR ?= $(CP) -r
 ECHO ?= $(call programpath,echo)
 INSTALLPROG ?= $(call programpath,install)
 else
 CP ?= copy
+CPR ?= $(CP)
 ECHO ?= $(call programpath,gecho)
 INSTALLPROG ?= $(call programpath,ginstall)
 endif

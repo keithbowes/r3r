@@ -1,4 +1,4 @@
-UNIT_DIRS = ../../bindings/*
+UNIT_DIRS = ../rlist ../../bindings/*
 
 include ../../../scripts/common.make
 

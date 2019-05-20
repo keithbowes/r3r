@@ -21,8 +21,7 @@ clean:
 
 install: all
 	$(MKDIR) $(docdir)
-	$(INSTALL) $(wildcard *.html) $(docdir)
-	$(foreach file, $(wildcard */*.html), $(MKDIR) $(docdir)/$(dir $(file)); $(INSTALL) $(file) $(docdir)/$(file);  )
+	$(CPR) LibR3R $(docdir)/api
 
 uninstall:
 	$(RMRF) $(wildcard $(docdir))
