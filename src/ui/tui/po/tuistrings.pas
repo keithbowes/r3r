@@ -50,6 +50,7 @@ var
 
   NoFeedURL: String;
 
+  DisplayTitle: String;
   Retrieving: String;
   ShowIncomingItems: String;
   WrapDescriptions: String;
@@ -116,6 +117,7 @@ begin
 
   NoFeedURL := _('No feed URL specified.');
 
+  DisplayTitle := _('Display window title');
   Retrieving := _('Retrieving items from %s...');
   ShowIncomingItems := _('Show incoming items');
   WrapDescriptions := _('Wrap descriptions');

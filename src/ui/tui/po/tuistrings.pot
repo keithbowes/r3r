@@ -130,6 +130,10 @@ msgstr ""
 msgid "No feed URL specified."
 msgstr ""
 
+# tiustrings:displaytitle
+msgid "Display window title"
+msgstr ""
+
 #: tuistrings:retrieving
 msgid "Retrieving items from %s..."
 msgstr ""

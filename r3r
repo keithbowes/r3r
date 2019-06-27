@@ -16,27 +16,19 @@ export R3R_INSTALLED_PREFIX
 # If there's an error
 err()
 {
-  if test -z "$DISPLAY";
-  then
-    # If there's no X display, just write the error to the screen
-    echo "$1"
-  else
-    # Under X, try the faster and more featured Zenity.
-    # If it fails, fall back on xmessage.
-    zenity --error --text="$1" || xmessage "$1"
-  fi
+    (zenity --error --text="$1" || xmessage "$1") 2>/dev/null || echo "$1" >&2
 }
 
 # Start up the preferred UI if defined
 if test -n "$R3R_UI";
 then
-  $bindir/r3r-$R3R_UI "$@"
+    $bindir/r3r-$R3R_UI "$@"
 else
-  false
+    false
 fi
 
 # There was an error or no preferred UI is defined
 if test $? -ne 0;
 then
-  $bindir/r3r-wx "$@" || $bindir/r3r-tui "$@" || $bindir/r3r-html "$@" || err "Cannot start any UI"
+    $bindir/r3r-wx "$@" || $bindir/r3r-tui "$@" || $bindir/r3r-html "$@" || err "Cannot start any UI"
 fi

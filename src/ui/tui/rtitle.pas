@@ -2,6 +2,7 @@ unit RTitle;
 
 interface
 
+function GetOriginalTitle: String;
 procedure SetNewTitle(const NewTitle: String);
 
 implementation
@@ -19,9 +20,8 @@ uses
   RSettings_Routines, SysUtils
 {$ENDIF};
 
-var
-  OrigTitle: String;
 {$IFDEF FPC_UNIX}
+var
   WindowDisplay: PDisplay;
   WindowHandle: TWindow;
 {$ENDIF}
@@ -55,16 +55,11 @@ begin
       end;
     end;
 {$ELSE}
-    Data := nil;
-
-    if GetEnv('DISPLAY') <> '' then
+    if (GetEnv('HOSTNAME') <> '') and (GetEnv('USER') <> '') then
     begin
-      Res := GetEnv('USER') + '@' + GetEnv('HOSTNAME') + ': ' + GetCurrentDir;
-    end
-    else
-    begin
-      Res := String(Data);
+      Res := GetEnv('USER') + '@' + GetEnv('HOSTNAME') + ': ';
     end;
+    Res := Res + GetCurrentDir;
 {$ENDIF FPC_UNIX}
 {$ENDIF MSWINDOWS}
   end;
@@ -103,29 +98,18 @@ begin
   end;
 
   { Hack for non-xterm terminal emulators }
-  if (GetEnv('DISPLAY') <> '') and (GetEnv('XTERM_VERSION') = '') then
+  if GetEnv('XTERM_VERSION') = '' then
   begin
     SwapVectors;
     Exec(GetInstalledPrefix + '/bin/r3r-settitle', NewTitle);
     SwapVectors;
   end;
 {$ELSE}
-  if GetEnv('DISPLAY') <> '' then
-  begin
-    SwapVectors;
-    Exec(GetInstalledPrefix + '/bin/r3r-settitle', NewTitle);
-    SwapVectors;
-  end;
+  SwapVectors;
+  Exec(GetInstalledPrefix + '/bin/r3r-settitle', NewTitle);
+  SwapVectors;
 {$ENDIF FPC_UNIX}
 {$ENDIF MSWINDOWS}
 end;
-
-initialization
-
-OrigTitle := GetOriginalTitle;
-
-finalization
-
-SetNewTitle(OrigTitle);
 
 end.

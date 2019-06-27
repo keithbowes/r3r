@@ -31,6 +31,7 @@ type
     FDimStatus: TWindowDim;
     FDimUA: TWindowDim;
     FItems: PRList;
+    FOrigTitle: String;
     FPrintItems: Boolean;
     FProcessingStatus: TProcessingStatus;
     FScreenHeight: word;
@@ -220,6 +221,7 @@ begin
 
   RegisterItemCallback(ItemReceived, Self);
   SetUserAgentInfo(GetUserAgentInfo);
+  Settings.RegisterBoolean('display-title', 'Display', true, DisplayTitle);
   Settings.RegisterBoolean('show-incoming-items', 'Display', true, ShowIncomingItems);
   Settings.RegisterBoolean('wrap-descriptions', 'Display', true, WrapDescriptions);
   Settings.RegisterInteger('error-seconds', 'Display', 1, ErrorSeconds);
@@ -228,7 +230,11 @@ begin
 {$ENDIF}
 
   Draw;
-  SetNewTitle(AppName);
+  if Settings.GetBoolean('display-title') then
+  begin
+    FOrigTitle := GetOriginalTitle;
+    SetNewTitle(AppName);
+  end;
 
   if ParamCount > 0 then
   begin
@@ -579,6 +585,11 @@ begin
     end;
 
     Dispose(FItems, Done);
+  end;
+
+  if Settings.GetBoolean('display-title') then
+  begin
+    SetNewTitle(FOrigTitle);
   end;
 
   if FCanStart then

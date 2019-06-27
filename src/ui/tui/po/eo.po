@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: R3R 2.0-alpha6\n"
-"PO-Revision-Date: 2015-04-17 14:31-0400\n"
+"PO-Revision-Date: 2019-06-26 22:39-0400\n"
 "Last-Translator: Keith Bowes\n"
 "Language-Team: Esperanto <eo@li.org>\n"
 "Language: eo\n"
@@ -141,6 +141,10 @@ msgstr "Sintakso: %s [URL]"
 #: tuistrings:nofeedurl
 msgid "No feed URL specified."
 msgstr "Neniu fluo-URL donita."
+
+# tiustrings:displaytitle
+msgid "Display window title"
+msgstr "Montri la fenestran titolon"
 
 #: tuistrings:retrieving
 msgid "Retrieving items from %s..."

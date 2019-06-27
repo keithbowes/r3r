@@ -1,6 +1,3 @@
 #! /bin/sh
 
-if test -n "$DISPLAY";
-then
-  printf \\033]0\;\%s\\007 "$1"
-fi
+printf '\033]0;%s\007' "$1"
