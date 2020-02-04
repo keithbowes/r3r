@@ -46,12 +46,15 @@ begin
     finally
       if WindowHandle <> 0 then
       begin
-        WindowDisplay := XOpenDisplay(nil);
-        GetMem(Data, SizeOf(TXTextProperty));
-        XGetWMName(WindowDisplay, WindowHandle, Data);
-        XCloseDisplay(WindowDisplay);
-        WriteStr(Res, PChar(PXTextProperty(Data)^.value));
-        FreeMem(Data);
+        try
+          WindowDisplay := XOpenDisplay(nil);
+          GetMem(Data, SizeOf(TXTextProperty));
+          XGetWMName(WindowDisplay, WindowHandle, Data);
+          XCloseDisplay(WindowDisplay);
+        finally
+          WriteStr(Res, PChar(PXTextProperty(Data)^.value));
+          FreeMem(Data);
+        end;
       end;
     end;
 {$ELSE}
@@ -87,14 +90,17 @@ begin
   if WindowHandle <> 0 then
   begin
     Title := PChar(NewTitle);
-    WindowDisplay := XOpenDisplay(nil);
-    GetMem(Data, SizeOf(TXTextProperty));
-    XStringListToTextProperty(@Title, 1, Data); 
-    XSetWMProperties(WindowDisplay, WindowHandle, Data, nil, nil, 0, nil, nil, nil);
-    XFree(PXTextProperty(Data)^.value);
-    FreeMem(Data);
-    XFlush(WindowDisplay);
-    XCloseDisplay(WindowDisplay);
+    try
+      WindowDisplay := XOpenDisplay(nil);
+      GetMem(Data, SizeOf(TXTextProperty));
+      XStringListToTextProperty(@Title, 1, Data); 
+      XSetWMProperties(WindowDisplay, WindowHandle, Data, nil, nil, 0, nil, nil, nil);
+      XFree(PXTextProperty(Data)^.value);
+      XFlush(WindowDisplay);
+      XCloseDisplay(WindowDisplay);
+    finally
+      FreeMem(Data);
+    end;
   end;
 
   { Hack for non-xterm terminal emulators }
