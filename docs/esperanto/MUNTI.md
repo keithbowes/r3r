@@ -19,7 +19,7 @@ Por munti en unikseca operaciumo, estas facile:
 
 5. Instali R3R (vidu malsupre por kiel atingi la fontotekstojn per svn)
 
-    git clone https://gitlab.com/keithbowes/r3r.git
+    git clone https://github.com/keithbowes/r3r.git
 
     cd r3r
 
