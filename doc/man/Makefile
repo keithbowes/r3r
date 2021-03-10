@@ -28,4 +28,4 @@ uninstall:
 	-$(RMDIR) $(wildcard $(mandir)/man1 $(mandir)/*/man1)
 
 ../%.html: %
-	$(MAN2HTML) $(call MAN2HTMLFLAGS,$<,$@)
+	-$(MAN2HTML) $(call MAN2HTMLFLAGS,$<,$@)
