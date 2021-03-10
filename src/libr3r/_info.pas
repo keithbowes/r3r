@@ -105,13 +105,13 @@ function UserAgent: String;
 type
   ProcTempl = function(Typ: integer): PChar; cdecl;
 const
-  SSLEAY_VERSION = 0;
-  SSLEAY_CFLAGS = 2;
-  SSLEAY_BUILT_ON = 3;
-  SSLEAY_PLATFORM = 4;
-  SSLEAY_DIR = 5;
+  OPENSSL_VERSION = 0;
+  OPENSSL_CFLAGS = 1;
+  OPENSSL_BUILT_ON = 2;
+  OPENSSL_PLATFORM = 3;
+  OPENSSL_DIR = 4;
+  OPENSSL_ENGINES_DIR = 5;
 var
-  Lib: TLibHandle;
   Proc: ProcTempl;
 {$ELSE}
 var
@@ -139,13 +139,12 @@ begin
   Ret := StringReplace(Ret, '%m', '@CPU@', [rfReplaceAll]);
 {$IFDEF SOCKETS_SYNAPSE}
 {$IFDEF USE_SSL}
-  Lib := LoadLibrary(DLLUtilName);
-  if Lib <> NilHandle then
+  if SSLUtilHandle <> NilHandle then
   begin
-    Proc := ProcTempl(GetProcAddress(Lib, 'SSLeay_version'));
+    Proc := ProcTempl(GetProcAddress(SSLUtilHandle, 'OpenSSL_version'));
     if Assigned(Proc) then
     begin
-      Rep := Proc(SSLEAY_VERSION);
+      Rep := Proc(OPENSSL_VERSION);
 
       Rep := StringReplace(Rep, ' ', '/', []);
       Rep := StringReplace(Rep, ' ', ' (', []);
@@ -155,8 +154,6 @@ begin
       end;
       Ret := StringReplace(Ret, '%l', Rep, [rfReplaceAll]);
     end;
-
-    FreeLibrary(Lib);
   end;
 
 {$ENDIF}
