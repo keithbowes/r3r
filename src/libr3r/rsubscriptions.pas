@@ -61,7 +61,7 @@ begin
     except
     end;
   end;
-  
+
   FBodyElem := FDocument.GetElementsByTagName('body')[0];
   FElems := TDOMElement(FBodyElem).GetElementsByTagName('outline');
 
@@ -96,7 +96,7 @@ begin
   FBodyElem.AppendChild(FElem);
   FList^.Add(FElem);
 end;
-  
+
 function TRSubscriptions.Count: PtrUint;
 begin
   Result := FElems.Length;
@@ -114,10 +114,13 @@ end;
 
 procedure TRSubscriptions.GetInfo(const index: PtrUInt; out url, name: DOMString);
 begin
-  with TDOMElement(FElems[index]) do
+  if Assigned(FElems[index]) then
   begin
-    url := GetAttribute('xmlUrl');
-    name := GetAttribute('text');
+    with TDOMElement(FElems[index]) do
+    begin
+      url := GetAttribute('xmlUrl');
+      name := GetAttribute('text');
+    end;
   end;
 end;
 

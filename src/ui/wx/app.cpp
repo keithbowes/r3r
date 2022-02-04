@@ -18,7 +18,7 @@ bool R3R::OnInit()
 {
 	InitGettext();
 
-	RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(480, 380));
+	RFrame * frame = new RFrame(_("R3R"), wxDefaultPosition, wxSize(640, 480));
 	frame->Show(true);
 	SetTopWindow(frame);
 

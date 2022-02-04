@@ -26,15 +26,15 @@ void CreateDescriptionBox(wxPanel * parent)
 
 	contact = new wxButton(parent, wxID_CONTACT_BUTTON, _("&Contact"));
 	contact->Disable();
-	hbox->Add(contact, 1, wxALL | wxALIGN_RIGHT, 5);
+	hbox->Add(contact, 1, wxALL, 5);
 
 	subscribe = new wxButton(parent, wxID_SUBSCRIBE_BUTTON, _("&Subscribe"));
 	subscribe->Disable();
-	hbox->Add(subscribe, 1, wxALL | wxALIGN_RIGHT, 5);
+	hbox->Add(subscribe, 1, wxALL, 5);
 
 	enclosure = new wxButton(parent, wxID_ENCLOSURE_BUTTON, _("&View Enclosure..."));
 	enclosure->Disable();
-	hbox->Add(enclosure, 1, wxALL | wxALIGN_RIGHT, 5);
+	hbox->Add(enclosure, 1, wxALL, 5);
 
 	sizer->Add(bsizer, 2, wxEXPAND | wxALL, 5);
 }
