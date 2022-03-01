@@ -49,7 +49,7 @@ distclean:
 	$(RMRF) $(wildcard ../../doc-pak)
 
 r3r.desktop: r3r.desktop.in
-	-$(SED) -e 's|@bindir@|$(bindir)|g' -e 's|@icondir@|$(icondir)|g' $< > $@
+	$(CP) $^ $@
 ifeq ($(R3R_UI),tui)
 	$(ECHO) "Terminal=true" >> $@
 else

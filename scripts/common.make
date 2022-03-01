@@ -60,7 +60,7 @@ LN ?= $(call programpath,ln) -sf
 GIT ?= $(call programpath,git)
 
 ifndef inDOS
-CP ?= $(call programpath,cp)
+CP ?= $(call programpath,cp) -f
 CPR ?= $(CP) -r
 ECHO ?= $(call programpath,echo)
 INSTALLPROG ?= $(call programpath,install)
@@ -185,8 +185,8 @@ override COMPILER_OPTIONS += $(PCFLAGS)
 
 USE_EXPAT ?= 1
 USE_ICONV ?= 1
-USE_IDN ?= 1
-USE_LIBIDN2 ?= 0
+USE_IDN ?= 0
+USE_LIBIDN2 ?= 1
 USE_NLS ?= 1
 DEFS_REGEXP ?= REGEXP_PCRE
 
@@ -215,7 +215,7 @@ endif
 ifneq ($(USE_LIBIDN2),0)
 override DEFS_EXTRA+=USE_LIBIDN2
 ifeq ($(USE_NLS),0)
-$(error LibIDN2 *requires* gettext)
+$(error LibIDN2 *requires* gettext. Specify USE_IDN=1 instead.)
 endif
 else
 ifneq ($(USE_IDN),0)

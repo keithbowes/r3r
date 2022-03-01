@@ -2,7 +2,7 @@
 
 # Get the parent directory (for relocatability)
 origdir=`pwd`
-bindir=`dirname $0`
+bindir=$(dirname $(readlink -e $0))
 cd $bindir
 cwd=`pwd`
 bindir=`echo $bindir | sed -e "s|^\(\.\+\)|$cwd/\1|"`
@@ -12,6 +12,7 @@ cd $origdir
 
 R3R_INSTALLED_PREFIX=$parentdir
 export R3R_INSTALLED_PREFIX
+export LD_LIBRARY_PATH=$parentdir/lib:$LD_LIBRARY_PATH
 
 # If there's an error
 err()

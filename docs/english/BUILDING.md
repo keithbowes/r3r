@@ -146,7 +146,7 @@ variables manually (0 to disable; 1 to enable):
     Allow the use of the libidn library to decode IDN (web addresses
     with non-English characters).
 
-    Default: 1
+    Default: 0
 =USE\_LIBEDIT=
     Use libedit's readline emulation (only valid when USE\_READLINE
     is defined).  Beware that libedit is very buggy, especially
@@ -162,7 +162,7 @@ variables manually (0 to disable; 1 to enable):
     Enable the use of libidn2 instead of libidn to decode IDN
     addresses.
 
-    Default: 0
+    Default: 1
 =USE\_NLS=
     Allow the use of gettext to enable NLS (native language support).
 
