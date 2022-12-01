@@ -11,7 +11,7 @@ uses
 {$IFDEF SOCKETS_SYNAPSE}
   , BlckSock
 {$IFDEF USE_SSL}
-  , ssl_openssl
+  , ssl_openssl3
 {$ENDIF}
 {$ENDIF}
   

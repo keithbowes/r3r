@@ -31,7 +31,7 @@ uses
 {$IFDEF SOCKETS_SYNAPSE}
   , BlckSock
 {$IFDEF USE_SSL}
-  , DynLibs, ssl_openssl_lib
+  , DynLibs, ssl_openssl3_lib
 {$ENDIF}
 {$ENDIF}
   
